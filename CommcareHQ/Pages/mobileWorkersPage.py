@@ -38,7 +38,7 @@ class MobileWorkerPage:
 
     def click_create(self):
         bool
-        create_button_enabled = self.driver.find_element_by_id(self.create_button_xpath).is_enabled()
+        create_button_enabled = self.driver.find_element_by_xpath(self.create_button_xpath).is_enabled()
         if create_button_enabled:
             self.driver.find_element_by_xpath(self.create_button_xpath).click()
             time.sleep(2)

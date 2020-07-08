@@ -39,7 +39,7 @@ class CCHQTest(unittest.TestCase):
         visible = MobileWorkerPage(driver)
         visible.mobile_worker_menu()
         visible.create_mobile_worker()
-        visible.mobile_worker_enter_username("user4")
+        visible.mobile_worker_enter_username("user5")
         visible.mobile_worker_enter_password("1234")
         visible.click_create()
         print("Mobile Worker Created")

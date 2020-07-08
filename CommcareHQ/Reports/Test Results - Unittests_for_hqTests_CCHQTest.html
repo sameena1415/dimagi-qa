@@ -572,7 +572,7 @@ jQuery.cookie = function(name, value, options) {
     <body>
         <div id="container">
             <div id="header">
-                <div class="time" xmlns="">22.49 s</div>
+                <div class="time" xmlns="">21.32 s</div>
                 <h1>
                     Unittests for hqTests.CCHQTest: <strong><span class="total" xmlns="http://www.w3.org/1999/xhtml">3 total, </span><span class="failed">1 failed, </span><span class="passed">2 passed</span></strong>
                 </h1>
@@ -593,17 +593,17 @@ jQuery.cookie = function(name, value, options) {
                 <ul id="tree">
                     <li xmlns="" class="level top failed open">
                         <span><em class="time">
-                                <div class="time">22.49 s</div>
+                                <div class="time">21.32 s</div>
                             </em>hqTests</span>
                         <ul>
                             <li class="level suite failed open">
                                 <span><em class="time">
-                                        <div class="time">22.49 s</div>
+                                        <div class="time">21.32 s</div>
                                     </em>CCHQTest</span>
                                 <ul>
                                     <li class="level test">
                                         <span><em class="time">
-                                                <div class="time">7.50 s</div>
+                                                <div class="time">8.19 s</div>
                                             </em><em class="status">passed</em>test_login_valid</span>
                                         <ul>
                                             <li class="text">
@@ -613,7 +613,7 @@ jQuery.cookie = function(name, value, options) {
                                     </li>
                                     <li class="level test">
                                         <span><em class="time">
-                                                <div class="time">5.74 s</div>
+                                                <div class="time">3.83 s</div>
                                             </em><em class="status">passed</em>test_menu_visibility</span>
                                         <ul>
                                             <li class="text">
@@ -623,14 +623,11 @@ jQuery.cookie = function(name, value, options) {
                                     </li>
                                     <li class="level test failed open">
                                         <span><em class="time">
-                                                <div class="time">9.25 s</div>
+                                                <div class="time">9.30 s</div>
                                             </em><em class="status">failed</em>test_mobileworker_creation</span>
                                         <ul>
                                             <li class="text">
-                                                <span class="stdout">Button disabled<br/>Exception:  local variable &#39;create_button_enabled&#39; referenced before assignment<br/></span>
-                                            </li>
-                                            <li class="text">
-                                                <span class="stderr">Failure<br/>Traceback (most recent call last):<br/>  File &quot;C:\Users\dsi-user.DESKTOP-IGCBOU4\AutomationProjects\SeleniumCCHQ\CommcareHQ\Pages\mobileWorkersPage.py&quot;, line 42, in click_create<br/>    create_button_enabled = self.driver.find_element_by_id(self.create_button_xpath).is_enabled()<br/>  File &quot;C:\Users\dsi-user.DESKTOP-IGCBOU4\AutomationProjects\venv\lib\site-packages\selenium\webdriver\remote\webdriver.py&quot;, line 360, in find_element_by_id<br/>    return self.find_element(by=By.ID, value=id_)<br/>  File &quot;C:\Users\dsi-user.DESKTOP-IGCBOU4\AutomationProjects\venv\lib\site-packages\selenium\webdriver\remote\webdriver.py&quot;, line 976, in find_element<br/>    return self.execute(Command.FIND_ELEMENT, {<br/>  File &quot;C:\Users\dsi-user.DESKTOP-IGCBOU4\AutomationProjects\venv\lib\site-packages\selenium\webdriver\remote\webdriver.py&quot;, line 321, in execute<br/>    self.error_handler.check_response(response)<br/>  File &quot;C:\Users\dsi-user.DESKTOP-IGCBOU4\AutomationProjects\venv\lib\site-packages\selenium\webdriver\remote\errorhandler.py&quot;, line 242, in check_response<br/>    raise exception_class(message, screen, stacktrace)<br/>selenium.common.exceptions.InvalidSelectorException: Message: invalid selector: An invalid or illegal selector was specified<br/>  (Session info: chrome=83.0.4103.116)<br/>During handling of the above exception, another exception occurred:<br/>Traceback (most recent call last):<br/>  File &quot;C:\Users\dsi-user.DESKTOP-IGCBOU4\AutomationProjects\SeleniumCCHQ\CommcareHQ\Pages\mobileWorkersPage.py&quot;, line 46, in click_create<br/>    if create_button_enabled:<br/>UnboundLocalError: local variable &#39;create_button_enabled&#39; referenced before assignment<br/>During handling of the above exception, another exception occurred:<br/>Traceback (most recent call last):<br/>  File &quot;C:\Users\dsi-user.DESKTOP-IGCBOU4\AppData\Local\Programs\Python\Python38-32\lib\unittest\case.py&quot;, line 60, in testPartExecutor<br/>    yield<br/>  File &quot;C:\Users\dsi-user.DESKTOP-IGCBOU4\AppData\Local\Programs\Python\Python38-32\lib\unittest\case.py&quot;, line 676, in run<br/>    self._callTestMethod(testMethod)<br/>  File &quot;C:\Users\dsi-user.DESKTOP-IGCBOU4\AppData\Local\Programs\Python\Python38-32\lib\unittest\case.py&quot;, line 633, in _callTestMethod<br/>    method()<br/>  File &quot;C:\Users\dsi-user.DESKTOP-IGCBOU4\AutomationProjects\SeleniumCCHQ\CommcareHQ\Tests\hqTests.py&quot;, line 44, in test_mobileworker_creation<br/>    visible.click_create()<br/>  File &quot;C:\Users\dsi-user.DESKTOP-IGCBOU4\AutomationProjects\SeleniumCCHQ\CommcareHQ\Pages\mobileWorkersPage.py&quot;, line 50, in click_create<br/>    assert False, print(&quot;Exception: &quot;, exception)<br/>AssertionError: None<br/></span>
+                                                <span class="stderr">Error<br/>Traceback (most recent call last):<br/>  File &quot;C:\Users\dsi-user.DESKTOP-IGCBOU4\AppData\Local\Programs\Python\Python38-32\lib\unittest\case.py&quot;, line 60, in testPartExecutor<br/>    yield<br/>  File &quot;C:\Users\dsi-user.DESKTOP-IGCBOU4\AppData\Local\Programs\Python\Python38-32\lib\unittest\case.py&quot;, line 676, in run<br/>    self._callTestMethod(testMethod)<br/>  File &quot;C:\Users\dsi-user.DESKTOP-IGCBOU4\AppData\Local\Programs\Python\Python38-32\lib\unittest\case.py&quot;, line 633, in _callTestMethod<br/>    method()<br/>  File &quot;C:\Users\dsi-user.DESKTOP-IGCBOU4\AutomationProjects\SeleniumCCHQ\CommcareHQ\Tests\hqTests.py&quot;, line 44, in test_mobileworker_creation<br/>    visible.click_create()<br/>  File &quot;C:\Users\dsi-user.DESKTOP-IGCBOU4\AutomationProjects\SeleniumCCHQ\CommcareHQ\Pages\mobileWorkersPage.py&quot;, line 41, in click_create<br/>    create_button_enabled = self.driver.find_element_by_id(self.create_button_xpath).is_enabled()<br/>  File &quot;C:\Users\dsi-user.DESKTOP-IGCBOU4\AutomationProjects\venv\lib\site-packages\selenium\webdriver\remote\webdriver.py&quot;, line 360, in find_element_by_id<br/>    return self.find_element(by=By.ID, value=id_)<br/>  File &quot;C:\Users\dsi-user.DESKTOP-IGCBOU4\AutomationProjects\venv\lib\site-packages\selenium\webdriver\remote\webdriver.py&quot;, line 976, in find_element<br/>    return self.execute(Command.FIND_ELEMENT, {<br/>  File &quot;C:\Users\dsi-user.DESKTOP-IGCBOU4\AutomationProjects\venv\lib\site-packages\selenium\webdriver\remote\webdriver.py&quot;, line 321, in execute<br/>    self.error_handler.check_response(response)<br/>  File &quot;C:\Users\dsi-user.DESKTOP-IGCBOU4\AutomationProjects\venv\lib\site-packages\selenium\webdriver\remote\errorhandler.py&quot;, line 242, in check_response<br/>    raise exception_class(message, screen, stacktrace)<br/>selenium.common.exceptions.InvalidSelectorException: Message: invalid selector: An invalid or illegal selector was specified<br/>  (Session info: chrome=83.0.4103.116)<br/></span>
                                             </li>
                                         </ul>
                                     </li>
@@ -642,7 +639,7 @@ jQuery.cookie = function(name, value, options) {
             </div>
         </div>
         <div id="footer">
-            <p>Generated by PyCharm on 06/07/20, 8:11 PM</p>
+            <p>Generated by PyCharm on 07/07/20, 3:35 PM</p>
         </div>
     </body>
 </html>
