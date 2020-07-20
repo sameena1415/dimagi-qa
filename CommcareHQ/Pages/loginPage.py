@@ -25,5 +25,8 @@ class LoginPage:
         self.driver.find_element_by_xpath(self.submit_button_xpath).click()
 
     def accept_alert(self):
-        WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.ID, self.alert_button_accept))).click()
-        time.sleep(5)
+        try:
+            WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.ID, self.alert_button_accept))).click()
+            time.sleep(7)
+        except Exception as e:
+            print(e)
