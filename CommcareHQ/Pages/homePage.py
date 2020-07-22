@@ -1,6 +1,4 @@
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.wait import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
 import time
 
 
@@ -14,38 +12,55 @@ class HomePage:
         self.driver = driver
         self.dashboard_menu_id = "DashboardTab"
         self.reports_menu_id = "ProjectReportsTab"
-        self.reports_view_all_linkedtext = "View All"
-        self.applications_menu_id = "ApplicationsTab"
-        self.applications_menu_new_application = "New Application"
+        self.view_all_link_text = "View All"
+        self.data_menu_id = "ProjectDataTab"
         self.users_menu_id = "ProjectUsersTab"
-
+        self.applications_menu_id = "ApplicationsTab"
+        self.new_application_link_text = "New Application"
+        self.web_apps_menu_id = "CloudcareTab"
+        self.show_full_menu_id = "commcare-menu-toggle"
+        self.messaging_menu_id = "MessagingTab"
+        self.admin_menu_id = "AdminTab"
 
     def dashboard_menu(self):
-        dashboard_menu = self.driver.find_element_by_id(self.dashboard_menu_id)
-        if dashboard_menu.is_enabled():
-            try:
-                dashboard_menu.click()
-                time.sleep(2)
-            except Exception as e:
-                print(e)
+        self.driver.find_element(By.ID, self.dashboard_menu_id).click()
+        time.sleep(2)
 
     def reports_menu(self):
-        report_menu = self.driver.find_element_by_id(self.reports_menu_id)
-        if report_menu.is_enabled():
-            try:
-                report_menu.click()
-                time.sleep(2)
-                self.driver.find_element_by_link_text (self.reports_view_all_linkedtext).click()
-            except Exception as e:
-                print(e)
+        self.driver.find_element(By.ID, self.reports_menu_id).click()
+        self.driver.find_element(By.LINK_TEXT, self.view_all_link_text).click()
+        time.sleep(2)
+
+    def data_menu(self):
+        self.driver.find_element(By.ID, self.data_menu_id).click()
+        self.driver.find_element(By.LINK_TEXT, self.view_all_link_text).click()
+        time.sleep(2)
 
     def applications_menu(self):
-        applications_menu = self.driver.find_element_by_id(self.applications_menu_id)
-        if applications_menu.is_enabled():
-            try:
-                applications_menu.click()
-                self.driver.find_element_by_link_text(self.applications_menu_new_application).click()
-                time.sleep(2)
-            except Exception as e:
-                print(e)
+        self.driver.find_element(By.ID, self.applications_menu_id).click()
+        self.driver.find_element(By.LINK_TEXT, self.new_application_link_text).click()
+        time.sleep(2)
 
+    def users_menu(self):
+        self.driver.find_element(By.ID, self.users_menu_id).click()
+        self.driver.find_element(By.LINK_TEXT, self.view_all_link_text).click()
+        time.sleep(2)
+
+    def web_apps_menu(self):
+        self.driver.find_element(By.ID, self.web_apps_menu_id).click()
+        time.sleep (2)
+        self.driver.find_element(By.ID, self.show_full_menu_id).click()
+        time.sleep (2)
+
+
+        time.sleep(2)
+
+    def messaging_menu(self):
+        self.driver.find_element(By.ID, self.messaging_menu_id).click()
+        self.driver.find_element(By.LINK_TEXT, self.view_all_link_text).click()
+        time.sleep(2)
+
+    def admin_menu(self):
+        self.driver.find_element(By.ID, self.admin_menu_id).click()
+        self.driver.find_element(By.LINK_TEXT, self.view_all_link_text).click()
+        time.sleep(2)

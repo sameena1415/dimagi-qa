@@ -2,7 +2,7 @@
 <html xmlns:str="http://exslt.org/strings" xmlns="http://www.w3.org/1999/xhtml">
     <head>
         <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Test Results &mdash; Unittests for login.CCHQTest</title>
+        <title>Test Results &mdash; Unittests in mobileWorkers.py</title>
         <style type="text/css">
           html {
             height: 100%
@@ -572,9 +572,9 @@ jQuery.cookie = function(name, value, options) {
     <body>
         <div id="container">
             <div id="header">
-                <div class="time" xmlns="">25.66 s</div>
+                <div class="time" xmlns="">1 m 15 s</div>
                 <h1>
-                    Unittests for login.CCHQTest: <strong><span class="total" xmlns="http://www.w3.org/1999/xhtml">2 total, </span><span class="passed">2 passed</span></strong>
+                    Unittests in mobileWorkers.py: <strong><span class="total" xmlns="http://www.w3.org/1999/xhtml">4 total, </span><span class="failed">1 failed, </span><span class="passed">3 passed</span></strong>
                 </h1>
                 <div id="treecontrol">
                     <ul>
@@ -591,33 +591,53 @@ jQuery.cookie = function(name, value, options) {
             </div>
             <div id="content">
                 <ul id="tree">
-                    <li xmlns="" class="level top open">
+                    <li xmlns="" class="level top failed open">
                         <span><em class="time">
-                                <div class="time">25.66 s</div>
-                            </em>login</span>
+                                <div class="time">1 m 15 s</div>
+                            </em>mobileWorkers</span>
                         <ul>
-                            <li class="level suite open">
+                            <li class="level suite failed open">
                                 <span><em class="time">
-                                        <div class="time">25.66 s</div>
-                                    </em>CCHQTest</span>
+                                        <div class="time">1 m 15 s</div>
+                                    </em>MenuVisibility</span>
                                 <ul>
                                     <li class="level test">
                                         <span><em class="time">
-                                                <div class="time">13.63 s</div>
-                                            </em><em class="status">passed</em>test_login_valid</span>
+                                                <div class="time">5.36 s</div>
+                                            </em><em class="status">passed</em>test_02_click_mobile_worker_menu</span>
                                         <ul>
                                             <li class="text">
-                                                <span class="stdout">Sucessfully logged in<br/></span>
+                                                <span class="stdout">Mobile Workers Menu Visible and Click-able<br/></span>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li class="level test failed open">
+                                        <span><em class="time">
+                                                <div class="time">6.34 s</div>
+                                            </em><em class="status">failed</em>test_03_create_mobile_worker</span>
+                                        <ul>
+                                            <li class="text">
+                                                <span class="stderr">Failure<br/>Traceback (most recent call last):<br/>  File &quot;C:\Users\dsi-user.DESKTOP-IGCBOU4\AppData\Local\Programs\Python\Python38-32\lib\unittest\case.py&quot;, line 60, in testPartExecutor<br/>    yield<br/>  File &quot;C:\Users\dsi-user.DESKTOP-IGCBOU4\AppData\Local\Programs\Python\Python38-32\lib\unittest\case.py&quot;, line 676, in run<br/>    self._callTestMethod(testMethod)<br/>  File &quot;C:\Users\dsi-user.DESKTOP-IGCBOU4\AppData\Local\Programs\Python\Python38-32\lib\unittest\case.py&quot;, line 633, in _callTestMethod<br/>    method()<br/>  File &quot;C:\Users\dsi-user.DESKTOP-IGCBOU4\AutomationProjects\SeleniumCCHQ\CommcareHQ\Tests\mobileWorkers.py&quot;, line 27, in test_03_create_mobile_worker<br/>    worker.click_create()<br/>  File &quot;C:\Users\dsi-user.DESKTOP-IGCBOU4\AutomationProjects\SeleniumCCHQ\CommcareHQ\Pages\mobileWorkersPage.py&quot;, line 72, in click_create<br/>    assert False, &quot; Username is already taken&quot;<br/>AssertionError:  Username is already taken<br/></span>
                                             </li>
                                         </ul>
                                     </li>
                                     <li class="level test">
                                         <span><em class="time">
-                                                <div class="time">12.03 s</div>
-                                            </em><em class="status">passed</em>test_menu_visibility</span>
+                                                <div class="time">28.31 s</div>
+                                            </em><em class="status">passed</em>test_04_user_field_creation</span>
                                         <ul>
                                             <li class="text">
-                                                <span class="stdout">Dashboard Menu Visible and Clickable<br/>&lt;selenium.webdriver.remote.webelement.WebElement (session=&quot;4ad4ea5c2db830553e9e5a98f938351c&quot;, element=&quot;8d3a7f72-f186-4680-8b11-cefc5da1bb2b&quot;)&gt; True<br/>Reports Menu Visible and Clickable<br/></span>
+                                                <span class="stdout">User Field Added<br/></span>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li class="level test">
+                                        <span><em class="time">
+                                                <div class="time">34.63 s</div>
+                                            </em><em class="status">passed</em>test_05_user_field_visible</span>
+                                        <ul>
+                                            <li class="text">
+                                                <span class="stdout">Clicked on user<br/>Selected User Field<br/>User Field Visible and Added for User<br/></span>
                                             </li>
                                         </ul>
                                     </li>
@@ -629,7 +649,7 @@ jQuery.cookie = function(name, value, options) {
             </div>
         </div>
         <div id="footer">
-            <p>Generated by PyCharm on 04/07/20, 11:16 AM</p>
+            <p>Generated by PyCharm on 22/07/20, 4:09 PM</p>
         </div>
     </body>
 </html>
