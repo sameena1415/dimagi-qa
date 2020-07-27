@@ -11,5 +11,3 @@ if __name__ == "__main__":
 
     runner = TextTestRunner(verbosity=2)
     runner.run(SmokeTestSuite)
-
-

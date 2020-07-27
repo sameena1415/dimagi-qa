@@ -29,7 +29,7 @@ class MenuVisibilityTests(EnvironmentSetup):
         finally:
             assert "CommCare HQ" in driver.title
             print("Dashboard Menu Visible and Click-able")
-            time.sleep (2)
+            time.sleep(2)
 
     def test_03_application_menu_visibility(self):
         driver = self.driver
@@ -41,7 +41,7 @@ class MenuVisibilityTests(EnvironmentSetup):
         finally:
             assert "Releases - Untitled Application - CommCare HQ" in driver.title
             print("Application Menu Visible and Click-able")
-            time.sleep (2)
+            time.sleep(2)
 
     def test_04_user_menu_visibility(self):
         driver = self.driver
@@ -53,7 +53,7 @@ class MenuVisibilityTests(EnvironmentSetup):
         finally:
             assert "Mobile Workers : Users :: - CommCare HQ" in driver.title
             print("Users Menu Visible and Click-able")
-            time.sleep (2)
+            time.sleep(2)
 
     def test_05_data_menu_visibility(self):
         driver = self.driver
@@ -65,7 +65,7 @@ class MenuVisibilityTests(EnvironmentSetup):
         finally:
             assert "Export Form Data : Data :: - CommCare HQ" in driver.title
             print("Data Menu Visible and Click-able")
-            time.sleep (2)
+            time.sleep(2)
 
     def test_06_web_apps_menu_visibility(self):
         driver = self.driver
@@ -77,7 +77,7 @@ class MenuVisibilityTests(EnvironmentSetup):
         finally:
             assert "Web Apps - CommCare HQ" in driver.title
             print("WebApps Menu Visible and Click-able")
-            time.sleep (2)
+            time.sleep(2)
 
     def test_07_messaging_menu_visibility(self):
         driver = self.driver
@@ -89,7 +89,7 @@ class MenuVisibilityTests(EnvironmentSetup):
         finally:
             assert "Dashboard : Messaging :: - CommCare HQ" in driver.title
             print("Messaging Menu Visible and Click-able")
-            time.sleep (2)
+            time.sleep(2)
 
     def test_08_admin_menu_visibility(self):
         driver = self.driver
@@ -101,7 +101,7 @@ class MenuVisibilityTests(EnvironmentSetup):
         finally:
             assert "User List - CommCare HQ" in driver.title
             print("Admin Menu Visible and Click-able")
-            time.sleep (2)
+            time.sleep(2)
 
 
 if __name__ == "__main__":
