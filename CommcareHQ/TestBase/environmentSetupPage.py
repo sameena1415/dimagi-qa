@@ -1,6 +1,4 @@
 import unittest
-
-import HtmlTestRunner
 from selenium import webdriver
 
 from SeleniumCCHQ.CommcareHQ.Pages.loginPage import LoginPage
@@ -29,4 +27,4 @@ class EnvironmentSetup(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    unittest.main(testRunner=HtmlTestRunner.HTMLTestRunner(output='SeleniumCCHQ/CommcareHQ/Reports'))
+    unittest.main()

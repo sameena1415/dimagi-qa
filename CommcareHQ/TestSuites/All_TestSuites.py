@@ -1,4 +1,5 @@
-from unittest import TestLoader, TestSuite, TextTestRunner
+from unittest import TestLoader, TestSuite
+import HtmlTestRunner
 from SeleniumCCHQ.CommcareHQ.TestScripts.menuVisibility import MenuVisibilityTests
 from SeleniumCCHQ.CommcareHQ.TestScripts.mobileWorkers import MobileWorkerTests
 
@@ -9,5 +10,5 @@ if __name__ == "__main__":
         loader.loadTestsFromTestCase(MobileWorkerTests)
     ))
 
-    runner = TextTestRunner(verbosity=2)
-    runner.run(SmokeTestSuite)
+    testRunner = HtmlTestRunner.HTMLTestRunner(output='Reports', report_title='CCHQ Smoke Tests', verbosity=2)
+    testRunner.run(SmokeTestSuite)
