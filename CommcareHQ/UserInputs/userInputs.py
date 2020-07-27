@@ -22,3 +22,6 @@ class UserInputs:
     group_name = "ABC"
     group_rename = "ABC2"
 
+    # inputs for roles and permissions
+    role_name = "Bogus"
+    role_rename = "Bogus2"
