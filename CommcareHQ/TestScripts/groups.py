@@ -1,5 +1,4 @@
 import unittest
-import HtmlTestRunner
 from SeleniumCCHQ.CommcareHQ.Pages.homePage import HomePage
 from SeleniumCCHQ.CommcareHQ.Pages.groupPage import GroupPage
 from SeleniumCCHQ.CommcareHQ.TestBase.environmentSetupPage import EnvironmentSetup
@@ -29,7 +28,13 @@ class GroupsTests(EnvironmentSetup):
         edit = GroupPage(driver)
         edit.click_group_menu()
         print("Clicked on the Group to be Edited")
+        edit.edit_existing_group()
+        print("Clicked on Edit Settings for Group")
+        edit.rename_existing_group()
+        print("Renamed a group")
+        edit.remove_user_from_group()
+        print("Removed added user from group")
 
 
 if __name__ == "__main__":
-    unittest.main(testRunner=HtmlTestRunner.HTMLTestRunner(output='SeleniumCCHQ/CommcareHQ/Reports'))
+    unittest.main()

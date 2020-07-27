@@ -1,5 +1,4 @@
 import time
-
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.action_chains import ActionChains
 from SeleniumCCHQ.CommcareHQ.UserInputs.userInputs import UserInputs

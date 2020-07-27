@@ -1,5 +1,4 @@
 import unittest
-import HtmlTestRunner
 from SeleniumCCHQ.CommcareHQ.Pages.homePage import HomePage
 from SeleniumCCHQ.CommcareHQ.Pages.rolesPermissionsPage import RolesPermissionPage
 from SeleniumCCHQ.CommcareHQ.TestBase.environmentSetupPage import EnvironmentSetup
@@ -16,4 +15,4 @@ class RolesPermissionsTests(EnvironmentSetup):
 
 
 if __name__ == "__main__":
-    unittest.main(testRunner=HtmlTestRunner.HTMLTestRunner(output='SeleniumCCHQ/CommcareHQ/Reports'))
+    unittest.main()

@@ -1,6 +1,6 @@
-class RolesPermissionPage :
+class RolesPermissionPage:
 
-    def __init__(self, driver) :
+    def __init__(self, driver):
         self.driver = driver
         self.roles_menu_xpath = "//a[@data-title='Roles & Permissions']"
 

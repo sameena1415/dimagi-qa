@@ -20,4 +20,5 @@ class UserInputs:
 
     # inputs for group menu
     group_name = "ABC"
+    group_rename = "ABC2"
 

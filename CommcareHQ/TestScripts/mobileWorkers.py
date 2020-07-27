@@ -1,5 +1,4 @@
 import unittest
-import HtmlTestRunner
 from SeleniumCCHQ.CommcareHQ.Pages.mobileWorkersPage import MobileWorkerPage
 from SeleniumCCHQ.CommcareHQ.TestBase.environmentSetupPage import EnvironmentSetup
 from SeleniumCCHQ.CommcareHQ.UserInputs.userInputs import UserInputs
@@ -52,4 +51,4 @@ class MobileWorkerTests(EnvironmentSetup):
 
 
 if __name__ == "__main__":
-    unittest.main(testRunner=HtmlTestRunner.HTMLTestRunner(output='SeleniumCCHQ/CommcareHQ/Reports'))
+    unittest.main()

@@ -1,14 +1,15 @@
 from unittest import TestLoader, TestSuite
 import HtmlTestRunner
-from datetime import date
 from SeleniumCCHQ.CommcareHQ.TestScripts.menuVisibility import MenuVisibilityTests
 from SeleniumCCHQ.CommcareHQ.TestScripts.mobileWorkers import MobileWorkerTests
+from SeleniumCCHQ.CommcareHQ.TestScripts.groups import GroupsTests
 
 if __name__ == "__main__":
     loader = TestLoader()
     SmokeTestSuite = TestSuite((
         loader.loadTestsFromTestCase(MenuVisibilityTests),
-        loader.loadTestsFromTestCase(MobileWorkerTests)
+        loader.loadTestsFromTestCase(MobileWorkerTests),
+        loader.loadTestsFromTestCase(GroupsTests)
     ))
 
     testRunner = HtmlTestRunner.HTMLTestRunner(output='Reports', report_name="Test_Result_Report",
