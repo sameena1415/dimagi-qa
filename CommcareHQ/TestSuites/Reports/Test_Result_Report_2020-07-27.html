@@ -11,9 +11,9 @@
         <div class="row">
             <div class="col-xs-12">
                 <h2 class="text-capitalize">CCHQ Smoke Tests</h2>
-                <p class='attribute'><strong>Start Time: </strong>2020-07-27 12:46:46</p>
-                <p class='attribute'><strong>Duration: </strong>41.48 s</p>
-                <p class='attribute'><strong>Summary: </strong>Total: 8, Pass: 7, Fail: 1</p>
+                <p class='attribute'><strong>Start Time: </strong>2020-07-27 13:21:29</p>
+                <p class='attribute'><strong>Duration: </strong>222.73 s</p>
+                <p class='attribute'><strong>Summary: </strong>Total: 12, Pass: 9, Fail: 2, Error: 1</p>
             </div>
         </div>
         <div class="row">
@@ -147,7 +147,119 @@ AssertionError
                         </tr>
                         <tr>
                             <td colspan="3">
-                                Total: 8, Pass: 7, Fail: 1 -- Duration: 41.48 s
+                                Total: 8, Pass: 7, Fail: 1 -- Duration: 41.39 s
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12 col-sm-10 col-md-10">
+                <table class='table table-hover table-responsive'>
+                    <thead>
+                        <tr>
+                            <th>SeleniumCCHQ.CommcareHQ.TestScripts.mobileWorkers.MobileWorkerTests</th>
+                            <th>Status</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class='success'>
+                            <td class="col-xs-10">test_01_click_mobile_worker_menu</td>
+                            <td class="col-xs-1">
+                                <span class="label label-success" style="display:block;width:40px;">Pass</span>
+                            </td>
+                            <td class="col-xs-1">
+                                <button class="btn btn-default btn-xs">View</button>
+                            </td>
+                        </tr>
+                        <tr style="display:none;">
+                            <td class="col-xs-9" colspan="3"><p>Mobile Workers Menu Visible and Click-able
+</p>
+                            </td>
+                        </tr>
+                        <tr class='danger'>
+                            <td class="col-xs-10">test_02_create_mobile_worker</td>
+                            <td class="col-xs-1">
+                                <span class="label label-danger" style="display:block;width:40px;">Fail</span>
+                            </td>
+                            <td class="col-xs-1">
+                                <button class="btn btn-default btn-xs">View</button>
+                            </td>
+                        </tr>
+                        <tr style="display:none;">
+                            <td class="col-xs-9" colspan="3"><p style="color:maroon;">AssertionError:  Username is already taken</p><p style="color:maroon;">Traceback (most recent call last):
+  File "C:\Users\dsi-user.DESKTOP-IGCBOU4\AutomationProjects\SeleniumCCHQ\CommcareHQ\TestScripts\mobileWorkers.py", line 27, in test_02_create_mobile_worker
+    worker.click_create()
+  File "C:\Users\dsi-user.DESKTOP-IGCBOU4\AutomationProjects\SeleniumCCHQ\CommcareHQ\Pages\mobileWorkersPage.py", line 72, in click_create
+    assert False, " Username is already taken"
+AssertionError:  Username is already taken
+</p>
+                            </td>
+                        </tr>
+                        <tr class='warning'>
+                            <td class="col-xs-10">test_03_user_field_creation</td>
+                            <td class="col-xs-1">
+                                <span class="label label-warning" style="display:block;width:40px;">Error</span>
+                            </td>
+                            <td class="col-xs-1">
+                                <button class="btn btn-default btn-xs">View</button>
+                            </td>
+                        </tr>
+                        <tr style="display:none;">
+                            <td class="col-xs-9" colspan="3"><p>Message: no such element: Unable to locate element: {"method":"xpath","selector":"//input[@data-bind='value: slug']"}
+  (Session info: chrome=83.0.4103.116)
+
+Message: no such element: Unable to locate element: {"method":"xpath","selector":"//input[@data-bind='value: label']"}
+  (Session info: chrome=83.0.4103.116)
+
+Message: no such element: Unable to locate element: {"method":"xpath","selector":"//button[@data-bind='click: addChoice']"}
+  (Session info: chrome=83.0.4103.116)
+
+Message: no such element: Unable to locate element: {"method":"css selector","selector":"[id="save-custom-fields"]"}
+  (Session info: chrome=83.0.4103.116)
+
+</p><p style="color:maroon;">NoSuchElementException: Message: no such element: Unable to locate element: {"method":"xpath","selector":"//div[@class='alert alert-margin-top fade in alert-success']"}
+  (Session info: chrome=83.0.4103.116)
+</p><p style="color:maroon;">Traceback (most recent call last):
+  File "C:\Users\dsi-user.DESKTOP-IGCBOU4\AutomationProjects\SeleniumCCHQ\CommcareHQ\TestScripts\mobileWorkers.py", line 39, in test_03_user_field_creation
+    create.save_field()
+  File "C:\Users\dsi-user.DESKTOP-IGCBOU4\AutomationProjects\SeleniumCCHQ\CommcareHQ\Pages\mobileWorkersPage.py", line 118, in save_field
+    assert self.driver.find_element_by_xpath(self.user_field_success_msg).is_displayed
+  File "C:\Users\dsi-user.DESKTOP-IGCBOU4\AutomationProjects\venv\lib\site-packages\selenium\webdriver\remote\webdriver.py", line 394, in find_element_by_xpath
+    return self.find_element(by=By.XPATH, value=xpath)
+  File "C:\Users\dsi-user.DESKTOP-IGCBOU4\AutomationProjects\venv\lib\site-packages\selenium\webdriver\remote\webdriver.py", line 976, in find_element
+    return self.execute(Command.FIND_ELEMENT, {
+  File "C:\Users\dsi-user.DESKTOP-IGCBOU4\AutomationProjects\venv\lib\site-packages\selenium\webdriver\remote\webdriver.py", line 321, in execute
+    self.error_handler.check_response(response)
+  File "C:\Users\dsi-user.DESKTOP-IGCBOU4\AutomationProjects\venv\lib\site-packages\selenium\webdriver\remote\errorhandler.py", line 242, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.NoSuchElementException: Message: no such element: Unable to locate element: {"method":"xpath","selector":"//div[@class='alert alert-margin-top fade in alert-success']"}
+  (Session info: chrome=83.0.4103.116)
+
+</p>
+                            </td>
+                        </tr>
+                        <tr class='success'>
+                            <td class="col-xs-10">test_04_user_field_visible</td>
+                            <td class="col-xs-1">
+                                <span class="label label-success" style="display:block;width:40px;">Pass</span>
+                            </td>
+                            <td class="col-xs-1">
+                                <button class="btn btn-default btn-xs">View</button>
+                            </td>
+                        </tr>
+                        <tr style="display:none;">
+                            <td class="col-xs-9" colspan="3"><p>Clicked on user
+Selected User Field
+User Field Visible and Added for User
+</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">
+                                Total: 4, Pass: 2, Fail: 1, Error: 1 -- Duration: 181.34 s
                             </td>
                         </tr>
                     </tbody>
