@@ -1,5 +1,4 @@
 import unittest
-import time
 from SeleniumCCHQ.CommcareHQ.Pages.homePage import HomePage
 from SeleniumCCHQ.CommcareHQ.Pages.rolesPermissionsPage import RolesPermissionPage
 from SeleniumCCHQ.CommcareHQ.TestBase.environmentSetupPage import EnvironmentSetup
@@ -20,11 +19,13 @@ class RolesPermissionsTests(EnvironmentSetup):
         driver = self.driver
         role = RolesPermissionPage(driver)
         role.add_role()
+        print("New Role Added")
 
     def test_03_edit_role(self):
         driver = self.driver
         role = RolesPermissionPage(driver)
         role.edit_role()
+        print("Role Edited Successfully")
 
 
 if __name__ == "__main__":

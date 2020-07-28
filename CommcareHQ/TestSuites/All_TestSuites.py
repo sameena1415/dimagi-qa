@@ -3,7 +3,8 @@ import HtmlTestRunner
 from SeleniumCCHQ.CommcareHQ.TestScripts.menuVisibility import MenuVisibilityTests
 from SeleniumCCHQ.CommcareHQ.TestScripts.mobileWorkers import MobileWorkerTests
 from SeleniumCCHQ.CommcareHQ.TestScripts.groups import GroupsTests
-from SeleniumCCHQ.CommcareHQ.TestScripts.rolesPermissions import RolesPermissionPage
+from SeleniumCCHQ.CommcareHQ.TestScripts.rolesPermissions import RolesPermissionsTests
+from SeleniumCCHQ.CommcareHQ.TestScripts.organisationStructure import OrganisationStructureTests
 
 if __name__ == "__main__":
     loader = TestLoader()
@@ -11,7 +12,8 @@ if __name__ == "__main__":
         loader.loadTestsFromTestCase(MenuVisibilityTests),
         loader.loadTestsFromTestCase(MobileWorkerTests),
         loader.loadTestsFromTestCase(GroupsTests),
-        loader.loadTestsFromTestCase(RolesPermissionPage)
+        loader.loadTestsFromTestCase(RolesPermissionsTests),
+        loader.loadTestsFromTestCase(OrganisationStructureTests)
     ))
 
     testRunner = HtmlTestRunner.HTMLTestRunner(output='Reports', report_name="Test_Result_Report",
