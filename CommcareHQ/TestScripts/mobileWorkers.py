@@ -26,28 +26,42 @@ class MobileWorkerTests(EnvironmentSetup):
         worker.click_create()
         print("Mobile Worker Created")
 
-    def test_03_user_field_creation(self):
-        driver = self.driver
-        create = MobileWorkerPage(driver)
-        create.mobile_worker_menu()
-        create.edit_user_field()
-        create.add_field()
-        create.add_user_property(UserInputs.user_property)
-        create.add_label(UserInputs.label)
-        create.add_choice(UserInputs.choice)
-        create.save_field()
-        print("User Field Added")
-
-    def test_04_user_field_visible(self):
-        driver = self.driver
-        visible = MobileWorkerPage(driver)
-        visible.go_back_to_mobile_workers()
-        visible.select_mobile_worker_created()
-        print("Clicked on user")
-        visible.enter_value_for_created_user_field()
-        print("Selected User Field")
-        visible.update_information()
-        print("User Field Visible and Added for User")
+    # def test_03_user_field_creation(self):
+    #     driver = self.driver
+    #     create = MobileWorkerPage(driver)
+    #     create.mobile_worker_menu()
+    #     create.edit_user_field()
+    #     create.add_field()
+    #     create.add_user_property(UserInputs.user_property)
+    #     create.add_label(UserInputs.label)
+    #     create.add_choice(UserInputs.choice)
+    #     create.save_field()
+    #     print("User Field Added")
+    #
+    # def test_04_user_field_visible(self):
+    #     driver = self.driver
+    #     visible = MobileWorkerPage(driver)
+    #     visible.go_back_to_mobile_workers()
+    #     visible.select_mobile_worker_created()
+    #     print("Clicked on user")
+    #     visible.enter_value_for_created_user_field()
+    #     print("Selected User Field")
+    #     visible.update_information()
+    #     print("User Field Visible and Added for User")
+    #
+    # def test_05_deactivate_user(self):
+    #     driver = self.driver
+    #     user = MobileWorkerPage(driver)
+    #     user.deactivate_user()
+    #     user.verify_deactivation()
+    #     user.verify_deactivation_via_login()
+    #
+    # def test_06_reactivate_user(self):
+    #     driver = self.driver
+    #     user = MobileWorkerPage(driver)
+    #     user.reactivate_user()
+    #     user.verify_reactivation()
+    #     user.verify_reactivation_via_login()
 
 
 if __name__ == "__main__":

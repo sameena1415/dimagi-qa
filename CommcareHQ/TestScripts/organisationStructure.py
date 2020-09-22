@@ -26,6 +26,32 @@ class OrganisationStructureTests(EnvironmentSetup):
         edit.edit_location()
         print("Location edited")
 
+    def test_04_edit_location_fields(self):
+        driver = self.driver
+        edit = OrganisationStructurePage(driver)
+        edit.edit_location_fields()
+        print("Location field created")
+
+    def test_05_visibilty_of_location_fields_in_locations(self):
+        driver = self.driver
+        edit = OrganisationStructurePage (driver)
+        edit.selection_location_field_for_location_created()
+        print("Selected location field created, for the location")
+
+    def test_06_creation_organization_level(self):
+        driver = self.driver
+        org = OrganisationStructurePage(driver)
+        org.create_org_level()
+
+    # def test_07_download_locations(self):
+    #     driver = self.driver
+    #     org = OrganisationStructurePage(driver)
+    #     org.download_locations()
+
+    # def test_08_upload_locations(self):
+    #     driver = self.driver
+    #     org = OrganisationStructurePage(driver)
+    #     org.upload_locations()
 
 if __name__ == "__main__":
     unittest.main()

@@ -14,7 +14,7 @@ class RolesPermissionPage:
         self.edit_web_user_checkbox = "edit-web-users-checkbox"
         self.save_btn_xpath = "//button[@class='btn btn-primary disable-on-submit']"
         self.role_created = "//span[text()='"+UserInputs.role_name+"']"
-        self.edit_role_xpath = "//span[text()='"+UserInputs.role_name+"']//following::td[9]/button[1]"
+        self.edit_role_xpath = "//span[text()='"+UserInputs.role_name+"']//following::td[11]/button[1]"
         self.edit_mobile_worker_checkbox = "edit-commcare-users-checkbox"
         self.role_renamed = "//span[text()='" + UserInputs.role_rename + "']"
 
