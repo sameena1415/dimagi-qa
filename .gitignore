@@ -127,3 +127,10 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+CommcareHQ/Pages/__pycache__/
+CommcareHQ/TestBase/__pycache__/
+CommcareHQ/TestScripts/__pycache__/
+CommcareHQ/TestSuites/__pycache__/
+CommcareHQ/TestSuites/Reports/
+CommcareHQ/TestSuites/UserInputs.csv
