@@ -90,17 +90,17 @@ class MenuVisibilityTests(EnvironmentSetup):
             print("Messaging Menu Visible and Click-able")
             time.sleep(2)
 
-    def test_08_admin_menu_visibility(self):
-        driver = self.driver
-        visible = HomePage(driver)
-        try:
-            visible.admin_menu()
-        except Exception as e:
-            print(e)
-        finally:
-            assert "User List - CommCare HQ" in driver.title
-            print("Admin Menu Visible and Click-able")
-            time.sleep(2)
+    # def test_08_admin_menu_visibility(self):
+    #     driver = self.driver
+    #     visible = HomePage(driver)
+    #     try:
+    #         visible.admin_menu()
+    #     except Exception as e:
+    #         print(e)
+    #     finally:
+    #         assert "User List - CommCare HQ" in driver.title
+    #         print("Admin Menu Visible and Click-able")
+    #         time.sleep(2)
 
 
 if __name__ == "__main__":

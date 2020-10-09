@@ -2,7 +2,7 @@ import unittest
 from SeleniumCCHQ.CommcareHQ.Pages.homePage import HomePage
 from SeleniumCCHQ.CommcareHQ.Pages.groupPage import GroupPage
 from SeleniumCCHQ.CommcareHQ.TestBase.environmentSetupPage import EnvironmentSetup
-from SeleniumCCHQ.CommcareHQ.UserInputs.userInputs import UserInputs
+from SeleniumCCHQ.CommcareHQ.UserInputs.generateUserInputs import fetch_random_string
 
 
 class GroupsTests(EnvironmentSetup):
@@ -14,7 +14,7 @@ class GroupsTests(EnvironmentSetup):
         menu.users_menu()
         visible.click_group_menu()
         print("Group menu clicked")
-        visible.enter_group_name(UserInputs.group_name)
+        visible.enter_group_name("group_" + fetch_random_string())
         print("Group name entered")
         visible.add_group()
         print("Group Added")
@@ -27,6 +27,7 @@ class GroupsTests(EnvironmentSetup):
         driver = self.driver
         edit = GroupPage(driver)
         edit.click_group_menu()
+        edit.click_on_created_group()
         print("Clicked on the Group to be Edited")
         edit.edit_existing_group()
         print("Clicked on Edit Settings for Group")

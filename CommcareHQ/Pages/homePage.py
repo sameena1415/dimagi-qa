@@ -48,11 +48,8 @@ class HomePage:
 
     def web_apps_menu(self):
         self.driver.find_element(By.ID, self.web_apps_menu_id).click()
-        time.sleep (2)
+        time.sleep(2)
         self.driver.find_element(By.ID, self.show_full_menu_id).click()
-        time.sleep (2)
-
-
         time.sleep(2)
 
     def messaging_menu(self):
@@ -60,7 +57,7 @@ class HomePage:
         self.driver.find_element(By.LINK_TEXT, self.view_all_link_text).click()
         time.sleep(2)
 
-    def admin_menu(self):
-        self.driver.find_element(By.ID, self.admin_menu_id).click()
-        self.driver.find_element(By.LINK_TEXT, self.view_all_link_text).click()
-        time.sleep(2)
+    # def admin_menu(self):
+    #     self.driver.find_element(By.ID, self.admin_menu_id).click()
+    #     self.driver.find_element(By.LINK_TEXT, self.view_all_link_text).click()
+    #     time.sleep(2)
