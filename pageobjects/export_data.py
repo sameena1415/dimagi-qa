@@ -30,7 +30,6 @@ class Export_Data:
         self.delete_case_export_button = None
         self.delete_confirmation_button = None
 
-
         #Add Export
         self.add_export_button = None  # Add Export button
         self.app_dropdown = None #Application dropdown in the modal
@@ -108,9 +107,7 @@ class Export_Data:
         self.archived_forms_option = None
         self.view_archived_form_link = None
 
-
     def data_tab(self):
-        #print(type(self.driver))
         self.data_dropdown = WebDriverWait(self.driver.instance, 10).until(
             EC.element_to_be_clickable((
                 By.XPATH, '//*[@id="ProjectDataTab"]/a')))
@@ -126,9 +123,7 @@ class Export_Data:
         # time.sleep(2)
 
 # Test Case 20_a - Verify Export functionality for Forms
-
     def del_form_exports(self):
-    
         print("Printing page source...")
         print(self.driver.instance.page_source)
         if inputs.text_no_exports_to_display in self.driver.instance.page_source:
@@ -149,7 +144,6 @@ class Export_Data:
             self.delete_confirmation_button.click()
             print("Delete Confirmation Button clicked")
             time.sleep(2)
-
 
     def add_form_exports(self):
         self.add_export_button = WebDriverWait(self.driver.instance, 10).until(
@@ -434,32 +428,15 @@ class Export_Data:
         path = inputs.download_path
         os.chdir(path)
         files = sorted(os.listdir(os.getcwd()), key=os.path.getmtime)
-        # oldest = files[0]
         newest = files[-1]
-        # print("Oldest:", oldest)
-        # print("Newest:", newest)
-        # print ("All by modified oldest to newest:","\n".join(files))
-        # check if size of file is 0
-        # if os.stat(newest).st_size == 0:
-        #    print('File is empty')
-        # else:
-        #    print('File is not empty')
-
-        # Reading an excel file using Python
-        # To open Workbook
-        wb = xlrd.open_workbook(newest)
+        wb = xlrd.open_workbook(newest) #Opening the Workbook
         sheet = wb.sheet_by_index(0)
-        # Extract a particular row value
-        # print(sheet.row_values(1))
-        # For row 0 and column 1, extracting first formID
-        caseID_colName = sheet.cell_value(0, 1)
+        caseID_colName = sheet.cell_value(0, 1)# For row 0 and column 1, extracting first formID
         caseID = sheet.cell_value(1, 1)
         print(caseID_colName, ": ", caseID)
         womanName_colName = sheet.cell_value(0, 2)
         womanName_excel = sheet.cell_value(1, 2)
         print("Woman's name in Excel- ", womanName_colName, ": ", womanName_excel)
-        # return formID
-        # def find_data_by_ID(self,validate_downloaded_form_exports):
         self.find_data_by_ID_link = WebDriverWait(self.driver.instance, 10).until(
             EC.visibility_of_element_located((
                 By.XPATH, '//*[@id="hq-sidebar"]/nav/ul[1]/li[4]/a')))
@@ -482,10 +459,8 @@ class Export_Data:
         self.view_caseID.click()
         print("view_FormID link clicked")
         time.sleep(5)
-        # self.driver.instance.get("https://www.commcarehq.org/accounts/login/")
-
-        # Switch tab logic is required here
-        winHandles = self.driver.instance.window_handles
+        
+        winHandles = self.driver.instance.window_handles # Switch tab logic
         window_before = winHandles[0]
         print(window_before)
         window_after = winHandles[1]
@@ -504,7 +479,7 @@ class Export_Data:
         self.driver.instance.close()  # Close the feed URL
         self.driver.instance.switch_to.window(self.driver.instance.window_handles[0])  # Switch back to the
 
-    # Test Case 21 - Export SMS Messages
+# Test Case 21 - Export SMS Messages
     def sms_exports(self):
         self.export_sms_link = WebDriverWait(self.driver.instance, 10).until(
             EC.element_to_be_clickable((
@@ -623,7 +598,6 @@ class Export_Data:
                 By.XPATH, '//*[@id="select2-id_application-results"]/li')))
         self.select_app.click()
         print("First app selected")
-        # time.sleep(2)
 
         self.menu_dropdown = WebDriverWait(self.driver.instance, 10).until(
             EC.element_to_be_clickable((
@@ -636,32 +610,31 @@ class Export_Data:
                 By.XPATH, '//*[@id="select2-id_module-results"]/li[1]')))
         self.select_menu.click()
         print("First menu item selected")
-        # time.sleep(2)
 
         self.form_dropdown = WebDriverWait(self.driver.instance, 10).until(
             EC.element_to_be_clickable((
                 By.XPATH, '//*[@id="div_id_form"]/div/span/span[1]/span')))
         self.form_dropdown.click()
         print("form_dropdown clicked")
-        # time.sleep(2)
+        
         self.select_form = WebDriverWait(self.driver.instance, 10).until(
             EC.element_to_be_clickable((
                 By.XPATH, '//*[@id="select2-id_form-results"]/li[1]')))
         self.select_form.click()
         print("First form item selected")
-        # time.sleep(2)
+        
         self.add_dashboard_feed_button = WebDriverWait(self.driver.instance, 10).until(
             EC.element_to_be_clickable((
                 By.XPATH, '//*[@id="createExportOptionsModal"]/div/form/div/div[7]/button[2]')))
         self.add_dashboard_feed_button.click()
         print("Dashboard Feed added!!")
         time.sleep(2)
+        
         self.export_name = WebDriverWait(self.driver.instance, 10).until(
             EC.element_to_be_clickable((
                 By.XPATH, '//*[@id="export-name"]')))
         self.export_name.clear()
         self.export_name.send_keys(inputs.dashboard_feed_form)
-        # time.sleep(2)
 
         self.export_settings_create = WebDriverWait(self.driver.instance, 10).until(
             EC.element_to_be_clickable((
@@ -729,19 +702,18 @@ class Export_Data:
                 By.XPATH, '//*[@id="id_model_type"]/option[2]')))
         self.select_case_model.click()
         print("select_case_model selected")
-        # time.sleep(2)
+
         self.app_dropdown = WebDriverWait(self.driver.instance, 10).until(
             EC.element_to_be_clickable((
                 By.XPATH, '//*[@id="div_id_application"]/div/span/span[1]/span')))
         self.app_dropdown.click()
         print("app_dropdown clicked")
-        # time.sleep(2)
+
         self.select_app = WebDriverWait(self.driver.instance, 10).until(
             EC.element_to_be_clickable((
                 By.XPATH, '//*[@id="select2-id_application-results"]/li')))
         self.select_app.click()
         print("First app selected")
-        # time.sleep(2)
 
         self.case_type_dropdown = WebDriverWait(self.driver.instance, 10).until(
             EC.element_to_be_clickable((
@@ -754,10 +726,7 @@ class Export_Data:
                 By.XPATH, '//*[@id="select2-id_case_type-results"]/li')))
         self.select_case_type.click()
         print("First Case Type selected")
-        # time.sleep(2)
 
-
-        # time.sleep(2)
         self.add_dashboard_feed_button2 = WebDriverWait(self.driver.instance, 10).until(
             EC.element_to_be_clickable((
                 By.XPATH, '//*[@id="createExportOptionsModal"]/div/form/div/div[7]/button[2]')))
@@ -831,25 +800,24 @@ class Export_Data:
                 By.XPATH, '//*[@id="id_model_type"]')))
         self.feed_type_dropdown.click()
         print("feed_type_dropdown clicked")
-        # time.sleep(2)
+        
         self.select_form_feed_type = WebDriverWait(self.driver.instance, 10).until(
             EC.element_to_be_clickable((
                 By.XPATH, '//*[@id="id_model_type"]/option[3]')))
         self.select_form_feed_type.click()
         print("select_form_feed_type selected")
-        # time.sleep(2)
+        
         self.app_dropdown = WebDriverWait(self.driver.instance, 10).until(
             EC.element_to_be_clickable((
                 By.XPATH, '//*[@id="div_id_application"]/div/span/span[1]/span')))
         self.app_dropdown.click()
         print("app_dropdown clicked")
-        # time.sleep(2)
+        
         self.select_app = WebDriverWait(self.driver.instance, 10).until(
             EC.element_to_be_clickable((
                 By.XPATH, '//*[@id="select2-id_application-results"]/li')))
         self.select_app.click()
         print("First app selected")
-        # time.sleep(2)
 
         self.menu_dropdown = WebDriverWait(self.driver.instance, 10).until(
             EC.element_to_be_clickable((
@@ -869,13 +837,13 @@ class Export_Data:
                 By.XPATH, '//*[@id="div_id_form"]/div/span/span[1]/span')))
         self.form_dropdown.click()
         print("form_dropdown clicked")
-        # time.sleep(2)
+        
         self.select_form = WebDriverWait(self.driver.instance, 10).until(
             EC.element_to_be_clickable((
                 By.XPATH, '//*[@id="select2-id_form-results"]/li[1]')))
         self.select_form.click()
         print("First form item selected")
-        # time.sleep(2)
+        
         self.add_Odata_feed_button2 = WebDriverWait(self.driver.instance, 10).until(
             EC.element_to_be_clickable((
                 By.XPATH, '//*[@id="createExportOptionsModal"]/div/form/div/div[7]/button[2]')))
@@ -887,7 +855,6 @@ class Export_Data:
                 By.XPATH, '//*[@id="export-name"]')))
         self.export_name.clear()
         self.export_name.send_keys(inputs.odata_feed_form)
-        # time.sleep(2)
 
         self.export_settings_create = WebDriverWait(self.driver.instance, 10).until(
             EC.element_to_be_clickable((
@@ -906,8 +873,8 @@ class Export_Data:
         print(odata_feed_link)
         self.driver.instance.execute_script("window.open('');") # Open a new tab
         self.driver.instance.switch_to.window(self.driver.instance.window_handles[1]) # Switch to the new tab and open feed URL
-        #string manipulation for bypassing the authentication
-        final_URL=f"https://{inputs.login_username}:{inputs.login_password}@{odata_feed_link[8:]}"
+        
+        final_URL=f"https://{inputs.login_username}:{inputs.login_password}@{odata_feed_link[8:]}" #string manipulation for bypassing the authentication
         self.driver.instance.get(final_URL)
         odata_feed_data = self.driver.instance.page_source
         print(odata_feed_data)
@@ -915,7 +882,7 @@ class Export_Data:
             print("Odata form feed has data")
         else:
             print("Odata form feed is empty")
-        self.driver.instance.close() # Close the feed URL
+        self.driver.instance.close() 
         self.driver.instance.switch_to.window(self.driver.instance.window_handles[0]) # Switch back to the first tab with URL A
 
 #Test Case - 27 - Power BI / Tableau Integration, Case
@@ -939,40 +906,37 @@ class Export_Data:
                 By.XPATH, '//*[@id="id_model_type"]')))
         self.feed_type_dropdown.click()
         print("feed_type_dropdown clicked")
-        # time.sleep(2)
+        
         self.select_case_feed_type = WebDriverWait(self.driver.instance, 10).until(
             EC.element_to_be_clickable((
                 By.XPATH, '//*[@id="id_model_type"]/option[2]')))
         self.select_case_feed_type.click()
         print("select_case_feed_type selected")
-        # time.sleep(2)
+        
         self.app_dropdown = WebDriverWait(self.driver.instance, 10).until(
             EC.element_to_be_clickable((
                 By.XPATH, '//*[@id="div_id_application"]/div/span/span[1]/span')))
         self.app_dropdown.click()
         print("app_dropdown clicked")
-        # time.sleep(2)
+        
         self.select_app = WebDriverWait(self.driver.instance, 10).until(
             EC.element_to_be_clickable((
                 By.XPATH, '//*[@id="select2-id_application-results"]/li')))
         self.select_app.click()
         print("First app selected")
-        # time.sleep(2)
 
         self.case_type_dropdown = WebDriverWait(self.driver.instance, 10).until(
             EC.element_to_be_clickable((
                 By.XPATH, '//*[@id="div_id_case_type"]/div/span/span[1]/span')))
         self.case_type_dropdown.click()
         print("case_type_dropdown clicked")
-        # time.sleep(2)
+        
         self.select_case_type = WebDriverWait(self.driver.instance, 10).until(
             EC.element_to_be_clickable((
                 By.XPATH, '//*[@id="select2-id_case_type-results"]/li')))
         self.select_case_type.click()
         print("First Case Type selected")
-        # time.sleep(2)
 
-        # time.sleep(2)
         self.add_Odata_feed_button2 = WebDriverWait(self.driver.instance, 10).until(
             EC.element_to_be_clickable((
                 By.XPATH, '//*[@id="createExportOptionsModal"]/div/form/div/div[7]/button[2]')))
@@ -984,7 +948,6 @@ class Export_Data:
                 By.XPATH, '//*[@id="export-name"]')))
         self.export_name.clear()
         self.export_name.send_keys(inputs.odata_feed_case)
-        # time.sleep(2)
 
         self.export_settings_create = WebDriverWait(self.driver.instance, 10).until(
             EC.element_to_be_clickable((
@@ -1047,7 +1010,7 @@ class Export_Data:
         time.sleep(5)
         print("Forms archival successful!!")
 
-        #View Normal Forms
+#View Normal Forms
 
         self.driver.instance.refresh()
 
