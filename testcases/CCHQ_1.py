@@ -1,3 +1,5 @@
+# Import the libraries and packages we will need and create a Unit Test Class that will have
+# a setup, a teardown and our first test method (or test case).
 import unittest
 from pageobjects.export_data import Export_Data
 from pageobjects.login import Login
@@ -25,13 +27,13 @@ class TestCCHQ(unittest.TestCase):
         try:
             export.data_tab()
             time.sleep(2)
-            export.del_form_exports()
-            time.sleep(2)
             export.add_form_exports()
             time.sleep(2)
             export.form_exports()
             time.sleep(2)
             export.validate_downloaded_form_exports()
+            time.sleep(2)
+            ##export.del_form_exports() #to be called only if not running DSE
             time.sleep(2)
             export.add_case_exports()
             time.sleep(2)
@@ -39,17 +41,33 @@ class TestCCHQ(unittest.TestCase):
             time.sleep(2)
             export.validate_downloaded_case_exports()
             time.sleep(2)
+            ##export.del_case_exports() #to be called only if not running DSE
+            time.sleep(2)
             export.sms_exports()
             time.sleep(2)
-            export.daily_saved_exports()
+            export.daily_saved_exports_form()
+            time.sleep(2)
+            export.deletion()
+            time.sleep(2)
+            export.daily_saved_exports_case()
+            time.sleep(2)
+            export.deletion()
             time.sleep(2)
             export.excel_dashboard_integration_form()
             time.sleep(2)
+            export.deletion()
+            time.sleep(2)
             export.excel_dashboard_integration_case()
+            time.sleep(2)
+            export.deletion()
             time.sleep(2)
             export.powerBI_tableau_integration_form()
             time.sleep(2)
+            export.bi_tab_deletion()
+            time.sleep(2)
             export.powerBI_tableau_integration_case()
+            time.sleep(2)
+            export.bi_tab_deletion()
             time.sleep(2)
             export.manage_forms()
 
@@ -60,8 +78,8 @@ class TestCCHQ(unittest.TestCase):
             time.sleep(2)
 
 
-     def tearDown(self):
-     self.driver.instance.quit()
+    def tearDown(self):
+        self.driver.instance.quit()
 
 
 if __name__ == '__main__':
