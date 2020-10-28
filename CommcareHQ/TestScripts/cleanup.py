@@ -1,8 +1,8 @@
 import unittest
-from SeleniumCCHQ.CommcareHQ.Pages.groupPage import GroupPage
-from SeleniumCCHQ.CommcareHQ.Pages.mobileWorkersPage import MobileWorkerPage
-from SeleniumCCHQ.CommcareHQ.Pages.rolesPermissionsPage import RolesPermissionPage
-from SeleniumCCHQ.CommcareHQ.TestBase.environmentSetupPage import EnvironmentSetup
+from CommcareHQ.Pages.groupPage import GroupPage
+from CommcareHQ.Pages.mobileWorkersPage import MobileWorkerPage
+from CommcareHQ.Pages.rolesPermissionsPage import RolesPermissionPage
+from CommcareHQ.TestBase.environmentSetupPage import EnvironmentSetup
 
 
 class CleanUps(EnvironmentSetup):

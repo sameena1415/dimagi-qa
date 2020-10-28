@@ -1,6 +1,6 @@
-from SeleniumCCHQ.CommcareHQ.Pages.homePage import HomePage
-from SeleniumCCHQ.CommcareHQ.Pages.webappsPermissionPage import WebAppPermissionPage
-from SeleniumCCHQ.CommcareHQ.TestBase.environmentSetupPage import EnvironmentSetup
+from CommcareHQ.Pages.homePage import HomePage
+from CommcareHQ.Pages.webappsPermissionPage import WebAppPermissionPage
+from CommcareHQ.TestBase.environmentSetupPage import EnvironmentSetup
 
 
 class WebAppPermissionsTests(EnvironmentSetup):

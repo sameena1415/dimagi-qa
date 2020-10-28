@@ -1,8 +1,8 @@
 import unittest
-from SeleniumCCHQ.CommcareHQ.Pages.homePage import HomePage
-from SeleniumCCHQ.CommcareHQ.Pages.groupPage import GroupPage
-from SeleniumCCHQ.CommcareHQ.TestBase.environmentSetupPage import EnvironmentSetup
-from SeleniumCCHQ.CommcareHQ.UserInputs.generateUserInputs import fetch_random_string
+from CommcareHQ.Pages.homePage import HomePage
+from CommcareHQ.Pages.groupPage import GroupPage
+from CommcareHQ.TestBase.environmentSetupPage import EnvironmentSetup
+from CommcareHQ.UserInputs.generateUserInputs import fetch_random_string
 
 
 class GroupsTests(EnvironmentSetup):

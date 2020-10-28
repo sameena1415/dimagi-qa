@@ -1,8 +1,8 @@
 import unittest
 from selenium import webdriver
 
-from SeleniumCCHQ.CommcareHQ.Pages.loginPage import LoginPage
-from SeleniumCCHQ.CommcareHQ.UserInputs.userInputs import UserInputs
+from CommcareHQ.Pages.loginPage import LoginPage
+from CommcareHQ.UserInputs.userInputs import UserInputs
 
 
 class EnvironmentSetup(unittest.TestCase):

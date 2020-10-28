@@ -3,14 +3,14 @@ from unittest.loader import TestLoader
 
 import HtmlTestRunner
 
-from SeleniumCCHQ.CommcareHQ.TestScripts.cleanup import CleanUps
-from SeleniumCCHQ.CommcareHQ.TestScripts.groups import GroupsTests
-from SeleniumCCHQ.CommcareHQ.TestScripts.menuVisibility import MenuVisibilityTests
-from SeleniumCCHQ.CommcareHQ.TestScripts.mobileWorkers import MobileWorkerTests
-from SeleniumCCHQ.CommcareHQ.TestScripts.organisationStructure import OrganisationStructureTests
-from SeleniumCCHQ.CommcareHQ.TestScripts.rolesPermissions import RolesPermissionsTests
-from SeleniumCCHQ.CommcareHQ.TestScripts.webappsPermission import WebAppPermissionsTests
-from SeleniumCCHQ.CommcareHQ.UserInputs.generateUserInputs import GenerateUserInputs
+from CommcareHQ.TestScripts.cleanup import CleanUps
+from CommcareHQ.TestScripts.groups import GroupsTests
+from CommcareHQ.TestScripts.menuVisibility import MenuVisibilityTests
+from CommcareHQ.TestScripts.mobileWorkers import MobileWorkerTests
+from CommcareHQ.TestScripts.organisationStructure import OrganisationStructureTests
+from CommcareHQ.TestScripts.rolesPermissions import RolesPermissionsTests
+from CommcareHQ.TestScripts.webappsPermission import WebAppPermissionsTests
+from CommcareHQ.UserInputs.generateUserInputs import GenerateUserInputs
 
 if __name__ == "__main__":
     loader: TestLoader = TestLoader()

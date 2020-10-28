@@ -2,7 +2,7 @@ import time
 from selenium.common.exceptions import UnexpectedAlertPresentException
 from selenium.webdriver.common.by import By
 
-from SeleniumCCHQ.CommcareHQ.UserInputs.generateUserInputs import fetch_random_string
+from CommcareHQ.UserInputs.generateUserInputs import fetch_random_string
 
 
 class GroupPage:

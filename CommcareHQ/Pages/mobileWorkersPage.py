@@ -5,8 +5,8 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-from SeleniumCCHQ.CommcareHQ.UserInputs.generateUserInputs import fetch_random_string
-from SeleniumCCHQ.CommcareHQ.UserInputs.userInputs import UserInputs
+from CommcareHQ.UserInputs.generateUserInputs import fetch_random_string
+from CommcareHQ.UserInputs.userInputs import UserInputs
 
 
 class MobileWorkerPage:

@@ -2,7 +2,7 @@ from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
 import time
 
-from SeleniumCCHQ.CommcareHQ.UserInputs.generateUserInputs import fetch_random_string
+from CommcareHQ.UserInputs.generateUserInputs import fetch_random_string
 
 
 class RolesPermissionPage:

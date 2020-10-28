@@ -1,7 +1,7 @@
 import unittest
-from SeleniumCCHQ.CommcareHQ.Pages.homePage import HomePage
-from SeleniumCCHQ.CommcareHQ.Pages.organisationStructurePage import OrganisationStructurePage
-from SeleniumCCHQ.CommcareHQ.TestBase.environmentSetupPage import EnvironmentSetup
+from CommcareHQ.Pages.homePage import HomePage
+from CommcareHQ.Pages.organisationStructurePage import OrganisationStructurePage
+from CommcareHQ.TestBase.environmentSetupPage import EnvironmentSetup
 
 
 class OrganisationStructureTests(EnvironmentSetup):

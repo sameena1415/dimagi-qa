@@ -1,7 +1,7 @@
 import unittest
-from SeleniumCCHQ.CommcareHQ.Pages.mobileWorkersPage import MobileWorkerPage
-from SeleniumCCHQ.CommcareHQ.TestBase.environmentSetupPage import EnvironmentSetup
-from SeleniumCCHQ.CommcareHQ.UserInputs.generateUserInputs import fetch_random_string
+from CommcareHQ.Pages.mobileWorkersPage import MobileWorkerPage
+from CommcareHQ.TestBase.environmentSetupPage import EnvironmentSetup
+from CommcareHQ.UserInputs.generateUserInputs import fetch_random_string
 
 
 class MobileWorkerTests(EnvironmentSetup):

@@ -1,7 +1,7 @@
 import unittest
 import time
-from SeleniumCCHQ.CommcareHQ.Pages.homePage import HomePage
-from SeleniumCCHQ.CommcareHQ.TestBase.environmentSetupPage import EnvironmentSetup
+from CommcareHQ.Pages.homePage import HomePage
+from CommcareHQ.TestBase.environmentSetupPage import EnvironmentSetup
 
 
 class MenuVisibilityTests(EnvironmentSetup):
