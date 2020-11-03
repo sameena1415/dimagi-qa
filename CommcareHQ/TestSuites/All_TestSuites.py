@@ -4,6 +4,7 @@ from unittest.loader import TestLoader
 import HtmlTestRunner
 
 from CommcareHQ.TestScripts.cleanup import CleanUps
+from CommcareHQ.TestScripts.exportData import ExportTests
 from CommcareHQ.TestScripts.groups import GroupsTests
 from CommcareHQ.TestScripts.menuVisibility import MenuVisibilityTests
 from CommcareHQ.TestScripts.mobileWorkers import MobileWorkerTests
@@ -16,14 +17,16 @@ if __name__ == "__main__":
     loader: TestLoader = TestLoader()
     # noinspection PyTypeChecker
     SmokeTestSuite = TestSuite((
-        loader.loadTestsFromTestCase(MenuVisibilityTests),
-        loader.loadTestsFromTestCase(GenerateUserInputs),
-        loader.loadTestsFromTestCase(MobileWorkerTests),
-        loader.loadTestsFromTestCase(GroupsTests),
-        loader.loadTestsFromTestCase(RolesPermissionsTests),
-        loader.loadTestsFromTestCase(OrganisationStructureTests),
-        loader.loadTestsFromTestCase(WebAppPermissionsTests),
-        loader.loadTestsFromTestCase(CleanUps)
+        # loader.loadTestsFromTestCase(MenuVisibilityTests),
+        # loader.loadTestsFromTestCase(GenerateUserInputs),
+        # loader.loadTestsFromTestCase(MobileWorkerTests),
+        # loader.loadTestsFromTestCase(GroupsTests),
+        # loader.loadTestsFromTestCase(RolesPermissionsTests),
+        # loader.loadTestsFromTestCase(OrganisationStructureTests),
+        # loader.loadTestsFromTestCase(WebAppPermissionsTests),
+        # loader.loadTestsFromTestCase(CleanUps),
+        loader.loadTestsFromTestCase(ExportTests)
+
 
     ))
 
