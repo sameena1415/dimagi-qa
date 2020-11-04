@@ -16,7 +16,7 @@ def generate_random_string():
 
 
 def fetch_random_string():
-    with open('UserInputs.csv') as csvDataFile:
+    with open('..\\UserInputs\\generatedUserInputs.csv') as csvDataFile:
         data = [row for row in csv.reader(csvDataFile)]
     return data[-1][1]
 
