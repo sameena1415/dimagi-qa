@@ -6,12 +6,12 @@ import string
 def generate_random_string():
     res = ''.join(random.choices(string.ascii_lowercase + string.digits, k=6))
     random_string = str(res)
-    myData = ['random_string', random_string]
-    myFile = open('UserInputs.csv', 'a+', newline='\n')
-    with myFile:
-        writer = csv.writer(myFile)
-        writer.writerow(myData)
-        myFile.close()
+    my_data = ['random_string', random_string]
+    my_file = open('UserInputs.csv', 'a+', newline='\n')
+    with my_file:
+        writer = csv.writer(my_file)
+        writer.writerow(my_data)
+        my_file.close()
         print("Random string generated")
 
 
@@ -24,4 +24,3 @@ def fetch_random_string():
 class GenerateUserInputs:
     generate_random_string()
     fetch_random_string()
-

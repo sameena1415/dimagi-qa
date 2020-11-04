@@ -1,7 +1,7 @@
 # Import the libraries and packages we will need and create a Unit Test Class that will have
 # a setup, a teardown and our first test method (or test case).
 import unittest
-from CommcareHQ.Pages.ExportDataPage import ExportDataPage
+from CommcareHQ.Pages.exportDataPage import ExportDataPage
 from CommcareHQ.TestBase.environmentSetupPage import EnvironmentSetup
 import time
 
