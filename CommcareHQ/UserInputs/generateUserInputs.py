@@ -7,7 +7,7 @@ def generate_random_string():
     res = ''.join(random.choices(string.ascii_lowercase + string.digits, k=6))
     random_string = str(res)
     my_data = ['random_string', random_string]
-    my_file = open('..\\UserInputs\\generatedUserInputs.csv', 'a+', newline='\n')
+    my_file = open('generatedUserInputs.csv', 'a+', newline='\n')
     with my_file:
         writer = csv.writer(my_file)
         writer.writerow(my_data)
@@ -16,7 +16,7 @@ def generate_random_string():
 
 
 def fetch_random_string():
-    with open('..\\UserInputs\\generatedUserInputs.csv') as csvDataFile:
+    with open('generatedUserInputs.csv') as csvDataFile:
         data = [row for row in csv.reader(csvDataFile)]
     return data[-1][1]
 
