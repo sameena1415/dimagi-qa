@@ -138,5 +138,5 @@ CommcareHQ/UserInputs/generatedUserInputs.csv
 CommcareHQ/Reports/
 
 #Ignoring credentials
-CommcareHQ/UserInputs/loginCredentials.py
+#CommcareHQ/UserInputs/loginCredentials.py
 
