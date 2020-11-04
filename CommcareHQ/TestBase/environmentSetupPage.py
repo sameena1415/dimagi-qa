@@ -7,6 +7,8 @@ from CommcareHQ.UserInputs.loginCredentials import LoginCredentials
 
 class EnvironmentSetup(unittest.TestCase):
 
+    driver = None
+
     @classmethod
     def setUpClass(cls):
         cls.driver = webdriver.Chrome(executable_path="..\\..\\Drivers\\chromedriver.exe")
@@ -21,7 +23,6 @@ class EnvironmentSetup(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        cls.driver = webdriver.Chrome(executable_path="..\\..\\Drivers\\chromedriver.exe")
         cls.driver.close()
         cls.driver.quit()
         print("Test Completed")
