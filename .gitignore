@@ -134,7 +134,7 @@ CommcareHQ/Pages/__pycache__/
 CommcareHQ/TestBase/__pycache__/
 CommcareHQ/TestScripts/__pycache__/
 CommcareHQ/TestSuites/__pycache__/
-CommcareHQ/TestSuites/UserInputs.csv
+CommcareHQ/UserInputs/generatedUserInputs.csv
 CommcareHQ/Reports/
 
 #Ignoring credentials
