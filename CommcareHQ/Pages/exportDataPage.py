@@ -249,32 +249,19 @@ class ExportDataPage:
         path = UserInputsData.download_path
         os.chdir(path)
         files = sorted(os.listdir(os.getcwd()), key=os.path.getmtime)
-        # oldest = files[0]
+        
         newest = files[-1]
-        # print("Oldest:", oldest)
-        # print("Newest:", newest)
-        # print ("All by modified oldest to newest:","\n".join(files))
-        # check if size of file is 0
-        # if os.stat(newest).st_size == 0:
-        #    print('File is empty')
-        # else:
-        #    print('File is not empty')
-
-        # Reading an excel file using Python
-        # To open Workbook
+        
         wb = xlrd.open_workbook(newest)
         sheet = wb.sheet_by_index(0)
-        # Extract a particular row value
-        # print(sheet.row_values(1))
-        # For row 0 and column 1, extracting first formID
+        
         formID_colName = sheet.cell_value(0, 1)
         formID = sheet.cell_value(1, 1)
         print(formID_colName, ": ", formID)
         Name_colName = sheet.cell_value(0, 2)
         Name_excel = sheet.cell_value(1, 2)
         print("Woman's name in Excel- ", Name_colName, ": ", Name_excel)
-        # return formID
-        # def find_data_by_ID(self,validate_downloaded_form_exports):
+        
         self.find_data_by_ID_link = WebDriverWait(self.driver, 10).until(
             EC.visibility_of_element_located((
                 By.XPATH, '//*[@id="hq-sidebar"]/nav/ul[1]/li[4]/a')))
