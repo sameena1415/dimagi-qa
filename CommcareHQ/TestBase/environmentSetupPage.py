@@ -9,7 +9,7 @@ class EnvironmentSetup(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.driver = webdriver.Chrome(executable_path=UserInputs.driver_path)
+        cls.driver = webdriver.Chrome(executable_path="..\..\Drivers\chromedriver.exe")
         cls.driver.maximize_window()
         cls.driver.get(UserInputs.url)
         login = LoginPage(cls.driver)
