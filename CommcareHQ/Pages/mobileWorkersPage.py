@@ -6,7 +6,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
 from CommcareHQ.UserInputs.generateUserInputs import fetch_random_string
-from CommcareHQ.UserInputs.userInputs import UserInputs
+from CommcareHQ.UserInputs.userInputsData import UserInputsData
 
 
 class MobileWorkerPage:
@@ -328,7 +328,7 @@ class MobileWorkerPage:
         self.driver.find_element(By.LINK_TEXT, self.actions_tab_link_text).click()
         self.driver.find_element(By.XPATH, self.delete_mobile_worker).click()
         time.sleep(2)
-        self.driver.find_element(By.XPATH, self.enter_username).send_keys("username_" + fetch_random_string() + "@"+UserInputs.domain+".commcarehq.org")
+        self.driver.find_element(By.XPATH, self.enter_username).send_keys("username_" + fetch_random_string() + "@" + UserInputsData.domain + ".commcarehq.org")
         time.sleep(3)
         self.driver.find_element(By.XPATH, self.confirm_delete_mw).click()
         time.sleep(4)

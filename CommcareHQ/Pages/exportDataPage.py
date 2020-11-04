@@ -6,9 +6,7 @@ from selenium.webdriver.common.by import By
 
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-
-import CommcareHQ.UserInputs.userInputs
-from CommcareHQ.UserInputs import userInputs
+from CommcareHQ.UserInputs.userInputsData import UserInputsData
 
 
 class ExportDataPage:
@@ -49,8 +47,6 @@ class ExportDataPage:
         self.find_data_by_ID_button = None
         self.view_FormID = None
         self.Name_HQ = None  # Property 'Woman's name' value on HQ
-        oldest = None
-        newest = None
 
         # Export Case data variables
         self.export_case_data_link = None  # Export Case Data link on the left panel
@@ -198,7 +194,7 @@ class ExportDataPage:
             EC.element_to_be_clickable((
                 By.XPATH, '//*[@id="export-name"]')))
         self.export_name.clear()
-        self.export_name.send_keys(CommcareHQ.UserInputs.userInputs.form_export_name)
+        self.export_name.send_keys(UserInputsData.form_export_name)
 
         self.export_settings_create = WebDriverWait(self.driver, 10).until(
             EC.element_to_be_clickable((
@@ -228,7 +224,7 @@ class ExportDataPage:
                     By.XPATH, '//*[@id="download-progress"]/div/div/div[2]/div[1]/form/a')))
             self.download_button.click()
             print("Download form button clicked")
-            path = CommcareHQ.UserInputs.userInputs.download_path
+            path = UserInputsData.download_path
             os.chdir(path)
             files = sorted(os.listdir(os.getcwd()), key=os.path.getmtime)
             oldest = files[0]
@@ -250,7 +246,7 @@ class ExportDataPage:
     # Test Case 22_a -  Find Data By ID, forms
 
     def validate_downloaded_form_exports(self):
-        path = CommcareHQ.UserInputs.userInputs.download_path
+        path = UserInputsData.download_path
         os.chdir(path)
         files = sorted(os.listdir(os.getcwd()), key=os.path.getmtime)
         # oldest = files[0]
@@ -320,7 +316,7 @@ class ExportDataPage:
             print("Values match!")
         else:
             print("Values don't match")
-        self.drive.close()  # Close the feed URL
+        self.driver.close()  # Close the feed URL
         self.driver.switch_to.window(self.driver.window_handles[0])  # Switch back to the
 
     # Test Case 20_b - Verify Export functionality for Cases
@@ -376,7 +372,7 @@ class ExportDataPage:
             EC.element_to_be_clickable((
                 By.XPATH, '//*[@id="export-name"]')))
         self.export_name.clear()
-        self.export_name.send_keys(CommcareHQ.UserInputs.userInputs.case_export_name)
+        self.export_name.send_keys(UserInputsData.case_export_name)
 
         self.export_settings_create = WebDriverWait(self.driver, 10).until(
             EC.element_to_be_clickable((
@@ -422,7 +418,7 @@ class ExportDataPage:
     # Test Case 22_b - Find Data by ID for Case Exports
 
     def validate_downloaded_case_exports(self):
-        path = CommcareHQ.UserInputs.userInputs.download_path
+        path = UserInputsData.download_path
         os.chdir(path)
         files = sorted(os.listdir(os.getcwd()), key=os.path.getmtime)
         # oldest = files[0]
@@ -527,7 +523,7 @@ class ExportDataPage:
             self.sms_download_button.click()
             print("Download SMS button clicked")
             time.sleep(2)
-            path = CommcareHQ.UserInputs.userInputs.download_path
+            path = UserInputsData.download_path
             os.chdir(path)
             files = sorted(os.listdir(os.getcwd()), key=os.path.getmtime)
             oldest = files[0]
@@ -579,8 +575,8 @@ class ExportDataPage:
 
         self.driver.refresh()
 
-        if CommcareHQ.UserInputs.userInputs.form_export_name in self.driver.page_source:  # this condition can be improvised
-            print(CommcareHQ.UserInputs.userInputs.form_export_name, " - Export is present")
+        if UserInputsData.form_export_name in self.driver.page_source:  # this condition can be improvised
+            print(UserInputsData.form_export_name, " - Export is present")
         else:
             print("Form Export creation failed")
 
@@ -617,8 +613,8 @@ class ExportDataPage:
 
         self.driver.refresh()
 
-        if CommcareHQ.UserInputs.userInputs.case_export_name in self.driver.page_source:  # this condition can be improvised
-            print(CommcareHQ.UserInputs.userInputs.case_export_name, " - Export is present")
+        if UserInputsData.case_export_name in self.driver.page_source:  # this condition can be improvised
+            print(UserInputsData.case_export_name, " - Export is present")
         else:
             print("Case Export creation failed")
 
@@ -699,7 +695,7 @@ class ExportDataPage:
             EC.element_to_be_clickable((
                 By.XPATH, '//*[@id="export-name"]')))
         self.export_name.clear()
-        self.export_name.send_keys(CommcareHQ.UserInputs.userInputs.dashboard_feed_form)
+        self.export_name.send_keys(UserInputsData.dashboard_feed_form)
         # time.sleep(2)
 
         self.export_settings_create = WebDriverWait(self.driver, 10).until(
@@ -812,7 +808,7 @@ class ExportDataPage:
             EC.element_to_be_clickable((
                 By.XPATH, '//*[@id="export-name"]')))
         self.export_name.clear()
-        self.export_name.send_keys(CommcareHQ.UserInputs.userInputs.dashboard_feed_case)
+        self.export_name.send_keys(UserInputsData.dashboard_feed_case)
         # time.sleep(2)
 
         self.export_settings_create = WebDriverWait(self.driver, 10).until(
@@ -937,7 +933,7 @@ class ExportDataPage:
             EC.element_to_be_clickable((
                 By.XPATH, '//*[@id="export-name"]')))
         self.export_name.clear()
-        self.export_name.send_keys(CommcareHQ.UserInputs.userInputs.odata_feed_form)
+        self.export_name.send_keys(UserInputsData.odata_feed_form)
         # time.sleep(2)
 
         self.export_settings_create = WebDriverWait(self.driver, 10).until(
@@ -959,7 +955,7 @@ class ExportDataPage:
         self.driver.switch_to.window(
             self.driver.window_handles[1])  # Switch to the new tab and open feed URL
         # string manipulation for bypassing the authentication
-        final_URL = f"https://{userInputs.login_username}:{userInputs.login_password}@{odata_feed_link[8:]}"
+        final_URL = f"https://{UserInputsData.login_username}:{UserInputsData.login_password}@{odata_feed_link[8:]}"
         self.driver.get(final_URL)
         odata_feed_data = self.driver.page_source
         print(odata_feed_data)
@@ -1055,7 +1051,7 @@ class ExportDataPage:
             EC.element_to_be_clickable((
                 By.XPATH, '//*[@id="export-name"]')))
         self.export_name.clear()
-        self.export_name.send_keys(CommcareHQ.UserInputs.userInputs.odata_feed_case)
+        self.export_name.send_keys(UserInputsData.odata_feed_case)
         # time.sleep(2)
 
         self.export_settings_create = WebDriverWait(self.driver, 10).until(
@@ -1077,7 +1073,7 @@ class ExportDataPage:
         self.driver.switch_to.window(
             self.driver.window_handles[1])  # Switch to the new tab and open feed URL
         # string manipulation for bypassing the authentication
-        final_URL = f"https://{userInputs.login_username}:{userInputs.login_password}@{odata_feed_link[8:]}"
+        final_URL = f"https://{UserInputsData.login_username}:{UserInputsData.login_password}@{odata_feed_link[8:]}"
         self.driver.get(final_URL)
         odata_feed_data = self.driver.page_source
         print(odata_feed_data)
