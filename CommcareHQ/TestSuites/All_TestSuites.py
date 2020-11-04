@@ -29,7 +29,7 @@ if __name__ == "__main__":
 
     ))
 
-    testRunner = HtmlTestRunner.HTMLTestRunner(output='Reports', report_name="CCHQ_Test_Result_Report",
+    testRunner = HtmlTestRunner.HTMLTestRunner(output='..\\Reports\\', report_name="CCHQ_Test_Result_Report",
                                                report_title='CCHQ Smoke Tests', verbosity=2, combine_reports=True)
     # 0 (quiet): you just get the total numbers of tests executed and the global result
     # 1 (default): you get the same plus a dot for every successful test or a F for every failure
