@@ -135,3 +135,4 @@ CommcareHQ/TestSuites/__pycache__/
 CommcareHQ/TestSuites/Reports/
 CommcareHQ/TestSuites/UserInputs.csv
 .idea/
+CommcareHQ/UserInputs/loginCredentials.py
