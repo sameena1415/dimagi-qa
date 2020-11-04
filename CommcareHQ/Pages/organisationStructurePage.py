@@ -19,8 +19,8 @@ class OrganisationStructurePage:
         self.edit_first_loc_xpath = "(//*[@id='button-template']/a)[1]"
         self.loc_name_input_id = "id_name"
         self.update_loc_xpath = "//*[@id='users']//preceding::button"
-        self.location_created_xpath = "//span[text()='"+"location_"+fetch_random_string()+"']"
-        self.location_renamed_xpath = "//span[text()='"+"location_"+str(fetch_random_string())+"new"+"']"
+        self.location_created_xpath = "//span[text()='" + "location_" + fetch_random_string() + "']"
+        self.location_renamed_xpath = "//span[text()='" + "location_" + str(fetch_random_string()) + "new" + "']"
         self.edit_loc_field_btn_xpath = "//a[@data-action='Edit Location Fields']"
         self.add_field_btn_xpath = "//button[@data-bind='click: addField']"
         self.loc_property_xpath = "(//input[@data-bind='value: slug'])[last()]"
@@ -29,8 +29,9 @@ class OrganisationStructurePage:
         self.choice_xpath = "(//input[@data-bind='value: value'])[last()]"
         self.save_btn_id = "save-custom-fields"
         self.success_msg_xpath = "//div[@class='alert alert-margin-top fade in alert-success']"
-        self.additional_info_drop_down = "//*[@id='select2-id_data-field-"+"location_field_"+str(fetch_random_string())+"-container']"
-        self.select_value_drop_down = "//li[text()='"+"location_field_"+str(fetch_random_string())+"']"
+        self.additional_info_drop_down = "//*[@id='select2-id_data-field-" + "location_field_" + str(
+            fetch_random_string()) + "-container']"
+        self.select_value_drop_down = "//li[text()='" + "location_field_" + str(fetch_random_string()) + "']"
         self.update_loc_btn_xpath = "//*[@id='new_user']//preceding::button[2]"
         self.duplicate_msg_xpath = "//div[@class='alert alert-danger']"
         self.org_level_menu_link_text = "Organization Levels"
@@ -50,7 +51,7 @@ class OrganisationStructurePage:
         self.driver.implicitly_wait(5)
         self.driver.find_element(By.XPATH, self.add_loc_btn_xpath).click()
         self.driver.find_element(By.XPATH, self.loc_name_xpath).clear()
-        self.driver.find_element(By.XPATH, self.loc_name_xpath).send_keys("location_"+fetch_random_string())
+        self.driver.find_element(By.XPATH, self.loc_name_xpath).send_keys("location_" + fetch_random_string())
         self.driver.find_element(By.XPATH, self.create_loc_xpath).click()
         time.sleep(2)
         try:
@@ -66,7 +67,8 @@ class OrganisationStructurePage:
     def edit_location(self):
         self.driver.find_element(By.XPATH, self.edit_first_loc_xpath).click()
         self.driver.find_element(By.ID, self.loc_name_input_id).clear()
-        self.driver.find_element(By.ID, self.loc_name_input_id).send_keys("location_"+str(fetch_random_string())+"new")
+        self.driver.find_element(By.ID, self.loc_name_input_id).send_keys(
+            "location_" + str(fetch_random_string()) + "new")
         self.driver.find_element(By.XPATH, self.update_loc_xpath).click()
         assert self.driver.find_element(By.XPATH, self.loc_saved_success_msg).is_displayed()
         self.driver.find_element(By.LINK_TEXT, self.org_menu_link_text).click()
@@ -78,11 +80,11 @@ class OrganisationStructurePage:
         time.sleep(2)
         self.driver.find_element(By.XPATH, self.add_field_btn_xpath).click()
         self.driver.find_element(By.XPATH, self.loc_property_xpath).clear()
-        self.driver.find_element(By.XPATH, self.loc_property_xpath).send_keys("location_field_"+fetch_random_string())
+        self.driver.find_element(By.XPATH, self.loc_property_xpath).send_keys("location_field_" + fetch_random_string())
         self.driver.find_element(By.XPATH, self.loc_label_xpath).clear()
-        self.driver.find_element(By.XPATH, self.loc_label_xpath).send_keys("location_field_"+fetch_random_string())
+        self.driver.find_element(By.XPATH, self.loc_label_xpath).send_keys("location_field_" + fetch_random_string())
         self.driver.find_element(By.XPATH, self.add_choice_btn_xpath).click()
-        self.driver.find_element(By.XPATH, self.choice_xpath).send_keys("location_field_"+fetch_random_string())
+        self.driver.find_element(By.XPATH, self.choice_xpath).send_keys("location_field_" + fetch_random_string())
         self.driver.find_element(By.ID, self.save_btn_id).click()
         assert self.driver.find_element(By.XPATH, self.success_msg_xpath).is_displayed()
 
@@ -103,7 +105,7 @@ class OrganisationStructurePage:
         self.driver.find_element(By.LINK_TEXT, self.org_level_menu_link_text).click()
         time.sleep(3)
         self.driver.find_element(By.XPATH, self.new_org_level_btn_xpath).click()
-        self.driver.find_element(By.XPATH, self.org_level_value_xpath).send_keys("loc_level_"+fetch_random_string())
+        self.driver.find_element(By.XPATH, self.org_level_value_xpath).send_keys("loc_level_" + fetch_random_string())
         self.driver.find_element(By.XPATH, self.save_btn_xpath).click()
         time.sleep(2)
 

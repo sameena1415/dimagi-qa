@@ -128,11 +128,15 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
+#Ignoring compliled files
+.idea/
 CommcareHQ/Pages/__pycache__/
 CommcareHQ/TestBase/__pycache__/
 CommcareHQ/TestScripts/__pycache__/
 CommcareHQ/TestSuites/__pycache__/
 CommcareHQ/TestSuites/Reports/
 CommcareHQ/TestSuites/UserInputs.csv
-.idea/
+
+#Ignoring credentials
 CommcareHQ/UserInputs/loginCredentials.py
+

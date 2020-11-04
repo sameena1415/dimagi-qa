@@ -20,7 +20,7 @@ class ExportTests(EnvironmentSetup):
             time.sleep(2)
             export.validate_downloaded_form_exports()
             time.sleep(2)
-            ##export.del_form_exports() #to be called only if not running DSE
+            # export.del_form_exports() #to be called only if not running DSE
             time.sleep(2)
             export.add_case_exports()
             time.sleep(2)

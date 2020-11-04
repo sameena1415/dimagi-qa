@@ -1,4 +1,5 @@
 import time
+
 from selenium.common.exceptions import UnexpectedAlertPresentException
 from selenium.webdriver.common.by import By
 
@@ -13,7 +14,7 @@ class GroupPage:
         self.add_group_button = "//button[@type='submit' and @class='btn btn-primary']"
         self.group_menu_xpath = "//a[@data-title='Groups']"
         self.users_drop_down_xpath = "//input[@class='select2-search__field']"
-        self.select_user_xpath = "//li[text()='"+"username_" + fetch_random_string() + "']"
+        self.select_user_xpath = "//li[text()='" + "username_" + fetch_random_string() + "']"
         self.update_button_id = "submit-id-submit"
         self.edit_settings_link_text = "Edit Settings"
         self.group_name_input_id = "group-name-input"
@@ -40,7 +41,7 @@ class GroupPage:
 
     def click_on_users_drop_down(self):
         time.sleep(2)
-        self.driver.find_element_by_xpath (self.users_drop_down_xpath).click()
+        self.driver.find_element_by_xpath(self.users_drop_down_xpath).click()
         time.sleep(2)
         self.driver.find_element_by_xpath(self.users_drop_down_xpath).send_keys("username_" + fetch_random_string())
         time.sleep(2)
@@ -70,7 +71,8 @@ class GroupPage:
 
     def rename_existing_group(self):
         self.driver.find_element(By.ID, self.group_name_input_id).clear()
-        self.driver.find_element(By.ID, self.group_name_input_id).send_keys("group_" + fetch_random_string()+"_rename")
+        self.driver.find_element(By.ID, self.group_name_input_id).send_keys(
+            "group_" + fetch_random_string() + "_rename")
         self.driver.find_element(By.XPATH, self.save_button_xpath).click()
         time.sleep(3)
         assert True == self.driver.find_element(By.ID, self.success_alert_id).is_displayed()
@@ -82,7 +84,7 @@ class GroupPage:
         assert True == self.driver.find_element(By.ID, self.success_alert_id).is_displayed()
 
     def cleanup_group(self):
-        self.driver.find_element(By.LINK_TEXT, "group_" + fetch_random_string()+"_rename").click()
+        self.driver.find_element(By.LINK_TEXT, "group_" + fetch_random_string() + "_rename").click()
         self.driver.find_element(By.XPATH, self.delete_group).click()
         time.sleep(2)
         self.driver.find_element(By.XPATH, self.confirm_delete).click()

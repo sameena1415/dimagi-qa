@@ -356,7 +356,7 @@ class ExportDataPage:
         print("case_type_dropdown clicked")
         # time.sleep(2)
         self.select_case_type = WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((
-                By.XPATH, '//*[@id="select2-id_case_type-results"]/li')))
+            By.XPATH, '//*[@id="select2-id_case_type-results"]/li')))
         self.select_case_type.click()
         print("First Case Type selected")
         # time.sleep(2)
