@@ -9,10 +9,7 @@ class UserInputsData:
     url = "https://staging.commcarehq.org/accounts/login/"
     login_username = "automation.user.commcarehq@gmail.com"
     login_password = "pass@123"
-
-
     domain = "another-upstream"
-    #download_path = "C:\\Users\\dsi-user\\Downloads"
     download_path = Path(str(os.path.expanduser('~\Downloads')))
 
 
