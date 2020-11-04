@@ -17,16 +17,15 @@ if __name__ == "__main__":
     loader: TestLoader = TestLoader()
     # noinspection PyTypeChecker
     SmokeTestSuite = TestSuite((
-        # loader.loadTestsFromTestCase(MenuVisibilityTests),
-        # loader.loadTestsFromTestCase(GenerateUserInputs),
-        # loader.loadTestsFromTestCase(MobileWorkerTests),
-        # loader.loadTestsFromTestCase(GroupsTests),
-        # loader.loadTestsFromTestCase(RolesPermissionsTests),
-        # loader.loadTestsFromTestCase(OrganisationStructureTests),
-        # loader.loadTestsFromTestCase(WebAppPermissionsTests),
-        # loader.loadTestsFromTestCase(CleanUps),
+        loader.loadTestsFromTestCase(MenuVisibilityTests),
+        loader.loadTestsFromTestCase(GenerateUserInputs),
+        loader.loadTestsFromTestCase(MobileWorkerTests),
+        loader.loadTestsFromTestCase(GroupsTests),
+        loader.loadTestsFromTestCase(RolesPermissionsTests),
+        loader.loadTestsFromTestCase(OrganisationStructureTests),
+        loader.loadTestsFromTestCase(WebAppPermissionsTests),
+        loader.loadTestsFromTestCase(CleanUps),
         loader.loadTestsFromTestCase(ExportTests)
-
 
     ))
 
