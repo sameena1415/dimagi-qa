@@ -1,6 +1,6 @@
 import unittest
 from selenium import webdriver
-
+from webdriver_manager.chrome import ChromeDriverManager
 from CommcareHQ.Pages.loginPage import LoginPage
 from CommcareHQ.UserInputs.loginCredentials import LoginCredentials
 
@@ -11,7 +11,7 @@ class EnvironmentSetup(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.driver = webdriver.Chrome(executable_path="..\\..\\Drivers\\chromedriver.exe")
+        cls.driver = webdriver.Chrome(executable_path=ChromeDriverManager().install())
         cls.driver.maximize_window()
         cls.driver.get(LoginCredentials.url)
         login = LoginPage(cls.driver)
