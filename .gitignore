@@ -130,13 +130,13 @@ dmypy.json
 
 #Ignoring compliled files
 .idea/
-CommcareHQ/Pages/__pycache__/
-CommcareHQ/TestBase/__pycache__/
-CommcareHQ/TestScripts/__pycache__/
-CommcareHQ/TestSuites/__pycache__/
-CommcareHQ/TestSuites/generatedUserInputs.csv
-CommcareHQ/Reports/
+Pages/__pycache__/
+TestBase/__pycache__/
+TestScripts/__pycache__/
+TestSuites/__pycache__/
+TestSuites/generatedUserInputs.csv
+Reports/
 
 #Ignoring credentials
-CommcareHQ/UserInputs/loginCredentials.py
+#UserInputs/loginCredentials.py
 
