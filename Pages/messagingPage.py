@@ -2,6 +2,8 @@ import time
 import glob
 from pathlib import Path
 import os
+
+from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 
@@ -43,6 +45,7 @@ class MessagingPage:
         self.continue_button_rule_tab = "//button[@data-bind='click: handleRuleNavContinue, enable: ruleTabValid']"
         self.cond_alert_created = "//a[text()='" + "cond_alert_" + fetch_random_string() + "']"
         self.select_recipient_type = "(//ul[@id='select2-id_schedule-recipient_types-results']/li)[1]"
+        self.delete_cond_alert = "//a[text()='" + "cond_alert_" + fetch_random_string() + "']//preceding::button[@class='btn btn-danger'][1]"
         # Condition Alerts : Download and Upload
         self.bulk_upload_button = "Bulk Upload SMS Alert Content"
         self.download = "Download SMS alert content"
@@ -60,6 +63,10 @@ class MessagingPage:
         self.keyword_survey = "(//span[@class='select2-selection select2-selection--single'])[1]"
         self.survey_option_select = "(//li[@class='select2-results__option'])[2]"
         self.structured_keyword_created = "//a[text()='" + "STRUCTURED_KEYWORD_" + fetch_random_string().upper() + "']"
+        self.delete_keyword = self.keyword_created+"//following::a[@class='btn btn-danger'][1]"
+        self.delete_structured_keyword = self.structured_keyword_created+"//following::a[@class='btn btn-danger'][1]"
+        self.confirm_delete_keyword = self.keyword_created+"//following::a[@class='btn btn-danger delete-item-confirm'][1]"
+        self.confirm_delete_structured_keyword = self.structured_keyword_created+"//following::a[@class='btn btn-danger delete-item-confirm'][1]"
         # Chat
         self.chat = "Chat"
         self.contact_table = "contact_list"
@@ -116,26 +123,38 @@ class MessagingPage:
         time.sleep(2)
         self.driver.find_element(By.XPATH, self.select_value_dropdown).click()
         self.driver.find_element(By.XPATH, self.broadcast_message).send_keys("Test Broadcast:" + "broadcast_"
-                                                                              + fetch_random_string())
+                                                                             + fetch_random_string())
         self.driver.find_element(By.XPATH, self.send_broadcast).click()
         time.sleep(2)
         assert True == self.driver.find_element(By.XPATH, self.broadcast_created).is_displayed()
         print("Broadcast created successfully!")
 
     def create_cond_alert(self):
-        self.driver.find_element(By.LINK_TEXT, self.cond_alerts).click()
-        self.driver.find_element(By.LINK_TEXT, self.add_cond_alert).click()
-        self.driver.find_element(By.XPATH, self.cond_alert_name).send_keys("cond_alert_" + fetch_random_string())
-        self.driver.find_element(By.XPATH, self.continue_button_basic_tab).click()
-        self.driver.find_element(By.XPATH, self.case_type).click()
-        self.driver.find_element(By.XPATH, self.case_type_option_value).click()
-        self.driver.find_element(By.XPATH, self.continue_button_rule_tab).click()
-        self.driver.find_element(By.XPATH, self.recipients).click()
-        self.driver.find_element(By.XPATH, self.select_recipient_type).click()
-        self.driver.find_element(By.XPATH, self.broadcast_message).send_keys("Test Alert:" + "cond_alert_"
-                                                                              + fetch_random_string())
-        self.driver.find_element(By.XPATH, self.send_message).click()
-        assert True == self.driver.find_element(By.XPATH, self.cond_alert_created).is_displayed()
+        WebDriverWait(self.driver, 10).until(ec.element_to_be_clickable((
+            By.LINK_TEXT, self.cond_alerts))).click()
+        WebDriverWait(self.driver, 10).until(ec.element_to_be_clickable((
+            By.LINK_TEXT, self.add_cond_alert))).click()
+        WebDriverWait(self.driver, 10).until(ec.element_to_be_clickable((
+            By.XPATH, self.cond_alert_name))).send_keys("cond_alert_" + fetch_random_string())
+        WebDriverWait(self.driver, 10).until(ec.element_to_be_clickable((
+            By.XPATH, self.continue_button_basic_tab))).click()
+        WebDriverWait(self.driver, 10).until(ec.element_to_be_clickable((
+            By.XPATH, self.case_type))).click()
+        WebDriverWait(self.driver, 10).until(ec.element_to_be_clickable((
+            By.XPATH, self.case_type_option_value))).click()
+        WebDriverWait(self.driver, 10).until(ec.element_to_be_clickable((
+            By.XPATH, self.continue_button_rule_tab))).click()
+        WebDriverWait(self.driver, 10).until(ec.element_to_be_clickable((
+            By.XPATH, self.recipients))).click()
+        WebDriverWait(self.driver, 10).until(ec.element_to_be_clickable((
+            By.XPATH, self.select_recipient_type))).click()
+        WebDriverWait(self.driver, 10).until(ec.element_to_be_clickable((
+            By.XPATH, self.broadcast_message))).send_keys("Test Alert:" + "cond_alert_" + fetch_random_string())
+        WebDriverWait(self.driver, 10).until(ec.element_to_be_clickable((
+            By.XPATH, self.send_message))).click()
+        time.sleep(2)
+        assert True == WebDriverWait(self.driver, 10).until(ec.presence_of_element_located((
+            By.XPATH, self.cond_alert_created))).is_displayed()
         print("Conditional Alert created successfully!")
 
     def cond_alert_download(self):
@@ -236,3 +255,59 @@ class MessagingPage:
         WebDriverWait(self.driver, 10).until(ec.element_to_be_clickable((By.XPATH, self.delete_lang))).click()
         WebDriverWait(self.driver, 10).until(ec.element_to_be_clickable((By.XPATH, self.save_lang))).click()
         print("Language added and deleted successfully!")
+
+    def remove_keyword(self):
+        WebDriverWait(self.driver, 10).until(ec.element_to_be_clickable((
+            By.LINK_TEXT, self.keywords))).click()
+        WebDriverWait(self.driver, 10).until(ec.element_to_be_clickable((
+            By.XPATH, self.delete_keyword))).click()
+        WebDriverWait(self.driver, 10).until(ec.element_to_be_clickable((
+            By.XPATH, self.confirm_delete_keyword))).click()
+        self.driver.refresh()
+        try:
+            isPresent = self.driver.find_element(By.XPATH, self.keyword_created).is_displayed()
+        except NoSuchElementException:
+            isPresent = False
+        if not isPresent:
+            assert True
+            print("Keyword removed successfully!")
+        else:
+            assert False
+
+    def remove_structured_keyword(self):
+        WebDriverWait(self.driver, 10).until(ec.element_to_be_clickable((
+            By.LINK_TEXT, self.keywords))).click()
+        WebDriverWait(self.driver, 10).until(ec.element_to_be_clickable((
+            By.XPATH, self.delete_structured_keyword))).click()
+        WebDriverWait(self.driver, 10).until(ec.element_to_be_clickable((
+            By.XPATH, self.confirm_delete_structured_keyword))).click()
+        self.driver.refresh()
+        try:
+            isPresent = self.driver.find_element(By.XPATH, self.structured_keyword_created).is_displayed()
+        except NoSuchElementException:
+            isPresent = False
+        if not isPresent:
+            assert True
+            print("Structured keyword removed successfully!")
+        else:
+            assert False
+
+    def remove_cond_alert(self):
+        WebDriverWait(self.driver, 10).until(ec.element_to_be_clickable((
+            By.LINK_TEXT, self.cond_alerts))).click()
+        WebDriverWait(self.driver, 10).until(ec.presence_of_element_located((
+            By.XPATH, self.delete_cond_alert))).click()
+        time.sleep(2)
+        obj = self.driver.switch_to.alert
+        obj.accept()
+        time.sleep(2)
+        self.driver.refresh()
+        try:
+            isPresent = self.driver.find_element(By.XPATH, self.cond_alert_created).is_displayed()
+        except NoSuchElementException:
+            isPresent = False
+        if not isPresent:
+            assert True
+            print("Cond Alert removed successfully!")
+        else:
+            assert False
