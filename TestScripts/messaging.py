@@ -74,6 +74,20 @@ class MessagingTests(EnvironmentSetup):
         menu.messaging_menu()
         msg.languages_page()
 
+    def test_10_translations(self):
+        driver = self.driver
+        menu = HomePage(driver)
+        msg = MessagingPage(driver)
+        menu.messaging_menu()
+        msg.msg_trans_download()
+        msg.msg_trans_upload()
+
+    def test_11_settings_pages(self):
+        driver = self.driver
+        msg = MessagingPage(driver)
+        msg.project_settings_page()
+        msg.current_subscription_page()
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -48,7 +48,7 @@ class MessagingPage:
         self.delete_cond_alert = "//a[text()='" + "cond_alert_" + fetch_random_string() + "']//preceding::button[@class='btn btn-danger'][1]"
         # Condition Alerts : Download and Upload
         self.bulk_upload_button = "Bulk Upload SMS Alert Content"
-        self.download = "Download SMS alert content"
+        self.download_id = "download_link"
         self.choose_file = "//input[@name='bulk_upload_file']"
         self.upload = "//button[@class='btn btn-primary disable-on-submit']"
         self.upload_success_message = "//div[@class='alert alert-margin-top fade in alert-success']"
@@ -95,6 +95,14 @@ class MessagingPage:
         self.select_second_lang = "(//li[@role='treeitem'])[2]"
         self.save_lang = "(//div[@class='btn btn-primary'])[1]"
         self.delete_lang = "(//a[@data-bind='click: $root.removeLanguage'])[last()]"
+        # Message Translation
+        self.msg_translation_menu = "//a[text()='Messaging Translations']"
+        # Project and Subscription Settings
+        self.settings_bar ="//a[@data-action='Click Gear Icon']"
+        self.subscription_menu = "Current Subscription"
+        self.subscription_elements_id = "subscriptionSummary"
+        self.project_settings_menu = "Project Settings"
+        self.project_settings_elements= "//form[@class='form form-horizontal']"
 
     def open_dashboard_page(self):
         time.sleep(2)
@@ -161,7 +169,7 @@ class MessagingPage:
         self.driver.find_element(By.LINK_TEXT, self.cond_alerts).click()
         time.sleep(2)
         self.driver.find_element(By.LINK_TEXT, self.bulk_upload_button).click()
-        self.driver.find_element(By.LINK_TEXT, self.download).click()
+        self.driver.find_element(By.ID, self.download_id).click()
         time.sleep(3)
         print("Conditional Alert downloaded successfully!")
 
@@ -311,3 +319,38 @@ class MessagingPage:
             print("Cond Alert removed successfully!")
         else:
             assert False
+
+    def msg_trans_download(self):
+        self.driver.find_element(By.LINK_TEXT, self.languages).click()
+        self.driver.find_element(By.XPATH, self.msg_translation_menu).click()
+        time.sleep(2)
+        self.driver.find_element(By.ID, self.download_id).click()
+        time.sleep(3)
+        print("Msg Trans downloaded successfully!")
+
+    def msg_trans_upload(self):
+        path = Path(str(Path.home()) + '\\Downloads\\*.xlsx')
+        list_of_files = glob.glob(str(path))
+        latest_file = max(list_of_files, key=os.path.getctime)
+        print(latest_file)
+        self.driver.find_element(By.XPATH, self.choose_file).send_keys(latest_file)
+        time.sleep(2)
+        self.driver.find_element(By.XPATH, self.upload).click()
+        time.sleep(2)
+        assert True == self.driver.find_element(By.XPATH, self.upload_success_message).is_displayed()
+        print("Msg Trans uploaded successfully!")
+
+    def project_settings_page(self):
+        self.driver.find_element(By.XPATH, self.settings_bar).click()
+        time.sleep(2)
+        self.driver.find_element(By.LINK_TEXT, self.project_settings_menu).click()
+        assert True == self.driver.find_element(By.XPATH, self.project_settings_elements).is_displayed()
+        print("Project Settings page loaded successfully!")
+
+    def current_subscription_page(self):
+        self.driver.find_element(By.XPATH, self.settings_bar).click()
+        time.sleep(2)
+        self.driver.find_element(By.LINK_TEXT, self.subscription_menu).click()
+        assert True == self.driver.find_element(By.ID, self.subscription_elements_id).is_displayed()
+        print("Current Subscription page loaded successfully!")
+
