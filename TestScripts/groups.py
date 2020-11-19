@@ -2,7 +2,6 @@ import unittest
 from Pages.homePage import HomePage
 from Pages.groupPage import GroupPage
 from TestBase.environmentSetupPage import EnvironmentSetup
-from UserInputs.generateUserInputs import fetch_random_string
 
 
 class GroupsTests(EnvironmentSetup):
