@@ -34,7 +34,7 @@ class OrganisationStructureTests(EnvironmentSetup):
 
     def test_05_visibilty_of_location_fields_in_locations(self):
         driver = self.driver
-        edit = OrganisationStructurePage (driver)
+        edit = OrganisationStructurePage(driver)
         edit.selection_location_field_for_location_created()
         print("Selected location field created, for the location")
 
