@@ -1,4 +1,5 @@
 import os
+import sys
 import time
 from datetime import datetime
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
@@ -11,11 +12,20 @@ from UserInputs.userInputsData import UserInputsData
 
 
 def latest_download_file():
-    os.chdir(UserInputsData.download_path)
-    files = sorted(os.listdir(os.getcwd()), key=os.path.getmtime)
-    newest = files[-1]
-    print("File downloaded: "+newest)
-    return newest
+    global cwd
+    try:
+        cwd = os.getcwd()
+        os.chdir(UserInputsData.download_path)
+        files = sorted(os.listdir(os.getcwd()), key=os.path.getmtime)
+        newest = files[-1]
+        print("File downloaded: " + newest)
+        return newest
+    except EnvironmentError as err:
+        print('Something wrong with specified directory. Exception- ', err + sys.exc_info())
+    finally:
+        print("Restoring the path...")
+        os.chdir(cwd)
+        print("Current directory is-", os.getcwd())
 
 
 newest_file = latest_download_file()
@@ -35,7 +45,7 @@ class OrganisationStructurePage:
         self.loc_name_input_id = "id_name"
         self.update_loc_xpath = "//*[@id='users']//preceding::button"
         self.location_created_xpath = "//span[text()='" + "location_" + fetch_random_string() + "']"
-        self.location_renamed_xpath = "//span[text()='" + "location_" + str(fetch_random_string()) + "new" + "']"
+        self.location_renamed_xpath = "//span[text()='" + "location_" + fetch_random_string() + "new" + "']"
         self.edit_loc_field_btn_xpath = "//a[@data-action='Edit Location Fields']"
         self.add_field_btn_xpath = "//button[@data-bind='click: addField']"
         self.loc_property_xpath = "(//input[@data-bind='value: slug'])[last()]"
@@ -131,7 +141,7 @@ class OrganisationStructurePage:
         time.sleep(3)
         try:
             WebDriverWait(self.driver, 20).until(ec.presence_of_element_located((
-              By.LINK_TEXT, self.download_loc_btn))).click()
+                By.LINK_TEXT, self.download_loc_btn))).click()
             time.sleep(5)
         except TimeoutException as e:
             print("Still preparing for download.." + str(e))
@@ -152,3 +162,4 @@ class OrganisationStructurePage:
         self.driver.find_element(By.ID, "id_bulk_upload_file").send_keys(str(
             UserInputsData.download_path) + "\\" + newest_file)
         assert self.driver.find_element(By.XPATH, self.import_complete).is_displayed()
+        print("File uploaded successfully")
