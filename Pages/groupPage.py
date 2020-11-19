@@ -91,4 +91,3 @@ class GroupPage:
         assert WebDriverWait(self.driver, 10).until(ec.element_to_be_clickable((
             By.XPATH, self.delete_success_message))).is_displayed()
         print("Clean up added group")
-
