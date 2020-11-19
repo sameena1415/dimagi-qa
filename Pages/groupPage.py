@@ -2,7 +2,8 @@ import time
 
 from selenium.common.exceptions import UnexpectedAlertPresentException
 from selenium.webdriver.common.by import By
-
+from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.support import expected_conditions as ec
 from UserInputs.generateUserInputs import fetch_random_string
 
 
@@ -13,9 +14,10 @@ class GroupPage:
         self.group_name_id = "id_group_name"
         self.add_group_button = "//button[@type='submit' and @class='btn btn-primary']"
         self.group_menu_xpath = "//a[@data-title='Groups']"
-        self.users_drop_down_xpath = "//input[@class='select2-search__field']"
-        self.select_user_xpath = "//li[text()='" + "username_" + fetch_random_string() + "']"
+        self.users_drop_down = "//input[@class='select2-search__field']"
+        self.select_user = "//li[text()='" + "username_" + fetch_random_string() + "']"
         self.update_button_id = "submit-id-submit"
+        self.created_group = "group_" + fetch_random_string()
         self.edit_settings_link_text = "Edit Settings"
         self.group_name_input_id = "group-name-input"
         self.save_button_xpath = "//button[@type='submit' and text()='Save']"
@@ -26,67 +28,67 @@ class GroupPage:
         self.delete_success_message = "//div[@class='alert alert-margin-top fade in html alert-success']"
 
     def click_group_menu(self):
-        self.driver.find_element_by_xpath(self.group_menu_xpath).click()
-        time.sleep(2)
-
-    def enter_group_name(self, groupname):
-        time.sleep(2)
-        self.driver.find_element_by_id(self.group_name_id).send_keys(groupname)
+        WebDriverWait(self.driver, 10).until(ec.element_to_be_clickable((
+            By.XPATH, self.group_menu_xpath))).click()
         time.sleep(2)
 
     def add_group(self):
-        time.sleep(2)
-        self.driver.find_element_by_xpath(self.add_group_button).click()
-        time.sleep(2)
-
-    def click_on_users_drop_down(self):
-        time.sleep(2)
-        self.driver.find_element_by_xpath(self.users_drop_down_xpath).click()
-        time.sleep(2)
-        self.driver.find_element_by_xpath(self.users_drop_down_xpath).send_keys("username_" + fetch_random_string())
-        time.sleep(2)
+        WebDriverWait(self.driver, 10).until(ec.presence_of_element_located((
+            By.ID, self.group_name_id))).send_keys(self.created_group)
+        WebDriverWait(self.driver, 10).until(ec.element_to_be_clickable((
+            By.XPATH, self.add_group_button))).click()
+        print("Group Added")
 
     def add_user_to_group(self):
-        time.sleep(2)
-        self.driver.find_element_by_xpath(self.select_user_xpath).click()
-        time.sleep(2)
-
-    def update_group(self):
-        time.sleep(2)
+        WebDriverWait(self.driver, 10).until(ec.element_to_be_clickable((
+            By.XPATH, self.users_drop_down))).click()
+        WebDriverWait(self.driver, 10).until(ec.presence_of_element_located((
+            By.XPATH, self.users_drop_down))).send_keys("username_" + fetch_random_string())
+        WebDriverWait(self.driver, 10).until(ec.element_to_be_clickable((
+            By.XPATH, self.select_user))).click()
         try:
-            self.driver.find_element_by_id(self.update_button_id).click()
+            WebDriverWait(self.driver, 10).until(ec.element_to_be_clickable((
+                By.ID, self.update_button_id))).click()
             time.sleep(2)
             self.click_group_menu()
-            time.sleep(2)
-            assert True == self.driver.find_element_by_link_text("group_" + fetch_random_string()).is_displayed()
+            assert WebDriverWait(self.driver, 10).until(ec.element_to_be_clickable((
+                By.LINK_TEXT, self.created_group))).is_displayed()
         except UnexpectedAlertPresentException as e:
             print(e)
-
-    def click_on_created_group(self):
-        self.driver.find_element(By.LINK_TEXT, "group_" + fetch_random_string()).click()
+            print("User Added to Group")
 
     def edit_existing_group(self):
-        self.driver.find_element(By.LINK_TEXT, self.edit_settings_link_text).click()
-        time.sleep(2)
-
-    def rename_existing_group(self):
-        self.driver.find_element(By.ID, self.group_name_input_id).clear()
-        self.driver.find_element(By.ID, self.group_name_input_id).send_keys(
-            "group_" + fetch_random_string() + "_rename")
+        WebDriverWait(self.driver, 10).until(ec.element_to_be_clickable((
+            By.LINK_TEXT, self.created_group))).click()
+        WebDriverWait(self.driver, 10).until(ec.element_to_be_clickable((
+            By.LINK_TEXT, self.edit_settings_link_text))).click()
+        WebDriverWait(self.driver, 10).until(ec.element_to_be_clickable((
+            By.ID, self.group_name_input_id))).clear()
+        self.driver.find_element(
+            By.ID, self.group_name_input_id).send_keys(self.created_group + "_rename")
         self.driver.find_element(By.XPATH, self.save_button_xpath).click()
-        time.sleep(3)
-        assert True == self.driver.find_element(By.ID, self.success_alert_id).is_displayed()
+        time.sleep(2)
+        assert WebDriverWait(self.driver, 10).until(ec.element_to_be_clickable((
+            By.ID, self.success_alert_id))).is_displayed()
+        print("Renamed a group")
 
     def remove_user_from_group(self):
-        self.driver.find_element(By.XPATH, self.remove_user_xpath).click()
-        self.driver.find_element(By.ID, self.update_button_id).click()
-        time.sleep(2)
-        assert True == self.driver.find_element(By.ID, self.success_alert_id).is_displayed()
+        WebDriverWait(self.driver, 10).until(ec.element_to_be_clickable((
+            By.XPATH, self.remove_user_xpath))).click()
+        WebDriverWait(self.driver, 10).until(ec.element_to_be_clickable((
+            By.ID, self.update_button_id))).click()
+        assert WebDriverWait(self.driver, 10).until(ec.element_to_be_clickable((
+            By.ID, self.success_alert_id))).is_displayed()
+        print("Removed added user from group")
 
     def cleanup_group(self):
-        self.driver.find_element(By.LINK_TEXT, "group_" + fetch_random_string() + "_rename").click()
-        self.driver.find_element(By.XPATH, self.delete_group).click()
-        time.sleep(2)
-        self.driver.find_element(By.XPATH, self.confirm_delete).click()
-        time.sleep(4)
-        assert True == self.driver.find_element(By.XPATH, self.delete_success_message).is_displayed()
+        WebDriverWait(self.driver, 10).until(ec.element_to_be_clickable((
+            By.LINK_TEXT, self.created_group + "_rename"))).click()
+        WebDriverWait(self.driver, 10).until(ec.element_to_be_clickable((
+            By.XPATH, self.delete_group))).click()
+        WebDriverWait(self.driver, 10).until(ec.element_to_be_clickable((
+            By.XPATH, self.confirm_delete))).click()
+        assert WebDriverWait(self.driver, 10).until(ec.element_to_be_clickable((
+            By.XPATH, self.delete_success_message))).is_displayed()
+        print("Clean up added group")
+
