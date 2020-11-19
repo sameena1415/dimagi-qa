@@ -43,15 +43,18 @@ class OrganisationStructureTests(EnvironmentSetup):
         org = OrganisationStructurePage(driver)
         org.create_org_level()
 
-    # def test_07_download_locations(self):
-    #     driver = self.driver
-    #     org = OrganisationStructurePage(driver)
-    #     org.download_locations()
+    def test_07_download_locations(self):
+        driver = self.driver
+        menu = HomePage(driver)
+        menu.users_menu()
+        org = OrganisationStructurePage(driver)
+        org.download_locations()
 
-    # def test_08_upload_locations(self):
-    #     driver = self.driver
-    #     org = OrganisationStructurePage(driver)
-    #     org.upload_locations()
+    def test_08_upload_locations(self):
+        driver = self.driver
+        org = OrganisationStructurePage(driver)
+        org.upload_locations()
+
 
 if __name__ == "__main__":
     unittest.main()

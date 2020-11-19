@@ -134,6 +134,7 @@ Pages/__pycache__/
 TestBase/__pycache__/
 TestScripts/__pycache__/
 TestSuites/__pycache__/
+Pages/generatedUserInputs.csv
 TestSuites/generatedUserInputs.csv
 Reports/
 

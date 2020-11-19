@@ -1,5 +1,5 @@
 class LoginCredentials:
     # inputs for login page
-    url = ""
-    login_username = ""
-    login_password = ""
+    url = "https://staging.commcarehq.org/accounts/login/"
+    login_username = "automation.user.commcarehq@gmail.com"
+    login_password = "pass@123"

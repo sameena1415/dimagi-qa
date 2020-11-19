@@ -1,9 +1,24 @@
-from selenium.common.exceptions import NoSuchElementException
+import os
+import time
+from datetime import datetime
+from selenium.common.exceptions import NoSuchElementException, TimeoutException
 from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
-import time
-
+from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.support import expected_conditions as ec
 from UserInputs.generateUserInputs import fetch_random_string
+from UserInputs.userInputsData import UserInputsData
+
+
+def latest_download_file():
+    os.chdir(UserInputsData.download_path)
+    files = sorted(os.listdir(os.getcwd()), key=os.path.getmtime)
+    newest = files[-1]
+    print("File downloaded: "+newest)
+    return newest
+
+
+newest_file = latest_download_file()
 
 
 class OrganisationStructurePage:
@@ -40,6 +55,7 @@ class OrganisationStructurePage:
         self.save_btn_xpath = "//button[@type='submit' and @class='btn btn-default pull-right btn-primary']"
         self.download_loc_btn = "Download Organization Structure"
         self.upload_loc_btn = "Bulk Upload"
+        self.import_complete = "//legend[text()='Import complete.']"
 
     def organisation_menu_open(self):
         self.driver.find_element(By.LINK_TEXT, self.org_menu_link_text).click()
@@ -109,41 +125,30 @@ class OrganisationStructurePage:
         self.driver.find_element(By.XPATH, self.save_btn_xpath).click()
         time.sleep(2)
 
-    # def download_locations(self):
-    #     self.driver.find_element(By.LINK_TEXT, self.org_menu_link_text).click()
-    #     self.driver.find_element(By.LINK_TEXT, self.download_loc_btn).click()
-    #     time.sleep(3)
-    #     try:
-    #         WebDriverWait(self.driver, 20).until(EC.presence_of_element_located((By.LINK_TEXT, self.download_loc_btn)))\
-    #             .click()
-    #         time.sleep(5)
-    #     except TimeoutException as e:
-    #         print("Still preparing for download.." + str(e))
-    #         assert False
-    #
-    # def verify_downloaded_locations(self):
-    #     pattern = '*_locations.xlsx'
-    #     files = os.listdir('C:/Users/dsi-user.DESKTOP-IGCBOU4/Downloads/')
-    #     for name in files:
-    #         if fnmatch.fnmatch(name, pattern):
-    #             print(name, fnmatch.fnmatchcase (name, pattern))
-    #             print("Last modified: %s" % time.ctime (
-    #                 os.path.getmtime ('C:/Users/dsi-user.DESKTOP-IGCBOU4/Downloads/' + name)))
-    #             print("Created: %s" % time.ctime(
-    #                 os.path.getctime ('C:/Users/dsi-user.DESKTOP-IGCBOU4/Downloads/' + name)))
-    #             dateTimeObj = datetime.now ( )
-    #             timestampStr = dateTimeObj.strftime ("%b %d ")
-    #             print('Current Timestamp : ', timestampStr)
-    #
-    #     # assert if file is downloaded and matches with the file name pattern
-    #
-    # def upload_locations(self):
-    #     self.driver.find_element(By.LINK_TEXT, self.org_menu_link_text).click()
-    #     self.driver.find_element(By.LINK_TEXT, self.upload_loc_btn).click()
-    #     path = Path(str(Path.home()) + '\Downloads\*.xlsx')
-    #     list_of_files = glob.glob(str(path))
-    #     latest_file = max(list_of_files, key=os.path.getctime)
-    #     print(latest_file)
-    #     # if downloaded=file name pattern else fail
-    #     self.driver.find_element(By.ID, "id_bulk_upload_file").send_keys(latest_file)
-    #     # assert
+    def download_locations(self):
+        self.driver.find_element(By.LINK_TEXT, self.org_menu_link_text).click()
+        self.driver.find_element(By.LINK_TEXT, self.download_loc_btn).click()
+        time.sleep(3)
+        try:
+            WebDriverWait(self.driver, 20).until(ec.presence_of_element_located((
+              By.LINK_TEXT, self.download_loc_btn))).click()
+            time.sleep(5)
+        except TimeoutException as e:
+            print("Still preparing for download.." + str(e))
+            assert False
+        # verify_downloaded_location
+        modTimesinceEpoc = os.path.getmtime(str(UserInputsData.download_path) + "\\" + newest_file)
+        modificationTime = datetime.fromtimestamp(modTimesinceEpoc).strftime('%Y-%m-%d %H:%M')
+        print("Last Modified Time : ", modificationTime)
+        timeNow = datetime.now().strftime('%Y-%m-%d %H:%M')
+        print('Current Time : ', timeNow)
+        if "locations" in newest_file and modificationTime == timeNow:
+            assert True
+            print("File downloaded successfully")
+
+    def upload_locations(self):
+        self.driver.find_element(By.LINK_TEXT, self.org_menu_link_text).click()
+        self.driver.find_element(By.LINK_TEXT, self.upload_loc_btn).click()
+        self.driver.find_element(By.ID, "id_bulk_upload_file").send_keys(str(
+            UserInputsData.download_path) + "\\" + newest_file)
+        assert self.driver.find_element(By.XPATH, self.import_complete).is_displayed()

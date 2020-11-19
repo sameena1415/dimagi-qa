@@ -1,14 +1,14 @@
-import time
 import glob
-from pathlib import Path
 import os
+import time
+from pathlib import Path
 
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.support.wait import WebDriverWait
 
 from UserInputs.generateUserInputs import fetch_random_string
-from selenium.webdriver.support import expected_conditions as ec
 
 
 class MessagingPage:
@@ -63,10 +63,10 @@ class MessagingPage:
         self.keyword_survey = "(//span[@class='select2-selection select2-selection--single'])[1]"
         self.survey_option_select = "(//li[@class='select2-results__option'])[2]"
         self.structured_keyword_created = "//a[text()='" + "STRUCTURED_KEYWORD_" + fetch_random_string().upper() + "']"
-        self.delete_keyword = self.keyword_created+"//following::a[@class='btn btn-danger'][1]"
-        self.delete_structured_keyword = self.structured_keyword_created+"//following::a[@class='btn btn-danger'][1]"
-        self.confirm_delete_keyword = self.keyword_created+"//following::a[@class='btn btn-danger delete-item-confirm'][1]"
-        self.confirm_delete_structured_keyword = self.structured_keyword_created+"//following::a[@class='btn btn-danger delete-item-confirm'][1]"
+        self.delete_keyword = self.keyword_created + "//following::a[@class='btn btn-danger'][1]"
+        self.delete_structured_keyword = self.structured_keyword_created + "//following::a[@class='btn btn-danger'][1]"
+        self.confirm_delete_keyword = self.keyword_created + "//following::a[@class='btn btn-danger delete-item-confirm'][1]"
+        self.confirm_delete_structured_keyword = self.structured_keyword_created + "//following::a[@class='btn btn-danger delete-item-confirm'][1]"
         # Chat
         self.chat = "Chat"
         self.contact_table = "contact_list"
@@ -98,11 +98,11 @@ class MessagingPage:
         # Message Translation
         self.msg_translation_menu = "//a[text()='Messaging Translations']"
         # Project and Subscription Settings
-        self.settings_bar ="//a[@data-action='Click Gear Icon']"
+        self.settings_bar = "//a[@data-action='Click Gear Icon']"
         self.subscription_menu = "Current Subscription"
         self.subscription_elements_id = "subscriptionSummary"
         self.project_settings_menu = "Project Settings"
-        self.project_settings_elements= "//form[@class='form form-horizontal']"
+        self.project_settings_elements = "//form[@class='form form-horizontal']"
 
     def open_dashboard_page(self):
         time.sleep(2)
@@ -353,4 +353,3 @@ class MessagingPage:
         self.driver.find_element(By.LINK_TEXT, self.subscription_menu).click()
         assert True == self.driver.find_element(By.ID, self.subscription_elements_id).is_displayed()
         print("Current Subscription page loaded successfully!")
-
