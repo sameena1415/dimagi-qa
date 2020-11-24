@@ -41,15 +41,18 @@ class OrganisationStructurePage:
         self.create_loc_xpath = "//button[@type='submit']"
         self.loc_saved_success_msg = "//div[@class ='alert alert-margin-top fade in alert-success']"
         self.error_1_id = "error_1_id_name"
-        self.edit_first_loc_xpath = "(//*[@id='button-template']/a)[1]"
+        self.loc_created = "location_" + fetch_random_string()
+        self.loc_created_edit_path = "//span[text ()='" + self.loc_created + "']" + \
+                                     "//following::a[@data-bind='attr: { href: loc_edit_url(uuid()) }'][1]"
         self.loc_name_input_id = "id_name"
         self.update_loc_xpath = "//*[@id='users']//preceding::button"
-        self.location_created_xpath = "//span[text()='" + "location_" + fetch_random_string() + "']"
-        self.location_renamed_xpath = "//span[text()='" + "location_" + fetch_random_string() + "new" + "']"
+        self.location_created_xpath = "//span[text()='" + self.loc_created + "']"
+        self.location_renamed_xpath = "//span[text()='" + self.loc_created + "new" + "']"
         self.edit_loc_field_btn_xpath = "//a[@data-action='Edit Location Fields']"
         self.add_field_btn_xpath = "//button[@data-bind='click: addField']"
         self.loc_property_xpath = "(//input[@data-bind='value: slug'])[last()]"
         self.loc_label_xpath = "(//input[@data-bind='value: label'])[last()]"
+        self.choice_selection = "(//div[contains(@data-bind, \"validationMode('choice')\")])[last()]"
         self.add_choice_btn_xpath = "(//button[@data-bind='click: addChoice'])[last()]"
         self.choice_xpath = "(//input[@data-bind='value: value'])[last()]"
         self.save_btn_id = "save-custom-fields"
@@ -77,7 +80,7 @@ class OrganisationStructurePage:
         self.driver.implicitly_wait(5)
         self.driver.find_element(By.XPATH, self.add_loc_btn_xpath).click()
         self.driver.find_element(By.XPATH, self.loc_name_xpath).clear()
-        self.driver.find_element(By.XPATH, self.loc_name_xpath).send_keys("location_" + fetch_random_string())
+        self.driver.find_element(By.XPATH, self.loc_name_xpath).send_keys(self.loc_created)
         self.driver.find_element(By.XPATH, self.create_loc_xpath).click()
         time.sleep(2)
         try:
@@ -91,7 +94,7 @@ class OrganisationStructurePage:
                 assert False, "name conflicts with another location with this parent"
 
     def edit_location(self):
-        self.driver.find_element(By.XPATH, self.edit_first_loc_xpath).click()
+        self.driver.find_element(By.XPATH, self.loc_created_edit_path).click()
         self.driver.find_element(By.ID, self.loc_name_input_id).clear()
         self.driver.find_element(By.ID, self.loc_name_input_id).send_keys(
             "location_" + str(fetch_random_string()) + "new")
@@ -109,6 +112,7 @@ class OrganisationStructurePage:
         self.driver.find_element(By.XPATH, self.loc_property_xpath).send_keys("location_field_" + fetch_random_string())
         self.driver.find_element(By.XPATH, self.loc_label_xpath).clear()
         self.driver.find_element(By.XPATH, self.loc_label_xpath).send_keys("location_field_" + fetch_random_string())
+        self.driver.find_element_by_xpath(self.choice_selection).click()
         self.driver.find_element(By.XPATH, self.add_choice_btn_xpath).click()
         self.driver.find_element(By.XPATH, self.choice_xpath).send_keys("location_field_" + fetch_random_string())
         self.driver.find_element(By.ID, self.save_btn_id).click()
@@ -117,7 +121,7 @@ class OrganisationStructurePage:
     def selection_location_field_for_location_created(self):
         self.driver.find_element(By.LINK_TEXT, self.org_menu_link_text).click()
         time.sleep(2)
-        self.driver.find_element(By.XPATH, self.edit_first_loc_xpath).click()
+        self.driver.find_element(By.XPATH, self.loc_created_edit_path).click()
         ActionChains(self.driver).move_to_element(
             self.driver.find_element(By.XPATH, self.additional_info_drop_down)).click(
             self.driver.find_element(By.XPATH, self.additional_info_drop_down)).perform()
@@ -161,5 +165,6 @@ class OrganisationStructurePage:
         self.driver.find_element(By.LINK_TEXT, self.upload_loc_btn).click()
         self.driver.find_element(By.ID, "id_bulk_upload_file").send_keys(str(
             UserInputsData.download_path) + "\\" + newest_file)
+        time.sleep(2)
         assert self.driver.find_element(By.XPATH, self.import_complete).is_displayed()
         print("File uploaded successfully")
