@@ -15,7 +15,8 @@ class MobileWorkerPage:
         self.driver = driver
         self.domain = "//span[text()='Project:']"
         self.confirm_user_field_delete = "//button[@class='btn btn-danger']"
-        self.delete_user_field = "(//a[@class='btn btn-danger' and @data-toggle='modal'])[last()]"
+        self.delete_user_field = "(//input[@data-bind='value: slug'])[last()]" \
+                                 "//following::a[@class='btn btn-danger' and @data-toggle='modal'][1]"
         self.delete_success_mw = "//div[@class='alert alert-margin-top fade in alert-success']"
         self.confirm_delete_mw = "//button[@class='btn btn-danger']"
         self.enter_username = '//input[@data-bind="value: signOff, valueUpdate: \'textchange\'"]'
@@ -216,6 +217,7 @@ class MobileWorkerPage:
                         time.sleep(2)
                         self.driver.find_element(By.XPATH, self.confirm_deactivate_xpath_list +
                                                  "[" + str(j + 1) + "]").click()
+                        time.sleep(5)
                         print("User deactivated")
                         break
             except Exception as e:
@@ -225,6 +227,7 @@ class MobileWorkerPage:
                 time.sleep(5)
 
     def verify_deactivation(self):
+        self.driver.refresh()
         total_pages = self.driver.find_elements_by_xpath(self.page_xpath)
         print("Total pages: ", len(total_pages))
         for i in range(1, len(total_pages) + 1):
@@ -241,6 +244,7 @@ class MobileWorkerPage:
                 print("Only one element on last page scenario" + str(e))
 
     def verify_deactivation_via_login(self):
+        time.sleep(2)
         self.driver.find_element(By.ID, self.web_apps_menu_id).click()
         self.driver.find_element(By.XPATH, self.webapp_login).click()
         time.sleep(2)
