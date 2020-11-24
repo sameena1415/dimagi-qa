@@ -68,6 +68,7 @@ class OrganisationStructurePage:
         self.save_btn_xpath = "//button[@type='submit' and @class='btn btn-default pull-right btn-primary']"
         self.download_loc_btn = "Download Organization Structure"
         self.upload_loc_btn = "Bulk Upload"
+        self.upload = "//button[@class='btn btn-primary disable-on-submit']"
         self.import_complete = "//legend[text()='Import complete.']"
 
     def organisation_menu_open(self):
@@ -146,7 +147,7 @@ class OrganisationStructurePage:
         try:
             WebDriverWait(self.driver, 20).until(ec.presence_of_element_located((
                 By.LINK_TEXT, self.download_loc_btn))).click()
-            time.sleep(5)
+            time.sleep(7)
         except TimeoutException as e:
             print("Still preparing for download.." + str(e))
             assert False
@@ -165,6 +166,7 @@ class OrganisationStructurePage:
         self.driver.find_element(By.LINK_TEXT, self.upload_loc_btn).click()
         self.driver.find_element(By.ID, "id_bulk_upload_file").send_keys(str(
             UserInputsData.download_path) + "\\" + newest_file)
-        time.sleep(2)
-        assert self.driver.find_element(By.XPATH, self.import_complete).is_displayed()
+        self.driver.find_element(By.XPATH, self.upload).click()
+        assert WebDriverWait(self.driver, 10).until(ec.presence_of_element_located((
+            By.XPATH, self.import_complete))).is_displayed()
         print("File uploaded successfully")
