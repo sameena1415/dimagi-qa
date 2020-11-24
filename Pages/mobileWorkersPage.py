@@ -55,6 +55,7 @@ class MobileWorkerPage:
         self.add_field_xpath = "//button[@data-bind='click: addField']"
         self.user_property_xpath = "(//input[@data-bind='value: slug'])[last()]"
         self.label_xpath = "(//input[@data-bind='value: label'])[last()]"
+        self.choice_selection = "(//div[contains(@data-bind, \"validationMode('choice')\")])[last()]"
         self.add_choice_button_xpath = "(//button[@data-bind='click: addChoice'])[last()]"
         self.choice_xpath = "(//input[@data-bind='value: value'])[last()]"
         self.save_field_id = "save-custom-fields"
@@ -142,6 +143,7 @@ class MobileWorkerPage:
 
     def add_choice(self, choice):
         try:
+            self.driver.find_element_by_xpath(self.choice_selection).click()
             self.driver.find_element_by_xpath(self.add_choice_button_xpath).click()
             self.driver.find_element_by_xpath(self.choice_xpath).clear()
             self.driver.find_element_by_xpath(self.choice_xpath).send_keys(choice)
@@ -333,7 +335,7 @@ class MobileWorkerPage:
         time.sleep(3)
         self.driver.find_element(By.XPATH, self.confirm_delete_mw).click()
         time.sleep(4)
-        assert True == self.driver.find_element(By.XPATH, self.delete_success_mw).is_displayed()
+        assert self.driver.find_element(By.XPATH, self.delete_success_mw).is_displayed()
 
     def cleanup_user_field(self):
         self.driver.find_element(By.XPATH, self.delete_user_field).click()
