@@ -136,7 +136,8 @@ TestScripts/__pycache__/
 TestSuites/__pycache__/
 Pages/generatedUserInputs.csv
 TestSuites/generatedUserInputs.csv
-Reports/
+TestScripts/generatedUserInputs.csv
+AutomationTestReports/
 
 #Ignoring credentials
 UserInputs/loginCredentials.py

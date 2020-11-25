@@ -12,6 +12,7 @@ from TestScripts.organisationStructure import OrganisationStructureTests
 from TestScripts.rolesPermissions import RolesPermissionsTests
 from TestScripts.webappsPermission import WebAppPermissionsTests
 from UserInputs.generateUserInputs import GenerateUserInputs
+from TestScripts.messaging import MessagingTests
 
 if __name__ == "__main__":
     loader: TestLoader = TestLoader()
@@ -20,16 +21,16 @@ if __name__ == "__main__":
         loader.loadTestsFromTestCase(MenuVisibilityTests),
         loader.loadTestsFromTestCase(GenerateUserInputs),
         loader.loadTestsFromTestCase(MobileWorkerTests),
-        # loader.loadTestsFromTestCase(GroupsTests),
-        # loader.loadTestsFromTestCase(RolesPermissionsTests),
-        # loader.loadTestsFromTestCase(OrganisationStructureTests),
-        # loader.loadTestsFromTestCase(WebAppPermissionsTests),
-        # loader.loadTestsFromTestCase(CleanUps),
-        # loader.loadTestsFromTestCase(ExportTests)
-
+        loader.loadTestsFromTestCase(GroupsTests),
+        loader.loadTestsFromTestCase(RolesPermissionsTests),
+        loader.loadTestsFromTestCase(OrganisationStructureTests),
+        loader.loadTestsFromTestCase(WebAppPermissionsTests),
+        loader.loadTestsFromTestCase(CleanUps),
+        loader.loadTestsFromTestCase(ExportTests),
+        loader.loadTestsFromTestCase(MessagingTests)
     ))
 
-    testRunner = HtmlTestRunner.HTMLTestRunner(output='..\\Reports\\', report_name="CCHQ_Test_Result_Report",
+    testRunner = HtmlTestRunner.HTMLTestRunner(output='..\\AutomationTestReports\\', report_name="CCHQ_Test_Result_Report",
                                                report_title='CCHQ Smoke Tests', verbosity=2, combine_reports=True)
     # 0 (quiet): you just get the total numbers of tests executed and the global result
     # 1 (default): you get the same plus a dot for every successful test or a F for every failure
