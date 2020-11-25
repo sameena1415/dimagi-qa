@@ -1,7 +1,7 @@
 import os
 import sys
 import time
-from datetime import datetime
+import datetime
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
 from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
@@ -153,13 +153,13 @@ class OrganisationStructurePage:
             assert False
         # verify_downloaded_location
         modTimesinceEpoc = os.path.getmtime(str(UserInputsData.download_path) + "\\" + newest_file)
-        modificationTime = datetime.fromtimestamp(modTimesinceEpoc).strftime('%Y-%m-%d %H:%M')
-        print("Last Modified Time : ", modificationTime)
-        timeNow = datetime.now().strftime('%Y-%m-%d %H:%M')
-        print('Current Time : ', timeNow)
-        if "locations" in newest_file and modificationTime == timeNow:
-            assert True
-            print("File downloaded successfully")
+        modificationTime = datetime.datetime.fromtimestamp(modTimesinceEpoc)
+        timeNow = datetime.datetime.now()
+        diff_seconds = round((timeNow - modificationTime).total_seconds())
+        print("Last Modified Time : ", str(modificationTime) + 'Current Time : ', str(timeNow),
+              "Diff: " + str(diff_seconds))
+        assert "_users_" in newest_file and diff_seconds in range(0, 600)
+        print("File download successful")
 
     def upload_locations(self):
         self.driver.find_element(By.LINK_TEXT, self.org_menu_link_text).click()
