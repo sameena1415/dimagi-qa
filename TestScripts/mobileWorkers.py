@@ -11,7 +11,7 @@ class MobileWorkerTests(EnvironmentSetup):
         worker = MobileWorkerPage(driver)
         try:
             worker.mobile_worker_menu()
-        except Exception
+        except Exception as e:
             print(e)
         finally:
             assert "Mobile Workers : Users :: - CommCare HQ" in driver.title
