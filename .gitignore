@@ -138,7 +138,3 @@ Pages/generatedUserInputs.csv
 TestSuites/generatedUserInputs.csv
 TestScripts/generatedUserInputs.csv
 AutomationTestReports/
-
-#Ignoring credentials
-#UserInputs/loginCredentials.py
-
