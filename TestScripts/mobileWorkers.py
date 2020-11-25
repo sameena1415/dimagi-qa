@@ -11,7 +11,7 @@ class MobileWorkerTests(EnvironmentSetup):
         worker = MobileWorkerPage(driver)
         try:
             worker.mobile_worker_menu()
-        except Exception as e:
+        except Exception
             print(e)
         finally:
             assert "Mobile Workers : Users :: - CommCare HQ" in driver.title
@@ -62,6 +62,16 @@ class MobileWorkerTests(EnvironmentSetup):
         user.reactivate_user()
         user.verify_reactivation()
         user.verify_reactivation_via_login()
+
+    def test_07_download_workers(self):
+        driver = self.driver
+        user = MobileWorkerPage(driver)
+        user.download_mobile_worker()
+
+    def test_08_upload_workers(self):
+        driver = self.driver
+        user = MobileWorkerPage(driver)
+        user.upload_mobile_worker()
 
 
 if __name__ == "__main__":

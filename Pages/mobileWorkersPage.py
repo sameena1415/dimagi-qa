@@ -1,12 +1,17 @@
+import datetime
+import os
 import time
-from selenium.common.exceptions import NoSuchElementException
+from selenium.common.exceptions import NoSuchElementException, TimeoutException
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as ec
 
+from Pages.organisationStructurePage import latest_download_file
 from UserInputs.generateUserInputs import fetch_random_string
 from UserInputs.userInputsData import UserInputsData
+
+newest_file = latest_download_file()
 
 
 class MobileWorkerPage:
@@ -75,6 +80,13 @@ class MobileWorkerPage:
         ######
         self.search_user_web_apps = "//input[@placeholder='Filter workers']"
         self.search_button_we_apps = "//div[@class='input-group-btn']"
+        # Download and Upload
+        self.download_worker_btn = "Download Mobile Workers"
+        self.download_users_btn = "Download Users"
+        self.bulk_upload_btn = "Bulk Upload"
+        self.choose_file = "id_bulk_upload_file"
+        self.upload = "//button[@class='btn btn-primary disable-on-submit']"
+        self.import_complete = "//legend[text()='Bulk upload complete.']"
 
     def mobile_worker_menu(self):
         time.sleep(2)
@@ -346,3 +358,34 @@ class MobileWorkerPage:
         time.sleep(2)
         self.driver.find_element(By.XPATH, self.confirm_user_field_delete).click()
         time.sleep(2)
+
+    def download_mobile_worker(self):
+        self.mobile_worker_menu()
+        self.driver.find_element(By.LINK_TEXT, self.download_worker_btn).click()
+        time.sleep(3)
+        try:
+            WebDriverWait(self.driver, 20).until(ec.presence_of_element_located((
+                By.LINK_TEXT, self.download_users_btn))).click()
+            time.sleep(10)
+        except TimeoutException as e:
+            print("Still preparing for download.." + str(e))
+            assert False
+        # verify_downloaded_workers
+        modTimesinceEpoc = os.path.getmtime(str(UserInputsData.download_path) + "\\" + newest_file)
+        modificationTime = datetime.datetime.fromtimestamp(modTimesinceEpoc)
+        timeNow = datetime.datetime.now()
+        diff_seconds = round((timeNow - modificationTime).total_seconds())
+        print("Last Modified Time : ", str(modificationTime)+'Current Time : ', str(timeNow), "Diff: " + str(diff_seconds))
+        assert "_users_" in newest_file and diff_seconds in range(0, 600)
+        print("File download successful")
+
+    def upload_mobile_worker(self):
+        self.mobile_worker_menu()
+        self.driver.find_element(By.LINK_TEXT, self.bulk_upload_btn).click()
+        self.driver.find_element(By.ID, self.choose_file).send_keys(str(
+            UserInputsData.download_path) + "\\" + newest_file)
+        self.driver.find_element(By.XPATH, self.upload).click()
+        time.sleep(10)
+        assert WebDriverWait(self.driver, 10).until(ec.presence_of_element_located((
+            By.XPATH, self.import_complete))).is_displayed()
+        print("File uploaded successfully")
