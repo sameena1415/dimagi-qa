@@ -140,5 +140,5 @@ TestScripts/generatedUserInputs.csv
 AutomationTestReports/
 
 #Ignoring credentials
-UserInputs/loginCredentials.py
+#UserInputs/loginCredentials.py
 
