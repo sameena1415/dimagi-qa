@@ -1,1 +1,1 @@
-# dimagi-qa
+# QA Automation scripts

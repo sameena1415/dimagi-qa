@@ -128,10 +128,13 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-CommcareHQ/Pages/__pycache__/
-CommcareHQ/TestBase/__pycache__/
-CommcareHQ/TestScripts/__pycache__/
-CommcareHQ/TestSuites/__pycache__/
-CommcareHQ/TestSuites/Reports/
-CommcareHQ/TestSuites/UserInputs.csv
-CommcareHQ/.idea/
+#Ignoring compliled files
+.idea/
+Pages/__pycache__/
+TestBase/__pycache__/
+TestScripts/__pycache__/
+TestSuites/__pycache__/
+Pages/generatedUserInputs.csv
+TestSuites/generatedUserInputs.csv
+TestScripts/generatedUserInputs.csv
+AutomationTestReports/
