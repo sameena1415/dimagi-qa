@@ -22,7 +22,6 @@ class EnvironmentSetup(unittest.TestCase):
             login.enter_username(settings["login_username"])
             login.enter_password(settings["login_password"])
             login.click_submit()
-            login.accept_alert()
         except Exception:
             cls.tearDownClass()
             raise
