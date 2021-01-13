@@ -15,13 +15,17 @@ class EnvironmentSetup(unittest.TestCase):
         settings = load_settings()["default"]
         driver_path = ChromeDriverManager().install()
         cls.driver = webdriver.Chrome(executable_path=driver_path)
-        cls.driver.maximize_window()
-        cls.driver.get(settings["url"])
-        login = LoginPage(cls.driver)
-        login.enter_username(settings["login_username"])
-        login.enter_password(settings["login_password"])
-        login.click_submit()
-        login.accept_alert()
+        try:
+            cls.driver.maximize_window()
+            cls.driver.get(settings["url"])
+            login = LoginPage(cls.driver)
+            login.enter_username(settings["login_username"])
+            login.enter_password(settings["login_password"])
+            login.click_submit()
+            login.accept_alert()
+        except Exception:
+            cls.tearDownClass()
+            raise
         print("Successfully logged in")
 
     @classmethod
