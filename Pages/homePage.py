@@ -1,5 +1,4 @@
 from selenium.webdriver.common.by import By
-import time
 
 
 class HomePage:
@@ -24,40 +23,31 @@ class HomePage:
 
     def dashboard_menu(self):
         self.driver.find_element(By.ID, self.dashboard_menu_id).click()
-        time.sleep(2)
 
     def reports_menu(self):
         self.driver.find_element(By.ID, self.reports_menu_id).click()
         self.driver.find_element(By.LINK_TEXT, self.view_all_link_text).click()
-        time.sleep(2)
 
     def data_menu(self):
         self.driver.find_element(By.ID, self.data_menu_id).click()
         self.driver.find_element(By.LINK_TEXT, self.view_all_link_text).click()
-        time.sleep(2)
 
     def applications_menu(self):
         self.driver.find_element(By.ID, self.applications_menu_id).click()
         self.driver.find_element(By.LINK_TEXT, self.new_application_link_text).click()
-        time.sleep(2)
 
     def users_menu(self):
         self.driver.find_element(By.ID, self.users_menu_id).click()
         self.driver.find_element(By.LINK_TEXT, self.view_all_link_text).click()
-        time.sleep(2)
 
     def web_apps_menu(self):
         self.driver.find_element(By.ID, self.web_apps_menu_id).click()
-        time.sleep(2)
         self.driver.find_element(By.ID, self.show_full_menu_id).click()
-        time.sleep(2)
 
     def messaging_menu(self):
         self.driver.find_element(By.ID, self.messaging_menu_id).click()
         self.driver.find_element(By.LINK_TEXT, self.view_all_link_text).click()
-        time.sleep(2)
 
     # def admin_menu(self):
     #     self.driver.find_element(By.ID, self.admin_menu_id).click()
     #     self.driver.find_element(By.LINK_TEXT, self.view_all_link_text).click()
-    #     time.sleep(2)
