@@ -12,16 +12,13 @@ from UserInputs.userInputsData import UserInputsData
 
 
 def latest_download_file():
-    global cwd
+    cwd = os.getcwd()
     try:
-        cwd = os.getcwd()
         os.chdir(UserInputsData.download_path)
         files = sorted(os.listdir(os.getcwd()), key=os.path.getmtime)
         newest = files[-1]
         print("File downloaded: " + newest)
         return newest
-    except EnvironmentError as err:
-        print('Something wrong with specified directory. Exception- ', err + sys.exc_info())
     finally:
         print("Restoring the path...")
         os.chdir(cwd)
