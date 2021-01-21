@@ -1,4 +1,6 @@
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.support import expected_conditions as ec
 
 
 class HomePage:
@@ -22,31 +24,44 @@ class HomePage:
         self.admin_menu_id = "AdminTab"
 
     def dashboard_menu(self):
-        self.driver.find_element(By.ID, self.dashboard_menu_id).click()
+        WebDriverWait(self.driver, 5).until(ec.element_to_be_clickable((
+            By.ID, self.dashboard_menu_id))).click()
 
     def reports_menu(self):
-        self.driver.find_element(By.ID, self.reports_menu_id).click()
-        self.driver.find_element(By.LINK_TEXT, self.view_all_link_text).click()
+        WebDriverWait(self.driver, 5).until(ec.element_to_be_clickable((
+            By.ID, self.reports_menu_id))).click()
+        WebDriverWait(self.driver, 5).until(ec.element_to_be_clickable((
+            By.LINK_TEXT, self.view_all_link_text))).click()
 
     def data_menu(self):
-        self.driver.find_element(By.ID, self.data_menu_id).click()
-        self.driver.find_element(By.LINK_TEXT, self.view_all_link_text).click()
+        WebDriverWait(self.driver, 5).until(ec.element_to_be_clickable((
+            By.ID, self.data_menu_id))).click()
+        WebDriverWait(self.driver, 5).until(ec.element_to_be_clickable((
+            By.LINK_TEXT, self.view_all_link_text))).click()
 
     def applications_menu(self):
-        self.driver.find_element(By.ID, self.applications_menu_id).click()
-        self.driver.find_element(By.LINK_TEXT, self.new_application_link_text).click()
+        WebDriverWait(self.driver, 5).until(ec.element_to_be_clickable((
+            By.ID, self.applications_menu_id))).click()
+        WebDriverWait(self.driver, 5).until(ec.element_to_be_clickable((
+            By.LINK_TEXT, self.new_application_link_text))).click()
 
     def users_menu(self):
-        self.driver.find_element(By.ID, self.users_menu_id).click()
-        self.driver.find_element(By.LINK_TEXT, self.view_all_link_text).click()
+        WebDriverWait(self.driver, 5).until(ec.element_to_be_clickable((
+            By.ID, self.users_menu_id))).click()
+        WebDriverWait(self.driver, 5).until(ec.element_to_be_clickable((
+            By.LINK_TEXT, self.view_all_link_text))).click()
 
     def web_apps_menu(self):
-        self.driver.find_element(By.ID, self.web_apps_menu_id).click()
-        self.driver.find_element(By.ID, self.show_full_menu_id).click()
+        WebDriverWait(self.driver, 5).until(ec.element_to_be_clickable((
+            By.ID, self.web_apps_menu_id))).click()
+        WebDriverWait(self.driver, 5).until(ec.element_to_be_clickable((
+            By.ID, self.show_full_menu_id))).click()
 
     def messaging_menu(self):
-        self.driver.find_element(By.ID, self.messaging_menu_id).click()
-        self.driver.find_element(By.LINK_TEXT, self.view_all_link_text).click()
+        WebDriverWait(self.driver, 5).until(ec.element_to_be_clickable((
+            By.ID, self.messaging_menu_id))).click()
+        WebDriverWait(self.driver, 5).until(ec.element_to_be_clickable((
+            By.LINK_TEXT, self.view_all_link_text))).click()
 
     # def admin_menu(self):
     #     self.driver.find_element(By.ID, self.admin_menu_id).click()
