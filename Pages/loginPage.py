@@ -1,4 +1,4 @@
-from selenium.common.exceptions import NoSuchElementException
+from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as ec
@@ -29,5 +29,5 @@ class LoginPage:
         try:
             WebDriverWait(self.driver, 5).until(ec.element_to_be_clickable((
                 By.ID, self.alert_button_accept))).click()
-        except NoSuchElementException:
+        except TimeoutException:
             pass  # ignore if alert not on page
