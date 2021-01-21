@@ -1,6 +1,8 @@
 from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as ec
-import time
+
 
 
 class LoginPage:
@@ -25,6 +27,7 @@ class LoginPage:
 
     def accept_alert(self):
         try:
-            self.driver.find_element_by_id(self.alert_button_accept).click()
+            WebDriverWait(self.driver, 5).until(ec.element_to_be_clickable((
+                By.ID, self.alert_button_accept))).click()
         except NoSuchElementException:
             pass  # ignore if alert not on page
