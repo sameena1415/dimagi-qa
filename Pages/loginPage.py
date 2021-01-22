@@ -4,7 +4,6 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as ec
 
 
-
 class LoginPage:
 
     def __init__(self, driver):
@@ -27,7 +26,7 @@ class LoginPage:
 
     def accept_alert(self):
         try:
-            WebDriverWait(self.driver, 5).until(ec.element_to_be_clickable((
+            WebDriverWait(self.driver, 3).until(ec.element_to_be_clickable((
                 By.ID, self.alert_button_accept))).click()
         except TimeoutException:
             pass  # ignore if alert not on page
