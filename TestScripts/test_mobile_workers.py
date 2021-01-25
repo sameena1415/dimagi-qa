@@ -9,13 +9,9 @@ class MobileWorkerTests(EnvironmentSetup):
     def test_01_click_mobile_worker_menu(self):
         driver = self.driver
         worker = MobileWorkerPage(driver)
-        try:
-            worker.mobile_worker_menu()
-        except Exception as e:
-            print(e)
-        finally:
-            assert "Mobile Workers : Users :: - CommCare HQ" in driver.title
-            print("Mobile Workers Menu Visible and Click-able")
+        worker.mobile_worker_menu()
+        assert "Mobile Workers : Users :: - CommCare HQ" in driver.title
+        print("Mobile Workers Menu Visible and Click-able")
 
     def test_02_create_mobile_worker(self):
         driver = self.driver
