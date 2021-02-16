@@ -1,4 +1,3 @@
-import unittest
 from Pages.homePage import HomePage
 from Pages.rolesPermissionsPage import RolesPermissionPage
 from TestBase.environmentSetupPage import EnvironmentSetup
@@ -12,7 +11,6 @@ class RolesPermissionsTests(EnvironmentSetup):
         visible = RolesPermissionPage(driver)
         menu.users_menu()
         visible.roles_menu_click()
-        assert "Roles & Permissions : Users :: - CommCare HQ" in driver.title
         print("Opened Roles and Permissions Page")
 
     def test_02_add_role(self):
@@ -26,7 +24,3 @@ class RolesPermissionsTests(EnvironmentSetup):
         role = RolesPermissionPage(driver)
         role.edit_role()
         print("Role Edited Successfully")
-
-
-if __name__ == "__main__":
-    unittest.main()
