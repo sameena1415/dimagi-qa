@@ -45,9 +45,3 @@ class MenuVisibilityTests(EnvironmentSetup):
         visible = HomePage(driver)
         visible.messaging_menu()
         assert "Dashboard : Messaging :: - CommCare HQ" in driver.title
-
-    # def test_08_admin_menu_visibility(self):
-    #     driver = self.driver
-    #     visible = HomePage(driver)
-    #     visible.admin_menu()
-    #     assert "User List - CommCare HQ" in driver.title
