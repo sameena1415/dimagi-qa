@@ -13,7 +13,7 @@ class WebAppPermissionPage:
 
     def webapp_permission_option_toggle(self):
         self.driver.find_element(By.LINK_TEXT, self.web_app_permissions_menu).click()
-        time.sleep(2)
+        self.driver.implicitly_wait(2)
         if self.driver.find_element(By.XPATH, self.first_radio_button).is_selected():
             self.driver.find_element(By.XPATH, self.second_radio_button).click()
         else:
