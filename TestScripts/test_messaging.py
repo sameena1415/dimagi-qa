@@ -1,4 +1,3 @@
-import unittest
 from Pages.homePage import HomePage
 from Pages.messagingPage import MessagingPage
 from TestBase.environmentSetupPage import EnvironmentSetup
@@ -87,8 +86,3 @@ class MessagingTests(EnvironmentSetup):
         msg = MessagingPage(driver)
         msg.project_settings_page()
         msg.current_subscription_page()
-
-
-if __name__ == "__main__":
-    unittest.main()
-
