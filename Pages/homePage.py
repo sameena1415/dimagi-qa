@@ -1,6 +1,7 @@
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as ec
+from UserInputs.userInputsData import UserInputsData
 
 
 class HomePage:
@@ -13,13 +14,13 @@ class HomePage:
         self.data_menu_id = "ProjectDataTab"
         self.users_menu_id = "ProjectUsersTab"
         self.applications_menu_id = "ApplicationsTab"
-        self.new_application_link_text = "New Application"
+        self.available_application = UserInputsData.application
         self.web_apps_menu_id = "CloudcareTab"
         self.show_full_menu_id = "commcare-menu-toggle"
         self.messaging_menu_id = "MessagingTab"
         self.admin_menu_id = "AdminTab"
 
-    def wait_to_click(self, *locator, timeout=3):
+    def wait_to_click(self, *locator, timeout=4):
         clickable = ec.element_to_be_clickable(locator)
         WebDriverWait(self.driver, timeout).until(clickable).click()
 
@@ -36,7 +37,7 @@ class HomePage:
 
     def applications_menu(self):
         self.wait_to_click(By.ID, self.applications_menu_id)
-        self.wait_to_click(By.LINK_TEXT, self.new_application_link_text)
+        self.wait_to_click(By.LINK_TEXT, self.available_application)
 
     def users_menu(self):
         self.wait_to_click(By.ID, self.users_menu_id)

@@ -2,6 +2,7 @@ from pathlib import Path
 
 
 class UserInputsData:
+    application = "Village Health"
     domain = "qa-automation"
     download_path = Path('~/Downloads').expanduser()
     # Report names
