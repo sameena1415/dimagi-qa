@@ -2,7 +2,7 @@ from pathlib import Path
 
 
 class UserInputsData:
-    domain = "another-upstream"
+    domain = "qa-automation"
     download_path = Path('~/Downloads').expanduser()
     # Report names
     form_export_name = "CCHQ Smoke Tests Form Export"
