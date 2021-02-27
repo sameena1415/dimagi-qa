@@ -6,12 +6,9 @@ from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as ec
-
 from Pages.organisationStructurePage import latest_download_file
 from UserInputs.generateUserInputs import fetch_random_string
 from UserInputs.userInputsData import UserInputsData
-
-newest_file = latest_download_file()
 
 
 class MobileWorkerPage:
@@ -249,18 +246,21 @@ class MobileWorkerPage:
             print("Still preparing for download.." + str(e))
             assert False
         # verify_downloaded_workers
+        newest_file = latest_download_file()
         modTimesinceEpoc = os.path.getmtime(str(UserInputsData.download_path) + "\\" + newest_file)
         modificationTime = datetime.datetime.fromtimestamp(modTimesinceEpoc)
         timeNow = datetime.datetime.now()
         diff_seconds = round((timeNow - modificationTime).total_seconds())
         print("Last Modified Time : ", str(modificationTime) + 'Current Time : ', str(timeNow),
               "Diff: " + str(diff_seconds))
+        newest_file = latest_download_file()
         assert "_users_" in newest_file and diff_seconds in range(0, 600)
         print("File download successful")
 
     def upload_mobile_worker(self):
         self.mobile_worker_menu()
         self.driver.find_element(By.LINK_TEXT, self.bulk_upload_btn).click()
+        newest_file = latest_download_file()
         self.driver.find_element(By.ID, self.choose_file).send_keys(str(
             UserInputsData.download_path) + "\\" + newest_file)
         self.driver.find_element(By.XPATH, self.upload).click()
