@@ -1,8 +1,7 @@
 import os
-import sys
 import time
 import datetime
-from selenium.common.exceptions import NoSuchElementException, TimeoutException
+from selenium.common.exceptions import TimeoutException
 from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
@@ -15,7 +14,7 @@ def latest_download_file():
     cwd = os.getcwd()
     try:
         os.chdir(UserInputsData.download_path)
-        files = sorted(os.listdir(os.getcwd()), key=os.path.getmtime)
+        files = sorted(os.listdir(os.getcwd()), key=os.path.getctime)
         newest = files[-1]
         print("File downloaded: " + newest)
         return newest
@@ -68,44 +67,42 @@ class OrganisationStructurePage:
         self.upload = "//button[@class='btn btn-primary disable-on-submit']"
         self.import_complete = "//legend[text()='Import complete.']"
 
+    def wait_to_click(self, *locator, timeout=3):
+        clickable = ec.element_to_be_clickable(locator)
+        WebDriverWait(self.driver, timeout).until(clickable).click()
+
     def organisation_menu_open(self):
-        self.driver.find_element(By.LINK_TEXT, self.org_menu_link_text).click()
-        time.sleep(4)
+        self.wait_to_click(By.LINK_TEXT, self.org_menu_link_text)
         print(self.driver.title)
         assert "Organization Structure : Locations :: - CommCare HQ" in self.driver.title
 
     def create_location(self):
-        self.driver.implicitly_wait(5)
-        self.driver.find_element(By.XPATH, self.add_loc_btn_xpath).click()
+        self.wait_to_click(By.XPATH, self.add_loc_btn_xpath)
         self.driver.find_element(By.XPATH, self.loc_name_xpath).clear()
         self.driver.find_element(By.XPATH, self.loc_name_xpath).send_keys(self.loc_created)
         self.driver.find_element(By.XPATH, self.create_loc_xpath).click()
-        time.sleep(2)
-        try:
-            assert self.driver.find_element(By.XPATH, self.loc_saved_success_msg).is_displayed()
-            self.driver.find_element(By.LINK_TEXT, self.org_menu_link_text).click()
-            assert self.driver.find_element(By.XPATH, self.location_created_xpath).is_displayed()
-        except NoSuchElementException:
-            if self.driver.find_element(By.ID, self.error_1_id).is_displayed():
-                self.driver.find_element(By.LINK_TEXT, self.org_menu_link_text).click()
-                time.sleep(2)
-                assert False, "name conflicts with another location with this parent"
+        assert WebDriverWait(self.driver, 3).until(ec.presence_of_element_located((
+            By.XPATH, self.loc_saved_success_msg))).is_displayed()
+        self.wait_to_click(By.LINK_TEXT, self.org_menu_link_text)
+        assert WebDriverWait(self.driver, 3).until(ec.presence_of_element_located((
+            By.XPATH, self.location_created_xpath))).is_displayed()
 
     def edit_location(self):
-        self.driver.find_element(By.XPATH, self.loc_created_edit_path).click()
+        self.wait_to_click(By.XPATH, self.loc_created_edit_path)
         self.driver.find_element(By.ID, self.loc_name_input_id).clear()
         self.driver.find_element(By.ID, self.loc_name_input_id).send_keys(
             "location_" + str(fetch_random_string()) + "new")
         self.driver.find_element(By.XPATH, self.update_loc_xpath).click()
-        assert self.driver.find_element(By.XPATH, self.loc_saved_success_msg).is_displayed()
+        assert WebDriverWait(self.driver, 3).until(ec.presence_of_element_located((
+            By.XPATH, self.loc_saved_success_msg))).is_displayed()
         self.driver.find_element(By.LINK_TEXT, self.org_menu_link_text).click()
-        assert self.driver.find_element(By.XPATH, self.location_renamed_xpath).is_displayed()
+        assert WebDriverWait(self.driver, 3).until(ec.presence_of_element_located((
+            By.XPATH, self.location_renamed_xpath))).is_displayed()
 
     def edit_location_fields(self):
         self.driver.find_element(By.LINK_TEXT, self.org_menu_link_text).click()
         self.driver.find_element(By.XPATH, self.edit_loc_field_btn_xpath).click()
-        time.sleep(2)
-        self.driver.find_element(By.XPATH, self.add_field_btn_xpath).click()
+        self.wait_to_click(By.XPATH, self.add_field_btn_xpath)
         self.driver.find_element(By.XPATH, self.loc_property_xpath).clear()
         self.driver.find_element(By.XPATH, self.loc_property_xpath).send_keys("location_field_" + fetch_random_string())
         self.driver.find_element(By.XPATH, self.loc_label_xpath).clear()
@@ -115,36 +112,32 @@ class OrganisationStructurePage:
         self.driver.find_element(By.XPATH, self.choice_xpath).send_keys("location_field_" + fetch_random_string())
         self.driver.find_element(By.ID, self.save_btn_id).click()
         assert self.driver.find_element(By.XPATH, self.success_msg_xpath).is_displayed()
+        self.driver.refresh()
 
     def selection_location_field_for_location_created(self):
         self.driver.find_element(By.LINK_TEXT, self.org_menu_link_text).click()
-        time.sleep(2)
-        self.driver.find_element(By.XPATH, self.loc_created_edit_path).click()
+        self.wait_to_click(By.XPATH, self.loc_created_edit_path)
         ActionChains(self.driver).move_to_element(
             self.driver.find_element(By.XPATH, self.additional_info_drop_down)).click(
             self.driver.find_element(By.XPATH, self.additional_info_drop_down)).perform()
-        time.sleep(2)
         self.driver.find_element(By.XPATH, self.select_value_drop_down).click()
         self.driver.find_element(By.XPATH, self.update_loc_btn_xpath).click()
-        time.sleep(2)
-        assert self.driver.find_element(By.XPATH, self.success_msg_xpath).is_displayed()
+        assert WebDriverWait(self.driver, 2).until(ec.presence_of_element_located((
+            By.XPATH, self.success_msg_xpath))).is_displayed()
 
     def create_org_level(self):
         self.driver.find_element(By.LINK_TEXT, self.org_level_menu_link_text).click()
-        time.sleep(3)
-        self.driver.find_element(By.XPATH, self.new_org_level_btn_xpath).click()
+        self.wait_to_click(By.XPATH, self.new_org_level_btn_xpath)
         self.driver.find_element(By.XPATH, self.org_level_value_xpath).send_keys("loc_level_" + fetch_random_string())
         self.driver.find_element(By.XPATH, self.save_btn_xpath).click()
-        time.sleep(2)
 
     def download_locations(self):
         self.driver.find_element(By.LINK_TEXT, self.org_menu_link_text).click()
         self.driver.find_element(By.LINK_TEXT, self.download_loc_btn).click()
-        time.sleep(3)
         try:
             WebDriverWait(self.driver, 20).until(ec.presence_of_element_located((
                 By.LINK_TEXT, self.download_loc_btn))).click()
-            time.sleep(7)
+            time.sleep(6)
         except TimeoutException as e:
             print("Still preparing for download.." + str(e))
             assert False
@@ -155,7 +148,7 @@ class OrganisationStructurePage:
         diff_seconds = round((timeNow - modificationTime).total_seconds())
         print("Last Modified Time : ", str(modificationTime) + 'Current Time : ', str(timeNow),
               "Diff: " + str(diff_seconds))
-        assert "_users_" in newest_file and diff_seconds in range(0, 600)
+        assert "_locations" in newest_file and diff_seconds in range(0, 600)
         print("File download successful")
 
     def upload_locations(self):
@@ -163,7 +156,8 @@ class OrganisationStructurePage:
         self.driver.find_element(By.LINK_TEXT, self.upload_loc_btn).click()
         self.driver.find_element(By.ID, "id_bulk_upload_file").send_keys(str(
             UserInputsData.download_path) + "\\" + newest_file)
-        self.driver.find_element(By.XPATH, self.upload).click()
-        assert WebDriverWait(self.driver, 10).until(ec.presence_of_element_located((
+        self.wait_to_click(By.XPATH, self.upload)
+        #picks up latest -1 file always, hence might fail
+        assert WebDriverWait(self.driver, 3).until(ec.presence_of_element_located((
             By.XPATH, self.import_complete))).is_displayed()
         print("File uploaded successfully")

@@ -1,4 +1,3 @@
-import unittest
 from Pages.groupPage import GroupPage
 from Pages.mobileWorkersPage import MobileWorkerPage
 from Pages.rolesPermissionsPage import RolesPermissionPage
@@ -41,7 +40,3 @@ class CleanUps(EnvironmentSetup):
         clean.roles_menu_click()
         clean.cleanup_role()
         print("Deleted the role")
-
-
-if __name__ == "__main__":
-    unittest.main()
