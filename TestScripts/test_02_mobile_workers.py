@@ -35,7 +35,6 @@ class MobileWorkerTests(EnvironmentSetup):
     def test_04_user_field_visible(self):
         driver = self.driver
         visible = MobileWorkerPage(driver)
-        visible.go_back_to_mobile_workers()
         visible.select_mobile_worker_created()
         print("Clicked on user")
         visible.enter_value_for_created_user_field()
@@ -46,12 +45,14 @@ class MobileWorkerTests(EnvironmentSetup):
     def test_05_deactivate_user(self):
         driver = self.driver
         user = MobileWorkerPage(driver)
+        user.mobile_worker_menu()
         user.deactivate_user()
         user.verify_deactivation_via_login()
 
     def test_06_reactivate_user(self):
         driver = self.driver
         user = MobileWorkerPage(driver)
+        user.mobile_worker_menu()
         user.reactivate_user()
         user.verify_reactivation_via_login()
 

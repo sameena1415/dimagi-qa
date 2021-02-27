@@ -1,8 +1,7 @@
 import datetime
 import os
 import time
-from selenium.common.exceptions import NoSuchElementException, TimeoutException
-from selenium.webdriver.common.action_chains import ActionChains
+from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as ec
@@ -15,6 +14,7 @@ class MobileWorkerPage:
 
     def __init__(self, driver):
         self.driver = driver
+        self.username = "username_" + fetch_random_string()
         self.domain = "//span[text()='Project:']"
         self.confirm_user_field_delete = "//button[@class='btn btn-danger']"
         self.delete_user_field = "(//input[@data-bind='value: slug'])[last()]" \
@@ -36,8 +36,7 @@ class MobileWorkerPage:
         self.webapp_login = "(//div[@class='js-restore-as-item appicon appicon-restore-as'])"
         self.confirm_reactivate_xpath_list = "((//div[@class='modal-footer'])/button[@data-bind=" \
                                              "'click: function(user) { user.is_active(true); }'])"
-        self.reactivate_buttons_list = "(//td/div[@data-bind='visible: !is_active() && is_account_confirmed()']" \
-                                       "/button[@class='btn btn-default'])"
+        self.reactivate_buttons_list = "//td/div[@data-bind='visible: !is_active()']//button[@class='btn btn-default']"
         self.confirm_deactivate_xpath_list = "((//div[@class='modal-footer'])/button[@class='btn btn-danger'])"
         self.deactivate_buttons_list = "(//td/div[@data-bind='visible: is_active()']/button[@class='btn btn-default'])"
         self.show_deactivated_users_btn = '//button[@data-bind="visible: !deactivatedOnly(), click: function() ' \
@@ -60,20 +59,19 @@ class MobileWorkerPage:
         self.add_field_xpath = "//button[@data-bind='click: addField']"
         self.user_property_xpath = "(//input[@data-bind='value: slug'])[last()]"
         self.label_xpath = "(//input[@data-bind='value: label'])[last()]"
-        self.choice_selection = "(//div[contains(@data-bind, \"validationMode('choice')\")])[last()]"
         self.add_choice_button_xpath = "(//button[@data-bind='click: addChoice'])[last()]"
         self.choice_xpath = "(//input[@data-bind='value: value'])[last()]"
         self.save_field_id = "save-custom-fields"
         self.user_field_success_msg = "//div[@class='alert alert-margin-top fade in alert-success']"
         self.mobile_worker_on_left_panel = "//a[@data-title='Mobile Workers']"
         self.next_page_button_xpath = "//a[contains(@data-bind,'click: nextPage')]"
-        self.additional_info_dropdown = "//select[@name = 'data-field-user_field_" + fetch_random_string() + "']"
+        self.additional_info_dropdown = "select2-id_data-field-" + "user_field_" + fetch_random_string() + "-container"
+        # self.additional_info_dropdown = "//select[@name = 'data-field-user_field_" + fetch_random_string() + "']"
         self.select_value_dropdown = "//select[@name = 'data-field-user_field_" \
                                      + fetch_random_string() + "']/option[text()='user_field_" + fetch_random_string() + "']"
         self.update_info_button = "//button[text()='Update Information']"
         self.user_file_additional_info = "//label[@for='id_data-field-" + "user_field_" + fetch_random_string() + "']"
-        self.deactivate_btn_xpath = "//td/a/strong[text()='" + "username_" + fetch_random_string() + "']" \
-                                                                                                     "/following::td[5]/div[@data-bind='visible: is_active()']/button"
+        self.deactivate_btn_xpath = "//td/a/strong[text()='" + self.username + "']/following::td[5]/div[@data-bind='visible: is_active()']/button"
         self.confirm_deactivate = "(//button[@class='btn btn-danger'])[1]"
         self.show_full_menu_id = "commcare-menu-toggle"
         self.view_all_link_text = "View All"
@@ -88,9 +86,22 @@ class MobileWorkerPage:
         self.upload = "//button[@class='btn btn-primary disable-on-submit']"
         self.import_complete = "//legend[text()='Bulk upload complete.']"
 
-    def wait_to_click(self, *locator, timeout=3):
+    def wait_to_click(self, *locator, timeout=5):
         clickable = ec.element_to_be_clickable(locator)
         WebDriverWait(self.driver, timeout).until(clickable).click()
+
+    def search_user(self):
+        WebDriverWait(self.driver, 3).until(ec.presence_of_element_located((
+            By.XPATH, self.search_mw))).send_keys(self.username)
+        self.wait_to_click(By.XPATH, self.search_button_mw)
+
+    def webapp_login_as(self):
+        self.wait_to_click(By.ID, self.web_apps_menu_id)
+        self.wait_to_click(By.XPATH, self.webapp_login)
+        time.sleep(1)
+        self.driver.find_element(By.XPATH, self.search_user_web_apps).send_keys(self.username)
+        self.wait_to_click(By.XPATH, self.search_button_we_apps)
+        time.sleep(1)
 
     def mobile_worker_menu(self):
         self.wait_to_click(By.ID, self.users_menu_id)
@@ -112,7 +123,7 @@ class MobileWorkerPage:
         new_user_created = WebDriverWait(self.driver, 3).until(ec.presence_of_element_located((
             By.XPATH, self.new_user_created_xpath)))
         print("Username is : " + new_user_created.text)
-        assert "username_" + fetch_random_string() == new_user_created.text
+        assert self.username == new_user_created.text
 
     def edit_user_field(self):
         self.wait_to_click(By.XPATH, self.edit_user_field_xpath)
@@ -129,7 +140,6 @@ class MobileWorkerPage:
         self.driver.find_element(By.XPATH, self.label_xpath).send_keys(label)
 
     def add_choice(self, choice):
-        self.wait_to_click(By.XPATH, self.choice_selection)
         self.wait_to_click(By.XPATH, self.add_choice_button_xpath)
         self.driver.find_element(By.XPATH, self.choice_xpath).clear()
         self.driver.find_element(By.XPATH, self.choice_xpath).send_keys(choice)
@@ -138,25 +148,13 @@ class MobileWorkerPage:
         self.wait_to_click(By.ID, self.save_field_id)
         assert self.driver.find_element(By.XPATH, self.user_field_success_msg).is_displayed()
 
-    def go_back_to_mobile_workers(self):
-        self.wait_to_click(By.XPATH, self.mobile_worker_on_left_panel)
-
     def select_mobile_worker_created(self):
-        while True:
-            try:
-                mobile_worker_created = self.driver.find_element_by_link_text("username_" + fetch_random_string())
-                if mobile_worker_created.is_displayed():
-                    mobile_worker_created.click()
-                    break
-            except NoSuchElementException:
-                self.wait_to_click(By.XPATH, self.next_page_button_xpath)
-                time.sleep(2)
+        self.wait_to_click(By.XPATH, self.mobile_worker_on_left_panel)
+        self.search_user()
+        self.wait_to_click(By.LINK_TEXT, self.username)
 
     def enter_value_for_created_user_field(self):
-        actions = ActionChains(self.driver)
-        actions.move_to_element(self.driver.find_element_by_xpath(self.additional_info_dropdown)).perform()
-        self.wait_to_click(By.XPATH, self.additional_info_dropdown)
-        time.sleep(1)
+        self.wait_to_click(By.ID, self.additional_info_dropdown)
         self.wait_to_click(By.XPATH, self.select_value_dropdown)
         assert self.driver.find_element_by_xpath(self.user_file_additional_info).is_displayed()
 
@@ -164,68 +162,52 @@ class MobileWorkerPage:
         self.wait_to_click(By.XPATH, self.update_info_button)
 
     def deactivate_user(self):
-        self.wait_to_click(By.XPATH, self.mobile_worker_on_left_panel)
-        time.sleep(2)
-        username = "username_" + fetch_random_string()
-        self.driver.find_element(By.XPATH, self.search_mw).send_keys(username)
-        self.wait_to_click(By.XPATH, self.search_button_mw)
+        self.search_user()
         self.wait_to_click(By.XPATH, self.deactivate_buttons_list)
         self.wait_to_click(By.XPATH, self.confirm_deactivate_xpath_list)
+        time.sleep(2)
 
     def verify_deactivation_via_login(self):
-        self.wait_to_click(By.ID, self.web_apps_menu_id)
-        self.wait_to_click(By.XPATH, self.webapp_login)
-        WebDriverWait(self.driver, 3).until(ec.presence_of_element_located((
-            By.XPATH, self.search_user_web_apps))).send_keys("username_" + fetch_random_string())
-        self.wait_to_click(By.XPATH, self.search_button_we_apps)
-        time.sleep(2)
+        self.webapp_login_as()
         login_with_username = self.driver.find_elements(By.XPATH, self.webapp_login_with_username)
         print("Checking webapp login...")
         for j in range(len(login_with_username)):
             print("Username is " + login_with_username[j].text)
-            if login_with_username[j].text != "username_" + fetch_random_string():
+            if login_with_username[j].text != self.username:
                 assert True
         print("Username not in list - Successfully deactivated!")
+        self.wait_to_click(By.ID, self.show_full_menu_id)
 
     def reactivate_user(self):
-        self.wait_to_click(By.ID, self.show_full_menu_id)
-        self.wait_to_click(By.ID, self.users_menu_id)
-        self.wait_to_click(By.LINK_TEXT, self.view_all_link_text)
         self.wait_to_click(By.XPATH, self.show_deactivated_users_btn)
-        username = "username_" + fetch_random_string()
-        self.driver.find_element(By.XPATH, self.search_mw).send_keys(username)
-        self.wait_to_click(By.XPATH, self.search_button_mw)
+        self.search_user()
         self.wait_to_click(By.XPATH, self.reactivate_buttons_list)
         self.wait_to_click(By.XPATH, self.confirm_reactivate_xpath_list)
         time.sleep(2)
 
     def verify_reactivation_via_login(self):
-        self.wait_to_click(By.ID, self.web_apps_menu_id)
-        self.wait_to_click(By.XPATH, self.webapp_login)
-        WebDriverWait(self.driver, 3).until(ec.presence_of_element_located((
-            By.XPATH, self.search_user_web_apps))).send_keys("username_" + fetch_random_string())
-        self.wait_to_click(By.XPATH, self.search_button_we_apps)
-        time.sleep(2)
+        self.webapp_login_as()
         login_with_username = self.driver.find_elements(By.XPATH, self.webapp_login_with_username)
         for j in range(len(login_with_username)):
             print("Checking webapp login...")
             print("Username is " + login_with_username[j].text)
-            if login_with_username[j].text == "username_" + fetch_random_string():
+            if login_with_username[j].text == self.username:
                 self.wait_to_click(By.XPATH, self.webapp_login_with_username + "[" + str(j + 1) + "]")
                 self.wait_to_click(By.ID, self.webapp_login_confirmation)
                 break
-        login_username = WebDriverWait(self.driver, 10).until(ec.presence_of_element_located(
+        login_username = WebDriverWait(self.driver, 3).until(ec.presence_of_element_located(
             (By.XPATH, self.webapp_working_as)))
-        if login_username.text == "username_" + fetch_random_string():
+        if login_username.text == self.username:
             assert True, "Login with the reactivated user failed!"
-            print("Working as " + "username_" + fetch_random_string() + " : Reactivation successful!")
+            print("Working as " + self.username + " : Reactivation successful!")
+        self.wait_to_click(By.ID, self.show_full_menu_id)
 
     def cleanup_mobile_worker(self):
         self.wait_to_click(By.LINK_TEXT, self.actions_tab_link_text)
         self.wait_to_click(By.XPATH, self.delete_mobile_worker)
         WebDriverWait(self.driver, 3).until(ec.presence_of_element_located((
             By.XPATH, self.enter_username))).send_keys(
-            "username_" + fetch_random_string() + "@" + UserInputsData.domain + ".commcarehq.org")
+            self.username + "@" + UserInputsData.domain + ".commcarehq.org")
         self.wait_to_click(By.XPATH, self.confirm_delete_mw)
         assert WebDriverWait(self.driver, 8).until(ec.presence_of_element_located((
             By.XPATH, self.delete_success_mw))).is_displayed()
@@ -235,13 +217,13 @@ class MobileWorkerPage:
         self.wait_to_click(By.XPATH, self.confirm_user_field_delete)
 
     def download_mobile_worker(self):
-        self.wait_to_click(By.ID, self.show_full_menu_id)
+        time.sleep(1)
         self.mobile_worker_menu()
         self.wait_to_click(By.LINK_TEXT, self.download_worker_btn)
         try:
             WebDriverWait(self.driver, 20).until(ec.presence_of_element_located((
                 By.LINK_TEXT, self.download_users_btn))).click()
-            time.sleep(10)
+            time.sleep(5)
         except TimeoutException as e:
             print("Still preparing for download.." + str(e))
             assert False
