@@ -38,7 +38,17 @@ class EnvironmentSetup(unittest.TestCase):
 
 def load_settings():
     if os.environ.get("CI") == "true":
-        return load_settings_from_environment()
+        settings = load_settings_from_environment()
+        if not settings:
+            raise RuntimeError(
+                f"Environment variables not set:\n"
+                "  DIMAGIQA_URL\n"
+                "  DIMAGIQA_LOGIN_USERNAME\n"
+                "  DIMAGIQA_LOGIN_PASSWORD\n\n"
+                "See https://docs.github.com/en/actions/reference/encrypted-secrets "
+                "for instructions on how to set them."
+            )
+        return settings
     path = Path(__file__).parent.parent / "settings.cfg"
     if not path.exists():
         raise RuntimeError(
