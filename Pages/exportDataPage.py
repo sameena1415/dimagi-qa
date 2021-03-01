@@ -362,8 +362,8 @@ class ExportDataPage:
         self.driver.execute_script("window.open('');")
         self.switch_to_next_tab()
         # string manipulation for bypassing the authentication
-        username = load_settings()["default"]["login_username"]
-        password = load_settings()["default"]["login_password"]
+        username = load_settings()["login_username"]
+        password = load_settings()["login_password"]
         final_URL = f"https://{username}:{password}@{odata_feed_link[8:]}"
         self.driver.get(final_URL)
         odata_feed_data = self.driver.page_source
@@ -404,8 +404,8 @@ class ExportDataPage:
         print(odata_feed_link)
         self.driver.execute_script("window.open('');")  # Open a new tab
         self.switch_to_next_tab()
-        username = load_settings()["default"]["login_username"]
-        password = load_settings()["default"]["login_password"]
+        username = load_settings()["login_username"]
+        password = load_settings()["login_password"]
         final_URL = f"https://{username}:{password}@{odata_feed_link[8:]}"
         self.driver.get(final_URL)
         odata_feed_data = self.driver.page_source

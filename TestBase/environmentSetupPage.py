@@ -1,3 +1,4 @@
+import os
 import unittest
 from configparser import ConfigParser
 from pathlib import Path
@@ -12,7 +13,7 @@ class EnvironmentSetup(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        settings = load_settings()["default"]
+        settings = load_settings()
         driver_path = ChromeDriverManager().install()
         cls.driver = webdriver.Chrome(executable_path=driver_path)
         try:
@@ -36,6 +37,8 @@ class EnvironmentSetup(unittest.TestCase):
 
 
 def load_settings():
+    if os.environ.get("CI") == "true":
+        return load_settings_from_environment()
     path = Path(__file__).parent.parent / "settings.cfg"
     if not path.exists():
         raise RuntimeError(
@@ -45,4 +48,23 @@ def load_settings():
         )
     settings = ConfigParser()
     settings.read(path)
+    return settings["default"]
+
+
+def load_settings_from_environment():
+    """Load settings from os.environ
+
+    Names of environment variables:
+        DIMAGIQA_URL
+        DIMAGIQA_LOGIN_USERNAME
+        DIMAGIQA_LOGIN_PASSWORD
+
+    See https://docs.github.com/en/actions/reference/encrypted-secrets
+    for instructions on how to set them.
+    """
+    settings = {}
+    for name in ["url", "login_username", "login_password"]:
+        var = f"DIMAGIQA_{name.upper()}"
+        if var in os.environ:
+            settings[name] = os.environ[var]
     return settings
