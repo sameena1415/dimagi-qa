@@ -42,7 +42,7 @@ class OrganisationStructurePage:
         self.loc_name_input_id = "id_name"
         self.update_loc_xpath = "//*[@id='users']//preceding::button"
         self.location_created_xpath = "//span[text()='" + self.new_location_name + "']"
-        self.renamed_location = "//span[text()='" + self.edit_this_loc + str(date.today()) + "']"
+        self.renamed_location = "//span[text()='updated_on:" + str(date.today()) + "']"
         self.edit_loc_field_btn_xpath = "//a[@data-action='Edit Location Fields']"
         self.add_field_btn_xpath = "//button[@data-bind='click: addField']"
         self.loc_property_xpath = "(//input[@data-bind='value: slug'])[last()]"
@@ -101,11 +101,11 @@ class OrganisationStructurePage:
         self.driver.find_element(By.ID, self.loc_name_input_id).clear()
         self.driver.find_element(By.ID, self.loc_name_input_id).send_keys("updated_on:" + str(date.today()))
         self.driver.find_element(By.XPATH, self.update_loc_xpath).click()
-        assert WebDriverWait(self.driver, 3).until(ec.presence_of_element_located((
+        assert WebDriverWait(self.driver, 3).until(ec.visibility_of_element_located((
             By.XPATH, self.loc_saved_success_msg))).is_displayed()
-        # self.driver.find_element(By.LINK_TEXT, self.org_menu_link_text).click()
-        # assert WebDriverWait(self.driver, 3).until(ec.presence_of_element_located((
-        #     By.XPATH, self.renamed_location))).is_displayed()
+        self.driver.find_element(By.LINK_TEXT, self.org_menu_link_text).click()
+        assert WebDriverWait(self.driver, 3).until(ec.visibility_of_element_located((
+            By.XPATH, self.renamed_location))).is_displayed()
 
     def edit_location_fields(self):
         self.driver.find_element(By.LINK_TEXT, self.org_menu_link_text).click()
@@ -178,14 +178,14 @@ class OrganisationStructurePage:
         self.wait_to_click(By.XPATH, self.delete_loc_field)
         self.wait_to_click(By.XPATH, self.delete_org_level)
         self.wait_to_click(By.ID, self.save_btn_id)
-        # Delete Org Level
-        self.driver.find_element(By.LINK_TEXT, self.org_level_menu_link_text).click()
-        self.driver.refresh()
-        self.wait_to_click(By.XPATH, self.delete_org_level)
-        self.wait_to_click(By.XPATH, self.save_btn_delete)
         # Delete Location
         self.wait_to_click(By.LINK_TEXT, self.org_menu_link_text)
         self.wait_to_click(By.XPATH, self.delete_location_created)
         time.sleep(1)
         self.driver.find_element(By.XPATH, self.delete_confirm).send_keys("1")
         self.driver.find_element(By.XPATH, self.delete_confirm_button).click()
+        # Delete Org Level
+        self.driver.find_element(By.LINK_TEXT, self.org_level_menu_link_text).click()
+        time.sleep(1)
+        self.driver.find_element(By.XPATH, self.delete_org_level).click()
+        self.wait_to_click(By.XPATH, self.save_btn_delete)
