@@ -15,8 +15,8 @@ class RolesPermissionPage:
         self.edit_web_user_checkbox = "edit-web-users-checkbox"
         self.save_btn_xpath = "//button[@class='btn btn-primary disable-on-submit']"
         self.role_created = "//span[text()='" + "role_name_" + fetch_random_string() + "']"
-        self.edit_role_xpath = "//span[text()='" + "role_name_" + fetch_random_string() + "']//following::td[11]/button[1]"
-        self.delete_role_xpath = "//span[text()='" + "role_name_" + fetch_random_string() + "']//following::td[11]/button[2]"
+        self.edit_role_xpath = "//span[text()='" + "role_name_" + fetch_random_string() + "']//following::td[9]/button[1]"
+        self.delete_role_xpath = "//span[text()='" + "role_name_" + fetch_random_string() + "']//following::td[9]/button[2]"
         self.edit_mobile_worker_checkbox = "edit-commcare-users-checkbox"
         self.role_renamed = "//span[text()='" + "role_name_" + fetch_random_string() + "']"
         self.confirm_role_delete = "//div[@class='btn btn-danger']"
@@ -30,7 +30,7 @@ class RolesPermissionPage:
         assert "Roles & Permissions : Users :: - CommCare HQ" in self.driver.title
 
     def add_role(self):
-        self.driver.implicitly_wait(10)
+        self.driver.implicitly_wait(3)
         ActionChains(self.driver).move_to_element(
             self.driver.find_element(By.XPATH, self.add_role_btn_xpath)).click(
             self.driver.find_element(By.XPATH, self.add_role_btn_xpath)).perform()

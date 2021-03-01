@@ -24,3 +24,10 @@ class RolesPermissionsTests(EnvironmentSetup):
         role = RolesPermissionPage(driver)
         role.edit_role()
         print("Role Edited Successfully")
+
+    def test_04_cleanup_role(self):
+        driver = self.driver
+        clean = RolesPermissionPage(driver)
+        clean.roles_menu_click()
+        clean.cleanup_role()
+        print("Deleted the role")
