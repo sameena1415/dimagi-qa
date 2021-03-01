@@ -1,4 +1,3 @@
-import unittest
 from Pages.homePage import HomePage
 from Pages.organisationStructurePage import OrganisationStructurePage
 from TestBase.environmentSetupPage import EnvironmentSetup
@@ -55,6 +54,7 @@ class OrganisationStructureTests(EnvironmentSetup):
         org = OrganisationStructurePage(driver)
         org.upload_locations()
 
-
-if __name__ == "__main__":
-    unittest.main()
+    def test_09_cleanup(self):
+        driver = self.driver
+        org = OrganisationStructurePage(driver)
+        org.cleanup()

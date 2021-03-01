@@ -1,4 +1,3 @@
-import unittest
 from Pages.homePage import HomePage
 from Pages.groupPage import GroupPage
 from TestBase.environmentSetupPage import EnvironmentSetup
@@ -21,7 +20,3 @@ class GroupsTests(EnvironmentSetup):
         edit.click_group_menu()
         edit.edit_existing_group()
         edit.remove_user_from_group()
-
-
-if __name__ == "__main__":
-    unittest.main()

@@ -1,4 +1,3 @@
-import unittest
 from Pages.mobileWorkersPage import MobileWorkerPage
 from TestBase.environmentSetupPage import EnvironmentSetup
 from UserInputs.generateUserInputs import fetch_random_string
@@ -9,19 +8,14 @@ class MobileWorkerTests(EnvironmentSetup):
     def test_01_click_mobile_worker_menu(self):
         driver = self.driver
         worker = MobileWorkerPage(driver)
-        try:
-            worker.mobile_worker_menu()
-        except Exception as e:
-            print(e)
-        finally:
-            assert "Mobile Workers : Users :: - CommCare HQ" in driver.title
-            print("Mobile Workers Menu Visible and Click-able")
+        worker.mobile_worker_menu()
+        print("Mobile Workers Menu Visible and Click-able")
 
     def test_02_create_mobile_worker(self):
         driver = self.driver
         worker = MobileWorkerPage(driver)
         worker.create_mobile_worker()
-        worker.mobile_worker_enter_username("username_" + fetch_random_string())
+        worker.mobile_worker_enter_username("username_" + str(fetch_random_string()))
         worker.mobile_worker_enter_password(fetch_random_string())
         worker.click_create()
         print("Mobile Worker Created")
@@ -41,7 +35,6 @@ class MobileWorkerTests(EnvironmentSetup):
     def test_04_user_field_visible(self):
         driver = self.driver
         visible = MobileWorkerPage(driver)
-        visible.go_back_to_mobile_workers()
         visible.select_mobile_worker_created()
         print("Clicked on user")
         visible.enter_value_for_created_user_field()
@@ -52,15 +45,14 @@ class MobileWorkerTests(EnvironmentSetup):
     def test_05_deactivate_user(self):
         driver = self.driver
         user = MobileWorkerPage(driver)
+        user.mobile_worker_menu()
         user.deactivate_user()
-        user.verify_deactivation()
         user.verify_deactivation_via_login()
 
     def test_06_reactivate_user(self):
         driver = self.driver
         user = MobileWorkerPage(driver)
         user.reactivate_user()
-        user.verify_reactivation()
         user.verify_reactivation_via_login()
 
     def test_07_download_workers(self):
@@ -72,7 +64,3 @@ class MobileWorkerTests(EnvironmentSetup):
         driver = self.driver
         user = MobileWorkerPage(driver)
         user.upload_mobile_worker()
-
-
-if __name__ == "__main__":
-    unittest.main()

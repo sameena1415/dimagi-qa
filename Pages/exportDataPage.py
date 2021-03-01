@@ -1,1179 +1,460 @@
-import xlrd
+import datetime
 import os
 import time
 from tkinter import Tk
 from selenium.webdriver.common.by import By
-
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from UserInputs.userInputsData import UserInputsData
+import pandas as pd
+from TestBase.environmentSetupPage import load_settings
+
+
+def latest_download_file():
+    os.chdir(UserInputsData.download_path)
+    files = sorted(os.listdir(os.getcwd()), key=os.path.getmtime)
+    newest = files[-1]
+    print("File downloaded: " + newest)
+    return newest
 
 
 class ExportDataPage:
 
     def __init__(self, driver):  # initialize each WebElement here
         self.driver = driver
-
-        self.data_dropdown = None  # Data dropdown
-        self.view_all_link = None  # View All link
+        self.data_dropdown = '//*[@id="ProjectDataTab"]/a'  # Data dropdown
+        self.view_all_link = '//*[@id="ProjectDataTab"]/ul/li[6]/a'  # View All link
 
         # Delete Export
-        self.no_exports_to_display = None
-        self.existing_form_export_name = None
-        self.existing_case_export_name = None
-        self.delete_form_export_button = None
-        self.delete_case_export_button = None
-        self.delete_confirmation_button = None
+        self.delete_button = "//a[@class='btn btn-danger']"
+        self.delete_confirmation_button = "//button[@data-bind='click: deleteExport']"
 
         # Add Export
-        self.add_export_button = None  # Add Export button
-        self.app_dropdown = None  # Application dropdown in the modal
-        self.select_app = None  # Selecting first app
-        self.menu_dropdown = None  # Menu dropdown in the modal
-        self.select_menu = None  # Selecting first menu item
-        self.form_dropdown = None  # Form dropdown in the modal
-        self.select_form = None  # Selecting first form item
-        self.add_export_conf = None  # Confirm and add export
-        self.export_name = None  # Custom name for the export
-        self.export_settings_create = None  # Creating export with the default settings
+        self.add_export_button = '//*[@id="create-export"]/p/a'  # Add Export button
+        self.app_dropdown = '//*[@id="div_id_application"]/div/span/span[1]/span'# Application dropdown in the modal
+        self.select_app = '//*[@id="select2-id_application-results"]/li'  # Selecting first app
+        self.menu_dropdown = '//*[@id="div_id_module"]/div/span/span[1]/span'  # Menu dropdown in the modal
+        self.select_menu = '//*[@id="select2-id_module-results"]/li[1]'  # Selecting first menu item
+        self.form_dropdown = '//*[@id="div_id_form"]/div/span/span[1]/span'  # Form dropdown in the modal
+        self.select_form = '//*[@id="select2-id_form-results"]/li[1]'  # Selecting first form item
+        self.add_export_conf = '//*[@id="createExportOptionsModal"]/div/form/div/div[7]/button[2]'  # Confirm and add export
+        self.export_name = '//*[@id="export-name"]'  # Custom name for the export
+        self.export_settings_create = '//*[@id="customize-export"]/form/div/div[1]/button'  # Creating export with the default settings
+        self.date_range = "id_date_range"
+        self.date_range_key = "//li[@data-range-key='Last 30 Days']"
 
         # Export Form data variables
-        self.export_form_data_link = None  # Export Form Data link on the left panel
-        self.export_form_data_button = None  # click form exports
-        self.prepare_export_button = None  # click prepare exports
-        self.download_button = None  # click download
-        self.find_data_by_ID_link = None  # Click findDataByID link
-        self.find_data_by_ID_textbox = None  # Find data by ID textbox
-        self.find_data_by_ID_button = None
-        self.view_FormID = None
-        self.Name_HQ = None  # Property 'Woman's name' value on HQ
+        self.export_form_data_link = '//*[@id="hq-sidebar"]/nav/ul[1]/li[1]/a'  # Export Form Data link on the left panel
+        self.export_form_data_button = '//*[@id="export-list"]/div[2]/div/div[2]/table/tbody/tr/td[2]/a[1]'  # click form exports
+        self.prepare_export_button = '//*[@id="download-export-form"]/form/div[2]/div/div[2]/div[1]/button'  # click prepare exports
+        self.download_button = '//*[@id="download-progress"]/div/div/div[2]/div[1]/form/a'  # click download
+        self.find_data_by_ID_link = '//*[@id="hq-sidebar"]/nav/ul[1]/li[4]/a'  # Click findDataByID link
+        self.find_data_by_ID_textbox = '//*[@id="find-form"]/div[2]/div[1]/input'  # Find data by ID textbox
+        self.find_data_by_ID_button = '//*[@id="find-form"]/div[2]/div[2]/button'
+        self.view_FormID = '//*[@id="find-form"]/div[2]/div[1]/div[2]/a'
+        self.womanName_HQ = '//*[@id="form-data"]/div[3]/div/div/table/tbody/tr[2]/td[2]/div' # Property 'Woman's name' value on HQ
+        self.woman_case_name_HQ = "//th[@title='name']//following::td[1]"
 
         # Export Case data variables
-        self.export_case_data_link = None  # Export Case Data link on the left panel
-        self.export_case_data_button = None
-        self.prepare_case_export_button = None
-        self.case_download_button = None
+        self.export_case_data_link = '//*[@id="hq-sidebar"]/nav/ul[1]/li[2]/a'  # Export Case Data link on the left panel
+        self.export_case_data_button = '//*[@id="export-list"]/div[2]/div/div[2]/table/tbody/tr/td[3]/a[1]'
+        self.view_caseID ='//*[@id="find-form"]/div[2]/div[1]/div[2]/a'
 
         # Export SMS variables
-        self.export_sms_link = None  # Export Case Data on the left panel
-        self.prepare_sms_export_button = None
-        self.sms_download_button = None
+        self.export_sms_link = '//*[@id="hq-sidebar"]/nav/ul[1]/li[3]/a'  # Export Case Data on the left panel
 
         # Daily Saved Export variables, form
-        self.edit_form_export = None  # Edit an existing form export
-        self.create_DSE_checkbox = None  # Create a Daily Saved Export checkbox
-        self.save_DSE_button = None  # Create a Daily Saved Export confirmation button
+        self.edit_form_export = '//*[@id="export-list"]/div[2]/div/div[2]/table/tbody/tr[1]/td[4]/div[2]/div/a'  # Edit an existing form export
+        self.create_DSE_checkbox = '//*[@id="daily-saved-export-checkbox"]'  # Create a Daily Saved Export checkbox
 
         # Daily Saved Export variables, case
-        self.edit_case_export = None  # Edit an existing case export
+        self.edit_case_export = '//*[@id="export-list"]/div[2]/div/div[2]/table/tbody/tr[1]/td[4]/div[2]/div/a'  # Edit an existing case export
 
         # Excel Dashboard Integrations, form
-        self.export_excel_dash_int_link = None  # Excel Dashboard Integrations link on the left panel
-        self.add_dashboard_feed_button1 = None
-        self.model_dropdown = None
-        self.select_form_model = None
-        self.add_dashboard_feed_button2 = None
-        self.update_data = None
-        self.update_data_conf = None
-        self.copy_dashfeed_link = None
+        self.export_excel_dash_int_link = '//*[@id="hq-sidebar"]/nav/ul[1]/li[6]/a'  # Excel Dashboard Integrations link on the left panel
+        self.model_dropdown = '//*[@id="id_model_type"]'
+        self.select_form_model = '//*[@id="id_model_type"]/option[3]'
+        self.update_data = "//button[@data-toggle='modal'][1]"
+        self.update_data_conf = "//button[@data-bind='click: emailedExport.updateData']"
+        self.copy_dashfeed_link = "//a[@class='btn btn-default btn-sm']"
 
         # Excel Dashboard Integrations, case
-        self.select_case_model = None
-        self.case_type_dropdown = None
+        self.select_case_model = '//*[@id="id_model_type"]/option[2]'
+        self.case_type_dropdown = '//*[@id="div_id_case_type"]/div/span/span[1]/span'
+        self.select_case_type ='//*[@id="select2-id_case_type-results"]/li'
 
         # Power BI / Tableau Integration, Form
-        self.powerBI_tab_int_link = None
-        self.add_Odata_feed_button1 = None
-        self.feed_type_dropdown = None
-        self.select_form_feed_type = None
-        self.add_Odata_feed_button2 = None
-        self.copy_odatafeed_link = None
-        self.odata_username = None
-        self.odata_password = None
+        self.powerBI_tab_int_link = '//*[@id="hq-sidebar"]/nav/ul[1]/li[7]/a'
+        self.copy_odatafeed_link = '//*[@id="export-list"]/div[2]/div/div[2]/table/tbody/tr[1]/td[1]/div/span/a'
+        self.bi_delete_confirmation = '/html/body/div[1]/div[3]/div/div[2]/div[4]/div[2]/div/div[2]/table/' \
+                                 'tbody/tr/td[4]/div/div/div/div/form/div[2]/button'
+        self.bi_delete_button = '/html/body/div[1]/div[3]/div/div[2]/div[4]/div[2]/div/div[2]/table/tbody/tr/td[4]/div/a'
 
         # Manage Forms
-        self.manage_forms_link = None
-        self.apply_button = None
-        self.checkbox1 = None
-        self.checkbox2 = None
-        self.archive_button = None
-        self.view_normal_form_link = None
-        self.archived_restored_dropdown = None
-        self.archived_forms_option = None
-        self.view_archived_form_link = None
+        self.manage_forms_link = '//*[@id="hq-sidebar"]/nav/ul[2]/li[3]/a'
+        self.apply_button = '//*[@id="apply-btn"]'
+        self.select_all_checkbox = "//input[@name='select_all']"
+        self.checkbox1 = "(//input[@class='xform-checkbox'])[1]"
+        self.archive_button = '//*[@id="submitForms"]'
+        self.success_message = "//div[@class='alert alert-success']"
+        self.view_form_link = "//a[@class='ajax_dialog']"
+        self.archived_restored_dropdown = '//*[@id="select2-report_filter_archive_or_restore-container"]'
+        self.archived_forms_option = '/html/body/span/span/span[2]/ul/li[2]'
+
+    def wait_to_click(self, *locator, timeout=20):
+        clickable = EC.element_to_be_clickable(locator)
+        WebDriverWait(self.driver, timeout).until(clickable).click()
+
+    def wait_to_clear(self, *locator, timeout=5):
+        clickable = EC.element_to_be_clickable(locator)
+        WebDriverWait(self.driver, timeout).until(clickable).clear()
+
+    def switch_to_next_tab(self):
+        winHandles = self.driver.window_handles
+        window_after = winHandles[1]
+        self.driver.switch_to.window(window_after)
+
+    def switch_back_to_prev_tab(self):
+        winHandles = self.driver.window_handles
+        window_before = winHandles[0]
+        self.driver.switch_to.window(window_before)
 
     def data_tab(self):
-        # print(type(self.driver))
-        self.data_dropdown = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((
-                By.XPATH, '//*[@id="ProjectDataTab"]/a')))
-        self.data_dropdown.click()
-        print("Data drop down clicked")
-        time.sleep(2)
-
-        self.view_all_link = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((
-                By.XPATH, '//*[@id="ProjectDataTab"]/ul/li[6]/a')))
-        self.view_all_link.click()
-        print("View All link clicked")
-        # time.sleep(2)
+        self.wait_to_click(By.XPATH, self.data_dropdown)
+        self.wait_to_click(By.XPATH, self.view_all_link)
 
     def deletion(self):
-        self.delete_button = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((
-                By.XPATH,
-                '/html/body/div[1]/div[3]/div/div[2]/div[3]/div[2]/div/div[2]/table/tbody/tr[1]/td[5]/div/a')))
-        self.delete_button.click()
-        print("Delete Button clicked")
-        time.sleep(2)
-
-        self.delete_confirmation_button = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((
-                By.XPATH,
-                '/html/body/div[1]/div[3]/div/div[2]/div[3]/div[2]/div/div[2]/table/tbody/tr[1]/td[5]/div/div/div/div/form/div[2]/button')))
-        self.delete_confirmation_button.click()
+        self.wait_to_click(By.XPATH, self.delete_button)
+        self.wait_to_click(By.XPATH, self.delete_confirmation_button)
         print("Delete Confirmation Button clicked")
-        time.sleep(2)
 
     # Test Case 20_a - Verify Export functionality for Forms
-
     def add_form_exports(self):
-        self.add_export_button = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((
-                By.XPATH, '//*[@id="create-export"]/p/a')))
-        self.add_export_button.click()
-        print("add_export_button clicked")
-        time.sleep(2)
-
-        self.app_dropdown = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((
-                By.XPATH, '//*[@id="div_id_application"]/div/span/span[1]/span')))
-        self.app_dropdown.click()
-        print("app_dropdown clicked")
-        # time.sleep(2)
-        self.select_app = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((By.XPATH, '//*[@id="select2-id_application-results"]/li')))
-        self.select_app.click()
-        print("First app selected")
-        # time.sleep(2)
-
-        self.menu_dropdown = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((
-                By.XPATH, '//*[@id="div_id_module"]/div/span/span[1]/span')))
-        self.menu_dropdown.click()
-        print("menu_dropdown clicked")
-        # time.sleep(2)
-        self.select_menu = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((
-                By.XPATH, '//*[@id="select2-id_module-results"]/li[1]')))
-        self.select_menu.click()
-        print("First menu item selected")
-        # time.sleep(2)
-
-        self.form_dropdown = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((
-                By.XPATH, '//*[@id="div_id_form"]/div/span/span[1]/span')))
-        self.form_dropdown.click()
-        print("form_dropdown clicked")
-        # time.sleep(2)
-        self.select_form = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((
-                By.XPATH, '//*[@id="select2-id_form-results"]/li[1]')))
-        self.select_form.click()
-        print("First form item selected")
-        # time.sleep(2)
-
-        self.add_export_conf = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((
-                By.XPATH, '//*[@id="createExportOptionsModal"]/div/form/div/div[7]/button[2]')))
-        self.add_export_conf.click()
-        print("Export added!!")
-        time.sleep(2)
-
-        self.export_name = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((
-                By.XPATH, '//*[@id="export-name"]')))
-        self.export_name.clear()
-        self.export_name.send_keys(UserInputsData.form_export_name)
-
-        self.export_settings_create = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((
-                By.XPATH, '//*[@id="customize-export"]/form/div/div[1]/button')))
-        self.export_settings_create.click()
+        self.wait_to_click(By.XPATH, self.add_export_button)
+        self.wait_to_click(By.XPATH, self.app_dropdown)
+        self.wait_to_click(By.XPATH, self.select_app)
+        self.wait_to_click(By.XPATH, self.menu_dropdown)
+        self.wait_to_click(By.XPATH, self.select_menu)
+        self.wait_to_click(By.XPATH, self.form_dropdown)
+        self.wait_to_click(By.XPATH, self.select_form)
+        self.wait_to_click(By.XPATH, self.add_export_conf)
+        self.wait_to_click(By.XPATH, self.export_settings_create)
         print("Export created!!")
-        time.sleep(2)
 
     def form_exports(self):
-        self.export_form_data_button = WebDriverWait(self.driver, 10).until(
-            EC.visibility_of_element_located((
-                By.XPATH, '//*[@id="export-list"]/div[2]/div/div[2]/table/tbody/tr/td[2]/a[1]')))
-        self.export_form_data_button.click()
-        print("Export form button clicked")
-        # time.sleep(2)
-
-        self.prepare_export_button = WebDriverWait(self.driver, 10).until(
-            EC.visibility_of_element_located((
-                By.XPATH, '//*[@id="download-export-form"]/form/div[2]/div/div[2]/div[1]/button')))
-        self.prepare_export_button.click()
-        print("Prepare Form Export button clicked")
-        # time.sleep(2)
-
-        try:
-            self.download_button = WebDriverWait(self.driver, 10).until(
-                EC.visibility_of_element_located((
-                    By.XPATH, '//*[@id="download-progress"]/div/div/div[2]/div[1]/form/a')))
-            self.download_button.click()
-            print("Download form button clicked")
-            path = UserInputsData.download_path
-            os.chdir(path)
-            files = sorted(os.listdir(os.getcwd()), key=os.path.getmtime)
-            oldest = files[0]
-            newest = files[-1]
-            print("Oldest:", oldest)
-            print("Newest:", newest)
-            # print ("All by modified oldest to newest:","\n".join(files))
-            # check if size of file is 0
-            if os.stat(newest).st_size == 0:
-                print('Form Exports file is empty')
-            else:
-                print('Form Exports file is not empty')
-        except Exception as e:
-            print(e)
-            print("Download task failed to start")
-        finally:
-            time.sleep(2)
+        self.wait_to_click(By.XPATH, self.export_form_data_button)
+        self.wait_to_click(By.ID, self.date_range)
+        self.wait_to_click(By.XPATH, self.date_range_key)
+        self.wait_to_click(By.XPATH, self.prepare_export_button)
+        self.wait_to_click(By.XPATH, self.download_button)
+        print("Download form button clicked")
+        time.sleep(3)
 
     # Test Case 22_a -  Find Data By ID, forms
-
     def validate_downloaded_form_exports(self):
-        path = UserInputsData.download_path
-        os.chdir(path)
-        files = sorted(os.listdir(os.getcwd()), key=os.path.getmtime)
-        
-        newest = files[-1]
-        
-        wb = xlrd.open_workbook(newest)
-        sheet = wb.sheet_by_index(0)
-        
-        formID_colName = sheet.cell_value(0, 1)
-        formID = sheet.cell_value(1, 1)
-        print(formID_colName, ": ", formID)
-        Name_colName = sheet.cell_value(0, 2)
-        Name_excel = sheet.cell_value(1, 2)
-        print("Woman's name in Excel- ", Name_colName, ": ", Name_excel)
-        
-        self.find_data_by_ID_link = WebDriverWait(self.driver, 10).until(
-            EC.visibility_of_element_located((
-                By.XPATH, '//*[@id="hq-sidebar"]/nav/ul[1]/li[4]/a')))
-        self.find_data_by_ID_link.click()
-        print("Find data by ID link clicked")
-        self.find_data_by_ID_textbox = WebDriverWait(self.driver, 10).until(
-            EC.visibility_of_element_located((
-                By.XPATH, '//*[@id="find-form"]/div[2]/div[1]/input')))
-        self.find_data_by_ID_textbox.clear()
-        self.find_data_by_ID_textbox.send_keys(formID)
-        print("Form ID fed in the textbox")
-        self.find_data_by_ID_button = WebDriverWait(self.driver, 10).until(
-            EC.visibility_of_element_located((
-                By.XPATH, '//*[@id="find-form"]/div[2]/div[2]/button')))
-        self.find_data_by_ID_button.click()
-        print("find_data_by_ID_button clicked")
-        self.view_FormID = WebDriverWait(self.driver, 10).until(
-            EC.visibility_of_element_located((
-                By.XPATH, '//*[@id="find-form"]/div[2]/div[1]/div[2]/a')))
-        self.view_FormID.click()
-        print("view_FormID link clicked")
-        time.sleep(5)
-        # self.driver.get("https://www.commcarehq.org/accounts/login/")
+        self.wait_to_click(By.XPATH, self.find_data_by_ID_link)
+        newest_file = latest_download_file()
+        print("Newest file:" + newest_file)
+        data = pd.read_excel(newest_file)
+        df = pd.DataFrame(data, columns=['form.womans_name', 'formid'])
+        formID = df['formid'].values[0]
+        woman_name_excel = df['form.womans_name'].values[0]
 
-        # Switch tab logic
-        winHandles = self.driver.window_handles
-        window_before = winHandles[0]
-        print(window_before)
-        window_after = winHandles[1]
-        print(window_after)
-        self.driver.switch_to.window(window_after)
-
-        self.womanName_HQ = self.driver.find_element_by_xpath(
-            '//*[@id="form-data"]/div[3]/div/div/table/tbody/tr[2]/td[2]/div').text
-        print("Woman's name on HQ")
-        print(self.Name_HQ)
-
-        if Name_excel == self.Name_HQ:
-            print("Values match!")
-        else:
-            print("Values don't match")
-        self.driver.close()  # Close the feed URL
-        self.driver.switch_to.window(self.driver.window_handles[0])  # Switch back to the
+        WebDriverWait(self.driver, 3).until(EC.visibility_of_element_located((
+            By.XPATH, self.find_data_by_ID_textbox))).send_keys(str(formID))
+        self.wait_to_click(By.XPATH, self.find_data_by_ID_button)
+        self.wait_to_click(By.XPATH, self.view_FormID)
+        self.switch_to_next_tab()
+        time.sleep(3)
+        womanName_HQ = WebDriverWait(self.driver, 3).until(EC.presence_of_element_located((
+            By.XPATH, self.womanName_HQ))).text
+        assert woman_name_excel == womanName_HQ
+        print("Downloaded file has the required data!")
+        self.driver.close()
+        self.switch_back_to_prev_tab()
+        path = os.path.join(UserInputsData.download_path, newest_file)
+        os.remove(path)
+        print("File Removed!")
 
     # Test Case 20_b - Verify Export functionality for Cases
-
     def add_case_exports(self):
-        self.export_case_data_link = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((
-                By.XPATH, '//*[@id="hq-sidebar"]/nav/ul[1]/li[2]/a')))
-        self.export_case_data_link.click()
-        print("export_case_data_link clicked")
-        time.sleep(2)
-
-        self.add_export_button = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((
-                By.XPATH, '//*[@id="create-export"]/p/a')))
-        self.add_export_button.click()
-        print("add_export_button clicked")
-        time.sleep(2)
-
-        self.app_dropdown = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((
-                By.XPATH, '//*[@id="div_id_application"]/div/span/span[1]/span')))
-        self.app_dropdown.click()
-        print("app_dropdown clicked")
-        # time.sleep(2)
-        self.select_app = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((
-                By.XPATH, '//*[@id="select2-id_application-results"]/li')))
-        self.select_app.click()
-        print("First app selected")
-        # time.sleep(2)
-
-        self.case_type_dropdown = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((
-                By.XPATH, '//*[@id="div_id_case_type"]/div/span/span[1]/span')))
-        self.case_type_dropdown.click()
-        print("case_type_dropdown clicked")
-        # time.sleep(2)
-        self.select_case_type = WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((
-            By.XPATH, '//*[@id="select2-id_case_type-results"]/li')))
-        self.select_case_type.click()
-        print("First Case Type selected")
-        # time.sleep(2)
-
-        self.add_export_conf = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((
-                By.XPATH, '//*[@id="createExportOptionsModal"]/div/form/div/div[7]/button[2]')))
-        self.add_export_conf.click()
-        print("Export added!!")
-        time.sleep(2)
-
-        self.export_name = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((
-                By.XPATH, '//*[@id="export-name"]')))
-        self.export_name.clear()
-        self.export_name.send_keys(UserInputsData.case_export_name)
-
-        self.export_settings_create = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((
-                By.XPATH, '//*[@id="customize-export"]/form/div/div[1]/button')))
-        self.export_settings_create.click()
+        self.wait_to_click(By.XPATH, self.export_case_data_link)
+        self.wait_to_click(By.XPATH, self.add_export_button)
+        self.wait_to_click(By.XPATH, self.app_dropdown)
+        self.wait_to_click(By.XPATH, self.select_app)
+        self.wait_to_click(By.XPATH, self.case_type_dropdown)
+        self.wait_to_click(By.XPATH, self.select_case_type)
+        self.wait_to_click(By.XPATH, self.add_export_conf)
+        self.wait_to_click(By.XPATH, self.export_settings_create)
         print("Export created!!")
-        time.sleep(2)
 
     def case_exports(self):
-        self.export_case_data_link = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((
-                By.XPATH, '//*[@id="hq-sidebar"]/nav/ul[1]/li[2]/a')))
-        self.export_case_data_link.click()
-        print("export_case_data_link clicked")
-        time.sleep(2)
-
-        self.export_case_data_button = WebDriverWait(self.driver, 10).until(
-            EC.visibility_of_element_located((
-                By.XPATH, '//*[@id="export-list"]/div[2]/div/div[2]/table/tbody/tr/td[3]/a[1]')))
-        self.export_case_data_button.click()
-        print("Export Case button clicked")
-        # time.sleep(2)
-
-        self.prepare_case_export_button = WebDriverWait(self.driver, 10).until(
-            EC.visibility_of_element_located((
-                By.XPATH, '//*[@id="download-export-form"]/form/div[2]/div/div[2]/div[1]/button')))
-        self.prepare_case_export_button.click()
-        print("Prepare Case Export button clicked")
-        time.sleep(2)
-
-        try:
-            self.case_download_button = WebDriverWait(self.driver, 10).until(
-                EC.visibility_of_element_located((
-                    By.XPATH, '//*[@id="download-progress"]/div/div/div[2]/div[1]/form/a')))
-            self.case_download_button.click()
-            print("Download Case button clicked")
-        except Exception as e:
-            print(e)
-            print("Download task failed to start")
-        finally:
-            time.sleep(2)
+        self.wait_to_click(By.XPATH, self.export_case_data_link)
+        self.wait_to_click(By.XPATH, self.export_case_data_button)
+        self.wait_to_click(By.XPATH, self.prepare_export_button)
+        self.wait_to_click(By.XPATH, self.download_button)
+        time.sleep(3)
 
     # Test Case 22_b - Find Data by ID for Case Exports
-
     def validate_downloaded_case_exports(self):
-        path = UserInputsData.download_path
-        os.chdir(path)
-        files = sorted(os.listdir(os.getcwd()), key=os.path.getmtime)
-        # oldest = files[0]
-        newest = files[-1]
-        wb = xlrd.open_workbook(newest)
-        sheet = wb.sheet_by_index(0)
-        caseID_colName = sheet.cell_value(0, 1)
-        caseID = sheet.cell_value(1, 1)
-        print(caseID_colName, ": ", caseID)
-        Name_colName = sheet.cell_value(0, 16)  # These values to be compared may change in different domains
-        Name_excel = sheet.cell_value(1, 16)
-        print("Name in Excel- ", Name_colName, ": ", Name_excel)
+        self.wait_to_click(By.XPATH, self.find_data_by_ID_link)
+        newest_file = latest_download_file()
+        print("Newest file:" + newest_file)
+        data2 = pd.read_excel(newest_file)
+        df2 = pd.DataFrame(data2, columns=['name', 'caseid'])
+        caseID = df2['caseid'].values[0]
+        woman_name_excel = df2['name'].values[0]
 
-        self.find_data_by_ID_link = WebDriverWait(self.driver, 10).until(
-            EC.visibility_of_element_located((
-                By.XPATH, '//*[@id="hq-sidebar"]/nav/ul[1]/li[4]/a')))
-        self.find_data_by_ID_link.click()
-        print("Find data by ID link clicked")
-        self.find_data_by_ID_textbox = WebDriverWait(self.driver, 10).until(
-            EC.visibility_of_element_located((
-                By.XPATH, '//*[@id="find-form"]/div[2]/div[1]/input')))
-        self.find_data_by_ID_textbox.clear()
-        self.find_data_by_ID_textbox.send_keys(caseID)
-        print("Form ID fed in the textbox")
-        self.find_data_by_ID_button = WebDriverWait(self.driver, 10).until(
-            EC.visibility_of_element_located((
-                By.XPATH, '//*[@id="find-form"]/div[2]/div[2]/button')))
-        self.find_data_by_ID_button.click()
-        print("find_data_by_ID_button clicked")
-        self.view_caseID = WebDriverWait(self.driver, 10).until(
-            EC.visibility_of_element_located((
-                By.XPATH, '//*[@id="find-form"]/div[2]/div[1]/div[2]/a')))
-        self.view_caseID.click()
-        print("view_FormID link clicked")
-        time.sleep(5)
-
-        # Switch tab logic 
-        winHandles = self.driver.window_handles
-        window_before = winHandles[0]
-        print(window_before)
-        window_after = winHandles[1]
-        print(window_after)
-        self.driver.switch_to.window(window_after)
-
-        self.Name_HQ = self.driver.find_element_by_xpath(
-            '//*[@id="properties"]/div/div/div/table/tbody/tr[1]/td[3]').text
-        print("name on HQ")
-        print(self.Name_HQ)
-
-        if Name_excel == self.Name_HQ:
-            print("Values match!")
-        else:
-            print("Values don't match")
-        self.driver.close()  # Close the feed URL
-        self.driver.switch_to.window(self.driver.window_handles[0])  # Switch back to the first tab
-
-    def del_case_exports(self):
-        self.export_case_data_link = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((
-                By.XPATH, '//*[@id="hq-sidebar"]/nav/ul[1]/li[2]/a')))
-        self.export_case_data_link.click()
-        print("export_case_data_link clicked")
-        time.sleep(2)
-
-        self.delete_form_export_button = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((
-                By.XPATH,
-                '/html/body/div[1]/div[3]/div/div[2]/div[3]/div[2]/div/div[2]/table/tbody/tr[1]/td[5]/div/a')))
-        self.delete_form_export_button.click()
-        print("Delete Button clicked")
-        time.sleep(2)
-
-        self.delete_confirmation_button = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((
-                By.XPATH,
-                '/html/body/div[1]/div[3]/div/div[2]/div[3]/div[2]/div/div[2]/table/tbody/tr[1]/td[5]/div/div/div/div/form/div[2]/button')))
-        self.delete_confirmation_button.click()
-        print("Delete Confirmation Button clicked")
-        time.sleep(2)
+        WebDriverWait(self.driver, 3).until(EC.visibility_of_element_located((
+                By.XPATH, self.find_data_by_ID_textbox))).send_keys(str(caseID))
+        self.wait_to_click(By.XPATH, self.find_data_by_ID_button)
+        self.wait_to_click(By.XPATH, self.view_caseID)
+        time.sleep(3)
+        self.switch_to_next_tab()
+        womanName_HQ = WebDriverWait(self.driver, 3).until(EC.presence_of_element_located((
+            By.XPATH, self.woman_case_name_HQ))).text
+        assert woman_name_excel == womanName_HQ
+        print("Downloaded file has the required data!")
+        self.driver.close()
+        self.switch_back_to_prev_tab()
+        os.remove(str(UserInputsData.download_path) + "\\" + newest_file)
+        print("File Removed!")
 
     # Test Case 21 - Export SMS Messages
-
     def sms_exports(self):
-        self.export_sms_link = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((
-                By.XPATH, '//*[@id="hq-sidebar"]/nav/ul[1]/li[3]/a')))
-        self.export_sms_link.click()
-        print("export_sms_link clicked")
-        time.sleep(2)
-
-        self.prepare_sms_export_button = WebDriverWait(self.driver, 10).until(
-            EC.visibility_of_element_located((
-                By.XPATH, '//*[@id="download-export-form"]/form/div[2]/div/div[2]/div[1]/button')))
-        self.prepare_sms_export_button.click()
-        print("Prepare SMS Export button clicked")
-        time.sleep(2)
-
-        try:
-            self.sms_download_button = WebDriverWait(self.driver, 10).until(
-                EC.visibility_of_element_located((
-                    By.XPATH, '//*[@id="download-progress"]/div/div/div[2]/div[1]/form/a')))
-            self.sms_download_button.click()
-            print("Download SMS button clicked")
-            time.sleep(2)
-            path = UserInputsData.download_path
-            os.chdir(path)
-            files = sorted(os.listdir(os.getcwd()), key=os.path.getmtime)
-            oldest = files[0]
-            newest = files[-1]
-            print("Oldest:", oldest)
-            print("Newest:", newest)
-            # print ("All by modified oldest to newest:","\n".join(files))
-            # check if size of file is 0
-            if os.stat(newest).st_size == 0:
-                print('File is empty')
-            else:
-                print('File is not empty')
-        except Exception as e:
-            print(e)
-            print("Download task failed to start")
-        finally:
-            time.sleep(2)
+        self.wait_to_click(By.XPATH, self.export_sms_link)
+        self.wait_to_click(By.XPATH, self.prepare_export_button)
+        self.wait_to_click(By.XPATH, self.download_button)
+        time.sleep(3)
+        newest_file = latest_download_file()
+        print("Newest:", newest_file)
+        modTimesinceEpoc = os.path.getmtime(str(UserInputsData.download_path) + "\\" + newest_file)
+        modificationTime = datetime.datetime.fromtimestamp(modTimesinceEpoc)
+        timeNow = datetime.datetime.now()
+        diff_seconds = round((timeNow - modificationTime).total_seconds())
+        print("Last Modified Time : ", str(modificationTime) + 'Current Time : ', str(timeNow),
+              "Diff: " + str(diff_seconds))
+        assert "Messages" in newest_file and diff_seconds in range(0, 600)
+        print("Export successful")
 
     # Test Case 23_a - Daily saved export, form
-
     def daily_saved_exports_form(self):
-        self.export_form_data_link = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((
-                By.XPATH, '//*[@id="hq-sidebar"]/nav/ul[1]/li[1]/a')))
-        self.export_form_data_link.click()
-        print("export_form_data_link clicked")
-        time.sleep(2)
-
-        self.edit_form_export = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((
-                By.XPATH, '//*[@id="export-list"]/div[2]/div/div[2]/table/tbody/tr[1]/td[4]/div[2]/div/a')))
-        self.edit_form_export.click()
-        print("edit_form_export for form clicked")
-        time.sleep(2)
-
-        self.create_DSE_checkbox = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((
-                By.XPATH, '//*[@id="daily-saved-export-checkbox"]')))
-        self.create_DSE_checkbox.click()
-        print("create_DSE_checkbox for form clicked")
-        time.sleep(2)
-
-        self.save_DSE_button = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((
-                By.XPATH, '//*[@id="customize-export"]/form/div/div[1]/button')))
-        self.save_DSE_button.click()
-        print("save_DSE_button clicked")
-        time.sleep(2)
-
+        self.wait_to_click(By.XPATH, self.export_form_data_link)
+        self.wait_to_click(By.XPATH, self.edit_form_export)
+        self.wait_to_clear(By.XPATH, self.export_name)
+        self.driver.find_element(By.XPATH, self.export_name).send_keys(UserInputsData.form_export_name)
+        self.wait_to_click(By.XPATH, self.create_DSE_checkbox)
+        self.wait_to_click(By.XPATH, self.export_settings_create)
+        time.sleep(1)
         self.driver.refresh()
-
-        if UserInputsData.form_export_name in self.driver.page_source:  # this condition can be improvised
-            print(UserInputsData.form_export_name, " - Export is present")
-        else:
-            print("Form Export creation failed")
+        time.sleep(1)
+        assert UserInputsData.form_export_name in self.driver.page_source
+        print("Form Export creation successful")
 
     # Test Case 23_b - Daily saved export, case
-
     def daily_saved_exports_case(self):
-        self.export_case_data_link = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((
-                By.XPATH, '//*[@id="hq-sidebar"]/nav/ul[1]/li[2]/a')))
-        self.export_case_data_link.click()
-        print("export_case_data_link clicked")
-        time.sleep(2)
-
-        self.edit_case_export = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((
-                By.XPATH, '//*[@id="export-list"]/div[2]/div/div[2]/table/tbody/tr[1]/td[4]/div[2]/div/a')))
-        self.edit_case_export.click()
-        print("edit_case_export clicked")
-        time.sleep(2)
-
-        self.create_DSE_checkbox = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((
-                By.XPATH, '//*[@id="daily-saved-export-checkbox"]')))
-        self.create_DSE_checkbox.click()
-        print("create_DSE_checkbox for case selected")
-        time.sleep(2)
-
-        self.save_DSE_button = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((
-                By.XPATH, '//*[@id="customize-export"]/form/div/div[1]/button')))
-        self.save_DSE_button.click()
-        print("save_DSE_button for case clicked")
-        time.sleep(2)
-
+        self.wait_to_click(By.XPATH, self.export_case_data_link)
+        self.wait_to_click(By.XPATH, self.edit_case_export)
+        self.wait_to_clear(By.XPATH, self.export_name)
+        self.driver.find_element(By.XPATH, self.export_name).send_keys(UserInputsData.case_export_name)
+        self.wait_to_click(By.XPATH, self.create_DSE_checkbox)
+        self.wait_to_click(By.XPATH, self.export_settings_create)
+        time.sleep(1)
         self.driver.refresh()
-
-        if UserInputsData.case_export_name in self.driver.page_source:  # this condition can be improvised
-            print(UserInputsData.case_export_name, " - Export is present")
-        else:
-            print("Case Export creation failed")
+        time.sleep(1)
+        assert UserInputsData.case_export_name in self.driver.page_source
+        print("Form Export creation successful")
 
     # Test Case - 24 - Excel Dashboard Integration, form
-
     def excel_dashboard_integration_form(self):
-        self.export_excel_dash_int_link = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((
-                By.XPATH, '//*[@id="hq-sidebar"]/nav/ul[1]/li[6]/a')))
-        self.export_excel_dash_int_link.click()
-        print("export_excel_dash_int_link clicked")
-        time.sleep(2)
-
-        self.add_dashboard_feed_link = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((
-                By.XPATH, '//*[@id="create-export"]/p/a')))
-        self.add_dashboard_feed_link.click()
-        print("add_dashboard_feed clicked")
-        time.sleep(2)
-
-        self.model_dropdown = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((
-                By.XPATH, '//*[@id="id_model_type"]')))
-        self.model_dropdown.click()
-        print("model_dropdown clicked")
-        # time.sleep(2)
-        self.select_form_model = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((
-                By.XPATH, '//*[@id="id_model_type"]/option[3]')))
-        self.select_form_model.click()
-        print("select_form_model selected")
-        # time.sleep(2)
-        self.app_dropdown = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((
-                By.XPATH, '//*[@id="div_id_application"]/div/span/span[1]/span')))
-        self.app_dropdown.click()
-        print("app_dropdown clicked")
-        # time.sleep(2)
-        self.select_app = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((
-                By.XPATH, '//*[@id="select2-id_application-results"]/li')))
-        self.select_app.click()
-        print("First app selected")
-        # time.sleep(2)
-
-        self.menu_dropdown = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((
-                By.XPATH, '//*[@id="div_id_module"]/div/span/span[1]/span')))
-        self.menu_dropdown.click()
-        print("menu_dropdown clicked")
-        # time.sleep(2)
-        self.select_menu = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((
-                By.XPATH, '//*[@id="select2-id_module-results"]/li[1]')))
-        self.select_menu.click()
-        print("First menu item selected")
-        # time.sleep(2)
-
-        self.form_dropdown = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((
-                By.XPATH, '//*[@id="div_id_form"]/div/span/span[1]/span')))
-        self.form_dropdown.click()
-        print("form_dropdown clicked")
-        # time.sleep(2)
-        self.select_form = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((
-                By.XPATH, '//*[@id="select2-id_form-results"]/li[1]')))
-        self.select_form.click()
-        print("First form item selected")
-        # time.sleep(2)
-        self.add_dashboard_feed_button = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((
-                By.XPATH, '//*[@id="createExportOptionsModal"]/div/form/div/div[7]/button[2]')))
-        self.add_dashboard_feed_button.click()
+        self.wait_to_click(By.XPATH, self.export_excel_dash_int_link)
+        self.wait_to_click(By.XPATH, self.add_export_button)
+        self.wait_to_click(By.XPATH, self.model_dropdown)
+        self.wait_to_click(By.XPATH, self.select_form_model)
+        self.wait_to_click(By.XPATH, self.app_dropdown)
+        self.wait_to_click(By.XPATH, self.select_app)
+        self.wait_to_click(By.XPATH, self.menu_dropdown)
+        self.wait_to_click(By.XPATH, self.select_menu)
+        self.wait_to_click(By.XPATH, self.form_dropdown)
+        self.wait_to_click(By.XPATH, self.select_form)
+        self.wait_to_click(By.XPATH, self.add_export_conf)
         print("Dashboard Feed added!!")
-        time.sleep(2)
-        self.export_name = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((
-                By.XPATH, '//*[@id="export-name"]')))
-        self.export_name.clear()
-        self.export_name.send_keys(UserInputsData.dashboard_feed_form)
-        # time.sleep(2)
-
-        self.export_settings_create = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((
-                By.XPATH, '//*[@id="customize-export"]/form/div/div[1]/button')))
-        self.export_settings_create.click()
+        WebDriverWait(self.driver, 3).until(EC.element_to_be_clickable((
+                By.XPATH, self.export_name))).send_keys(UserInputsData.dashboard_feed_form)
+        self.wait_to_click(By.XPATH, self.export_settings_create)
         print("Dashboard Form Feed created!!")
-
-        self.update_data = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((
-                By.XPATH, '//*[@id="export-list"]/div[2]/div/div[2]/table/tbody/tr/td[1]/div/div[1]/div/button[1]')))
-        self.update_data.click()
-        print("update_data link clicked!!")
-
+        self.wait_to_click(By.XPATH, self.update_data)
+        self.wait_to_click(By.XPATH, self.update_data_conf)
+        time.sleep(1)
         self.driver.refresh()
-
-        self.update_data_conf = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((
-                By.XPATH,
-                '/html/body/div[1]/div[3]/div/div[2]/div[3]/div[2]/div/div[2]/table/tbody/tr[1]/td[1]/div/div[4]/div[2]/div/div/div[4]/button')))
-        self.update_data_conf.click()
-        print("update_data confirmed!!")
-
-        self.driver.refresh()
-
-        self.copy_dashfeed_link = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((
-                By.XPATH, '//*[@id="export-list"]/div[2]/div/div[2]/table/tbody/tr[1]/td[1]/div/div[2]/div/span/a')))
-        self.copy_dashfeed_link.click()
+        self.wait_to_click(By.XPATH, self.copy_dashfeed_link)
         print("Dashboard link copied on the clipboard!!")
         dashboard_feed_link = Tk().clipboard_get()
         print(dashboard_feed_link)
         self.driver.execute_script("window.open('');")  # Open a new tab
-        self.driver.switch_to.window(
-            self.driver.window_handles[1])  # Switch to the new tab and open feed URL
+        self.switch_to_next_tab()
         self.driver.get(dashboard_feed_link)
         dashboard_feed_data = self.driver.page_source
-        # print(dashboard_feed_data)
         if dashboard_feed_data != "":
             print("Excel Dashboard (form) has data")
         else:
             print("Excel Dashboard (form) is empty")
-        self.driver.close()  # Close the feed URL
-        self.driver.switch_to.window(
-            self.driver.window_handles[0])  # Switch back to the first tab with URL A
+        self.driver.close()
+        self.switch_back_to_prev_tab()
 
     # Test Case - 25 - Excel Dashboard Integration, case
 
     def excel_dashboard_integration_case(self):
-        # Followig not required if running sequentially
-        # self.export_excel_dash_int_link = WebDriverWait(self.driver, 10).until(
-        #    EC.element_to_be_clickable((
-        #         By.XPATH, '//*[@id="hq-sidebar"]/nav/ul[1]/li[6]/a')))
-        # self.export_excel_dash_int_link.click()
-        # print("export_excel_dash_int_link clicked")
-        # time.sleep(2)
-
-        self.add_dashboard_feed_button1 = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((
-                By.XPATH, '//*[@id="create-export"]/p/a')))
-        self.add_dashboard_feed_button1.click()
-        print("add_dashboard_feed clicked")
-        time.sleep(2)
-
-        self.model_dropdown = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((
-                By.XPATH, '//*[@id="id_model_type"]')))
-        self.model_dropdown.click()
-        print("model_dropdown clicked")
-        # time.sleep(2)
-        self.select_case_model = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((
-                By.XPATH, '//*[@id="id_model_type"]/option[2]')))
-        self.select_case_model.click()
-        print("select_case_model selected")
-        # time.sleep(2)
-        self.app_dropdown = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((
-                By.XPATH, '//*[@id="div_id_application"]/div/span/span[1]/span')))
-        self.app_dropdown.click()
-        print("app_dropdown clicked")
-        # time.sleep(2)
-        self.select_app = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((
-                By.XPATH, '//*[@id="select2-id_application-results"]/li')))
-        self.select_app.click()
-        print("First app selected")
-        # time.sleep(2)
-
-        self.case_type_dropdown = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((
-                By.XPATH, '//*[@id="div_id_case_type"]/div/span/span[1]/span')))
-        self.case_type_dropdown.click()
-        print("case_type_dropdown clicked")
-        # time.sleep(2)
-        self.select_case_type = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((
-                By.XPATH, '//*[@id="select2-id_case_type-results"]/li')))
-        self.select_case_type.click()
-        print("First Case Type selected")
-        # time.sleep(2)
-
-        self.add_dashboard_feed_button2 = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((
-                By.XPATH, '//*[@id="createExportOptionsModal"]/div/form/div/div[7]/button[2]')))
-        self.add_dashboard_feed_button2.click()
+        self.wait_to_click(By.XPATH, self.export_excel_dash_int_link)
+        self.wait_to_click(By.XPATH, self.add_export_button)
+        self.wait_to_click(By.XPATH, self.model_dropdown)
+        self.wait_to_click(By.XPATH, self.select_case_model)
+        self.wait_to_click(By.XPATH, self.app_dropdown)
+        self.wait_to_click(By.XPATH, self.select_app)
+        self.wait_to_click(By.XPATH, self.case_type_dropdown)
+        self.wait_to_click(By.XPATH, self.select_case_type)
+        self.wait_to_click(By.XPATH, self.add_export_conf)
         print("Dashboard Feed added!!")
-        time.sleep(2)
-        self.export_name = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((
-                By.XPATH, '//*[@id="export-name"]')))
-        self.export_name.clear()
-        self.export_name.send_keys(UserInputsData.dashboard_feed_case)
-        # time.sleep(2)
-
-        self.export_settings_create = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((
-                By.XPATH, '//*[@id="customize-export"]/form/div/div[1]/button')))
-        self.export_settings_create.click()
+        self.wait_to_clear(By.XPATH, self.export_name)
+        self.driver.find_element(By.XPATH, self.export_name).send_keys(UserInputsData.dashboard_feed_case)
+        self.wait_to_click(By.XPATH, self.export_settings_create)
         print("Dashboard Form Feed created!!")
-        time.sleep(2)
-
-        self.update_data = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((
-                By.XPATH, '//*[@id="export-list"]/div[2]/div/div[2]/table/tbody/tr/td[1]/div/div[1]/div/button[1]')))
-        self.update_data.click()
-        print("update_data link clicked!!")
-
+        self.wait_to_click(By.XPATH, self.update_data)
+        self.wait_to_click(By.XPATH, self.update_data_conf)
+        time.sleep(1)
         self.driver.refresh()
-
-        self.update_data_conf = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((
-                By.XPATH,
-                '/html/body/div[1]/div[3]/div/div[2]/div[3]/div[2]/div/div[2]/table/tbody/tr[1]/td[1]/div/div[4]/div[2]/div/div/div[4]/button')))
-        self.update_data_conf.click()
-        print("update_data confirmed!!")
-
-        self.driver.refresh()
-
-        self.copy_dashfeed_link = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((
-                By.XPATH, '//*[@id="export-list"]/div[2]/div/div[2]/table/tbody/tr[1]/td[1]/div/div[2]/div/span/a')))
-        self.copy_dashfeed_link.click()
-        print("Dashboard link copied on the clipboard!!")
+        self.wait_to_click(By.XPATH, self.copy_dashfeed_link)
         dashboard_feed_link = Tk().clipboard_get()
         print(dashboard_feed_link)
         self.driver.execute_script("window.open('');")  # Open a new tab
-        self.driver.switch_to.window(
-            self.driver.window_handles[1])  # Switch to the new tab and open feed URL
+        self.switch_to_next_tab()
         self.driver.get(dashboard_feed_link)
         dashboard_feed_data = self.driver.page_source
-        # print(dashboard_feed_data)
         if dashboard_feed_data != "":
             print("Excel Dashboard (case) has data")
         else:
             print("Excel Dashboard (case) is empty")
-        self.driver.close()  # Close the feed URL
-        self.driver.switch_to.window(
-            self.driver.window_handles[0])  # Switch back to the first tab with URL A
+        self.driver.close()
+        self.switch_back_to_prev_tab()
 
     # Test Case - 28 - Power BI / Tableau Integration, Form
-
-    def powerBI_tableau_integration_form(self):
-        self.powerBI_tab_int_link = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((
-                By.XPATH, '//*[@id="hq-sidebar"]/nav/ul[1]/li[7]/a')))
-        self.powerBI_tab_int_link.click()
-        print("powerBI_tab_int_link clicked")
-        time.sleep(2)
-
-        self.add_Odata_feed_button1 = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((
-                By.XPATH, '//*[@id="create-export"]/p/a')))
-        self.add_Odata_feed_button1.click()
-        print("OData_feed_button clicked")
-        time.sleep(2)
-
-        self.feed_type_dropdown = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((
-                By.XPATH, '//*[@id="id_model_type"]')))
-        self.feed_type_dropdown.click()
-        print("feed_type_dropdown clicked")
-        # time.sleep(2)
-        self.select_form_feed_type = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((
-                By.XPATH, '//*[@id="id_model_type"]/option[3]')))
-        self.select_form_feed_type.click()
-        print("select_form_feed_type selected")
-        # time.sleep(2)
-        self.app_dropdown = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((
-                By.XPATH, '//*[@id="div_id_application"]/div/span/span[1]/span')))
-        self.app_dropdown.click()
-        print("app_dropdown clicked")
-        # time.sleep(2)
-        self.select_app = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((
-                By.XPATH, '//*[@id="select2-id_application-results"]/li')))
-        self.select_app.click()
-        print("First app selected")
-        # time.sleep(2)
-
-        self.menu_dropdown = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((
-                By.XPATH, '//*[@id="div_id_module"]/div/span/span[1]/span')))
-        self.menu_dropdown.click()
-        print("menu_dropdown clicked")
-        # time.sleep(2)
-        self.select_menu = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((
-                By.XPATH, '//*[@id="select2-id_module-results"]/li[1]')))
-        self.select_menu.click()
-        print("First menu item selected")
-        # time.sleep(2)
-
-        self.form_dropdown = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((
-                By.XPATH, '//*[@id="div_id_form"]/div/span/span[1]/span')))
-        self.form_dropdown.click()
-        print("form_dropdown clicked")
-        # time.sleep(2)
-        self.select_form = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((
-                By.XPATH, '//*[@id="select2-id_form-results"]/li[1]')))
-        self.select_form.click()
-        print("First form item selected")
-        # time.sleep(2)
-        self.add_Odata_feed_button2 = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((
-                By.XPATH, '//*[@id="createExportOptionsModal"]/div/form/div/div[7]/button[2]')))
-        self.add_Odata_feed_button2.click()
+    def power_bi_tableau_integration_form(self):
+        self.wait_to_click(By.XPATH, self.powerBI_tab_int_link)
+        self.wait_to_click(By.XPATH, self.add_export_button)
+        self.wait_to_click(By.XPATH, self.model_dropdown)
+        self.wait_to_click(By.XPATH, self.select_form_model)
+        self.wait_to_click(By.XPATH, self.app_dropdown)
+        self.wait_to_click(By.XPATH, self.select_app)
+        self.wait_to_click(By.XPATH, self.menu_dropdown)
+        self.wait_to_click(By.XPATH, self.select_menu)
+        self.wait_to_click(By.XPATH, self.form_dropdown)
+        self.wait_to_click(By.XPATH, self.select_form)
+        self.wait_to_click(By.XPATH, self.add_export_conf)
         print("Odata form Feed added!!")
-        time.sleep(2)
-        self.export_name = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((
-                By.XPATH, '//*[@id="export-name"]')))
-        self.export_name.clear()
-        self.export_name.send_keys(UserInputsData.odata_feed_form)
-        # time.sleep(2)
-
-        self.export_settings_create = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((
-                By.XPATH, '//*[@id="customize-export"]/form/div/div[1]/button')))
-        self.export_settings_create.click()
+        self.wait_to_clear(By.XPATH, self.export_name)
+        self.driver.find_element(By.XPATH, self.export_name).send_keys(UserInputsData.dashboard_feed_form)
+        self.wait_to_click(By.XPATH, self.export_settings_create)
         print("Odata Form Feed created!!")
-
         self.driver.refresh()
-
-        self.copy_odatafeed_link = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((
-                By.XPATH, '//*[@id="export-list"]/div[2]/div/div[2]/table/tbody/tr[1]/td[1]/div/span/a')))
-        self.copy_odatafeed_link.click()
-        print("Odata feed link copied on the clipboard!!")
+        self.wait_to_click(By.XPATH, self.copy_odatafeed_link)
         odata_feed_link = Tk().clipboard_get()
         print(odata_feed_link)
-        self.driver.execute_script("window.open('');")  # Open a new tab
-        self.driver.switch_to.window(
-            self.driver.window_handles[1])  # Switch to the new tab and open feed URL
+        self.driver.execute_script("window.open('');")
+        self.switch_to_next_tab()
         # string manipulation for bypassing the authentication
-        final_URL = f"https://{UserInputsData.login_username}:{UserInputsData.login_password}@{odata_feed_link[8:]}"
+        username = load_settings()["default"]["login_username"]
+        password = load_settings()["default"]["login_password"]
+        final_URL = f"https://{username}:{password}@{odata_feed_link[8:]}"
         self.driver.get(final_URL)
         odata_feed_data = self.driver.page_source
         print(odata_feed_data)
-        if odata_feed_data != "":
-            print("Odata form feed has data")
-        else:
-            print("Odata form feed is empty")
-        self.driver.close()  # Close the feed URL
-        self.driver.switch_to.window(
-            self.driver.window_handles[0])  # Switch back to the first tab with URL A
+        assert odata_feed_data != ""
+        print("Odata form feed has data")
+        self.driver.close()
+        self.switch_back_to_prev_tab()
 
     def bi_tab_deletion(self):
-        self.delete_button = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((
-                By.XPATH, '/html/body/div[1]/div[3]/div/div[2]/div[4]/div[2]/div/div[2]/table/tbody/tr/td[4]/div/a')))
-        self.delete_button.click()
-        print("Delete Button clicked")
-        time.sleep(2)
-
-        self.delete_confirmation_button = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((
-                By.XPATH,
-                '/html/body/div[1]/div[3]/div/div[2]/div[4]/div[2]/div/div[2]/table/tbody/tr/td[4]/div/div/div/div/form/div[2]/button')))
-
-        self.delete_confirmation_button.click()
-        print("Delete Confirmation Button clicked")
-        time.sleep(2)
-
-    # Test Case - 27 - Power BI / Tableau Integration, Case
-
-    def powerBI_tableau_integration_case(self):
-        # Following not required if running sequentially
-        # self.powerBI_tab_int_link = WebDriverWait(self.driver, 10).until(
-        #    EC.element_to_be_clickable((
-        #        By.XPATH, '//*[@id="hq-sidebar"]/nav/ul[1]/li[7]/a')))
-        # self.powerBI_tab_int_link.click()
-        # print("powerBI_tab_int_link clicked")
-        # time.sleep(2)
-
-        self.add_Odata_feed_button1 = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((
-                By.XPATH, '//*[@id="create-export"]/p/a')))
-        self.add_Odata_feed_button1.click()
-        print("Add OData_feed_button clicked")
-        time.sleep(2)
-
-        self.feed_type_dropdown = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((
-                By.XPATH, '//*[@id="id_model_type"]')))
-        self.feed_type_dropdown.click()
-        print("feed_type_dropdown clicked")
-        # time.sleep(2)
-        self.select_case_feed_type = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((
-                By.XPATH, '//*[@id="id_model_type"]/option[2]')))
-        self.select_case_feed_type.click()
-        print("select_case_feed_type selected")
-        # time.sleep(2)
-        self.app_dropdown = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((
-                By.XPATH, '//*[@id="div_id_application"]/div/span/span[1]/span')))
-        self.app_dropdown.click()
-        print("app_dropdown clicked")
-        # time.sleep(2)
-        self.select_app = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((
-                By.XPATH, '//*[@id="select2-id_application-results"]/li')))
-        self.select_app.click()
-        print("First app selected")
-        # time.sleep(2)
-
-        self.case_type_dropdown = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((
-                By.XPATH, '//*[@id="div_id_case_type"]/div/span/span[1]/span')))
-        self.case_type_dropdown.click()
-        print("case_type_dropdown clicked")
-        # time.sleep(2)
-        self.select_case_type = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((
-                By.XPATH, '//*[@id="select2-id_case_type-results"]/li')))
-        self.select_case_type.click()
-        print("First Case Type selected")
-        # time.sleep(2)
-
-        self.add_Odata_feed_button2 = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((
-                By.XPATH, '//*[@id="createExportOptionsModal"]/div/form/div/div[7]/button[2]')))
-        self.add_Odata_feed_button2.click()
-        print("Odata Case Feed added!!")
-        time.sleep(2)
-
-        self.export_name = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((
-                By.XPATH, '//*[@id="export-name"]')))
-        self.export_name.clear()
-        self.export_name.send_keys(UserInputsData.odata_feed_case)
-        # time.sleep(2)
-
-        self.export_settings_create = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((
-                By.XPATH, '//*[@id="customize-export"]/form/div/div[1]/button')))
-        self.export_settings_create.click()
-        print("Odata Case Feed created!!")
-
         self.driver.refresh()
+        self.wait_to_click(By.XPATH, self.delete_button)
+        self.wait_to_click(By.XPATH, self.delete_confirmation_button)
+        print("Delete Confirmation Button clicked")
 
-        self.copy_odatafeed_link = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((
-                By.XPATH, '//*[@id="export-list"]/div[2]/div/div[2]/table/tbody/tr[1]/td[1]/div/span/a')))
-        self.copy_odatafeed_link.click()
-        print("Odata feed link copied on the clipboard!!")
+    # Test Case - 27 - Power BI / Tableau Integration, Case`
+    def power_bi_tableau_integration_case(self):
+        self.driver.refresh()
+        self.wait_to_click(By.XPATH, self.powerBI_tab_int_link)
+        self.wait_to_click(By.XPATH, self.add_export_button)
+        print("Add OData_feed_button clicked")
+        self.wait_to_click(By.XPATH, self.model_dropdown)
+        self.wait_to_click(By.XPATH, self.select_case_model)
+        self.wait_to_click(By.XPATH, self.app_dropdown)
+        self.wait_to_click(By.XPATH, self.select_app)
+        self.wait_to_click(By.XPATH, self.case_type_dropdown)
+        self.wait_to_click(By.XPATH, self.select_case_type)
+        self.wait_to_click(By.XPATH, self.add_export_conf)
+        print("Odata Case Feed added!!")
+        time.sleep(5)
+        self.wait_to_clear(By.XPATH, self.export_name)
+        self.driver.find_element(By.XPATH, self.export_name).send_keys(UserInputsData.odata_feed_case)
+        self.wait_to_click(By.XPATH, self.export_settings_create)
+        print("Odata Case Feed created!!")
+        self.driver.refresh()
+        self.wait_to_click(By.XPATH, self.copy_odatafeed_link)
         odata_feed_link = Tk().clipboard_get()
         print(odata_feed_link)
         self.driver.execute_script("window.open('');")  # Open a new tab
-        self.driver.switch_to.window(
-            self.driver.window_handles[1])  # Switch to the new tab and open feed URL
-        # string manipulation for bypassing the authentication
-        final_URL = f"https://{UserInputsData.login_username}:{UserInputsData.login_password}@{odata_feed_link[8:]}"
+        self.switch_to_next_tab()
+        username = load_settings()["default"]["login_username"]
+        password = load_settings()["default"]["login_password"]
+        final_URL = f"https://{username}:{password}@{odata_feed_link[8:]}"
         self.driver.get(final_URL)
         odata_feed_data = self.driver.page_source
         print(odata_feed_data)
-        if odata_feed_data != "":  # This condition can be improvised
-            print("Odata case feed has data")
-        else:
-            print("Odata case feed is empty")
+        assert odata_feed_data != ""  # This condition can be improvised
+        print("Odata case feed has data")
         self.driver.close()  # Close the feed URL
-        self.driver.switch_to.window(
-            self.driver.window_handles[0])  # Switch back to the first tab with URL A
+        self.switch_back_to_prev_tab()
+        self.driver.refresh()
 
     # Test Case - 30 - Verify user is able to manage forms and archive a form
-
     def manage_forms(self):
         # Forms archival
-        self.manage_forms_link = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((
-                By.XPATH, '//*[@id="hq-sidebar"]/nav/ul[2]/li[3]/a')))
-        self.manage_forms_link.click()
-        print("manage_forms_link clicked")
-        time.sleep(5)
-
-        self.apply_button = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((
-                By.XPATH, '//*[@id="apply-btn"]')))
-        self.apply_button.click()
-        print("apply_button clicked")
-        time.sleep(5)
-
-        self.checkbox1 = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((
-                By.XPATH, '//*[@id="report_table_bulk_archive_forms"]/tbody/tr[1]/td[1]/input')))
-        self.checkbox1.click()
-        print("checkbox1 selected")
-        time.sleep(1)
-
-        self.archive_button = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((
-                By.XPATH, '//*[@id="submitForms"]')))
-        self.archive_button.click()
-        print("archive_button clicked")
-        time.sleep(5)
+        self.wait_to_click(By.XPATH, self.manage_forms_link)
+        self.wait_to_click(By.XPATH, self.apply_button)
+        self.wait_to_click(By.XPATH, self.checkbox1)
+        self.wait_to_click(By.XPATH, self.archive_button)
+        assert WebDriverWait(self.driver, 5).until(EC.presence_of_element_located((
+            By.XPATH, self.success_message))).is_displayed()
         print("Forms archival successful!!")
 
         # View Normal Forms
-
-        self.driver.refresh()
-
-        self.manage_forms_link = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((
-                By.XPATH, '//*[@id="hq-sidebar"]/nav/ul[2]/li[3]/a')))
-        self.manage_forms_link.click()
-        print("manage_forms_link clicked")
-
-        self.driver.refresh()
-
-        time.sleep(2)
-        self.apply_button = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((
-                By.XPATH, '//*[@id="apply-btn"]')))
-        self.apply_button.click()
-        print("apply_button clicked")
-        # Good to add a check to verify that there are required forms available; or get the count of forms available
-        # Abort if zero
-        time.sleep(5)
-        self.view_normal_form_link = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((
-                By.XPATH, '//*[@id="report_table_bulk_archive_forms"]/tbody/tr[2]/td[2]/a')))
-        self.view_normal_form_link.click()
-        print("view_normal_form link clicked")
-        time.sleep(2)
-        self.driver.switch_to.window(self.driver.window_handles[1])  # Switch to the new
+        self.wait_to_click(By.XPATH, self.manage_forms_link)
+        self.wait_to_click(By.XPATH, self.apply_button)
+        self.wait_to_click(By.XPATH, self.view_form_link)
+        self.switch_to_next_tab()
         normal_form_data = self.driver.page_source
-        print(normal_form_data)
-        if normal_form_data != "":  # This condition can be improvised
-            print("normal_form has data")
-        else:
-            print("normal_form is empty")
-        self.driver.close()  # Close the feed URL
-        self.driver.switch_to.window(self.driver.window_handles[0])  # Switch back to the
+        assert normal_form_data != ""  # This condition can be improvised
+        print("normal_form has data")
+        self.driver.close()
+        self.switch_back_to_prev_tab()
 
         # View Archived Forms
-
-        self.archived_restored_dropdown = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((
-                By.XPATH, '//*[@id="select2-report_filter_archive_or_restore-container"]')))
-        self.archived_restored_dropdown.click()
-        print("archived_restored_dropdown clicked")
-        # time.sleep(2)
-        self.archived_forms_option = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((
-                By.XPATH, '/html/body/span/span/span[2]/ul/li[2]')))
-        self.archived_forms_option.click()
-        print("Archived type selected")
-        # time.sleep(2)
-        self.apply_button = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((
-                By.XPATH, '//*[@id="apply-btn"]')))
-        self.apply_button.click()
-        print("apply_button clicked")
-        time.sleep(5)
-        self.view_archived_form_link = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((
-                By.XPATH, '//*[@id="report_table_bulk_archive_forms"]/tbody/tr[2]/td[2]/a')))
-        self.view_archived_form_link.click()
-        print("view_archived_form link clicked")
-        time.sleep(2)
-        self.driver.switch_to.window(self.driver.window_handles[1])  # Switch to the new
+        self.wait_to_click(By.XPATH, self.archived_restored_dropdown)
+        self.wait_to_click(By.XPATH, self.archived_forms_option)
+        self.wait_to_click(By.XPATH, self.apply_button)
+        self.driver.refresh()
+        self.wait_to_click(By.XPATH, self.view_form_link)
+        self.switch_to_next_tab()
         normal_form_data = self.driver.page_source
         print(normal_form_data)
-        if normal_form_data != "":  # This condition can be improvised
-            print("archived_form has data")
-        else:
-            print("archived_form is empty")
-        self.driver.close()  # Close the feed URL
-        self.driver.switch_to.window(self.driver.window_handles[0])  # Switch back to the
+        assert normal_form_data != "" # This condition can be improvised
+        print("archived_form has data")
+        self.driver.close()
+        self.switch_back_to_prev_tab()
+
+        # Restore Archived Forms
+        self.wait_to_click(By.XPATH, self.checkbox1)
+        self.wait_to_click(By.XPATH, self.archive_button)
+        assert WebDriverWait(self.driver, 5).until(EC.presence_of_element_located((
+            By.XPATH, self.success_message))).is_displayed()
+        print("Forms archival successful!!")

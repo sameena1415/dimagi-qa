@@ -1,7 +1,7 @@
+from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as ec
-import time
 
 
 class LoginPage:
@@ -26,8 +26,7 @@ class LoginPage:
 
     def accept_alert(self):
         try:
-            WebDriverWait(self.driver, 10).until(
-                ec.presence_of_element_located((By.ID, self.alert_button_accept))).click()
-            time.sleep(7)
-        except Exception as e:
-            print(e)
+            WebDriverWait(self.driver, 3).until(ec.element_to_be_clickable((
+                By.ID, self.alert_button_accept))).click()
+        except TimeoutException:
+            pass  # ignore if alert not on page
