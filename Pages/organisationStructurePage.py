@@ -8,6 +8,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as ec
 from UserInputs.generateUserInputs import fetch_random_string
 from UserInputs.userInputsData import UserInputsData
+from datetime import date
 
 
 def latest_download_file():
@@ -24,9 +25,6 @@ def latest_download_file():
         print("Current directory is-", os.getcwd())
 
 
-newest_file = latest_download_file()
-
-
 class OrganisationStructurePage:
 
     def __init__(self, driver):
@@ -37,13 +35,14 @@ class OrganisationStructurePage:
         self.create_loc_xpath = "//button[@type='submit']"
         self.loc_saved_success_msg = "//div[@class ='alert alert-margin-top fade in alert-success']"
         self.error_1_id = "error_1_id_name"
-        self.loc_created = "location_" + fetch_random_string()
-        self.loc_created_edit_path = "//span[text ()='" + self.loc_created + "']" + \
-                                     "//following::a[@data-bind='attr: { href: loc_edit_url(uuid()) }'][1]"
+        self.new_location_name = "location_" + fetch_random_string()
+        self.edit_this_loc = "(//span[contains(text(),'updated_on:')])[1]"
+        self.edit_loc_button_xpath = self.edit_this_loc + \
+                                     "//preceding::a[@data-bind='attr: { href: loc_edit_url(uuid()) }'][1] "
         self.loc_name_input_id = "id_name"
         self.update_loc_xpath = "//*[@id='users']//preceding::button"
-        self.location_created_xpath = "//span[text()='" + self.loc_created + "']"
-        self.location_renamed_xpath = "//span[text()='" + self.loc_created + "new" + "']"
+        self.location_created_xpath = "//span[text()='" + self.new_location_name + "']"
+        self.renamed_location = "//span[text()='" + self.edit_this_loc + str(date.today()) + "']"
         self.edit_loc_field_btn_xpath = "//a[@data-action='Edit Location Fields']"
         self.add_field_btn_xpath = "//button[@data-bind='click: addField']"
         self.loc_property_xpath = "(//input[@data-bind='value: slug'])[last()]"
@@ -62,12 +61,21 @@ class OrganisationStructurePage:
         self.new_org_level_btn_xpath = "//button[@data-bind='click: new_loctype']"
         self.org_level_value_xpath = "(//input[@data-bind='value: name'])[last()]"
         self.save_btn_xpath = "//button[@type='submit' and @class='btn btn-default pull-right btn-primary']"
+        self.save_btn_delete = "//button[@class='btn btn-default pull-right']"
         self.download_loc_btn = "Download Organization Structure"
         self.upload_loc_btn = "Bulk Upload"
         self.upload = "//button[@class='btn btn-primary disable-on-submit']"
         self.import_complete = "//legend[text()='Import complete.']"
 
-    def wait_to_click(self, *locator, timeout=3):
+        # cleanup
+        self.delete_location_created = "//span[text ()='" + self.new_location_name + \
+                                       "']//preceding::button[@class='btn btn-danger'][1]"
+        self.delete_confirm = '//input[@data-bind ="value: signOff, valueUpdate: \'input\'"]'
+        self.delete_confirm_button = "//button[@data-bind ='click: delete_fn, css: {disabled: !(signOff() == count)}']"
+        self.delete_loc_field = "(//a[@class='btn btn-danger'])[last()]"
+        self.delete_org_level = "(//button[@class='btn btn-danger'])[last()]"
+
+    def wait_to_click(self, *locator, timeout=5):
         clickable = ec.element_to_be_clickable(locator)
         WebDriverWait(self.driver, timeout).until(clickable).click()
 
@@ -79,25 +87,25 @@ class OrganisationStructurePage:
     def create_location(self):
         self.wait_to_click(By.XPATH, self.add_loc_btn_xpath)
         self.driver.find_element(By.XPATH, self.loc_name_xpath).clear()
-        self.driver.find_element(By.XPATH, self.loc_name_xpath).send_keys(self.loc_created)
+        self.driver.find_element(By.XPATH, self.loc_name_xpath).send_keys(self.new_location_name)
         self.driver.find_element(By.XPATH, self.create_loc_xpath).click()
         assert WebDriverWait(self.driver, 3).until(ec.presence_of_element_located((
             By.XPATH, self.loc_saved_success_msg))).is_displayed()
         self.wait_to_click(By.LINK_TEXT, self.org_menu_link_text)
+        self.driver.refresh()
         assert WebDriverWait(self.driver, 3).until(ec.presence_of_element_located((
             By.XPATH, self.location_created_xpath))).is_displayed()
 
     def edit_location(self):
-        self.wait_to_click(By.XPATH, self.loc_created_edit_path)
+        self.wait_to_click(By.XPATH, self.edit_loc_button_xpath)
         self.driver.find_element(By.ID, self.loc_name_input_id).clear()
-        self.driver.find_element(By.ID, self.loc_name_input_id).send_keys(
-            "location_" + str(fetch_random_string()) + "new")
+        self.driver.find_element(By.ID, self.loc_name_input_id).send_keys("updated_on:" + str(date.today()))
         self.driver.find_element(By.XPATH, self.update_loc_xpath).click()
         assert WebDriverWait(self.driver, 3).until(ec.presence_of_element_located((
             By.XPATH, self.loc_saved_success_msg))).is_displayed()
-        self.driver.find_element(By.LINK_TEXT, self.org_menu_link_text).click()
-        assert WebDriverWait(self.driver, 3).until(ec.presence_of_element_located((
-            By.XPATH, self.location_renamed_xpath))).is_displayed()
+        # self.driver.find_element(By.LINK_TEXT, self.org_menu_link_text).click()
+        # assert WebDriverWait(self.driver, 3).until(ec.presence_of_element_located((
+        #     By.XPATH, self.renamed_location))).is_displayed()
 
     def edit_location_fields(self):
         self.driver.find_element(By.LINK_TEXT, self.org_menu_link_text).click()
@@ -107,7 +115,7 @@ class OrganisationStructurePage:
         self.driver.find_element(By.XPATH, self.loc_property_xpath).send_keys("location_field_" + fetch_random_string())
         self.driver.find_element(By.XPATH, self.loc_label_xpath).clear()
         self.driver.find_element(By.XPATH, self.loc_label_xpath).send_keys("location_field_" + fetch_random_string())
-        self.driver.find_element_by_xpath(self.choice_selection).click()
+        # self.driver.find_element_by_xpath(self.choice_selection).click() # required when reg exp FF enabled
         self.driver.find_element(By.XPATH, self.add_choice_btn_xpath).click()
         self.driver.find_element(By.XPATH, self.choice_xpath).send_keys("location_field_" + fetch_random_string())
         self.driver.find_element(By.ID, self.save_btn_id).click()
@@ -116,7 +124,7 @@ class OrganisationStructurePage:
 
     def selection_location_field_for_location_created(self):
         self.driver.find_element(By.LINK_TEXT, self.org_menu_link_text).click()
-        self.wait_to_click(By.XPATH, self.loc_created_edit_path)
+        self.wait_to_click(By.XPATH, self.edit_loc_button_xpath)
         ActionChains(self.driver).move_to_element(
             self.driver.find_element(By.XPATH, self.additional_info_drop_down)).click(
             self.driver.find_element(By.XPATH, self.additional_info_drop_down)).perform()
@@ -142,6 +150,7 @@ class OrganisationStructurePage:
             print("Still preparing for download.." + str(e))
             assert False
         # verify_downloaded_location
+        newest_file = latest_download_file()
         modTimesinceEpoc = os.path.getmtime(str(UserInputsData.download_path) + "\\" + newest_file)
         modificationTime = datetime.datetime.fromtimestamp(modTimesinceEpoc)
         timeNow = datetime.datetime.now()
@@ -154,10 +163,29 @@ class OrganisationStructurePage:
     def upload_locations(self):
         self.driver.find_element(By.LINK_TEXT, self.org_menu_link_text).click()
         self.driver.find_element(By.LINK_TEXT, self.upload_loc_btn).click()
+        newest_file = latest_download_file()
         self.driver.find_element(By.ID, "id_bulk_upload_file").send_keys(str(
             UserInputsData.download_path) + "\\" + newest_file)
         self.wait_to_click(By.XPATH, self.upload)
-        #picks up latest -1 file always, hence might fail
-        assert WebDriverWait(self.driver, 3).until(ec.presence_of_element_located((
+        assert WebDriverWait(self.driver, 10).until(ec.presence_of_element_located((
             By.XPATH, self.import_complete))).is_displayed()
         print("File uploaded successfully")
+
+    def cleanup(self):
+        # Delete User Field
+        self.wait_to_click(By.LINK_TEXT, self.org_menu_link_text)
+        self.wait_to_click(By.XPATH, self.edit_loc_field_btn_xpath)
+        self.wait_to_click(By.XPATH, self.delete_loc_field)
+        self.wait_to_click(By.XPATH, self.delete_org_level)
+        self.wait_to_click(By.ID, self.save_btn_id)
+        # Delete Org Level
+        self.driver.find_element(By.LINK_TEXT, self.org_level_menu_link_text).click()
+        self.driver.refresh()
+        self.wait_to_click(By.XPATH, self.delete_org_level)
+        self.wait_to_click(By.XPATH, self.save_btn_delete)
+        # Delete Location
+        self.wait_to_click(By.LINK_TEXT, self.org_menu_link_text)
+        self.wait_to_click(By.XPATH, self.delete_location_created)
+        time.sleep(1)
+        self.driver.find_element(By.XPATH, self.delete_confirm).send_keys("1")
+        self.driver.find_element(By.XPATH, self.delete_confirm_button).click()

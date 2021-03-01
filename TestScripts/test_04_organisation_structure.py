@@ -53,3 +53,8 @@ class OrganisationStructureTests(EnvironmentSetup):
         driver = self.driver
         org = OrganisationStructurePage(driver)
         org.upload_locations()
+
+    def test_09_cleanup(self):
+        driver = self.driver
+        org = OrganisationStructurePage(driver)
+        org.cleanup()
