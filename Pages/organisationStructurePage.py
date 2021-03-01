@@ -137,7 +137,7 @@ class OrganisationStructurePage:
         self.driver.find_element(By.LINK_TEXT, self.org_level_menu_link_text).click()
         self.wait_to_click(By.XPATH, self.new_org_level_btn_xpath)
         self.driver.find_element(By.XPATH, self.org_level_value_xpath).send_keys("loc_level_" + fetch_random_string())
-        self.driver.find_element(By.XPATH, self.save_btn_xpath).click()
+        self.wait_to_click(By.XPATH, self.save_btn_xpath)
 
     def download_locations(self):
         self.driver.find_element(By.LINK_TEXT, self.org_menu_link_text).click()

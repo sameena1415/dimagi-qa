@@ -31,12 +31,3 @@ class CleanUps(EnvironmentSetup):
         clean.click_group_menu()
         clean.cleanup_group()
         print("Deleted the group")
-
-    def test_04_cleanup_role(self):
-        driver = self.driver
-        clean = RolesPermissionPage(driver)
-        clean2 = MobileWorkerPage(driver)
-        clean2.mobile_worker_menu()
-        clean.roles_menu_click()
-        clean.cleanup_role()
-        print("Deleted the role")

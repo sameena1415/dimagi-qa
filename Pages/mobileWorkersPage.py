@@ -207,7 +207,7 @@ class MobileWorkerPage:
     def cleanup_mobile_worker(self):
         self.wait_to_click(By.LINK_TEXT, self.actions_tab_link_text)
         self.wait_to_click(By.XPATH, self.delete_mobile_worker)
-        WebDriverWait(self.driver, 3).until(ec.presence_of_element_located((
+        WebDriverWait(self.driver, 3).until(ec.visibility_of_element_located((
             By.XPATH, self.enter_username))).send_keys(
             self.username + "@" + UserInputsData.domain + ".commcarehq.org")
         self.wait_to_click(By.XPATH, self.confirm_delete_mw)

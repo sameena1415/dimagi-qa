@@ -10,7 +10,7 @@ class RolesPermissionPage:
     def __init__(self, driver):
         self.driver = driver
         self.roles_menu_xpath = "//a[@data-title='Roles & Permissions']"
-        self.add_role_btn_xpath = "//*[@id='user-roles-table']/div[2]/button"
+        self.add_role_btn_xpath = "//button[@data-bind='click: function () {$root.setRoleBeingEdited($root.defaultRole)}']"
         self.role_name_id = "role-name"
         self.edit_web_user_checkbox = "edit-web-users-checkbox"
         self.save_btn_xpath = "//button[@class='btn btn-primary disable-on-submit']"
@@ -30,11 +30,9 @@ class RolesPermissionPage:
         assert "Roles & Permissions : Users :: - CommCare HQ" in self.driver.title
 
     def add_role(self):
-        self.driver.implicitly_wait(3)
-        ActionChains(self.driver).move_to_element(
-            self.driver.find_element(By.XPATH, self.add_role_btn_xpath)).click(
-            self.driver.find_element(By.XPATH, self.add_role_btn_xpath)).perform()
-        self.driver.find_element(By.ID, self.role_name_id).clear()
+        self.wait_to_click(By.XPATH, self.add_role_btn_xpath)
+        WebDriverWait(self.driver, 3).until(ec.visibility_of_element_located((
+            By.ID, self.role_name_id))).clear()
         self.driver.find_element(By.ID, self.role_name_id).send_keys("role_name_" + fetch_random_string())
         self.driver.find_element(By.ID, self.edit_web_user_checkbox).click()
         ActionChains(self.driver).move_to_element(
@@ -45,7 +43,8 @@ class RolesPermissionPage:
 
     def edit_role(self):
         self.driver.find_element(By.XPATH, self.edit_role_xpath).click()
-        self.driver.find_element(By.ID, self.role_name_id).clear()
+        WebDriverWait(self.driver, 3).until(ec.visibility_of_element_located((
+            By.ID, self.role_name_id))).clear()
         self.driver.find_element(By.ID, self.role_name_id).send_keys("role_name_" + fetch_random_string())
         self.driver.find_element(By.ID, self.edit_mobile_worker_checkbox).click()
         ActionChains(self.driver).move_to_element(
