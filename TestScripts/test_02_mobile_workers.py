@@ -52,7 +52,6 @@ class MobileWorkerTests(EnvironmentSetup):
     def test_06_reactivate_user(self):
         driver = self.driver
         user = MobileWorkerPage(driver)
-        user.mobile_worker_menu()
         user.reactivate_user()
         user.verify_reactivation_via_login()
 

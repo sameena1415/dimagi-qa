@@ -179,11 +179,13 @@ class MobileWorkerPage:
         self.wait_to_click(By.ID, self.show_full_menu_id)
 
     def reactivate_user(self):
+        time.sleep(1)
+        self.mobile_worker_menu()
         self.wait_to_click(By.XPATH, self.show_deactivated_users_btn)
         self.search_user()
         self.wait_to_click(By.XPATH, self.reactivate_buttons_list)
         self.wait_to_click(By.XPATH, self.confirm_reactivate_xpath_list)
-        time.sleep(2)
+        time.sleep(3)
 
     def verify_reactivation_via_login(self):
         self.webapp_login_as()
