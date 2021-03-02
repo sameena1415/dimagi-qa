@@ -16,12 +16,13 @@ class EnvironmentSetup(unittest.TestCase):
     def setUpClass(cls):
         settings = load_settings()
         chrome_options = Options()
-        chrome_options.add_argument('--no-sandbox')
-        chrome_options.add_argument('--disable-dev-shm-usage')
+        if os.environ.get("CI") == "true":
+            chrome_options.add_argument('--no-sandbox')
+            chrome_options.add_argument('--headless')
+        chrome_options.add_argument('window-size=1024,768')
         driver_path = ChromeDriverManager().install()
         cls.driver = webdriver.Chrome(executable_path=driver_path , chrome_options=chrome_options)
         try:
-            cls.driver.maximize_window()
             cls.driver.get(settings["url"])
             login = LoginPage(cls.driver)
             login.enter_username(settings["login_username"])
