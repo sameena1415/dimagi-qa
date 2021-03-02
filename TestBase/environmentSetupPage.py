@@ -5,6 +5,7 @@ from pathlib import Path
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
 from Pages.loginPage import LoginPage
+from selenium.webdriver.chrome.options import Options
 
 
 class EnvironmentSetup(unittest.TestCase):
@@ -14,8 +15,11 @@ class EnvironmentSetup(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         settings = load_settings()
+        chrome_options = Options()
+        chrome_options.add_argument('--no-sandbox')
+        chrome_options.add_argument('--disable-dev-shm-usage')
         driver_path = ChromeDriverManager().install()
-        cls.driver = webdriver.Chrome(executable_path=driver_path)
+        cls.driver = webdriver.Chrome(executable_path=driver_path , chrome_options=chrome_options)
         try:
             cls.driver.maximize_window()
             cls.driver.get(settings["url"])
