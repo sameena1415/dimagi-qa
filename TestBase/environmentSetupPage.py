@@ -7,6 +7,8 @@ from webdriver_manager.chrome import ChromeDriverManager
 from Pages.loginPage import LoginPage
 from selenium.webdriver.chrome.options import Options
 
+from UserInputs.userInputsData import UserInputsData
+
 
 class EnvironmentSetup(unittest.TestCase):
 
@@ -19,9 +21,14 @@ class EnvironmentSetup(unittest.TestCase):
         if os.environ.get("CI") == "true":
             chrome_options.add_argument('--no-sandbox')
             chrome_options.add_argument('--headless')
-        chrome_options.add_argument('window-size=1024,768')
+            chrome_options.add_argument('window-size=1024,768')
+            chrome_options.add_experimental_option("prefs", {
+                "download.default_directory": UserInputsData.download_path_ci,
+                "download.prompt_for_download": False,
+                "download.directory_upgrade": True,
+                "safebrowsing.enabled": True})
         driver_path = ChromeDriverManager().install()
-        cls.driver = webdriver.Chrome(executable_path=driver_path , chrome_options=chrome_options)
+        cls.driver = webdriver.Chrome(executable_path=driver_path, chrome_options=chrome_options)
         try:
             cls.driver.get(settings["url"])
             login = LoginPage(cls.driver)
