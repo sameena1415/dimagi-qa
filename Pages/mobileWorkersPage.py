@@ -231,7 +231,10 @@ class MobileWorkerPage:
             assert False
         # verify_downloaded_workers
         newest_file = latest_download_file()
-        modTimesinceEpoc = os.path.getmtime(str(UserInputsData.download_path) + "\\" + newest_file)
+        if os.environ.get("CI") == "true":
+            modTimesinceEpoc = os.path.getmtime(str(UserInputsData.download_path_ci) + str(newest_file))
+        else:
+            modTimesinceEpoc = os.path.getmtime(str(UserInputsData.download_path) + "\\" + newest_file)
         modificationTime = datetime.datetime.fromtimestamp(modTimesinceEpoc)
         timeNow = datetime.datetime.now()
         diff_seconds = round((timeNow - modificationTime).total_seconds())
@@ -245,8 +248,12 @@ class MobileWorkerPage:
         self.mobile_worker_menu()
         self.driver.find_element(By.LINK_TEXT, self.bulk_upload_btn).click()
         newest_file = latest_download_file()
-        self.driver.find_element(By.ID, self.choose_file).send_keys(str(
-            UserInputsData.download_path) + "\\" + newest_file)
+        if os.environ.get("CI") == "true":
+            self.driver.find_element(By.ID, self.choose_file).send_keys(
+                str(UserInputsData.download_path_ci) + str(newest_file))
+        else:
+            self.driver.find_element(By.ID, self.choose_file).send_keys(
+                str(UserInputsData.download_path) + "\\" + newest_file)
         self.driver.find_element(By.XPATH, self.upload).click()
         assert WebDriverWait(self.driver, 60).until(ec.presence_of_element_located((
             By.XPATH, self.import_complete))).is_displayed()
