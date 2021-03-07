@@ -8,6 +8,8 @@ from selenium.webdriver.support import expected_conditions as EC
 from UserInputs.userInputsData import UserInputsData
 import pandas as pd
 from TestBase.environmentSetupPage import load_settings
+import matplotlib
+matplotlib.use('Agg')
 
 
 def latest_download_file():
@@ -226,7 +228,10 @@ class ExportDataPage:
         time.sleep(3)
         newest_file = latest_download_file()
         print("Newest:", newest_file)
-        modTimesinceEpoc = os.path.getmtime(str(UserInputsData.download_path) + "\\" + newest_file)
+        if os.environ.get("CI") == "true":
+            modTimesinceEpoc = os.path.getmtime(str(UserInputsData.download_path_ci) + str(newest_file))
+        else:
+            modTimesinceEpoc = os.path.getmtime(str(UserInputsData.download_path) + "\\" + newest_file)
         modificationTime = datetime.datetime.fromtimestamp(modTimesinceEpoc)
         timeNow = datetime.datetime.now()
         diff_seconds = round((timeNow - modificationTime).total_seconds())
