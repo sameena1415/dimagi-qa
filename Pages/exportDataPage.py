@@ -8,8 +8,6 @@ from selenium.webdriver.support import expected_conditions as EC
 from UserInputs.userInputsData import UserInputsData
 import pandas as pd
 from TestBase.environmentSetupPage import load_settings
-import matplotlib
-matplotlib.use('Agg')
 
 
 def latest_download_file():
