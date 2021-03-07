@@ -11,9 +11,12 @@ from TestBase.environmentSetupPage import load_settings
 
 
 def latest_download_file():
-    os.chdir(UserInputsData.download_path)
+    if os.environ.get("CI") == "true":
+        os.chdir(UserInputsData.download_path_ci)
+    else:
+        os.chdir(UserInputsData.download_path)
     files = sorted(os.listdir(os.getcwd()), key=os.path.getmtime)
-    newest = files[-1]
+    newest = max(files, key=os.path.getctime)
     print("File downloaded: " + newest)
     return newest
 
@@ -172,9 +175,6 @@ class ExportDataPage:
         print("Downloaded file has the required data!")
         self.driver.close()
         self.switch_back_to_prev_tab()
-        path = os.path.join(UserInputsData.download_path, newest_file)
-        os.remove(path)
-        print("File Removed!")
 
     # Test Case 20_b - Verify Export functionality for Cases
     def add_case_exports(self):
@@ -217,8 +217,6 @@ class ExportDataPage:
         print("Downloaded file has the required data!")
         self.driver.close()
         self.switch_back_to_prev_tab()
-        os.remove(str(UserInputsData.download_path) + "\\" + newest_file)
-        print("File Removed!")
 
     # Test Case 21 - Export SMS Messages
     def sms_exports(self):

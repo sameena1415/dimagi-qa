@@ -157,7 +157,10 @@ class OrganisationStructurePage:
             assert False
         # verify_downloaded_location
         newest_file = latest_download_file()
-        modTimesinceEpoc = os.path.getmtime(str(UserInputsData.download_path) + "\\" + newest_file)
+        if os.environ.get("CI") == "true":
+            modTimesinceEpoc = os.path.getmtime(str(UserInputsData.download_path_ci) + str(newest_file))
+        else:
+            modTimesinceEpoc = os.path.getmtime(str(UserInputsData.download_path) + "\\" + newest_file)
         modificationTime = datetime.datetime.fromtimestamp(modTimesinceEpoc)
         timeNow = datetime.datetime.now()
         diff_seconds = round((timeNow - modificationTime).total_seconds())
@@ -170,8 +173,12 @@ class OrganisationStructurePage:
         self.driver.find_element(By.LINK_TEXT, self.org_menu_link_text).click()
         self.driver.find_element(By.LINK_TEXT, self.upload_loc_btn).click()
         newest_file = latest_download_file()
-        self.driver.find_element(By.ID, "id_bulk_upload_file").send_keys(str(
-            UserInputsData.download_path) + "\\" + newest_file)
+        if os.environ.get("CI") == "true":
+            self.driver.find_element(By.ID, "id_bulk_upload_file").send_keys(
+                str(UserInputsData.download_path_ci) + str(newest_file))
+        else:
+            self.driver.find_element(By.ID, "id_bulk_upload_file").send_keys(
+                str(UserInputsData.download_path) + "\\" + newest_file)
         self.wait_to_click(By.XPATH, self.upload)
         assert WebDriverWait(self.driver, 10).until(ec.presence_of_element_located((
             By.XPATH, self.import_complete))).is_displayed()
