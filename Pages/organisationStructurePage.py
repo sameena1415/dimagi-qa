@@ -187,7 +187,8 @@ class OrganisationStructurePage:
         self.driver.find_element(By.XPATH, self.delete_confirm).send_keys("1")
         self.driver.find_element(By.XPATH, self.delete_confirm_button).click()
         # Delete Org Level
-        self.wait_to_click(By.LINK_TEXT, self.org_level_menu_link_text)
+        org_level_menu = self.driver.find_element(By.LINK_TEXT, self.org_level_menu_link_text)
+        self.driver.execute_script("arguments[0].click();", org_level_menu)
         time.sleep(1)
         self.driver.find_element(By.XPATH, self.delete_org_level).click()
         self.wait_to_click(By.XPATH, self.save_btn_delete)
