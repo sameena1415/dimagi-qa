@@ -27,9 +27,9 @@ class EnvironmentSetup(unittest.TestCase):
                 "download.prompt_for_download": False,
                 "download.directory_upgrade": True,
                 "safebrowsing.enabled": True})
-            if os.environ.get('DISPLAY', '') == '':
-                print('no display found. Using :0.0')
-                os.environ.__setitem__('DISPLAY', ':0.0')
+            # if os.environ.get('DISPLAY', '') == '':
+            #     print('no display found. Using :0.0')
+            #     os.environ.__setitem__('DISPLAY', ':0.0')
         driver_path = ChromeDriverManager().install()
         cls.driver = webdriver.Chrome(executable_path=driver_path, chrome_options=chrome_options)
         try:

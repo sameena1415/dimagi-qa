@@ -1,6 +1,7 @@
 import datetime
 import os
 import time
+import matplotlib
 from tkinter import Tk
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
@@ -8,6 +9,9 @@ from selenium.webdriver.support import expected_conditions as EC
 from UserInputs.userInputsData import UserInputsData
 import pandas as pd
 from TestBase.environmentSetupPage import load_settings
+
+# Force matplotlib to not use any Xwindows backend.
+matplotlib.use('Agg')
 
 
 def latest_download_file():
