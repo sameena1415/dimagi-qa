@@ -1,7 +1,6 @@
-import glob
 import os
 import time
-from pathlib import Path
+
 
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
@@ -68,8 +67,10 @@ class MessagingPage:
         self.structured_keyword_created = "//a[text()='" + "STRUCTURED_KEYWORD_" + fetch_random_string().upper() + "']"
         self.delete_keyword = self.keyword_created + "//following::a[@class='btn btn-danger'][1]"
         self.delete_structured_keyword = self.structured_keyword_created + "//following::a[@class='btn btn-danger'][1]"
-        self.confirm_delete_keyword = self.keyword_created + "//following::a[@class='btn btn-danger delete-item-confirm'][1]"
-        self.confirm_delete_structured_keyword = self.structured_keyword_created + "//following::a[@class='btn btn-danger delete-item-confirm'][1]"
+        self.confirm_delete_keyword = self.keyword_created + \
+                                      "//following::a[@class='btn btn-danger delete-item-confirm'][1]"
+        self.confirm_delete_structured_keyword = self.structured_keyword_created + \
+                                                 "//following::a[@class='btn btn-danger delete-item-confirm'][1]"
         # Chat
         self.chat = "Chat"
         self.contact_table = "contact_list"
@@ -166,12 +167,8 @@ class MessagingPage:
 
     def cond_alert_upload(self):
         newest_file = latest_download_file()
-        if os.environ.get("CI") == "true":
-            self.driver.find_element(By.XPATH, self.choose_file).send_keys(
-                str(UserInputsData.download_path_ci) + str(newest_file))
-        else:
-            self.driver.find_element(By.XPATH, self.choose_file).send_keys(
-                str(UserInputsData.download_path) + "\\" + newest_file)
+        file_that_was_downloaded = os.path.join(UserInputsData.download_path + os.sep, newest_file)
+        self.driver.find_element(By.XPATH, self.choose_file).send_keys(file_that_was_downloaded)
         self.wait_to_click(By.XPATH, self.upload)
         assert True == self.driver.find_element(By.XPATH, self.upload_success_message).is_displayed()
         print("Conditional Alert uploaded successfully!")
@@ -214,7 +211,8 @@ class MessagingPage:
     #     time.sleep(2)
     #     self.driver.find_element(By.XPATH, "//select[@name='hq_api_id']").click()
     #     time.sleep(2)
-    #     self.driver.find_element(By.XPATH, "//select[@name='hq_api_id']/option[text()='Airtel (through TCL)']").click()
+    #     self.driver.find_element(By.XPATH, "//select[@name='hq_api_id']/option[text(
+    #     )='Airtel (through TCL)']").click()
     #     self.driver.find_element(By.XPATH, self.add_gateway).click()
     #     self.driver.find_element(By.XPATH, self.gateway_name).send_keys("gateway_" + fetch_random_string())
     #     self.driver.find_element(By.XPATH, self.host_and_port).send_keys("gateway_" + fetch_random_string())
@@ -313,12 +311,8 @@ class MessagingPage:
 
     def msg_trans_upload(self):
         newest_file = latest_download_file()
-        if os.environ.get("CI") == "true":
-            self.driver.find_element(By.XPATH, self.choose_file).send_keys(
-                str(UserInputsData.download_path_ci) + str(newest_file))
-        else:
-            self.driver.find_element(By.XPATH, self.choose_file).send_keys(
-                str(UserInputsData.download_path) + "\\" + newest_file)
+        file_that_was_downloaded = os.path.join(UserInputsData.download_path + os.sep, newest_file)
+        self.driver.find_element(By.XPATH, self.choose_file).send_keys(file_that_was_downloaded)
         self.wait_to_click(By.XPATH, self.upload)
         assert True == WebDriverWait(self.driver, 2).until(ec.presence_of_element_located((
             By.XPATH, self.upload_success_message))).is_displayed()

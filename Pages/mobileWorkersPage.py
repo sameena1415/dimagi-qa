@@ -233,7 +233,6 @@ class MobileWorkerPage:
         # verify_downloaded_workers
         newest_file = latest_download_file()
         file_that_was_downloaded = os.path.join(UserInputsData.download_path + os.sep, newest_file)
-        print(file_that_was_downloaded)
         modTimesinceEpoc = os.path.getmtime(file_that_was_downloaded)
         modificationTime = datetime.datetime.fromtimestamp(modTimesinceEpoc)
         timeNow = datetime.datetime.now()
