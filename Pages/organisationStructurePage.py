@@ -14,10 +14,7 @@ from datetime import date
 def latest_download_file():
     cwd = os.getcwd()
     try:
-        if os.environ.get("CI") == "true":
-            os.chdir(UserInputsData.download_path_ci)
-        else:
-            os.chdir(UserInputsData.download_path)
+        os.chdir(UserInputsData.download_path)
         files = sorted(os.listdir(os.getcwd()), key=os.path.getctime)
         print(files)
         for filename in files:
