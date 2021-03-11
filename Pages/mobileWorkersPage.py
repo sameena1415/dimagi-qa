@@ -250,6 +250,6 @@ class MobileWorkerPage:
         file_that_was_downloaded = os.path.join(UserInputsData.download_path + os.sep, newest_file)
         self.driver.find_element(By.ID, self.choose_file).send_keys(file_that_was_downloaded)
         self.driver.find_element(By.XPATH, self.upload).click()
-        assert WebDriverWait(self.driver, 60).until(ec.presence_of_element_located((
+        assert WebDriverWait(self.driver, 90).until(ec.presence_of_element_located((
             By.XPATH, self.import_complete))).is_displayed()
         print("File uploaded successfully")

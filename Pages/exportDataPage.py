@@ -1,3 +1,4 @@
+import matplotlib
 import datetime
 import os
 import time
@@ -9,6 +10,7 @@ from UserInputs.userInputsData import UserInputsData
 import pandas as pd
 from TestBase.environmentSetupPage import load_settings
 
+matplotlib.use('Agg')
 
 def latest_download_file():
     os.chdir(UserInputsData.download_path)
