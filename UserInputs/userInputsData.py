@@ -8,7 +8,7 @@ class UserInputsData:
     if os.environ.get("CI") == "true":
         download_path = r"/home/runner/work/dimagi-qa/dimagi-qa"
     else:
-        download_path = Path('~/Downloads').expanduser()
+        download_path = str(Path('~/Downloads').expanduser())
     # Report names
     form_export_name = "CCHQ Smoke Tests Form Export"
     case_export_name = "CCHQ Smoke Tests Case Export"
