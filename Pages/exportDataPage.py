@@ -11,10 +11,7 @@ from TestBase.environmentSetupPage import load_settings
 
 
 def latest_download_file():
-    if os.environ.get("CI") == "true":
-        os.chdir(UserInputsData.download_path_ci)
-    else:
-        os.chdir(UserInputsData.download_path)
+    os.chdir(UserInputsData.download_path)
     files = sorted(os.listdir(os.getcwd()), key=os.path.getmtime)
     newest = max(files, key=os.path.getctime)
     print("File downloaded: " + newest)
@@ -34,7 +31,7 @@ class ExportDataPage:
 
         # Add Export
         self.add_export_button = '//*[@id="create-export"]/p/a'  # Add Export button
-        self.app_dropdown = '//*[@id="div_id_application"]/div/span/span[1]/span'# Application dropdown in the modal
+        self.app_dropdown = '//*[@id="div_id_application"]/div/span/span[1]/span'  # Application dropdown in the modal
         self.select_app = '//*[@id="select2-id_application-results"]/li'  # Selecting first app
         self.menu_dropdown = '//*[@id="div_id_module"]/div/span/span[1]/span'  # Menu dropdown in the modal
         self.select_menu = '//*[@id="select2-id_module-results"]/li[1]'  # Selecting first menu item
@@ -226,10 +223,8 @@ class ExportDataPage:
         time.sleep(3)
         newest_file = latest_download_file()
         print("Newest:", newest_file)
-        if os.environ.get("CI") == "true":
-            modTimesinceEpoc = os.path.getmtime(str(UserInputsData.download_path_ci) + str(newest_file))
-        else:
-            modTimesinceEpoc = os.path.getmtime(str(UserInputsData.download_path) + "\\" + newest_file)
+        file_that_was_downloaded = os.path.join(UserInputsData.download_path + os.sep, newest_file)
+        modTimesinceEpoc = os.path.getmtime(file_that_was_downloaded)
         modificationTime = datetime.datetime.fromtimestamp(modTimesinceEpoc)
         timeNow = datetime.datetime.now()
         diff_seconds = round((timeNow - modificationTime).total_seconds())
