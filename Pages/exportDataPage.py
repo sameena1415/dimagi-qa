@@ -14,7 +14,6 @@ import pandas as pd
 from TestBase.environmentSetupPage import load_settings
 
 
-
 def latest_download_file():
     os.chdir(UserInputsData.download_path)
     files = sorted(os.listdir(os.getcwd()), key=os.path.getmtime)

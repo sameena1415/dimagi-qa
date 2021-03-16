@@ -167,8 +167,8 @@ class MessagingPage:
 
     def cond_alert_upload(self):
         newest_file = latest_download_file()
-        file_that_was_downloaded = os.path.join(UserInputsData.download_path + os.sep, newest_file)
-        self.driver.find_element(By.XPATH, self.choose_file).send_keys(file_that_was_downloaded)
+        file_that_was_downloaded = UserInputsData.download_path / newest_file
+        self.driver.find_element(By.XPATH, self.choose_file).send_keys(str(file_that_was_downloaded))
         self.wait_to_click(By.XPATH, self.upload)
         assert True == self.driver.find_element(By.XPATH, self.upload_success_message).is_displayed()
         print("Conditional Alert uploaded successfully!")
@@ -311,8 +311,8 @@ class MessagingPage:
 
     def msg_trans_upload(self):
         newest_file = latest_download_file()
-        file_that_was_downloaded = os.path.join(UserInputsData.download_path + os.sep, newest_file)
-        self.driver.find_element(By.XPATH, self.choose_file).send_keys(file_that_was_downloaded)
+        file_that_was_downloaded = UserInputsData.download_path / newest_file
+        self.driver.find_element(By.XPATH, self.choose_file).send_keys(str(file_that_was_downloaded))
         self.wait_to_click(By.XPATH, self.upload)
         assert True == WebDriverWait(self.driver, 2).until(ec.presence_of_element_located((
             By.XPATH, self.upload_success_message))).is_displayed()
