@@ -228,8 +228,7 @@ class ExportDataPage:
         time.sleep(3)
         newest_file = latest_download_file()
         print("Newest:", newest_file)
-        file_that_was_downloaded = os.path.join(UserInputsData.download_path + os.sep, newest_file)
-        modTimesinceEpoc = os.path.getmtime(file_that_was_downloaded)
+        modTimesinceEpoc = (UserInputsData.download_path / newest_file).stat().st_mtime
         modificationTime = datetime.datetime.fromtimestamp(modTimesinceEpoc)
         timeNow = datetime.datetime.now()
         diff_seconds = round((timeNow - modificationTime).total_seconds())
