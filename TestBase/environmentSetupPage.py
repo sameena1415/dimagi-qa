@@ -22,7 +22,7 @@ class EnvironmentSetup(unittest.TestCase):
             chrome_options.add_argument('--headless')
             chrome_options.add_argument('window-size=1024,768')
             chrome_options.add_experimental_option("prefs", {
-                "download.default_directory": UserInputsData.download_path,
+                "download.default_directory": str(UserInputsData.download_path),
                 "download.prompt_for_download": False,
                 "download.directory_upgrade": True,
                 "safebrowsing.enabled": True})
