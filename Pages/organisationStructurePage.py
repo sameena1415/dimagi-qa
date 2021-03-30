@@ -16,9 +16,12 @@ def latest_download_file():
     try:
         os.chdir(UserInputsData.download_path)
         files = sorted(os.listdir(os.getcwd()), key=os.path.getctime)
-        newest = files[-1]
-        print("File downloaded: " + newest)
-        return newest
+        print(files)
+        for filename in files:
+            if filename.endswith(".xlsx"):
+                newest = max(files, key=os.path.getctime)
+                print("File downloaded: " + newest)
+                return newest
     finally:
         print("Restoring the path...")
         os.chdir(cwd)
@@ -125,9 +128,7 @@ class OrganisationStructurePage:
     def selection_location_field_for_location_created(self):
         self.driver.find_element(By.LINK_TEXT, self.org_menu_link_text).click()
         self.wait_to_click(By.XPATH, self.edit_loc_button_xpath)
-        ActionChains(self.driver).move_to_element(
-            self.driver.find_element(By.XPATH, self.additional_info_drop_down)).click(
-            self.driver.find_element(By.XPATH, self.additional_info_drop_down)).perform()
+        self.wait_to_click(By.XPATH, self.additional_info_drop_down)
         self.driver.find_element(By.XPATH, self.select_value_drop_down).click()
         self.driver.find_element(By.XPATH, self.update_loc_btn_xpath).click()
         assert WebDriverWait(self.driver, 2).until(ec.presence_of_element_located((
@@ -151,7 +152,7 @@ class OrganisationStructurePage:
             assert False
         # verify_downloaded_location
         newest_file = latest_download_file()
-        modTimesinceEpoc = os.path.getmtime(str(UserInputsData.download_path) + "\\" + newest_file)
+        modTimesinceEpoc = (UserInputsData.download_path / newest_file).stat().st_mtime
         modificationTime = datetime.datetime.fromtimestamp(modTimesinceEpoc)
         timeNow = datetime.datetime.now()
         diff_seconds = round((timeNow - modificationTime).total_seconds())
@@ -164,8 +165,8 @@ class OrganisationStructurePage:
         self.driver.find_element(By.LINK_TEXT, self.org_menu_link_text).click()
         self.driver.find_element(By.LINK_TEXT, self.upload_loc_btn).click()
         newest_file = latest_download_file()
-        self.driver.find_element(By.ID, "id_bulk_upload_file").send_keys(str(
-            UserInputsData.download_path) + "\\" + newest_file)
+        file_that_was_downloaded = UserInputsData.download_path / newest_file
+        self.driver.find_element(By.ID, "id_bulk_upload_file").send_keys(str(file_that_was_downloaded))
         self.wait_to_click(By.XPATH, self.upload)
         assert WebDriverWait(self.driver, 10).until(ec.presence_of_element_located((
             By.XPATH, self.import_complete))).is_displayed()
@@ -185,7 +186,8 @@ class OrganisationStructurePage:
         self.driver.find_element(By.XPATH, self.delete_confirm).send_keys("1")
         self.driver.find_element(By.XPATH, self.delete_confirm_button).click()
         # Delete Org Level
-        self.driver.find_element(By.LINK_TEXT, self.org_level_menu_link_text).click()
+        org_level_menu = self.driver.find_element(By.LINK_TEXT, self.org_level_menu_link_text)
+        self.driver.execute_script("arguments[0].click();", org_level_menu)
         time.sleep(1)
         self.driver.find_element(By.XPATH, self.delete_org_level).click()
         self.wait_to_click(By.XPATH, self.save_btn_delete)

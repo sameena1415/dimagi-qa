@@ -1,5 +1,9 @@
-import datetime
 import os
+import datetime
+import matplotlib as matpl
+if os.environ.get('DISPLAY', '') == '':
+    print('Currently no display found. Using the non-interactive Agg backend')
+    matpl.use('Agg')
 import time
 from tkinter import Tk
 from selenium.webdriver.common.by import By
@@ -13,7 +17,7 @@ from TestBase.environmentSetupPage import load_settings
 def latest_download_file():
     os.chdir(UserInputsData.download_path)
     files = sorted(os.listdir(os.getcwd()), key=os.path.getmtime)
-    newest = files[-1]
+    newest = max(files, key=os.path.getctime)
     print("File downloaded: " + newest)
     return newest
 
@@ -31,7 +35,7 @@ class ExportDataPage:
 
         # Add Export
         self.add_export_button = '//*[@id="create-export"]/p/a'  # Add Export button
-        self.app_dropdown = '//*[@id="div_id_application"]/div/span/span[1]/span'# Application dropdown in the modal
+        self.app_dropdown = '//*[@id="div_id_application"]/div/span/span[1]/span'  # Application dropdown in the modal
         self.select_app = '//*[@id="select2-id_application-results"]/li'  # Selecting first app
         self.menu_dropdown = '//*[@id="div_id_module"]/div/span/span[1]/span'  # Menu dropdown in the modal
         self.select_menu = '//*[@id="select2-id_module-results"]/li[1]'  # Selecting first menu item
@@ -172,9 +176,6 @@ class ExportDataPage:
         print("Downloaded file has the required data!")
         self.driver.close()
         self.switch_back_to_prev_tab()
-        path = os.path.join(UserInputsData.download_path, newest_file)
-        os.remove(path)
-        print("File Removed!")
 
     # Test Case 20_b - Verify Export functionality for Cases
     def add_case_exports(self):
@@ -217,8 +218,6 @@ class ExportDataPage:
         print("Downloaded file has the required data!")
         self.driver.close()
         self.switch_back_to_prev_tab()
-        os.remove(str(UserInputsData.download_path) + "\\" + newest_file)
-        print("File Removed!")
 
     # Test Case 21 - Export SMS Messages
     def sms_exports(self):
@@ -228,7 +227,7 @@ class ExportDataPage:
         time.sleep(3)
         newest_file = latest_download_file()
         print("Newest:", newest_file)
-        modTimesinceEpoc = os.path.getmtime(str(UserInputsData.download_path) + "\\" + newest_file)
+        modTimesinceEpoc = (UserInputsData.download_path / newest_file).stat().st_mtime
         modificationTime = datetime.datetime.fromtimestamp(modTimesinceEpoc)
         timeNow = datetime.datetime.now()
         diff_seconds = round((timeNow - modificationTime).total_seconds())
@@ -362,8 +361,8 @@ class ExportDataPage:
         self.driver.execute_script("window.open('');")
         self.switch_to_next_tab()
         # string manipulation for bypassing the authentication
-        username = load_settings()["default"]["login_username"]
-        password = load_settings()["default"]["login_password"]
+        username = load_settings()["login_username"]
+        password = load_settings()["login_password"]
         final_URL = f"https://{username}:{password}@{odata_feed_link[8:]}"
         self.driver.get(final_URL)
         odata_feed_data = self.driver.page_source
@@ -404,8 +403,8 @@ class ExportDataPage:
         print(odata_feed_link)
         self.driver.execute_script("window.open('');")  # Open a new tab
         self.switch_to_next_tab()
-        username = load_settings()["default"]["login_username"]
-        password = load_settings()["default"]["login_password"]
+        username = load_settings()["login_username"]
+        password = load_settings()["login_password"]
         final_URL = f"https://{username}:{password}@{odata_feed_link[8:]}"
         self.driver.get(final_URL)
         odata_feed_data = self.driver.page_source

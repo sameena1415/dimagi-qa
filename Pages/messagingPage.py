@@ -1,7 +1,6 @@
-import glob
 import os
 import time
-from pathlib import Path
+
 
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
@@ -9,6 +8,8 @@ from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.support.wait import WebDriverWait
 
 from UserInputs.generateUserInputs import fetch_random_string
+from UserInputs.userInputsData import UserInputsData
+from Pages.organisationStructurePage import latest_download_file
 
 
 class MessagingPage:
@@ -66,8 +67,10 @@ class MessagingPage:
         self.structured_keyword_created = "//a[text()='" + "STRUCTURED_KEYWORD_" + fetch_random_string().upper() + "']"
         self.delete_keyword = self.keyword_created + "//following::a[@class='btn btn-danger'][1]"
         self.delete_structured_keyword = self.structured_keyword_created + "//following::a[@class='btn btn-danger'][1]"
-        self.confirm_delete_keyword = self.keyword_created + "//following::a[@class='btn btn-danger delete-item-confirm'][1]"
-        self.confirm_delete_structured_keyword = self.structured_keyword_created + "//following::a[@class='btn btn-danger delete-item-confirm'][1]"
+        self.confirm_delete_keyword = self.keyword_created + \
+                                      "//following::a[@class='btn btn-danger delete-item-confirm'][1]"
+        self.confirm_delete_structured_keyword = self.structured_keyword_created + \
+                                                 "//following::a[@class='btn btn-danger delete-item-confirm'][1]"
         # Chat
         self.chat = "Chat"
         self.contact_table = "contact_list"
@@ -163,11 +166,9 @@ class MessagingPage:
         print("Conditional Alert downloaded successfully!")
 
     def cond_alert_upload(self):
-        path = Path(str(Path.home()) + '\\Downloads\\*.xlsx')
-        list_of_files = glob.glob(str(path))
-        latest_file = max(list_of_files, key=os.path.getctime)
-        print(latest_file)
-        self.driver.find_element(By.XPATH, self.choose_file).send_keys(latest_file)
+        newest_file = latest_download_file()
+        file_that_was_downloaded = UserInputsData.download_path / newest_file
+        self.driver.find_element(By.XPATH, self.choose_file).send_keys(str(file_that_was_downloaded))
         self.wait_to_click(By.XPATH, self.upload)
         assert True == self.driver.find_element(By.XPATH, self.upload_success_message).is_displayed()
         print("Conditional Alert uploaded successfully!")
@@ -210,7 +211,8 @@ class MessagingPage:
     #     time.sleep(2)
     #     self.driver.find_element(By.XPATH, "//select[@name='hq_api_id']").click()
     #     time.sleep(2)
-    #     self.driver.find_element(By.XPATH, "//select[@name='hq_api_id']/option[text()='Airtel (through TCL)']").click()
+    #     self.driver.find_element(By.XPATH, "//select[@name='hq_api_id']/option[text(
+    #     )='Airtel (through TCL)']").click()
     #     self.driver.find_element(By.XPATH, self.add_gateway).click()
     #     self.driver.find_element(By.XPATH, self.gateway_name).send_keys("gateway_" + fetch_random_string())
     #     self.driver.find_element(By.XPATH, self.host_and_port).send_keys("gateway_" + fetch_random_string())
@@ -308,11 +310,9 @@ class MessagingPage:
         print("Msg Trans downloaded successfully!")
 
     def msg_trans_upload(self):
-        path = Path(str(Path.home()) + '\\Downloads\\*.xlsx')
-        list_of_files = glob.glob(str(path))
-        latest_file = max(list_of_files, key=os.path.getctime)
-        print(latest_file)
-        self.driver.find_element(By.XPATH, self.choose_file).send_keys(latest_file)
+        newest_file = latest_download_file()
+        file_that_was_downloaded = UserInputsData.download_path / newest_file
+        self.driver.find_element(By.XPATH, self.choose_file).send_keys(str(file_that_was_downloaded))
         self.wait_to_click(By.XPATH, self.upload)
         assert True == WebDriverWait(self.driver, 2).until(ec.presence_of_element_located((
             By.XPATH, self.upload_success_message))).is_displayed()

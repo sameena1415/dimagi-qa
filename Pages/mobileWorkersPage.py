@@ -157,6 +157,7 @@ class MobileWorkerPage:
         self.wait_to_click(By.ID, self.additional_info_dropdown)
         self.wait_to_click(By.XPATH, self.select_value_dropdown)
         assert self.driver.find_element_by_xpath(self.user_file_additional_info).is_displayed()
+        time.sleep(1)
 
     def update_information(self):
         self.wait_to_click(By.XPATH, self.update_info_button)
@@ -231,7 +232,7 @@ class MobileWorkerPage:
             assert False
         # verify_downloaded_workers
         newest_file = latest_download_file()
-        modTimesinceEpoc = os.path.getmtime(str(UserInputsData.download_path) + "\\" + newest_file)
+        modTimesinceEpoc = (UserInputsData.download_path / newest_file).stat().st_mtime
         modificationTime = datetime.datetime.fromtimestamp(modTimesinceEpoc)
         timeNow = datetime.datetime.now()
         diff_seconds = round((timeNow - modificationTime).total_seconds())
@@ -245,9 +246,9 @@ class MobileWorkerPage:
         self.mobile_worker_menu()
         self.driver.find_element(By.LINK_TEXT, self.bulk_upload_btn).click()
         newest_file = latest_download_file()
-        self.driver.find_element(By.ID, self.choose_file).send_keys(str(
-            UserInputsData.download_path) + "\\" + newest_file)
+        file_that_was_downloaded = UserInputsData.download_path / newest_file
+        self.driver.find_element(By.ID, self.choose_file).send_keys(str(file_that_was_downloaded))
         self.driver.find_element(By.XPATH, self.upload).click()
-        assert WebDriverWait(self.driver, 60).until(ec.presence_of_element_located((
+        assert WebDriverWait(self.driver, 90).until(ec.presence_of_element_located((
             By.XPATH, self.import_complete))).is_displayed()
         print("File uploaded successfully")
