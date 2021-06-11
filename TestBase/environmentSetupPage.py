@@ -29,9 +29,11 @@ class EnvironmentSetup(unittest.TestCase):
         driver_path = ChromeDriverManager().install()
         cls.driver = webdriver.Chrome(executable_path=driver_path, chrome_options=chrome_options)
         try:
+            cls.driver.implicitly_wait(2)
             cls.driver.get(settings["url"])
             login = LoginPage(cls.driver)
             login.enter_username(settings["login_username"])
+            login.click_continue()
             login.enter_password(settings["login_password"])
             login.click_submit()
             login.accept_alert()
