@@ -98,7 +98,7 @@ class OrganisationStructurePage:
             By.XPATH, self.location_created_xpath))).is_displayed()
 
     def edit_location(self):
-        self.wait_to_click(By.XPATH, self.edit_loc_button_xpath)
+        self.driver.find_element(By.XPATH, self.edit_loc_button_xpath).click()
         self.driver.find_element(By.ID, self.loc_name_input_id).clear()
         self.driver.find_element(By.ID, self.loc_name_input_id).send_keys("updated_on:" + str(date.today()))
         self.driver.find_element(By.XPATH, self.update_loc_xpath).click()
