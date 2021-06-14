@@ -147,8 +147,9 @@ class ExportDataPage:
 
     def form_exports(self):
         self.wait_to_click(By.XPATH, self.export_form_data_button)
-        self.wait_to_click(By.ID, self.date_range)
-        self.wait_to_click(By.XPATH, self.date_range_key)
+        # Date filter
+        # self.wait_to_click(By.ID, self.date_range)
+        # self.wait_to_click(By.XPATH, self.date_range_key)
         self.wait_to_click(By.XPATH, self.prepare_export_button)
         self.wait_to_click(By.XPATH, self.download_button)
         print("Download form button clicked")

@@ -1,6 +1,4 @@
-import os
 import time
-
 
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
@@ -30,7 +28,7 @@ class MessagingPage:
         self.broadcasts = "Broadcasts"
         self.add_broadcast = "//div[@class='btn-group']"
         self.broadcast_name = "//input[@name='schedule-schedule_name']"
-        self.recipients = "(//ul[@class='select2-selection__rendered'])[1]"
+        self.recipients = "(//span[@class='select2-selection select2-selection--multiple'])[1]"
         self.user_recipient = "(//span[@class='select2-selection select2-selection--multiple'])[2]"
         self.select_value_dropdown = "(//ul[@class='select2-results__options']/li)[2]"
         self.broadcast_message = "(//textarea[@data-bind='value: nonTranslatedMessage'])[2]"
@@ -46,8 +44,9 @@ class MessagingPage:
         self.continue_button_rule_tab = "//button[@data-bind='click: handleRuleNavContinue, enable: ruleTabValid']"
         self.cond_alert_created = "//a[text()='" + "cond_alert_" + fetch_random_string() + "']"
         self.select_recipient_type = "(//ul[@id='select2-id_schedule-recipient_types-results']/li)[1]"
-        self.save_id = "conditional-alert-save-btn"
-        self.delete_cond_alert = "//a[text()='" + "cond_alert_" + fetch_random_string() + "']//preceding::button[@class='btn btn-danger'][1]"
+        self.save_button_xpath = "//button[@type='submit'and text()='Save']"
+        self.delete_cond_alert = "//a[text()='" + "cond_alert_" + fetch_random_string() +\
+                                 "']//preceding::button[@class='btn btn-danger'][1]"
         # Condition Alerts : Download and Upload
         self.bulk_upload_button = "Bulk Upload SMS Alert Content"
         self.download_id = "download_link"
@@ -63,7 +62,7 @@ class MessagingPage:
         self.keyword_created = "//a[text()='" + "KEYWORD_" + fetch_random_string().upper() + "']"
         self.add_structured_keyword = "Add Structured Keyword"
         self.keyword_survey = "(//span[@class='select2-selection select2-selection--single'])[1]"
-        self.survey_option_select = "(//li[@class='select2-results__option'])[2]"
+        self.survey_option_select = "(//li[@class='select2-results__option select2-results__option--selectable'])[1]"
         self.structured_keyword_created = "//a[text()='" + "STRUCTURED_KEYWORD_" + fetch_random_string().upper() + "']"
         self.delete_keyword = self.keyword_created + "//following::a[@class='btn btn-danger'][1]"
         self.delete_structured_keyword = self.structured_keyword_created + "//following::a[@class='btn btn-danger'][1]"
@@ -95,8 +94,8 @@ class MessagingPage:
         self.languages = "Languages"
         self.add_lang = "//button[@data-bind='click: addLanguage, disable: addLanguageDisabled']"
         self.lang_input_textarea = "(//span[@role='combobox'])[last()]"
-        self.select_first_lang = "(//li[@role='treeitem'])[1]"
-        self.select_second_lang = "(//li[@role='treeitem'])[2]"
+        self.select_first_lang = "(//li[@role='option'])[1]"
+        self.select_second_lang = "(//li[@role='option'])[3]"
         self.save_lang = "(//div[@class='btn btn-primary'])[1]"
         self.delete_lang = "(//a[@data-bind='click: $root.removeLanguage'])[last()]"
         # Message Translation
@@ -121,7 +120,7 @@ class MessagingPage:
         self.driver.find_element(By.XPATH, self.recipients_textarea).send_keys("[send to all]")
         self.driver.find_element(By.XPATH, self.message_textarea).send_keys("sms_" + fetch_random_string())
         self.driver.find_element(By.XPATH, self.send_message).click()
-        assert True == WebDriverWait(self.driver, 2).until(ec.presence_of_element_located((
+        assert True == WebDriverWait(self.driver, 3).until(ec.presence_of_element_located((
             By.XPATH, self.message_sent_success_msg))).is_displayed()
         print("SMS composed successfully!")
 
@@ -129,7 +128,7 @@ class MessagingPage:
         self.wait_to_click(By.LINK_TEXT, self.broadcasts)
         self.wait_to_click(By.XPATH, self.add_broadcast)
         self.driver.find_element(By.XPATH, self.broadcast_name).send_keys("broadcast_" + fetch_random_string())
-        self.wait_to_click(By.XPATH, self.recipients)
+        self.driver.find_element(By.XPATH, self.recipients).click()
         self.wait_to_click(By.XPATH, self.select_recipient_type)
         self.wait_to_click(By.XPATH, self.user_recipient)
         self.wait_to_click(By.XPATH, self.select_value_dropdown)
@@ -153,7 +152,7 @@ class MessagingPage:
         self.wait_to_click(By.XPATH, self.select_recipient_type)
         WebDriverWait(self.driver, 2).until(ec.element_to_be_clickable((
             By.XPATH, self.broadcast_message))).send_keys("Test Alert:" + "cond_alert_" + fetch_random_string())
-        self.wait_to_click(By.ID, self.save_id)
+        self.wait_to_click(By.XPATH, self.save_button_xpath)
         assert True == WebDriverWait(self.driver, 3).until(ec.presence_of_element_located((
             By.XPATH, self.cond_alert_created))).is_displayed()
         print("Conditional Alert created successfully!")
@@ -245,10 +244,11 @@ class MessagingPage:
         self.wait_to_click(By.XPATH, self.lang_input_textarea)
         time.sleep(1)
         self.wait_to_click(By.XPATH, self.select_first_lang)
+        time.sleep(1)
         self.wait_to_click(By.XPATH, self.save_lang)
         self.wait_to_click(By.XPATH, self.lang_input_textarea)
-        time.sleep(1)
         self.wait_to_click(By.XPATH, self.select_second_lang)
+        time.sleep(1)
         self.wait_to_click(By.XPATH, self.save_lang)
         self.wait_to_click(By.XPATH, self.delete_lang)
         self.wait_to_click(By.XPATH, self.save_lang)
