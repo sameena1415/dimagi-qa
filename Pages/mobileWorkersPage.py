@@ -164,6 +164,7 @@ class MobileWorkerPage:
 
     def deactivate_user(self):
         self.search_user()
+        time.sleep(1)
         self.wait_to_click(By.XPATH, self.deactivate_buttons_list)
         self.wait_to_click(By.XPATH, self.confirm_deactivate_xpath_list)
         time.sleep(2)
@@ -184,6 +185,7 @@ class MobileWorkerPage:
         self.mobile_worker_menu()
         self.wait_to_click(By.XPATH, self.show_deactivated_users_btn)
         self.search_user()
+        time.sleep(1)
         self.wait_to_click(By.XPATH, self.reactivate_buttons_list)
         self.wait_to_click(By.XPATH, self.confirm_reactivate_xpath_list)
         time.sleep(3)
