@@ -2,7 +2,6 @@ import os
 import time
 import datetime
 from selenium.common.exceptions import TimeoutException
-from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as ec
@@ -43,7 +42,7 @@ class OrganisationStructurePage:
         self.edit_loc_button_xpath = self.edit_this_loc + \
                                      "//preceding::a[@data-bind='attr: { href: loc_edit_url(uuid()) }'][1] "
         self.loc_name_input_id = "id_name"
-        self.update_loc_xpath = "//*[@id='users']//preceding::button"
+        self.update_loc_xpath = "(//button[@type='submit'])[1]"
         self.location_created_xpath = "//span[text()='" + self.new_location_name + "']"
         self.renamed_location = "//span[text()='updated_on:" + str(date.today()) + "']"
         self.edit_loc_field_btn_xpath = "//a[@data-action='Edit Location Fields']"
@@ -58,7 +57,6 @@ class OrganisationStructurePage:
         self.additional_info_drop_down = "//*[@id='select2-id_data-field-" + "location_field_" + str(
             fetch_random_string()) + "-container']"
         self.select_value_drop_down = "//li[text()='" + "location_field_" + str(fetch_random_string()) + "']"
-        self.update_loc_btn_xpath = "//*[@id='new_user']//preceding::button[2]"
         self.duplicate_msg_xpath = "//div[@class='alert alert-danger']"
         self.org_level_menu_link_text = "Organization Levels"
         self.new_org_level_btn_xpath = "//button[@data-bind='click: new_loctype']"
@@ -78,7 +76,7 @@ class OrganisationStructurePage:
         self.delete_loc_field = "(//a[@class='btn btn-danger'])[last()]"
         self.delete_org_level = "(//button[@class='btn btn-danger'])[last()]"
 
-    def wait_to_click(self, *locator, timeout=5):
+    def wait_to_click(self, *locator, timeout=7):
         clickable = ec.element_to_be_clickable(locator)
         WebDriverWait(self.driver, timeout).until(clickable).click()
 
@@ -92,7 +90,7 @@ class OrganisationStructurePage:
         self.driver.find_element(By.XPATH, self.loc_name_xpath).clear()
         self.driver.find_element(By.XPATH, self.loc_name_xpath).send_keys(self.new_location_name)
         self.driver.find_element(By.XPATH, self.create_loc_xpath).click()
-        assert WebDriverWait(self.driver, 3).until(ec.presence_of_element_located((
+        assert WebDriverWait(self.driver, 5).until(ec.presence_of_element_located((
             By.XPATH, self.loc_saved_success_msg))).is_displayed()
         self.wait_to_click(By.LINK_TEXT, self.org_menu_link_text)
         self.driver.refresh()
@@ -104,7 +102,7 @@ class OrganisationStructurePage:
         self.driver.find_element(By.ID, self.loc_name_input_id).clear()
         self.driver.find_element(By.ID, self.loc_name_input_id).send_keys("updated_on:" + str(date.today()))
         self.driver.find_element(By.XPATH, self.update_loc_xpath).click()
-        assert WebDriverWait(self.driver, 3).until(ec.visibility_of_element_located((
+        assert WebDriverWait(self.driver, 5).until(ec.visibility_of_element_located((
             By.XPATH, self.loc_saved_success_msg))).is_displayed()
         self.driver.find_element(By.LINK_TEXT, self.org_menu_link_text).click()
         assert WebDriverWait(self.driver, 3).until(ec.visibility_of_element_located((
@@ -112,7 +110,7 @@ class OrganisationStructurePage:
 
     def edit_location_fields(self):
         self.driver.find_element(By.LINK_TEXT, self.org_menu_link_text).click()
-        self.driver.find_element(By.XPATH, self.edit_loc_field_btn_xpath).click()
+        self.wait_to_click(By.XPATH, self.edit_loc_field_btn_xpath)
         self.wait_to_click(By.XPATH, self.add_field_btn_xpath)
         self.driver.find_element(By.XPATH, self.loc_property_xpath).clear()
         self.driver.find_element(By.XPATH, self.loc_property_xpath).send_keys("location_field_" + fetch_random_string())
@@ -130,7 +128,7 @@ class OrganisationStructurePage:
         self.wait_to_click(By.XPATH, self.edit_loc_button_xpath)
         self.wait_to_click(By.XPATH, self.additional_info_drop_down)
         self.driver.find_element(By.XPATH, self.select_value_drop_down).click()
-        self.driver.find_element(By.XPATH, self.update_loc_btn_xpath).click()
+        self.driver.find_element(By.XPATH, self.update_loc_xpath).click()
         assert WebDriverWait(self.driver, 2).until(ec.presence_of_element_located((
             By.XPATH, self.success_msg_xpath))).is_displayed()
 
