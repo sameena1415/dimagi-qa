@@ -1,5 +1,4 @@
 import datetime
-import os
 import time
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.by import By
@@ -68,10 +67,12 @@ class MobileWorkerPage:
         self.additional_info_dropdown = "select2-id_data-field-" + "user_field_" + fetch_random_string() + "-container"
         # self.additional_info_dropdown = "//select[@name = 'data-field-user_field_" + fetch_random_string() + "']"
         self.select_value_dropdown = "//select[@name = 'data-field-user_field_" \
-                                     + fetch_random_string() + "']/option[text()='user_field_" + fetch_random_string() + "']"
+                                     + fetch_random_string() + "']/option[text()='user_field_" + fetch_random_string() \
+                                     + "']"
         self.update_info_button = "//button[text()='Update Information']"
         self.user_file_additional_info = "//label[@for='id_data-field-" + "user_field_" + fetch_random_string() + "']"
-        self.deactivate_btn_xpath = "//td/a/strong[text()='" + self.username + "']/following::td[5]/div[@data-bind='visible: is_active()']/button"
+        self.deactivate_btn_xpath = "//td/a/strong[text()='" + self.username + \
+                                    "']/following::td[5]/div[@data-bind='visible: is_active()']/button"
         self.confirm_deactivate = "(//button[@class='btn btn-danger'])[1]"
         self.show_full_menu_id = "commcare-menu-toggle"
         self.view_all_link_text = "View All"
@@ -151,7 +152,7 @@ class MobileWorkerPage:
     def select_mobile_worker_created(self):
         self.wait_to_click(By.XPATH, self.mobile_worker_on_left_panel)
         self.search_user()
-        self.wait_to_click(By.LINK_TEXT, self.username)
+        self.driver.find_element(By.LINK_TEXT, self.username).click()
 
     def enter_value_for_created_user_field(self):
         self.wait_to_click(By.ID, self.additional_info_dropdown)
