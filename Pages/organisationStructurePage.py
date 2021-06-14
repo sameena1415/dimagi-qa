@@ -105,6 +105,7 @@ class OrganisationStructurePage:
         assert WebDriverWait(self.driver, 5).until(ec.visibility_of_element_located((
             By.XPATH, self.loc_saved_success_msg))).is_displayed()
         self.driver.find_element(By.LINK_TEXT, self.org_menu_link_text).click()
+        self.driver.refresh()
         assert WebDriverWait(self.driver, 3).until(ec.visibility_of_element_located((
             By.XPATH, self.renamed_location))).is_displayed()
 
