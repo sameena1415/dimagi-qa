@@ -27,7 +27,7 @@ class EnvironmentSetup(unittest.TestCase):
                 "download.directory_upgrade": True,
                 "safebrowsing.enabled": True})
         driver_path = ChromeDriverManager().install()
-        cls.driver = webdriver.Chrome(executable_path=driver_path, chrome_options=chrome_options)
+        cls.driver = webdriver.Chrome(executable_path=driver_path, options=chrome_options)
         try:
             cls.driver.implicitly_wait(2)
             cls.driver.get(settings["url"])

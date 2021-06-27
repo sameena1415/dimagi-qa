@@ -102,7 +102,7 @@ class OrganisationStructurePage:
             self.driver.find_element(By.XPATH, self.edit_loc_button_xpath).click()
         except StaleElementReferenceException:
             pass
-        self.driver.refresh()
+        time.sleep(2)
         self.driver.find_element(By.ID, self.loc_name_input_id).clear()
         self.driver.find_element(By.ID, self.loc_name_input_id).send_keys("updated_on:" + str(date.today()))
         self.driver.find_element(By.XPATH, self.update_loc_xpath).click()
@@ -137,6 +137,7 @@ class OrganisationStructurePage:
             self.driver.find_element(By.XPATH, self.edit_loc_button_xpath).click()
         except StaleElementReferenceException:
             pass
+        time.sleep(2)
         self.driver.find_element(By.XPATH, self.additional_info_drop_down).click()
         self.driver.find_element(By.XPATH, self.select_value_drop_down).click()
         self.driver.find_element(By.XPATH, self.update_loc_xpath).click()
@@ -194,7 +195,7 @@ class OrganisationStructurePage:
             self.wait_to_click(By.XPATH, self.delete_location_created)
         except StaleElementReferenceException:
             pass
-        time.sleep(2)
+        time.sleep(3)
         self.driver.find_element(By.XPATH, self.delete_confirm).send_keys("1")
         self.driver.find_element(By.XPATH, self.delete_confirm_button).click()
         # Delete Org Level
