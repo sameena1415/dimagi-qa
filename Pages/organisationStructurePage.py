@@ -194,7 +194,8 @@ class OrganisationStructurePage:
         except StaleElementReferenceException:
             pass
         time.sleep(1)
-        self.driver.find_element(By.XPATH, self.delete_confirm).send_keys("1")
+        WebDriverWait(self.driver, 3).until(ec.visibility_of_element_located((
+            By.XPATH, self.delete_confirm))).send_keys("1")
         self.driver.find_element(By.XPATH, self.delete_confirm_button).click()
         # Delete Org Level
         org_level_menu = self.driver.find_element(By.LINK_TEXT, self.org_level_menu_link_text)
