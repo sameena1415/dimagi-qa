@@ -1,7 +1,7 @@
 import os
 import time
 import datetime
-from selenium.common.exceptions import TimeoutException, StaleElementReferenceException
+from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as ec
@@ -107,11 +107,8 @@ class OrganisationStructurePage:
             By.XPATH, self.loc_saved_success_msg))).is_displayed()
         self.driver.find_element(By.LINK_TEXT, self.org_menu_link_text).click()
         self.driver.refresh()
-        try:
-            assert WebDriverWait(self.driver, 3).until(ec.visibility_of_element_located((
+        assert WebDriverWait(self.driver, 5).until(ec.visibility_of_element_located((
              By.XPATH, self.renamed_location))).is_displayed()
-        except StaleElementReferenceException:
-            pass
 
     def edit_location_fields(self):
         self.driver.find_element(By.LINK_TEXT, self.org_menu_link_text).click()
