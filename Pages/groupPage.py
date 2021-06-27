@@ -1,5 +1,5 @@
 import time
-from selenium.common.exceptions import UnexpectedAlertPresentException
+from selenium.common.exceptions import UnexpectedAlertPresentException, TimeoutException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as ec
@@ -54,6 +54,14 @@ class GroupPage:
 
     def edit_existing_group(self):
         self.wait_to_click(By.LINK_TEXT, self.created_group)
+        try:
+            WebDriverWait(self.driver, 3).until(ec.alert_is_present(), 'Waiting for popup to appear.')
+
+            alert = self.driver.switch_to.alert
+            alert.accept()
+            print("alert accepted")
+        except TimeoutException:
+            print("no alert")
         self.wait_to_click(By.LINK_TEXT, self.edit_settings_link_text)
         WebDriverWait(self.driver, 3).until(ec.element_to_be_clickable((
             By.ID, self.group_name_input_id))).clear()

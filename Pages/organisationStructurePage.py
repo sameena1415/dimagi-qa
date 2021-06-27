@@ -1,7 +1,7 @@
 import os
 import time
 import datetime
-from selenium.common.exceptions import TimeoutException
+from selenium.common.exceptions import TimeoutException, StaleElementReferenceException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as ec
@@ -98,8 +98,10 @@ class OrganisationStructurePage:
             By.XPATH, self.location_created_xpath))).is_displayed()
 
     def edit_location(self):
-        self.driver.refresh()
-        self.driver.find_element(By.XPATH, self.edit_loc_button_xpath).click()
+        try:
+            self.driver.find_element(By.XPATH, self.edit_loc_button_xpath).click()
+        except StaleElementReferenceException:
+            pass
         self.driver.find_element(By.ID, self.loc_name_input_id).clear()
         self.driver.find_element(By.ID, self.loc_name_input_id).send_keys("updated_on:" + str(date.today()))
         self.driver.find_element(By.XPATH, self.update_loc_xpath).click()
