@@ -1,11 +1,6 @@
 import os
 import datetime
-import matplotlib as matpl
-if os.environ.get('DISPLAY', '') == '':
-    print('Currently no display found. Using the non-interactive Agg backend')
-    matpl.use('Agg')
 import time
-from tkinter import Tk
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -81,6 +76,7 @@ class ExportDataPage:
         self.update_data = "//button[@data-toggle='modal'][1]"
         self.update_data_conf = "//button[@data-bind='click: emailedExport.updateData']"
         self.copy_dashfeed_link = "//a[@class='btn btn-default btn-sm']"
+        self.dashboard_feed_link = "//span[@class='input-group-btn']//preceding::a[@class='btn btn-info btn-xs']"
 
         # Excel Dashboard Integrations, case
         self.select_case_model = '//*[@id="id_model_type"]/option[2]'
@@ -288,9 +284,8 @@ class ExportDataPage:
         time.sleep(1)
         self.driver.refresh()
         self.wait_to_click(By.XPATH, self.copy_dashfeed_link)
-        print("Dashboard link copied on the clipboard!!")
-        dashboard_feed_link = Tk().clipboard_get()
-        print(dashboard_feed_link)
+        dashboard_feed_link = self.driver.find_element(By.XPATH, self.dashboard_feed_link).get_attribute("href")
+        print("Feed Link: "+dashboard_feed_link)
         self.driver.execute_script("window.open('');")  # Open a new tab
         self.switch_to_next_tab()
         self.driver.get(dashboard_feed_link)
@@ -324,7 +319,7 @@ class ExportDataPage:
         time.sleep(1)
         self.driver.refresh()
         self.wait_to_click(By.XPATH, self.copy_dashfeed_link)
-        dashboard_feed_link = Tk().clipboard_get()
+        dashboard_feed_link = self.driver.find_element(By.XPATH, self.dashboard_feed_link).get_attribute("href")
         print(dashboard_feed_link)
         self.driver.execute_script("window.open('');")  # Open a new tab
         self.switch_to_next_tab()
@@ -357,7 +352,7 @@ class ExportDataPage:
         print("Odata Form Feed created!!")
         self.driver.refresh()
         self.wait_to_click(By.XPATH, self.copy_odatafeed_link)
-        odata_feed_link = Tk().clipboard_get()
+        odata_feed_link = self.driver.find_element(By.XPATH, self.dashboard_feed_link).get_attribute("href")
         print(odata_feed_link)
         self.driver.execute_script("window.open('');")
         self.switch_to_next_tab()
@@ -400,7 +395,7 @@ class ExportDataPage:
         print("Odata Case Feed created!!")
         self.driver.refresh()
         self.wait_to_click(By.XPATH, self.copy_odatafeed_link)
-        odata_feed_link = Tk().clipboard_get()
+        odata_feed_link = self.driver.find_element(By.XPATH, self.dashboard_feed_link).get_attribute("href")
         print(odata_feed_link)
         self.driver.execute_script("window.open('');")  # Open a new tab
         self.switch_to_next_tab()
