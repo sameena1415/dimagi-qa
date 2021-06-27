@@ -1,8 +1,7 @@
 import os
-import matplotlib as mpl
-if os.environ.get("CI") == "true":
-    print('no display found. Using non-interactive Agg backend')
-    mpl.use('Agg')
+if os.environ.get('DISPLAY','') == '':
+    print('no display found. Using :0.0')
+    os.environ.__setitem__('DISPLAY', ':0.0')
 import datetime
 import time
 from selenium.webdriver.common.by import By
