@@ -1,4 +1,8 @@
 import os
+import matplotlib as mpl
+if os.environ.get("CI") == "true":
+    print('no display found. Using non-interactive Agg backend')
+    mpl.use('Agg')
 import datetime
 import time
 from selenium.webdriver.common.by import By
@@ -7,7 +11,6 @@ from selenium.webdriver.support import expected_conditions as EC
 from UserInputs.userInputsData import UserInputsData
 import pandas as pd
 from TestBase.environmentSetupPage import load_settings
-from selenium.webdriver.common.keys import Keys
 from tkinter import *
 
 
