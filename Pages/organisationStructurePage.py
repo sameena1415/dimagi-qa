@@ -98,10 +98,7 @@ class OrganisationStructurePage:
             By.XPATH, self.location_created_xpath))).is_displayed()
 
     def edit_location(self):
-        try:
-            self.driver.find_element(By.XPATH, self.edit_loc_button_xpath).click()
-        except StaleElementReferenceException:
-            pass
+        self.driver.find_element(By.XPATH, self.edit_loc_button_xpath).click()
         time.sleep(2)
         self.driver.find_element(By.ID, self.loc_name_input_id).clear()
         self.driver.find_element(By.ID, self.loc_name_input_id).send_keys("updated_on:" + str(date.today()))
@@ -133,10 +130,7 @@ class OrganisationStructurePage:
 
     def selection_location_field_for_location_created(self):
         self.driver.find_element(By.LINK_TEXT, self.org_menu_link_text).click()
-        try:
-            self.driver.find_element(By.XPATH, self.edit_loc_button_xpath).click()
-        except StaleElementReferenceException:
-            pass
+        self.driver.find_element(By.XPATH, self.edit_loc_button_xpath).click()
         time.sleep(2)
         self.driver.find_element(By.XPATH, self.additional_info_drop_down).click()
         self.driver.find_element(By.XPATH, self.select_value_drop_down).click()
@@ -191,10 +185,7 @@ class OrganisationStructurePage:
         self.wait_to_click(By.ID, self.save_btn_id)
         # Delete Location
         self.wait_to_click(By.LINK_TEXT, self.org_menu_link_text)
-        try:
-            self.wait_to_click(By.XPATH, self.delete_location_created)
-        except StaleElementReferenceException:
-            pass
+        self.wait_to_click(By.XPATH, self.delete_location_created)
         time.sleep(3)
         self.driver.find_element(By.XPATH, self.delete_confirm).send_keys("1")
         self.driver.find_element(By.XPATH, self.delete_confirm_button).click()
