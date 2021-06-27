@@ -8,7 +8,7 @@ from UserInputs.userInputsData import UserInputsData
 import pandas as pd
 from TestBase.environmentSetupPage import load_settings
 from selenium.webdriver.common.keys import Keys
-import win32clipboard
+from tkinter import *
 
 
 def latest_download_file():
@@ -122,13 +122,15 @@ class ExportDataPage:
         self.driver.switch_to.window(window_before)
 
     def copy_clipboard_paste_browser(self):
-        odata_feed_link_element = self.driver.find_element(By.XPATH,
-                                                           "(//input[@class='form-control input-sm' and @type ='text'])[1]")
-        odata_feed_link_element.send_keys(Keys.CONTROL, 'a')  # highlight all in box
-        odata_feed_link_element.send_keys(Keys.CONTROL, 'c')  # copy
-        win32clipboard.OpenClipboard()
-        odata_feed_link = win32clipboard.GetClipboardData()  # paste
-        win32clipboard.CloseClipboard()
+        win = Tk()
+        win.withdraw()
+        odata_feed_link = win.clipboard_get()
+        #odata_feed_link_element = self.driver.find_element(By.XPATH,"(//input[@class='form-control input-sm' and @type ='text'])[1]")
+        # odata_feed_link_element.send_keys(Keys.CONTROL, 'a')  # highlight all in box
+        # odata_feed_link_element.send_keys(Keys.CONTROL, 'c')  # copy
+        # win32clipboard.OpenClipboard()
+        # odata_feed_link = win32clipboard.GetClipboardData()  # paste
+        # win32clipboard.CloseClipboard()
         print(odata_feed_link)
         self.driver.execute_script("window.open('');")  # Open a new tab
         self.switch_to_next_tab()
@@ -303,6 +305,7 @@ class ExportDataPage:
         self.wait_to_click(By.XPATH, self.update_data_conf)
         time.sleep(1)
         self.driver.refresh()
+        time.sleep(1)
         self.wait_to_click(By.XPATH, self.copy_dashfeed_link)
         dashboard_feed_link = self.driver.find_element(By.XPATH, self.dashboard_feed_link).get_attribute("href")
         print("Feed Link: "+dashboard_feed_link)
