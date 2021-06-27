@@ -83,7 +83,7 @@ class MobileWorkerPage:
         self.download_worker_btn = "Download Mobile Workers"
         self.download_users_btn = "Download Users"
         self.bulk_upload_btn = "Bulk Upload"
-        self.choose_file = "id_bulk_upload_file"
+        self.choose_file = "//input[@id='id_bulk_upload_file']"
         self.upload = "//button[@class='btn btn-primary disable-on-submit']"
         self.import_complete = "//legend[text()='Bulk upload complete.']"
 
@@ -251,7 +251,7 @@ class MobileWorkerPage:
         self.driver.find_element(By.LINK_TEXT, self.bulk_upload_btn).click()
         newest_file = latest_download_file()
         file_that_was_downloaded = UserInputsData.download_path / newest_file
-        self.driver.find_element(By.ID, self.choose_file).send_keys(str(file_that_was_downloaded))
+        self.driver.find_element(By.XPATH, self.choose_file).send_keys(str(file_that_was_downloaded))
         self.driver.find_element(By.XPATH, self.upload).click()
         assert WebDriverWait(self.driver, 90).until(ec.presence_of_element_located((
             By.XPATH, self.import_complete))).is_displayed()

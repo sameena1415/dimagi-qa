@@ -102,6 +102,7 @@ class OrganisationStructurePage:
             self.driver.find_element(By.XPATH, self.edit_loc_button_xpath).click()
         except StaleElementReferenceException:
             pass
+        self.driver.refresh()
         self.driver.find_element(By.ID, self.loc_name_input_id).clear()
         self.driver.find_element(By.ID, self.loc_name_input_id).send_keys("updated_on:" + str(date.today()))
         self.driver.find_element(By.XPATH, self.update_loc_xpath).click()
@@ -176,7 +177,7 @@ class OrganisationStructurePage:
         file_that_was_downloaded = UserInputsData.download_path / newest_file
         self.driver.find_element(By.ID, "id_bulk_upload_file").send_keys(str(file_that_was_downloaded))
         self.wait_to_click(By.XPATH, self.upload)
-        assert WebDriverWait(self.driver, 10).until(ec.presence_of_element_located((
+        assert WebDriverWait(self.driver, 15).until(ec.presence_of_element_located((
             By.XPATH, self.import_complete))).is_displayed()
         print("File uploaded successfully")
 
@@ -193,9 +194,8 @@ class OrganisationStructurePage:
             self.wait_to_click(By.XPATH, self.delete_location_created)
         except StaleElementReferenceException:
             pass
-        time.sleep(1)
-        WebDriverWait(self.driver, 3).until(ec.visibility_of_element_located((
-            By.XPATH, self.delete_confirm))).send_keys("1")
+        time.sleep(2)
+        self.driver.find_element(By.XPATH, self.delete_confirm).send_keys("1")
         self.driver.find_element(By.XPATH, self.delete_confirm_button).click()
         # Delete Org Level
         org_level_menu = self.driver.find_element(By.LINK_TEXT, self.org_level_menu_link_text)

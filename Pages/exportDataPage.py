@@ -307,7 +307,7 @@ class ExportDataPage:
         self.wait_to_click(By.XPATH, self.update_data_conf)
         time.sleep(1)
         self.driver.refresh()
-        time.sleep(1)
+        time.sleep(2)
         self.wait_to_click(By.XPATH, self.copy_dashfeed_link)
         dashboard_feed_link = self.driver.find_element(By.XPATH, self.dashboard_feed_link).get_attribute("href")
         print("Feed Link: "+dashboard_feed_link)
