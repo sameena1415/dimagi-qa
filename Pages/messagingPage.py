@@ -246,6 +246,7 @@ class MessagingPage:
         self.wait_to_click(By.XPATH, self.select_first_lang)
         time.sleep(1)
         self.wait_to_click(By.XPATH, self.save_lang)
+        time.sleep(1)
         self.wait_to_click(By.XPATH, self.lang_input_textarea)
         self.wait_to_click(By.XPATH, self.select_second_lang)
         time.sleep(1)
