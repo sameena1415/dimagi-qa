@@ -7,6 +7,8 @@ from selenium.webdriver.support import expected_conditions as EC
 from UserInputs.userInputsData import UserInputsData
 import pandas as pd
 from TestBase.environmentSetupPage import load_settings
+from selenium.webdriver.common.keys import Keys
+import win32clipboard
 
 
 def latest_download_file():
@@ -119,12 +121,30 @@ class ExportDataPage:
         window_before = winHandles[0]
         self.driver.switch_to.window(window_before)
 
+    def copy_clipboard_paste_browser(self):
+        odata_feed_link_element = self.driver.find_element(By.XPATH,
+                                                           "(//input[@class='form-control input-sm' and @type ='text'])[1]")
+        odata_feed_link_element.send_keys(Keys.CONTROL, 'a')  # highlight all in box
+        odata_feed_link_element.send_keys(Keys.CONTROL, 'c')  # copy
+        win32clipboard.OpenClipboard()
+        odata_feed_link = win32clipboard.GetClipboardData()  # paste
+        win32clipboard.CloseClipboard()
+        print(odata_feed_link)
+        self.driver.execute_script("window.open('');")  # Open a new tab
+        self.switch_to_next_tab()
+        username = load_settings()["login_username"]
+        password = load_settings()["login_password"]
+        final_URL = f"https://{username}:{password}@{odata_feed_link[8:]}"
+        self.driver.get(final_URL)
+
     def data_tab(self):
         self.wait_to_click(By.XPATH, self.data_dropdown)
         self.wait_to_click(By.XPATH, self.view_all_link)
 
     def deletion(self):
+        time.sleep(1)
         self.wait_to_click(By.XPATH, self.delete_button)
+        time.sleep(1)
         self.wait_to_click(By.XPATH, self.delete_confirmation_button)
         print("Delete Confirmation Button clicked")
 
@@ -167,7 +187,7 @@ class ExportDataPage:
         self.wait_to_click(By.XPATH, self.view_FormID)
         self.switch_to_next_tab()
         time.sleep(3)
-        womanName_HQ = WebDriverWait(self.driver, 3).until(EC.presence_of_element_located((
+        womanName_HQ = WebDriverWait(self.driver, 7).until(EC.visibility_of_element_located((
             By.XPATH, self.womanName_HQ))).text
         assert woman_name_excel == womanName_HQ
         print("Downloaded file has the required data!")
@@ -209,7 +229,7 @@ class ExportDataPage:
         self.wait_to_click(By.XPATH, self.view_caseID)
         time.sleep(3)
         self.switch_to_next_tab()
-        womanName_HQ = WebDriverWait(self.driver, 3).until(EC.presence_of_element_located((
+        womanName_HQ = WebDriverWait(self.driver, 5).until(EC.presence_of_element_located((
             By.XPATH, self.woman_case_name_HQ))).text
         assert woman_name_excel == womanName_HQ
         print("Downloaded file has the required data!")
@@ -352,17 +372,8 @@ class ExportDataPage:
         print("Odata Form Feed created!!")
         self.driver.refresh()
         self.wait_to_click(By.XPATH, self.copy_odatafeed_link)
-        odata_feed_link = self.driver.find_element(By.XPATH, self.dashboard_feed_link).get_attribute("href")
-        print(odata_feed_link)
-        self.driver.execute_script("window.open('');")
-        self.switch_to_next_tab()
-        # string manipulation for bypassing the authentication
-        username = load_settings()["login_username"]
-        password = load_settings()["login_password"]
-        final_URL = f"https://{username}:{password}@{odata_feed_link[8:]}"
-        self.driver.get(final_URL)
+        self.copy_clipboard_paste_browser()
         odata_feed_data = self.driver.page_source
-        print(odata_feed_data)
         assert odata_feed_data != ""
         print("Odata form feed has data")
         self.driver.close()
@@ -395,14 +406,7 @@ class ExportDataPage:
         print("Odata Case Feed created!!")
         self.driver.refresh()
         self.wait_to_click(By.XPATH, self.copy_odatafeed_link)
-        odata_feed_link = self.driver.find_element(By.XPATH, self.dashboard_feed_link).get_attribute("href")
-        print(odata_feed_link)
-        self.driver.execute_script("window.open('');")  # Open a new tab
-        self.switch_to_next_tab()
-        username = load_settings()["login_username"]
-        password = load_settings()["login_password"]
-        final_URL = f"https://{username}:{password}@{odata_feed_link[8:]}"
-        self.driver.get(final_URL)
+        self.copy_clipboard_paste_browser()
         odata_feed_data = self.driver.page_source
         print(odata_feed_data)
         assert odata_feed_data != ""  # This condition can be improvised
@@ -441,7 +445,6 @@ class ExportDataPage:
         self.wait_to_click(By.XPATH, self.view_form_link)
         self.switch_to_next_tab()
         normal_form_data = self.driver.page_source
-        print(normal_form_data)
         assert normal_form_data != "" # This condition can be improvised
         print("archived_form has data")
         self.driver.close()
