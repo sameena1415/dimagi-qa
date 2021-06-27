@@ -38,6 +38,5 @@ jobs:
         DIMAGIQA_LOGIN_USERNAME: ${{ secrets.DIMAGIQA_LOGIN_USERNAME }}
         DIMAGIQA_LOGIN_PASSWORD: ${{ secrets.DIMAGIQA_LOGIN_PASSWORD }}
       run: |
-        export DISPLAY=0.0
-        xhost +
+        export DISPLAY=mymachine.com:0.0
         pytest -v
