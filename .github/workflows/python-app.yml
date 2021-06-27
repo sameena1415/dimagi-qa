@@ -26,6 +26,7 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requires.txt
+        export DISPLAY=mymachine.com:0.0
     - name: Lint with flake8
       run: |
         # stop the build if there are Python syntax errors or undefined names
@@ -38,5 +39,4 @@ jobs:
         DIMAGIQA_LOGIN_USERNAME: ${{ secrets.DIMAGIQA_LOGIN_USERNAME }}
         DIMAGIQA_LOGIN_PASSWORD: ${{ secrets.DIMAGIQA_LOGIN_PASSWORD }}
       run: |
-        ssh -X remoteMachine
         pytest -v
