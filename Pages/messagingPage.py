@@ -95,7 +95,7 @@ class MessagingPage:
         self.add_lang = "//button[@data-bind='click: addLanguage, disable: addLanguageDisabled']"
         self.lang_input_textarea = "(//span[@role='combobox'])[last()]"
         self.select_first_lang = "(//li[@role='option'])[1]"
-        self.select_second_lang = "(//li[@role='option'])[3]"
+        self.select_second_lang = "(//li[@role='option'])[2]"
         self.save_lang = "(//div[@class='btn btn-primary'])[1]"
         self.delete_lang = "(//a[@data-bind='click: $root.removeLanguage'])[last()]"
         # Message Translation
@@ -244,17 +244,14 @@ class MessagingPage:
         self.wait_to_click(By.XPATH, self.lang_input_textarea)
         time.sleep(1)
         self.wait_to_click(By.XPATH, self.select_first_lang)
-        time.sleep(1)
         self.wait_to_click(By.XPATH, self.save_lang)
-        time.sleep(1)
         self.wait_to_click(By.XPATH, self.lang_input_textarea)
-        self.wait_to_click(By.XPATH, self.select_second_lang)
         time.sleep(1)
+        self.wait_to_click(By.XPATH, self.select_second_lang)
         self.wait_to_click(By.XPATH, self.save_lang)
         self.wait_to_click(By.XPATH, self.delete_lang)
         self.wait_to_click(By.XPATH, self.save_lang)
-        time.sleep(1)
-        print("Language added and deleted successfully!")
+        print("Languages added and deleted successfully!")
 
     def remove_keyword(self):
         self.wait_to_click(By.LINK_TEXT, self.keywords)
