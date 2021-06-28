@@ -251,6 +251,7 @@ class MobileWorkerPage:
         self.driver.find_element(By.LINK_TEXT, self.bulk_upload_btn).click()
         newest_file = latest_download_file()
         file_that_was_downloaded = UserInputsData.download_path / newest_file
+        time.sleep(2)
         self.driver.find_element(By.XPATH, self.choose_file).send_keys(str(file_that_was_downloaded))
         self.driver.find_element(By.XPATH, self.upload).click()
         assert WebDriverWait(self.driver, 90).until(ec.presence_of_element_located((
