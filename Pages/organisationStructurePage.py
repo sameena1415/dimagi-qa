@@ -76,7 +76,7 @@ class OrganisationStructurePage:
         self.delete_loc_field = "(//a[@class='btn btn-danger'])[last()]"
         self.delete_org_level = "(//button[@class='btn btn-danger'])[last()]"
 
-    def wait_to_click(self, *locator, timeout=7):
+    def wait_to_click(self, *locator, timeout=10):
         clickable = ec.element_to_be_clickable(locator)
         WebDriverWait(self.driver, timeout).until(clickable).click()
 
