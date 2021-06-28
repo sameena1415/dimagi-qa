@@ -107,7 +107,7 @@ class MessagingPage:
         self.project_settings_menu = "Project Settings"
         self.project_settings_elements = "//form[@class='form form-horizontal']"
 
-    def wait_to_click(self, *locator, timeout=3):
+    def wait_to_click(self, *locator, timeout=10):
         clickable = ec.element_to_be_clickable(locator)
         WebDriverWait(self.driver, timeout).until(clickable).click()
 
