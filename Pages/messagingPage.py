@@ -285,9 +285,7 @@ class MessagingPage:
 
     def remove_cond_alert(self):
         self.wait_to_click(By.LINK_TEXT, self.cond_alerts)
-        WebDriverWait(self.driver, 10).until(ec.presence_of_element_located((
-            By.XPATH, self.delete_cond_alert))).click()
-        time.sleep(1)
+        self.wait_to_click(By.XPATH, self.delete_cond_alert)
         obj = self.driver.switch_to.alert
         obj.accept()
         self.driver.refresh()
