@@ -1,7 +1,7 @@
 import os
 import time
 import datetime
-from selenium.common.exceptions import TimeoutException
+from selenium.common.exceptions import TimeoutException, StaleElementReferenceException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as ec
@@ -40,7 +40,7 @@ class OrganisationStructurePage:
         self.new_location_name = "location_" + fetch_random_string()
         self.edit_this_loc = "(//span[contains(text(),'updated_on:')])[1]"
         self.edit_loc_button_xpath = self.edit_this_loc + \
-                                     "//preceding::a[@data-bind='attr: { href: loc_edit_url(uuid()) }'][1] "
+                                     "//preceding::a[@data-bind='attr: { href: loc_edit_url(uuid()) }'][1]"
         self.loc_name_input_id = "id_name"
         self.update_loc_xpath = "(//button[@type='submit'])[1]"
         self.location_created_xpath = "//span[text()='" + self.new_location_name + "']"
@@ -98,17 +98,20 @@ class OrganisationStructurePage:
             By.XPATH, self.location_created_xpath))).is_displayed()
 
     def edit_location(self):
-        self.wait_to_click(By.LINK_TEXT, self.org_menu_link_text)
-        self.driver.find_element(By.XPATH, self.edit_loc_button_xpath).click()
-        self.driver.find_element(By.ID, self.loc_name_input_id).clear()
-        self.driver.find_element(By.ID, self.loc_name_input_id).send_keys("updated_on:" + str(date.today()))
-        self.driver.find_element(By.XPATH, self.update_loc_xpath).click()
-        assert WebDriverWait(self.driver, 5).until(ec.visibility_of_element_located((
-            By.XPATH, self.loc_saved_success_msg))).is_displayed()
-        self.driver.find_element(By.LINK_TEXT, self.org_menu_link_text).click()
-        self.driver.refresh()
-        assert WebDriverWait(self.driver, 5).until(ec.visibility_of_element_located((
-             By.XPATH, self.renamed_location))).is_displayed()
+        try:
+            self.wait_to_click(By.LINK_TEXT, self.org_menu_link_text)
+            self.driver.find_element(By.XPATH, self.edit_loc_button_xpath).click()
+            self.driver.find_element(By.ID, self.loc_name_input_id).clear()
+            self.driver.find_element(By.ID, self.loc_name_input_id).send_keys("updated_on:" + str(date.today()))
+            self.driver.find_element(By.XPATH, self.update_loc_xpath).click()
+            assert WebDriverWait(self.driver, 5).until(ec.visibility_of_element_located((
+                By.XPATH, self.loc_saved_success_msg))).is_displayed()
+            self.driver.find_element(By.LINK_TEXT, self.org_menu_link_text).click()
+            self.driver.refresh()
+            assert WebDriverWait(self.driver, 5).until(ec.visibility_of_element_located((
+                 By.XPATH, self.renamed_location))).is_displayed()
+        except StaleElementReferenceException:
+            print(StaleElementReferenceException)
 
     def edit_location_fields(self):
         self.driver.find_element(By.LINK_TEXT, self.org_menu_link_text).click()
@@ -181,11 +184,14 @@ class OrganisationStructurePage:
         self.wait_to_click(By.XPATH, self.delete_org_level)
         self.wait_to_click(By.ID, self.save_btn_id)
         # Delete Location
-        self.wait_to_click(By.LINK_TEXT, self.org_menu_link_text)
-        self.driver.refresh()
-        self.wait_to_click(By.XPATH, self.delete_location_created)
-        self.driver.find_element(By.XPATH, self.delete_confirm).send_keys("1")
-        self.driver.find_element(By.XPATH, self.delete_confirm_button).click()
+        try:
+            self.wait_to_click(By.LINK_TEXT, self.org_menu_link_text)
+            self.driver.refresh()
+            self.wait_to_click(By.XPATH, self.delete_location_created)
+            self.driver.find_element(By.XPATH, self.delete_confirm).send_keys("1")
+            self.driver.find_element(By.XPATH, self.delete_confirm_button).click()
+        except StaleElementReferenceException:
+            print(StaleElementReferenceException)
         # Delete Org Level
         org_level_menu = self.driver.find_element(By.LINK_TEXT, self.org_level_menu_link_text)
         self.driver.execute_script("arguments[0].click();", org_level_menu)

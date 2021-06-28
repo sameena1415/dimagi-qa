@@ -151,9 +151,9 @@ class MobileWorkerPage:
 
     def select_mobile_worker_created(self):
         self.wait_to_click(By.XPATH, self.mobile_worker_on_left_panel)
-        self.search_user()
         time.sleep(1)
-        self.driver.find_element(By.LINK_TEXT, self.username).click()
+        self.search_user()
+        self.wait_to_click(By.LINK_TEXT, self.username)
 
     def enter_value_for_created_user_field(self):
         self.wait_to_click(By.ID, self.additional_info_dropdown)
