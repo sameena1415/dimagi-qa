@@ -276,7 +276,7 @@ class ExportDataPage:
         self.wait_to_click(By.XPATH, self.export_settings_create)
         time.sleep(1)
         self.driver.refresh()
-        time.sleep(1)
+        time.sleep(2)
         assert UserInputsData.case_export_name in self.driver.page_source
         print("Form Export creation successful")
 
@@ -301,6 +301,7 @@ class ExportDataPage:
             print("Dashboard Form Feed created!!")
             self.wait_to_click(By.XPATH, self.update_data)
             self.wait_to_click(By.XPATH, self.update_data_conf)
+            time.sleep(1)
             self.driver.refresh()
             time.sleep(5)
             self.driver.find_element(By.XPATH, self.copy_dashfeed_link).click()
