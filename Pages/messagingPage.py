@@ -315,7 +315,8 @@ class MessagingPage:
         newest_file = latest_download_file()
         file_that_was_downloaded = UserInputsData.download_path / newest_file
         self.driver.find_element(By.XPATH, self.choose_file).send_keys(str(file_that_was_downloaded))
-        self.driver.find_element(By.XPATH, self.upload).click()
+        button = self.driver.find_element(By.XPATH, self.upload)
+        self.driver.execute_script("arguments[0].click();", button)
         assert True == WebDriverWait(self.driver, 2).until(ec.presence_of_element_located((
             By.XPATH, self.upload_success_message))).is_displayed()
         print("Msg Trans uploaded successfully!")

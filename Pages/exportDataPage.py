@@ -301,7 +301,7 @@ class ExportDataPage:
         self.wait_to_click(By.XPATH, self.update_data)
         self.wait_to_click(By.XPATH, self.update_data_conf)
         self.driver.refresh()
-        time.sleep(3)
+        time.sleep(1)
         self.driver.find_element(By.XPATH, self.copy_dashfeed_link).click()
         dashboard_feed_link = self.driver.find_element(By.XPATH, self.dashboard_feed_link).get_attribute("href")
         print("Feed Link: "+dashboard_feed_link)
@@ -353,7 +353,6 @@ class ExportDataPage:
             self.switch_back_to_prev_tab()
         except StaleElementReferenceException:
             print(StaleElementReferenceException)
-
 
     # Test Case - 28 - Power BI / Tableau Integration, Form
     def power_bi_tableau_integration_form(self):
