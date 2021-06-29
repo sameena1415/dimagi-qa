@@ -175,7 +175,7 @@ class OrganisationStructurePage:
         self.driver.find_element(By.ID, "id_bulk_upload_file").send_keys(str(file_that_was_downloaded))
         time.sleep(2)
         self.wait_to_click(By.XPATH, self.upload)
-        assert WebDriverWait(self.driver, 15).until(ec.presence_of_element_located((
+        assert WebDriverWait(self.driver, 20).until(ec.presence_of_element_located((
             By.XPATH, self.import_complete))).is_displayed()
         print("File uploaded successfully")
 
