@@ -289,8 +289,8 @@ class MessagingPage:
         self.wait_to_click(By.XPATH, self.delete_cond_alert)
         obj = self.driver.switch_to.alert
         obj.accept()
-        self.driver.refresh()
         try:
+            self.driver.refresh()
             isPresent = self.driver.find_element(By.XPATH, self.cond_alert_created).is_displayed()
         except NoSuchElementException:
             isPresent = False

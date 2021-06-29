@@ -162,7 +162,7 @@ class MobileWorkerPage:
         time.sleep(1)
 
     def update_information(self):
-        self.driver.find_element(By.XPATH, self.update_info_button).click()
+        self.wait_to_click(By.XPATH, self.update_info_button)
 
     def deactivate_user(self):
         self.search_user()
