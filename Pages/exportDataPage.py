@@ -78,7 +78,7 @@ class ExportDataPage:
         self.select_form_model = '//*[@id="id_model_type"]/option[3]'
         self.update_data = "//button[@data-toggle='modal'][1]"
         self.update_data_conf = "//button[@data-bind='click: emailedExport.updateData']"
-        self.copy_dashfeed_link = "//a[@class='btn btn-default btn-sm']"
+        self.copy_dashfeed_link = "//a[@class='btn btn-default btn-sm'][1]"
         self.dashboard_feed_link = "//span[@class='input-group-btn']//preceding::a[@class='btn btn-info btn-xs']"
 
         # Excel Dashboard Integrations, case
@@ -301,7 +301,6 @@ class ExportDataPage:
             print("Dashboard Form Feed created!!")
             self.wait_to_click(By.XPATH, self.update_data)
             self.wait_to_click(By.XPATH, self.update_data_conf)
-            time.sleep(1)
             self.driver.refresh()
             time.sleep(5)
             self.driver.find_element(By.XPATH, self.copy_dashfeed_link).click()
