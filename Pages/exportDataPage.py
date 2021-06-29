@@ -380,6 +380,7 @@ class ExportDataPage:
 
     def bi_tab_deletion(self):
         self.driver.refresh()
+        time.sleep(1)
         self.wait_to_click(By.XPATH, self.delete_button)
         self.wait_to_click(By.XPATH, self.delete_confirmation_button)
         print("Delete Confirmation Button clicked")
