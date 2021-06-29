@@ -282,39 +282,42 @@ class ExportDataPage:
 
     # Test Case - 24 - Excel Dashboard Integration, form
     def excel_dashboard_integration_form(self):
-        self.wait_to_click(By.XPATH, self.export_excel_dash_int_link)
-        self.wait_to_click(By.XPATH, self.add_export_button)
-        self.wait_to_click(By.XPATH, self.model_dropdown)
-        self.wait_to_click(By.XPATH, self.select_form_model)
-        self.wait_to_click(By.XPATH, self.app_dropdown)
-        self.wait_to_click(By.XPATH, self.select_app)
-        self.wait_to_click(By.XPATH, self.menu_dropdown)
-        self.wait_to_click(By.XPATH, self.select_menu)
-        self.wait_to_click(By.XPATH, self.form_dropdown)
-        self.wait_to_click(By.XPATH, self.select_form)
-        self.wait_to_click(By.XPATH, self.add_export_conf)
-        print("Dashboard Feed added!!")
-        WebDriverWait(self.driver, 3).until(EC.element_to_be_clickable((
-                By.XPATH, self.export_name))).send_keys(UserInputsData.dashboard_feed_form)
-        self.wait_to_click(By.XPATH, self.export_settings_create)
-        print("Dashboard Form Feed created!!")
-        self.wait_to_click(By.XPATH, self.update_data)
-        self.wait_to_click(By.XPATH, self.update_data_conf)
-        self.driver.refresh()
-        time.sleep(1)
-        self.driver.find_element(By.XPATH, self.copy_dashfeed_link).click()
-        dashboard_feed_link = self.driver.find_element(By.XPATH, self.dashboard_feed_link).get_attribute("href")
-        print("Feed Link: "+dashboard_feed_link)
-        self.driver.execute_script("window.open('');")  # Open a new tab
-        self.switch_to_next_tab()
-        self.driver.get(dashboard_feed_link)
-        dashboard_feed_data = self.driver.page_source
-        if dashboard_feed_data != "":
-            print("Excel Dashboard (form) has data")
-        else:
-            print("Excel Dashboard (form) is empty")
-        self.driver.close()
-        self.switch_back_to_prev_tab()
+        try:
+            self.wait_to_click(By.XPATH, self.export_excel_dash_int_link)
+            self.wait_to_click(By.XPATH, self.add_export_button)
+            self.wait_to_click(By.XPATH, self.model_dropdown)
+            self.wait_to_click(By.XPATH, self.select_form_model)
+            self.wait_to_click(By.XPATH, self.app_dropdown)
+            self.wait_to_click(By.XPATH, self.select_app)
+            self.wait_to_click(By.XPATH, self.menu_dropdown)
+            self.wait_to_click(By.XPATH, self.select_menu)
+            self.wait_to_click(By.XPATH, self.form_dropdown)
+            self.wait_to_click(By.XPATH, self.select_form)
+            self.wait_to_click(By.XPATH, self.add_export_conf)
+            print("Dashboard Feed added!!")
+            WebDriverWait(self.driver, 3).until(EC.element_to_be_clickable((
+                    By.XPATH, self.export_name))).send_keys(UserInputsData.dashboard_feed_form)
+            self.wait_to_click(By.XPATH, self.export_settings_create)
+            print("Dashboard Form Feed created!!")
+            self.wait_to_click(By.XPATH, self.update_data)
+            self.wait_to_click(By.XPATH, self.update_data_conf)
+            self.driver.refresh()
+            time.sleep(5)
+            self.driver.find_element(By.XPATH, self.copy_dashfeed_link).click()
+            dashboard_feed_link = self.driver.find_element(By.XPATH, self.dashboard_feed_link).get_attribute("href")
+            print("Feed Link: "+dashboard_feed_link)
+            self.driver.execute_script("window.open('');")  # Open a new tab
+            self.switch_to_next_tab()
+            self.driver.get(dashboard_feed_link)
+            dashboard_feed_data = self.driver.page_source
+            if dashboard_feed_data != "":
+                print("Excel Dashboard (form) has data")
+            else:
+                print("Excel Dashboard (form) is empty")
+            self.driver.close()
+            self.switch_back_to_prev_tab()
+        except StaleElementReferenceException:
+            print(StaleElementReferenceException)
 
     # Test Case - 25 - Excel Dashboard Integration, case
 
