@@ -30,7 +30,7 @@ class MessagingPage:
         self.broadcast_name = "//input[@name='schedule-schedule_name']"
         self.recipients = "(//span[@class='select2-selection select2-selection--multiple'])[1]"
         self.user_recipient = "(//span[@class='select2-selection select2-selection--multiple'])[2]"
-        self.select_value_dropdown = "(//ul[@class='select2-results__options']/li)[2]"
+        self.select_value_dropdown = "(//ul[@class='select2-results__options']/li)[1]"
         self.broadcast_message = "(//textarea[@data-bind='value: nonTranslatedMessage'])[2]"
         self.send_broadcast = "//button[@data-bind='text: saveBroadcastText()']"
         self.broadcast_created = "//a[text()='" + "broadcast_" + fetch_random_string() + "']"
@@ -131,6 +131,7 @@ class MessagingPage:
         self.driver.find_element(By.XPATH, self.recipients).click()
         self.wait_to_click(By.XPATH, self.select_recipient_type)
         self.wait_to_click(By.XPATH, self.user_recipient)
+        time.sleep(1)
         self.wait_to_click(By.XPATH, self.select_value_dropdown)
         self.driver.find_element(By.XPATH, self.broadcast_message).send_keys("Test Broadcast:" + "broadcast_"
                                                                              + fetch_random_string())
@@ -245,12 +246,16 @@ class MessagingPage:
         time.sleep(1)
         self.wait_to_click(By.XPATH, self.select_first_lang)
         self.wait_to_click(By.XPATH, self.save_lang)
+        time.sleep(1)
         self.wait_to_click(By.XPATH, self.lang_input_textarea)
         time.sleep(1)
         self.wait_to_click(By.XPATH, self.select_second_lang)
         self.wait_to_click(By.XPATH, self.save_lang)
+        time.sleep(1)
         self.wait_to_click(By.XPATH, self.delete_lang)
+        time.sleep(1)
         self.wait_to_click(By.XPATH, self.save_lang)
+        time.sleep(2)
         print("Languages added and deleted successfully!")
 
     def remove_keyword(self):
@@ -301,15 +306,12 @@ class MessagingPage:
             assert False
 
     def msg_trans_download(self):
-        try:
-            self.wait_to_click(By.LINK_TEXT, self.languages)
-        except UnexpectedAlertPresentException:
-            obj = self.driver.switch_to.alert
-            obj.accept()
-            self.wait_to_click(By.XPATH, self.msg_translation_menu)
-            self.wait_to_click(By.ID, self.download_id)
-            time.sleep(2)
-            print("Msg Trans downloaded successfully!")
+        self.wait_to_click(By.LINK_TEXT, self.languages)
+        time.sleep(1)
+        self.wait_to_click(By.XPATH, self.msg_translation_menu)
+        self.wait_to_click(By.ID, self.download_id)
+        time.sleep(2)
+        print("Msg Trans downloaded successfully!")
 
     def msg_trans_upload(self):
         newest_file = latest_download_file()
@@ -324,7 +326,7 @@ class MessagingPage:
     def project_settings_page(self):
         self.wait_to_click(By.XPATH, self.settings_bar)
         self.wait_to_click(By.LINK_TEXT, self.project_settings_menu)
-        assert True == WebDriverWait(self.driver, 2).until(ec.presence_of_element_located((
+        assert True == WebDriverWait(self.driver, 3).until(ec.presence_of_element_located((
             By.XPATH, self.project_settings_elements))).is_displayed()
         print("Project Settings page loaded successfully!")
 
