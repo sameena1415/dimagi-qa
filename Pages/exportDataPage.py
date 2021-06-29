@@ -282,27 +282,27 @@ class ExportDataPage:
 
     # Test Case - 24 - Excel Dashboard Integration, form
     def excel_dashboard_integration_form(self):
-        try:
-            self.wait_to_click(By.XPATH, self.export_excel_dash_int_link)
-            self.wait_to_click(By.XPATH, self.add_export_button)
-            self.wait_to_click(By.XPATH, self.model_dropdown)
-            self.wait_to_click(By.XPATH, self.select_form_model)
-            self.wait_to_click(By.XPATH, self.app_dropdown)
-            self.wait_to_click(By.XPATH, self.select_app)
-            self.wait_to_click(By.XPATH, self.menu_dropdown)
-            self.wait_to_click(By.XPATH, self.select_menu)
-            self.wait_to_click(By.XPATH, self.form_dropdown)
-            self.wait_to_click(By.XPATH, self.select_form)
-            self.wait_to_click(By.XPATH, self.add_export_conf)
-            print("Dashboard Feed added!!")
-            WebDriverWait(self.driver, 3).until(EC.element_to_be_clickable((
+        self.wait_to_click(By.XPATH, self.export_excel_dash_int_link)
+        self.wait_to_click(By.XPATH, self.add_export_button)
+        self.wait_to_click(By.XPATH, self.model_dropdown)
+        self.wait_to_click(By.XPATH, self.select_form_model)
+        self.wait_to_click(By.XPATH, self.app_dropdown)
+        self.wait_to_click(By.XPATH, self.select_app)
+        self.wait_to_click(By.XPATH, self.menu_dropdown)
+        self.wait_to_click(By.XPATH, self.select_menu)
+        self.wait_to_click(By.XPATH, self.form_dropdown)
+        self.wait_to_click(By.XPATH, self.select_form)
+        self.wait_to_click(By.XPATH, self.add_export_conf)
+        print("Dashboard Feed added!!")
+        WebDriverWait(self.driver, 3).until(EC.element_to_be_clickable((
                     By.XPATH, self.export_name))).send_keys(UserInputsData.dashboard_feed_form)
-            self.wait_to_click(By.XPATH, self.export_settings_create)
-            print("Dashboard Form Feed created!!")
-            self.wait_to_click(By.XPATH, self.update_data)
-            self.wait_to_click(By.XPATH, self.update_data_conf)
-            self.driver.refresh()
-            time.sleep(5)
+        self.wait_to_click(By.XPATH, self.export_settings_create)
+        print("Dashboard Form Feed created!!")
+        self.wait_to_click(By.XPATH, self.update_data)
+        self.wait_to_click(By.XPATH, self.update_data_conf)
+        time.sleep()
+        self.driver.refresh()
+        try:
             self.driver.find_element(By.XPATH, self.copy_dashfeed_link).click()
             dashboard_feed_link = self.driver.find_element(By.XPATH, self.dashboard_feed_link).get_attribute("href")
             print("Feed Link: "+dashboard_feed_link)
@@ -382,7 +382,6 @@ class ExportDataPage:
         print("Odata form feed has data")
         self.driver.close()
         self.switch_back_to_prev_tab()
-
 
     # Test Case - 27 - Power BI / Tableau Integration, Case`
     def power_bi_tableau_integration_case(self):

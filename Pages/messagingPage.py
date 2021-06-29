@@ -227,7 +227,7 @@ class MessagingPage:
 
     def general_settings_page(self):
         self.driver.find_element(By.LINK_TEXT, self.general_settings).click()
-        time.sleep(1)
+        time.sleep(2)
         if self.driver.find_element(By.XPATH, self.disable_button).is_enabled():
             self.driver.find_element(By.XPATH, self.enable_button).click()
             self.driver.find_element(By.XPATH, self.time_input).send_keys("23:59")
