@@ -1,6 +1,6 @@
 import time
 
-from selenium.common.exceptions import NoSuchElementException
+from selenium.common.exceptions import NoSuchElementException, UnexpectedAlertPresentException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.support.wait import WebDriverWait
@@ -301,11 +301,17 @@ class MessagingPage:
             assert False
 
     def msg_trans_download(self):
-        self.wait_to_click(By.LINK_TEXT, self.languages)
-        self.wait_to_click(By.XPATH, self.msg_translation_menu)
-        self.wait_to_click(By.ID, self.download_id)
-        time.sleep(2)
-        print("Msg Trans downloaded successfully!")
+        try:
+            self.wait_to_click(By.LINK_TEXT, self.languages)
+        except UnexpectedAlertPresentException:
+            obj = self.driver.switch_to.alert
+            obj.accept()
+            self.wait_to_click(By.XPATH, self.msg_translation_menu)
+            self.wait_to_click(By.ID, self.download_id)
+            time.sleep(2)
+            print("Msg Trans downloaded successfully!")
+
+
 
     def msg_trans_upload(self):
         newest_file = latest_download_file()

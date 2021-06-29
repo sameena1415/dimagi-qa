@@ -122,7 +122,7 @@ class ExportDataPage:
 
     def get_url_paste_browser(self):
         self.wait_to_click(By.XPATH, self.copy_odatafeed_link)
-        self.driver.find_element(By.XPATH, self.edit_button).click()
+        self.wait_to_click(By.XPATH, self.edit_button)
         time.sleep(1)
         get_url = self.driver.current_url
         ID = get_url.strip ("https://staging.commcarehq.org/a/qa-automation/data/export/custom/odata_form_feed/edit/")
@@ -185,7 +185,7 @@ class ExportDataPage:
         self.wait_to_click(By.XPATH, self.view_FormID)
         self.switch_to_next_tab()
         time.sleep(3)
-        womanName_HQ = WebDriverWait(self.driver, 7).until(EC.visibility_of_element_located((
+        womanName_HQ = WebDriverWait(self.driver, 10).until(EC.visibility_of_element_located((
             By.XPATH, self.womanName_HQ))).text
         assert woman_name_excel == womanName_HQ
         print("Downloaded file has the required data!")
@@ -300,7 +300,7 @@ class ExportDataPage:
         self.wait_to_click(By.XPATH, self.update_data)
         self.wait_to_click(By.XPATH, self.update_data_conf)
         self.driver.refresh()
-        time.sleep(2)
+        time.sleep(3)
         self.driver.find_element(By.XPATH, self.copy_dashfeed_link).click()
         dashboard_feed_link = self.driver.find_element(By.XPATH, self.dashboard_feed_link).get_attribute("href")
         print("Feed Link: "+dashboard_feed_link)
