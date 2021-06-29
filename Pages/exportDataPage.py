@@ -10,7 +10,6 @@ from selenium.webdriver.support import expected_conditions as EC
 from UserInputs.userInputsData import UserInputsData
 import pandas as pd
 from TestBase.environmentSetupPage import load_settings
-from tkinter import *
 
 
 def latest_download_file():
@@ -123,17 +122,13 @@ class ExportDataPage:
         window_before = winHandles[0]
         self.driver.switch_to.window(window_before)
 
-    def copy_clipboard_paste_browser(self):
-        win = Tk()
-        win.withdraw()
-        odata_feed_link = win.clipboard_get()
-        #odata_feed_link_element = self.driver.find_element(By.XPATH,"(//input[@class='form-control input-sm' and @type ='text'])[1]")
-        # odata_feed_link_element.send_keys(Keys.CONTROL, 'a')  # highlight all in box
-        # odata_feed_link_element.send_keys(Keys.CONTROL, 'c')  # copy
-        # win32clipboard.OpenClipboard()
-        # odata_feed_link = win32clipboard.GetClipboardData()  # paste
-        # win32clipboard.CloseClipboard()
-        print(odata_feed_link)
+    def get_url_paste_browser(self):
+        self.wait_to_click(By.XPATH, self.copy_odatafeed_link)
+        self.driver.find_element(By.XPATH,"//a[@data-bind='click: editExport']").click()
+        time.sleep(1)
+        get_url = self.driver.current_url
+        ID = get_url.strip ("https://staging.commcarehq.org/a/qa-automation/data/export/custom/odata_form_feed/edit/")
+        odata_feed_link="https://staging.commcarehq.org/a/another-upstream/api/v0.5/odata/forms/"+ID+"/feed/"
         self.driver.execute_script("window.open('');")  # Open a new tab
         self.switch_to_next_tab()
         username = load_settings()["login_username"]
@@ -376,8 +371,7 @@ class ExportDataPage:
         self.wait_to_click(By.XPATH, self.export_settings_create)
         print("Odata Form Feed created!!")
         self.driver.refresh()
-        self.wait_to_click(By.XPATH, self.copy_odatafeed_link)
-        self.copy_clipboard_paste_browser()
+        self.get_url_paste_browser()
         odata_feed_data = self.driver.page_source
         assert odata_feed_data != ""
         print("Odata form feed has data")
@@ -410,8 +404,7 @@ class ExportDataPage:
         self.wait_to_click(By.XPATH, self.export_settings_create)
         print("Odata Case Feed created!!")
         self.driver.refresh()
-        self.wait_to_click(By.XPATH, self.copy_odatafeed_link)
-        self.copy_clipboard_paste_browser()
+        self.get_url_paste_browser()
         odata_feed_data = self.driver.page_source
         print(odata_feed_data)
         assert odata_feed_data != ""  # This condition can be improvised
