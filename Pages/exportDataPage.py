@@ -122,6 +122,7 @@ class ExportDataPage:
 
     def get_url_paste_browser(self):
         self.wait_to_click(By.XPATH, self.copy_odatafeed_link)
+        time.sleep(1)
         self.wait_to_click(By.XPATH, self.edit_button)
         time.sleep(1)
         get_url = self.driver.current_url

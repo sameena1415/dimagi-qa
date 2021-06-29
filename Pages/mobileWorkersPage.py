@@ -159,10 +159,11 @@ class MobileWorkerPage:
         self.wait_to_click(By.ID, self.additional_info_dropdown)
         self.wait_to_click(By.XPATH, self.select_value_dropdown)
         assert self.driver.find_element_by_xpath(self.user_file_additional_info).is_displayed()
-        time.sleep(2)
+        time.sleep(1)
 
     def update_information(self):
-        self.wait_to_click(By.XPATH, self.update_info_button)
+        button = self.driver.find_element(By.XPATH, self.update_info_button)
+        self.driver.execute_script("arguments[0].click();", button)
 
     def deactivate_user(self):
         self.search_user()
