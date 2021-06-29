@@ -300,7 +300,7 @@ class ExportDataPage:
         print("Dashboard Form Feed created!!")
         self.wait_to_click(By.XPATH, self.update_data)
         self.wait_to_click(By.XPATH, self.update_data_conf)
-        time.sleep()
+        time.sleep(1)
         self.driver.refresh()
         try:
             self.driver.find_element(By.XPATH, self.copy_dashfeed_link).click()
