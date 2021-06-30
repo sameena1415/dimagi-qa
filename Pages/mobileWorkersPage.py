@@ -229,7 +229,7 @@ class MobileWorkerPage:
         self.mobile_worker_menu()
         self.wait_to_click(By.LINK_TEXT, self.download_worker_btn)
         try:
-            WebDriverWait(self.driver, 20).until(ec.presence_of_element_located((
+            WebDriverWait(self.driver, 25).until(ec.presence_of_element_located((
                 By.LINK_TEXT, self.download_users_btn))).click()
             time.sleep(5)
         except TimeoutException as e:
@@ -255,6 +255,6 @@ class MobileWorkerPage:
         time.sleep(2)
         self.driver.find_element(By.XPATH, self.choose_file).send_keys(str(file_that_was_downloaded))
         self.driver.find_element(By.XPATH, self.upload).click()
-        assert WebDriverWait(self.driver, 90).until(ec.presence_of_element_located((
+        assert WebDriverWait(self.driver, 100).until(ec.presence_of_element_located((
             By.XPATH, self.import_complete))).is_displayed()
         print("File uploaded successfully")
