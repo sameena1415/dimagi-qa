@@ -206,11 +206,14 @@ class MobileWorkerPage:
                 self.wait_to_click(By.XPATH, self.webapp_login_with_username + "[" + str(j + 1) + "]")
                 self.wait_to_click(By.ID, self.webapp_login_confirmation)
                 break
-        login_username = WebDriverWait(self.driver, 3).until(ec.presence_of_element_located(
-            (By.XPATH, self.webapp_working_as)))
-        if login_username.text == self.username:
-            assert True, "Login with the reactivated user failed!"
-            print("Working as " + self.username + " : Reactivation successful!")
+        try:
+            login_username = WebDriverWait(self.driver, 3).until(ec.presence_of_element_located(
+                (By.XPATH, self.webapp_working_as)))
+            if login_username.text == self.username:
+                assert True, "Login with the reactivated user failed!"
+                print("Working as " + self.username + " : Reactivation successful!")
+        except TimeoutException:
+            print(TimeoutException)
         self.wait_to_click(By.ID, self.show_full_menu_id)
 
     def cleanup_mobile_worker(self):
