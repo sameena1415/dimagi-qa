@@ -88,8 +88,11 @@ class MobileWorkerPage:
         self.import_complete = "//legend[text()='Bulk upload complete.']"
 
     def wait_to_click(self, *locator, timeout=10):
-        clickable = ec.element_to_be_clickable(locator)
-        WebDriverWait(self.driver, timeout).until(clickable).click()
+        try:
+            clickable = ec.element_to_be_clickable(locator)
+            WebDriverWait(self.driver, timeout).until(clickable).click()
+        except TimeoutException:
+            print(TimeoutException)
 
     def search_user(self):
         WebDriverWait(self.driver, 3).until(ec.presence_of_element_located((
@@ -102,9 +105,10 @@ class MobileWorkerPage:
         time.sleep(1)
         self.driver.find_element(By.XPATH, self.search_user_web_apps).send_keys(self.username)
         self.wait_to_click(By.XPATH, self.search_button_we_apps)
-        time.sleep(1)
+        time.sleep()
 
     def mobile_worker_menu(self):
+        self.driver.refresh()
         self.wait_to_click(By.ID, self.users_menu_id)
         self.wait_to_click(By.LINK_TEXT, self.mobile_workers_menu_link_text)
         assert "Mobile Workers : Users :: - CommCare HQ" in self.driver.title
