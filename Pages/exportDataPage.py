@@ -255,6 +255,7 @@ class ExportDataPage:
     # Test Case 23_a - Daily saved export, form
     def daily_saved_exports_form(self):
         self.wait_to_click(By.XPATH, self.export_form_data_link)
+        self.driver.refresh()
         self.wait_to_click(By.XPATH, self.edit_form_export)
         self.wait_to_clear(By.XPATH, self.export_name)
         self.driver.find_element(By.XPATH, self.export_name).send_keys(UserInputsData.form_export_name)
@@ -361,7 +362,6 @@ class ExportDataPage:
     def power_bi_tableau_integration_form(self):
         self.wait_to_click(By.XPATH, self.powerBI_tab_int_link)
         self.wait_to_click(By.XPATH, self.add_export_button)
-        time.sleep(2)
         self.wait_to_click(By.XPATH, self.model_dropdown)
         self.wait_to_click(By.XPATH, self.select_form_model)
         self.wait_to_click(By.XPATH, self.app_dropdown)
