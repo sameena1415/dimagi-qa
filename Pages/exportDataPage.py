@@ -361,6 +361,7 @@ class ExportDataPage:
     def power_bi_tableau_integration_form(self):
         self.wait_to_click(By.XPATH, self.powerBI_tab_int_link)
         self.wait_to_click(By.XPATH, self.add_export_button)
+        time.sleep(2)
         self.wait_to_click(By.XPATH, self.model_dropdown)
         self.wait_to_click(By.XPATH, self.select_form_model)
         self.wait_to_click(By.XPATH, self.app_dropdown)
