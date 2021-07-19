@@ -105,7 +105,7 @@ class MobileWorkerPage:
         time.sleep(1)
         self.driver.find_element(By.XPATH, self.search_user_web_apps).send_keys(self.username)
         self.wait_to_click(By.XPATH, self.search_button_we_apps)
-        time.sleep()
+        time.sleep(1)
 
     def mobile_worker_menu(self):
         self.driver.refresh()
