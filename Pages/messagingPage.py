@@ -296,6 +296,7 @@ class MessagingPage:
         obj = self.driver.switch_to.alert
         obj.accept()
         try:
+            time.sleep(2)
             self.driver.refresh()
             isPresent = self.driver.find_element(By.XPATH, self.cond_alert_created).is_displayed()
         except NoSuchElementException:
