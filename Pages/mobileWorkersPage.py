@@ -108,7 +108,6 @@ class MobileWorkerPage:
         time.sleep(1)
 
     def mobile_worker_menu(self):
-        self.driver.refresh()
         self.wait_to_click(By.ID, self.users_menu_id)
         self.wait_to_click(By.LINK_TEXT, self.mobile_workers_menu_link_text)
         assert "Mobile Workers : Users :: - CommCare HQ" in self.driver.title
