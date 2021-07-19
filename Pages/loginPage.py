@@ -12,10 +12,14 @@ class LoginPage:
         self.password_textbox_id = "id_auth-password"
         self.submit_button_xpath = '//button[@type="submit"]'
         self.alert_button_accept = "hs-eu-confirmation-button"
+        self.continue_button_xpath = '//button[@class="btn btn-primary btn-lg" and @type ="button"]'
 
     def enter_username(self, username):
         self.driver.find_element_by_id(self.username_textbox_id).clear()
         self.driver.find_element_by_id(self.username_textbox_id).send_keys(username)
+
+    def click_continue(self):
+        self.driver.find_element_by_xpath(self.continue_button_xpath).click()
 
     def enter_password(self, password):
         self.driver.find_element_by_id(self.password_textbox_id).clear()

@@ -1,11 +1,8 @@
 import os
+
+from selenium.common.exceptions import StaleElementReferenceException
 import datetime
-import matplotlib as matpl
-if os.environ.get('DISPLAY', '') == '':
-    print('Currently no display found. Using the non-interactive Agg backend')
-    matpl.use('Agg')
 import time
-from tkinter import Tk
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -30,7 +27,8 @@ class ExportDataPage:
         self.view_all_link = '//*[@id="ProjectDataTab"]/ul/li[6]/a'  # View All link
 
         # Delete Export
-        self.delete_button = "//a[@class='btn btn-danger']"
+        # self.delete_button = "//input[@style='']//following::a[@class='btn btn-danger'][1]"
+        self.delete_button = "//a[@class='btn btn-danger'][1]"
         self.delete_confirmation_button = "//button[@data-bind='click: deleteExport']"
 
         # Add Export
@@ -80,7 +78,8 @@ class ExportDataPage:
         self.select_form_model = '//*[@id="id_model_type"]/option[3]'
         self.update_data = "//button[@data-toggle='modal'][1]"
         self.update_data_conf = "//button[@data-bind='click: emailedExport.updateData']"
-        self.copy_dashfeed_link = "//a[@class='btn btn-default btn-sm']"
+        self.copy_dashfeed_link = "//a[@class='btn btn-default btn-sm'][1]"
+        self.dashboard_feed_link = "//span[@class='input-group-btn']//preceding::a[@class='btn btn-info btn-xs']"
 
         # Excel Dashboard Integrations, case
         self.select_case_model = '//*[@id="id_model_type"]/option[2]'
@@ -90,9 +89,7 @@ class ExportDataPage:
         # Power BI / Tableau Integration, Form
         self.powerBI_tab_int_link = '//*[@id="hq-sidebar"]/nav/ul[1]/li[7]/a'
         self.copy_odatafeed_link = '//*[@id="export-list"]/div[2]/div/div[2]/table/tbody/tr[1]/td[1]/div/span/a'
-        self.bi_delete_confirmation = '/html/body/div[1]/div[3]/div/div[2]/div[4]/div[2]/div/div[2]/table/' \
-                                 'tbody/tr/td[4]/div/div/div/div/form/div[2]/button'
-        self.bi_delete_button = '/html/body/div[1]/div[3]/div/div[2]/div[4]/div[2]/div/div[2]/table/tbody/tr/td[4]/div/a'
+        self.edit_button = "//input[@style='']//following::a[@data-bind='click: editExport'][1]"
 
         # Manage Forms
         self.manage_forms_link = '//*[@id="hq-sidebar"]/nav/ul[2]/li[3]/a'
@@ -123,13 +120,31 @@ class ExportDataPage:
         window_before = winHandles[0]
         self.driver.switch_to.window(window_before)
 
+    def get_url_paste_browser(self):
+        self.wait_to_click(By.XPATH, self.copy_odatafeed_link)
+        time.sleep(1)
+        self.wait_to_click(By.XPATH, self.edit_button)
+        time.sleep(1)
+        get_url = self.driver.current_url
+        ID = get_url.strip ("https://staging.commcarehq.org/a/qa-automation/data/export/custom/odata_form_feed/edit/")
+        odata_feed_link="https://staging.commcarehq.org/a/another-upstream/api/v0.5/odata/forms/"+ID+"/feed/"
+        self.driver.back()
+        self.driver.execute_script("window.open('');")  # Open a new tab
+        self.switch_to_next_tab()
+        username = load_settings()["login_username"]
+        password = load_settings()["login_password"]
+        final_URL = f"https://{username}:{password}@{odata_feed_link[8:]}"
+        self.driver.get(final_URL)
+
     def data_tab(self):
         self.wait_to_click(By.XPATH, self.data_dropdown)
         self.wait_to_click(By.XPATH, self.view_all_link)
 
     def deletion(self):
-        self.wait_to_click(By.XPATH, self.delete_button)
-        self.wait_to_click(By.XPATH, self.delete_confirmation_button)
+        time.sleep(2)
+        self.driver.find_element(By.XPATH, self.delete_button).click()
+        time.sleep(1)
+        self.driver.find_element(By.XPATH, self.delete_confirmation_button).click()
         print("Delete Confirmation Button clicked")
 
     # Test Case 20_a - Verify Export functionality for Forms
@@ -147,8 +162,9 @@ class ExportDataPage:
 
     def form_exports(self):
         self.wait_to_click(By.XPATH, self.export_form_data_button)
-        self.wait_to_click(By.ID, self.date_range)
-        self.wait_to_click(By.XPATH, self.date_range_key)
+        # Date filter
+        # self.wait_to_click(By.ID, self.date_range)
+        # self.wait_to_click(By.XPATH, self.date_range_key)
         self.wait_to_click(By.XPATH, self.prepare_export_button)
         self.wait_to_click(By.XPATH, self.download_button)
         print("Download form button clicked")
@@ -170,7 +186,7 @@ class ExportDataPage:
         self.wait_to_click(By.XPATH, self.view_FormID)
         self.switch_to_next_tab()
         time.sleep(3)
-        womanName_HQ = WebDriverWait(self.driver, 3).until(EC.presence_of_element_located((
+        womanName_HQ = WebDriverWait(self.driver, 10).until(EC.visibility_of_element_located((
             By.XPATH, self.womanName_HQ))).text
         assert woman_name_excel == womanName_HQ
         print("Downloaded file has the required data!")
@@ -212,7 +228,7 @@ class ExportDataPage:
         self.wait_to_click(By.XPATH, self.view_caseID)
         time.sleep(3)
         self.switch_to_next_tab()
-        womanName_HQ = WebDriverWait(self.driver, 3).until(EC.presence_of_element_located((
+        womanName_HQ = WebDriverWait(self.driver, 5).until(EC.presence_of_element_located((
             By.XPATH, self.woman_case_name_HQ))).text
         assert woman_name_excel == womanName_HQ
         print("Downloaded file has the required data!")
@@ -239,6 +255,7 @@ class ExportDataPage:
     # Test Case 23_a - Daily saved export, form
     def daily_saved_exports_form(self):
         self.wait_to_click(By.XPATH, self.export_form_data_link)
+        self.driver.refresh()
         self.wait_to_click(By.XPATH, self.edit_form_export)
         self.wait_to_clear(By.XPATH, self.export_name)
         self.driver.find_element(By.XPATH, self.export_name).send_keys(UserInputsData.form_export_name)
@@ -260,7 +277,7 @@ class ExportDataPage:
         self.wait_to_click(By.XPATH, self.export_settings_create)
         time.sleep(1)
         self.driver.refresh()
-        time.sleep(1)
+        time.sleep(2)
         assert UserInputsData.case_export_name in self.driver.page_source
         print("Form Export creation successful")
 
@@ -279,27 +296,29 @@ class ExportDataPage:
         self.wait_to_click(By.XPATH, self.add_export_conf)
         print("Dashboard Feed added!!")
         WebDriverWait(self.driver, 3).until(EC.element_to_be_clickable((
-                By.XPATH, self.export_name))).send_keys(UserInputsData.dashboard_feed_form)
+                    By.XPATH, self.export_name))).send_keys(UserInputsData.dashboard_feed_form)
         self.wait_to_click(By.XPATH, self.export_settings_create)
         print("Dashboard Form Feed created!!")
         self.wait_to_click(By.XPATH, self.update_data)
         self.wait_to_click(By.XPATH, self.update_data_conf)
         time.sleep(1)
         self.driver.refresh()
-        self.wait_to_click(By.XPATH, self.copy_dashfeed_link)
-        print("Dashboard link copied on the clipboard!!")
-        dashboard_feed_link = Tk().clipboard_get()
-        print(dashboard_feed_link)
-        self.driver.execute_script("window.open('');")  # Open a new tab
-        self.switch_to_next_tab()
-        self.driver.get(dashboard_feed_link)
-        dashboard_feed_data = self.driver.page_source
-        if dashboard_feed_data != "":
-            print("Excel Dashboard (form) has data")
-        else:
-            print("Excel Dashboard (form) is empty")
-        self.driver.close()
-        self.switch_back_to_prev_tab()
+        try:
+            self.driver.find_element(By.XPATH, self.copy_dashfeed_link).click()
+            dashboard_feed_link = self.driver.find_element(By.XPATH, self.dashboard_feed_link).get_attribute("href")
+            print("Feed Link: "+dashboard_feed_link)
+            self.driver.execute_script("window.open('');")  # Open a new tab
+            self.switch_to_next_tab()
+            self.driver.get(dashboard_feed_link)
+            dashboard_feed_data = self.driver.page_source
+            if dashboard_feed_data != "":
+                print("Excel Dashboard (form) has data")
+            else:
+                print("Excel Dashboard (form) is empty")
+            self.driver.close()
+            self.switch_back_to_prev_tab()
+        except StaleElementReferenceException:
+            print(StaleElementReferenceException)
 
     # Test Case - 25 - Excel Dashboard Integration, case
 
@@ -322,19 +341,22 @@ class ExportDataPage:
         self.wait_to_click(By.XPATH, self.update_data_conf)
         time.sleep(1)
         self.driver.refresh()
-        self.wait_to_click(By.XPATH, self.copy_dashfeed_link)
-        dashboard_feed_link = Tk().clipboard_get()
-        print(dashboard_feed_link)
-        self.driver.execute_script("window.open('');")  # Open a new tab
-        self.switch_to_next_tab()
-        self.driver.get(dashboard_feed_link)
-        dashboard_feed_data = self.driver.page_source
-        if dashboard_feed_data != "":
-            print("Excel Dashboard (case) has data")
-        else:
-            print("Excel Dashboard (case) is empty")
-        self.driver.close()
-        self.switch_back_to_prev_tab()
+        try:
+            self.driver.find_element(By.XPATH, self.copy_dashfeed_link).click()
+            dashboard_feed_link = self.driver.find_element(By.XPATH, self.dashboard_feed_link).get_attribute("href")
+            print(dashboard_feed_link)
+            self.driver.execute_script("window.open('');")  # Open a new tab
+            self.switch_to_next_tab()
+            self.driver.get(dashboard_feed_link)
+            dashboard_feed_data = self.driver.page_source
+            if dashboard_feed_data != "":
+                print("Excel Dashboard (case) has data")
+            else:
+                print("Excel Dashboard (case) is empty")
+            self.driver.close()
+            self.switch_back_to_prev_tab()
+        except StaleElementReferenceException:
+            print(StaleElementReferenceException)
 
     # Test Case - 28 - Power BI / Tableau Integration, Form
     def power_bi_tableau_integration_form(self):
@@ -351,32 +373,16 @@ class ExportDataPage:
         self.wait_to_click(By.XPATH, self.add_export_conf)
         print("Odata form Feed added!!")
         self.wait_to_clear(By.XPATH, self.export_name)
-        self.driver.find_element(By.XPATH, self.export_name).send_keys(UserInputsData.dashboard_feed_form)
+        self.driver.find_element(By.XPATH, self.export_name).send_keys(UserInputsData.odata_feed_form)
         self.wait_to_click(By.XPATH, self.export_settings_create)
         print("Odata Form Feed created!!")
         self.driver.refresh()
-        self.wait_to_click(By.XPATH, self.copy_odatafeed_link)
-        odata_feed_link = Tk().clipboard_get()
-        print(odata_feed_link)
-        self.driver.execute_script("window.open('');")
-        self.switch_to_next_tab()
-        # string manipulation for bypassing the authentication
-        username = load_settings()["login_username"]
-        password = load_settings()["login_password"]
-        final_URL = f"https://{username}:{password}@{odata_feed_link[8:]}"
-        self.driver.get(final_URL)
+        self.get_url_paste_browser()
         odata_feed_data = self.driver.page_source
-        print(odata_feed_data)
         assert odata_feed_data != ""
         print("Odata form feed has data")
         self.driver.close()
         self.switch_back_to_prev_tab()
-
-    def bi_tab_deletion(self):
-        self.driver.refresh()
-        self.wait_to_click(By.XPATH, self.delete_button)
-        self.wait_to_click(By.XPATH, self.delete_confirmation_button)
-        print("Delete Confirmation Button clicked")
 
     # Test Case - 27 - Power BI / Tableau Integration, Case`
     def power_bi_tableau_integration_case(self):
@@ -398,17 +404,8 @@ class ExportDataPage:
         self.wait_to_click(By.XPATH, self.export_settings_create)
         print("Odata Case Feed created!!")
         self.driver.refresh()
-        self.wait_to_click(By.XPATH, self.copy_odatafeed_link)
-        odata_feed_link = Tk().clipboard_get()
-        print(odata_feed_link)
-        self.driver.execute_script("window.open('');")  # Open a new tab
-        self.switch_to_next_tab()
-        username = load_settings()["login_username"]
-        password = load_settings()["login_password"]
-        final_URL = f"https://{username}:{password}@{odata_feed_link[8:]}"
-        self.driver.get(final_URL)
+        self.get_url_paste_browser()
         odata_feed_data = self.driver.page_source
-        print(odata_feed_data)
         assert odata_feed_data != ""  # This condition can be improvised
         print("Odata case feed has data")
         self.driver.close()  # Close the feed URL
@@ -445,7 +442,6 @@ class ExportDataPage:
         self.wait_to_click(By.XPATH, self.view_form_link)
         self.switch_to_next_tab()
         normal_form_data = self.driver.page_source
-        print(normal_form_data)
         assert normal_form_data != "" # This condition can be improvised
         print("archived_form has data")
         self.driver.close()

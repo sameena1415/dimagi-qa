@@ -1,5 +1,4 @@
 import datetime
-import os
 import time
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.by import By
@@ -68,10 +67,12 @@ class MobileWorkerPage:
         self.additional_info_dropdown = "select2-id_data-field-" + "user_field_" + fetch_random_string() + "-container"
         # self.additional_info_dropdown = "//select[@name = 'data-field-user_field_" + fetch_random_string() + "']"
         self.select_value_dropdown = "//select[@name = 'data-field-user_field_" \
-                                     + fetch_random_string() + "']/option[text()='user_field_" + fetch_random_string() + "']"
+                                     + fetch_random_string() + "']/option[text()='user_field_" + fetch_random_string() \
+                                     + "']"
         self.update_info_button = "//button[text()='Update Information']"
         self.user_file_additional_info = "//label[@for='id_data-field-" + "user_field_" + fetch_random_string() + "']"
-        self.deactivate_btn_xpath = "//td/a/strong[text()='" + self.username + "']/following::td[5]/div[@data-bind='visible: is_active()']/button"
+        self.deactivate_btn_xpath = "//td/a/strong[text()='" + self.username + \
+                                    "']/following::td[5]/div[@data-bind='visible: is_active()']/button"
         self.confirm_deactivate = "(//button[@class='btn btn-danger'])[1]"
         self.show_full_menu_id = "commcare-menu-toggle"
         self.view_all_link_text = "View All"
@@ -82,13 +83,16 @@ class MobileWorkerPage:
         self.download_worker_btn = "Download Mobile Workers"
         self.download_users_btn = "Download Users"
         self.bulk_upload_btn = "Bulk Upload"
-        self.choose_file = "id_bulk_upload_file"
+        self.choose_file = "//input[@id='id_bulk_upload_file']"
         self.upload = "//button[@class='btn btn-primary disable-on-submit']"
         self.import_complete = "//legend[text()='Bulk upload complete.']"
 
-    def wait_to_click(self, *locator, timeout=5):
-        clickable = ec.element_to_be_clickable(locator)
-        WebDriverWait(self.driver, timeout).until(clickable).click()
+    def wait_to_click(self, *locator, timeout=10):
+        try:
+            clickable = ec.element_to_be_clickable(locator)
+            WebDriverWait(self.driver, timeout).until(clickable).click()
+        except TimeoutException:
+            print(TimeoutException)
 
     def search_user(self):
         WebDriverWait(self.driver, 3).until(ec.presence_of_element_located((
@@ -150,8 +154,9 @@ class MobileWorkerPage:
 
     def select_mobile_worker_created(self):
         self.wait_to_click(By.XPATH, self.mobile_worker_on_left_panel)
+        time.sleep(1)
         self.search_user()
-        self.wait_to_click(By.LINK_TEXT, self.username)
+        self.driver.find_element(By.LINK_TEXT, self.username).click()
 
     def enter_value_for_created_user_field(self):
         self.wait_to_click(By.ID, self.additional_info_dropdown)
@@ -160,10 +165,12 @@ class MobileWorkerPage:
         time.sleep(1)
 
     def update_information(self):
-        self.wait_to_click(By.XPATH, self.update_info_button)
+        button = self.driver.find_element(By.XPATH, self.update_info_button)
+        self.driver.execute_script("arguments[0].click();", button)
 
     def deactivate_user(self):
         self.search_user()
+        time.sleep(1)
         self.wait_to_click(By.XPATH, self.deactivate_buttons_list)
         self.wait_to_click(By.XPATH, self.confirm_deactivate_xpath_list)
         time.sleep(2)
@@ -184,6 +191,7 @@ class MobileWorkerPage:
         self.mobile_worker_menu()
         self.wait_to_click(By.XPATH, self.show_deactivated_users_btn)
         self.search_user()
+        time.sleep(1)
         self.wait_to_click(By.XPATH, self.reactivate_buttons_list)
         self.wait_to_click(By.XPATH, self.confirm_reactivate_xpath_list)
         time.sleep(3)
@@ -198,11 +206,14 @@ class MobileWorkerPage:
                 self.wait_to_click(By.XPATH, self.webapp_login_with_username + "[" + str(j + 1) + "]")
                 self.wait_to_click(By.ID, self.webapp_login_confirmation)
                 break
-        login_username = WebDriverWait(self.driver, 3).until(ec.presence_of_element_located(
-            (By.XPATH, self.webapp_working_as)))
-        if login_username.text == self.username:
-            assert True, "Login with the reactivated user failed!"
-            print("Working as " + self.username + " : Reactivation successful!")
+        try:
+            login_username = WebDriverWait(self.driver, 3).until(ec.presence_of_element_located(
+                (By.XPATH, self.webapp_working_as)))
+            if login_username.text == self.username:
+                assert True, "Login with the reactivated user failed!"
+                print("Working as " + self.username + " : Reactivation successful!")
+        except TimeoutException:
+            print(TimeoutException)
         self.wait_to_click(By.ID, self.show_full_menu_id)
 
     def cleanup_mobile_worker(self):
@@ -224,7 +235,7 @@ class MobileWorkerPage:
         self.mobile_worker_menu()
         self.wait_to_click(By.LINK_TEXT, self.download_worker_btn)
         try:
-            WebDriverWait(self.driver, 20).until(ec.presence_of_element_located((
+            WebDriverWait(self.driver, 25).until(ec.presence_of_element_located((
                 By.LINK_TEXT, self.download_users_btn))).click()
             time.sleep(5)
         except TimeoutException as e:
@@ -247,8 +258,9 @@ class MobileWorkerPage:
         self.driver.find_element(By.LINK_TEXT, self.bulk_upload_btn).click()
         newest_file = latest_download_file()
         file_that_was_downloaded = UserInputsData.download_path / newest_file
-        self.driver.find_element(By.ID, self.choose_file).send_keys(str(file_that_was_downloaded))
+        time.sleep(2)
+        self.driver.find_element(By.XPATH, self.choose_file).send_keys(str(file_that_was_downloaded))
         self.driver.find_element(By.XPATH, self.upload).click()
-        assert WebDriverWait(self.driver, 90).until(ec.presence_of_element_located((
+        assert WebDriverWait(self.driver, 100).until(ec.presence_of_element_located((
             By.XPATH, self.import_complete))).is_displayed()
         print("File uploaded successfully")

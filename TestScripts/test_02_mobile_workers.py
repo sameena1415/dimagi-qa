@@ -1,6 +1,7 @@
 from Pages.mobileWorkersPage import MobileWorkerPage
 from TestBase.environmentSetupPage import EnvironmentSetup
 from UserInputs.generateUserInputs import fetch_random_string
+import pytest
 
 
 class MobileWorkerTests(EnvironmentSetup):
@@ -49,6 +50,7 @@ class MobileWorkerTests(EnvironmentSetup):
         user.deactivate_user()
         user.verify_deactivation_via_login()
 
+    @pytest.mark.dependency(depends=["test_05_deactivate_user"])
     def test_06_reactivate_user(self):
         driver = self.driver
         user = MobileWorkerPage(driver)
@@ -60,6 +62,7 @@ class MobileWorkerTests(EnvironmentSetup):
         user = MobileWorkerPage(driver)
         user.download_mobile_worker()
 
+    @pytest.mark.dependency(depends=["test_07_download_workers"])
     def test_08_upload_workers(self):
         driver = self.driver
         user = MobileWorkerPage(driver)

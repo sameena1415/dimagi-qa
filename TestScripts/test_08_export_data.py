@@ -49,9 +49,9 @@ class ExportTests(EnvironmentSetup):
         export = ExportDataPage(driver)
         export.data_tab()
         export.power_bi_tableau_integration_form()
-        export.bi_tab_deletion()
+        export.deletion()
         export.power_bi_tableau_integration_case()
-        export.bi_tab_deletion()
+        export.deletion()
 
     def test_07_manage_forms(self):
         driver = self.driver
