@@ -1,4 +1,4 @@
-from selenium.common.exceptions import TimeoutException
+from selenium.common.exceptions import TimeoutException, NoSuchElementException, ElementNotInteractableException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as ec
@@ -19,7 +19,10 @@ class LoginPage:
         self.driver.find_element_by_id(self.username_textbox_id).send_keys(username)
 
     def click_continue(self):
-        self.driver.find_element_by_xpath(self.continue_button_xpath).click()
+        try:
+            self.driver.find_element_by_xpath(self.continue_button_xpath).click()
+        except (NoSuchElementException, ElementNotInteractableException):
+            print("Non SSO workflow")
 
     def enter_password(self, password):
         self.driver.find_element_by_id(self.password_textbox_id).clear()
