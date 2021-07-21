@@ -5,7 +5,7 @@ name: Python application
 
 on:
   push:
-    branches: [ master ]
+    branches: [ master, fixes ]
   pull_request:
     branches: [ master ]
   repository_dispatch:
@@ -40,3 +40,4 @@ jobs:
         DIMAGIQA_LOGIN_PASSWORD: ${{ secrets.DIMAGIQA_LOGIN_PASSWORD }}
       run: |
         pytest -v
+        scp file:///home/runner/work/dimagi-qa/dimagi-qa/report.html /home/runner/work/dimagi-qa/dimagi-qa/

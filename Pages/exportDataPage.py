@@ -1,6 +1,6 @@
 import os
 
-from selenium.common.exceptions import StaleElementReferenceException
+from selenium.common.exceptions import StaleElementReferenceException, TimeoutException
 import datetime
 import time
 from selenium.webdriver.common.by import By
@@ -103,8 +103,12 @@ class ExportDataPage:
         self.archived_forms_option = '/html/body/span/span/span[2]/ul/li[2]'
 
     def wait_to_click(self, *locator, timeout=20):
-        clickable = EC.element_to_be_clickable(locator)
-        WebDriverWait(self.driver, timeout).until(clickable).click()
+        try:
+            clickable = EC.element_to_be_clickable(locator)
+            WebDriverWait(self.driver, timeout).until(clickable).click()
+        except TimeoutException:
+            self.driver.refresh()
+
 
     def wait_to_clear(self, *locator, timeout=5):
         clickable = EC.element_to_be_clickable(locator)
