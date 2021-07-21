@@ -1,6 +1,6 @@
 import os
 
-from selenium.common.exceptions import StaleElementReferenceException
+from selenium.common.exceptions import StaleElementReferenceException, TimeoutException
 import datetime
 import time
 from selenium.webdriver.common.by import By
@@ -46,31 +46,31 @@ class ExportDataPage:
         self.date_range_key = "//li[@data-range-key='Last 30 Days']"
 
         # Export Form data variables
-        self.export_form_data_link = '//*[@id="hq-sidebar"]/nav/ul[1]/li[1]/a'  # Export Form Data link on the left panel
-        self.export_form_data_button = '//*[@id="export-list"]/div[2]/div/div[2]/table/tbody/tr/td[2]/a[1]'  # click form exports
-        self.prepare_export_button = '//*[@id="download-export-form"]/form/div[2]/div/div[2]/div[1]/button'  # click prepare exports
-        self.download_button = '//*[@id="download-progress"]/div/div/div[2]/div[1]/form/a'  # click download
-        self.find_data_by_ID_link = '//*[@id="hq-sidebar"]/nav/ul[1]/li[4]/a'  # Click findDataByID link
-        self.find_data_by_ID_textbox = '//*[@id="find-form"]/div[2]/div[1]/input'  # Find data by ID textbox
-        self.find_data_by_ID_button = '//*[@id="find-form"]/div[2]/div[2]/button'
-        self.view_FormID = '//*[@id="find-form"]/div[2]/div[1]/div[2]/a'
-        self.womanName_HQ = '//*[@id="form-data"]/div[3]/div/div/table/tbody/tr[2]/td[2]/div' # Property 'Woman's name' value on HQ
+        self.export_form_data_link = 'Export Form Data'  # Export Form Data link on the left panel
+        self.export_form_data_button = "(//a[@class='btn btn-primary'])[2]"  # click form exports
+        self.prepare_export_button = "//button[@data-bind='disable: disablePrepareExport']"  # click prepare exports
+        self.download_button = "//a[@class='btn btn-primary btn-full-width']"  # click download
+        self.find_data_by_ID_link = 'Find Data by ID'  # Click findDataByID link
+        self.find_data_by_ID_textbox = "//input[@placeholder='Form Submission ID']"  # Find data by ID textbox
+        self.find_data_by_ID_button = "(//button[@data-bind='click: find, enable: allowFind'])[2]"
+        self.view_FormID = 'View'
+        self.womanName_HQ = "(//div[@class='form-data-readable form-data-raw'])[1]"# Property 'Woman's name' value on HQ
         self.woman_case_name_HQ = "//th[@title='name']//following::td[1]"
 
         # Export Case data variables
-        self.export_case_data_link = '//*[@id="hq-sidebar"]/nav/ul[1]/li[2]/a'  # Export Case Data link on the left panel
-        self.export_case_data_button = '//*[@id="export-list"]/div[2]/div/div[2]/table/tbody/tr/td[3]/a[1]'
+        self.export_case_data_link = 'Export Case Data'  # Export Case Data link on the left panel
+        self.export_case_data_button = "(//a[@class='btn btn-primary'])[2]"
         self.view_caseID ='//*[@id="find-form"]/div[2]/div[1]/div[2]/a'
 
         # Export SMS variables
         self.export_sms_link = '//*[@id="hq-sidebar"]/nav/ul[1]/li[3]/a'  # Export Case Data on the left panel
 
         # Daily Saved Export variables, form
-        self.edit_form_export = '//*[@id="export-list"]/div[2]/div/div[2]/table/tbody/tr[1]/td[4]/div[2]/div/a'  # Edit an existing form export
+        self.edit_form_export = "(//a[@data-bind='click: editExport'])[1]"  # Edit an existing form export
         self.create_DSE_checkbox = '//*[@id="daily-saved-export-checkbox"]'  # Create a Daily Saved Export checkbox
 
         # Daily Saved Export variables, case
-        self.edit_case_export = '//*[@id="export-list"]/div[2]/div/div[2]/table/tbody/tr[1]/td[4]/div[2]/div/a'  # Edit an existing case export
+        self.edit_case_export = "(//a[@data-bind='click: editExport'])[1]"  # Edit an existing case export
 
         # Excel Dashboard Integrations, form
         self.export_excel_dash_int_link = '//*[@id="hq-sidebar"]/nav/ul[1]/li[6]/a'  # Excel Dashboard Integrations link on the left panel
@@ -88,7 +88,7 @@ class ExportDataPage:
 
         # Power BI / Tableau Integration, Form
         self.powerBI_tab_int_link = '//*[@id="hq-sidebar"]/nav/ul[1]/li[7]/a'
-        self.copy_odatafeed_link = '//*[@id="export-list"]/div[2]/div/div[2]/table/tbody/tr[1]/td[1]/div/span/a'
+        self.copy_odatafeed_link = "//a[@class='btn btn-default btn-sm']"
         self.edit_button = "//input[@style='']//following::a[@data-bind='click: editExport'][1]"
 
         # Manage Forms
@@ -103,12 +103,18 @@ class ExportDataPage:
         self.archived_forms_option = '/html/body/span/span/span[2]/ul/li[2]'
 
     def wait_to_click(self, *locator, timeout=20):
-        clickable = EC.element_to_be_clickable(locator)
-        WebDriverWait(self.driver, timeout).until(clickable).click()
+        try:
+            clickable = EC.element_to_be_clickable(locator)
+            WebDriverWait(self.driver, timeout).until(clickable).click()
+        except TimeoutException:
+            print(TimeoutException)
 
     def wait_to_clear(self, *locator, timeout=5):
-        clickable = EC.element_to_be_clickable(locator)
-        WebDriverWait(self.driver, timeout).until(clickable).clear()
+        try:
+            clickable = EC.element_to_be_clickable(locator)
+            WebDriverWait(self.driver, timeout).until(clickable).clear()
+        except TimeoutException:
+            print(TimeoutException)
 
     def switch_to_next_tab(self):
         winHandles = self.driver.window_handles
@@ -172,7 +178,7 @@ class ExportDataPage:
 
     # Test Case 22_a -  Find Data By ID, forms
     def validate_downloaded_form_exports(self):
-        self.wait_to_click(By.XPATH, self.find_data_by_ID_link)
+        self.wait_to_click(By.LINK_TEXT, self.find_data_by_ID_link)
         newest_file = latest_download_file()
         print("Newest file:" + newest_file)
         data = pd.read_excel(newest_file)
@@ -183,10 +189,10 @@ class ExportDataPage:
         WebDriverWait(self.driver, 3).until(EC.visibility_of_element_located((
             By.XPATH, self.find_data_by_ID_textbox))).send_keys(str(formID))
         self.wait_to_click(By.XPATH, self.find_data_by_ID_button)
-        self.wait_to_click(By.XPATH, self.view_FormID)
+        self.wait_to_click(By.LINK_TEXT, self.view_FormID)
         self.switch_to_next_tab()
         time.sleep(3)
-        womanName_HQ = WebDriverWait(self.driver, 10).until(EC.visibility_of_element_located((
+        womanName_HQ = WebDriverWait(self.driver, 15).until(EC.visibility_of_element_located((
             By.XPATH, self.womanName_HQ))).text
         assert woman_name_excel == womanName_HQ
         print("Downloaded file has the required data!")
@@ -195,7 +201,7 @@ class ExportDataPage:
 
     # Test Case 20_b - Verify Export functionality for Cases
     def add_case_exports(self):
-        self.wait_to_click(By.XPATH, self.export_case_data_link)
+        self.wait_to_click(By.LINK_TEXT, self.export_case_data_link)
         self.wait_to_click(By.XPATH, self.add_export_button)
         self.wait_to_click(By.XPATH, self.app_dropdown)
         self.wait_to_click(By.XPATH, self.select_app)
@@ -206,7 +212,7 @@ class ExportDataPage:
         print("Export created!!")
 
     def case_exports(self):
-        self.wait_to_click(By.XPATH, self.export_case_data_link)
+        self.wait_to_click(By.LINK_TEXT, self.export_case_data_link)
         self.wait_to_click(By.XPATH, self.export_case_data_button)
         self.wait_to_click(By.XPATH, self.prepare_export_button)
         self.wait_to_click(By.XPATH, self.download_button)
@@ -214,7 +220,7 @@ class ExportDataPage:
 
     # Test Case 22_b - Find Data by ID for Case Exports
     def validate_downloaded_case_exports(self):
-        self.wait_to_click(By.XPATH, self.find_data_by_ID_link)
+        self.wait_to_click(By.LINK_TEXT, self.find_data_by_ID_link)
         newest_file = latest_download_file()
         print("Newest file:" + newest_file)
         data2 = pd.read_excel(newest_file)
@@ -228,7 +234,7 @@ class ExportDataPage:
         self.wait_to_click(By.XPATH, self.view_caseID)
         time.sleep(3)
         self.switch_to_next_tab()
-        womanName_HQ = WebDriverWait(self.driver, 5).until(EC.presence_of_element_located((
+        womanName_HQ = WebDriverWait(self.driver, 15).until(EC.presence_of_element_located((
             By.XPATH, self.woman_case_name_HQ))).text
         assert woman_name_excel == womanName_HQ
         print("Downloaded file has the required data!")
@@ -254,7 +260,7 @@ class ExportDataPage:
 
     # Test Case 23_a - Daily saved export, form
     def daily_saved_exports_form(self):
-        self.wait_to_click(By.XPATH, self.export_form_data_link)
+        self.wait_to_click(By.LINK_TEXT, self.export_form_data_link)
         self.driver.refresh()
         self.wait_to_click(By.XPATH, self.edit_form_export)
         self.wait_to_clear(By.XPATH, self.export_name)
@@ -269,7 +275,7 @@ class ExportDataPage:
 
     # Test Case 23_b - Daily saved export, case
     def daily_saved_exports_case(self):
-        self.wait_to_click(By.XPATH, self.export_case_data_link)
+        self.wait_to_click(By.LINK_TEXT, self.export_case_data_link)
         self.wait_to_click(By.XPATH, self.edit_case_export)
         self.wait_to_clear(By.XPATH, self.export_name)
         self.driver.find_element(By.XPATH, self.export_name).send_keys(UserInputsData.case_export_name)
@@ -295,6 +301,7 @@ class ExportDataPage:
         self.wait_to_click(By.XPATH, self.select_form)
         self.wait_to_click(By.XPATH, self.add_export_conf)
         print("Dashboard Feed added!!")
+        self.wait_to_clear(By.XPATH, self.export_name)
         WebDriverWait(self.driver, 3).until(EC.element_to_be_clickable((
                     By.XPATH, self.export_name))).send_keys(UserInputsData.dashboard_feed_form)
         self.wait_to_click(By.XPATH, self.export_settings_create)
@@ -419,7 +426,7 @@ class ExportDataPage:
         self.wait_to_click(By.XPATH, self.apply_button)
         self.wait_to_click(By.XPATH, self.checkbox1)
         self.wait_to_click(By.XPATH, self.archive_button)
-        assert WebDriverWait(self.driver, 5).until(EC.presence_of_element_located((
+        assert WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((
             By.XPATH, self.success_message))).is_displayed()
         print("Forms archival successful!!")
 
@@ -450,6 +457,6 @@ class ExportDataPage:
         # Restore Archived Forms
         self.wait_to_click(By.XPATH, self.checkbox1)
         self.wait_to_click(By.XPATH, self.archive_button)
-        assert WebDriverWait(self.driver, 5).until(EC.presence_of_element_located((
+        assert WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((
             By.XPATH, self.success_message))).is_displayed()
         print("Forms archival successful!!")
