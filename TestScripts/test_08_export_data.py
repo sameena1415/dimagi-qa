@@ -4,27 +4,27 @@ from TestBase.environmentSetupPage import EnvironmentSetup
 
 class ExportTests(EnvironmentSetup):
 
-    # def test_01_form_exports(self):
-    #     driver = self.driver
-    #     export = ExportDataPage(driver)
-    #     export.data_tab()
-    #     export.add_form_exports()
-    #     export.form_exports()
-    #     export.validate_downloaded_form_exports()
-    #
-    # def test_02_case_exports(self):
-    #     driver = self.driver
-    #     export = ExportDataPage(driver)
-    #     export.data_tab()
-    #     export.add_case_exports()
-    #     export.case_exports()
-    #     export.validate_downloaded_case_exports()
-    #
-    # def test_03_sms_exports(self):
-    #     driver = self.driver
-    #     export = ExportDataPage(driver)
-    #     export.data_tab()
-    #     export.sms_exports()
+    def test_01_form_exports(self):
+        driver = self.driver
+        export = ExportDataPage(driver)
+        export.data_tab()
+        export.add_form_exports()
+        export.form_exports()
+        export.validate_downloaded_form_exports()
+
+    def test_02_case_exports(self):
+        driver = self.driver
+        export = ExportDataPage(driver)
+        export.data_tab()
+        export.add_case_exports()
+        export.case_exports()
+        export.validate_downloaded_case_exports()
+
+    def test_03_sms_exports(self):
+        driver = self.driver
+        export = ExportDataPage(driver)
+        export.data_tab()
+        export.sms_exports()
 
     def test_04_daily_saved_exports(self):
         driver = self.driver
