@@ -10,8 +10,8 @@ class UserInputsData:
     else:
         download_path = Path('~/Downloads').expanduser()
     # Report names
-    form_export_name = "CCHQ Smoke Tests Form Export"
-    case_export_name = "CCHQ Smoke Tests Case Export"
+    form_export_name = "CCHQ Smoke Tests Form Export DSE"
+    case_export_name = "CCHQ Smoke Tests Case Export DSE"
     dashboard_feed_form = "CCHQ Smoke Tests Dashboard Form feed"
     dashboard_feed_case = "CCHQ Smoke Tests Dashboard Case feed"
     odata_feed_form = "CCHQ Smoke Tests Odata Form feed"
