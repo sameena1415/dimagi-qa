@@ -64,7 +64,10 @@ class ExportDataPage:
         # Daily Saved Export variables, form, case
         self.edit_form_case_export = "(//a[@data-bind='click: editExport'])[1]"  # Edit an existing form/case export
         self.create_DSE_checkbox = '//*[@id="daily-saved-export-checkbox"]'  # Create a Daily Saved Export checkbox
-        self.download_dse = "//a[@class='btn btn-info btn-xs']"
+        self.download_dse_form = "//span[text()='" + UserInputsData.form_export_name + \
+                                 "']//following::a[@class='btn btn-info btn-xs']"
+        self.download_dse_case = "//span[text()='" + UserInputsData.case_export_name + \
+                                 "']//following::a[@class='btn btn-info btn-xs']"
 
         # Excel Dashboard Integrations, form, case
         self.export_excel_dash_int_link = 'Excel Dashboard Integration'  # Excel Dashboard Integrations left panel
@@ -281,7 +284,7 @@ class ExportDataPage:
         self.wait_to_click(By.XPATH, self.update_data_conf)
         time.sleep(2)
         self.driver.refresh()
-        self.wait_to_click(By.XPATH, self.download_dse)
+        self.wait_to_click(By.XPATH, self.download_dse_form)
         time.sleep(3)
         newest_file = latest_download_file()
         print("Newest:", newest_file)
@@ -306,7 +309,7 @@ class ExportDataPage:
         self.wait_to_click(By.XPATH, self.update_data_conf)
         time.sleep(2)
         self.driver.refresh()
-        self.wait_to_click(By.XPATH, self.download_dse)
+        self.wait_to_click(By.XPATH, self.download_dse_case)
         time.sleep(3)
         newest_file = latest_download_file()
         print("Newest:", newest_file)
