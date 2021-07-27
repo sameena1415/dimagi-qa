@@ -50,7 +50,6 @@ class MobileWorkerTests(EnvironmentSetup):
         user.deactivate_user()
         user.verify_deactivation_via_login()
 
-    @pytest.mark.dependency(depends=["test_05_deactivate_user"])
     def test_06_reactivate_user(self):
         driver = self.driver
         user = MobileWorkerPage(driver)
