@@ -43,6 +43,7 @@ class MobileWorkerTests(EnvironmentSetup):
         visible.update_information()
         print("User Field Visible and Added for User")
 
+    @pytest.mark.dependency(name="activation", scope='session')
     def test_05_deactivate_user(self):
         driver = self.driver
         user = MobileWorkerPage(driver)
@@ -50,7 +51,7 @@ class MobileWorkerTests(EnvironmentSetup):
         user.deactivate_user()
         user.verify_deactivation_via_login()
 
-    @pytest.mark.dependency(depends=["test_05_deactivate_user"])
+    @pytest.mark.dependency(depends=["activation"], scope='session')
     def test_06_reactivate_user(self):
         driver = self.driver
         user = MobileWorkerPage(driver)
