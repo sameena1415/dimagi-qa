@@ -40,3 +40,8 @@ jobs:
         DIMAGIQA_LOGIN_PASSWORD: ${{ secrets.DIMAGIQA_LOGIN_PASSWORD }}
       run: |
         pytest -v
+    - name: Archive test results
+        uses: actions/upload-artifact@v2
+        with:
+          name: test-result-report
+          path: /home/runner/work/dimagi-qa/dimagi-qa/report.html
