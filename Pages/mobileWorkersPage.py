@@ -87,7 +87,7 @@ class MobileWorkerPage:
         self.upload = "//button[@class='btn btn-primary disable-on-submit']"
         self.import_complete = "//legend[text()='Bulk upload complete.']"
 
-    def wait_to_click(self, *locator, timeout=10):
+    def wait_to_click(self, *locator, timeout=15):
         try:
             clickable = ec.element_to_be_clickable(locator)
             WebDriverWait(self.driver, timeout).until(clickable).click()
