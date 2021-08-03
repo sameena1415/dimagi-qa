@@ -141,3 +141,7 @@ Pages/generatedUserInputs.csv
 TestSuites/generatedUserInputs.csv
 TestScripts/generatedUserInputs.csv
 AutomationTestReports/
+output.json
+pytest_html_report.html
+archive
+assets
