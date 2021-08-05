@@ -44,4 +44,5 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: test-result-report
+        if: always()
         path: /home/runner/work/dimagi-qa/dimagi-qa/report.html
