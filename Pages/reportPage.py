@@ -192,8 +192,8 @@ class ReportPage:
         self.driver.find_element(By.ID, self.new_saved_report_name).send_keys(self.report_name_saved)
         self.wait_to_click(By.XPATH, self.save_confirm)
         time.sleep(2)
-        self.wait_to_click(By.LINK_TEXT, self.saved_reports_menu_link)
-        assert True == WebDriverWait(self.driver, 10).until(ec.visibility_of_element_located((
+        self.driver.find_element(By.LINK_TEXT, self.saved_reports_menu_link).click()
+        assert True == WebDriverWait(self.driver, 10).until(ec.presence_of_element_located((
             By.XPATH, self.saved_report_created))).is_displayed()
         print("Report Saved successfully!")
 
