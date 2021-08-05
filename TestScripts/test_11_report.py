@@ -26,5 +26,35 @@ class ExportTests(EnvironmentSetup):
         load.sms_opt_out_report()
         load.scheduled_messaging_report()
 
+    def test_02_create_case_report(self):
+        driver = self.driver
+        report = HomePage(driver)
+        report.reports_menu()
+        load = ReportPage(driver)
+        load.create_report_builder_case_report()
+
+    def test_03_create_form_report(self):
+        driver = self.driver
+        report = HomePage(driver)
+        report.reports_menu()
+        load = ReportPage(driver)
+        load.create_report_builder_form_report()
+
+    def test_04_save_report(self):
+        driver = self.driver
+        report = HomePage(driver)
+        report.reports_menu()
+        load = ReportPage(driver)
+        load.saved_report()
+
+    def test_05_scheduled_report(self):
+        driver = self.driver
+        report = HomePage(driver)
+        report.reports_menu()
+        load = ReportPage(driver)
+        load.scheduled_report()
+        load.delete_scheduled_and_saved_reports()
+
+
 
 
