@@ -3,7 +3,7 @@ from Pages.reportPage import ReportPage
 from TestBase.environmentSetupPage import EnvironmentSetup
 
 
-class ExportTests(EnvironmentSetup):
+class ReportTests(EnvironmentSetup):
 
     def test_01_report_loading(self):
         driver = self.driver
