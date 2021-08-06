@@ -14,6 +14,16 @@ class ApplicationTests(EnvironmentSetup):
         load = ApplicationPage(driver)
         load.form_builder_exploration()
 
+    def test_03_form_xml_download_upload(self):
+        driver = self.driver
+        load = ApplicationPage(driver)
+        load.form_xml_download_upload()
+
+    def test_04_settings_exploration(self):
+        driver = self.driver
+        load = ApplicationPage(driver)
+        load.app_settings_exploration()
+
     def test_05_delete_app(self):
         driver = self.driver
         load = ApplicationPage(driver)

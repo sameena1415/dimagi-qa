@@ -6,6 +6,8 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as ec
 
 from UserInputs.generateUserInputs import fetch_random_string
+from UserInputs.userInputsData import UserInputsData
+from Pages.organisationStructurePage import latest_download_file
 
 
 class ApplicationPage:
@@ -31,7 +33,6 @@ class ApplicationPage:
 
         # Delete Application
         self.settings = "//i[@class='fa fa-gear']"
-        self.actions_tab = "//a[text()='Actions']"
         self.delete_app = "//a[@href='#delete-app-modal']"
         self.delete_confirm = "(//button[@class='disable-on-submit btn btn-danger'])[last()]"
 
@@ -41,12 +42,31 @@ class ApplicationPage:
         self.form_settings = "(//a[@data-action='View Form'])[1]"
         self.form_settings_content = "//div[@class='tabbable appmanager-tabs-container']"
 
+        # Form XML
+        self.download_xml = "//a[contains(i/following-sibling::text(), 'Download')]"
+        self.upload_xml = "//a[@href='#upload-xform']"
+        self.add_form_button = "(//i[@class='fa fa-plus'])[1]"
+        self.register_form = "//button[@data-case-action='open']"
+        self.new_form_settings = "(//a[@data-action='View Form'])[3]"
+        self.choose_file = "xform_file_input"
+        self.upload = 'xform_file_submit'
+        self.same_question_present = "//a[contains(i/following-sibling::text(), 'Name')]"
+
+        # App Settings
+        self.languages_tab = "//a[@href='#languages']"
+        self.languages_tab_content = "language-settings-options"
+        self.multimedia_tab = "//a[@href='#multimedia-tab']"
+        self.multimedia_tab_content = "multimedia-tab"
+        self.actions_tab = "//a[text()='Actions']"
+        self.actions_tab_content = "actions"
+        self.add_ons_tab = "//a[@href='#add-ons']"
+        self.add_ons_tab_content = "add-ons"
+        self.advanced_settings_tab = "//a[@href='#commcare-settings']"
+        self.advanced_settings_tab_content = "app-settings-options"
+
     def wait_to_click(self, *locator, timeout=10):
-        try:
-            clickable = ec.element_to_be_clickable(locator)
-            WebDriverWait(self.driver, timeout).until(clickable).click()
-        except TimeoutException:
-            print(TimeoutException)
+        clickable = ec.element_to_be_clickable(locator)
+        WebDriverWait(self.driver, timeout).until(clickable).click()
 
     def create_new_application(self):
         self.wait_to_click(By.ID, self.applications_menu_id)
@@ -79,7 +99,51 @@ class ApplicationPage:
 
     def delete_application(self):
         time.sleep(2)
-        self.wait_to_click(By.XPATH, self.settings)
+        settings_button = self.driver.find_element(By.XPATH, self.settings)
+        self.driver.execute_script("arguments[0].click();", settings_button)
         self.wait_to_click(By.XPATH, self.actions_tab)
         self.wait_to_click(By.XPATH, self.delete_app)
         self.wait_to_click(By.XPATH, self.delete_confirm)
+
+    def form_xml_download_upload(self):
+        self.wait_to_click(By.XPATH, self.actions_tab)
+        self.wait_to_click(By.XPATH, self.download_xml)
+        time.sleep(1)
+        self.wait_to_click(By.XPATH, self.add_form_button)
+        time.sleep(1)
+        try:
+            self.wait_to_click(By.XPATH, self.register_form)
+            time.sleep(2)
+        except TimeoutException:
+            self.driver.refresh()
+        self.wait_to_click(By.XPATH, self.new_form_settings)
+        self.wait_to_click(By.XPATH, self.actions_tab)
+        self.wait_to_click(By.XPATH, self.upload_xml)
+        newest_file = latest_download_file()
+        file_that_was_downloaded = UserInputsData.download_path / newest_file
+        self.driver.find_element(By.ID, self.choose_file).send_keys(str(file_that_was_downloaded))
+        time.sleep(1)
+        self.driver.find_element(By.ID, self.upload).click()
+        assert True == WebDriverWait(self.driver, 10).until(ec.presence_of_element_located((
+            By.XPATH, self.same_question_present))).is_displayed()
+        print("XML copied successfully!")
+
+    def app_settings_exploration(self):
+        self.wait_to_click(By.XPATH, self.settings)
+        assert True == WebDriverWait(self.driver, 5).until(ec.presence_of_element_located((
+            By.ID, self.languages_tab_content))).is_displayed()
+        self.wait_to_click(By.XPATH, self.multimedia_tab)
+        assert True == WebDriverWait(self.driver, 5).until(ec.presence_of_element_located((
+            By.ID, self.multimedia_tab_content))).is_displayed()
+        self.wait_to_click(By.XPATH, self.actions_tab)
+        assert True == WebDriverWait(self.driver, 5).until(ec.presence_of_element_located((
+            By.ID, self.actions_tab_content))).is_displayed()
+        self.wait_to_click(By.XPATH, self.add_ons_tab)
+        assert True == WebDriverWait(self.driver, 5).until(ec.presence_of_element_located((
+            By.ID, self.add_ons_tab_content))).is_displayed()
+        self.wait_to_click(By.XPATH, self.advanced_settings_tab)
+        assert True == WebDriverWait(self.driver, 5).until(ec.presence_of_element_located((
+            By.ID, self.advanced_settings_tab_content))).is_displayed()
+        print("App Settings loading successfully!")
+
+
