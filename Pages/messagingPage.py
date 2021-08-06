@@ -136,6 +136,7 @@ class MessagingPage:
         self.driver.find_element(By.XPATH, self.broadcast_message).send_keys("Test Broadcast:" + "broadcast_"
                                                                              + fetch_random_string())
         self.wait_to_click(By.XPATH, self.send_broadcast)
+        self.driver.refresh()
         assert True == WebDriverWait(self.driver, 3).until(ec.presence_of_element_located((
             By.XPATH, self.broadcast_created))).is_displayed()
         print("Broadcast created successfully!")

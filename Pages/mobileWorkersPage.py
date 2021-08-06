@@ -92,7 +92,7 @@ class MobileWorkerPage:
         WebDriverWait(self.driver, timeout).until(clickable).click()
 
     def search_user(self):
-        WebDriverWait(self.driver, 3).until(ec.presence_of_element_located((
+        WebDriverWait(self.driver, 5).until(ec.presence_of_element_located((
             By.XPATH, self.search_mw))).send_keys(self.username)
         self.wait_to_click(By.XPATH, self.search_button_mw)
 
@@ -151,7 +151,7 @@ class MobileWorkerPage:
 
     def select_mobile_worker_created(self):
         self.wait_to_click(By.XPATH, self.mobile_worker_on_left_panel)
-        time.sleep(1)
+        time.sleep(2)
         self.search_user()
         time.sleep(2)
         self.driver.find_element(By.LINK_TEXT, self.username).click()
