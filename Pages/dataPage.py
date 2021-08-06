@@ -1,5 +1,3 @@
-import time
-
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
@@ -101,9 +99,3 @@ class DataPage:
         assert True == WebDriverWait(self.driver, 3).until(ec.presence_of_element_located((
             By.XPATH, self.column_name))).is_displayed()
         print("LookUp Table can be viewed successfully!")
-
-
-
-
-
-

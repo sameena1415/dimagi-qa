@@ -3,7 +3,7 @@ from Pages.exportDataPage import ExportDataPage
 from TestBase.environmentSetupPage import EnvironmentSetup
 
 
-class ExportTests(EnvironmentSetup):
+class DataTests(EnvironmentSetup):
 
     def test_01_auto_case_update(self):
         driver = self.driver

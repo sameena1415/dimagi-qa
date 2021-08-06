@@ -32,7 +32,7 @@ class ExportDataPage:
         # Add Export
         self.add_export_button = "//a[@href='#createExportOptionsModal']"  # Add Export button
         self.app_dropdown = "//span[@aria-labelledby='select2-id_application-container']"  # Application dropdown
-        self.select_app = '//*[@id="select2-id_application-results"]/li'  # Selecting first app
+        self.select_app = "//li[text()='Village Health']"  # Selecting first app
         self.menu_dropdown = "//span[@aria-labelledby='select2-id_module-container']"  # Menu dropdown in the modal
         self.select_menu = '//*[@id="select2-id_module-results"]/li[1]'  # Selecting first menu item
         self.form_dropdown = "//span[@aria-labelledby='select2-id_form-container']"  # Form dropdown in the modal
