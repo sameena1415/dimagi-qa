@@ -88,11 +88,8 @@ class MobileWorkerPage:
         self.import_complete = "//legend[text()='Bulk upload complete.']"
 
     def wait_to_click(self, *locator, timeout=15):
-        try:
-            clickable = ec.element_to_be_clickable(locator)
-            WebDriverWait(self.driver, timeout).until(clickable).click()
-        except TimeoutException:
-            print(TimeoutException)
+        clickable = ec.element_to_be_clickable(locator)
+        WebDriverWait(self.driver, timeout).until(clickable).click()
 
     def search_user(self):
         WebDriverWait(self.driver, 3).until(ec.presence_of_element_located((
