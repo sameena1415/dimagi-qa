@@ -124,6 +124,7 @@ class ApplicationPage:
         self.driver.find_element(By.ID, self.choose_file).send_keys(str(file_that_was_downloaded))
         time.sleep(1)
         self.driver.find_element(By.ID, self.upload).click()
+        time.sleep(1)
         assert True == WebDriverWait(self.driver, 10).until(ec.presence_of_element_located((
             By.XPATH, self.same_question_present))).is_displayed()
         print("XML copied successfully!")
