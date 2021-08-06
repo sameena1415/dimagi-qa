@@ -210,9 +210,3 @@ class ReportPage:
         self.wait_to_click(By.XPATH, self.scheduled_reports_menu_xpath)
         self.wait_to_click(By.XPATH, self.delete_scheduled)
         self.driver.find_element(By.XPATH, self.delete_scheduled_confirm)
-
-
-
-
-
-

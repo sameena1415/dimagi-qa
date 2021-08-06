@@ -145,5 +145,3 @@ class ApplicationPage:
         assert True == WebDriverWait(self.driver, 5).until(ec.presence_of_element_located((
             By.ID, self.advanced_settings_tab_content))).is_displayed()
         print("App Settings loading successfully!")
-
-
