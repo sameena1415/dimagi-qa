@@ -43,6 +43,7 @@ class DataPage:
         self.select_table_from_dropdown = "//li[contains(.,'"+self.table_id_name+"')]"
         self.view_table_id = "apply-btn"
         self.column_name = "(//div[contains(i/following-sibling::text(), '"+self.table_id_name+"')])[1]"
+        self.delete_table = self.table_created+"//following::button[@data-bind='click: $root.removeDataType'][1]"
 
     def wait_to_click(self, *locator, timeout=10):
         try:
@@ -99,3 +100,11 @@ class DataPage:
         assert True == WebDriverWait(self.driver, 3).until(ec.presence_of_element_located((
             By.XPATH, self.column_name))).is_displayed()
         print("LookUp Table can be viewed successfully!")
+
+    def delete_lookup_table(self):
+        self.wait_to_click(By.LINK_TEXT, self.manage_tables_link)
+        self.wait_to_click(By.XPATH, self.delete_table)
+        obj = self.driver.switch_to.alert
+        obj.accept()
+        print("LookUp Table deleted successfully!")
+

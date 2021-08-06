@@ -27,3 +27,4 @@ class DataTests(EnvironmentSetup):
         export = ExportDataPage(driver)
         export.data_tab()
         data.view_lookup_table()
+        data.delete_lookup_table()
