@@ -74,8 +74,8 @@ class GroupPage:
 
     def remove_user_from_group(self):
         self.wait_to_click(By.XPATH, self.remove_user_xpath)
-        time.sleep(1)
-        self.driver.find_element(By.ID, self.update_button_id).click()
+        update_button = self.driver.find_element(By.ID, self.update_button_id)
+        self.driver.execute_script("arguments[0].click();", update_button)
         assert WebDriverWait(self.driver, 3).until(ec.element_to_be_clickable((
             By.ID, self.success_alert_id))).is_displayed()
         print("Removed added user from group")
