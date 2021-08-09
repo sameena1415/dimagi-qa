@@ -161,7 +161,11 @@ class ReportPage:
         self.check_if_report_loaded()
 
     def delete_report(self):
-        self.wait_to_click(By.ID, self.edit_report_id)
+        try:
+            self.wait_to_click(By.ID, self.edit_report_id)
+        except TimeoutException:
+            self.driver.refresh()
+            self.wait_to_click(By.ID, self.edit_report_id)
         self.wait_to_click(By.XPATH, self.delete_report_xpath)
         # assert True == WebDriverWait(self.driver, 10).until(ec.vi((
         #     By.XPATH, self.delete_success))).is_displayed()
