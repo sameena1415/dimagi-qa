@@ -193,6 +193,7 @@ class ReportPage:
         self.wait_to_click(By.XPATH, self.save_confirm)
         time.sleep(2)
         self.driver.refresh()
+        time.sleep(2)
         self.driver.find_element(By.LINK_TEXT, self.saved_reports_menu_link).click()
         assert True == WebDriverWait(self.driver, 10).until(ec.presence_of_element_located((
             By.XPATH, self.saved_report_created))).is_displayed()

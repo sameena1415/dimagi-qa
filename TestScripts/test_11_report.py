@@ -50,6 +50,7 @@ class ReportTests(EnvironmentSetup):
     def test_05_scheduled_report(self):
         driver = self.driver
         report = HomePage(driver)
+        self.driver.refresh()
         report.reports_menu()
         load = ReportPage(driver)
         load.scheduled_report()
