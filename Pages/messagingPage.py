@@ -1,6 +1,6 @@
 import time
 
-from selenium.common.exceptions import NoSuchElementException
+from selenium.common.exceptions import NoSuchElementException, StaleElementReferenceException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.support.wait import WebDriverWait
@@ -137,8 +137,12 @@ class MessagingPage:
                                                                              + fetch_random_string())
         self.wait_to_click(By.XPATH, self.send_broadcast)
         self.driver.refresh()
-        assert True == WebDriverWait(self.driver, 5).until(ec.presence_of_element_located((
-            By.XPATH, self.broadcast_created))).is_displayed()
+        try:
+            assert True == WebDriverWait(self.driver, 5).until(ec.presence_of_element_located((
+                By.XPATH, self.broadcast_created))).is_displayed()
+        except StaleElementReferenceException:
+            assert True == WebDriverWait(self.driver, 5).until(ec.presence_of_element_located((
+                By.XPATH, self.broadcast_created))).is_displayed()
         print("Broadcast created successfully!")
 
     def create_cond_alert(self):
