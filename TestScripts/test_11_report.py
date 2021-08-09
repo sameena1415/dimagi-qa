@@ -36,6 +36,7 @@ class ReportTests(EnvironmentSetup):
     def test_03_create_form_report(self):
         driver = self.driver
         report = HomePage(driver)
+        self.driver.refresh()
         report.reports_menu()
         load = ReportPage(driver)
         load.create_report_builder_form_report()
@@ -43,6 +44,7 @@ class ReportTests(EnvironmentSetup):
     def test_04_save_report(self):
         driver = self.driver
         report = HomePage(driver)
+        self.driver.refresh()
         report.reports_menu()
         load = ReportPage(driver)
         load.saved_report()
