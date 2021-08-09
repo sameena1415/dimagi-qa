@@ -1,6 +1,6 @@
 import time
 
-from selenium.common.exceptions import NoSuchElementException, TimeoutException
+from selenium.common.exceptions import NoSuchElementException, TimeoutException, StaleElementReferenceException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as ec
@@ -195,10 +195,10 @@ class ReportPage:
         self.wait_to_click(By.XPATH, self.save_xpath)
         self.driver.find_element(By.ID, self.new_saved_report_name).send_keys(self.report_name_saved)
         self.wait_to_click(By.XPATH, self.save_confirm)
-        time.sleep(2)
-        self.driver.refresh()
-        time.sleep(2)
-        self.driver.find_element(By.LINK_TEXT, self.saved_reports_menu_link).click()
+        try:
+            self.wait_to_click(By.LINK_TEXT, self.saved_reports_menu_link)
+        except StaleElementReferenceException:
+            self.wait_to_click(By.LINK_TEXT, self.saved_reports_menu_link)
         assert True == WebDriverWait(self.driver, 10).until(ec.presence_of_element_located((
             By.XPATH, self.saved_report_created))).is_displayed()
         print("Report Saved successfully!")
