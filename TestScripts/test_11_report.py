@@ -44,7 +44,6 @@ class ReportTests(EnvironmentSetup):
     def test_04_save_report(self):
         driver = self.driver
         report = HomePage(driver)
-        self.driver.refresh()
         report.reports_menu()
         load = ReportPage(driver)
         load.saved_report()
