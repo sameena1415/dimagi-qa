@@ -31,11 +31,7 @@ class ReportTests(EnvironmentSetup):
     def test_02_create_case_report(self):
         driver = self.driver
         report = HomePage(driver)
-        try:
-            report.reports_menu()
-        except UnexpectedAlertPresentException:
-            alert = self.driver.switch_to.alert
-            alert.accept()
+        report.reports_menu()
         load = ReportPage(driver)
         load.create_report_builder_case_report()
 
@@ -58,7 +54,11 @@ class ReportTests(EnvironmentSetup):
         driver = self.driver
         report = HomePage(driver)
         self.driver.refresh()
-        report.reports_menu()
+        try:
+            report.reports_menu()
+        except UnexpectedAlertPresentException:
+            alert = self.driver.switch_to.alert
+            alert.accept()
         load = ReportPage(driver)
         load.scheduled_report()
         load.delete_scheduled_and_saved_reports()

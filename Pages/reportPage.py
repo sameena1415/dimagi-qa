@@ -202,10 +202,13 @@ class ReportPage:
         self.driver.find_element(By.ID, self.new_saved_report_name).send_keys(self.report_name_saved)
         self.wait_to_click(By.XPATH, self.save_confirm)
         try:
+            time.sleep(2)
             my_saved_rep = self.driver.find_element(By.LINK_TEXT, self.saved_reports_menu_link)
             self.driver.execute_script("arguments[0].click();", my_saved_rep)
         except StaleElementReferenceException:
-            self.wait_to_click(By.LINK_TEXT, self.saved_reports_menu_link)
+            time.sleep(2)
+            my_saved_rep = self.driver.find_element(By.LINK_TEXT, self.saved_reports_menu_link)
+            self.driver.execute_script("arguments[0].click();", my_saved_rep)
         assert True == WebDriverWait(self.driver, 10).until(ec.presence_of_element_located((
             By.XPATH, self.saved_report_created))).is_displayed()
         print("Report Saved successfully!")
