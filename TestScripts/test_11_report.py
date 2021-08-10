@@ -1,3 +1,5 @@
+from selenium.common.exceptions import UnexpectedAlertPresentException
+
 from Pages.homePage import HomePage
 from Pages.reportPage import ReportPage
 from TestBase.environmentSetupPage import EnvironmentSetup
@@ -36,6 +38,7 @@ class ReportTests(EnvironmentSetup):
     def test_03_create_form_report(self):
         driver = self.driver
         report = HomePage(driver)
+        self.driver.refresh()
         report.reports_menu()
         load = ReportPage(driver)
         load.create_report_builder_form_report()
@@ -50,7 +53,12 @@ class ReportTests(EnvironmentSetup):
     def test_05_scheduled_report(self):
         driver = self.driver
         report = HomePage(driver)
-        report.reports_menu()
+        self.driver.refresh()
+        try:
+            report.reports_menu()
+        except UnexpectedAlertPresentException:
+            alert = self.driver.switch_to.alert
+            alert.accept()
         load = ReportPage(driver)
         load.scheduled_report()
         load.delete_scheduled_and_saved_reports()

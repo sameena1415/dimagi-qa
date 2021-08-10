@@ -88,14 +88,11 @@ class MobileWorkerPage:
         self.import_complete = "//legend[text()='Bulk upload complete.']"
 
     def wait_to_click(self, *locator, timeout=15):
-        try:
-            clickable = ec.element_to_be_clickable(locator)
-            WebDriverWait(self.driver, timeout).until(clickable).click()
-        except TimeoutException:
-            print(TimeoutException)
+        clickable = ec.element_to_be_clickable(locator)
+        WebDriverWait(self.driver, timeout).until(clickable).click()
 
     def search_user(self):
-        WebDriverWait(self.driver, 3).until(ec.presence_of_element_located((
+        WebDriverWait(self.driver, 5).until(ec.presence_of_element_located((
             By.XPATH, self.search_mw))).send_keys(self.username)
         self.wait_to_click(By.XPATH, self.search_button_mw)
 
@@ -154,9 +151,9 @@ class MobileWorkerPage:
 
     def select_mobile_worker_created(self):
         self.wait_to_click(By.XPATH, self.mobile_worker_on_left_panel)
-        time.sleep(1)
+        time.sleep(2)
         self.search_user()
-        time.sleep(1)
+        time.sleep(2)
         self.driver.find_element(By.LINK_TEXT, self.username).click()
 
     def enter_value_for_created_user_field(self):

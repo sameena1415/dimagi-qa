@@ -77,11 +77,8 @@ class OrganisationStructurePage:
         self.delete_org_level = "(//button[@class='btn btn-danger'])[last()]"
 
     def wait_to_click(self, *locator, timeout=10):
-        try:
-            clickable = ec.element_to_be_clickable(locator)
-            WebDriverWait(self.driver, timeout).until(clickable).click()
-        except TimeoutException:
-            print(TimeoutException)
+        clickable = ec.element_to_be_clickable(locator)
+        WebDriverWait(self.driver, timeout).until(clickable).click()
 
     def organisation_menu_open(self):
         self.wait_to_click(By.LINK_TEXT, self.org_menu_link_text)

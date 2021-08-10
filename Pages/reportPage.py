@@ -1,6 +1,7 @@
 import time
 
-from selenium.common.exceptions import NoSuchElementException, TimeoutException
+from selenium.common.exceptions import NoSuchElementException, TimeoutException, StaleElementReferenceException, \
+    UnexpectedAlertPresentException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as ec
@@ -154,14 +155,19 @@ class ReportPage:
 
     def sms_opt_out_report(self):
         self.wait_to_click(By.LINK_TEXT, self.sms_opt_out_rep)
-        self.check_if_report_loaded()
+        assert True == WebDriverWait(self.driver, 5).until(ec.presence_of_element_located((
+            By.ID, self.report_content_id))).is_displayed()
 
     def scheduled_messaging_report(self):
         self.wait_to_click(By.LINK_TEXT, self.scheduled_messaging_rep)
         self.check_if_report_loaded()
 
     def delete_report(self):
-        self.wait_to_click(By.ID, self.edit_report_id)
+        try:
+            self.wait_to_click(By.ID, self.edit_report_id)
+        except TimeoutException:
+            self.driver.refresh()
+            self.wait_to_click(By.ID, self.edit_report_id)
         self.wait_to_click(By.XPATH, self.delete_report_xpath)
         # assert True == WebDriverWait(self.driver, 10).until(ec.vi((
         #     By.XPATH, self.delete_success))).is_displayed()
@@ -187,12 +193,22 @@ class ReportPage:
         self.delete_report()
 
     def saved_report(self):
-        self.wait_to_click(By.LINK_TEXT, self.case_activity_rep)
+        try:
+            self.wait_to_click(By.LINK_TEXT, self.case_activity_rep)
+        except UnexpectedAlertPresentException:
+            alert = self.driver.switch_to.alert
+            alert.accept()
         self.wait_to_click(By.XPATH, self.save_xpath)
         self.driver.find_element(By.ID, self.new_saved_report_name).send_keys(self.report_name_saved)
         self.wait_to_click(By.XPATH, self.save_confirm)
-        time.sleep(2)
-        self.driver.find_element(By.LINK_TEXT, self.saved_reports_menu_link).click()
+        try:
+            time.sleep(2)
+            my_saved_rep = self.driver.find_element(By.LINK_TEXT, self.saved_reports_menu_link)
+            self.driver.execute_script("arguments[0].click();", my_saved_rep)
+        except StaleElementReferenceException:
+            time.sleep(2)
+            my_saved_rep = self.driver.find_element(By.LINK_TEXT, self.saved_reports_menu_link)
+            self.driver.execute_script("arguments[0].click();", my_saved_rep)
         assert True == WebDriverWait(self.driver, 10).until(ec.presence_of_element_located((
             By.XPATH, self.saved_report_created))).is_displayed()
         print("Report Saved successfully!")
@@ -206,13 +222,8 @@ class ReportPage:
             By.XPATH, self.success_alert))).is_displayed()
 
     def delete_scheduled_and_saved_reports(self):
-        self.wait_to_click(By.XPATH, self.delete_saved)
+        time.sleep(1)
+        self.driver.find_element(By.XPATH, self.delete_saved).click()
         self.wait_to_click(By.XPATH, self.scheduled_reports_menu_xpath)
         self.wait_to_click(By.XPATH, self.delete_scheduled)
         self.driver.find_element(By.XPATH, self.delete_scheduled_confirm)
-
-
-
-
-
-
