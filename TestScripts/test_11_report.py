@@ -1,3 +1,5 @@
+from selenium.common.exceptions import UnexpectedAlertPresentException
+
 from Pages.homePage import HomePage
 from Pages.reportPage import ReportPage
 from TestBase.environmentSetupPage import EnvironmentSetup
@@ -29,7 +31,11 @@ class ReportTests(EnvironmentSetup):
     def test_02_create_case_report(self):
         driver = self.driver
         report = HomePage(driver)
-        report.reports_menu()
+        try:
+            report.reports_menu()
+        except UnexpectedAlertPresentException:
+            alert = self.driver.switch_to.alert
+            alert.accept()
         load = ReportPage(driver)
         load.create_report_builder_case_report()
 

@@ -1,6 +1,7 @@
 import time
 
-from selenium.common.exceptions import NoSuchElementException, TimeoutException, StaleElementReferenceException
+from selenium.common.exceptions import NoSuchElementException, TimeoutException, StaleElementReferenceException, \
+    UnexpectedAlertPresentException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as ec
@@ -154,7 +155,8 @@ class ReportPage:
 
     def sms_opt_out_report(self):
         self.wait_to_click(By.LINK_TEXT, self.sms_opt_out_rep)
-        self.check_if_report_loaded()
+        assert True == WebDriverWait(self.driver, 5).until(ec.presence_of_element_located((
+            By.ID, self.report_content_id))).is_displayed()
 
     def scheduled_messaging_report(self):
         self.wait_to_click(By.LINK_TEXT, self.scheduled_messaging_rep)
@@ -191,7 +193,11 @@ class ReportPage:
         self.delete_report()
 
     def saved_report(self):
-        self.wait_to_click(By.LINK_TEXT, self.case_activity_rep)
+        try:
+            self.wait_to_click(By.LINK_TEXT, self.case_activity_rep)
+        except UnexpectedAlertPresentException:
+            alert = self.driver.switch_to.alert
+            alert.accept()
         self.wait_to_click(By.XPATH, self.save_xpath)
         self.driver.find_element(By.ID, self.new_saved_report_name).send_keys(self.report_name_saved)
         self.wait_to_click(By.XPATH, self.save_confirm)
