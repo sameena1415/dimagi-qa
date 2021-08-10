@@ -225,5 +225,8 @@ class ReportPage:
         time.sleep(1)
         self.driver.find_element(By.XPATH, self.delete_saved).click()
         self.wait_to_click(By.XPATH, self.scheduled_reports_menu_xpath)
-        self.wait_to_click(By.XPATH, self.delete_scheduled)
+        try:
+            self.wait_to_click(By.XPATH, self.delete_scheduled)
+        except StaleElementReferenceException:
+            self.wait_to_click(By.XPATH, self.delete_scheduled)
         self.driver.find_element(By.XPATH, self.delete_scheduled_confirm)
