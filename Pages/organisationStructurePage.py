@@ -94,8 +94,12 @@ class OrganisationStructurePage:
             By.XPATH, self.loc_saved_success_msg))).is_displayed()
         self.wait_to_click(By.LINK_TEXT, self.org_menu_link_text)
         self.driver.refresh()
-        assert WebDriverWait(self.driver, 3).until(ec.presence_of_element_located((
-            By.XPATH, self.location_created_xpath))).is_displayed()
+        try:
+            assert WebDriverWait(self.driver, 3).until(ec.presence_of_element_located((
+                By.XPATH, self.location_created_xpath))).is_displayed()
+        except StaleElementReferenceException:
+            assert WebDriverWait(self.driver, 3).until(ec.presence_of_element_located((
+                By.XPATH, self.location_created_xpath))).is_displayed()
 
     def edit_location(self):
         try:
