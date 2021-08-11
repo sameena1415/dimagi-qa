@@ -90,7 +90,7 @@ class OrganisationStructurePage:
         self.driver.find_element(By.XPATH, self.loc_name_xpath).clear()
         self.driver.find_element(By.XPATH, self.loc_name_xpath).send_keys(self.new_location_name)
         self.driver.find_element(By.XPATH, self.create_loc_xpath).click()
-        assert WebDriverWait(self.driver, 5).until(ec.presence_of_element_located((
+        assert WebDriverWait(self.driver, 10).until(ec.presence_of_element_located((
             By.XPATH, self.loc_saved_success_msg))).is_displayed()
         self.wait_to_click(By.LINK_TEXT, self.org_menu_link_text)
         self.driver.refresh()
@@ -152,7 +152,7 @@ class OrganisationStructurePage:
         try:
             WebDriverWait(self.driver, 20).until(ec.presence_of_element_located((
                 By.LINK_TEXT, self.download_loc_btn))).click()
-            time.sleep(6)
+            time.sleep(10)
         except TimeoutException as e:
             print("Still preparing for download.." + str(e))
             assert False
