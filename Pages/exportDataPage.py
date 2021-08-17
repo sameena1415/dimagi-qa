@@ -489,8 +489,11 @@ class ExportDataPage:
         self.switch_back_to_prev_tab()
 
         # Restore Archived Forms
-        self.wait_to_click(By.XPATH, self.checkbox1)
-        self.wait_to_click(By.XPATH, self.archive_button)
-        assert WebDriverWait(self.driver, 20).until(ec.presence_of_element_located((
-            By.XPATH, self.success_message))).is_displayed()
-        print("Forms archival successful!!")
+        try:
+            self.wait_to_click(By.XPATH, self.checkbox1)
+            self.wait_to_click(By.XPATH, self.archive_button)
+            assert WebDriverWait(self.driver, 20).until(ec.presence_of_element_located((
+                By.XPATH, self.success_message))).is_displayed()
+            print("Forms archival successful!!")
+        except TimeoutException:
+            print(TimeoutException)
