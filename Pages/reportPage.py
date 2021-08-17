@@ -85,8 +85,8 @@ class ReportPage:
         try:
             clickable = ec.element_to_be_clickable(locator)
             WebDriverWait(self.driver, timeout).until(clickable).click()
-        except NoSuchElementException:
-            print(NoSuchElementException)
+        except (NoSuchElementException, TimeoutException):
+            print(NoSuchElementException, TimeoutException)
 
     def check_if_report_loaded(self):
         try:

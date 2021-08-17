@@ -56,6 +56,7 @@ class GroupPage:
             print("User Added to Group")
 
     def edit_existing_group(self):
+        time.sleep(2)
         self.wait_to_click(By.LINK_TEXT, self.created_group)
         try:
             WebDriverWait(self.driver, 3).until(ec.alert_is_present(), 'Waiting for popup to appear.')
