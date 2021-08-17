@@ -27,8 +27,11 @@ class GroupPage:
         self.delete_success_message = "//div[@class='alert alert-margin-top fade in html alert-success']"
 
     def wait_to_click(self, *locator, timeout=3):
-        clickable = ec.element_to_be_clickable(locator)
-        WebDriverWait(self.driver, timeout).until(clickable).click()
+        try:
+            clickable = ec.element_to_be_clickable(locator)
+            WebDriverWait(self.driver, timeout).until(clickable).click()
+        except TimeoutException:
+            print(TimeoutException)
 
     def click_group_menu(self):
         self.wait_to_click(By.XPATH, self.group_menu_xpath)
@@ -53,6 +56,7 @@ class GroupPage:
             print("User Added to Group")
 
     def edit_existing_group(self):
+        time.sleep(2)
         self.wait_to_click(By.LINK_TEXT, self.created_group)
         try:
             WebDriverWait(self.driver, 3).until(ec.alert_is_present(), 'Waiting for popup to appear.')

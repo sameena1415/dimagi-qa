@@ -1,6 +1,6 @@
 import time
 
-from selenium.common.exceptions import NoSuchElementException, StaleElementReferenceException
+from selenium.common.exceptions import NoSuchElementException, StaleElementReferenceException, TimeoutException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.support.wait import WebDriverWait
@@ -98,6 +98,7 @@ class MessagingPage:
         self.select_second_lang = "(//li[@role='option'])[2]"
         self.save_lang = "(//div[@class='btn btn-primary'])[1]"
         self.delete_lang = "(//a[@data-bind='click: $root.removeLanguage'])[last()]"
+        self.lang_error = "//p[text()='Language appears twice']"
         # Message Translation
         self.msg_translation_menu = "//a[text()='Messaging Translations']"
         # Project and Subscription Settings
@@ -107,9 +108,13 @@ class MessagingPage:
         self.project_settings_menu = "Project Settings"
         self.project_settings_elements = "//form[@class='form form-horizontal']"
 
+
     def wait_to_click(self, *locator, timeout=10):
-        clickable = ec.element_to_be_clickable(locator)
-        WebDriverWait(self.driver, timeout).until(clickable).click()
+        try:
+            clickable = ec.element_to_be_clickable(locator)
+            WebDriverWait(self.driver, timeout).until(clickable).click()
+        except TimeoutException:
+            print(TimeoutException)
 
     def open_dashboard_page(self):
         assert True == self.driver.find_element(By.XPATH, self.dashboard_elements).is_displayed()
@@ -120,9 +125,17 @@ class MessagingPage:
         self.driver.find_element(By.XPATH, self.recipients_textarea).send_keys("[send to all]")
         self.driver.find_element(By.XPATH, self.message_textarea).send_keys("sms_" + fetch_random_string())
         self.driver.find_element(By.XPATH, self.send_message).click()
-        assert True == WebDriverWait(self.driver, 3).until(ec.presence_of_element_located((
-            By.XPATH, self.message_sent_success_msg))).is_displayed()
-        print("SMS composed successfully!")
+        try:
+            assert True == WebDriverWait(self.driver, 3).until(ec.presence_of_element_located((
+                By.XPATH, self.message_sent_success_msg))).is_displayed()
+        except TimeoutException:
+            self.driver.find_element(By.LINK_TEXT, self.compose_sms_menu).click()
+            self.driver.find_element(By.XPATH, self.recipients_textarea).send_keys("[send to all]")
+            self.driver.find_element(By.XPATH, self.message_textarea).send_keys("sms_" + fetch_random_string())
+            self.driver.find_element(By.XPATH, self.send_message).click()
+            assert True == WebDriverWait(self.driver, 3).until(ec.presence_of_element_located((
+                By.XPATH, self.message_sent_success_msg))).is_displayed()
+            print("SMS composed successfully!")
 
     def send_broadcast_message(self):
         self.wait_to_click(By.LINK_TEXT, self.broadcasts)
@@ -186,7 +199,7 @@ class MessagingPage:
         self.driver.find_element(By.XPATH, self.keyword_message).send_keys("Test Message: " + "keyword_"
                                                                            + fetch_random_string())
         self.driver.find_element(By.XPATH, self.send_message).click()
-        assert True == WebDriverWait(self.driver, 3).until(ec.presence_of_element_located((
+        assert True == WebDriverWait(self.driver, 5).until(ec.presence_of_element_located((
             By.XPATH, self.keyword_created))).is_displayed()
         print("Keyword created successfully!")
 
@@ -250,6 +263,20 @@ class MessagingPage:
         self.wait_to_click(By.XPATH, self.lang_input_textarea)
         time.sleep(1)
         self.wait_to_click(By.XPATH, self.select_first_lang)
+        try:
+            if self.driver.find_element(By.XPATH, self.lang_error).is_displayed():
+                self.wait_to_click(By.XPATH, self.delete_lang)
+                time.sleep(1)
+                self.wait_to_click(By.XPATH, self.delete_lang)
+                time.sleep(1)
+                self.wait_to_click(By.XPATH, self.save_lang)
+                time.sleep(1)
+                self.wait_to_click(By.XPATH, self.add_lang)
+                self.wait_to_click(By.XPATH, self.lang_input_textarea)
+                time.sleep(1)
+                self.wait_to_click(By.XPATH, self.select_first_lang)
+        except (NoSuchElementException, TimeoutException):
+            print("One lang only")
         self.wait_to_click(By.XPATH, self.save_lang)
         time.sleep(1)
         self.wait_to_click(By.XPATH, self.lang_input_textarea)
