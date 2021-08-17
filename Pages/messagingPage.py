@@ -124,9 +124,17 @@ class MessagingPage:
         self.driver.find_element(By.XPATH, self.recipients_textarea).send_keys("[send to all]")
         self.driver.find_element(By.XPATH, self.message_textarea).send_keys("sms_" + fetch_random_string())
         self.driver.find_element(By.XPATH, self.send_message).click()
-        assert True == WebDriverWait(self.driver, 3).until(ec.presence_of_element_located((
-            By.XPATH, self.message_sent_success_msg))).is_displayed()
-        print("SMS composed successfully!")
+        try:
+            assert True == WebDriverWait(self.driver, 3).until(ec.presence_of_element_located((
+                By.XPATH, self.message_sent_success_msg))).is_displayed()
+        except TimeoutException:
+            self.driver.find_element(By.LINK_TEXT, self.compose_sms_menu).click()
+            self.driver.find_element(By.XPATH, self.recipients_textarea).send_keys("[send to all]")
+            self.driver.find_element(By.XPATH, self.message_textarea).send_keys("sms_" + fetch_random_string())
+            self.driver.find_element(By.XPATH, self.send_message).click()
+            assert True == WebDriverWait(self.driver, 3).until(ec.presence_of_element_located((
+                By.XPATH, self.message_sent_success_msg))).is_displayed()
+            print("SMS composed successfully!")
 
     def send_broadcast_message(self):
         self.wait_to_click(By.LINK_TEXT, self.broadcasts)
