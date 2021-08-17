@@ -98,6 +98,7 @@ class MessagingPage:
         self.select_second_lang = "(//li[@role='option'])[2]"
         self.save_lang = "(//div[@class='btn btn-primary'])[1]"
         self.delete_lang = "(//a[@data-bind='click: $root.removeLanguage'])[last()]"
+        self.lang_error = "//p[text()='Language appears twice']"
         # Message Translation
         self.msg_translation_menu = "//a[text()='Messaging Translations']"
         # Project and Subscription Settings
@@ -107,13 +108,13 @@ class MessagingPage:
         self.project_settings_menu = "Project Settings"
         self.project_settings_elements = "//form[@class='form form-horizontal']"
 
+
     def wait_to_click(self, *locator, timeout=10):
         try:
             clickable = ec.element_to_be_clickable(locator)
             WebDriverWait(self.driver, timeout).until(clickable).click()
         except TimeoutException:
             print(TimeoutException)
-
 
     def open_dashboard_page(self):
         assert True == self.driver.find_element(By.XPATH, self.dashboard_elements).is_displayed()
@@ -262,6 +263,20 @@ class MessagingPage:
         self.wait_to_click(By.XPATH, self.lang_input_textarea)
         time.sleep(1)
         self.wait_to_click(By.XPATH, self.select_first_lang)
+        try:
+            if self.driver.find_element(By.XPATH, self.lang_error).is_displayed():
+                self.wait_to_click(By.XPATH, self.delete_lang)
+                time.sleep(1)
+                self.wait_to_click(By.XPATH, self.delete_lang)
+                time.sleep(1)
+                self.wait_to_click(By.XPATH, self.save_lang)
+                time.sleep(1)
+                self.wait_to_click(By.XPATH, self.add_lang)
+                self.wait_to_click(By.XPATH, self.lang_input_textarea)
+                time.sleep(1)
+                self.wait_to_click(By.XPATH, self.select_first_lang)
+        except (NoSuchElementException, TimeoutException):
+            print("One lang only")
         self.wait_to_click(By.XPATH, self.save_lang)
         time.sleep(1)
         self.wait_to_click(By.XPATH, self.lang_input_textarea)
