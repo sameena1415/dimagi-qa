@@ -1,6 +1,6 @@
 import time
 
-from selenium.common.exceptions import NoSuchElementException, StaleElementReferenceException
+from selenium.common.exceptions import NoSuchElementException, StaleElementReferenceException, TimeoutException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.support.wait import WebDriverWait
@@ -108,8 +108,12 @@ class MessagingPage:
         self.project_settings_elements = "//form[@class='form form-horizontal']"
 
     def wait_to_click(self, *locator, timeout=10):
-        clickable = ec.element_to_be_clickable(locator)
-        WebDriverWait(self.driver, timeout).until(clickable).click()
+        try:
+            clickable = ec.element_to_be_clickable(locator)
+            WebDriverWait(self.driver, timeout).until(clickable).click()
+        except TimeoutException:
+            print(TimeoutException)
+
 
     def open_dashboard_page(self):
         assert True == self.driver.find_element(By.XPATH, self.dashboard_elements).is_displayed()

@@ -27,8 +27,11 @@ class GroupPage:
         self.delete_success_message = "//div[@class='alert alert-margin-top fade in html alert-success']"
 
     def wait_to_click(self, *locator, timeout=3):
-        clickable = ec.element_to_be_clickable(locator)
-        WebDriverWait(self.driver, timeout).until(clickable).click()
+        try:
+            clickable = ec.element_to_be_clickable(locator)
+            WebDriverWait(self.driver, timeout).until(clickable).click()
+        except TimeoutException:
+            print(TimeoutException)
 
     def click_group_menu(self):
         self.wait_to_click(By.XPATH, self.group_menu_xpath)
