@@ -3,6 +3,7 @@
 import loginPage from '../pageObjects/loginPage'
 import webappsPage from '../pageObjects/webappsPage'
 
+
 describe('Formplayer Tests', function() {
 
     before('Login',() => { 
@@ -28,7 +29,7 @@ describe('Formplayer Tests', function() {
     it('Submit forms', function() {    
         const sf=new webappsPage
         sf.submitForm("Woman1","Village Name1","06/10/2021")
-        cy.get('#cloudcare-notifications > .alert > p').should('have.text', 'Form successfully saved!')
+        cy.get('.alert-success').should('contain.text', 'Form successfully saved!')
     })
 })
 

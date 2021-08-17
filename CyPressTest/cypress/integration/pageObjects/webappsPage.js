@@ -17,10 +17,11 @@ class webappsPage {
     }
     
     submitForm(data1,data2,data3){
-      const selectapp = cy.get('.js-application-container > .grid-item > .appicon')
-      selectapp.trigger('mouseover').click({log:true})
+      const selectapp = cy.xpath('//*[@id="menu-region"]/div/div[2]/div[1]/div/div')
+      selectapp.click()
       const selectmenu = cy.get('.module-column-name');
       selectmenu.click();
+      
       const openform = cy.get('[aria-label="Registration Form"] > .module-column-name')
       openform.click()
       const enterdata1 = cy.xpath('//span[text()="Woman\'s Name English"]/following::div[1]/div[@class="widget"]/descendant::textarea')

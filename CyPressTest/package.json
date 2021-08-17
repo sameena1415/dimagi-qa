@@ -15,7 +15,7 @@
     "mocha-loader": "^5.1.5"
   },
   "devDependencies": {
-    "cypress": "^7.6.0",
+    "cypress": "^8.0.0",
     "cypress-iframe": "^1.0.1",
     "cypress-xpath": "^1.6.2",
     "typescript": "^4.1.3"

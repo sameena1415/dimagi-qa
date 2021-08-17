@@ -2,7 +2,7 @@
 
 class logInPage {
     visit() {
-      cy.visit('https://staging.commcarehq.org/accounts/login/');
+      cy.visit(Cypress.env('login_url'));
     }
   
     fillEmail(value) {
@@ -14,16 +14,15 @@ class logInPage {
     }
 
     acceptCookie(value) {
-        const field = cy.get('#hs-eu-confirmation-button');
+        const field = cy.get('#hs-eu-confirmation-button', {timeout: 10000});
         field.click();
 
       }
 
       clickContinue(value) {
         const field = cy.get('.form-bubble-actions > [type="button"]');
-        field.click();
-
-      }
+        field.click()
+        }
 
   
     fillPassword(value) {
