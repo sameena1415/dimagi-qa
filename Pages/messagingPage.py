@@ -198,7 +198,7 @@ class MessagingPage:
         self.driver.find_element(By.XPATH, self.keyword_message).send_keys("Test Message: " + "keyword_"
                                                                            + fetch_random_string())
         self.driver.find_element(By.XPATH, self.send_message).click()
-        assert True == WebDriverWait(self.driver, 3).until(ec.presence_of_element_located((
+        assert True == WebDriverWait(self.driver, 5).until(ec.presence_of_element_located((
             By.XPATH, self.keyword_created))).is_displayed()
         print("Keyword created successfully!")
 
