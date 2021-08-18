@@ -6,4 +6,5 @@ node_modules
 # misc
 cypress.env.json
 npm-debug.log
+videos
 
