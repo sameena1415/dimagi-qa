@@ -8,4 +8,5 @@ cypress.env.json
 npm-debug.log
 videos
 test.ts
+screenshots
 

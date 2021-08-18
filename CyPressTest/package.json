@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "cypress:open": "cypress open",
-    "cypress:run": "cypress run"
+    "cypress:run": "cypress run --spec './cypress/integration/testCases/*.spec.js'"
   },
   "author": "Kiran",
   "license": "ISC",
