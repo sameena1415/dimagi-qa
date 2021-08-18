@@ -11,7 +11,7 @@ jobs:
       run:
         working-directory: CyPressTest
     steps:
-     - name: Install dependencies
+    - name: Install dependencies
       working-directory: ./CyPressTest
       run: |
         npm install
