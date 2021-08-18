@@ -15,9 +15,8 @@ jobs:
         uses: cypress-io/github-action@v2
         with:
           working-directory: CyPressTest
-          build: npm run build
-          start: npm start
-          record: truE
+          build: npm run cypress:run
+          record: true
         env:
           CYPRESS_RECORD_KE: ${{secrets.CYPRESS_RECORD_KEY}}
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          GITHUB_TOKEN: {{secrets.GITHUB_TOKEN}}
