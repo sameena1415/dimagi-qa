@@ -10,7 +10,16 @@ jobs:
     defaults:
       run:
         working-directory: CyPressTest
-    # steps:
+    steps:
+     - name: Install dependencies
+      working-directory: ./CyPressTest
+      run: |
+        npm install
+
+    - name: Build
+      working-directory: ./CyPressTest
+      run: |
+        npm run build
     # - name: Checkout
     #   uses: actions/checkout@v2
       
@@ -26,12 +35,3 @@ jobs:
     #     name: cypress-report
     #     path: /home/runner/work/dimagi-qa/dimagi-qa/report.html
     #     retention-days: 2
-  - name: Install dependencies
-    working-directory: ./CyPressTest
-    run: |
-      npm install
-
-  - name: Build
-    working-directory: ./CyPressTest
-    run: |
-      npm run build
