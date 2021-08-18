@@ -28,7 +28,7 @@ describe('Formplayer Tests', function() {
     
     it('Submit forms', function() {    
         const sf=new webappsPage
-        sf.submitForm("Woman1","Village Name2","06/10/2021")
+        sf.submitForm("Woman1","Village Name1","06/10/2021")
         cy.get('.alert-success').should('contain.text', 'Form successfully saved!')
     })
 })
