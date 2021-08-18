@@ -10,24 +10,23 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v2
-      # Install NPM dependencies, cache them correctly
-      # and run all Cypress tests
     - name: Cypress run
       uses: cypress-io/github-action@v2
       with:
         build: npm run build
         start: npm start
-
-    # Save videos and screenshots as test artifac
+        working-directory: ./CypressTests
     - name: Archive test results
       uses: actions/upload-artifact@v2
       with:
         name: test-result-report
+        working-directory: ./CypressTests
         path: /home/runner/work/dimagi-qa/dimagi-qa/report.html
         retention-days: 2
     - name: Cypress test results
       uses: actions/upload-artifact@v2
       with:
         name: cypress-report
+        working-directory: ./CypressTests
         path: /home/runner/work/dimagi-qa/dimagi-qa/report.html
         retention-days: 2
