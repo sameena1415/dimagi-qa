@@ -1,9 +1,5 @@
 {
     "projectId": "ahabhb",
-    "defaultCommandTimeout": 5000 ,
-    "env": {
-      "login_url": "",
-      "user_name": "",
-      "user_password": ""
+    "defaultCommandTimeout": 5000 
     }
   }
