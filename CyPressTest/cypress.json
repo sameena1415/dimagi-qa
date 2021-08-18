@@ -1,4 +1,9 @@
 {
     "projectId": "ahabhb",
-    "defaultCommandTimeout": 5000 
+    "defaultCommandTimeout": 5000 ,
+    "env": {
+      "CYPRESS_QA_URL": "https://staging.commcarehq.org/accounts/login/",
+      "CYPRESS_LOGIN_USERNAME": "",
+      "CYPRESS_LOGIN_PASSWORD": ""
+   }
   }

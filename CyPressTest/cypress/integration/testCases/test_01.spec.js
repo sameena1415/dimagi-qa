@@ -9,10 +9,10 @@ describe('Formplayer Tests', function() {
     before('Login',() => { 
         const lp=new loginPage
         lp.visit()
-        lp.fillEmail(Cypress.env('CYPRESS_LOGIN_USERNAME'))
+        lp.fillEmail(Cypress.env('LOGIN_USERNAME'))
         lp.clickContinue()
         lp.acceptCookie()
-        lp.fillPassword(Cypress.env('CYPRESS_LOGIN_PASSWORD'))
+        lp.fillPassword(Cypress.env('LOGIN_PASSWORD'))
         lp.submit()
         cy.title().should('be.equal', 'CommCare HQ')})
 
