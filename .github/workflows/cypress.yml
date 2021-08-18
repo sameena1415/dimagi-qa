@@ -4,12 +4,12 @@ on:
   push:
     branches: [ formplayer_cypress ]
     
-defaults:
-      run:
-        working-directory: ./CyPressTest
 jobs:
   cypress-run:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./CyPressTest
     steps:
     - name: Checkout
       uses: actions/checkout@v2
