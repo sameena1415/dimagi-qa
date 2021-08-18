@@ -1,4 +1,9 @@
 {
     "projectId": "ahabhb",
-    "defaultCommandTimeout": 5000 
-}
+    "defaultCommandTimeout": 5000 ,
+  //   "env": {
+  //     "DIMAGIQA_URL": "",
+  //     "DIMAGIQA_LOGIN_USERNAME": "",
+  //     "DIMAGIQA_LOGIN_PASSWORD": ""
+  //  }
+  }

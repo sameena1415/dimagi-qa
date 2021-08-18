@@ -2,7 +2,7 @@
 
 class logInPage {
     visit() {
-      cy.visit(Cypress.env('DIMAGIQA_URL'));
+      cy.visit(Cypress.env('CYPRESS_QA_URL'));
     }
   
     fillEmail(value) {
