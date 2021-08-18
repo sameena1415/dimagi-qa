@@ -3,10 +3,6 @@ name: Cypress Tests
 on:
   push:
     branches: [ formplayer_cypress ]
-
-defaults:
-  run:
-    working-directory: CyPressTest
     
 jobs:
   cypress-run:
@@ -21,3 +17,7 @@ jobs:
           working-directory: CyPressTest
           build: npm run build
           start: npm start
+          record: truE
+        env:
+          CYPRESS_RECORD_KE: ${{secrets.CYPRESS_RECORD_KEY}}
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
