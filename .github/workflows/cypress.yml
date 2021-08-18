@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./CyPressTest
+        working-directory: CyPressTest
     steps:
     - name: Checkout
       uses: actions/checkout@v2
