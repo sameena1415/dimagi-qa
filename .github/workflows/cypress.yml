@@ -23,9 +23,9 @@ jobs:
           CYPRESS_LOGIN_USERNAME: ${{ secrets.DIMAGIQA_LOGIN_USERNAME }}
           CYPRESS_LOGIN_PASSWORD: ${{ secrets.DIMAGIQA_LOGIN_PASSWORD }}
 
-       - name: Cypress test results
-         uses: actions/upload-artifact@v2
-          with:
-            name: test-run-videos
-            path: /home/runner/work/dimagi-qa/dimagi-qa/CyPressTest/cypress/videos/testCases/*
-            retention-days: 2
+      - name: Cypress test results
+        uses: actions/upload-artifact@v2
+        with:
+          name: test-run-videos
+          path: /home/runner/work/dimagi-qa/dimagi-qa/CyPressTest/cypress/videos/testCases/*
+          retention-days: 2
