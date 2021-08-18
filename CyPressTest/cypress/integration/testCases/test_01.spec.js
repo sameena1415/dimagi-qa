@@ -9,10 +9,10 @@ describe('Formplayer Tests', function() {
     before('Login',() => { 
         const lp=new loginPage
         lp.visit()
-        lp.fillEmail("automation.user.commcarehq@gmail.com")
+        lp.fillEmail(Cypress.env('user_name'))
         lp.clickContinue()
         lp.acceptCookie()
-        lp.fillPassword("pass@123")
+        lp.fillPassword(Cypress.env('user_password'))
         lp.submit()
         cy.title().should('be.equal', 'CommCare HQ')})
 
@@ -28,7 +28,7 @@ describe('Formplayer Tests', function() {
     
     it('Submit forms', function() {    
         const sf=new webappsPage
-        sf.submitForm("Woman1","Village Name1","06/10/2021")
+        sf.submitForm("Woman1","Village Name2","06/10/2021")
         cy.get('.alert-success').should('contain.text', 'Form successfully saved!')
     })
 })
