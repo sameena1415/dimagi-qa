@@ -7,19 +7,16 @@ on:
 jobs:
   cypress-run:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: CyPressTest
     steps:
-    - name: Install dependencies
-      working-directory: ./CyPressTest
-      run: |
-        npm install
+      - name: Checkout
+        uses: actions/checkout@v2
 
-    - name: Build
-      working-directory: ./CyPressTest
-      run: |
-        npm run build
+      - name: Cypress tests
+        uses: ./
+        with:
+          working-directory: CyPressTest
+          run: npm install
+    
     # - name: Checkout
     #   uses: actions/checkout@v2
       
