@@ -26,6 +26,7 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requires.txt
+        export DISPLAY=mymachine.com:0.0
     - name: Lint with flake8
       run: |
         # stop the build if there are Python syntax errors or undefined names
@@ -39,3 +40,9 @@ jobs:
         DIMAGIQA_LOGIN_PASSWORD: ${{ secrets.DIMAGIQA_LOGIN_PASSWORD }}
       run: |
         pytest -v
+    - name: Archive test results
+      uses: actions/upload-artifact@v2
+      with:
+        name: test-result-report
+        path: /home/runner/work/dimagi-qa/dimagi-qa/report.html
+        retention-days: 2

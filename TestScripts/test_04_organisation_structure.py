@@ -49,10 +49,10 @@ class OrganisationStructureTests(EnvironmentSetup):
         org = OrganisationStructurePage(driver)
         org.download_locations()
 
-    def test_08_upload_locations(self):
-        driver = self.driver
-        org = OrganisationStructurePage(driver)
-        org.upload_locations()
+    # def test_08_upload_locations(self):
+    #     driver = self.driver
+    #     org = OrganisationStructurePage(driver)
+    #     org.upload_locations()
 
     def test_09_cleanup(self):
         driver = self.driver

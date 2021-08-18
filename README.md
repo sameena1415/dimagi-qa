@@ -10,8 +10,6 @@ source venv/bin/activate
 # install requirements
 pip install -r requires.txt
 
-#install pytest plugin for generating HTML reports
-pip install pytest-html
 ```
 
 Copy `settings-sample.cfg` to `settings.cfg` and populate `settings.cfg` for

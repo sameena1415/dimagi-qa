@@ -20,7 +20,7 @@ class HomePage:
         self.messaging_menu_id = "MessagingTab"
         self.admin_menu_id = "AdminTab"
 
-    def wait_to_click(self, *locator, timeout=4):
+    def wait_to_click(self, *locator, timeout=5):
         clickable = ec.element_to_be_clickable(locator)
         WebDriverWait(self.driver, timeout).until(clickable).click()
 

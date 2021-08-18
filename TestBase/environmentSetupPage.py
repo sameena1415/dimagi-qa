@@ -19,6 +19,9 @@ class EnvironmentSetup(unittest.TestCase):
         chrome_options = Options()
         if os.environ.get("CI") == "true":
             chrome_options.add_argument('--no-sandbox')
+            chrome_options.add_argument('disable-extensions')
+            chrome_options.add_argument('--safebrowsing-disable-download-protection')
+            chrome_options.add_argument('--safebrowsing-disable-extension-blacklist')
             chrome_options.add_argument('--headless')
             chrome_options.add_argument('window-size=1024,768')
             chrome_options.add_experimental_option("prefs", {
@@ -26,12 +29,20 @@ class EnvironmentSetup(unittest.TestCase):
                 "download.prompt_for_download": False,
                 "download.directory_upgrade": True,
                 "safebrowsing.enabled": True})
+        else:
+            chrome_options.add_argument('--safebrowsing-disable-download-protection')
+            chrome_options.add_argument('--safebrowsing-disable-extension-blacklist')
+            chrome_options.add_experimental_option("prefs", {
+                "download.prompt_for_download": False,
+                "safebrowsing.enabled": True})
         driver_path = ChromeDriverManager().install()
-        cls.driver = webdriver.Chrome(executable_path=driver_path, chrome_options=chrome_options)
+        cls.driver = webdriver.Chrome(executable_path=driver_path, options=chrome_options)
         try:
+            cls.driver.implicitly_wait(2)
             cls.driver.get(settings["url"])
             login = LoginPage(cls.driver)
             login.enter_username(settings["login_username"])
+            login.click_continue()
             login.enter_password(settings["login_password"])
             login.click_submit()
             login.accept_alert()

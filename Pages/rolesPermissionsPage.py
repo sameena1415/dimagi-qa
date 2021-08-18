@@ -3,6 +3,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as ec
 from UserInputs.generateUserInputs import fetch_random_string
+import time
 
 
 class RolesPermissionPage:
@@ -52,6 +53,7 @@ class RolesPermissionPage:
             self.driver.find_element(By.XPATH, self.save_btn_xpath)).perform()
         assert True == WebDriverWait(self.driver, 3).until(ec.presence_of_element_located((
             By.XPATH, self.role_renamed))).is_displayed()
+        time.sleep(1)
 
     def cleanup_role(self):
         self.wait_to_click(By.XPATH, self.delete_role_xpath)
