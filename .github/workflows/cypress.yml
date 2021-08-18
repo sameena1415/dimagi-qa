@@ -18,12 +18,6 @@ jobs:
       - name: Cypress run
         uses: cypress-io/github-action@v2
         with:
+          working-directory: CyPressTest
           build: npm run build
           start: npm start
-          
-      - name: Cypress test results
-        uses: actions/upload-artifact@v2
-        with:
-          name: cypress-report
-          path: /home/runner/work/dimagi-qa/dimagi-qa/report.html
-          retention-days: 2
