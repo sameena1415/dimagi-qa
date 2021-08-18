@@ -15,8 +15,8 @@ jobs:
         uses: cypress-io/github-action@v2
         with:
           working-directory: CyPressTest
-         # run : npm run cypress:run
           record: true
+          spec: ./cypress/integration/testCases/*
         env:
           CYPRESS_RECORD_KEY: ${{secrets.CYPRESS_RECORD_KEY}}
           CYPRESS_QA_URL: ${{ secrets.DIMAGIQA_URL }}
