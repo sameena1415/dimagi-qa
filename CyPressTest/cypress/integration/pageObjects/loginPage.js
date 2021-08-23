@@ -1,41 +1,42 @@
 /// <reference types="cypress" />
+import locator from '../../fixtures/locators.json';
 
 class logInPage {
-    visit() {
-      cy.visit(Cypress.env('QA_URL'));
+    visit(value) {
+      cy.visit(value);
     }
   
     fillEmail(value) {
-      const field = cy.get('#id_auth-username');
+      const field = cy.get(locator.loginPage.username);
       field.clear();
       field.type(value);
   
       return this;
     }
 
-    acceptCookie(value) {
-        const field = cy.get('#hs-eu-confirmation-button', {timeout: 10000});
-        field.click();
 
+    acceptCookie() {
+        const field = cy.get(locator.loginPage.cookie, {timeout: 20000});
+          field.click();
       }
-
-      clickContinue(value) {
-        const field = cy.get('.form-bubble-actions > [type="button"]');
+     
+      clickContinue() {
+        const field = cy.get(locator.loginPage.continue);
         field.click()
         }
 
   
     fillPassword(value) {
-      const field = cy.get('#id_auth-password');
+      const field = cy.get(locator.loginPage.password);
       field.clear();
       field.type(value);
   
       return this;
     }
-
   
+
     submit() {
-      const button = cy.get('.form-bubble-actions > [type="submit"]');
+      const button = cy.get(locator.loginPage.submit);
       button.click();
     }
   }

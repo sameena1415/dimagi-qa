@@ -1,0 +1,27 @@
+{
+  "loginPage":
+  {
+    "username": "#id_auth-username",
+    "cookie": "#hs-eu-confirmation-button",
+    "continue": ".form-bubble-actions > [type='button']",
+    "password" : "#id_auth-password",
+    "submit": ".form-bubble-actions > [type='submit']"
+  },
+    
+  "webappsPage":
+  {
+    "webapps_menu": "#CloudcareTab > a",
+    "loginas":".js-restore-as-item",
+    "loginas_user":"[aria-label='test'] > .module-column-name",
+    "confirm_user":"#js-confirmation-confirm",
+    "select_app":"//*[@id='menu-region']/div/div[2]/div[1]/div/div",
+    "select_menu":".module-column-name",
+    "open_form":"[aria-label='Registration Form'] > .module-column-name",
+    "data1_field":"//span[text()=\"Woman's Name English\"]/following::div[1]/div[@class='widget']/descendant::textarea",
+    "data2_field":"//span[text()='Village Name']/following::div[1]/div[@class='widget']/descendant::textarea",
+    "data3_field":"//span[text()='Date of Last Menstrual Period']/following::div[1]/div[@class='widget']/descendant::input",
+    "data4_field":"//span[text()='Has the woman given birth to children that are still alive?']/following::div[1]/div[@class='widget']/descendant::input[@value='1']",
+    "submit_form":".submit"
+  }
+    
+}

@@ -1,49 +1,46 @@
 /// <reference types="cypress" />
+import locator from '../../fixtures/locators.json';
 
 class webappsPage {
 
     openWebapps() {
-        const menu = cy.get('#CloudcareTab > a');
+        const menu = cy.get(locator.webappsPage.webapps_menu);
         menu.click()
       }
   
     loginAs() {
-        const loginas = cy.get('.js-restore-as-item')
+        const loginas = cy.get(locator.webappsPage.loginas)
         loginas.click()
-        const user = cy.get('[aria-label="test"] > .module-column-name')
+        const user = cy.get(locator.webappsPage.loginas_user)
         user.click();
-        const confirm = cy.get('#js-confirmation-confirm')
+        const confirm = cy.get(locator.webappsPage.confirm_user)
         confirm.click();      
     }
     
     submitForm(data1,data2,data3){
-      const selectapp = cy.xpath('//*[@id="menu-region"]/div/div[2]/div[1]/div/div')
+      const selectapp = cy.xpath(locator.webappsPage.select_app)
       selectapp.click()
-      const selectmenu = cy.get('.module-column-name');
+      const selectmenu = cy.get(locator.webappsPage.select_menu);
       selectmenu.click();
       
-      const openform = cy.get('[aria-label="Registration Form"] > .module-column-name')
+      const openform = cy.get(locator.webappsPage.open_form)
       openform.click()
-      const enterdata1 = cy.xpath('//span[text()="Woman\'s Name English"]/following::div[1]/div[@class="widget"]/descendant::textarea')
+      const enterdata1 = cy.xpath(locator.webappsPage.data1_field)
       enterdata1.type(data1);
-      const enterdata2 = cy.xpath('//span[text()="Village Name"]/following::div[1]/div[@class="widget"]/descendant::textarea')
+      const enterdata2 = cy.xpath(locator.webappsPage.data2_field)
       enterdata2.type(data2)
-      const enterdata3 = cy.xpath('//span[text()="Date of Last Menstrual Period"]/following::div[1]/div[@class="widget"]/descendant::input')
+      const enterdata3 = cy.xpath(locator.webappsPage.data3_field)
       enterdata3.type(data3)
-      const enterdata4 =cy.xpath('//span[text()="Date of Last Menstrual Period"]/following::div[1]/div[@class="widget"]/descendant::input')
+      enterdata3.click()
+      const enterdata4 = cy.xpath(locator.webappsPage.data4_field)
       enterdata4.click()
-      const enterdata5 =cy.xpath('//span[text()="Has the woman given birth to children that are still alive?"]/following::div[1]/div[@class="widget"]/descendant::input[@value="1"]')
-      enterdata5.click()
-      const submit = cy.get('.submit')
+      const submit = cy.get(locator.webappsPage.submit_form)
       submit.click()
       return this;          
       }
 
-      acceptCookie() {
-        const field = cy.get('#hs-eu-confirmation-button');
-        field.click();
-      }
-
+     
+      
     }
 
   
