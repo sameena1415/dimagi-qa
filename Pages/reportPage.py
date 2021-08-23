@@ -61,6 +61,7 @@ class ReportPage:
         self.save_and_view_button_id = "btnSaveView"
         self.form_or_cases = "//select[@data-bind='value: sourceType']"
         self.select_form_type = "//option[@value='form']"
+        self.select_app = "//option[text()='Village Health']"
 
         # Saved Reports
         self.new_saved_report_name = "name"
@@ -177,6 +178,7 @@ class ReportPage:
     def create_report_builder_case_report(self):
         self.wait_to_click(By.ID, self.create_new_rep_id)
         self.driver.find_element(By.ID, self.report_name_textbox_id).send_keys(self.report_name_case)
+        self.driver.find_element(By.XPATH, self.select_app).click()
         self.wait_to_click(By.ID, self.next_button_id)
         self.wait_to_click(By.ID, self.save_and_view_button_id)
         self.check_if_report_loaded()
