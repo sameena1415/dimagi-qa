@@ -41,6 +41,7 @@ jobs:
       run: |
         pytest -v
     - name: Archive test results
+      if: failure()
       uses: actions/upload-artifact@v2
       with:
         name: test-result-report
