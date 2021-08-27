@@ -156,8 +156,8 @@ class OrganisationStructurePage:
 
     def download_locations(self):
         self.driver.find_element(By.LINK_TEXT, self.org_menu_link_text).click()
-        self.driver.find_element(By.XPATH, self.download_filter).click()
         self.driver.find_element(By.LINK_TEXT, self.download_loc_btn).click()
+        self.wait_to_click(By.XPATH, self.download_filter)
         try:
             WebDriverWait(self.driver, 20).until(ec.presence_of_element_located((
                 By.LINK_TEXT, self.download_loc_btn))).click()
