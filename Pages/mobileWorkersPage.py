@@ -236,7 +236,7 @@ class MobileWorkerPage:
         time.sleep(1)
         self.mobile_worker_menu()
         self.wait_to_click(By.LINK_TEXT, self.download_worker_btn)
-        self.driver.find_element(By.XPATH, self.download_filter).click()
+        self.wait_to_click(By.XPATH, self.download_filter)
         try:
             WebDriverWait(self.driver, 25).until(ec.presence_of_element_located((
                 By.LINK_TEXT, self.download_users_btn))).click()
