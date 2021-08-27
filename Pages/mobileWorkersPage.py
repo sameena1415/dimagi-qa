@@ -86,6 +86,7 @@ class MobileWorkerPage:
         self.choose_file = "//input[@id='id_bulk_upload_file']"
         self.upload = "//button[@class='btn btn-primary disable-on-submit']"
         self.import_complete = "//legend[text()='Bulk upload complete.']"
+        self.download_filter = "//button[@data-bind='html: buttonHTML']"
 
     def wait_to_click(self, *locator, timeout=15):
         try:
@@ -235,6 +236,7 @@ class MobileWorkerPage:
         time.sleep(1)
         self.mobile_worker_menu()
         self.wait_to_click(By.LINK_TEXT, self.download_worker_btn)
+        self.driver.find_element(By.XPATH, self.download_filter).click()
         try:
             WebDriverWait(self.driver, 25).until(ec.presence_of_element_located((
                 By.LINK_TEXT, self.download_users_btn))).click()
