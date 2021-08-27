@@ -67,6 +67,7 @@ class OrganisationStructurePage:
         self.upload_loc_btn = "Bulk Upload"
         self.upload = "//button[@class='btn btn-primary disable-on-submit']"
         self.import_complete = "//legend[text()='Import complete.']"
+        self.download_filter = "//button[@data-bind='html: buttonHTML']"
 
         # cleanup
         self.delete_location_created = "//span[text ()='" + self.new_location_name + \
@@ -155,6 +156,7 @@ class OrganisationStructurePage:
 
     def download_locations(self):
         self.driver.find_element(By.LINK_TEXT, self.org_menu_link_text).click()
+        self.driver.find_element(By.XPATH, self.download_filter).click()
         self.driver.find_element(By.LINK_TEXT, self.download_loc_btn).click()
         try:
             WebDriverWait(self.driver, 20).until(ec.presence_of_element_located((
