@@ -43,12 +43,12 @@ class ReportTests(EnvironmentSetup):
         load = ReportPage(driver)
         load.create_report_builder_form_report()
 
-    def test_04_save_report(self):
-        driver = self.driver
-        report = HomePage(driver)
-        report.reports_menu()
-        load = ReportPage(driver)
-        load.saved_report()
+    # def test_04_save_report(self):
+    #     driver = self.driver
+    #     report = HomePage(driver)
+    #     report.reports_menu()
+    #     load = ReportPage(driver)
+    #     load.saved_report()
 
     # def test_05_scheduled_report(self):
     #     driver = self.driver
