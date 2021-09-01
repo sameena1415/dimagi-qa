@@ -211,8 +211,11 @@ class ReportPage:
             time.sleep(2)
             my_saved_rep = self.driver.find_element(By.LINK_TEXT, self.saved_reports_menu_link)
             self.driver.execute_script("arguments[0].click();", my_saved_rep)
-        assert True == WebDriverWait(self.driver, 10).until(ec.presence_of_element_located((
-            By.XPATH, self.saved_report_created))).is_displayed()
+        try:
+            assert True == WebDriverWait(self.driver, 10).until(ec.presence_of_element_located((
+                By.XPATH, self.saved_report_created))).is_displayed()
+        except UnexpectedAlertPresentException:
+            self.driver.refresh()
         print("Report Saved successfully!")
 
     def scheduled_report(self):
@@ -224,8 +227,8 @@ class ReportPage:
             By.XPATH, self.success_alert))).is_displayed()
 
     def delete_scheduled_and_saved_reports(self):
-        time.sleep(1)
-        self.driver.find_element(By.XPATH, self.delete_saved).click()
+        time.sleep(2)
+        self.driver.find_element(By.XPATH, self.delete_saved)
         self.wait_to_click(By.XPATH, self.scheduled_reports_menu_xpath)
         try:
             self.wait_to_click(By.XPATH, self.delete_scheduled)
