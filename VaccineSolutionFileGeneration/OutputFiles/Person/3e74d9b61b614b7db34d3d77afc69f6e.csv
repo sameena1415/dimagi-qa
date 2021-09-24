@@ -1,0 +1,645 @@
+external_id,case_name,date_of_registration,dob,dummy_cp,gender,occupation,owner_id,vaccination_centre_id,whether_commorbidities,is_pregnant,all_conditional_vaccines,vaccines_completed,all_dose_id_administered,parent_type,parent_external_id
+CL_ib7hA,CL_ib7hA,2021-07-22,2018-01-01,All Vaccines,male,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_covaxin,Covid-19(Covaxin),,household,HH_0wVbR
+CL_EjgKb,CL_EjgKb,2021-07-30,2021-08-01,All Vaccines,female,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_astrazeneca,BCG,,household,HH_6qqCW
+CL_dhEbW,CL_dhEbW,2020-10-20,2006-01-01,All Vaccines,female,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,hpv covid_19_sinopharm,,,household,HH_PGlCZ
+CL_8Xgfv,CL_8Xgfv,2021-06-19,2006-01-01,All Vaccines,male,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_covaxin,Covid-19(Covaxin),,household,HH_kUMDJ
+CL_01Lbr,CL_01Lbr,2021-08-03,1950-01-01,All Vaccines,female,driver_housekeeping_staff,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,hep_b_adult covid_19_jj,,,household,HH_JA9OB
+CL_Gpxo4,CL_Gpxo4,2021-03-13,2016-01-01,All Vaccines,female,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_astrazeneca,DPT Booster,,household,HH_7WJWL
+CL_qM3F8,CL_qM3F8,2020-11-29,2021-04-01,All Vaccines,others,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_covaxin,Covid-19(Covaxin),,household,HH_zkDOH
+CL_8yD42,CL_8yD42,2020-09-17,2018-01-01,All Vaccines,others,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,,,household,HH_oOdV0
+CL_RUBFF,CL_RUBFF,2020-12-04,2018-01-01,All Vaccines,male,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,,,household,HH_AoXI0
+CL_uEUO3,CL_uEUO3,2020-12-16,1950-01-01,All Vaccines,others,social_worker_volunteer,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,hep_b_adult covid_19_jj,,,household,HH_nqTup
+CL_rltlN,CL_rltlN,2021-07-10,2021-04-01,All Vaccines,male,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_covaxin,Haemophilus influenzae type b (Hib),,household,HH_SJGoi
+CL_Nd4xb,CL_Nd4xb,2021-02-22,2010-01-01,All Vaccines,others,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,Covid-19(Astra Zeneca),,household,HH_yBYP0
+CL_4Mlsf,CL_4Mlsf,2020-12-04,1950-01-01,All Vaccines,others,hotelier_airline_personnel,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,hep_b_adult covid_19_jj,,,household,HH_6jYOU
+CL_UM4Wk,CL_UM4Wk,2020-09-05,2008-01-01,All Vaccines,female,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,hpv covid_19_sinopharm,,,household,HH_dg1Z4
+CL_roh6P,CL_roh6P,2020-10-08,1999-01-01,All Vaccines,others,other,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,hep_b_adult covid_19_jj,Hepatitis B - Adult Covid-19(J&J),,household,HH_4016s
+CL_6aXDW,CL_6aXDW,2021-02-20,2020-01-01,All Vaccines,male,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_astrazeneca,OPV,,household,HH_U44iQ
+CL_JfreQ,CL_JfreQ,2021-06-06,2010-01-01,All Vaccines,female,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,hpv covid_19_sinopharm,,,household,HH_JSe5b
+CL_6wdDs,CL_6wdDs,2021-07-03,2018-01-01,All Vaccines,male,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_covaxin,Covid-19(Covaxin),,household,HH_jnEpM
+CL_pFuMN,CL_pFuMN,2021-06-07,2008-01-01,All Vaccines,female,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,hpv covid_19_sinopharm,Japanese Encephalitis,,household,HH_1dDGB
+CL_qJzmr,CL_qJzmr,2020-11-12,2020-01-01,All Vaccines,female,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_covaxin,OPV,,household,HH_wgbMv
+CL_G7JId,CL_G7JId,2020-12-18,1999-01-01,All Vaccines,female,retired,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,yes,td_booster,,,household,HH_r8ud9
+CL_Bexw3,CL_Bexw3,2021-04-06,2020-01-01,All Vaccines,male,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_covaxin,Covid-19(Covaxin),,household,HH_ncJdM
+CL_Epnf6,CL_Epnf6,2020-09-21,2021-04-01,All Vaccines,female,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_covaxin,Covid-19(Covaxin),,household,HH_wMctH
+CL_KNwl9,CL_KNwl9,2021-08-15,1950-01-01,All Vaccines,male,hotelier_airline_personnel,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,hep_b_adult covid_19_jj,Hepatitis B - Adult Covid-19(J&J),,household,HH_DKkyY
+CL_n014K,CL_n014K,2021-07-03,2000-01-01,All Vaccines,male,hotelier_airline_personnel,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,hep_b_adult covid_19_jj,Hepatitis B - Adult Covid-19(J&J),,household,HH_HiMKt
+CL_BrNyB,CL_BrNyB,2021-04-10,2021-04-01,All Vaccines,male,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,Haemophilus influenzae type b (Hib),,household,HH_bbKam
+CL_uuvJU,CL_uuvJU,2021-02-07,2000-01-01,All Vaccines,female,social_worker_volunteer,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,yes,td_booster,Tetanus Diptheria Booster,,household,HH_gaHNQ
+CL_LU6pP,CL_LU6pP,2020-09-13,2000-01-01,All Vaccines,male,other,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,hep_b_adult covid_19_jj,Hepatitis B - Adult Covid-19(J&J),,household,HH_InQJs
+CL_Ze3ef,CL_Ze3ef,2020-09-24,1999-01-01,All Vaccines,others,manager_admin,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,hep_b_adult covid_19_jj,,,household,HH_kubOT
+CL_y5Cqd,CL_y5Cqd,2021-02-09,2008-01-01,All Vaccines,male,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,Japanese Encephalitis,,household,HH_b2PCO
+CL_KpbFG,CL_KpbFG,2021-03-17,1999-01-01,All Vaccines,female,retired,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,hep_b_adult covid_19_jj,,,household,HH_0Ds9T
+CL_SfyFR,CL_SfyFR,2020-09-26,2021-04-01,All Vaccines,female,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_covaxin,,,household,HH_M0JH4
+CL_YAlvF,CL_YAlvF,2021-02-15,2021-08-01,All Vaccines,male,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,IPV (inactivated Polio Vaccine),,household,HH_IbSTc
+CL_SsrXw,CL_SsrXw,2021-03-27,2020-01-01,All Vaccines,female,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_astrazeneca,Covid-19(Astra Zeneca),,household,HH_B77uc
+CL_Vcuub,CL_Vcuub,2020-10-03,1950-01-01,All Vaccines,female,retail_essentials,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,yes,td,Tetanus Diptheria,,household,HH_qW5k6
+CL_YBnzA,CL_YBnzA,2021-04-03,2021-01-01,All Vaccines,female,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_astrazeneca,OPV DPT Hepatitis B - Infant,opv_1 opv_2 opv_3 opv_4 dpt_1 dpt_2 dpt_3 hep_b_infant_1 hep_b_infant_2 hep_b_infant_3 measles_1,household,HH_tEfpL
+CL_3Gt3H,CL_3Gt3H,2021-01-21,1950-01-01,All Vaccines,male,law_enforcement_firefighter,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,hep_b_adult covid_19_jj,,,household,HH_Y2ZHe
+CL_jTKFD,CL_jTKFD,2020-10-21,2021-04-01,All Vaccines,others,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_covaxin,Haemophilus influenzae type b (Hib),,household,HH_MMES7
+CL_oRwuw,CL_oRwuw,2021-08-16,2020-01-01,All Vaccines,female,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_covaxin,Measles,,household,HH_k79WQ
+CL_Rh47a,CL_Rh47a,2021-08-14,2008-01-01,All Vaccines,female,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,hpv covid_19_sinopharm,Covid-19(Astra Zeneca),,household,HH_wL2CV
+CL_rLbGm,CL_rLbGm,2020-11-23,1950-01-01,All Vaccines,male,retired,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,hep_b_adult covid_19_jj,,,household,HH_e0cCH
+CL_yqwys,CL_yqwys,2021-05-06,2010-01-01,All Vaccines,female,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,hpv covid_19_sinopharm,HPV Covid-19(Sinopharm),,household,HH_ylmGT
+CL_5vjaW,CL_5vjaW,2020-09-23,2008-01-01,All Vaccines,others,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,,,household,HH_kazTo
+CL_6IygT,CL_6IygT,2021-07-22,2006-01-01,All Vaccines,female,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,yes,td,Tetanus Diptheria,,household,HH_xGgqs
+CL_PJMNE,CL_PJMNE,2020-09-20,2006-01-01,All Vaccines,male,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_astrazeneca,Covid-19(Astra Zeneca),,household,HH_0SSAA
+CL_dMa2w,CL_dMa2w,2021-08-07,2018-01-01,All Vaccines,female,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,Rotavirus,,household,HH_RCyam
+CL_vFvaa,CL_vFvaa,2020-10-15,1950-01-01,All Vaccines,others,retail_non_essential,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,hep_b_adult covid_19_jj,,,household,HH_ZkCbC
+CL_Axgat,CL_Axgat,2021-03-03,2020-01-01,All Vaccines,male,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_astrazeneca,,,household,HH_17qCa
+CL_OtJBX,CL_OtJBX,2021-01-16,2010-01-01,All Vaccines,male,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_covaxin,,,household,HH_PN11i
+CL_XbehS,CL_XbehS,2020-12-12,2021-04-01,All Vaccines,male,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,Covid-19(Astra Zeneca),,household,HH_mXyEo
+CL_YB0X8,CL_YB0X8,2021-07-02,2021-04-01,All Vaccines,others,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,,,household,HH_CLYy8
+CL_jCE1P,CL_jCE1P,2020-09-02,2021-04-01,All Vaccines,others,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,Covid-19(Astra Zeneca),,household,HH_1uJVZ
+CL_Qkd2Q,CL_Qkd2Q,2020-11-25,2021-08-01,All Vaccines,male,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_covaxin,BCG,,household,HH_R2oTa
+CL_ZA5ST,CL_ZA5ST,2021-04-23,2020-01-01,All Vaccines,female,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,Covid-19(Astra Zeneca),,household,HH_6ha3y
+CL_3A9RV,CL_3A9RV,2021-08-18,2000-01-01,All Vaccines,female,retired,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,yes,td,Tetanus Diptheria,,household,HH_Jvk24
+CL_21Ztj,CL_21Ztj,2021-08-05,2018-01-01,All Vaccines,female,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_covaxin,Covid-19(Covaxin),,household,HH_Pqv2l
+CL_edw4e,CL_edw4e,2021-04-26,1999-01-01,All Vaccines,female,banker,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,yes,td,,,household,HH_yDD0x
+CL_1PdEk,CL_1PdEk,2021-04-13,2016-01-01,All Vaccines,female,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_covaxin,Covid-19(Covaxin),,household,HH_UV8l5
+CL_B18TK,CL_B18TK,2020-10-09,2006-01-01,All Vaccines,others,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_covaxin,,,household,HH_m6846
+CL_UoNOU,CL_UoNOU,2021-08-04,1999-01-01,All Vaccines,female,retail_non_essential,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,yes,td_booster,Tetanus Diptheria Booster,,household,HH_isefH
+CL_yeHB4,CL_yeHB4,2021-08-11,2018-01-01,All Vaccines,others,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,Covid-19(Astra Zeneca),,household,HH_iSd4E
+CL_UWRd5,CL_UWRd5,2021-05-31,2018-01-01,All Vaccines,others,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_covaxin,Covid-19(Covaxin),,household,HH_OTFDX
+CL_aajXd,CL_aajXd,2021-03-05,1950-01-01,All Vaccines,female,hotelier_airline_personnel,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,yes,td_booster,Tetanus Diptheria Booster,,household,HH_zsmCI
+CL_AQEhN,CL_AQEhN,2021-07-06,2010-01-01,All Vaccines,others,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_covaxin,Covid-19(Covaxin),,household,HH_g9vJw
+CL_ctMmr,CL_ctMmr,2020-10-28,2010-01-01,All Vaccines,female,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,hpv covid_19_sinopharm,HPV Covid-19(Sinopharm),,household,HH_nkDW8
+CL_i0Gdo,CL_i0Gdo,2021-04-28,2020-01-01,All Vaccines,female,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_covaxin,Measles,,household,HH_cjMMy
+CL_fhjEI,CL_fhjEI,2021-01-29,1950-01-01,All Vaccines,others,banker,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,hep_b_adult covid_19_jj,Hepatitis B - Adult Covid-19(J&J),,household,HH_MnNx8
+CL_jeqVp,CL_jeqVp,2021-06-23,2006-01-01,All Vaccines,male,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_covaxin,Covid-19(Covaxin),,household,HH_mMjCZ
+CL_7YjBZ,CL_7YjBZ,2020-09-15,2006-01-01,All Vaccines,female,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,yes,td,Tetanus Diptheria,,household,HH_UVgfA
+CL_Y7GVG,CL_Y7GVG,2021-05-03,2010-01-01,All Vaccines,male,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_astrazeneca,,,household,HH_AXROY
+CL_lKmAt,CL_lKmAt,2020-12-26,1999-01-01,All Vaccines,female,law_enforcement_firefighter,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,yes,td,,,household,HH_4xp81
+CL_g4xyV,CL_g4xyV,2021-08-17,2016-01-01,All Vaccines,female,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_astrazeneca,Covid-19(Astra Zeneca),,household,HH_wUSJI
+CL_wPcdV,CL_wPcdV,2020-12-09,2018-01-01,All Vaccines,male,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_astrazeneca,Covid-19(Astra Zeneca),,household,HH_lArP0
+CL_obcQO,CL_obcQO,2020-12-20,2021-01-01,All Vaccines,female,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_covaxin,OPV DPT Hepatitis B - Infant,opv_1 opv_2 opv_3 opv_4 dpt_1 dpt_2 dpt_3 hep_b_infant_1 hep_b_infant_2 hep_b_infant_3 measles_1,household,HH_CgwSx
+CL_SZ6mO,CL_SZ6mO,2021-05-21,2006-01-01,All Vaccines,male,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_covaxin,,,household,HH_y8iDw
+CL_XWM49,CL_XWM49,2020-11-09,2010-01-01,All Vaccines,male,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_covaxin,,,household,HH_ovbuN
+CL_Q6EMS,CL_Q6EMS,2020-12-20,2021-01-01,All Vaccines,female,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_covaxin,OPV DPT Hepatitis B - Infant,opv_1 opv_2 opv_3 opv_4 dpt_1 dpt_2 dpt_3 hep_b_infant_1 hep_b_infant_2 hep_b_infant_3 measles_1,household,HH_OP1nX
+CL_BrvIZ,CL_BrvIZ,2020-09-27,2000-01-01,All Vaccines,male,social_worker_volunteer,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,hep_b_adult covid_19_jj,Hepatitis B - Adult Covid-19(J&J),,household,HH_QjtiQ
+CL_9YL2I,CL_9YL2I,2020-09-21,2021-08-01,All Vaccines,male,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_astrazeneca,,,household,HH_ISoD3
+CL_a54N6,CL_a54N6,2021-03-19,2018-01-01,All Vaccines,female,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_covaxin,Rubella,,household,HH_sBClm
+CL_qa3Rx,CL_qa3Rx,2020-12-03,2020-01-01,All Vaccines,male,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_covaxin,Covid-19(Covaxin),,household,HH_boaNS
+CL_WTgfV,CL_WTgfV,2020-09-12,1950-01-01,All Vaccines,others,teacher,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,hep_b_adult covid_19_jj,,,household,HH_JyXRD
+CL_GY2oP,CL_GY2oP,2021-05-20,2021-01-01,All Vaccines,male,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,Covid-19(Astra Zeneca),,household,HH_Jvb6w
+CL_Kmfnh,CL_Kmfnh,2021-07-08,2020-01-01,All Vaccines,others,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_covaxin,,,household,HH_oMSr5
+CL_EJ1jo,CL_EJ1jo,2021-07-15,1950-01-01,All Vaccines,others,driver_housekeeping_staff,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,hep_b_adult covid_19_jj,,,household,HH_vskh0
+CL_pmiun,CL_pmiun,2021-03-05,2021-08-01,All Vaccines,male,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_astrazeneca,Covid-19(Astra Zeneca),,household,HH_uyxpI
+CL_HFD9s,CL_HFD9s,2021-07-10,2020-01-01,All Vaccines,others,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_covaxin,Covid-19(Covaxin),,household,HH_nxpOy
+CL_LEQkE,CL_LEQkE,2021-04-22,1999-01-01,All Vaccines,female,driver_housekeeping_staff,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,yes,td,,,household,HH_X7BfD
+CL_Mtn3v,CL_Mtn3v,2021-05-12,1950-01-01,All Vaccines,male,social_worker_volunteer,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,hep_b_adult covid_19_jj,Hepatitis B - Adult Covid-19(J&J),,household,HH_kS8aR
+CL_ZtuLi,CL_ZtuLi,2020-12-26,1999-01-01,All Vaccines,others,healthcare_worker,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,hep_b_adult covid_19_jj,Hepatitis B - Adult Covid-19(J&J),,household,HH_NxZj2
+CL_oyLXH,CL_oyLXH,2021-07-14,1999-01-01,All Vaccines,female,retail_essentials,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,hep_b_adult covid_19_jj,Hepatitis B - Adult Covid-19(J&J),,household,HH_KEMsP
+CL_YN65J,CL_YN65J,2020-11-29,2021-01-01,All Vaccines,male,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_astrazeneca,Covid-19(Astra Zeneca),,household,HH_KF4PZ
+CL_WgxEQ,CL_WgxEQ,2021-03-03,2018-01-01,All Vaccines,female,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_covaxin,Covid-19(Covaxin),,household,HH_117Am
+CL_Vn4Yi,CL_Vn4Yi,2020-11-02,2016-01-01,All Vaccines,male,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,DPT,,household,HH_N9vlU
+CL_6NggM,CL_6NggM,2021-05-11,2016-01-01,All Vaccines,male,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,DPT Booster,,household,HH_SduzY
+CL_ed76Y,CL_ed76Y,2021-07-25,2010-01-01,All Vaccines,female,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,hpv covid_19_sinopharm,HPV Covid-19(Sinopharm),,household,HH_eiliu
+CL_yJPdr,CL_yJPdr,2021-07-10,2018-01-01,All Vaccines,male,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_covaxin,,,household,HH_C5FAZ
+CL_4OV8J,CL_4OV8J,2020-09-07,2018-01-01,All Vaccines,female,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_covaxin,Rubella,,household,HH_R2gdd
+CL_5z4D6,CL_5z4D6,2021-04-16,1950-01-01,All Vaccines,female,banker,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,yes,td,Tetanus Diptheria,,household,HH_wudao
+CL_ydliA,CL_ydliA,2021-05-05,2010-01-01,All Vaccines,female,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,hpv covid_19_sinopharm,,,household,HH_oi49P
+CL_z1yb2,CL_z1yb2,2021-01-11,1999-01-01,All Vaccines,others,driver_housekeeping_staff,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,hep_b_adult covid_19_jj,,,household,HH_oA4rr
+CL_IVEtE,CL_IVEtE,2021-06-20,2020-01-01,All Vaccines,female,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_astrazeneca,,,household,HH_8WeTL
+CL_wPNgk,CL_wPNgk,2021-07-14,2016-01-01,All Vaccines,male,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,DPT Booster,,household,HH_7ufri
+CL_2Sg1y,CL_2Sg1y,2021-07-20,2018-01-01,All Vaccines,female,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_covaxin,Covid-19(Covaxin),,household,HH_5M0gz
+CL_D7NeO,CL_D7NeO,2021-08-02,2021-08-01,All Vaccines,others,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_covaxin,Covid-19(Covaxin),,household,HH_cSM9X
+CL_Mmeo8,CL_Mmeo8,2020-11-23,2018-01-01,All Vaccines,female,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,Covid-19(Astra Zeneca),,household,HH_rCCaD
+CL_hxkQ5,CL_hxkQ5,2021-02-03,2020-01-01,All Vaccines,others,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_covaxin,Covid-19(Covaxin),,household,HH_be1TM
+CL_641XW,CL_641XW,2021-08-23,2020-01-01,All Vaccines,female,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_covaxin,Covid-19(Covaxin),,household,HH_ksRbI
+CL_KzFKQ,CL_KzFKQ,2021-06-14,2021-01-01,All Vaccines,male,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_covaxin,Pneumococcal (Conjugate),,household,HH_U3W4V
+CL_qZdKr,CL_qZdKr,2020-12-25,2016-01-01,All Vaccines,female,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_covaxin,,,household,HH_QWuH6
+CL_T5B7l,CL_T5B7l,2020-11-24,2021-01-01,All Vaccines,male,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_astrazeneca,Covid-19(Astra Zeneca),,household,HH_eLMkl
+CL_pnK5c,CL_pnK5c,2021-07-11,2006-01-01,All Vaccines,female,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,yes,td,,,household,HH_89m6f
+CL_ZfMHT,CL_ZfMHT,2021-07-28,2021-04-01,All Vaccines,others,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_covaxin,,,household,HH_B3W5U
+CL_9IwYg,CL_9IwYg,2020-10-29,2021-08-01,All Vaccines,male,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_covaxin,BCG,,household,HH_UvZXW
+CL_MB90T,CL_MB90T,2021-07-15,2021-08-01,All Vaccines,others,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,Covid-19(Astra Zeneca),,household,HH_JcUJG
+CL_YK9JF,CL_YK9JF,2020-09-24,2016-01-01,All Vaccines,others,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,DPT,,household,HH_bsLRr
+CL_SNBio,CL_SNBio,2021-08-05,2000-01-01,All Vaccines,others,hotelier_airline_personnel,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,hep_b_adult covid_19_jj,Hepatitis B - Adult Covid-19(J&J),,household,HH_RNGSN
+CL_9oeny,CL_9oeny,2021-08-15,2000-01-01,All Vaccines,female,law_enforcement_firefighter,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,yes,td_booster,Tetanus Diptheria Booster,,household,HH_cSCO1
+CL_uUbyj,CL_uUbyj,2020-11-29,2021-04-01,All Vaccines,female,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,Hepatitis B - Infant,,household,HH_jRwni
+CL_C4Eq8,CL_C4Eq8,2021-06-18,2021-04-01,All Vaccines,female,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_covaxin,,,household,HH_Sop7J
+CL_SpWqJ,CL_SpWqJ,2020-12-27,2021-04-01,All Vaccines,male,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,Covid-19(Astra Zeneca),,household,HH_qopTv
+CL_WNqed,CL_WNqed,2021-08-16,2020-01-01,All Vaccines,others,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_covaxin,Covid-19(Covaxin),,household,HH_JQHR7
+CL_Xo6nb,CL_Xo6nb,2021-03-20,2018-01-01,All Vaccines,others,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_covaxin,Covid-19(Covaxin),,household,HH_SIDt6
+CL_JTyJZ,CL_JTyJZ,2021-03-13,2021-04-01,All Vaccines,male,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_covaxin,Covid-19(Covaxin),,household,HH_y85ta
+CL_2o4wa,CL_2o4wa,2021-08-11,2006-01-01,All Vaccines,male,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_covaxin,Covid-19(Covaxin),,household,HH_KXjkU
+CL_gpLep,CL_gpLep,2020-11-17,2010-01-01,All Vaccines,male,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_covaxin,,,household,HH_9CfdL
+CL_cwKj0,CL_cwKj0,2020-12-04,2021-04-01,All Vaccines,female,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_astrazeneca,Hepatitis B - Infant,,household,HH_ByVs7
+CL_RRPPv,CL_RRPPv,2020-09-08,2021-01-01,All Vaccines,others,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,Covid-19(Astra Zeneca),,household,HH_H6tIq
+CL_C1nxw,CL_C1nxw,2021-03-26,2021-08-01,All Vaccines,male,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,Covid-19(Astra Zeneca),,household,HH_jzeEQ
+CL_aShAZ,CL_aShAZ,2020-12-03,2018-01-01,All Vaccines,male,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_covaxin,,,household,HH_NzX71
+CL_yK4uo,CL_yK4uo,2020-12-29,2008-01-01,All Vaccines,female,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,hpv covid_19_sinopharm,Covid-19(Covaxin),,household,HH_HrEqc
+CL_J02I3,CL_J02I3,2021-01-15,2010-01-01,All Vaccines,others,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_astrazeneca,Covid-19(Astra Zeneca),,household,HH_y9zo6
+CL_O5w7B,CL_O5w7B,2020-12-18,1999-01-01,All Vaccines,others,retail_non_essential,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,hep_b_adult covid_19_jj,,,household,HH_CXshE
+CL_FA25O,CL_FA25O,2020-12-13,2000-01-01,All Vaccines,male,healthcare_worker,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,hep_b_adult covid_19_jj,Hepatitis B - Adult Covid-19(J&J),,household,HH_ug0Dk
+CL_bcIg7,CL_bcIg7,2021-07-26,2000-01-01,All Vaccines,male,banker,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,hep_b_adult covid_19_jj,Hepatitis B - Adult Covid-19(J&J),,household,HH_4UHid
+CL_5JBnQ,CL_5JBnQ,2021-04-30,2021-04-01,All Vaccines,male,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_covaxin,Covid-19(Covaxin),,household,HH_5AQJh
+CL_ONZke,CL_ONZke,2021-04-05,1999-01-01,All Vaccines,male,manager_admin,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,hep_b_adult covid_19_jj,,,household,HH_T8O6M
+CL_5QyOA,CL_5QyOA,2021-07-06,2021-01-01,All Vaccines,female,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_astrazeneca,Covid-19(Astra Zeneca),,household,HH_CtHU7
+CL_FLHeN,CL_FLHeN,2021-03-07,2016-01-01,All Vaccines,male,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,,,household,HH_katvU
+CL_lQjPn,CL_lQjPn,2021-04-07,2016-01-01,All Vaccines,female,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,DPT,,household,HH_l1gEE
+CL_v64jx,CL_v64jx,2021-03-21,1950-01-01,All Vaccines,female,retail_essentials,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,hep_b_adult covid_19_jj,,,household,HH_i6pgg
+CL_8TtmS,CL_8TtmS,2021-05-13,2008-01-01,All Vaccines,female,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,hpv covid_19_sinopharm,Japanese Encephalitis,,household,HH_0Io07
+CL_e05v6,CL_e05v6,2020-11-22,2008-01-01,All Vaccines,male,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_covaxin,,,household,HH_JDYih
+CL_JixUY,CL_JixUY,2021-05-18,2018-01-01,All Vaccines,others,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_covaxin,Rubella,,household,HH_0TfR2
+CL_tgNIW,CL_tgNIW,2021-03-05,2021-01-01,All Vaccines,others,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_astrazeneca,Pneumococcal (Conjugate),,household,HH_kgqrD
+CL_A5EBk,CL_A5EBk,2021-01-13,2016-01-01,All Vaccines,male,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_astrazeneca,,,household,HH_2reV6
+CL_COm2I,CL_COm2I,2021-05-08,2016-01-01,All Vaccines,female,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_covaxin,Covid-19(Covaxin),,household,HH_TNqX8
+CL_Qx2w1,CL_Qx2w1,2021-07-10,2010-01-01,All Vaccines,female,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,hpv covid_19_sinopharm,,,household,HH_E6yXM
+CL_mHEIq,CL_mHEIq,2021-05-01,2020-01-01,All Vaccines,female,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,Covid-19(Astra Zeneca),,household,HH_kC98U
+CL_njYiw,CL_njYiw,2020-11-15,2021-04-01,All Vaccines,female,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,Covid-19(Astra Zeneca),,household,HH_qwWhH
+CL_peHTL,CL_peHTL,2020-09-27,2000-01-01,All Vaccines,female,banker,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,yes,td_booster,,,household,HH_LyutW
+CL_G6I95,CL_G6I95,2021-04-01,2018-01-01,All Vaccines,male,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_astrazeneca,Covid-19(Astra Zeneca),,household,HH_1M1dc
+CL_myXFL,CL_myXFL,2021-04-15,1999-01-01,All Vaccines,male,hotelier_airline_personnel,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,hep_b_adult covid_19_jj,Hepatitis B - Adult Covid-19(J&J),,household,HH_6lcOg
+CL_qYNDv,CL_qYNDv,2021-04-09,2021-01-01,All Vaccines,male,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_covaxin,Pneumococcal (Conjugate),,household,HH_OWLNi
+CL_O2WYa,CL_O2WYa,2020-12-07,2016-01-01,All Vaccines,others,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,Covid-19(Astra Zeneca),,household,HH_ZhjCw
+CL_7g8OX,CL_7g8OX,2020-10-20,2020-01-01,All Vaccines,others,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,Measles,,household,HH_r3Qa1
+CL_mujys,CL_mujys,2020-09-19,2000-01-01,All Vaccines,female,healthcare_worker,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,yes,td,Tetanus Diptheria,,household,HH_OV9Ye
+CL_4jRTO,CL_4jRTO,2021-05-05,2018-01-01,All Vaccines,others,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_covaxin,Rotavirus,,household,HH_foGeH
+CL_tWMYz,CL_tWMYz,2021-08-21,2021-08-01,All Vaccines,female,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_astrazeneca,,,household,HH_jXkZW
+CL_LQPnm,CL_LQPnm,2021-01-26,2010-01-01,All Vaccines,female,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,hpv covid_19_sinopharm,,,household,HH_pKFTE
+CL_jh9nD,CL_jh9nD,2020-12-21,2021-08-01,All Vaccines,others,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_covaxin,IPV (inactivated Polio Vaccine),,household,HH_hcXVH
+CL_AGZzx,CL_AGZzx,2020-11-16,1950-01-01,All Vaccines,others,teacher,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,hep_b_adult covid_19_jj,,,household,HH_6woKM
+CL_LOE8u,CL_LOE8u,2021-08-22,2020-01-01,All Vaccines,male,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_covaxin,Covid-19(Covaxin),,household,HH_sDitY
+CL_FOW9d,CL_FOW9d,2021-03-10,2018-01-01,All Vaccines,male,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,Rotavirus,,household,HH_DGPyj
+CL_nRImg,CL_nRImg,2021-02-18,1999-01-01,All Vaccines,others,driver_housekeeping_staff,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,hep_b_adult covid_19_jj,Hepatitis B - Adult Covid-19(J&J),,household,HH_uqOEi
+CL_0l8sz,CL_0l8sz,2021-08-21,2018-01-01,All Vaccines,others,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_astrazeneca,Rotavirus,,household,HH_7o93x
+CL_Ig8vw,CL_Ig8vw,2020-09-21,2021-01-01,All Vaccines,others,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,Covid-19(Astra Zeneca),,household,HH_z6khW
+CL_9pZ50,CL_9pZ50,2021-07-24,2000-01-01,All Vaccines,female,manager_admin,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,hep_b_adult covid_19_jj,Hepatitis B - Adult Covid-19(J&J),,household,HH_ymdqE
+CL_FztTg,CL_FztTg,2020-10-15,2021-04-01,All Vaccines,female,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_covaxin,Covid-19(Covaxin),,household,HH_TV7ZK
+CL_PxF0k,CL_PxF0k,2020-10-29,2016-01-01,All Vaccines,female,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_covaxin,Covid-19(Covaxin),,household,HH_1cDJy
+CL_FsJ9M,CL_FsJ9M,2021-03-30,1999-01-01,All Vaccines,female,retail_essentials,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,yes,td_booster,Tetanus Diptheria Booster,,household,HH_TiSwg
+CL_vJUm3,CL_vJUm3,2021-03-13,2000-01-01,All Vaccines,others,teacher,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,hep_b_adult covid_19_jj,Hepatitis B - Adult Covid-19(J&J),,household,HH_LR5BQ
+CL_g84SE,CL_g84SE,2020-09-01,2021-01-01,All Vaccines,female,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_covaxin,Covid-19(Covaxin),,household,HH_rsNnC
+CL_zfbRn,CL_zfbRn,2021-04-15,2008-01-01,All Vaccines,others,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_covaxin,,,household,HH_IFzaZ
+CL_U72ic,CL_U72ic,2021-02-20,2021-08-01,All Vaccines,female,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_covaxin,Covid-19(Covaxin),,household,HH_CcM2L
+CL_wBdX3,CL_wBdX3,2020-10-01,1950-01-01,All Vaccines,male,other,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,hep_b_adult covid_19_jj,Hepatitis B - Adult Covid-19(J&J),,household,HH_tiLeN
+CL_6jrBM,CL_6jrBM,2021-08-29,2021-08-01,All Vaccines,male,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,IPV (inactivated Polio Vaccine),,household,HH_DoDGK
+CL_8pJaY,CL_8pJaY,2020-10-27,2021-04-01,All Vaccines,others,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_covaxin,,,household,HH_Md5V3
+CL_rN2et,CL_rN2et,2020-10-08,2006-01-01,All Vaccines,others,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,,,household,HH_nRrzG
+CL_3PNVr,CL_3PNVr,2021-08-24,2006-01-01,All Vaccines,male,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_covaxin,Covid-19(Covaxin),,household,HH_Y4N1G
+CL_wMmkm,CL_wMmkm,2021-07-07,2021-04-01,All Vaccines,male,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_covaxin,Hepatitis B - Infant,,household,HH_7WGBB
+CL_0Zylm,CL_0Zylm,2021-02-09,2021-08-01,All Vaccines,female,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_astrazeneca,IPV (inactivated Polio Vaccine),,household,HH_kGxeA
+CL_vmp5z,CL_vmp5z,2021-05-23,2006-01-01,All Vaccines,female,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,yes,td_booster,Tetanus Diptheria Booster,,household,HH_lcVLj
+CL_6kD9m,CL_6kD9m,2021-04-03,2008-01-01,All Vaccines,female,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,hpv covid_19_sinopharm,Japanese Encephalitis,,household,HH_3Aj6j
+CL_2czM9,CL_2czM9,2021-02-26,2016-01-01,All Vaccines,others,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,Covid-19(Astra Zeneca),,household,HH_G8kdO
+CL_ttRAC,CL_ttRAC,2021-04-15,2020-01-01,All Vaccines,female,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,Measles,,household,HH_k5Qh0
+CL_M0krs,CL_M0krs,2020-10-06,2020-01-01,All Vaccines,female,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,OPV,,household,HH_oRO18
+CL_VD5aC,CL_VD5aC,2021-06-19,2000-01-01,All Vaccines,male,other,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,hep_b_adult covid_19_jj,,,household,HH_z7eB2
+CL_cdOOo,CL_cdOOo,2020-10-04,1950-01-01,All Vaccines,male,manager_admin,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,hep_b_adult covid_19_jj,,,household,HH_WzWmL
+CL_Wy3R7,CL_Wy3R7,2020-12-29,2021-08-01,All Vaccines,others,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,Covid-19(Astra Zeneca),,household,HH_jtcFc
+CL_75KYG,CL_75KYG,2021-02-27,2006-01-01,All Vaccines,others,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_astrazeneca,Covid-19(Astra Zeneca),,household,HH_xWFoR
+CL_SiQO6,CL_SiQO6,2021-07-29,2008-01-01,All Vaccines,others,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_astrazeneca,Covid-19(Astra Zeneca),,household,HH_7qA1T
+CL_f9BL0,CL_f9BL0,2021-02-21,2000-01-01,All Vaccines,female,banker,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,hep_b_adult covid_19_jj,,,household,HH_f7VGa
+CL_oQkUB,CL_oQkUB,2021-05-09,2018-01-01,All Vaccines,male,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_astrazeneca,Covid-19(Astra Zeneca),,household,HH_uAkoK
+CL_wvbAl,CL_wvbAl,2020-10-29,2021-04-01,All Vaccines,female,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,Hepatitis B - Infant,,household,HH_X2Mb1
+CL_X2beJ,CL_X2beJ,2020-09-03,2021-08-01,All Vaccines,male,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,Covid-19(Astra Zeneca),,household,HH_vswci
+CL_12peL,CL_12peL,2021-05-02,2018-01-01,All Vaccines,male,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_covaxin,Covid-19(Covaxin),,household,HH_Ux211
+CL_xA5I0,CL_xA5I0,2021-03-24,2021-04-01,All Vaccines,others,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_astrazeneca,Haemophilus influenzae type b (Hib),,household,HH_ZeyOd
+CL_XseWr,CL_XseWr,2021-08-02,2000-01-01,All Vaccines,female,driver_housekeeping_staff,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,yes,td_booster,,,household,HH_Jfcri
+CL_Jb6T5,CL_Jb6T5,2021-01-22,2006-01-01,All Vaccines,others,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_astrazeneca,Covid-19(Astra Zeneca),,household,HH_6dKhN
+CL_Lsd7e,CL_Lsd7e,2020-10-28,1950-01-01,All Vaccines,female,healthcare_worker,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,yes,td_booster,,,household,HH_hdunj
+CL_zwit4,CL_zwit4,2020-09-11,1950-01-01,All Vaccines,others,manager_admin,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,hep_b_adult covid_19_jj,,,household,HH_HEk7h
+CL_uuqCu,CL_uuqCu,2021-05-24,2016-01-01,All Vaccines,male,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_covaxin,DPT,,household,HH_2EThF
+CL_qpbSO,CL_qpbSO,2021-03-09,2000-01-01,All Vaccines,others,manager_admin,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,hep_b_adult covid_19_jj,Hepatitis B - Adult Covid-19(J&J),,household,HH_n8TJM
+CL_4Mpqh,CL_4Mpqh,2021-02-20,2000-01-01,All Vaccines,female,law_enforcement_firefighter,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,yes,td_booster,,,household,HH_Sp1U0
+CL_1eKVD,CL_1eKVD,2021-07-03,2010-01-01,All Vaccines,others,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_astrazeneca,Covid-19(Astra Zeneca),,household,HH_1Nxux
+CL_xYWEM,CL_xYWEM,2021-02-15,1999-01-01,All Vaccines,female,retail_non_essential,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,yes,td_booster,,,household,HH_pCBDm
+CL_o1pSB,CL_o1pSB,2020-11-01,2021-04-01,All Vaccines,others,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_covaxin,Covid-19(Covaxin),,household,HH_lcyM6
+CL_J5ikj,CL_J5ikj,2021-01-22,2006-01-01,All Vaccines,others,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,Covid-19(Astra Zeneca),,household,HH_JWV7i
+CL_8UyKu,CL_8UyKu,2021-03-14,2021-04-01,All Vaccines,male,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_covaxin,,,household,HH_NbzAc
+CL_fzn4G,CL_fzn4G,2021-02-13,2021-08-01,All Vaccines,female,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_astrazeneca,IPV (inactivated Polio Vaccine),,household,HH_9SrqA
+CL_8YBm0,CL_8YBm0,2021-04-21,1950-01-01,All Vaccines,others,hotelier_airline_personnel,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,hep_b_adult covid_19_jj,Hepatitis B - Adult Covid-19(J&J),,household,HH_BgyKr
+CL_TJDjN,CL_TJDjN,2020-10-23,2000-01-01,All Vaccines,male,retail_essentials,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,hep_b_adult covid_19_jj,,,household,HH_jBV6m
+CL_8qCPo,CL_8qCPo,2021-06-10,1950-01-01,All Vaccines,female,retired,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,yes,td_booster,Tetanus Diptheria Booster,,household,HH_pFz7W
+CL_Suetd,CL_Suetd,2021-07-12,2020-01-01,All Vaccines,others,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,,,household,HH_7jYkw
+CL_yTCh2,CL_yTCh2,2020-10-27,2006-01-01,All Vaccines,male,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,,,household,HH_fop4c
+CL_YXtqY,CL_YXtqY,2021-06-04,2021-08-01,All Vaccines,others,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_covaxin,Covid-19(Covaxin),,household,HH_f0AUR
+CL_8kpgy,CL_8kpgy,2021-01-03,2021-01-01,All Vaccines,female,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_covaxin,,,household,HH_aIIPR
+CL_3L10g,CL_3L10g,2021-06-04,2021-04-01,All Vaccines,female,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_astrazeneca,,,household,HH_clYxd
+CL_Ya9WR,CL_Ya9WR,2021-07-18,2006-01-01,All Vaccines,others,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_covaxin,,,household,HH_txoo0
+CL_ZMYXt,CL_ZMYXt,2021-05-16,2010-01-01,All Vaccines,female,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,hpv covid_19_sinopharm,HPV Covid-19(Sinopharm),,household,HH_glwM9
+CL_MKAb5,CL_MKAb5,2020-09-04,2016-01-01,All Vaccines,male,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_covaxin,DPT Booster,,household,HH_sRZA3
+CL_zYQr1,CL_zYQr1,2020-12-17,2021-08-01,All Vaccines,female,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_astrazeneca,,,household,HH_LuMwG
+CL_93Jo6,CL_93Jo6,2020-09-22,2021-01-01,All Vaccines,others,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_covaxin,Covid-19(Covaxin),,household,HH_BXA3h
+CL_O0nGP,CL_O0nGP,2021-05-25,2010-01-01,All Vaccines,others,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,Covid-19(Astra Zeneca),,household,HH_IMLfn
+CL_sD1aZ,CL_sD1aZ,2020-11-22,2021-01-01,All Vaccines,others,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_astrazeneca,,,household,HH_bQShh
+CL_jOaOg,CL_jOaOg,2020-09-24,2021-01-01,All Vaccines,female,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_covaxin,Covid-19(Covaxin),,household,HH_BMGEy
+CL_ma6W0,CL_ma6W0,2020-12-22,2018-01-01,All Vaccines,others,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,Covid-19(Astra Zeneca),,household,HH_xVAjP
+CL_ZseDu,CL_ZseDu,2021-02-15,2010-01-01,All Vaccines,female,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,hpv covid_19_sinopharm,,,household,HH_75v2m
+CL_tAynA,CL_tAynA,2020-09-19,2021-01-01,All Vaccines,others,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_astrazeneca,,,household,HH_WweAT
+CL_y3eGi,CL_y3eGi,2020-12-05,2018-01-01,All Vaccines,male,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_covaxin,,,household,HH_OJy8v
+CL_5lGvG,CL_5lGvG,2021-01-05,1999-01-01,All Vaccines,others,other,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,hep_b_adult covid_19_jj,,,household,HH_L0Xdd
+CL_ssK92,CL_ssK92,2020-10-06,2021-08-01,All Vaccines,female,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_covaxin,BCG,,household,HH_ADhXQ
+CL_1gH0D,CL_1gH0D,2020-11-08,2021-04-01,All Vaccines,male,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_astrazeneca,Haemophilus influenzae type b (Hib),,household,HH_j7Xaz
+CL_hzdvM,CL_hzdvM,2021-06-13,2018-01-01,All Vaccines,female,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_astrazeneca,Covid-19(Astra Zeneca),,household,HH_bh6om
+CL_X9O0y,CL_X9O0y,2021-07-25,2021-01-01,All Vaccines,male,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_astrazeneca,OPV DPT Hepatitis B - Infant,opv_1 opv_2 opv_3 opv_4 dpt_1 dpt_2 dpt_3 hep_b_infant_1 hep_b_infant_2 hep_b_infant_3 measles_1,household,HH_RRb8h
+CL_cuJFB,CL_cuJFB,2021-05-27,2021-04-01,All Vaccines,male,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,Covid-19(Astra Zeneca),,household,HH_aEanS
+CL_Tj8oq,CL_Tj8oq,2021-02-23,2010-01-01,All Vaccines,male,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,,,household,HH_duaau
+CL_o5rGQ,CL_o5rGQ,2020-12-15,2018-01-01,All Vaccines,male,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_covaxin,,,household,HH_CZfKx
+CL_1QT6h,CL_1QT6h,2020-12-19,2010-01-01,All Vaccines,male,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_astrazeneca,,,household,HH_pK8JB
+CL_LP2CP,CL_LP2CP,2021-01-23,2021-01-01,All Vaccines,female,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_covaxin,Covid-19(Covaxin),,household,HH_RONO6
+CL_jd7rK,CL_jd7rK,2021-01-18,2006-01-01,All Vaccines,female,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,hpv covid_19_sinopharm,HPV Covid-19(Sinopharm),,household,HH_gOxaI
+CL_8Mnp6,CL_8Mnp6,2020-10-31,2016-01-01,All Vaccines,male,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,,,household,HH_bKLXy
+CL_7WfmY,CL_7WfmY,2020-10-13,2020-01-01,All Vaccines,others,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_astrazeneca,Covid-19(Astra Zeneca),,household,HH_IoHIR
+CL_7wyqw,CL_7wyqw,2021-03-18,1999-01-01,All Vaccines,others,driver_housekeeping_staff,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,hep_b_adult covid_19_jj,Hepatitis B - Adult Covid-19(J&J),,household,HH_Hv4Zg
+CL_F8uFa,CL_F8uFa,2021-06-27,2021-01-01,All Vaccines,male,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,Covid-19(Astra Zeneca),,household,HH_355gD
+CL_EcS4R,CL_EcS4R,2021-01-12,2018-01-01,All Vaccines,female,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,Covid-19(Astra Zeneca),,household,HH_ZvTIz
+CL_vZr92,CL_vZr92,2021-07-31,2008-01-01,All Vaccines,others,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,Covid-19(Astra Zeneca),,household,HH_d6epE
+CL_QzIth,CL_QzIth,2021-06-20,2006-01-01,All Vaccines,female,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,yes,td,,,household,HH_3KFlk
+CL_gUdGP,CL_gUdGP,2021-06-02,1999-01-01,All Vaccines,others,retail_non_essential,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,hep_b_adult covid_19_jj,Hepatitis B - Adult Covid-19(J&J),,household,HH_QoUKN
+CL_oApaA,CL_oApaA,2021-02-03,2021-08-01,All Vaccines,male,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_covaxin,IPV (inactivated Polio Vaccine),,household,HH_NtcAL
+CL_jJ7yf,CL_jJ7yf,2021-05-30,2021-04-01,All Vaccines,others,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_covaxin,Hepatitis B - Infant,,household,HH_rgLNa
+CL_3qUN5,CL_3qUN5,2020-11-08,2020-01-01,All Vaccines,others,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_covaxin,,,household,HH_y94SG
+CL_Yaz98,CL_Yaz98,2021-05-26,2021-04-01,All Vaccines,male,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_covaxin,Covid-19(Covaxin),,household,HH_yYoP9
+CL_ExJQP,CL_ExJQP,2021-06-15,2021-08-01,All Vaccines,female,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,BCG,,household,HH_Yvcin
+CL_TV5QC,CL_TV5QC,2021-01-26,2020-01-01,All Vaccines,others,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_covaxin,Covid-19(Covaxin),,household,HH_ZRorS
+CL_P5Bb1,CL_P5Bb1,2020-12-18,2008-01-01,All Vaccines,female,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,hpv covid_19_sinopharm,Covid-19(Covaxin),,household,HH_fyt2K
+CL_q0qz6,CL_q0qz6,2021-02-08,2020-01-01,All Vaccines,others,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_covaxin,OPV,,household,HH_qjbC2
+CL_QrGX0,CL_QrGX0,2021-01-20,2020-01-01,All Vaccines,female,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_covaxin,Covid-19(Covaxin),,household,HH_ilTwK
+CL_yqvCV,CL_yqvCV,2021-07-02,2000-01-01,All Vaccines,others,law_enforcement_firefighter,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,hep_b_adult covid_19_jj,,,household,HH_sE5pI
+CL_QZbYL,CL_QZbYL,2021-06-05,2020-01-01,All Vaccines,male,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_astrazeneca,Covid-19(Astra Zeneca),,household,HH_Icn3y
+CL_T0CAP,CL_T0CAP,2021-05-26,2008-01-01,All Vaccines,female,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,hpv covid_19_sinopharm,Japanese Encephalitis,,household,HH_eLS3C
+CL_SFczA,CL_SFczA,2020-12-15,2008-01-01,All Vaccines,others,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_covaxin,Covid-19(Covaxin),,household,HH_DVyB9
+CL_VsNdl,CL_VsNdl,2020-12-26,2021-08-01,All Vaccines,male,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,IPV (inactivated Polio Vaccine),,household,HH_0MECI
+CL_pIuxe,CL_pIuxe,2021-02-13,2020-01-01,All Vaccines,female,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,OPV,,household,HH_s4o1u
+CL_n2P3j,CL_n2P3j,2021-05-24,2000-01-01,All Vaccines,others,retail_essentials,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,hep_b_adult covid_19_jj,Hepatitis B - Adult Covid-19(J&J),,household,HH_CzTsd
+CL_p3vY2,CL_p3vY2,2020-10-07,2021-04-01,All Vaccines,female,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_covaxin,,,household,HH_7SWvD
+CL_ibPt4,CL_ibPt4,2021-01-15,2006-01-01,All Vaccines,male,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_covaxin,,,household,HH_pdWOx
+CL_YAEGq,CL_YAEGq,2021-08-13,1950-01-01,All Vaccines,female,driver_housekeeping_staff,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,yes,td,Tetanus Diptheria,,household,HH_JJSs6
+CL_1zaLQ,CL_1zaLQ,2021-04-30,2008-01-01,All Vaccines,male,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_covaxin,Japanese Encephalitis,,household,HH_eLUHL
+CL_1lpx6,CL_1lpx6,2021-08-18,2008-01-01,All Vaccines,female,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,hpv covid_19_sinopharm,,,household,HH_IxZ7F
+CL_VsiFj,CL_VsiFj,2021-08-19,2020-01-01,All Vaccines,male,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_covaxin,Covid-19(Covaxin),,household,HH_odPbo
+CL_BjCAt,CL_BjCAt,2021-03-21,2021-01-01,All Vaccines,female,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_covaxin,Pneumococcal (Conjugate),,household,HH_rnPQc
+CL_90iSj,CL_90iSj,2021-06-12,2018-01-01,All Vaccines,female,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_astrazeneca,Covid-19(Astra Zeneca),,household,HH_n4ofo
+CL_TvSj1,CL_TvSj1,2021-02-06,2000-01-01,All Vaccines,male,law_enforcement_firefighter,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,hep_b_adult covid_19_jj,,,household,HH_1D66M
+CL_tUcuO,CL_tUcuO,2020-11-21,1950-01-01,All Vaccines,female,retail_non_essential,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,yes,td,Tetanus Diptheria,,household,HH_beDok
+CL_kHaJj,CL_kHaJj,2021-03-18,2021-08-01,All Vaccines,male,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_astrazeneca,IPV (inactivated Polio Vaccine),,household,HH_AlnnA
+CL_JpT63,CL_JpT63,2020-11-22,2021-04-01,All Vaccines,female,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_astrazeneca,Haemophilus influenzae type b (Hib),,household,HH_PBP6P
+CL_nhOvY,CL_nhOvY,2020-10-17,2021-01-01,All Vaccines,male,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_covaxin,,,household,HH_D0hHr
+CL_iOvxl,CL_iOvxl,2021-04-05,2021-04-01,All Vaccines,others,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_covaxin,Haemophilus influenzae type b (Hib),,household,HH_CfEb8
+CL_fVyUY,CL_fVyUY,2020-10-13,2018-01-01,All Vaccines,others,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,,,household,HH_QNtz3
+CL_lx7lJ,CL_lx7lJ,2021-04-05,2010-01-01,All Vaccines,male,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_astrazeneca,Covid-19(Astra Zeneca),,household,HH_EPPBD
+CL_BTWGp,CL_BTWGp,2020-12-02,2021-08-01,All Vaccines,others,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_astrazeneca,Covid-19(Astra Zeneca),,household,HH_wHbRC
+CL_GhV31,CL_GhV31,2021-06-09,1950-01-01,All Vaccines,others,retired,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,hep_b_adult covid_19_jj,Hepatitis B - Adult Covid-19(J&J),,household,HH_u2ZMI
+CL_GqORN,CL_GqORN,2021-06-02,2006-01-01,All Vaccines,female,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,yes,td,Tetanus Diptheria,,household,HH_4HmCi
+CL_WE5NN,CL_WE5NN,2020-12-21,2010-01-01,All Vaccines,male,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_astrazeneca,,,household,HH_p33kh
+CL_1Af8k,CL_1Af8k,2021-08-14,1950-01-01,All Vaccines,male,teacher,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,hep_b_adult covid_19_jj,,,household,HH_P2ED5
+CL_hsDjz,CL_hsDjz,2020-12-17,2021-01-01,All Vaccines,male,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_covaxin,Pneumococcal (Conjugate),,household,HH_SFDt6
+CL_MvxX5,CL_MvxX5,2021-03-10,2010-01-01,All Vaccines,male,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_covaxin,Covid-19(Covaxin),,household,HH_KaoIa
+CL_p2AAo,CL_p2AAo,2021-04-13,2021-01-01,All Vaccines,male,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_covaxin,OPV DPT Hepatitis B - Infant,opv_1 opv_2 opv_3 opv_4 dpt_1 dpt_2 dpt_3 hep_b_infant_1 hep_b_infant_2 hep_b_infant_3 measles_1,household,HH_4cDlM
+CL_caQEl,CL_caQEl,2020-12-09,1999-01-01,All Vaccines,female,driver_housekeeping_staff,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,hep_b_adult covid_19_jj,,,household,HH_sLWf9
+CL_Tkh08,CL_Tkh08,2021-04-02,1999-01-01,All Vaccines,male,driver_housekeeping_staff,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,hep_b_adult covid_19_jj,Hepatitis B - Adult Covid-19(J&J),,household,HH_qJDmD
+CL_zCU9c,CL_zCU9c,2020-12-20,2010-01-01,All Vaccines,male,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_covaxin,,,household,HH_xIvfl
+CL_tIngS,CL_tIngS,2020-10-24,2008-01-01,All Vaccines,male,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_astrazeneca,,,household,HH_kuz4I
+CL_yh2n3,CL_yh2n3,2021-07-11,2016-01-01,All Vaccines,male,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_covaxin,Covid-19(Covaxin),,household,HH_8ZhNq
+CL_X7FFP,CL_X7FFP,2021-03-16,2000-01-01,All Vaccines,male,hotelier_airline_personnel,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,hep_b_adult covid_19_jj,Hepatitis B - Adult Covid-19(J&J),,household,HH_llZC0
+CL_vzuxv,CL_vzuxv,2020-09-30,2021-04-01,All Vaccines,others,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_astrazeneca,Hepatitis B - Infant,,household,HH_CgNiw
+CL_bQFZM,CL_bQFZM,2021-05-31,2021-08-01,All Vaccines,male,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_covaxin,BCG,,household,HH_cxROM
+CL_Hl07P,CL_Hl07P,2021-08-03,2010-01-01,All Vaccines,female,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,hpv covid_19_sinopharm,,,household,HH_E0Hwv
+CL_QI8SY,CL_QI8SY,2020-11-01,2020-01-01,All Vaccines,others,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_covaxin,Covid-19(Covaxin),,household,HH_sD5va
+CL_3tKgl,CL_3tKgl,2020-12-30,2018-01-01,All Vaccines,others,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_astrazeneca,,,household,HH_tgm0o
+CL_9FzRi,CL_9FzRi,2021-06-22,2021-08-01,All Vaccines,female,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_covaxin,Covid-19(Covaxin),,household,HH_zUcox
+CL_0JZhT,CL_0JZhT,2020-10-31,2000-01-01,All Vaccines,others,driver_housekeeping_staff,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,hep_b_adult covid_19_jj,Hepatitis B - Adult Covid-19(J&J),,household,HH_PhirO
+CL_0nbuo,CL_0nbuo,2021-06-25,1950-01-01,All Vaccines,male,retail_non_essential,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,hep_b_adult covid_19_jj,,,household,HH_Vyc2O
+CL_p41Xh,CL_p41Xh,2021-08-04,2021-08-01,All Vaccines,others,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,Covid-19(Astra Zeneca),,household,HH_bZLxT
+CL_2VW53,CL_2VW53,2020-10-12,2000-01-01,All Vaccines,male,retail_essentials,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,hep_b_adult covid_19_jj,Hepatitis B - Adult Covid-19(J&J),,household,HH_wu2X6
+CL_Maift,CL_Maift,2020-11-18,2006-01-01,All Vaccines,others,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_covaxin,,,household,HH_zJvFA
+CL_VlECW,CL_VlECW,2021-04-03,2020-01-01,All Vaccines,female,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_astrazeneca,,,household,HH_I7rqt
+CL_ef5Ke,CL_ef5Ke,2020-11-05,2000-01-01,All Vaccines,others,banker,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,hep_b_adult covid_19_jj,,,household,HH_bQ0Ju
+CL_27ldc,CL_27ldc,2021-05-30,1999-01-01,All Vaccines,male,retired,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,hep_b_adult covid_19_jj,,,household,HH_49C8a
+CL_nGvCx,CL_nGvCx,2021-08-16,2018-01-01,All Vaccines,male,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_covaxin,Rubella,,household,HH_IU4BZ
+CL_sHsSf,CL_sHsSf,2021-05-04,1999-01-01,All Vaccines,others,other,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,hep_b_adult covid_19_jj,Hepatitis B - Adult Covid-19(J&J),,household,HH_c4HJs
+CL_Za27s,CL_Za27s,2021-05-14,2016-01-01,All Vaccines,male,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_astrazeneca,DPT Booster,,household,HH_pLKHE
+CL_YM38z,CL_YM38z,2021-07-25,2016-01-01,All Vaccines,others,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_astrazeneca,Covid-19(Astra Zeneca),,household,HH_jUftU
+CL_JYmns,CL_JYmns,2021-01-18,2021-08-01,All Vaccines,male,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,BCG,,household,HH_ut5z1
+CL_MJP9y,CL_MJP9y,2021-08-01,2021-01-01,All Vaccines,male,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_covaxin,Covid-19(Covaxin),,household,HH_WWWK2
+CL_VQHkc,CL_VQHkc,2020-11-13,2008-01-01,All Vaccines,male,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_covaxin,Covid-19(Covaxin),,household,HH_Z9K7p
+CL_wkMCb,CL_wkMCb,2020-11-19,2021-04-01,All Vaccines,male,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_astrazeneca,Covid-19(Astra Zeneca),,household,HH_xAIt9
+CL_NgpkZ,CL_NgpkZ,2021-02-22,2006-01-01,All Vaccines,female,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,hpv covid_19_sinopharm,HPV Covid-19(Sinopharm),,household,HH_UOXbv
+CL_sGeIX,CL_sGeIX,2021-01-03,2000-01-01,All Vaccines,others,retail_essentials,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,hep_b_adult covid_19_jj,,,household,HH_ylMJW
+CL_jaIhe,CL_jaIhe,2021-08-30,2021-08-01,All Vaccines,male,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_covaxin,,,household,HH_Vy3rs
+CL_rIj7p,CL_rIj7p,2021-06-05,2016-01-01,All Vaccines,others,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_astrazeneca,DPT Booster,,household,HH_YKNLC
+CL_AoG0A,CL_AoG0A,2021-02-21,2020-01-01,All Vaccines,male,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_astrazeneca,Covid-19(Astra Zeneca),,household,HH_0wVbR
+CL_XIcr1,CL_XIcr1,2021-03-24,2021-01-01,All Vaccines,others,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,OPV DPT Hepatitis B - Infant,opv_1 opv_2 opv_3 opv_4 dpt_1 dpt_2 dpt_3 hep_b_infant_1 hep_b_infant_2 hep_b_infant_3 measles_1,household,HH_6qqCW
+CL_kPs4W,CL_kPs4W,2021-07-03,2000-01-01,All Vaccines,others,social_worker_volunteer,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,hep_b_adult covid_19_jj,,,household,HH_PGlCZ
+CL_xFvoo,CL_xFvoo,2020-09-14,2018-01-01,All Vaccines,others,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_covaxin,Covid-19(Covaxin),,household,HH_kUMDJ
+CL_TaLK9,CL_TaLK9,2020-10-04,1999-01-01,All Vaccines,male,retail_non_essential,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,hep_b_adult covid_19_jj,Hepatitis B - Adult Covid-19(J&J),,household,HH_JA9OB
+CL_R7iyJ,CL_R7iyJ,2021-08-24,2021-01-01,All Vaccines,female,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_covaxin,Covid-19(Covaxin),,household,HH_7WJWL
+CL_zDl1g,CL_zDl1g,2021-01-05,2021-01-01,All Vaccines,others,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_astrazeneca,Covid-19(Astra Zeneca),,household,HH_zkDOH
+CL_xYjxk,CL_xYjxk,2021-03-16,2000-01-01,All Vaccines,female,banker,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,yes,td_booster,,,household,HH_oOdV0
+CL_kij7q,CL_kij7q,2021-07-09,2010-01-01,All Vaccines,female,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,hpv covid_19_sinopharm,HPV Covid-19(Sinopharm),,household,HH_AoXI0
+CL_mEOv7,CL_mEOv7,2020-12-01,2021-08-01,All Vaccines,female,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,Covid-19(Astra Zeneca),,household,HH_nqTup
+CL_wJYYg,CL_wJYYg,2021-03-09,1999-01-01,All Vaccines,female,retail_essentials,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,yes,td_booster,Tetanus Diptheria Booster,,household,HH_SJGoi
+CL_PWAfs,CL_PWAfs,2021-07-23,2006-01-01,All Vaccines,male,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_covaxin,Covid-19(Covaxin),,household,HH_yBYP0
+CL_aqYfM,CL_aqYfM,2020-10-05,2020-01-01,All Vaccines,male,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_astrazeneca,Covid-19(Astra Zeneca),,household,HH_6jYOU
+CL_rBTNA,CL_rBTNA,2021-06-23,2021-01-01,All Vaccines,female,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,Covid-19(Astra Zeneca),,household,HH_dg1Z4
+CL_TAvmN,CL_TAvmN,2020-10-04,1950-01-01,All Vaccines,female,retail_essentials,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,yes,td_booster,,,household,HH_4016s
+CL_NZ87F,CL_NZ87F,2021-04-12,2021-08-01,All Vaccines,male,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_astrazeneca,,,household,HH_U44iQ
+CL_G43Vd,CL_G43Vd,2021-07-05,2008-01-01,All Vaccines,others,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_covaxin,Covid-19(Covaxin),,household,HH_JSe5b
+CL_XP3Qd,CL_XP3Qd,2020-09-12,2016-01-01,All Vaccines,male,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_covaxin,Covid-19(Covaxin),,household,HH_jnEpM
+CL_lwjAI,CL_lwjAI,2021-07-29,2018-01-01,All Vaccines,male,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_covaxin,,,household,HH_1dDGB
+CL_Uyn8C,CL_Uyn8C,2021-07-05,2010-01-01,All Vaccines,male,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_astrazeneca,,,household,HH_wgbMv
+CL_SeChZ,CL_SeChZ,2021-03-29,2006-01-01,All Vaccines,male,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_covaxin,,,household,HH_r8ud9
+CL_jAiaM,CL_jAiaM,2020-11-13,2000-01-01,All Vaccines,male,other,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,hep_b_adult covid_19_jj,Hepatitis B - Adult Covid-19(J&J),,household,HH_ncJdM
+CL_sUYQO,CL_sUYQO,2021-03-05,2020-01-01,All Vaccines,others,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,Covid-19(Astra Zeneca),,household,HH_wMctH
+CL_Z9WLI,CL_Z9WLI,2021-05-25,2006-01-01,All Vaccines,male,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,Covid-19(Astra Zeneca),,household,HH_DKkyY
+CL_VYtkP,CL_VYtkP,2020-10-24,2018-01-01,All Vaccines,male,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_covaxin,Covid-19(Covaxin),,household,HH_HiMKt
+CL_Yte2G,CL_Yte2G,2020-12-21,2000-01-01,All Vaccines,female,law_enforcement_firefighter,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,yes,td_booster,Tetanus Diptheria Booster,,household,HH_bbKam
+CL_b8S6d,CL_b8S6d,2021-08-22,1999-01-01,All Vaccines,female,retired,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,yes,td_booster,,,household,HH_gaHNQ
+CL_BAztE,CL_BAztE,2021-06-25,1999-01-01,All Vaccines,female,retail_non_essential,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,hep_b_adult covid_19_jj,Hepatitis B - Adult Covid-19(J&J),,household,HH_InQJs
+CL_9Ypmz,CL_9Ypmz,2020-09-13,2008-01-01,All Vaccines,male,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,,,household,HH_kubOT
+CL_2rHjO,CL_2rHjO,2020-10-15,2020-01-01,All Vaccines,male,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_covaxin,,,household,HH_b2PCO
+CL_jA6gt,CL_jA6gt,2021-08-18,2010-01-01,All Vaccines,others,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_astrazeneca,,,household,HH_0Ds9T
+CL_LoJU0,CL_LoJU0,2021-02-08,1950-01-01,All Vaccines,male,manager_admin,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,hep_b_adult covid_19_jj,,,household,HH_M0JH4
+CL_EgoTW,CL_EgoTW,2020-12-08,2006-01-01,All Vaccines,male,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,,,household,HH_IbSTc
+CL_5A3L2,CL_5A3L2,2020-10-04,2008-01-01,All Vaccines,male,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,Japanese Encephalitis,,household,HH_B77uc
+CL_sHC5i,CL_sHC5i,2020-11-05,2018-01-01,All Vaccines,female,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_astrazeneca,Covid-19(Astra Zeneca),,household,HH_qW5k6
+CL_YKSSk,CL_YKSSk,2021-02-09,1950-01-01,All Vaccines,female,social_worker_volunteer,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,yes,td,,,household,HH_tEfpL
+CL_Rd9tR,CL_Rd9tR,2020-10-23,2010-01-01,All Vaccines,female,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,hpv covid_19_sinopharm,,,household,HH_Y2ZHe
+CL_uxiEY,CL_uxiEY,2021-07-01,2016-01-01,All Vaccines,others,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_covaxin,Covid-19(Covaxin),,household,HH_MMES7
+CL_KUEQv,CL_KUEQv,2021-03-09,2016-01-01,All Vaccines,others,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_covaxin,DPT,,household,HH_k79WQ
+CL_JcDCc,CL_JcDCc,2021-04-10,2020-01-01,All Vaccines,male,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_astrazeneca,,,household,HH_wL2CV
+CL_QndWq,CL_QndWq,2021-04-15,2021-08-01,All Vaccines,male,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_covaxin,Covid-19(Covaxin),,household,HH_e0cCH
+CL_4G2Ox,CL_4G2Ox,2021-08-06,1950-01-01,All Vaccines,female,retail_non_essential,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,yes,td,Tetanus Diptheria,,household,HH_ylmGT
+CL_i6rSN,CL_i6rSN,2020-10-08,2021-01-01,All Vaccines,male,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_covaxin,Covid-19(Covaxin),,household,HH_kazTo
+CL_jDTo6,CL_jDTo6,2020-11-01,2008-01-01,All Vaccines,male,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_covaxin,Covid-19(Covaxin),,household,HH_xGgqs
+CL_qbVcw,CL_qbVcw,2020-09-16,2010-01-01,All Vaccines,female,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,hpv covid_19_sinopharm,HPV Covid-19(Sinopharm),,household,HH_0SSAA
+CL_IMYUX,CL_IMYUX,2021-01-04,2021-08-01,All Vaccines,male,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_astrazeneca,BCG,,household,HH_RCyam
+CL_Llybw,CL_Llybw,2021-07-07,2021-08-01,All Vaccines,male,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,Covid-19(Astra Zeneca),,household,HH_ZkCbC
+CL_Qj24q,CL_Qj24q,2021-04-11,2006-01-01,All Vaccines,male,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_covaxin,,,household,HH_17qCa
+CL_f3CBQ,CL_f3CBQ,2021-07-27,1999-01-01,All Vaccines,female,retail_essentials,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,yes,td,,,household,HH_PN11i
+CL_NXlJE,CL_NXlJE,2021-07-14,2016-01-01,All Vaccines,others,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,DPT,,household,HH_mXyEo
+CL_9i7ap,CL_9i7ap,2021-08-29,2016-01-01,All Vaccines,male,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_covaxin,Covid-19(Covaxin),,household,HH_CLYy8
+CL_jKuTu,CL_jKuTu,2021-05-05,2021-04-01,All Vaccines,female,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_covaxin,,,household,HH_1uJVZ
+CL_oKnTR,CL_oKnTR,2020-10-19,2016-01-01,All Vaccines,others,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,Covid-19(Astra Zeneca),,household,HH_R2oTa
+CL_24J2U,CL_24J2U,2020-11-19,1999-01-01,All Vaccines,others,law_enforcement_firefighter,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,hep_b_adult covid_19_jj,,,household,HH_6ha3y
+CL_2tfzh,CL_2tfzh,2021-07-21,2020-01-01,All Vaccines,male,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_covaxin,,,household,HH_Jvk24
+CL_Siwwy,CL_Siwwy,2021-07-08,2018-01-01,All Vaccines,male,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_covaxin,Covid-19(Covaxin),,household,HH_Pqv2l
+CL_FI663,CL_FI663,2021-06-14,1950-01-01,All Vaccines,male,manager_admin,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,hep_b_adult covid_19_jj,,,household,HH_yDD0x
+CL_u637K,CL_u637K,2020-12-26,2006-01-01,All Vaccines,female,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,hpv covid_19_sinopharm,HPV Covid-19(Sinopharm),,household,HH_UV8l5
+CL_VdeZj,CL_VdeZj,2021-01-05,2020-01-01,All Vaccines,male,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_covaxin,Covid-19(Covaxin),,household,HH_m6846
+CL_qPfk3,CL_qPfk3,2020-09-05,2006-01-01,All Vaccines,male,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_covaxin,Covid-19(Covaxin),,household,HH_isefH
+CL_32XF4,CL_32XF4,2020-12-05,2021-04-01,All Vaccines,male,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,Haemophilus influenzae type b (Hib),,household,HH_iSd4E
+CL_4TldY,CL_4TldY,2021-06-16,2021-01-01,All Vaccines,male,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,Covid-19(Astra Zeneca),,household,HH_OTFDX
+CL_YWzlC,CL_YWzlC,2021-08-09,2018-01-01,All Vaccines,female,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_covaxin,Covid-19(Covaxin),,household,HH_zsmCI
+CL_1kju1,CL_1kju1,2021-03-13,2008-01-01,All Vaccines,others,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_covaxin,Japanese Encephalitis,,household,HH_g9vJw
+CL_4PvUN,CL_4PvUN,2021-01-02,1999-01-01,All Vaccines,female,other,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,yes,td_booster,Tetanus Diptheria Booster,,household,HH_nkDW8
+CL_ZljAh,CL_ZljAh,2021-06-16,1950-01-01,All Vaccines,others,manager_admin,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,hep_b_adult covid_19_jj,,,household,HH_cjMMy
+CL_YOINv,CL_YOINv,2020-11-17,2016-01-01,All Vaccines,others,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_astrazeneca,,,household,HH_MnNx8
+CL_7F1EJ,CL_7F1EJ,2021-04-06,2006-01-01,All Vaccines,others,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_covaxin,Covid-19(Covaxin),,household,HH_mMjCZ
+CL_dMNq2,CL_dMNq2,2021-07-29,2000-01-01,All Vaccines,others,retired,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,hep_b_adult covid_19_jj,Hepatitis B - Adult Covid-19(J&J),,household,HH_UVgfA
+CL_DAVdY,CL_DAVdY,2021-03-27,2010-01-01,All Vaccines,female,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,hpv covid_19_sinopharm,,,household,HH_AXROY
+CL_A5IJs,CL_A5IJs,2021-07-07,2021-04-01,All Vaccines,male,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_covaxin,Covid-19(Covaxin),,household,HH_4xp81
+CL_BYAuF,CL_BYAuF,2021-06-14,2000-01-01,All Vaccines,others,other,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,hep_b_adult covid_19_jj,Hepatitis B - Adult Covid-19(J&J),,household,HH_wUSJI
+CL_jgej0,CL_jgej0,2021-04-12,2016-01-01,All Vaccines,male,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_covaxin,Covid-19(Covaxin),,household,HH_lArP0
+CL_bomNa,CL_bomNa,2021-06-11,2006-01-01,All Vaccines,female,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,yes,td,Tetanus Diptheria,,household,HH_CgwSx
+CL_H6A5J,CL_H6A5J,2021-06-13,2021-08-01,All Vaccines,male,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_covaxin,,,household,HH_y8iDw
+CL_1crVt,CL_1crVt,2020-10-20,1999-01-01,All Vaccines,female,law_enforcement_firefighter,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,yes,td_booster,Tetanus Diptheria Booster,,household,HH_ovbuN
+CL_PAZhx,CL_PAZhx,2020-11-01,1999-01-01,All Vaccines,female,hotelier_airline_personnel,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,hep_b_adult covid_19_jj,Hepatitis B - Adult Covid-19(J&J),,household,HH_OP1nX
+CL_Ssn7z,CL_Ssn7z,2021-04-15,2010-01-01,All Vaccines,female,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,hpv covid_19_sinopharm,HPV Covid-19(Sinopharm),,household,HH_QjtiQ
+CL_ntHP6,CL_ntHP6,2021-07-23,2020-01-01,All Vaccines,male,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_covaxin,Covid-19(Covaxin),,household,HH_ISoD3
+CL_RPHqd,CL_RPHqd,2020-10-21,2021-08-01,All Vaccines,others,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_astrazeneca,Covid-19(Astra Zeneca),,household,HH_sBClm
+CL_NpanT,CL_NpanT,2021-04-03,2016-01-01,All Vaccines,others,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,,,household,HH_boaNS
+CL_TV1eJ,CL_TV1eJ,2020-12-07,2000-01-01,All Vaccines,others,teacher,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,hep_b_adult covid_19_jj,Hepatitis B - Adult Covid-19(J&J),,household,HH_JyXRD
+CL_WPam5,CL_WPam5,2021-06-15,2010-01-01,All Vaccines,female,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,hpv covid_19_sinopharm,HPV Covid-19(Sinopharm),,household,HH_Jvb6w
+CL_lgV3a,CL_lgV3a,2020-11-01,2016-01-01,All Vaccines,others,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,Covid-19(Astra Zeneca),,household,HH_oMSr5
+CL_nunKg,CL_nunKg,2020-12-06,2008-01-01,All Vaccines,others,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_astrazeneca,Covid-19(Astra Zeneca),,household,HH_vskh0
+CL_ePYf9,CL_ePYf9,2020-12-01,2010-01-01,All Vaccines,female,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,hpv covid_19_sinopharm,HPV Covid-19(Sinopharm),,household,HH_uyxpI
+CL_vmNIK,CL_vmNIK,2021-06-25,2000-01-01,All Vaccines,male,teacher,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,hep_b_adult covid_19_jj,Hepatitis B - Adult Covid-19(J&J),,household,HH_nxpOy
+CL_1xu8Z,CL_1xu8Z,2020-09-02,1950-01-01,All Vaccines,female,healthcare_worker,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,yes,td_booster,,,household,HH_X7BfD
+CL_qlaYb,CL_qlaYb,2021-04-10,1999-01-01,All Vaccines,others,teacher,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,hep_b_adult covid_19_jj,Hepatitis B - Adult Covid-19(J&J),,household,HH_kS8aR
+CL_hYZpi,CL_hYZpi,2021-01-18,2010-01-01,All Vaccines,female,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,hpv covid_19_sinopharm,HPV Covid-19(Sinopharm),,household,HH_NxZj2
+CL_A8xAT,CL_A8xAT,2021-06-27,2006-01-01,All Vaccines,female,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,yes,td,,,household,HH_KEMsP
+CL_FUJwO,CL_FUJwO,2021-01-30,2008-01-01,All Vaccines,male,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_covaxin,Covid-19(Covaxin),,household,HH_KF4PZ
+CL_78Kle,CL_78Kle,2021-08-28,1999-01-01,All Vaccines,female,hotelier_airline_personnel,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,yes,td_booster,Tetanus Diptheria Booster,,household,HH_117Am
+CL_m1V3M,CL_m1V3M,2021-08-04,2000-01-01,All Vaccines,male,law_enforcement_firefighter,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,hep_b_adult covid_19_jj,Hepatitis B - Adult Covid-19(J&J),,household,HH_N9vlU
+CL_396QA,CL_396QA,2021-05-12,2021-04-01,All Vaccines,male,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,,,household,HH_SduzY
+CL_LmszT,CL_LmszT,2021-07-27,2020-01-01,All Vaccines,female,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_covaxin,Measles,,household,HH_eiliu
+CL_tXahC,CL_tXahC,2020-10-06,2010-01-01,All Vaccines,male,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,,,household,HH_C5FAZ
+CL_8CvDd,CL_8CvDd,2021-03-08,2021-08-01,All Vaccines,female,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_astrazeneca,Covid-19(Astra Zeneca),,household,HH_R2gdd
+CL_hd6vX,CL_hd6vX,2021-02-24,2021-08-01,All Vaccines,male,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,Covid-19(Astra Zeneca),,household,HH_wudao
+CL_momvx,CL_momvx,2021-06-02,2021-04-01,All Vaccines,others,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_astrazeneca,Covid-19(Astra Zeneca),,household,HH_oi49P
+CL_DONHG,CL_DONHG,2020-12-02,1950-01-01,All Vaccines,male,hotelier_airline_personnel,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,hep_b_adult covid_19_jj,,,household,HH_oA4rr
+CL_I9TFL,CL_I9TFL,2021-03-13,2016-01-01,All Vaccines,female,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_astrazeneca,Covid-19(Astra Zeneca),,household,HH_8WeTL
+CL_7Vxpg,CL_7Vxpg,2021-04-10,2018-01-01,All Vaccines,others,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,Covid-19(Astra Zeneca),,household,HH_7ufri
+CL_jKtcc,CL_jKtcc,2021-08-25,2021-08-01,All Vaccines,female,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_covaxin,BCG,,household,HH_5M0gz
+CL_5YuSK,CL_5YuSK,2021-02-20,2006-01-01,All Vaccines,female,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,yes,td,Tetanus Diptheria,,household,HH_cSM9X
+CL_qrG7x,CL_qrG7x,2021-02-19,1950-01-01,All Vaccines,male,social_worker_volunteer,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,hep_b_adult covid_19_jj,,,household,HH_rCCaD
+CL_t1rLB,CL_t1rLB,2021-01-22,1950-01-01,All Vaccines,female,teacher,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,yes,td,,,household,HH_be1TM
+CL_kKV6i,CL_kKV6i,2021-07-10,2006-01-01,All Vaccines,male,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_astrazeneca,Covid-19(Astra Zeneca),,household,HH_ksRbI
+CL_7gCe4,CL_7gCe4,2020-10-10,2021-01-01,All Vaccines,others,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,Covid-19(Astra Zeneca),,household,HH_U3W4V
+CL_HhR1c,CL_HhR1c,2020-10-17,2021-04-01,All Vaccines,male,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_covaxin,,,household,HH_QWuH6
+CL_QuT0p,CL_QuT0p,2020-11-13,2021-08-01,All Vaccines,male,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_astrazeneca,Covid-19(Astra Zeneca),,household,HH_eLMkl
+CL_MKa1R,CL_MKa1R,2020-10-23,2021-01-01,All Vaccines,female,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,Pneumococcal (Conjugate),,household,HH_89m6f
+CL_RrRYi,CL_RrRYi,2020-11-01,1950-01-01,All Vaccines,female,teacher,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,yes,td_booster,Tetanus Diptheria Booster,,household,HH_B3W5U
+CL_Vid6R,CL_Vid6R,2021-05-15,2016-01-01,All Vaccines,male,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_covaxin,,,household,HH_UvZXW
+CL_WnacK,CL_WnacK,2021-01-09,2010-01-01,All Vaccines,others,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,Covid-19(Astra Zeneca),,household,HH_JcUJG
+CL_F6owm,CL_F6owm,2020-10-16,2021-08-01,All Vaccines,female,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_covaxin,,,household,HH_bsLRr
+CL_OvUIV,CL_OvUIV,2021-06-07,2000-01-01,All Vaccines,male,law_enforcement_firefighter,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,hep_b_adult covid_19_jj,Hepatitis B - Adult Covid-19(J&J),,household,HH_RNGSN
+CL_Drum5,CL_Drum5,2021-05-16,2008-01-01,All Vaccines,male,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_covaxin,Japanese Encephalitis,,household,HH_cSCO1
+CL_DSc7g,CL_DSc7g,2021-05-06,2020-01-01,All Vaccines,others,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_covaxin,,,household,HH_jRwni
+CL_qlbDW,CL_qlbDW,2021-06-14,2021-04-01,All Vaccines,female,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,Covid-19(Astra Zeneca),,household,HH_Sop7J
+CL_B8Tt3,CL_B8Tt3,2020-12-14,1999-01-01,All Vaccines,female,healthcare_worker,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,yes,td_booster,Tetanus Diptheria Booster,,household,HH_qopTv
+CL_ooXo2,CL_ooXo2,2021-01-20,2010-01-01,All Vaccines,others,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_astrazeneca,,,household,HH_JQHR7
+CL_UCCIp,CL_UCCIp,2021-06-17,2008-01-01,All Vaccines,others,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_astrazeneca,Japanese Encephalitis,,household,HH_SIDt6
+CL_XufU5,CL_XufU5,2020-12-09,2021-08-01,All Vaccines,male,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_astrazeneca,Covid-19(Astra Zeneca),,household,HH_y85ta
+CL_8mzg3,CL_8mzg3,2021-06-04,2021-08-01,All Vaccines,others,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,Covid-19(Astra Zeneca),,household,HH_KXjkU
+CL_dYGJL,CL_dYGJL,2021-05-02,2016-01-01,All Vaccines,others,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_astrazeneca,DPT,,household,HH_9CfdL
+CL_ca04a,CL_ca04a,2020-12-31,2021-01-01,All Vaccines,female,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,Covid-19(Astra Zeneca),,household,HH_ByVs7
+CL_1L808,CL_1L808,2021-06-11,2020-01-01,All Vaccines,male,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,OPV,,household,HH_H6tIq
+CL_DTDfV,CL_DTDfV,2020-09-14,2000-01-01,All Vaccines,male,social_worker_volunteer,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,hep_b_adult covid_19_jj,,,household,HH_jzeEQ
+CL_LyEK3,CL_LyEK3,2020-09-15,2021-04-01,All Vaccines,male,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_covaxin,Covid-19(Covaxin),,household,HH_NzX71
+CL_SZ2w1,CL_SZ2w1,2021-02-24,1999-01-01,All Vaccines,others,manager_admin,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,hep_b_adult covid_19_jj,,,household,HH_HrEqc
+CL_qHTHh,CL_qHTHh,2021-05-29,2010-01-01,All Vaccines,female,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,hpv covid_19_sinopharm,,,household,HH_y9zo6
+CL_76eav,CL_76eav,2021-05-01,1999-01-01,All Vaccines,others,manager_admin,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,hep_b_adult covid_19_jj,Hepatitis B - Adult Covid-19(J&J),,household,HH_CXshE
+CL_PPlrj,CL_PPlrj,2021-01-08,2018-01-01,All Vaccines,others,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_covaxin,Rubella,,household,HH_ug0Dk
+CL_6XrLg,CL_6XrLg,2021-07-08,2020-01-01,All Vaccines,others,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_astrazeneca,,,household,HH_4UHid
+CL_i6jNR,CL_i6jNR,2021-06-15,2000-01-01,All Vaccines,others,banker,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,hep_b_adult covid_19_jj,Hepatitis B - Adult Covid-19(J&J),,household,HH_5AQJh
+CL_WLxEe,CL_WLxEe,2021-05-05,2016-01-01,All Vaccines,others,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_astrazeneca,,,household,HH_T8O6M
+CL_QrSOX,CL_QrSOX,2020-12-07,2021-01-01,All Vaccines,male,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_covaxin,,,household,HH_CtHU7
+CL_i8Axg,CL_i8Axg,2021-04-08,1999-01-01,All Vaccines,others,retail_non_essential,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,hep_b_adult covid_19_jj,Hepatitis B - Adult Covid-19(J&J),,household,HH_katvU
+CL_6XlB3,CL_6XlB3,2021-06-07,2021-08-01,All Vaccines,male,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_covaxin,IPV (inactivated Polio Vaccine),,household,HH_l1gEE
+CL_oL7sK,CL_oL7sK,2021-08-23,2008-01-01,All Vaccines,others,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_covaxin,,,household,HH_i6pgg
+CL_fXILT,CL_fXILT,2021-06-04,2006-01-01,All Vaccines,others,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_astrazeneca,Covid-19(Astra Zeneca),,household,HH_0Io07
+CL_IJaPx,CL_IJaPx,2020-11-09,2008-01-01,All Vaccines,male,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_covaxin,Japanese Encephalitis,,household,HH_JDYih
+CL_9cmR7,CL_9cmR7,2021-07-09,2021-04-01,All Vaccines,others,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,Haemophilus influenzae type b (Hib),,household,HH_0TfR2
+CL_Wtupu,CL_Wtupu,2021-04-11,2018-01-01,All Vaccines,female,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_covaxin,Rotavirus,,household,HH_kgqrD
+CL_j0TSi,CL_j0TSi,2021-06-06,1999-01-01,All Vaccines,others,law_enforcement_firefighter,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,hep_b_adult covid_19_jj,,,household,HH_2reV6
+CL_MJckl,CL_MJckl,2020-09-22,2020-01-01,All Vaccines,female,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_covaxin,Covid-19(Covaxin),,household,HH_TNqX8
+CL_7SLKi,CL_7SLKi,2020-09-14,1950-01-01,All Vaccines,male,other,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,hep_b_adult covid_19_jj,Hepatitis B - Adult Covid-19(J&J),,household,HH_E6yXM
+CL_LPWrO,CL_LPWrO,2020-12-02,2016-01-01,All Vaccines,female,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_covaxin,Covid-19(Covaxin),,household,HH_kC98U
+CL_lOiFQ,CL_lOiFQ,2021-06-22,1999-01-01,All Vaccines,male,manager_admin,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,hep_b_adult covid_19_jj,Hepatitis B - Adult Covid-19(J&J),,household,HH_qwWhH
+CL_Q0DCP,CL_Q0DCP,2021-02-15,2016-01-01,All Vaccines,female,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_astrazeneca,DPT,,household,HH_LyutW
+CL_Q9OhB,CL_Q9OhB,2020-12-26,2008-01-01,All Vaccines,male,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,,,household,HH_1M1dc
+CL_EdWXo,CL_EdWXo,2020-09-23,2010-01-01,All Vaccines,others,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_covaxin,,,household,HH_6lcOg
+CL_ewGjE,CL_ewGjE,2021-01-07,2018-01-01,All Vaccines,female,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,Rubella,,household,HH_OWLNi
+CL_e9uCr,CL_e9uCr,2021-05-16,2010-01-01,All Vaccines,others,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_covaxin,Covid-19(Covaxin),,household,HH_ZhjCw
+CL_DRTHv,CL_DRTHv,2020-09-05,2021-01-01,All Vaccines,male,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_covaxin,,,household,HH_r3Qa1
+CL_pw6js,CL_pw6js,2021-04-05,2000-01-01,All Vaccines,male,other,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,hep_b_adult covid_19_jj,,,household,HH_OV9Ye
+CL_eBHUF,CL_eBHUF,2020-10-16,2018-01-01,All Vaccines,female,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_covaxin,,,household,HH_foGeH
+CL_x6pDI,CL_x6pDI,2020-12-16,2021-01-01,All Vaccines,others,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_astrazeneca,Pneumococcal (Conjugate),,household,HH_jXkZW
+CL_uHmqO,CL_uHmqO,2020-12-09,2006-01-01,All Vaccines,others,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_astrazeneca,,,household,HH_pKFTE
+CL_48zI3,CL_48zI3,2020-12-23,2021-01-01,All Vaccines,male,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,Covid-19(Astra Zeneca),,household,HH_hcXVH
+CL_U235i,CL_U235i,2020-12-28,2018-01-01,All Vaccines,others,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,Covid-19(Astra Zeneca),,household,HH_6woKM
+CL_qfCzS,CL_qfCzS,2020-09-21,1999-01-01,All Vaccines,others,healthcare_worker,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,hep_b_adult covid_19_jj,,,household,HH_sDitY
+CL_vBz0i,CL_vBz0i,2021-02-25,2020-01-01,All Vaccines,others,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,Covid-19(Astra Zeneca),,household,HH_DGPyj
+CL_uB2Wi,CL_uB2Wi,2020-11-12,1950-01-01,All Vaccines,male,retired,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,hep_b_adult covid_19_jj,,,household,HH_uqOEi
+CL_1L5AP,CL_1L5AP,2020-11-19,2008-01-01,All Vaccines,male,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_astrazeneca,,,household,HH_7o93x
+CL_EgXYj,CL_EgXYj,2021-03-03,2000-01-01,All Vaccines,male,law_enforcement_firefighter,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,hep_b_adult covid_19_jj,Hepatitis B - Adult Covid-19(J&J),,household,HH_z6khW
+CL_k77cE,CL_k77cE,2021-07-07,2010-01-01,All Vaccines,female,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,hpv covid_19_sinopharm,,,household,HH_ymdqE
+CL_v4ASo,CL_v4ASo,2021-04-03,2016-01-01,All Vaccines,male,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_covaxin,,,household,HH_TV7ZK
+CL_l1vcd,CL_l1vcd,2021-05-13,2000-01-01,All Vaccines,female,healthcare_worker,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,yes,td,Tetanus Diptheria,,household,HH_1cDJy
+CL_qwEOX,CL_qwEOX,2021-04-02,1999-01-01,All Vaccines,male,retail_essentials,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,hep_b_adult covid_19_jj,Hepatitis B - Adult Covid-19(J&J),,household,HH_TiSwg
+CL_VtyQA,CL_VtyQA,2020-11-19,2008-01-01,All Vaccines,female,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,hpv covid_19_sinopharm,Covid-19(Astra Zeneca),,household,HH_LR5BQ
+CL_6cBtJ,CL_6cBtJ,2020-12-16,2000-01-01,All Vaccines,male,teacher,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,hep_b_adult covid_19_jj,Hepatitis B - Adult Covid-19(J&J),,household,HH_rsNnC
+CL_3Un93,CL_3Un93,2021-01-04,2016-01-01,All Vaccines,others,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,Covid-19(Astra Zeneca),,household,HH_IFzaZ
+CL_lIa3Z,CL_lIa3Z,2020-09-23,2016-01-01,All Vaccines,female,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,Covid-19(Astra Zeneca),,household,HH_CcM2L
+CL_c2QJ2,CL_c2QJ2,2021-05-26,2018-01-01,All Vaccines,male,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,,,household,HH_tiLeN
+CL_tlFvc,CL_tlFvc,2021-05-09,2016-01-01,All Vaccines,male,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,DPT Booster,,household,HH_DoDGK
+CL_DwBQB,CL_DwBQB,2021-04-15,1999-01-01,All Vaccines,female,retired,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,yes,td,,,household,HH_Md5V3
+CL_znvNj,CL_znvNj,2020-11-05,2000-01-01,All Vaccines,female,retired,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,hep_b_adult covid_19_jj,,,household,HH_nRrzG
+CL_MQfk6,CL_MQfk6,2020-12-30,2000-01-01,All Vaccines,others,retired,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,hep_b_adult covid_19_jj,,,household,HH_Y4N1G
+CL_z4cd4,CL_z4cd4,2020-12-02,2016-01-01,All Vaccines,male,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_covaxin,DPT Booster,,household,HH_7WGBB
+CL_dFvNT,CL_dFvNT,2021-07-17,1999-01-01,All Vaccines,others,retail_non_essential,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,hep_b_adult covid_19_jj,,,household,HH_kGxeA
+CL_aOQUV,CL_aOQUV,2020-10-09,2018-01-01,All Vaccines,male,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,Rubella,,household,HH_lcVLj
+CL_DBnJi,CL_DBnJi,2020-10-15,2018-01-01,All Vaccines,female,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_astrazeneca,,,household,HH_3Aj6j
+CL_8x6O9,CL_8x6O9,2020-10-19,1950-01-01,All Vaccines,others,teacher,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,hep_b_adult covid_19_jj,,,household,HH_G8kdO
+CL_5PGU3,CL_5PGU3,2020-12-02,2010-01-01,All Vaccines,others,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_covaxin,Covid-19(Covaxin),,household,HH_k5Qh0
+CL_VXCBi,CL_VXCBi,2021-02-27,2021-01-01,All Vaccines,male,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_covaxin,Covid-19(Covaxin),,household,HH_oRO18
+CL_yHR0y,CL_yHR0y,2021-04-30,2006-01-01,All Vaccines,others,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_astrazeneca,,,household,HH_z7eB2
+CL_LqRUd,CL_LqRUd,2021-04-02,2021-04-01,All Vaccines,others,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_astrazeneca,Covid-19(Astra Zeneca),,household,HH_WzWmL
+CL_2pRLG,CL_2pRLG,2020-12-01,2021-08-01,All Vaccines,female,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,Covid-19(Astra Zeneca),,household,HH_jtcFc
+CL_w7Ehp,CL_w7Ehp,2020-11-25,1950-01-01,All Vaccines,female,driver_housekeeping_staff,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,hep_b_adult covid_19_jj,Hepatitis B - Adult Covid-19(J&J),,household,HH_xWFoR
+CL_R03AV,CL_R03AV,2021-01-12,2021-04-01,All Vaccines,male,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_covaxin,Hepatitis B - Infant,,household,HH_7qA1T
+CL_tUB8N,CL_tUB8N,2021-02-18,1950-01-01,All Vaccines,male,social_worker_volunteer,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,hep_b_adult covid_19_jj,Hepatitis B - Adult Covid-19(J&J),,household,HH_f7VGa
+CL_FNbFN,CL_FNbFN,2021-03-05,2008-01-01,All Vaccines,female,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,hpv covid_19_sinopharm,Covid-19(Covaxin),,household,HH_uAkoK
+CL_qMUqA,CL_qMUqA,2021-05-13,2006-01-01,All Vaccines,female,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,hpv covid_19_sinopharm,,,household,HH_X2Mb1
+CL_FM4em,CL_FM4em,2021-06-04,2016-01-01,All Vaccines,female,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_astrazeneca,Covid-19(Astra Zeneca),,household,HH_vswci
+CL_RXYcD,CL_RXYcD,2021-03-25,2008-01-01,All Vaccines,female,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,hpv covid_19_sinopharm,Covid-19(Astra Zeneca),,household,HH_Ux211
+CL_kE5S4,CL_kE5S4,2020-09-03,2006-01-01,All Vaccines,others,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,,,household,HH_ZeyOd
+CL_7Cu45,CL_7Cu45,2020-09-21,1999-01-01,All Vaccines,others,banker,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,hep_b_adult covid_19_jj,,,household,HH_Jfcri
+CL_MvJHE,CL_MvJHE,2020-10-25,2006-01-01,All Vaccines,others,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_covaxin,,,household,HH_6dKhN
+CL_K3IBR,CL_K3IBR,2021-03-29,2010-01-01,All Vaccines,female,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,hpv covid_19_sinopharm,,,household,HH_hdunj
+CL_YYU08,CL_YYU08,2020-09-15,1950-01-01,All Vaccines,others,healthcare_worker,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,hep_b_adult covid_19_jj,Hepatitis B - Adult Covid-19(J&J),,household,HH_HEk7h
+CL_tvOTp,CL_tvOTp,2020-12-19,1950-01-01,All Vaccines,female,banker,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,yes,td_booster,Tetanus Diptheria Booster,,household,HH_2EThF
+CL_HAHRn,CL_HAHRn,2021-08-19,1999-01-01,All Vaccines,female,hotelier_airline_personnel,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,yes,td,Tetanus Diptheria,,household,HH_n8TJM
+CL_lcWdp,CL_lcWdp,2021-05-14,2021-04-01,All Vaccines,others,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_covaxin,Covid-19(Covaxin),,household,HH_Sp1U0
+CL_uxzMj,CL_uxzMj,2021-06-29,2021-08-01,All Vaccines,male,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,Covid-19(Astra Zeneca),,household,HH_1Nxux
+CL_haCym,CL_haCym,2021-02-01,2021-04-01,All Vaccines,male,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_covaxin,,,household,HH_pCBDm
+CL_aUZxZ,CL_aUZxZ,2021-01-29,1999-01-01,All Vaccines,male,law_enforcement_firefighter,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,hep_b_adult covid_19_jj,Hepatitis B - Adult Covid-19(J&J),,household,HH_lcyM6
+CL_2H0hG,CL_2H0hG,2020-10-29,2008-01-01,All Vaccines,others,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_covaxin,Covid-19(Covaxin),,household,HH_JWV7i
+CL_OEM7L,CL_OEM7L,2021-07-10,2021-08-01,All Vaccines,female,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_astrazeneca,BCG,,household,HH_NbzAc
+CL_dKA2N,CL_dKA2N,2021-04-12,2016-01-01,All Vaccines,others,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_covaxin,DPT Booster,,household,HH_9SrqA
+CL_X6Sfv,CL_X6Sfv,2021-05-21,2010-01-01,All Vaccines,male,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_covaxin,Covid-19(Covaxin),,household,HH_BgyKr
+CL_aOycp,CL_aOycp,2021-04-21,2021-08-01,All Vaccines,male,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_covaxin,IPV (inactivated Polio Vaccine),,household,HH_jBV6m
+CL_Gu9uq,CL_Gu9uq,2020-12-17,2018-01-01,All Vaccines,others,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_covaxin,,,household,HH_pFz7W
+CL_kjs6Z,CL_kjs6Z,2021-02-15,2020-01-01,All Vaccines,female,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_covaxin,,,household,HH_7jYkw
+CL_uAhhV,CL_uAhhV,2021-02-16,2016-01-01,All Vaccines,female,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_covaxin,DPT,,household,HH_fop4c
+CL_Sud1j,CL_Sud1j,2021-03-04,2018-01-01,All Vaccines,female,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_astrazeneca,Covid-19(Astra Zeneca),,household,HH_f0AUR
+CL_h3VZ2,CL_h3VZ2,2021-04-29,2008-01-01,All Vaccines,others,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,Covid-19(Astra Zeneca),,household,HH_aIIPR
+CL_5gajr,CL_5gajr,2021-06-20,2018-01-01,All Vaccines,female,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,Covid-19(Astra Zeneca),,household,HH_clYxd
+CL_6K0ru,CL_6K0ru,2021-02-06,2016-01-01,All Vaccines,male,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_covaxin,,,household,HH_txoo0
+CL_2UKaa,CL_2UKaa,2021-01-22,2010-01-01,All Vaccines,female,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,hpv covid_19_sinopharm,HPV Covid-19(Sinopharm),,household,HH_glwM9
+CL_JQDJT,CL_JQDJT,2021-07-26,2021-08-01,All Vaccines,others,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_covaxin,Covid-19(Covaxin),,household,HH_sRZA3
+CL_YIvAU,CL_YIvAU,2021-08-09,2021-08-01,All Vaccines,female,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,Covid-19(Astra Zeneca),,household,HH_LuMwG
+CL_GuqSr,CL_GuqSr,2020-12-08,2000-01-01,All Vaccines,others,manager_admin,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,hep_b_adult covid_19_jj,Hepatitis B - Adult Covid-19(J&J),,household,HH_BXA3h
+CL_IDXf6,CL_IDXf6,2020-12-27,2010-01-01,All Vaccines,others,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_covaxin,,,household,HH_IMLfn
+CL_PXMnU,CL_PXMnU,2020-11-25,2021-04-01,All Vaccines,others,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_covaxin,Covid-19(Covaxin),,household,HH_bQShh
+CL_FXFPJ,CL_FXFPJ,2021-07-18,2021-04-01,All Vaccines,male,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_covaxin,Covid-19(Covaxin),,household,HH_BMGEy
+CL_mpdBI,CL_mpdBI,2021-07-19,2021-01-01,All Vaccines,male,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_covaxin,Covid-19(Covaxin),,household,HH_xVAjP
+CL_Lq1VB,CL_Lq1VB,2020-11-11,2021-01-01,All Vaccines,male,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_astrazeneca,Covid-19(Astra Zeneca),,household,HH_75v2m
+CL_SDtzl,CL_SDtzl,2021-01-15,2008-01-01,All Vaccines,male,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_astrazeneca,Covid-19(Astra Zeneca),,household,HH_WweAT
+CL_JDYnm,CL_JDYnm,2021-02-15,2021-04-01,All Vaccines,others,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_covaxin,Covid-19(Covaxin),,household,HH_OJy8v
+CL_kuFoR,CL_kuFoR,2020-10-18,2006-01-01,All Vaccines,female,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,yes,td,Tetanus Diptheria,,household,HH_L0Xdd
+CL_Oogxs,CL_Oogxs,2020-11-14,2018-01-01,All Vaccines,female,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_astrazeneca,Covid-19(Astra Zeneca),,household,HH_ADhXQ
+CL_QD8z6,CL_QD8z6,2021-05-02,2000-01-01,All Vaccines,male,teacher,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,hep_b_adult covid_19_jj,,,household,HH_j7Xaz
+CL_oq0Bd,CL_oq0Bd,2021-04-30,2008-01-01,All Vaccines,female,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,hpv covid_19_sinopharm,Covid-19(Covaxin),,household,HH_bh6om
+CL_HXG0g,CL_HXG0g,2020-12-10,2010-01-01,All Vaccines,male,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,,,household,HH_RRb8h
+CL_hLDxp,CL_hLDxp,2021-05-17,2000-01-01,All Vaccines,female,social_worker_volunteer,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,yes,td,,,household,HH_aEanS
+CL_70ntq,CL_70ntq,2021-03-30,2018-01-01,All Vaccines,male,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_covaxin,Covid-19(Covaxin),,household,HH_duaau
+CL_UpuBJ,CL_UpuBJ,2021-04-06,2018-01-01,All Vaccines,female,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_covaxin,Rotavirus,,household,HH_CZfKx
+CL_MOBwn,CL_MOBwn,2021-03-14,2008-01-01,All Vaccines,others,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_covaxin,Japanese Encephalitis,,household,HH_pK8JB
+CL_jgmcK,CL_jgmcK,2021-03-06,2021-08-01,All Vaccines,male,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,Covid-19(Astra Zeneca),,household,HH_RONO6
+CL_LT5pR,CL_LT5pR,2020-12-23,2021-04-01,All Vaccines,male,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,Covid-19(Astra Zeneca),,household,HH_gOxaI
+CL_4lj1y,CL_4lj1y,2021-07-30,2008-01-01,All Vaccines,male,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_covaxin,Covid-19(Covaxin),,household,HH_bKLXy
+CL_MV5wt,CL_MV5wt,2021-01-30,2021-04-01,All Vaccines,female,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,,,household,HH_IoHIR
+CL_YDVpH,CL_YDVpH,2021-02-18,2016-01-01,All Vaccines,female,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_covaxin,Covid-19(Covaxin),,household,HH_Hv4Zg
+CL_buG9g,CL_buG9g,2021-07-24,2000-01-01,All Vaccines,male,hotelier_airline_personnel,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,hep_b_adult covid_19_jj,Hepatitis B - Adult Covid-19(J&J),,household,HH_355gD
+CL_uc33B,CL_uc33B,2020-10-24,2021-04-01,All Vaccines,male,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,,,household,HH_ZvTIz
+CL_niXiQ,CL_niXiQ,2021-02-11,2018-01-01,All Vaccines,male,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_astrazeneca,Rotavirus,,household,HH_d6epE
+CL_Gvok3,CL_Gvok3,2021-08-11,2010-01-01,All Vaccines,female,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,hpv covid_19_sinopharm,HPV Covid-19(Sinopharm),,household,HH_3KFlk
+CL_mGa09,CL_mGa09,2021-06-02,2010-01-01,All Vaccines,female,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,hpv covid_19_sinopharm,HPV Covid-19(Sinopharm),,household,HH_QoUKN
+CL_TB7DW,CL_TB7DW,2021-08-28,2020-01-01,All Vaccines,male,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_covaxin,Covid-19(Covaxin),,household,HH_NtcAL
+CL_ArLqX,CL_ArLqX,2020-10-28,2006-01-01,All Vaccines,male,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_astrazeneca,,,household,HH_rgLNa
+CL_gXOWm,CL_gXOWm,2020-09-10,2018-01-01,All Vaccines,male,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_covaxin,Rubella,,household,HH_y94SG
+CL_jEmUe,CL_jEmUe,2021-03-20,2020-01-01,All Vaccines,female,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_covaxin,Measles,,household,HH_yYoP9
+CL_GryNO,CL_GryNO,2021-05-09,2021-04-01,All Vaccines,female,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_covaxin,Covid-19(Covaxin),,household,HH_Yvcin
+CL_O6R22,CL_O6R22,2021-07-06,2021-01-01,All Vaccines,male,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_covaxin,Pneumococcal (Conjugate),,household,HH_ZRorS
+CL_0WfIF,CL_0WfIF,2021-08-25,2010-01-01,All Vaccines,others,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,Covid-19(Astra Zeneca),,household,HH_fyt2K
+CL_2hqhb,CL_2hqhb,2020-10-13,1999-01-01,All Vaccines,others,teacher,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,hep_b_adult covid_19_jj,Hepatitis B - Adult Covid-19(J&J),,household,HH_qjbC2
+CL_Goj8f,CL_Goj8f,2021-01-30,2000-01-01,All Vaccines,others,manager_admin,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,hep_b_adult covid_19_jj,,,household,HH_ilTwK
+CL_91MdL,CL_91MdL,2021-05-06,2020-01-01,All Vaccines,male,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_astrazeneca,Covid-19(Astra Zeneca),,household,HH_sE5pI
+CL_ecY6a,CL_ecY6a,2021-04-04,2021-04-01,All Vaccines,male,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,,,household,HH_Icn3y
+CL_r1beT,CL_r1beT,2021-01-31,1950-01-01,All Vaccines,male,banker,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,hep_b_adult covid_19_jj,,,household,HH_eLS3C
+CL_OouvD,CL_OouvD,2021-08-25,2008-01-01,All Vaccines,others,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_covaxin,Japanese Encephalitis,,household,HH_DVyB9
+CL_Nplhv,CL_Nplhv,2021-08-23,2000-01-01,All Vaccines,male,other,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,hep_b_adult covid_19_jj,,,household,HH_0MECI
+CL_S7gxG,CL_S7gxG,2020-11-10,2021-08-01,All Vaccines,female,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,BCG,,household,HH_s4o1u
+CL_iiG9N,CL_iiG9N,2021-08-12,2021-04-01,All Vaccines,male,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_covaxin,Hepatitis B - Infant,,household,HH_CzTsd
+CL_YQh3v,CL_YQh3v,2021-08-25,2021-08-01,All Vaccines,others,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_covaxin,,,household,HH_7SWvD
+CL_HdsPp,CL_HdsPp,2021-03-15,2021-01-01,All Vaccines,female,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_astrazeneca,Covid-19(Astra Zeneca),,household,HH_pdWOx
+CL_lqk7U,CL_lqk7U,2021-05-23,2020-01-01,All Vaccines,male,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_covaxin,Covid-19(Covaxin),,household,HH_JJSs6
+CL_6ArmN,CL_6ArmN,2020-10-02,1999-01-01,All Vaccines,male,social_worker_volunteer,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,hep_b_adult covid_19_jj,,,household,HH_eLUHL
+CL_8t1zM,CL_8t1zM,2021-02-11,2018-01-01,All Vaccines,others,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_covaxin,Covid-19(Covaxin),,household,HH_IxZ7F
+CL_YkwlX,CL_YkwlX,2021-01-16,2021-04-01,All Vaccines,others,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_astrazeneca,,,household,HH_odPbo
+CL_Qhl5p,CL_Qhl5p,2021-04-02,1999-01-01,All Vaccines,others,law_enforcement_firefighter,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,hep_b_adult covid_19_jj,,,household,HH_rnPQc
+CL_jFkLy,CL_jFkLy,2021-03-14,1999-01-01,All Vaccines,others,banker,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,hep_b_adult covid_19_jj,,,household,HH_n4ofo
+CL_hW531,CL_hW531,2021-02-01,2010-01-01,All Vaccines,others,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,Covid-19(Astra Zeneca),,household,HH_1D66M
+CL_FtnMq,CL_FtnMq,2021-02-08,1950-01-01,All Vaccines,female,banker,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,yes,td,Tetanus Diptheria,,household,HH_beDok
+CL_XM6ag,CL_XM6ag,2021-06-07,2000-01-01,All Vaccines,others,law_enforcement_firefighter,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,hep_b_adult covid_19_jj,Hepatitis B - Adult Covid-19(J&J),,household,HH_AlnnA
+CL_FBogv,CL_FBogv,2021-08-19,1950-01-01,All Vaccines,male,healthcare_worker,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,hep_b_adult covid_19_jj,,,household,HH_PBP6P
+CL_FxhkR,CL_FxhkR,2020-12-22,2021-04-01,All Vaccines,male,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_covaxin,,,household,HH_D0hHr
+CL_Ntk2H,CL_Ntk2H,2020-10-26,2006-01-01,All Vaccines,female,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,hpv covid_19_sinopharm,HPV Covid-19(Sinopharm),,household,HH_CfEb8
+CL_5Nofr,CL_5Nofr,2021-03-28,2006-01-01,All Vaccines,male,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,,,household,HH_QNtz3
+CL_3itdl,CL_3itdl,2021-06-11,2000-01-01,All Vaccines,female,retired,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,yes,td_booster,Tetanus Diptheria Booster,,household,HH_EPPBD
+CL_h93JA,CL_h93JA,2021-03-10,2008-01-01,All Vaccines,female,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,hpv covid_19_sinopharm,Japanese Encephalitis,,household,HH_wHbRC
+CL_VJDSJ,CL_VJDSJ,2021-07-10,2021-08-01,All Vaccines,male,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_covaxin,BCG,,household,HH_u2ZMI
+CL_U0mZP,CL_U0mZP,2021-04-17,2010-01-01,All Vaccines,others,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_covaxin,,,household,HH_4HmCi
+CL_iqQZg,CL_iqQZg,2021-03-01,2018-01-01,All Vaccines,others,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,,,household,HH_p33kh
+CL_3E3Br,CL_3E3Br,2021-02-14,2006-01-01,All Vaccines,male,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_covaxin,Covid-19(Covaxin),,household,HH_P2ED5
+CL_vLuWy,CL_vLuWy,2021-07-11,2016-01-01,All Vaccines,others,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_covaxin,Covid-19(Covaxin),,household,HH_SFDt6
+CL_tCTxq,CL_tCTxq,2021-02-28,2010-01-01,All Vaccines,others,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_astrazeneca,,,household,HH_KaoIa
+CL_srt7w,CL_srt7w,2020-10-08,2000-01-01,All Vaccines,male,social_worker_volunteer,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,hep_b_adult covid_19_jj,,,household,HH_4cDlM
+CL_tGwv3,CL_tGwv3,2021-07-17,2021-08-01,All Vaccines,male,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_astrazeneca,Covid-19(Astra Zeneca),,household,HH_sLWf9
+CL_dH3is,CL_dH3is,2020-11-11,2021-04-01,All Vaccines,others,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,Covid-19(Astra Zeneca),,household,HH_qJDmD
+CL_c7XYk,CL_c7XYk,2021-03-10,2021-01-01,All Vaccines,female,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,Covid-19(Astra Zeneca),,household,HH_xIvfl
+CL_DQYcV,CL_DQYcV,2021-03-13,1950-01-01,All Vaccines,male,driver_housekeeping_staff,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,hep_b_adult covid_19_jj,Hepatitis B - Adult Covid-19(J&J),,household,HH_kuz4I
+CL_vcF7d,CL_vcF7d,2021-05-15,2006-01-01,All Vaccines,others,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,,,household,HH_8ZhNq
+CL_Bskdx,CL_Bskdx,2020-10-31,2006-01-01,All Vaccines,female,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,hpv covid_19_sinopharm,,,household,HH_llZC0
+CL_qt5FY,CL_qt5FY,2020-12-22,2010-01-01,All Vaccines,others,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,,,household,HH_CgNiw
+CL_vFpMY,CL_vFpMY,2021-06-17,2000-01-01,All Vaccines,others,hotelier_airline_personnel,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,hep_b_adult covid_19_jj,Hepatitis B - Adult Covid-19(J&J),,household,HH_cxROM
+CL_2hQdi,CL_2hQdi,2021-07-30,2021-08-01,All Vaccines,male,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_astrazeneca,Covid-19(Astra Zeneca),,household,HH_E0Hwv
+CL_ZDiNM,CL_ZDiNM,2021-03-26,1999-01-01,All Vaccines,female,retail_non_essential,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,hep_b_adult covid_19_jj,,,household,HH_sD5va
+CL_cLxPv,CL_cLxPv,2021-08-01,2008-01-01,All Vaccines,female,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,hpv covid_19_sinopharm,Japanese Encephalitis,,household,HH_tgm0o
+CL_u6FwJ,CL_u6FwJ,2021-01-10,2020-01-01,All Vaccines,female,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_covaxin,,,household,HH_zUcox
+CL_ZErEc,CL_ZErEc,2021-04-10,2010-01-01,All Vaccines,others,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_covaxin,Covid-19(Covaxin),,household,HH_PhirO
+CL_UDtx5,CL_UDtx5,2021-07-17,2021-04-01,All Vaccines,female,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_covaxin,Hepatitis B - Infant,,household,HH_Vyc2O
+CL_SNO3O,CL_SNO3O,2021-04-09,2000-01-01,All Vaccines,others,social_worker_volunteer,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,hep_b_adult covid_19_jj,,,household,HH_bZLxT
+CL_Vg8WG,CL_Vg8WG,2020-10-21,2021-04-01,All Vaccines,male,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_covaxin,Hepatitis B - Infant,,household,HH_wu2X6
+CL_eoPXh,CL_eoPXh,2020-11-12,2018-01-01,All Vaccines,female,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,Rubella,,household,HH_zJvFA
+CL_ohPtq,CL_ohPtq,2021-07-19,2018-01-01,All Vaccines,female,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_astrazeneca,Rubella,,household,HH_I7rqt
+CL_2R0xK,CL_2R0xK,2020-09-12,1999-01-01,All Vaccines,male,driver_housekeeping_staff,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,hep_b_adult covid_19_jj,Hepatitis B - Adult Covid-19(J&J),,household,HH_bQ0Ju
+CL_Xkk5O,CL_Xkk5O,2020-09-19,2016-01-01,All Vaccines,female,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,Covid-19(Astra Zeneca),,household,HH_49C8a
+CL_1qCQc,CL_1qCQc,2021-01-02,2010-01-01,All Vaccines,female,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,hpv covid_19_sinopharm,,,household,HH_IU4BZ
+CL_gv9rQ,CL_gv9rQ,2021-05-29,2021-04-01,All Vaccines,male,unemployed,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_covaxin,,,household,HH_c4HJs
+CL_7gZbf,CL_7gZbf,2021-01-27,2018-01-01,All Vaccines,male,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_covaxin,Covid-19(Covaxin),,household,HH_pLKHE
+CL_biSJe,CL_biSJe,2020-12-14,2021-04-01,All Vaccines,female,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,Covid-19(Astra Zeneca),,household,HH_jUftU
+CL_DnL5r,CL_DnL5r,2021-04-29,2021-01-01,All Vaccines,others,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,OPV DPT Hepatitis B - Infant,opv_1 opv_2 opv_3 opv_4 dpt_1 dpt_2 dpt_3 hep_b_infant_1 hep_b_infant_2 hep_b_infant_3 measles_1,household,HH_ut5z1
+CL_CvBrv,CL_CvBrv,2021-02-22,2006-01-01,All Vaccines,male,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_astrazeneca,Covid-19(Astra Zeneca),,household,HH_WWWK2
+CL_Dj54Z,CL_Dj54Z,2020-12-02,2000-01-01,All Vaccines,male,law_enforcement_firefighter,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,hep_b_adult covid_19_jj,Hepatitis B - Adult Covid-19(J&J),,household,HH_Z9K7p
+CL_pQFy7,CL_pQFy7,2020-09-14,1999-01-01,All Vaccines,others,driver_housekeeping_staff,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,hep_b_adult covid_19_jj,Hepatitis B - Adult Covid-19(J&J),,household,HH_xAIt9
+CL_QzD5p,CL_QzD5p,2021-03-30,1950-01-01,All Vaccines,others,other,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,hep_b_adult covid_19_jj,Hepatitis B - Adult Covid-19(J&J),,household,HH_UOXbv
+CL_qo8cJ,CL_qo8cJ,2020-11-17,2021-01-01,All Vaccines,others,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_astrazeneca,Covid-19(Astra Zeneca),,household,HH_ylMJW
+CL_GvIXe,CL_GvIXe,2021-04-29,2008-01-01,All Vaccines,male,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,no,no,covid_19_astrazeneca,Japanese Encephalitis,,household,HH_Vy3rs
+CL_zIpdP,CL_zIpdP,2021-04-04,2021-01-01,All Vaccines,male,student,3e74d9b61b614b7db34d3d77afc69f6e,3e74d9b61b614b7db34d3d77afc69f6e,yes,no,covid_19_astrazeneca,OPV DPT Hepatitis B - Infant,opv_1 opv_2 opv_3 opv_4 dpt_1 dpt_2 dpt_3 hep_b_infant_1 hep_b_infant_2 hep_b_infant_3 measles_1,household,HH_YKNLC

@@ -1,0 +1,81 @@
+<ns0:data xmlns:ns0="http://openrosa.org/formdesigner/DD8B35A8-0B0C-40E5-93EC-E72DC8406A07" xmlns:ns1="http://commcarehq.org/case/transaction/v2" xmlns:ns2="http://openrosa.org/jr/xforms" xmlns:ns3="http://commcarehq.org/xforms" uiVersion="1" version="2843" name="Vaccine Stock Management">
+<ns0:form_introductory_label>OK</ns0:form_introductory_label>
+<ns0:vaccination_centre_id>ac155a91ee9d4701a92346279fc8b318</ns0:vaccination_centre_id>
+<ns0:formatted_loaded_date>13/09/2021</ns0:formatted_loaded_date>
+<ns0:vaccine_name>Covid-19(Covaxin)</ns0:vaccine_name>
+<ns0:vaccine_id>covid_19_covaxin</ns0:vaccine_id>
+<ns0:vaccine_group>
+<ns0:last_stock_input_details_group>
+<ns0:last_stock_input_date_label>OK</ns0:last_stock_input_date_label>
+<ns0:last_number_of_vials_reported_label>OK</ns0:last_number_of_vials_reported_label>
+</ns0:last_stock_input_details_group>
+<ns0:date_of_stock_input>2021-01-22</ns0:date_of_stock_input>
+<ns0:formatted_input_date>13/09/2021</ns0:formatted_input_date>
+<ns0:minimum_maximum_stock_levels_group>
+<ns0:stock_level_img_label>OK</ns0:stock_level_img_label>
+<ns0:min_stock_level />
+<ns0:max_stock_level />
+</ns0:minimum_maximum_stock_levels_group>
+<ns0:final_minimum_stock_level />
+<ns0:final_maximum_stock_level />
+<ns0:stock_beginning_of_day>
+<ns0:vaccine_vial_stock_img_label>OK</ns0:vaccine_vial_stock_img_label>
+<ns0:lbl_vials_last_reported>OK</ns0:lbl_vials_last_reported>
+<ns0:number_of_new_vials_received>10</ns0:number_of_new_vials_received>
+<ns0:vials_current_count>30</ns0:vials_current_count>
+<ns0:lbl_vials_current_count>OK</ns0:lbl_vials_current_count>
+</ns0:stock_beginning_of_day>
+<ns0:vials_details_group>
+<ns0:vaccine_vial_stock_img_label>OK</ns0:vaccine_vial_stock_img_label>
+<ns0:open_vials>0</ns0:open_vials>
+<ns0:closed_vials>20</ns0:closed_vials>
+<ns0:vials_consumed_today>10</ns0:vials_consumed_today>
+<ns0:number_of_vials_in_hand>20</ns0:number_of_vials_in_hand>
+<ns0:total_vials_consumed>10</ns0:total_vials_consumed>
+</ns0:vials_details_group>
+<ns0:remaining_stock_summary>
+<ns0:lbl_vials_in_hand>OK</ns0:lbl_vials_in_hand>
+<ns0:vials_consumed_lbl>OK</ns0:vials_consumed_lbl>
+<ns0:average_consumption_rate>10</ns0:average_consumption_rate>
+<ns0:rounded_average_consumption_rate>10</ns0:rounded_average_consumption_rate>
+<ns0:number_of_days_stock_will_last>2</ns0:number_of_days_stock_will_last>
+</ns0:remaining_stock_summary>
+<ns0:potential_stockouts_oversupply_group>
+<ns0:vaccine_vial_stockout_img_label>OK</ns0:vaccine_vial_stockout_img_label>
+<ns0:run_out_days_label>OK</ns0:run_out_days_label>
+<ns0:report_potential_stockout_check>yes</ns0:report_potential_stockout_check>
+<ns0:report_oversupply_check>no</ns0:report_oversupply_check>
+<ns0:date_last_oversupply_reported>2021-09-13</ns0:date_last_oversupply_reported>
+</ns0:potential_stockouts_oversupply_group>
+<ns0:report_wastage>no</ns0:report_wastage>
+</ns0:vaccine_group>
+<ns0:form_success_label>OK</ns0:form_success_label>
+<ns1:case case_id="c3dc610e-de3b-4341-9c02-2e1bd6e8cfc9" date_modified="2021-09-13T20:55:56.115+05:30" user_id="ed3ffaa928014078bab1e5985fd98e76">
+<ns1:update>
+<ns1:average_consumption_rate>10</ns1:average_consumption_rate>
+<ns1:closed_vials>20</ns1:closed_vials>
+<ns1:date_last_oversupply_reported>2021-09-13</ns1:date_last_oversupply_reported>
+<ns1:date_of_stock_input>2021-09-13</ns1:date_of_stock_input>
+<ns1:max_stock_level />
+<ns1:min_stock_level />
+<ns1:number_of_days_stock_will_last>2</ns1:number_of_days_stock_will_last>
+<ns1:number_of_new_vials_received>10</ns1:number_of_new_vials_received>
+<ns1:number_of_vials_in_hand>20</ns1:number_of_vials_in_hand>
+<ns1:open_vials>0</ns1:open_vials>
+<ns1:report_oversupply_check>yes</ns1:report_oversupply_check>
+<ns1:report_potential_stockout_check>no</ns1:report_potential_stockout_check>
+<ns1:report_wastage>no</ns1:report_wastage>
+<ns1:vaccination_centre_id>5198771a9a8a4b56b405d526a8a0af04</ns1:vaccination_centre_id>
+</ns1:update>
+</ns1:case>
+<ns2:meta>
+<ns2:deviceID>commcare_b0fd11d0-afe0-4dd0-ac20-1cfb332069a0</ns2:deviceID>
+<ns2:timeStart>2021-09-13T20:51:02.995+05:30</ns2:timeStart>
+<ns2:timeEnd>2021-09-13T20:55:56.115+05:30</ns2:timeEnd>
+<ns2:username>uat.vsm</ns2:username>
+<ns2:userID>ed3ffaa928014078bab1e5985fd98e76</ns2:userID>
+<ns2:instanceID>dfba01ac-8d69-4e0b-b2b4-487421750e7b</ns2:instanceID>
+<ns3:appVersion>CommCare Android, version "2.52.0"(464179). App v2845. CommCare Version 2.52.0. Build 464179, built on: 2021-07-26</ns3:appVersion>
+<ns2:drift>0</ns2:drift>
+</ns2:meta>
+</ns0:data>

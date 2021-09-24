@@ -1,0 +1,127 @@
+<ns0:data xmlns:ns0="http://openrosa.org/formdesigner/278BDA92-6050-4C26-A02D-2FEBBCEED49D" xmlns:ns1="http://commcarehq.org/case/transaction/v2" xmlns:ns2="http://openrosa.org/jr/xforms" xmlns:ns3="http://commcarehq.org/xforms" uiVersion="1" version="2841" name="Report Adverse Events Following Immunization">
+<ns0:lbl_introduction>OK</ns0:lbl_introduction>
+<ns0:grp_defaults>
+<ns0:user_location_id>ac155a91ee9d4701a92346279fc8b318 </ns0:user_location_id>
+<ns0:today>2021-09-09</ns0:today>
+<ns0:dob>1999-01-01</ns0:dob>
+<ns0:vaccination_centre_id>ac155a91ee9d4701a92346279fc8b318 </ns0:vaccination_centre_id>
+</ns0:grp_defaults>
+<ns0:current_person_case_id>370ac475531949868ea787abf79892fb</ns0:current_person_case_id>
+<ns0:load_side_effect_contact_request />
+<ns0:check_vaccine_dose_given_already>yes</ns0:check_vaccine_dose_given_already>
+<ns0:last_dose_received_formatted>Covid-19(Astra Zeneca) Dose 1</ns0:last_dose_received_formatted>
+<ns0:last_dose_received_date_formatted>16/08/2021</ns0:last_dose_received_date_formatted>
+<ns0:lbl_next_dose_due>OK</ns0:lbl_next_dose_due>
+<ns0:grp_vaccine_given_case_exists>
+<ns0:grp_side_effect_confirmation>
+<ns0:has_adverse_side_effect>yes</ns0:has_adverse_side_effect>
+<ns0:side_effects_reported_date_onsite>2021-09-09</ns0:side_effects_reported_date_onsite>
+</ns0:grp_side_effect_confirmation>
+<ns0:grp_record_side_effects>
+<ns0:side_effect_dose_name>Hepatitis B - Adult Dose 3 Covid-19(J&amp;J) Dose 1</ns0:side_effect_dose_name>
+<ns0:side_effect_dose_received_date>2021-03-07</ns0:side_effect_dose_received_date>
+<ns0:side_effects_already_reported_once>yes</ns0:side_effects_already_reported_once>
+<ns0:side_effect_beneficiary_followed_up>yes</ns0:side_effect_beneficiary_followed_up>
+<ns0:lbl_selectside_effects>OK</ns0:lbl_selectside_effects>
+<ns0:side_effects_faced_list>
+<ns0:choose_for_each />
+<ns0:se_injection_site_swell></ns0:se_injection_site_swell>
+<ns0:se_fever></ns0:se_fever>
+<ns0:se_nausea></ns0:se_nausea>
+<ns0:se_diarrhea></ns0:se_diarrhea>
+<ns0:se_loss_of_taste></ns0:se_loss_of_taste>
+<ns0:se_breathing_difficulty>yes</ns0:se_breathing_difficulty>
+<ns0:se_other></ns0:se_other>
+</ns0:side_effects_faced_list>
+<ns0:se_other_description>No</ns0:se_other_description>
+<ns0:date_of_occurrence>
+<ns0:date_img_label>OK</ns0:date_img_label>
+<ns0:side_effects_date_of_occurence_same>yes</ns0:side_effects_date_of_occurence_same>
+<ns0:same_date_of_occurence_input>2021-08-16</ns0:same_date_of_occurence_input>
+<ns0:se_injection_site_swell_date>2021-08-16</ns0:se_injection_site_swell_date>
+<ns0:se_fever_date>2021-08-16</ns0:se_fever_date>
+<ns0:se_nausea_date>2021-08-16</ns0:se_nausea_date>
+<ns0:se_diarrhea_date>2021-08-16</ns0:se_diarrhea_date>
+<ns0:se_loss_of_taste_date>2021-08-16</ns0:se_loss_of_taste_date>
+<ns0:se_breathing_difficulty_date>2021-08-16</ns0:se_breathing_difficulty_date>
+<ns0:se_other_date>2021-08-16</ns0:se_other_date>
+</ns0:date_of_occurrence>
+<ns0:intensity_of_side_effects>
+<ns0:lb_se_intensity />
+<ns0:se_injection_site_swell_intensity>mild</ns0:se_injection_site_swell_intensity>
+<ns0:se_fever_intensity>mild</ns0:se_fever_intensity>
+<ns0:se_nausea_intensity>mild</ns0:se_nausea_intensity>
+<ns0:se_diarrhea_intensity>mild</ns0:se_diarrhea_intensity>
+<ns0:se_loss_of_taste_intensity>mild</ns0:se_loss_of_taste_intensity>
+<ns0:se_breathing_difficulty_intensity>mild</ns0:se_breathing_difficulty_intensity>
+<ns0:se_other_intensity>mild</ns0:se_other_intensity>
+</ns0:intensity_of_side_effects>
+<ns0:all_side_effects_joined>
+<ns0:delimiter>, </ns0:delimiter>
+<ns0:side_effect_injection_pain>Pain at injection site, </ns0:side_effect_injection_pain>
+<ns0:side_effects_fever>Fever, </ns0:side_effects_fever>
+<ns0:side_effect_nausea>Nausea, </ns0:side_effect_nausea>
+<ns0:side_effect_diarrhea>Diarrhea, </ns0:side_effect_diarrhea>
+<ns0:side_effect_taste_lost>Loss of taste or smell, </ns0:side_effect_taste_lost>
+<ns0:side_effect_breathing_difficulty>Breathing difficulty, </ns0:side_effect_breathing_difficulty>
+<ns0:side_effect_other>No, </ns0:side_effect_other>
+<ns0:side_effects_faced>Pain at injection site, Fever, Nausea, Diarrhea, Loss of taste or smell, Breathing difficulty, No, </ns0:side_effects_faced>
+<ns0:side_effects_faced_formatted>Pain at injection site, Fever, Nausea, Diarrhea, Loss of taste or smell, Breathing difficulty, No</ns0:side_effects_faced_formatted>
+</ns0:all_side_effects_joined>
+<ns0:severe_side_affects_grp>
+<ns0:hospitalized_check>no</ns0:hospitalized_check>
+</ns0:severe_side_affects_grp>
+<ns0:side_effects_reported_date>2021-03-07</ns0:side_effects_reported_date>
+<ns0:adverse_events_history>2021-09-09 : Pain at injection site, Fever, Nausea, Diarrhea, Loss of taste or smell, Breathing difficulty, No
+
+</ns0:adverse_events_history>
+</ns0:grp_record_side_effects>
+</ns0:grp_vaccine_given_case_exists>
+<ns0:lbl_finish>OK</ns0:lbl_finish>
+<ns1:case case_id="e6a2039a-a343-4c65-8adc-e33edc397c6b" date_modified="2021-09-09T01:15:47.390+05:30" user_id="346c2acf80c441418cd203db77a144d7">
+<ns1:update>
+<ns1:adverse_events_history>2021-09-09 : Pain at injection site, Fever, Nausea, Diarrhea, Loss of taste or smell, Breathing difficulty, No
+
+</ns1:adverse_events_history>
+<ns1:has_adverse_side_effect>yes</ns1:has_adverse_side_effect>
+<ns1:hospitalized_check>no</ns1:hospitalized_check>
+<ns1:se_breathing_difficulty>yes</ns1:se_breathing_difficulty>
+<ns1:se_breathing_difficulty_date>2021-08-16</ns1:se_breathing_difficulty_date>
+<ns1:se_breathing_difficulty_intensity>mild</ns1:se_breathing_difficulty_intensity>
+<ns1:se_diarrhea></ns1:se_diarrhea>
+<ns1:se_diarrhea_date>2021-08-16</ns1:se_diarrhea_date>
+<ns1:se_diarrhea_intensity>mild</ns1:se_diarrhea_intensity>
+<ns1:se_fever></ns1:se_fever>
+<ns1:se_fever_date>2021-08-16</ns1:se_fever_date>
+<ns1:se_fever_intensity>mild</ns1:se_fever_intensity>
+<ns1:se_injection_site_swell></ns1:se_injection_site_swell>
+<ns1:se_injection_site_swell_date>2021-08-16</ns1:se_injection_site_swell_date>
+<ns1:se_injection_site_swell_intensity>mild</ns1:se_injection_site_swell_intensity>
+<ns1:se_loss_of_taste></ns1:se_loss_of_taste>
+<ns1:se_loss_of_taste_date>2021-08-16</ns1:se_loss_of_taste_date>
+<ns1:se_loss_of_taste_intensity>mild</ns1:se_loss_of_taste_intensity>
+<ns1:se_nausea></ns1:se_nausea>
+<ns1:se_nausea_date>2021-08-16</ns1:se_nausea_date>
+<ns1:se_nausea_intensity>mild</ns1:se_nausea_intensity>
+<ns1:se_other></ns1:se_other>
+<ns1:se_other_date>2021-08-16</ns1:se_other_date>
+<ns1:se_other_description>No</ns1:se_other_description>
+<ns1:se_other_intensity>mild</ns1:se_other_intensity>
+<ns1:side_effect_beneficiary_followed_up>yes</ns1:side_effect_beneficiary_followed_up>
+<ns1:side_effect_dose_name>Covid-19(Astra Zeneca) Dose 1</ns1:side_effect_dose_name>
+<ns1:side_effects_already_reported_once>yes</ns1:side_effects_already_reported_once>
+<ns1:side_effects_faced>Pain at injection site, Fever, Nausea, Diarrhea, Loss of taste or smell, Breathing difficulty, No, </ns1:side_effects_faced>
+<ns1:side_effects_reported_date>2021-09-09</ns1:side_effects_reported_date>
+</ns1:update>
+</ns1:case>
+<ns2:meta>
+<ns2:deviceID>commcare_b0fd11d0-afe0-4dd0-ac20-1cfb332069a0</ns2:deviceID>
+<ns2:timeStart>2021-09-09T01:15:26.411+05:30</ns2:timeStart>
+<ns2:timeEnd>2021-09-09T01:15:47.390+05:30</ns2:timeEnd>
+<ns2:username>uat.va</ns2:username>
+<ns2:userID>346c2acf80c441418cd203db77a144d7</ns2:userID>
+<ns2:instanceID>40d7f89a-6019-4177-9d00-d367e3c8ba9d</ns2:instanceID>
+<ns3:appVersion>CommCare Android, version "2.52.0"(464179). App v2842. CommCare Version 2.52.0. Build 464179, built on: 2021-07-26</ns3:appVersion>
+<ns2:drift>0</ns2:drift>
+</ns2:meta>
+</ns0:data>
