@@ -1,6 +1,6 @@
-from Pages.homePage import HomePage
-from TestBase.environmentSetupPage import EnvironmentSetup
-from UserInputs.userInputsData import UserInputsData
+from HQSmokeTests.Pages.homePage import HomePage
+from HQSmokeTests.TestBase.environmentSetupPage import EnvironmentSetup
+from HQSmokeTests.UserInputs.userInputsData import UserInputsData
 
 
 class MenuVisibilityTests(EnvironmentSetup):

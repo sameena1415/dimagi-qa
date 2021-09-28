@@ -1,6 +1,6 @@
-from Pages.mobileWorkersPage import MobileWorkerPage
-from TestBase.environmentSetupPage import EnvironmentSetup
-from UserInputs.generateUserInputs import fetch_random_string
+from HQSmokeTests.Pages.mobileWorkersPage import MobileWorkerPage
+from HQSmokeTests.TestBase.environmentSetupPage import EnvironmentSetup
+from HQSmokeTests.UserInputs.generateUserInputs import fetch_random_string
 
 
 class MobileWorkerTests(EnvironmentSetup):

@@ -1,6 +1,6 @@
-from Pages.homePage import HomePage
-from Pages.messagingPage import MessagingPage
-from TestBase.environmentSetupPage import EnvironmentSetup
+from HQSmokeTests.Pages.homePage import HomePage
+from HQSmokeTests.Pages.messagingPage import MessagingPage
+from HQSmokeTests.TestBase.environmentSetupPage import EnvironmentSetup
 
 
 class MessagingTests(EnvironmentSetup):

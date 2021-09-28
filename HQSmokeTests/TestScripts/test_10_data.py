@@ -1,6 +1,6 @@
-from Pages.dataPage import DataPage
-from Pages.exportDataPage import ExportDataPage
-from TestBase.environmentSetupPage import EnvironmentSetup
+from HQSmokeTests.Pages.dataPage import DataPage
+from HQSmokeTests.Pages.exportDataPage import ExportDataPage
+from HQSmokeTests.TestBase.environmentSetupPage import EnvironmentSetup
 
 
 class DataTests(EnvironmentSetup):

@@ -4,9 +4,9 @@ from configparser import ConfigParser
 from pathlib import Path
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
-from Pages.loginPage import LoginPage
+from HQSmokeTests.Pages.loginPage import LoginPage
 from selenium.webdriver.chrome.options import Options
-from UserInputs.userInputsData import UserInputsData
+from HQSmokeTests.UserInputs.userInputsData import UserInputsData
 
 
 class EnvironmentSetup(unittest.TestCase):

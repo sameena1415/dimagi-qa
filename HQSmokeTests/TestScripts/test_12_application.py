@@ -1,5 +1,5 @@
-from Pages.applicationPage import ApplicationPage
-from TestBase.environmentSetupPage import EnvironmentSetup
+from HQSmokeTests.Pages.applicationPage import ApplicationPage
+from HQSmokeTests.TestBase.environmentSetupPage import EnvironmentSetup
 
 
 class ApplicationTests(EnvironmentSetup):
