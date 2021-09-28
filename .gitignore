@@ -149,12 +149,12 @@ assets
 #Ignoring compliled files of FormplayerTests
 
 # dependencies
-CyPressTest/node_modules
+FormplayerTests/node_modules
 
 # misc
-CyPressTest/cypress.env.json
-CyPressTest/npm-debug.log
-CyPressTest/videos
-CyPressTest/test.ts
-CyPressTest/screenshots
-CyPressTest/.vscode
+FormplayerTests/cypress.env.json
+FormplayerTests/npm-debug.log
+FormplayerTests/videos
+FormplayerTests/test.ts
+FormplayerTests/screenshots
+FormplayerTests/.vscode
