@@ -4,25 +4,28 @@ on:
   push:
     branches: [ formplayer_cypress ]
     
-defaults:
-      run:
-        working-directory: ./CyPressTest
 jobs:
   cypress-run:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout
-      uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
       
-    - name: Cypress run
-      uses: cypress-io/github-action@v2
-      with:
-        build: npm run build
-        start: npm start
-        
-    - name: Cypress test results
-      uses: actions/upload-artifact@v2
-      with:
-        name: cypress-report
-        path: /home/runner/work/dimagi-qa/dimagi-qa/report.html
-        retention-days: 2
+      - name: Cypress run
+        uses: cypress-io/github-action@v2
+        with:
+          working-directory: CyPressTest
+          record: true
+          spec: ./cypress/integration/testCases/*
+        env:
+          CYPRESS_RECORD_KEY: ${{secrets.CYPRESS_RECORD_KEY}}
+          CYPRESS_QA_URL: ${{ secrets.DIMAGIQA_URL }}
+          CYPRESS_LOGIN_USERNAME: ${{ secrets.DIMAGIQA_LOGIN_USERNAME }}
+          CYPRESS_LOGIN_PASSWORD: ${{ secrets.DIMAGIQA_LOGIN_PASSWORD }}
+
+      - name: Cypress test results
+        uses: actions/upload-artifact@v2
+        with:
+          name: test-run-videos
+          path: /home/runner/work/dimagi-qa/dimagi-qa/CyPressTest/cypress/videos/testCases/*
+          retention-days: 2
