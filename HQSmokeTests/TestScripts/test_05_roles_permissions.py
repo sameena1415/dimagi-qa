@@ -1,6 +1,6 @@
-from Pages.homePage import HomePage
-from Pages.rolesPermissionsPage import RolesPermissionPage
-from TestBase.environmentSetupPage import EnvironmentSetup
+from HQSmokeTests.Pages.homePage import HomePage
+from HQSmokeTests.Pages.rolesPermissionsPage import RolesPermissionPage
+from HQSmokeTests.TestBase.environmentSetupPage import EnvironmentSetup
 
 
 class RolesPermissionsTests(EnvironmentSetup):

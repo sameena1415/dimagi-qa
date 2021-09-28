@@ -1,6 +1,6 @@
-from Pages.homePage import HomePage
-from Pages.organisationStructurePage import OrganisationStructurePage
-from TestBase.environmentSetupPage import EnvironmentSetup
+from HQSmokeTests.Pages.homePage import HomePage
+from HQSmokeTests.Pages.organisationStructurePage import OrganisationStructurePage
+from HQSmokeTests.TestBase.environmentSetupPage import EnvironmentSetup
 
 
 class OrganisationStructureTests(EnvironmentSetup):

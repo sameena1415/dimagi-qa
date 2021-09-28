@@ -5,9 +5,9 @@ import time
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as ec
-from UserInputs.userInputsData import UserInputsData
+from HQSmokeTests.UserInputs.userInputsData import UserInputsData
 import pandas as pd
-from TestBase.environmentSetupPage import load_settings
+from HQSmokeTests.TestBase.environmentSetupPage import load_settings
 
 
 def latest_download_file():

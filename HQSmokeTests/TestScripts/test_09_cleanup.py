@@ -1,7 +1,6 @@
-from Pages.groupPage import GroupPage
-from Pages.mobileWorkersPage import MobileWorkerPage
-from Pages.rolesPermissionsPage import RolesPermissionPage
-from TestBase.environmentSetupPage import EnvironmentSetup
+from HQSmokeTests.Pages.groupPage import GroupPage
+from HQSmokeTests.Pages.mobileWorkersPage import MobileWorkerPage
+from HQSmokeTests.TestBase.environmentSetupPage import EnvironmentSetup
 
 
 class CleanUps(EnvironmentSetup):
