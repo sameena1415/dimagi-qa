@@ -1,5 +1,5 @@
-report.html
-settings.cfg
+HQSmokeTests/report.html
+HQSmokeTests/settings.cfg
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -133,13 +133,13 @@ dmypy.json
 
 #Ignoring compliled files
 .idea/
-Pages/__pycache__/
-TestBase/__pycache__/
-TestScripts/__pycache__/
+HQSmokeTests/Pages/__pycache__/
+HQSmokeTests/TestBase/__pycache__/
+HQSmokeTests/TestScripts/__pycache__/
 TestSuites/__pycache__/
-Pages/generatedUserInputs.csv
+HQSmokeTests/Pages/generatedUserInputs.csv
 TestSuites/generatedUserInputs.csv
-TestScripts/generatedUserInputs.csv
+HQSmokeTests/TestScripts/generatedUserInputs.csv
 AutomationTestReports/
 output.json
 pytest_html_report.html

@@ -1,4 +1,4 @@
-# QA Automation scripts
+# CCHQ Automation scripts
 
 Setup test environment
 
