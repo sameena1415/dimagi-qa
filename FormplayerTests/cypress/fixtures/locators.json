@@ -24,7 +24,7 @@
 
   "test_01_spec":
   {
-    "restore_as_banner": ".restore-as-banner > span",
+    "restore_as_banner": ".restore-as-banner",
     "success_msg": ".alert-success"
   }
 
