@@ -2,7 +2,7 @@ from HQSmokeTests.Pages.applicationPage import ApplicationPage
 from HQSmokeTests.TestBase.environmentSetupPage import EnvironmentSetup
 
 
-class ApplicationTests(EnvironmentSetup):
+class TestApplication(EnvironmentSetup):
 
     def test_01_create_new_app(self):
         driver = self.driver
