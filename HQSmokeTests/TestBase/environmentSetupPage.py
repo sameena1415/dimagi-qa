@@ -86,8 +86,8 @@ def load_settings_from_environment():
     """Load settings from os.environ
 
     Names of environment variables:
-        DIMAGIQA_URL - required unless DIMAGIQA_ENV is set
-        DIMAGIQA_ENV - required if DIMAGIQA_URL is not set
+        DIMAGIQA_URL - optional
+        DIMAGIQA_ENV - optional, used if DIMAGIQA_URL is not set. default: staging
         DIMAGIQA_LOGIN_USERNAME - required
         DIMAGIQA_LOGIN_PASSWORD - required
 
@@ -100,7 +100,7 @@ def load_settings_from_environment():
         if var in os.environ:
             settings[name] = os.environ[var]
     if "url" not in settings:
-        env = os.environ["DIMAGIQA_ENV"]
+        env = os.environ["DIMAGIQA_ENV"] or "staging"
         subdomain = "www" if env == "production" else env
         settings["url"] = f"https://{subdomain}.commcarehq.org/"
     return settings
