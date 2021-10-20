@@ -61,7 +61,7 @@ class EnvironmentSetup(unittest.TestCase):
 def load_settings():
     if os.environ.get("CI") == "true":
         settings = load_settings_from_environment()
-        if not settings:
+        if any(x not in settings for x in ["url", "login_username", "login_password"]):
             raise RuntimeError(
                 f"Environment variables not set:\n"
                 "  DIMAGIQA_URL\n"
