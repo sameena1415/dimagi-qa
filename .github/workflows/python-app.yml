@@ -35,7 +35,7 @@ jobs:
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Test with pytest
       env:
-        DIMAGIQA_URL: ${{ secrets.DIMAGIQA_URL }}
+        DIMAGIQA_URL: ${{ github.event.client_payload.environment == 'production' && 'https://www.commcarehq.org/accounts/login/' || 'https://staging.commcarehq.org/' }}
         DIMAGIQA_LOGIN_USERNAME: ${{ secrets.DIMAGIQA_LOGIN_USERNAME }}
         DIMAGIQA_LOGIN_PASSWORD: ${{ secrets.DIMAGIQA_LOGIN_PASSWORD }}
       run: |
