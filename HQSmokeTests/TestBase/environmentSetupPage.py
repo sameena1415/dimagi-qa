@@ -87,9 +87,10 @@ def load_settings_from_environment():
     """Load settings from os.environ
 
     Names of environment variables:
-        DIMAGIQA_URL
-        DIMAGIQA_LOGIN_USERNAME
-        DIMAGIQA_LOGIN_PASSWORD
+        DIMAGIQA_URL - required unless DIMAGIQA_ENV is set
+        DIMAGIQA_ENV - required if DIMAGIQA_URL is not set
+        DIMAGIQA_LOGIN_USERNAME - required
+        DIMAGIQA_LOGIN_PASSWORD - required
 
     See https://docs.github.com/en/actions/reference/encrypted-secrets
     for instructions on how to set them.
@@ -99,4 +100,8 @@ def load_settings_from_environment():
         var = f"DIMAGIQA_{name.upper()}"
         if var in os.environ:
             settings[name] = os.environ[var]
+    if "url" not in settings:
+        env = os.environ["DIMAGIQA_ENV"]
+        subdomain = "www" if env == "production" else env
+        settings["url"] = f"https://{subdomain}.commcarehq.org/"
     return settings
