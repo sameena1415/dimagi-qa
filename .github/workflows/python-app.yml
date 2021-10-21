@@ -35,10 +35,11 @@ jobs:
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Test with pytest
       env:
-        DIMAGIQA_URL: ${{ secrets.DIMAGIQA_URL }}
+        DIMAGIQA_ENV: ${{ github.event.client_payload.environment }}
         DIMAGIQA_LOGIN_USERNAME: ${{ secrets.DIMAGIQA_LOGIN_USERNAME }}
         DIMAGIQA_LOGIN_PASSWORD: ${{ secrets.DIMAGIQA_LOGIN_PASSWORD }}
       run: |
+        echo "client_payload: ${{ toJson(github.event.client_payload) }}"
         pytest -v
     - name: Archive test results
       if: failure()
