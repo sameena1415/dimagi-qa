@@ -63,9 +63,9 @@ def load_settings():
         settings = load_settings_from_environment()
         if any(x not in settings for x in ["url", "login_username", "login_password"]):
             lines = load_settings_from_environment.__doc__.splitlines()
-            vars_ = [line.strip() for line in lines if "DIMAGIQA_" in line]
+            vars_ = "\n  ".join(line.strip() for line in lines if "DIMAGIQA_" in line)
             raise RuntimeError(
-                f"Environment variables not set:\n  {chr(10).join(vars_)}\n\n"
+                f"Environment variables not set:\n  {vars_}\n\n"
                 "See https://docs.github.com/en/actions/reference/encrypted-secrets "
                 "for instructions on how to set them."
             )
@@ -86,8 +86,8 @@ def load_settings_from_environment():
     """Load settings from os.environ
 
     Names of environment variables:
-        DIMAGIQA_URL - required unless DIMAGIQA_ENV is set
-        DIMAGIQA_ENV - required if DIMAGIQA_URL is not set
+        DIMAGIQA_URL - optional
+        DIMAGIQA_ENV - optional, used if DIMAGIQA_URL is not set. default: staging
         DIMAGIQA_LOGIN_USERNAME - required
         DIMAGIQA_LOGIN_PASSWORD - required
 
@@ -100,7 +100,7 @@ def load_settings_from_environment():
         if var in os.environ:
             settings[name] = os.environ[var]
     if "url" not in settings:
-        env = os.environ["DIMAGIQA_ENV"]
+        env = os.environ["DIMAGIQA_ENV"] or "staging"
         subdomain = "www" if env == "production" else env
         settings["url"] = f"https://{subdomain}.commcarehq.org/"
     return settings
