@@ -100,7 +100,7 @@ def load_settings_from_environment():
         if var in os.environ:
             settings[name] = os.environ[var]
     if "url" not in settings:
-        env = os.environ["DIMAGIQA_ENV"] or "staging"
+        env = os.environ.get("DIMAGIQA_ENV") or "staging"
         subdomain = "www" if env == "production" else env
         settings["url"] = f"https://{subdomain}.commcarehq.org/"
     return settings
