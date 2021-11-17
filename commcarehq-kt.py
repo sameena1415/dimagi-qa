@@ -97,6 +97,14 @@ class WorkloadModelSteps(TaskSet):
             json.update(extra_json)
         name = name or command
 
+        if 'XSRF-TOKEN' not in self.client.cookies:
+            response = self.client.get(f"{self.user.formplayer_host}/serverup")
+            response.raise_for_status()
+
+            xsrf_token = self.client.cookies['XSRF-TOKEN']
+            headers = {'X-XSRF-TOKEN': xsrf_token}
+            self.client.headers.update(headers)
+
         with self.client.post(f"{self.user.formplayer_host}/{command}/", json=json, name=name,
                               catch_response=True) as response:
             data = response.json()
@@ -122,11 +130,13 @@ class WorkloadModelSteps(TaskSet):
 class LoginCommCareHQWithUniqueUsers(HttpUser):
     tasks = [WorkloadModelSteps]
 
+
     formplayer_host = "/formplayer"
     project = "syria-support"
     domain_user_credential_force = str(os.environ.get("user_credential"))
     app_config_force = str(os.environ.get("app_config"))
     wait_time_force = str(os.environ.get("wait_time"))
+
 
     if wait_time_force == "test":
         wait_time = between(2, 4)
@@ -148,6 +158,7 @@ class LoginCommCareHQWithUniqueUsers(HttpUser):
             app_config = config['app_config']
         owner_id = config['owner_id']
         case_type = config['case_type']
+
 
     # get domain user credential and app config info
     with open(domain_user_credential) as json_file:
