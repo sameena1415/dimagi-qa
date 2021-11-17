@@ -1,0 +1,18 @@
+{
+    "MOD_SKIP": {
+        "get_all_cases_info":""
+    },
+
+    "FUNC_HOME_SCREEN": {
+        "title":"Locust Scripts"
+    },
+    "FUNC_ALL_CASES_CASE_LIST": {
+        "selections":"1", "title":"All Cases"
+    },
+    "FUNC_CASE_DETAILS": {
+        "selections":"1", "checkKey":"details", "checkLen":1
+    },
+    "FUNC_CI_FORM": {
+        "selections":"0", "title":"Followup Form"
+    }
+}
