@@ -4,11 +4,11 @@ import os
 from datetime import datetime
 
 import yaml
-from locust import HttpUser, TaskSet, between, task, tag
+from locust import HttpUser, between, task, tag, SequentialTaskSet
 
 
-class WorkloadModelSteps(TaskSet):
-    def on_start(self, x=0):
+class WorkloadModelSteps(SequentialTaskSet):
+    def on_start(self):
         # get domain user credential and app config info
         with open(self.user.app_config) as json_file:
             data = json.load(json_file)
@@ -45,45 +45,6 @@ class WorkloadModelSteps(TaskSet):
                 # get build_id
                 self.build_id = app['_id']
         logging.info("build_id: " + self.build_id)
-
-    @tag('all', 'home_screen')
-    @task()
-    def home_screen(self):
-        logging.info("home_screen")
-        data = self._formplayer_post("navigate_menu_start", name="Home Screen", checkKey="title", checkValue=self.FUNC_HOME_SCREEN['title'])
-        assert (self.FUNC_HOME_SCREEN['title'] == data['title'])
-        # assert(len(data['commands']) == 41)
-
-        # @tag('all', 'all_cases_case_list')
-        # @task(6)
-        # def all_cases_case_list(self):
-        #     logging.info("all_cases_case_list")
-        #     data = self._formplayer_post("navigate_menu",extra_json={
-        #        "selections" : [self.FUNC_ALL_CASES_CASE_LIST['selections']],
-        #     }, name="All Cases Case List", checkKey="title", checkValue=self.FUNC_ALL_CASES_CASE_LIST['title'])
-        #     #data = self._navigate_menu([5], name="All Cases case list")
-        #     ##logging.info("===>>>>>>>>>"+str(data))
-        #     assert(data['title'] == self.FUNC_ALL_CASES_CASE_LIST['title'])
-        #     assert(len(data['entities']))       # should return at least one case
-        #
-        #     @task
-        #     def ci_form(self):
-        #         # Select All Cases, then a case, then Case Investiation form
-        #         logging.info("ci-form==ci_form::case_id::"+self.local_case_id)
-        #         data = self.parent._formplayer_post("navigate_menu", extra_json={
-        #             "selections": [self.parent.FUNC_CI_FORM['selections'], self.local_case_id, self.parent.FUNC_CI_FORM['subselections']],
-        #         }, name="CI Form", checkKey="title", checkValue=self.parent.FUNC_CI_FORM['title'])
-        #         if not ("session_id" in data):
-        #             logging.info("case not found -- no session_id")
-        #             self.interrupt()
-        #         self.session_id=data['session_id']
-        #         logging.info("ci_form==ci_form::sessionId::"+self.session_id)
-        #         assert(data['title'] == self.parent.FUNC_CI_FORM['title'])
-        #         assert('instanceXml' in data)
-
-        @task
-        def stop(self):
-            self.interrupt()
 
     def _formplayer_post(self, command, extra_json=None, name=None, checkKey=None, checkValue=None, checkLen=None):
         json = {
@@ -126,10 +87,32 @@ class WorkloadModelSteps(TaskSet):
                     response.failure("error::data['" + checkKey + "'] != " + checkValue)
         return response.json()
 
+    @tag('all', 'home_screen')
+    @task
+    def home_screen(self):
+        logging.info("home_screen")
+        data = self._formplayer_post("navigate_menu_start", name="Home Screen", checkKey="title", checkValue=self.FUNC_HOME_SCREEN['title'])
+        assert (self.FUNC_HOME_SCREEN['title'] == data['title'])
+        # assert(len(data['commands']) == 41)
+
+    @tag('all', 'all_cases_case_list')
+    @task
+    def all_cases_case_list(self):
+        logging.info("all_cases_case_list")
+        data = self._formplayer_post("navigate_menu",extra_json={
+               "selections" : [self.FUNC_ALL_CASES_CASE_LIST['selections']],
+        }, name="All Cases Case List", checkKey="title", checkValue=self.FUNC_ALL_CASES_CASE_LIST['title'])
+        logging.info("===>>>>>>>>>"+str(data))
+        assert(data['title'] == self.FUNC_ALL_CASES_CASE_LIST['title'])
+        assert(len(data['entities']))       # should return at least one case
+
+    @task
+    def stop(self):
+        self.interrupt()
+
 
 class LoginCommCareHQWithUniqueUsers(HttpUser):
     tasks = [WorkloadModelSteps]
-
 
     formplayer_host = "/formplayer"
     project = "syria-support"
@@ -141,7 +124,7 @@ class LoginCommCareHQWithUniqueUsers(HttpUser):
     if wait_time_force == "test":
         wait_time = between(2, 4)
     else:
-        wait_time = between(45, 90)
+        wait_time = between(6, 10)
 
     with open("project-config/" + project + "/config.yaml") as f:
         config = yaml.safe_load(f)
