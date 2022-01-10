@@ -1,9 +1,10 @@
 import time
+
+from HQSmokeTests.userInputs.generateUserInputs import fetch_random_string
 from selenium.common.exceptions import UnexpectedAlertPresentException, TimeoutException
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as ec
-from HQSmokeTests.UserInputs.generateUserInputs import fetch_random_string
+from selenium.webdriver.support.wait import WebDriverWait
 
 
 class GroupPage:
@@ -30,6 +31,7 @@ class GroupPage:
         try:
             clickable = ec.element_to_be_clickable(locator)
             WebDriverWait(self.driver, timeout).until(clickable).click()
+
         except TimeoutException:
             print(TimeoutException)
 

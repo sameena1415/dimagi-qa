@@ -1,13 +1,13 @@
 import time
 
+from HQSmokeTests.userInputs.generateUserInputs import fetch_random_string
+from HQSmokeTests.userInputs.userInputsData import UserInputsData
+from HQSmokeTests.testPages.organisationStructurePage import latest_download_file
 from selenium.common.exceptions import NoSuchElementException, StaleElementReferenceException, TimeoutException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as ec
+from selenium.webdriver.support.select import Select
 from selenium.webdriver.support.wait import WebDriverWait
-
-from HQSmokeTests.UserInputs.generateUserInputs import fetch_random_string
-from HQSmokeTests.UserInputs.userInputsData import UserInputsData
-from HQSmokeTests.Pages.organisationStructurePage import latest_download_file
 
 
 class MessagingPage:
@@ -33,7 +33,9 @@ class MessagingPage:
         self.select_value_dropdown = "(//ul[@class='select2-results__options']/li)[1]"
         self.broadcast_message = "(//textarea[@data-bind='value: nonTranslatedMessage'])[2]"
         self.send_broadcast = "//button[@data-bind='text: saveBroadcastText()']"
+        self.broadcast_select = "//div[@id='immediate-broadcasts']//select[@class='form-control']"
         self.broadcast_created = "//a[text()='" + "broadcast_" + fetch_random_string() + "']"
+        self.next_btn="//div[@id='immediate-broadcasts']//a[@data-bind='click: nextPage']"
         # Conditional Alerts
         self.cond_alerts = "Conditional Alerts"
         self.add_cond_alert = "New Conditional Alert"
@@ -47,6 +49,9 @@ class MessagingPage:
         self.save_button_xpath = "//button[@type='submit'and text()='Save']"
         self.delete_cond_alert = "//a[text()='" + "cond_alert_" + fetch_random_string() +\
                                  "']//preceding::button[@class='btn btn-danger'][1]"
+        self.search_box = "//form[@class='input-group']/input[@class='form-control']"
+        self.search_btn = "//form[@class='input-group']//button[@data-bind='click: clickAction, visible: !immediate']"
+
         # Condition Alerts : Download and Upload
         self.bulk_upload_button = "Bulk Upload SMS Alert Content"
         self.download_id = "download_link"
@@ -108,11 +113,11 @@ class MessagingPage:
         self.project_settings_menu = "Project Settings"
         self.project_settings_elements = "//form[@class='form form-horizontal']"
 
-
     def wait_to_click(self, *locator, timeout=10):
         try:
             clickable = ec.element_to_be_clickable(locator)
             WebDriverWait(self.driver, timeout).until(clickable).click()
+
         except TimeoutException:
             print(TimeoutException)
 
@@ -150,9 +155,22 @@ class MessagingPage:
                                                                              + fetch_random_string())
         self.wait_to_click(By.XPATH, self.send_broadcast)
         self.driver.refresh()
+        
+        select = Select(self.driver.find_element(By.XPATH, self.broadcast_select))
+        select.select_by_value('100')
+        
+        time.sleep(5)
+        
         try:
-            assert True == WebDriverWait(self.driver, 5).until(ec.presence_of_element_located((
-                By.XPATH, self.broadcast_created))).is_displayed()
+            while False:
+                if not self.driver.find_element(By.XPATH, self.broadcast_created).is_displayed():
+                    self.wait_to_click(By.XPATH, self.next_btn)
+                    time.sleep(5)
+                    continue
+                else:
+                    assert True
+#             assert True == WebDriverWait(self.driver, 5).until(ec.presence_of_element_located((
+#                 By.XPATH, self.broadcast_created))).is_displayed()
         except StaleElementReferenceException:
             assert True == WebDriverWait(self.driver, 5).until(ec.presence_of_element_located((
                 By.XPATH, self.broadcast_created))).is_displayed()
@@ -161,8 +179,9 @@ class MessagingPage:
     def create_cond_alert(self):
         self.wait_to_click(By.LINK_TEXT, self.cond_alerts)
         self.wait_to_click(By.LINK_TEXT, self.add_cond_alert)
+        cond_text = "cond_alert_" + fetch_random_string()
         WebDriverWait(self.driver, 2).until(ec.element_to_be_clickable((
-            By.XPATH, self.cond_alert_name))).send_keys("cond_alert_" + fetch_random_string())
+            By.XPATH, self.cond_alert_name))).send_keys(cond_text)
         self.wait_to_click(By.XPATH, self.continue_button_basic_tab)
         self.wait_to_click(By.XPATH, self.case_type)
         self.wait_to_click(By.XPATH, self.case_type_option_value)
@@ -170,8 +189,11 @@ class MessagingPage:
         self.wait_to_click(By.XPATH, self.recipients)
         self.wait_to_click(By.XPATH, self.select_recipient_type)
         WebDriverWait(self.driver, 2).until(ec.element_to_be_clickable((
-            By.XPATH, self.broadcast_message))).send_keys("Test Alert:" + "cond_alert_" + fetch_random_string())
+            By.XPATH, self.broadcast_message))).send_keys("Test Alert:" + cond_text)
         self.wait_to_click(By.XPATH, self.save_button_xpath)
+        WebDriverWait(self.driver, 2).until(ec.element_to_be_clickable((
+            By.XPATH, self.search_box))).send_keys(cond_text)
+        self.wait_to_click(By.XPATH, self.search_box)
         assert True == WebDriverWait(self.driver, 3).until(ec.presence_of_element_located((
             By.XPATH, self.cond_alert_created))).is_displayed()
         print("Conditional Alert created successfully!")
@@ -324,12 +346,21 @@ class MessagingPage:
         self.wait_to_click(By.LINK_TEXT, self.cond_alerts)
         time.sleep(2)
         self.driver.refresh()
+        cond_text = "cond_alert_" + fetch_random_string()
+        WebDriverWait(self.driver, 2).until(ec.element_to_be_clickable((
+            By.XPATH, self.search_box))).send_keys(cond_text)
+        self.wait_to_click(By.XPATH, self.search_box)
+        time.sleep(3)
         self.wait_to_click(By.XPATH, self.delete_cond_alert)
         obj = self.driver.switch_to.alert
         obj.accept()
         try:
             time.sleep(2)
             self.driver.refresh()
+            WebDriverWait(self.driver, 2).until(ec.element_to_be_clickable((
+                By.XPATH, self.search_box))).send_keys(cond_text)
+            self.wait_to_click(By.XPATH, self.search_box)
+            time.sleep(3)
             isPresent = self.driver.find_element(By.XPATH, self.cond_alert_created).is_displayed()
         except NoSuchElementException:
             isPresent = False

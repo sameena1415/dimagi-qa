@@ -1,4 +1,4 @@
-# CCHQ Automation scripts
+# QA Automation scripts
 
 Setup test environment
 
@@ -15,8 +15,13 @@ pip install -r requires.txt
 Copy `settings-sample.cfg` to `settings.cfg` and populate `settings.cfg` for
 the environment you want to test.
 
+
 Run tests
 
 ```sh
-pytest -v
+command to execute the scripts with 2 reruns
+pytest -v --reruns 2 --capture=tee-sys --html=report.html --self-contained-html
+
+command to execute the scripts with 2 reruns and in parallel
+pytest -v -n auto --reruns 2 --capture=tee-sys --html=report.html --self-contained-html
 ```

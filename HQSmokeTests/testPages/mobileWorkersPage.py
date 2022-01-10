@@ -1,12 +1,13 @@
 import datetime
 import time
+
+from HQSmokeTests.userInputs.generateUserInputs import fetch_random_string
+from HQSmokeTests.userInputs.userInputsData import UserInputsData
+from HQSmokeTests.testPages.organisationStructurePage import latest_download_file
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as ec
-from HQSmokeTests.Pages.organisationStructurePage import latest_download_file
-from HQSmokeTests.UserInputs.generateUserInputs import fetch_random_string
-from HQSmokeTests.UserInputs.userInputsData import UserInputsData
+from selenium.webdriver.support.wait import WebDriverWait
 
 
 class MobileWorkerPage:
@@ -92,6 +93,7 @@ class MobileWorkerPage:
         try:
             clickable = ec.element_to_be_clickable(locator)
             WebDriverWait(self.driver, timeout).until(clickable).click()
+            
         except TimeoutException:
             print(TimeoutException)
 
@@ -163,7 +165,7 @@ class MobileWorkerPage:
     def enter_value_for_created_user_field(self):
         self.wait_to_click(By.ID, self.additional_info_dropdown)
         self.wait_to_click(By.XPATH, self.select_value_dropdown)
-        assert self.driver.find_element_by_xpath(self.user_file_additional_info).is_displayed()
+        assert self.driver.find_element(By.XPATH, self.user_file_additional_info).is_displayed()
         time.sleep(1)
 
     def update_information(self):

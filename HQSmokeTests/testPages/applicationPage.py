@@ -5,9 +5,9 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as ec
 
-from HQSmokeTests.UserInputs.generateUserInputs import fetch_random_string
-from HQSmokeTests.UserInputs.userInputsData import UserInputsData
-from HQSmokeTests.Pages.organisationStructurePage import latest_download_file
+from HQSmokeTests.userInputs.generateUserInputs import fetch_random_string
+from HQSmokeTests.userInputs.userInputsData import UserInputsData
+from HQSmokeTests.testPages.organisationStructurePage import latest_download_file
 
 
 class ApplicationPage:
@@ -67,6 +67,7 @@ class ApplicationPage:
     def wait_to_click(self, *locator, timeout=10):
         clickable = ec.element_to_be_clickable(locator)
         WebDriverWait(self.driver, timeout).until(clickable).click()
+        
 
     def create_new_application(self):
         self.wait_to_click(By.ID, self.applications_menu_id)

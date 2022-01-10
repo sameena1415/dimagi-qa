@@ -1,13 +1,14 @@
+import datetime
 import os
 import time
-import datetime
+from datetime import date
+
+from HQSmokeTests.userInputs.generateUserInputs import fetch_random_string
+from HQSmokeTests.userInputs.userInputsData import UserInputsData
 from selenium.common.exceptions import TimeoutException, StaleElementReferenceException
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as ec
-from HQSmokeTests.UserInputs.generateUserInputs import fetch_random_string
-from HQSmokeTests.UserInputs.userInputsData import UserInputsData
-from datetime import date
+from selenium.webdriver.support.wait import WebDriverWait
 
 
 def latest_download_file():
@@ -16,11 +17,14 @@ def latest_download_file():
         os.chdir(UserInputsData.download_path)
         files = sorted(os.listdir(os.getcwd()), key=os.path.getctime)
         print(files)
-        for filename in files:
-            if filename.endswith(".xlsx"):
-                newest = max(files, key=os.path.getctime)
-                print("File downloaded: " + newest)
-                return newest
+        if files[-1].endswith(".log"):
+            newest = sorted(files, key=os.path.getctime)[-2]
+        elif files[-1].endswith(".xlsx"):
+            newest = sorted(files, key=os.path.getctime)[-1]
+        else:
+            newest = max(files, key=os.path.getctime)
+        print("File downloaded: " + newest)
+        return newest
     finally:
         print("Restoring the path...")
         os.chdir(cwd)
@@ -81,6 +85,7 @@ class OrganisationStructurePage:
         try:
             clickable = ec.element_to_be_clickable(locator)
             WebDriverWait(self.driver, timeout).until(clickable).click()
+
         except TimeoutException:
             print(TimeoutException)
 
@@ -117,7 +122,7 @@ class OrganisationStructurePage:
             self.driver.find_element(By.LINK_TEXT, self.org_menu_link_text).click()
             self.driver.refresh()
             assert WebDriverWait(self.driver, 5).until(ec.visibility_of_element_located((
-                 By.XPATH, self.renamed_location))).is_displayed()
+                By.XPATH, self.renamed_location))).is_displayed()
         except StaleElementReferenceException:
             print(StaleElementReferenceException)
 
@@ -129,7 +134,7 @@ class OrganisationStructurePage:
         self.driver.find_element(By.XPATH, self.loc_property_xpath).send_keys("location_field_" + fetch_random_string())
         self.driver.find_element(By.XPATH, self.loc_label_xpath).clear()
         self.driver.find_element(By.XPATH, self.loc_label_xpath).send_keys("location_field_" + fetch_random_string())
-        # self.driver.find_element_by_xpath(self.choice_selection).click() # required when reg exp FF enabled
+        # self.driver.find_element(By.XPATH, self.choice_selection).click() # required when reg exp FF enabled
         self.driver.find_element(By.XPATH, self.add_choice_btn_xpath).click()
         self.driver.find_element(By.XPATH, self.choice_xpath).send_keys("location_field_" + fetch_random_string())
         self.driver.find_element(By.ID, self.save_btn_id).click()

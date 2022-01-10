@@ -1,8 +1,8 @@
+from HQSmokeTests.userInputs.generateUserInputs import fetch_random_string
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as ec
-from HQSmokeTests.UserInputs.generateUserInputs import fetch_random_string
+from selenium.webdriver.support.wait import WebDriverWait
 
 
 class DataPage:
@@ -29,26 +29,27 @@ class DataPage:
         self.add_table = "//button[@data-bind='click: $root.addDataType']"
         self.table_fields = "//label[@class=\"control-label col-sm-2\"]" \
                             "//following::input[@type='text' and @class = 'form-control']"
-        self.table_id = self.table_fields+"[last()-3]"
-        self.table_id_name = "lookuptable_"+fetch_random_string()
-        self.table_id_description = self.table_fields+"[last()-2]"
+        self.table_id = self.table_fields + "[last()-3]"
+        self.table_id_name = "lookuptable_" + fetch_random_string()
+        self.table_id_description = self.table_fields + "[last()-2]"
         self.add_field = "(//button[@data-bind='click: addField'])[last()]"
         self.field_name = "(//input[@data-bind=\"value: tag, valueUpdate: 'afterkeydown', hasfocus: true\"])[last()]"
         self.save_table = "(//button[@data-bind='click: saveEdit'])[last()]"
-        self.table_created = "(//span[text()='"+self.table_id_name+"'])[1]"
+        self.table_created = "(//span[text()='" + self.table_id_name + "'])[1]"
 
         # View LookUp Tables
         self.view_tables_link = "View Tables"
         self.select_table_drop_down_id = "select2-report_filter_table_id-container"
-        self.select_table_from_dropdown = "//li[contains(.,'"+self.table_id_name+"')]"
+        self.select_table_from_dropdown = "//li[contains(.,'" + self.table_id_name + "')]"
         self.view_table_id = "apply-btn"
-        self.column_name = "(//div[contains(i/following-sibling::text(), '"+self.table_id_name+"')])[1]"
-        self.delete_table = self.table_created+"//following::button[@data-bind='click: $root.removeDataType'][1]"
+        self.column_name = "(//div[contains(i/following-sibling::text(), '" + self.table_id_name + "')])[1]"
+        self.delete_table = self.table_created + "//following::button[@data-bind='click: $root.removeDataType'][1]"
 
     def wait_to_click(self, *locator, timeout=10):
         try:
             clickable = ec.element_to_be_clickable(locator)
             WebDriverWait(self.driver, timeout).until(clickable).click()
+
         except NoSuchElementException:
             print(NoSuchElementException)
 
@@ -107,4 +108,3 @@ class DataPage:
         obj = self.driver.switch_to.alert
         obj.accept()
         print("LookUp Table deleted successfully!")
-

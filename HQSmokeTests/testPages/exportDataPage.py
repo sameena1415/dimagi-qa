@@ -1,13 +1,13 @@
-import os
-from selenium.common.exceptions import StaleElementReferenceException, TimeoutException
 import datetime
+import os
 import time
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.wait import WebDriverWait
-from selenium.webdriver.support import expected_conditions as ec
-from HQSmokeTests.UserInputs.userInputsData import UserInputsData
+
 import pandas as pd
-from HQSmokeTests.TestBase.environmentSetupPage import load_settings
+from HQSmokeTests.userInputs.userInputsData import UserInputsData
+from selenium.common.exceptions import StaleElementReferenceException, TimeoutException, NoSuchElementException
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as ec
+from selenium.webdriver.support.wait import WebDriverWait
 
 
 def latest_download_file():
@@ -64,10 +64,11 @@ class ExportDataPage:
         # Daily Saved Export variables, form, case
         self.edit_form_case_export = "(//a[@data-bind='click: editExport'])[1]"  # Edit an existing form/case export
         self.create_DSE_checkbox = '//*[@id="daily-saved-export-checkbox"]'  # Create a Daily Saved Export checkbox
-        self.download_dse_form = "//span[text()='" + UserInputsData.form_export_name + \
-                                 "']//following::a[@class='btn btn-info btn-xs']"
-        self.download_dse_case = "//span[text()='" + UserInputsData.case_export_name + \
-                                 "']//following::a[@class='btn btn-info btn-xs']"
+        self.download_dse_form = "(//span[text()='" + UserInputsData.form_export_name + \
+                                 "']//following::a[@class='btn btn-info btn-xs'])[1]"
+        self.download_dse_case = "(//span[text()='" + UserInputsData.case_export_name + \
+                                 "']//following::a[@class='btn btn-info btn-xs'])[1]"
+        self.data_upload_msg = "//*[contains(text(),'Data update complete')]"
 
         # Excel Dashboard Integrations, form, case
         self.export_excel_dash_int_link = 'Excel Dashboard Integration'  # Excel Dashboard Integrations left panel
@@ -77,6 +78,10 @@ class ExportDataPage:
         self.case_type_dropdown = '//*[@id="div_id_case_type"]/div/span/span[1]/span'
         self.select_case_type = '//*[@id="select2-id_case_type-results"]/li'
         self.update_data = "//button[@data-toggle='modal'][1]"
+        self.form_update_data = "(//span[text()='" + UserInputsData.form_export_name + \
+                                 "']//following::button[@data-toggle='modal'])[1]"
+        self.case_update_data = "(//span[text()='" + UserInputsData.case_export_name + \
+                                 "']//following::button[@data-toggle='modal'])[1]"
         self.update_data_conf = "//button[@data-bind='click: emailedExport.updateData']"
         self.copy_dashfeed_link = "(//span[contains(@data-bind, 'copyLinkRequested')])[1]"
         self.dashboard_feed_link = "//span[@class='input-group-btn']//preceding::a[@class='btn btn-info btn-xs']"
@@ -90,14 +95,22 @@ class ExportDataPage:
         self.manage_forms_link = '//*[@id="hq-sidebar"]/nav/ul[2]/li[3]/a'
         self.apply_button = '//*[@id="apply-btn"]'
         self.select_all_checkbox = "//input[@name='select_all']"
-        self.checkbox1 = "(//input[@class='xform-checkbox'])[1]"
+        # self.checkbox1 = "//input[@class='xform-checkbox'][1]"
+        self.checkbox1 = "//*[@id='form_options']//*[@type='checkbox']"
         self.archive_button = '//*[@id="submitForms"]'
         self.success_message = "//div[@class='alert alert-success']"
         self.view_form_link = "//a[@class='ajax_dialog']"
         self.archived_restored_dropdown = '//*[@id="select2-report_filter_archive_or_restore-container"]'
         self.archived_forms_option = '/html/body/span/span/span[2]/ul/li[2]'
+        self.manage_forms_return = '//span[contains(text(),"Return to")]/a[.="Manage Forms"]'
+
+        # bulk export delete
+        self.select_all_btn = '//button[@data-bind="click: selectAll"]'
+        self.delete_selected_exports = '//a[@href= "#bulk-delete-export-modal"]'
+        self.bulk_delete_confirmation_btn = '//button[@data-bind="click: BulkExportDelete"]'
 
     def wait_to_click(self, *locator, timeout=20):
+        time.sleep(5)
         clickable = ec.element_to_be_clickable(locator)
         WebDriverWait(self.driver, timeout).until(clickable).click()
 
@@ -113,12 +126,15 @@ class ExportDataPage:
         window_after = winHandles[1]
         self.driver.switch_to.window(window_after)
 
+    def switch_to_new_tab(self):
+        self.driver.switch_to.new_window('tab')
+
     def switch_back_to_prev_tab(self):
         winHandles = self.driver.window_handles
         window_before = winHandles[0]
         self.driver.switch_to.window(window_before)
 
-    def get_url_paste_browser_case(self):
+    def get_url_paste_browser_case(self, username, password):
         self.wait_to_click(By.XPATH, self.copy_odatafeed_link)
         time.sleep(2)
         self.wait_to_click(By.XPATH, self.edit_button)
@@ -127,15 +143,13 @@ class ExportDataPage:
         ID = get_url.split("/")[10]
         odata_feed_link_case = "https://staging.commcarehq.org/a/qa-automation/api/v0.5/odata/cases/" + ID + "/feed/"
         self.driver.back()
-        self.driver.execute_script("window.open('');")  # Open a new tab
-        self.switch_to_next_tab()
-        username = load_settings()["login_username"]
-        password = load_settings()["login_password"]
+        # self.driver.execute_script("window.open('');")  # Open a new tab
+        self.switch_to_new_tab()
         final_URL_case = f"https://{username}:{password}@{odata_feed_link_case[8:]}"
         print(final_URL_case)
         self.driver.get(final_URL_case)
 
-    def get_url_paste_browser_form(self):
+    def get_url_paste_browser_form(self, username, password):
         self.wait_to_click(By.XPATH, self.copy_odatafeed_link)
         time.sleep(2)
         self.wait_to_click(By.XPATH, self.edit_button)
@@ -144,15 +158,13 @@ class ExportDataPage:
         ID = get_url.split("/")[10]
         odata_feed_link_form = "https://staging.commcarehq.org/a/qa-automation/api/v0.5/odata/forms/" + ID + "/feed/"
         self.driver.back()
-        self.driver.execute_script("window.open('');")  # Open a new tab
-        self.switch_to_next_tab()
-        username = load_settings()["login_username"]
-        password = load_settings()["login_password"]
+        self.switch_to_new_tab()
         final_URL_form = f"https://{username}:{password}@{odata_feed_link_form[8:]}"
         print(final_URL_form)
         self.driver.get(final_URL_form)
 
     def data_tab(self):
+        self.driver.refresh()
         self.wait_to_click(By.LINK_TEXT, self.data_dropdown)
         self.wait_to_click(By.LINK_TEXT, self.view_all_link)
 
@@ -209,6 +221,17 @@ class ExportDataPage:
         self.driver.close()
         self.switch_back_to_prev_tab()
 
+    def delete_bulk_exports(self):
+        try:
+            time.sleep(2)
+            self.wait_to_click(By.XPATH, self.select_all_btn)
+            time.sleep(2)
+            self.wait_to_click(By.XPATH, self.delete_selected_exports)
+            self.wait_to_click(By.XPATH, self.bulk_delete_confirmation_btn)
+            print("Exports Deleted successfully")
+        except TimeoutException:
+            print("No exports present")
+
     # Test Case 20_b - Verify Export functionality for Cases
     def add_case_exports(self):
         self.wait_to_click(By.LINK_TEXT, self.export_case_data_link)
@@ -239,7 +262,7 @@ class ExportDataPage:
         woman_name_excel = df2['name'].values[0]
 
         WebDriverWait(self.driver, 3).until(ec.visibility_of_element_located((
-                By.XPATH, self.find_data_by_ID_textbox))).send_keys(str(caseID))
+            By.XPATH, self.find_data_by_ID_textbox))).send_keys(str(caseID))
         self.wait_to_click(By.XPATH, self.find_data_by_ID_button)
         self.wait_to_click(By.LINK_TEXT, self.view_FormID_CaseID)
         time.sleep(3)
@@ -278,10 +301,20 @@ class ExportDataPage:
         self.wait_to_click(By.XPATH, self.create_DSE_checkbox)
         self.wait_to_click(By.XPATH, self.export_settings_create)
         self.wait_to_click(By.XPATH, self.update_data)
-        self.wait_to_click(By.XPATH, self.update_data_conf)
         time.sleep(2)
+        self.wait_to_click(By.XPATH, self.update_data_conf)
+        display_msg = WebDriverWait(self.driver, 20).until(
+            ec.visibility_of_element_located((By.XPATH, self.data_upload_msg)))
+        print("Display message:", display_msg.text)
         self.driver.refresh()
+        time.sleep(5)
+        # try:
         self.wait_to_click(By.XPATH, self.download_dse_form)
+        # except (NoSuchElementException, TimeoutException):
+        #     self.wait_to_click(By.XPATH, self.update_data_conf)
+        #     time.sleep(5)
+        #     self.driver.refresh()
+        #     self.wait_to_click(By.XPATH, self.download_dse_form)
         time.sleep(3)
         newest_file = latest_download_file()
         print("Newest:", newest_file)
@@ -303,11 +336,22 @@ class ExportDataPage:
         self.wait_to_click(By.XPATH, self.create_DSE_checkbox)
         self.wait_to_click(By.XPATH, self.export_settings_create)
         self.wait_to_click(By.XPATH, self.update_data)
-        self.wait_to_click(By.XPATH, self.update_data_conf)
         time.sleep(2)
+        self.wait_to_click(By.XPATH, self.update_data_conf)
+        display_msg = WebDriverWait(self.driver, 20).until(
+            ec.visibility_of_element_located((By.XPATH, self.data_upload_msg)))
+        print("Display message:", display_msg.text)
         self.driver.refresh()
+        # self.wait_to_click(By.XPATH, self.download_dse_case)
+        time.sleep(5)
+        # try:
+        #     self.wait_to_click(By.XPATH, self.download_dse_case)
+        # except (NoSuchElementException, TimeoutException):
+        #     self.wait_to_click(By.XPATH, self.update_data_conf)
+        #     time.sleep(5)
+        #     self.driver.refresh()
         self.wait_to_click(By.XPATH, self.download_dse_case)
-        time.sleep(3)
+        time.sleep(5)
         newest_file = latest_download_file()
         print("Newest:", newest_file)
         modTimesinceEpoc = (UserInputsData.download_path / newest_file).stat().st_mtime
@@ -335,7 +379,7 @@ class ExportDataPage:
         print("Dashboard Feed added!!")
         self.wait_to_clear(By.XPATH, self.export_name)
         WebDriverWait(self.driver, 3).until(ec.element_to_be_clickable((
-                    By.XPATH, self.export_name))).send_keys(UserInputsData.dashboard_feed_form)
+            By.XPATH, self.export_name))).send_keys(UserInputsData.dashboard_feed_form)
         self.driver.find_element(By.XPATH, self.export_settings_create).click()
         print("Dashboard Form Feed created!!")
         self.wait_to_click(By.XPATH, self.update_data)
@@ -346,9 +390,9 @@ class ExportDataPage:
             time.sleep(2)
             self.driver.find_element(By.XPATH, self.copy_dashfeed_link).click()
             dashboard_feed_link = self.driver.find_element(By.XPATH, self.dashboard_feed_link).get_attribute("href")
-            print("Feed Link: "+dashboard_feed_link)
-            self.driver.execute_script("window.open('');")  # Open a new tab
-            self.switch_to_next_tab()
+            print("Feed Link: " + dashboard_feed_link)
+            # self.driver.execute_script("window.open('');")  # Open a new tab
+            self.switch_to_new_tab()
             self.driver.get(dashboard_feed_link)
             dashboard_feed_data = self.driver.page_source
             if dashboard_feed_data != "":
@@ -386,8 +430,8 @@ class ExportDataPage:
             self.driver.find_element(By.XPATH, self.copy_dashfeed_link).click()
             dashboard_feed_link = self.driver.find_element(By.XPATH, self.dashboard_feed_link).get_attribute("href")
             print(dashboard_feed_link)
-            self.driver.execute_script("window.open('');")  # Open a new tab
-            self.switch_to_next_tab()
+            # self.driver.execute_script("window.open('');")  # Open a new tab
+            self.switch_to_new_tab()
             self.driver.get(dashboard_feed_link)
             dashboard_feed_data = self.driver.page_source
             if dashboard_feed_data != "":
@@ -400,7 +444,7 @@ class ExportDataPage:
             print(StaleElementReferenceException)
 
     # Test Case - 28 - Power BI / Tableau Integration, Form
-    def power_bi_tableau_integration_form(self):
+    def power_bi_tableau_integration_form(self, username, password):
         self.wait_to_click(By.LINK_TEXT, self.powerBI_tab_int_link)
         self.wait_to_click(By.XPATH, self.add_export_button)
         self.wait_to_click(By.XPATH, self.model_dropdown)
@@ -418,7 +462,7 @@ class ExportDataPage:
         self.driver.find_element(By.XPATH, self.export_settings_create).click()
         print("Odata Form Feed created!!")
         self.driver.refresh()
-        self.get_url_paste_browser_form()
+        self.get_url_paste_browser_form(username, password)
         odata_feed_data = self.driver.page_source
         assert odata_feed_data != ""
         print("Odata form feed has data")
@@ -426,7 +470,7 @@ class ExportDataPage:
         self.switch_back_to_prev_tab()
 
     # Test Case - 27 - Power BI / Tableau Integration, Case`
-    def power_bi_tableau_integration_case(self):
+    def power_bi_tableau_integration_case(self, username, password):
         self.driver.refresh()
         self.wait_to_click(By.LINK_TEXT, self.powerBI_tab_int_link)
         self.wait_to_click(By.XPATH, self.add_export_button)
@@ -445,7 +489,7 @@ class ExportDataPage:
         self.driver.find_element(By.XPATH, self.export_settings_create).click()
         print("Odata Case Feed created!!")
         self.driver.refresh()
-        self.get_url_paste_browser_case()
+        self.get_url_paste_browser_case(username, password)
         odata_feed_data = self.driver.page_source
         assert odata_feed_data != ""  # This condition can be improvised
         print("Odata case feed has data")
@@ -458,24 +502,16 @@ class ExportDataPage:
         # Forms archival
         self.wait_to_click(By.XPATH, self.manage_forms_link)
         self.wait_to_click(By.XPATH, self.apply_button)
+        time.sleep(2)
         self.wait_to_click(By.XPATH, self.checkbox1)
         self.wait_to_click(By.XPATH, self.archive_button)
-        assert WebDriverWait(self.driver, 20).until(ec.presence_of_element_located((
+        assert WebDriverWait(self.driver, 100).until(ec.presence_of_element_located((
             By.XPATH, self.success_message))).is_displayed()
         print("Forms archival successful!!")
-
-        # View Normal Forms
-        self.wait_to_click(By.XPATH, self.manage_forms_link)
-        self.wait_to_click(By.XPATH, self.apply_button)
-        self.wait_to_click(By.XPATH, self.view_form_link)
-        self.switch_to_next_tab()
-        normal_form_data = self.driver.page_source
-        assert normal_form_data != ""  # This condition can be improvised
-        print("normal_form has data")
-        self.driver.close()
-        self.switch_back_to_prev_tab()
+        time.sleep(5)
 
         # View Archived Forms
+        self.wait_to_click(By.XPATH, self.manage_forms_link)
         self.wait_to_click(By.XPATH, self.archived_restored_dropdown)
         self.wait_to_click(By.XPATH, self.archived_forms_option)
         self.wait_to_click(By.XPATH, self.apply_button)
@@ -492,8 +528,37 @@ class ExportDataPage:
         try:
             self.wait_to_click(By.XPATH, self.checkbox1)
             self.wait_to_click(By.XPATH, self.archive_button)
-            assert WebDriverWait(self.driver, 20).until(ec.presence_of_element_located((
+            assert WebDriverWait(self.driver, 100).until(ec.presence_of_element_located((
                 By.XPATH, self.success_message))).is_displayed()
             print("Forms archival successful!!")
         except TimeoutException:
             print(TimeoutException)
+
+        # View Normal Forms
+        self.wait_to_click(By.XPATH, self.manage_forms_link)
+        self.wait_to_click(By.XPATH, self.apply_button)
+        self.wait_to_click(By.XPATH, self.view_form_link)
+        self.switch_to_next_tab()
+        normal_form_data = self.driver.page_source
+        assert normal_form_data != ""  # This condition can be improvised
+        print("normal_form has data")
+        self.driver.close()
+        self.switch_back_to_prev_tab()
+
+    def delete_all_bulk_exports(self):
+        self.wait_to_click(By.LINK_TEXT, self.export_form_data_link)
+        try:
+            self.wait_to_click(By.XPATH, self.select_all_btn)
+            self.wait_to_click(By.XPATH, self.delete_selected_exports)
+            self.wait_to_click(By.XPATH, self.bulk_delete_confirmation_btn)
+            print("Bulk exports deleted for Export Form data")
+        except TimeoutException:
+            print("No exports available")
+        try:
+            self.wait_to_click(By.LINK_TEXT, self.export_case_data_link)
+            self.wait_to_click(By.XPATH, self.select_all_btn)
+            self.wait_to_click(By.XPATH, self.delete_selected_exports)
+            self.wait_to_click(By.XPATH, self.bulk_delete_confirmation_btn)
+            print("Bulk exports deleted for Export Case data")
+        except TimeoutException:
+            print("No exports available")
