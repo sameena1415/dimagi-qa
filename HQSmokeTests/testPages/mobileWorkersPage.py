@@ -244,7 +244,7 @@ class MobileWorkerPage:
                 By.LINK_TEXT, self.download_users_btn))).click()
             time.sleep(5)
         except TimeoutException as e:
-            print("Still preparing for download.." + str(e))
+            print("Still preparing for download..")
             assert False
         # verify_downloaded_workers
         newest_file = latest_download_file()
