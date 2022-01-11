@@ -49,7 +49,7 @@ jobs:
 
     - name: Send Pass Email
       uses: dawidd6/action-send-mail@v3
-      if: success()   
+      if: ${{ success && github.event_name == 'repository_dispatch' }}
       with:
         # Required mail server address:
         server_address: smtp.gmail.com
@@ -73,7 +73,7 @@ jobs:
         priority: normal
     - name: Send Failure Email
       uses: dawidd6/action-send-mail@v3
-      if: failure()   
+      if: ${{ failure() && github.event_name == 'repository_dispatch' }}
       with:
         # Required mail server address:
         server_address: smtp.gmail.com
