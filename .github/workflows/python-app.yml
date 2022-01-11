@@ -43,7 +43,7 @@ jobs:
         
       run: |
         echo "client_payload: ${{ toJson(github.event.client_payload) }}"
-        pytest -v --reruns 2 --capture=tee-sys --html=report.html --self-contained-html
+        pytest -v --reruns 1 --capture=tee-sys --html=report.html --self-contained-html
         echo "NOW=$(date +'%Y-%m-%d %H:%M:%S')" >> $GITHUB_ENV
         echo ${{env.NOW}}
     - name: Send Pass Email
