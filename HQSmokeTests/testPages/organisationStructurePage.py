@@ -168,7 +168,7 @@ class OrganisationStructurePage:
                 By.LINK_TEXT, self.download_loc_btn))).click()
             time.sleep(10)
         except TimeoutException as e:
-            print("Still preparing for download.." + str(e))
+            print("Still preparing for download..")
             assert False
         # verify_downloaded_location
         newest_file = latest_download_file()

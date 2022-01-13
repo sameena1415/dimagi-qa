@@ -114,27 +114,25 @@ def driver(settings):
 @pytest.hookimpl(hookwrapper=True)
 # @pytest.mark.hookwrapper
 def pytest_runtest_makereport(item):
-    print("entering report formation")
+    # print("entering report formation")
     pytest_html = item.config.pluginmanager.getplugin("html")
     outcome = yield
     report = outcome.get_result()
     extra = getattr(report, 'extra', [])
-    print(item.fixturenames)
+    # print(item.fixturenames)
     if report.when == "call" or report.when == "teardown":
-        print(report.when)
+        # print(report.when)
         xfail = hasattr(report, 'wasxfail')
         if (report.skipped and xfail) or (report.failed and not xfail):
             print("report skipped or failed")
-            print("report skipped or failed")
             file_name = report.nodeid.replace("::", "_") + ".png"
-            # file_name = None
             screen_img = _capture_screenshot(item.funcargs["driver"])
             if file_name:
                 html = '<div><img src="data:image/png;base64,%s" alt="screenshot" style="width:600px;height:300px;" ' \
                        'onclick="window.open(this.src)" align="right"/></div>' % screen_img
                 extra.append(pytest_html.extras.html(html))
         report.extra = extra
-        print("extra added to report")
+        # print("extra added to report")
 
 
 def _capture_screenshot(driver):
