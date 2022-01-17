@@ -4,7 +4,7 @@ import time
 
 import pandas as pd
 from HQSmokeTests.userInputs.userInputsData import UserInputsData
-from selenium.common.exceptions import StaleElementReferenceException, TimeoutException, NoSuchElementException
+from selenium.common.exceptions import StaleElementReferenceException, TimeoutException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.support.wait import WebDriverWait
@@ -93,6 +93,8 @@ class ExportDataPage:
 
         # Manage Forms
         self.manage_forms_link = '//*[@id="hq-sidebar"]/nav/ul[2]/li[3]/a'
+        self.select_app_dropdown = 'report_filter_form_app_id'
+        self.village_app = "//option[text()='Village Health']"
         self.apply_button = '//*[@id="apply-btn"]'
         self.select_all_checkbox = "//input[@name='select_all']"
         # self.checkbox1 = "//input[@class='xform-checkbox'][1]"
@@ -146,7 +148,7 @@ class ExportDataPage:
         # self.driver.execute_script("window.open('');")  # Open a new tab
         self.switch_to_new_tab()
         final_URL_case = f"https://{username}:{password}@{odata_feed_link_case[8:]}"
-        print(final_URL_case)
+        # print(final_URL_case)
         self.driver.get(final_URL_case)
 
     def get_url_paste_browser_form(self, username, password):
@@ -160,7 +162,7 @@ class ExportDataPage:
         self.driver.back()
         self.switch_to_new_tab()
         final_URL_form = f"https://{username}:{password}@{odata_feed_link_form[8:]}"
-        print(final_URL_form)
+        # print(final_URL_form)
         self.driver.get(final_URL_form)
 
     def data_tab(self):
@@ -288,7 +290,7 @@ class ExportDataPage:
         diff_seconds = round((timeNow - modificationTime).total_seconds())
         print("Last Modified Time : ", str(modificationTime) + 'Current Time : ', str(timeNow),
               "Diff: " + str(diff_seconds))
-        assert "Messages" in newest_file and diff_seconds in range(0, 600)
+        assert "Messages" in newest_file and diff_seconds in range(0, 600), "Export not completed"
         print("Export successful")
 
     # Test Case 23_a - Daily saved export, form
@@ -308,13 +310,13 @@ class ExportDataPage:
         print("Display message:", display_msg.text)
         self.driver.refresh()
         time.sleep(5)
-        # try:
-        self.wait_to_click(By.XPATH, self.download_dse_form)
-        # except (NoSuchElementException, TimeoutException):
-        #     self.wait_to_click(By.XPATH, self.update_data_conf)
-        #     time.sleep(5)
-        #     self.driver.refresh()
-        #     self.wait_to_click(By.XPATH, self.download_dse_form)
+        try:
+            self.wait_to_click(By.XPATH, self.download_dse_form)
+        except TimeoutException:
+            self.wait_to_click(By.XPATH, self.update_data_conf)
+            time.sleep(5)
+            self.driver.refresh()
+            self.wait_to_click(By.XPATH, self.download_dse_form)
         time.sleep(3)
         newest_file = latest_download_file()
         print("Newest:", newest_file)
@@ -324,7 +326,7 @@ class ExportDataPage:
         diff_seconds = round((timeNow - modificationTime).total_seconds())
         print("Last Modified Time : ", str(modificationTime) + 'Current Time : ', str(timeNow),
               "Diff: " + str(diff_seconds))
-        assert "Form Export DSE" in newest_file and diff_seconds in range(0, 600)
+        assert "Form Export DSE" in newest_file and diff_seconds in range(0, 600), "Export not completed"
         print("DSE Form Export successful")
 
     # Test Case 23_b - Daily saved export, case
@@ -360,7 +362,7 @@ class ExportDataPage:
         diff_seconds = round((timeNow - modificationTime).total_seconds())
         print("Last Modified Time : ", str(modificationTime) + 'Current Time : ', str(timeNow),
               "Diff: " + str(diff_seconds))
-        assert "Case Export DSE" in newest_file and diff_seconds in range(0, 600)
+        assert "Case Export DSE" in newest_file and diff_seconds in range(0, 600), "Export not completed"
         print("DSE Case Export successful")
 
     # Test Case - 24 - Excel Dashboard Integration, form
@@ -501,8 +503,10 @@ class ExportDataPage:
     def manage_forms(self):
         # Forms archival
         self.wait_to_click(By.XPATH, self.manage_forms_link)
+        self.wait_to_click(By.ID, self.select_app_dropdown)
+        self.wait_to_click(By.XPATH, self.village_app)
         self.wait_to_click(By.XPATH, self.apply_button)
-        time.sleep(2)
+        time.sleep(5)
         self.wait_to_click(By.XPATH, self.checkbox1)
         self.wait_to_click(By.XPATH, self.archive_button)
         assert WebDriverWait(self.driver, 100).until(ec.presence_of_element_located((
@@ -512,6 +516,8 @@ class ExportDataPage:
 
         # View Archived Forms
         self.wait_to_click(By.XPATH, self.manage_forms_link)
+        self.wait_to_click(By.ID, self.select_app_dropdown)
+        self.wait_to_click(By.XPATH, self.village_app)
         self.wait_to_click(By.XPATH, self.archived_restored_dropdown)
         self.wait_to_click(By.XPATH, self.archived_forms_option)
         self.wait_to_click(By.XPATH, self.apply_button)
@@ -530,7 +536,7 @@ class ExportDataPage:
             self.wait_to_click(By.XPATH, self.archive_button)
             assert WebDriverWait(self.driver, 100).until(ec.presence_of_element_located((
                 By.XPATH, self.success_message))).is_displayed()
-            print("Forms archival successful!!")
+            print("Forms Restoration successful!!")
         except TimeoutException:
             print(TimeoutException)
 
@@ -560,5 +566,21 @@ class ExportDataPage:
             self.wait_to_click(By.XPATH, self.delete_selected_exports)
             self.wait_to_click(By.XPATH, self.bulk_delete_confirmation_btn)
             print("Bulk exports deleted for Export Case data")
+        except TimeoutException:
+            print("No exports available")
+        try:
+            self.wait_to_click(By.LINK_TEXT, self.powerBI_tab_int_link)
+            self.wait_to_click(By.XPATH, self.select_all_btn)
+            self.wait_to_click(By.XPATH, self.delete_selected_exports)
+            self.wait_to_click(By.XPATH, self.bulk_delete_confirmation_btn)
+            print("Bulk exports deleted for Power BI Reports")
+        except TimeoutException:
+            print("No exports available")
+        try:
+            self.wait_to_click(By.LINK_TEXT, self.export_excel_dash_int_link)
+            self.wait_to_click(By.XPATH, self.select_all_btn)
+            self.wait_to_click(By.XPATH, self.delete_selected_exports)
+            self.wait_to_click(By.XPATH, self.bulk_delete_confirmation_btn)
+            print("Bulk exports deleted for Export Excel Int Reports")
         except TimeoutException:
             print("No exports available")

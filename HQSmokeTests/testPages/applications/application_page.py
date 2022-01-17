@@ -7,7 +7,7 @@ from selenium.webdriver.support import expected_conditions as ec
 
 from HQSmokeTests.userInputs.generateUserInputs import fetch_random_string
 from HQSmokeTests.userInputs.userInputsData import UserInputsData
-from HQSmokeTests.testPages.organisationStructurePage import latest_download_file
+from HQSmokeTests.testPages.users.org_structure_page import latest_download_file
 
 
 class ApplicationPage:
@@ -67,7 +67,6 @@ class ApplicationPage:
     def wait_to_click(self, *locator, timeout=10):
         clickable = ec.element_to_be_clickable(locator)
         WebDriverWait(self.driver, timeout).until(clickable).click()
-        
 
     def create_new_application(self):
         self.wait_to_click(By.ID, self.applications_menu_id)
@@ -105,6 +104,7 @@ class ApplicationPage:
         self.wait_to_click(By.XPATH, self.actions_tab)
         self.wait_to_click(By.XPATH, self.delete_app)
         self.wait_to_click(By.XPATH, self.delete_confirm)
+        print("Deleted the application")
 
     def form_xml_download_upload(self):
         self.wait_to_click(By.XPATH, self.actions_tab)

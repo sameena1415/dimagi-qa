@@ -13,7 +13,6 @@ class ReportPage:
 
     def __init__(self, driver):
         self.driver = driver
-
         # Mobile Worker Reports
         self.worker_activity_rep = "Worker Activity"
         self.daily_form_activity_rep = "Daily Form Activity"
@@ -74,7 +73,7 @@ class ReportPage:
         self.report_name_saved = "saved form " + fetch_random_string()
         self.save_confirm = '//div[@class = "btn btn-primary"]'
         self.saved_reports_menu_link = 'My Saved Reports'
-        self.saved_report_created = "//a[text()='"+self.report_name_saved+"']"
+        self.saved_report_created = "//a[text()='" + self.report_name_saved + "']"
         self.delete_saved = "(" + self.saved_report_created + \
                             "//following::button[@class='btn btn-danger add-spinner-on-click'])[1]"
 
@@ -84,17 +83,14 @@ class ReportPage:
         self.available_reports = "//li[@class='ms-elem-selectable']"
         self.submit_id = "submit-id-submit_btn"
         self.success_alert = "//div[@class='alert alert-margin-top fade in alert-success']"
-        self.delete_scheduled = "(//a[contains(.,'" + self.report_name_saved + \
-                                "')]//following::button[@class='btn btn-danger'])[1]"
-        self.delete_scheduled_confirm = "//button[@class='send-stopper btn btn-danger disable-on-submit']"
+        self.select_all = "(//button[@data-bind='click: selectAll'])[1]"
+        self.delete_selected = "//a[@class='btn btn-danger']"
+        self.delete_scheduled_confirm = "(//button[@data-bind='click: bulkDelete'])[1]"
+        self.delete_success_scheduled = "//div[@class='alert alert-margin-top fade in alert-success']"
 
     def wait_to_click(self, *locator, timeout=10):
-        try:
-            clickable = ec.element_to_be_clickable(locator)
-            WebDriverWait(self.driver, timeout).until(clickable).click()
-            
-        except (NoSuchElementException, TimeoutException):
-            print(NoSuchElementException, TimeoutException)
+        clickable = ec.element_to_be_clickable(locator)
+        WebDriverWait(self.driver, timeout).until(clickable).click()
 
     def check_if_report_loaded(self):
         try:
@@ -233,18 +229,28 @@ class ReportPage:
 
     def scheduled_report(self):
         self.wait_to_click(By.XPATH, self.scheduled_reports_menu_xpath)
+        time.sleep(2)
         self.wait_to_click(By.XPATH, self.create_scheduled_report)
         self.wait_to_click(By.XPATH, self.available_reports)
         self.wait_to_click(By.ID, self.submit_id)
         assert True == WebDriverWait(self.driver, 10).until(ec.presence_of_element_located((
             By.XPATH, self.success_alert))).is_displayed()
+        print("Scheduled Report Created Successfully")
 
     def delete_scheduled_and_saved_reports(self):
-        time.sleep(2)
-        self.driver.find_element(By.XPATH, self.delete_saved)
-        self.wait_to_click(By.XPATH, self.scheduled_reports_menu_xpath)
+        saved_rep = self.driver.find_element(By.LINK_TEXT, self.saved_reports_menu_link)
+        self.driver.execute_script("arguments[0].click();", saved_rep)
+        self.driver.find_element(By.XPATH, self.delete_saved).click()
+        print("Deleted Saved Report")
+        time.sleep(1)
+        self.driver.find_element(By.XPATH, self.scheduled_reports_menu_xpath).click()
         try:
-            self.wait_to_click(By.XPATH, self.delete_scheduled)
-        except StaleElementReferenceException:
-            self.wait_to_click(By.XPATH, self.delete_scheduled)
-        self.driver.find_element(By.XPATH, self.delete_scheduled_confirm)
+            self.wait_to_click(By.XPATH, self.select_all)
+            self.wait_to_click(By.XPATH, self.delete_selected)
+            self.driver.find_element(By.XPATH, self.delete_scheduled_confirm).click()
+            assert True == WebDriverWait(self.driver, 10).until(ec.visibility_of_element_located(
+                (By.XPATH, self.delete_success_scheduled))).is_displayed()
+            print("Deleted Scheduled Report")
+        except TimeoutException:
+            print("No exports available")
+
