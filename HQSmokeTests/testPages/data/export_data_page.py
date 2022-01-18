@@ -41,7 +41,7 @@ class ExportDataPage:
         self.export_name = '//*[@id="export-name"]'  # Custom name for the export
         self.export_settings_create = "//button[@class='btn btn-lg btn-primary']"  # Creating export
         self.date_range = "id_date_range"
-        self.date_range_key = "//li[@data-range-key='Last 30 Days']"
+        self.date_range_manage_forms = "filter_range"
 
         # Export Form and Case data variables
         self.export_form_data_link = 'Export Form Data'  # Export Form Data link on the left panel
@@ -49,6 +49,9 @@ class ExportDataPage:
         self.export_form_case_data_button = "(//a[@class='btn btn-primary'])[2]"  # Export button on listing page
         self.prepare_export_button = "//button[@data-bind='disable: disablePrepareExport']"  # click prepare exports
         self.download_button = "//a[@class='btn btn-primary btn-full-width']"  # click download
+        self.date_having_submissions = "2022-01-18 to 2022-01-18"
+        self.apply = "//button[@class='applyBtn btn btn-sm btn-primary']"
+        self.users_filter = "//span[@class='select2-selection select2-selection--multiple']"
 
         # Find Data By ID
         self.find_data_by_ID_link = 'Find Data by ID'  # Click findDataByID link
@@ -166,6 +169,12 @@ class ExportDataPage:
         # print(final_URL_form)
         self.driver.get(final_URL_form)
 
+    def date_filter(self):
+        self.wait_to_click(By.ID, self.date_range)
+        self.driver.find_element(By.ID, self.date_range).clear()
+        self.driver.find_element(By.ID, self.date_range).send_keys(self.date_having_submissions)
+        self.wait_to_click(By.XPATH, self.apply)
+
     def data_tab(self):
         self.driver.refresh()
         self.wait_to_click(By.LINK_TEXT, self.data_dropdown)
@@ -193,9 +202,7 @@ class ExportDataPage:
 
     def form_exports(self):
         self.wait_to_click(By.XPATH, self.export_form_case_data_button)
-        # Date filter
-        # self.wait_to_click(By.ID, self.date_range)
-        # self.wait_to_click(By.XPATH, self.date_range_key)
+        self.date_filter()
         self.wait_to_click(By.XPATH, self.prepare_export_button)
         self.wait_to_click(By.XPATH, self.download_button)
         print("Download form button clicked")
@@ -239,6 +246,7 @@ class ExportDataPage:
     def case_exports(self):
         self.wait_to_click(By.LINK_TEXT, self.export_case_data_link)
         self.wait_to_click(By.XPATH, self.export_form_case_data_button)
+        self.date_filter()
         self.wait_to_click(By.XPATH, self.prepare_export_button)
         self.wait_to_click(By.XPATH, self.download_button)
         time.sleep(3)
@@ -269,6 +277,7 @@ class ExportDataPage:
     # Test Case 21 - Export SMS Messages
     def sms_exports(self):
         self.wait_to_click(By.LINK_TEXT, self.export_sms_link)
+        self.date_filter()
         self.wait_to_click(By.XPATH, self.prepare_export_button)
         self.wait_to_click(By.XPATH, self.download_button)
         time.sleep(3)
@@ -303,6 +312,7 @@ class ExportDataPage:
         try:
             self.wait_to_click(By.XPATH, self.download_dse_form)
         except TimeoutException:
+            self.driver.refresh()
             self.wait_to_click(By.XPATH, self.update_data_conf)
             time.sleep(5)
             self.driver.refresh()
@@ -334,14 +344,7 @@ class ExportDataPage:
             ec.visibility_of_element_located((By.XPATH, self.data_upload_msg)))
         print("Display message:", display_msg.text)
         self.driver.refresh()
-        # self.wait_to_click(By.XPATH, self.download_dse_case)
         time.sleep(5)
-        # try:
-        #     self.wait_to_click(By.XPATH, self.download_dse_case)
-        # except (NoSuchElementException, TimeoutException):
-        #     self.wait_to_click(By.XPATH, self.update_data_conf)
-        #     time.sleep(5)
-        #     self.driver.refresh()
         self.wait_to_click(By.XPATH, self.download_dse_case)
         time.sleep(5)
         newest_file = latest_download_file()
@@ -495,14 +498,20 @@ class ExportDataPage:
         self.wait_to_click(By.XPATH, self.manage_forms_link)
         self.wait_to_click(By.ID, self.select_app_dropdown)
         self.wait_to_click(By.XPATH, self.village_app)
+        # Date Filter
+        self.wait_to_click(By.ID, self.date_range_manage_forms)
+        self.driver.find_element(By.ID, self.date_range_manage_forms).clear()
+        self.driver.find_element(By.ID, self.date_range_manage_forms).send_keys(self.date_having_submissions)
+        self.wait_to_click(By.XPATH, self.apply)
+        # Report Apply
         self.wait_to_click(By.XPATH, self.apply_button)
         time.sleep(5)
         self.wait_to_click(By.XPATH, self.checkbox1)
         self.wait_to_click(By.XPATH, self.archive_button)
-        assert WebDriverWait(self.driver, 100).until(ec.presence_of_element_located((
+        assert WebDriverWait(self.driver, 60).until(ec.presence_of_element_located((
             By.XPATH, self.success_message))).is_displayed()
         print("Forms archival successful!!")
-        time.sleep(5)
+        time.sleep(3)
 
         # View Archived Forms
         self.wait_to_click(By.XPATH, self.manage_forms_link)
@@ -524,7 +533,7 @@ class ExportDataPage:
         try:
             self.wait_to_click(By.XPATH, self.checkbox1)
             self.wait_to_click(By.XPATH, self.archive_button)
-            assert WebDriverWait(self.driver, 100).until(ec.presence_of_element_located((
+            assert WebDriverWait(self.driver, 60).until(ec.presence_of_element_located((
                 By.XPATH, self.success_message))).is_displayed()
             print("Forms Restoration successful!!")
         except TimeoutException:
@@ -533,6 +542,7 @@ class ExportDataPage:
         # View Normal Forms
         self.wait_to_click(By.XPATH, self.manage_forms_link)
         self.wait_to_click(By.XPATH, self.apply_button)
+        time.sleep(2)
         self.wait_to_click(By.XPATH, self.view_form_link)
         self.switch_to_next_tab()
         normal_form_data = self.driver.page_source
