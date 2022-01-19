@@ -126,3 +126,33 @@ def test_TC_12_toggle_option_webapp_permission(driver):
     web.webapp_permission_option_toggle()
 
 
+def test_cleanup_items_in_users_menu(driver):
+    clean = MobileWorkerPage(driver)
+    clean2 = GroupPage(driver)
+    clean3 = RolesPermissionPage(driver)
+    clean4 = OrganisationStructurePage(driver)
+
+    clean.mobile_worker_menu()
+    clean.select_mobile_worker_created()
+    clean.cleanup_mobile_worker()
+    print("Deleted the mobile worker")
+
+    clean.mobile_worker_menu()
+    clean.edit_user_field()
+    clean.cleanup_user_field()
+    clean.save_field()
+    print("Deleted the user field")
+
+    clean.mobile_worker_menu()
+    clean2.click_group_menu()
+    clean2.cleanup_group()
+    print("Deleted the group")
+
+    clean3.roles_menu_click()
+    clean3.cleanup_role()
+    print("Deleted the role")
+
+    clean4.cleanup_location()
+    print("Deleted the location and location field")
+
+
