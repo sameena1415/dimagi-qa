@@ -4,7 +4,8 @@ import time
 
 import pandas as pd
 from HQSmokeTests.userInputs.userInputsData import UserInputsData
-from selenium.common.exceptions import StaleElementReferenceException, TimeoutException
+from selenium.common.exceptions import StaleElementReferenceException, TimeoutException, \
+    ElementClickInterceptedException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.support.wait import WebDriverWait
@@ -440,7 +441,11 @@ class ExportDataPage:
 
     # Test Case - 28 - Power BI / Tableau Integration, Form
     def power_bi_tableau_integration_form(self, username, password):
-        self.wait_to_click(By.LINK_TEXT, self.powerBI_tab_int_link)
+        try:
+            self.wait_to_click(By.LINK_TEXT, self.powerBI_tab_int_link)
+        except ElementClickInterceptedException:
+            menu = self.driver.find_element(By.LINK_TEXT, self.powerBI_tab_int_link)
+            self.driver.execute_script("arguments[0].click();", menu)
         self.wait_to_click(By.XPATH, self.add_export_button)
         self.wait_to_click(By.XPATH, self.model_dropdown)
         self.wait_to_click(By.XPATH, self.select_form_model)
