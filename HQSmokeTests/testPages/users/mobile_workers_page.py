@@ -110,7 +110,11 @@ class MobileWorkerPage:
             print("TIMEOUT ERROR: Couldn't find newly created user to login as on webapps")
 
     def mobile_worker_menu(self):
-        self.wait_to_click(By.ID, self.users_menu_id)
+        try:
+            self.wait_to_click(By.ID, self.users_menu_id)
+        except TimeoutException:
+            self.driver.find_element(By.ID, self.show_full_menu_id).click()
+            self.wait_to_click(By.ID, self.users_menu_id)
         self.wait_to_click(By.LINK_TEXT, self.mobile_workers_menu_link_text)
         assert "Mobile Workers : Users :: - CommCare HQ" in self.driver.title, "Unable find the Users Menu."
 
