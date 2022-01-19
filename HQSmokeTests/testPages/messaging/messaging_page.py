@@ -42,7 +42,7 @@ class MessagingPage:
         self.cond_alert_name = "//input[@name='conditional-alert-name']"
         self.continue_button_basic_tab = "//button[@data-bind='click: handleBasicNavContinue, enable: basicTabValid']"
         self.case_type = "//select[@data-bind='value: caseType']"
-        self.case_type_option_value = "//option[@value='case']"
+        self.case_type_option_value = "//option[@value='pregnancy']"
         self.continue_button_rule_tab = "//button[@data-bind='click: handleRuleNavContinue, enable: ruleTabValid']"
         self.cond_alert_created = "//a[text()='" + "cond_alert_" + fetch_random_string() + "']"
         self.select_recipient_type = "(//ul[@id='select2-id_schedule-recipient_types-results']/li)[1]"

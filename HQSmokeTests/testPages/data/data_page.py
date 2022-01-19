@@ -15,7 +15,7 @@ class DataPage:
         self.add_rule_button_id = 'add-new'
         self.add_rule_name_id = "id_rule-name"
         self.case_type_id = "id_criteria-case_type"
-        self.case_type_option_value = "//option[@value='case']"
+        self.case_type_option_value = "//option[@value='pregnancy']"
         self.rule_save = "//button[@class='btn btn-primary' and text()='Save']"
         self.add_action = "(//button[@ data-toggle='dropdown'])[3]"
         self.close_case = "//li[@data-bind=\"click: function() { addAction('close-case-action'); }\"]"
