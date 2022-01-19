@@ -1,10 +1,11 @@
 import datetime
 import time
+import re
 
 from HQSmokeTests.userInputs.generateUserInputs import fetch_random_string
 from HQSmokeTests.userInputs.userInputsData import UserInputsData
 from HQSmokeTests.testPages.users.org_structure_page import latest_download_file
-from selenium.common.exceptions import TimeoutException, NoSuchElementException
+from selenium.common.exceptions import TimeoutException, NoSuchElementException, ElementClickInterceptedException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.support.wait import WebDriverWait
@@ -15,7 +16,6 @@ class MobileWorkerPage:
     def __init__(self, driver):
         self.driver = driver
         self.username = "username_" + fetch_random_string()
-        self.domain = "//span[text()='Project:']"
         self.confirm_user_field_delete = "//button[@class='btn btn-danger']"
         self.delete_user_field = "(//input[@data-bind='value: slug'])[last()]" \
                                  "//following::a[@class='btn btn-danger' and @data-toggle='modal'][1]"
@@ -112,9 +112,10 @@ class MobileWorkerPage:
     def mobile_worker_menu(self):
         try:
             self.wait_to_click(By.ID, self.users_menu_id)
-        except TimeoutException:
-            self.driver.find_element(By.ID, self.show_full_menu_id).click()
-            self.wait_to_click(By.ID, self.users_menu_id)
+            time.sleep(1)
+        except ElementClickInterceptedException:
+            user_menu = self.driver.find_element(By.ID, self.users_menu_id)
+            self.driver.execute_script("arguments[0].click();", user_menu)
         self.wait_to_click(By.LINK_TEXT, self.mobile_workers_menu_link_text)
         assert "Mobile Workers : Users :: - CommCare HQ" in self.driver.title, "Unable find the Users Menu."
 
@@ -188,7 +189,7 @@ class MobileWorkerPage:
             time.sleep(1)
             self.wait_to_click(By.XPATH, self.deactivate_buttons_list)
             self.wait_to_click(By.XPATH, self.confirm_deactivate_xpath_list)
-            time.sleep(2)
+            time.sleep(3)
         except (TimeoutException, NoSuchElementException):
             print("TIMEOUT ERROR: Deactivation Unsuccessful.")
 
@@ -239,7 +240,7 @@ class MobileWorkerPage:
             self.wait_to_click(By.XPATH, self.delete_mobile_worker)
             WebDriverWait(self.driver, 3).until(ec.visibility_of_element_located((
                 By.XPATH, self.enter_username))).send_keys(
-                self.username + "@" + UserInputsData.domain + ".commcarehq.org")
+                self.username + "@" + self.get_domain() + ".commcarehq.org")
             self.wait_to_click(By.XPATH, self.confirm_delete_mw)
         except (TimeoutException, NoSuchElementException):
             print("TIMEOUT ERROR: Could not delete the mobile worker")
@@ -247,6 +248,7 @@ class MobileWorkerPage:
             By.XPATH, self.delete_success_mw))).is_displayed(), "Mobile User Deletion Unsuccessful"
 
     def cleanup_user_field(self):
+        time.sleep(1)
         self.wait_to_click(By.XPATH, self.delete_user_field)
         self.wait_to_click(By.XPATH, self.confirm_user_field_delete)
 
@@ -288,3 +290,9 @@ class MobileWorkerPage:
         assert WebDriverWait(self.driver, 100).until(ec.presence_of_element_located((
             By.XPATH, self.import_complete))).is_displayed(), "Upload Not Completed! Taking Longer to process.."
         print("File uploaded successfully")
+
+    def get_domain(self):
+        get_url = self.driver.current_url
+        domain_name = get_url.split("/")[4]
+        print("domain: "+domain_name)
+        return domain_name
