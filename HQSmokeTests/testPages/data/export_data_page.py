@@ -42,7 +42,6 @@ class ExportDataPage:
         self.export_name = '//*[@id="export-name"]'  # Custom name for the export
         self.export_settings_create = "//button[@class='btn btn-lg btn-primary']"  # Creating export
         self.date_range = "id_date_range"
-        self.date_range_manage_forms = "filter_range"
 
         # Export Form and Case data variables
         self.export_form_data_link = 'Export Form Data'  # Export Form Data link on the left panel
@@ -96,25 +95,11 @@ class ExportDataPage:
         self.copy_odatafeed_link = "//a[@class='btn btn-default btn-sm']"
         self.edit_button = "//input[@style='']//following::a[@data-bind='click: editExport'][1]"
 
-        # Manage Forms
-        self.manage_forms_link = '//*[@id="hq-sidebar"]/nav/ul[2]/li[3]/a'
-        self.select_app_dropdown = 'report_filter_form_app_id'
-        self.village_app = "//option[text()='Village Health']"
-        self.apply_button = '//*[@id="apply-btn"]'
-        self.select_all_checkbox = "//input[@name='select_all']"
-        # self.checkbox1 = "//input[@class='xform-checkbox'][1]"
-        self.checkbox1 = "//*[@id='form_options']//*[@type='checkbox']"
-        self.archive_button = '//*[@id="submitForms"]'
-        self.success_message = "//div[@class='alert alert-success']"
-        self.view_form_link = "//a[@class='ajax_dialog']"
-        self.archived_restored_dropdown = '//*[@id="select2-report_filter_archive_or_restore-container"]'
-        self.archived_forms_option = '/html/body/span/span/span[2]/ul/li[2]'
-        self.manage_forms_return = '//span[contains(text(),"Return to")]/a[.="Manage Forms"]'
-
         # bulk export delete
         self.select_all_btn = '//button[@data-bind="click: selectAll"]'
         self.delete_selected_exports = '//a[@href= "#bulk-delete-export-modal"]'
         self.bulk_delete_confirmation_btn = '//button[@data-bind="click: BulkExportDelete"]'
+        self.no_records = "//td[text()='No data available to display. Please try changing your filters.']"
 
     def wait_to_click(self, *locator, timeout=20):
         time.sleep(5)
@@ -496,65 +481,6 @@ class ExportDataPage:
         self.driver.close()  # Close the feed URL
         self.switch_back_to_prev_tab()
         self.driver.refresh()
-
-    # Test Case - 30 - Verify user is able to manage forms and archive a form
-    def manage_forms(self):
-        # Forms archival
-        self.wait_to_click(By.XPATH, self.manage_forms_link)
-        self.wait_to_click(By.ID, self.select_app_dropdown)
-        self.wait_to_click(By.XPATH, self.village_app)
-        # Date Filter
-        self.wait_to_click(By.ID, self.date_range_manage_forms)
-        self.driver.find_element(By.ID, self.date_range_manage_forms).clear()
-        self.driver.find_element(By.ID, self.date_range_manage_forms).send_keys(self.date_having_submissions)
-        self.wait_to_click(By.XPATH, self.apply)
-        # Report Apply
-        self.wait_to_click(By.XPATH, self.apply_button)
-        time.sleep(5)
-        self.wait_to_click(By.XPATH, self.checkbox1)
-        self.wait_to_click(By.XPATH, self.archive_button)
-        assert WebDriverWait(self.driver, 60).until(ec.presence_of_element_located((
-            By.XPATH, self.success_message))).is_displayed()
-        print("Forms archival successful!!")
-        time.sleep(3)
-
-        # View Archived Forms
-        self.wait_to_click(By.XPATH, self.manage_forms_link)
-        self.wait_to_click(By.ID, self.select_app_dropdown)
-        self.wait_to_click(By.XPATH, self.village_app)
-        self.wait_to_click(By.XPATH, self.archived_restored_dropdown)
-        self.wait_to_click(By.XPATH, self.archived_forms_option)
-        self.wait_to_click(By.XPATH, self.apply_button)
-        self.driver.refresh()
-        self.wait_to_click(By.XPATH, self.view_form_link)
-        self.switch_to_next_tab()
-        normal_form_data = self.driver.page_source
-        assert normal_form_data != ""  # This condition can be improvised
-        print("archived_form has data")
-        self.driver.close()
-        self.switch_back_to_prev_tab()
-
-        # Restore Archived Forms
-        try:
-            self.wait_to_click(By.XPATH, self.checkbox1)
-            self.wait_to_click(By.XPATH, self.archive_button)
-            assert WebDriverWait(self.driver, 60).until(ec.presence_of_element_located((
-                By.XPATH, self.success_message))).is_displayed()
-            print("Forms Restoration successful!!")
-        except TimeoutException:
-            print(TimeoutException)
-
-        # View Normal Forms
-        self.wait_to_click(By.XPATH, self.manage_forms_link)
-        self.wait_to_click(By.XPATH, self.apply_button)
-        time.sleep(2)
-        self.wait_to_click(By.XPATH, self.view_form_link)
-        self.switch_to_next_tab()
-        normal_form_data = self.driver.page_source
-        assert normal_form_data != ""  # This condition can be improvised
-        print("normal_form has data")
-        self.driver.close()
-        self.switch_back_to_prev_tab()
 
     def delete_bulk_exports(self):
         try:

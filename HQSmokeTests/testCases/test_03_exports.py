@@ -24,7 +24,6 @@ def test_TC_22_sms_exports(driver):
 def test_TC_24_daily_saved_exports(driver):
     export = ExportDataPage(driver)
     export.daily_saved_exports_form()
-    export.delete_bulk_exports()
     export.daily_saved_exports_case()
 
 
@@ -51,9 +50,3 @@ def test_TC_29_powerBI_tableau_integration_form(driver, settings):
     export = ExportDataPage(driver)
     export.power_bi_tableau_integration_form(username, password)
     export.delete_all_bulk_exports()
-
-
-def test_TC_31_manage_forms(driver):
-    export = ExportDataPage(driver)
-    driver.refresh()
-    export.manage_forms()
