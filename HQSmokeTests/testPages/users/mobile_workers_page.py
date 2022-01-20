@@ -113,6 +113,7 @@ class MobileWorkerPage:
             self.wait_to_click(By.ID, self.users_menu_id)
             time.sleep(1)
         except ElementClickInterceptedException:
+            self.driver.find_element(By.ID, self.alert_button_accept).click()
             user_menu = self.driver.find_element(By.ID, self.users_menu_id)
             self.driver.execute_script("arguments[0].click();", user_menu)
         except TimeoutException:

@@ -41,6 +41,7 @@ def test_TC_28_powerBI_tableau_integration_case(driver, settings):
     username = settings["login_username"]
     password = settings["login_password"]
     export = ExportDataPage(driver)
+    export.data_tab()
     export.power_bi_tableau_integration_case(username, password)
 
 
@@ -48,5 +49,6 @@ def test_TC_29_powerBI_tableau_integration_form(driver, settings):
     username = settings["login_username"]
     password = settings["login_password"]
     export = ExportDataPage(driver)
+    export.data_tab()
     export.power_bi_tableau_integration_form(username, password)
     export.delete_all_bulk_exports()

@@ -100,6 +100,7 @@ class ExportDataPage:
         self.delete_selected_exports = '//a[@href= "#bulk-delete-export-modal"]'
         self.bulk_delete_confirmation_btn = '//button[@data-bind="click: BulkExportDelete"]'
         self.no_records = "//td[text()='No data available to display. Please try changing your filters.']"
+        self.alert_button_accept = "hs-eu-confirmation-button"
 
     def wait_to_click(self, *locator, timeout=20):
         time.sleep(5)
@@ -133,7 +134,8 @@ class ExportDataPage:
         time.sleep(2)
         get_url = self.driver.current_url
         ID = get_url.split("/")[10]
-        odata_feed_link_case = "https://staging.commcarehq.org/a/qa-automation/api/v0.5/odata/cases/" + ID + "/feed/"
+        odata_feed_link_case = "https://"+self.get_environment()+"/a/"+self.get_domain()+"/api/v0.5/odata/cases/"\
+                               + ID + "/feed/"
         self.driver.back()
         # self.driver.execute_script("window.open('');")  # Open a new tab
         self.switch_to_new_tab()
@@ -148,7 +150,8 @@ class ExportDataPage:
         time.sleep(2)
         get_url = self.driver.current_url
         ID = get_url.split("/")[10]
-        odata_feed_link_form = "https://staging.commcarehq.org/a/qa-automation/api/v0.5/odata/forms/" + ID + "/feed/"
+        odata_feed_link_form = "https://"+self.get_environment()+"/a/"+self.get_domain()+"/api/v0.5/odata/forms/" \
+                               + ID + "/feed/"
         self.driver.back()
         self.switch_to_new_tab()
         final_URL_form = f"https://{username}:{password}@{odata_feed_link_form[8:]}"
@@ -163,7 +166,11 @@ class ExportDataPage:
 
     def data_tab(self):
         self.driver.refresh()
-        self.wait_to_click(By.LINK_TEXT, self.data_dropdown)
+        try:
+            self.wait_to_click(By.LINK_TEXT, self.data_dropdown)
+        except ElementClickInterceptedException:
+            self.driver.find_element(By.ID, self.alert_button_accept).click()
+            self.wait_to_click(By.LINK_TEXT, self.data_dropdown)
         self.wait_to_click(By.LINK_TEXT, self.view_all_link)
 
     # def deletion(self):
@@ -506,3 +513,15 @@ class ExportDataPage:
         self.wait_to_click(By.LINK_TEXT, self.export_excel_dash_int_link)
         self.delete_bulk_exports()
         print("Bulk exports deleted for Export Excel Int Reports")
+
+    def get_environment(self):
+        get_env = self.driver.current_url
+        env_name = get_env.split("/")[2]
+        print("server : "+env_name)
+        return env_name
+
+    def get_domain(self):
+        get_url = self.driver.current_url
+        domain_name = get_url.split("/")[4]
+        print("domain: " + domain_name)
+        return domain_name
