@@ -131,7 +131,11 @@ class ApplicationPage:
         print("XML copied successfully!")
 
     def app_settings_exploration(self):
-        self.wait_to_click(By.XPATH, self.settings)
+        try:
+            self.wait_to_click(By.XPATH, self.settings)
+        except TimeoutException:
+            self.driver.refresh()
+            self.driver.find_element(By.XPATH, self.settings).click()
         assert True == WebDriverWait(self.driver, 5).until(ec.presence_of_element_located((
             By.ID, self.languages_tab_content))).is_displayed()
         self.wait_to_click(By.XPATH, self.multimedia_tab)

@@ -1,6 +1,5 @@
 import datetime
 import time
-import re
 
 from HQSmokeTests.userInputs.generateUserInputs import fetch_random_string
 from HQSmokeTests.userInputs.userInputsData import UserInputsData
@@ -114,8 +113,12 @@ class MobileWorkerPage:
             self.wait_to_click(By.ID, self.users_menu_id)
             time.sleep(1)
         except ElementClickInterceptedException:
+            self.driver.find_element(By.ID, self.alert_button_accept).click()
             user_menu = self.driver.find_element(By.ID, self.users_menu_id)
             self.driver.execute_script("arguments[0].click();", user_menu)
+        except TimeoutException:
+            self.driver.find_element(By.ID, self.show_full_menu_id)
+            self.driver.find_element(By.ID, self.users_menu_id)
         self.wait_to_click(By.LINK_TEXT, self.mobile_workers_menu_link_text)
         assert "Mobile Workers : Users :: - CommCare HQ" in self.driver.title, "Unable find the Users Menu."
 
