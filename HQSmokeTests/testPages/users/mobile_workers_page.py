@@ -87,6 +87,7 @@ class MobileWorkerPage:
         self.upload = "//button[@class='btn btn-primary disable-on-submit']"
         self.import_complete = "//legend[text()='Bulk upload complete.']"
         self.download_filter = "//button[@data-bind='html: buttonHTML']"
+        self.alert_button_accept = "hs-eu-confirmation-button"
 
     def wait_to_click(self, *locator, timeout=15):
         clickable = ec.element_to_be_clickable(locator)
