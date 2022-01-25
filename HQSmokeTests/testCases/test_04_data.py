@@ -19,6 +19,8 @@ def test_TC_31_manage_forms(driver):
 def test_TC_32_auto_case_update(driver):
 
     data = DataPage(driver)
+    export = ExportDataPage(driver)
+    export.data_tab()
     data.open_auto_case_update_page()
     data.add_new_rule()
     data.remove_rule()
@@ -27,12 +29,21 @@ def test_TC_32_auto_case_update(driver):
 def test_TC_33_create_lookup_table(driver):
 
     data = DataPage(driver)
+    export = ExportDataPage(driver)
+    export.data_tab()
     data.create_lookup_table()
 
 
 def test_TC_34_view_lookup_table(driver):
 
     data = DataPage(driver)
+    export = ExportDataPage(driver)
+    export.data_tab()
     data.view_lookup_table()
+
+
+def test_cleanup_lookuptable(driver):
+
+    data = DataPage(driver)
     data.delete_lookup_table()
 
