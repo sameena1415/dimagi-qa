@@ -50,6 +50,6 @@ class LoginPage:
         self.enter_username(username)
         self.click_continue()
         self.enter_password(password)
-        self.click_submit()
         self.accept_alert()
+        self.click_submit()
         self.assert_logged_in()
