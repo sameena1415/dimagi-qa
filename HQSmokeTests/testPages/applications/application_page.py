@@ -167,6 +167,7 @@ class ApplicationPage:
         self.wait_to_click(By.XPATH, self.add_ons_tab)
         assert True == WebDriverWait(self.driver, 5).until(ec.presence_of_element_located((
             By.ID, self.add_ons_tab_content))).is_displayed()
+        time.sleep(2)
         self.wait_to_click(By.XPATH, self.advanced_settings_tab)
         assert True == WebDriverWait(self.driver, 5).until(ec.presence_of_element_located((
             By.ID, self.advanced_settings_tab_content))).is_displayed()
