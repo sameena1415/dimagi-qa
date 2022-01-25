@@ -54,6 +54,7 @@ class MobileWorkerPage:
         self.cancel_button = "//button[text()='Cancel']"
         self.new_user_created_xpath = "//*[@class='success']//a[contains(@data-bind,'attr: {href: edit_url}, visible: " \
                                       "user_id')]//following-sibling::strong"
+        self.NEW = "//span[@class='text-success']"
         self.edit_user_field_xpath = "//*[@id='btn-edit_user_fields']"
         self.add_field_xpath = "//button[@data-bind='click: addField']"
         self.user_property_xpath = "(//input[@data-bind='value: slug'])[last()]"
@@ -87,6 +88,7 @@ class MobileWorkerPage:
         self.upload = "//button[@class='btn btn-primary disable-on-submit']"
         self.import_complete = "//legend[text()='Bulk upload complete.']"
         self.download_filter = "//button[@data-bind='html: buttonHTML']"
+        self.alert_button_accept = "hs-eu-confirmation-button"
 
     def wait_to_click(self, *locator, timeout=15):
         clickable = ec.element_to_be_clickable(locator)
@@ -95,6 +97,7 @@ class MobileWorkerPage:
     def search_user(self):
         WebDriverWait(self.driver, 5).until(ec.presence_of_element_located((
                 By.XPATH, self.search_mw))).send_keys(self.username)
+        time.sleep(2)
         self.wait_to_click(By.XPATH, self.search_button_mw)
 
     def webapp_login_as(self):
@@ -112,13 +115,10 @@ class MobileWorkerPage:
         try:
             self.wait_to_click(By.ID, self.users_menu_id)
             time.sleep(1)
-        except ElementClickInterceptedException:
-            self.driver.find_element(By.ID, self.alert_button_accept).click()
-            user_menu = self.driver.find_element(By.ID, self.users_menu_id)
-            self.driver.execute_script("arguments[0].click();", user_menu)
         except TimeoutException:
-            self.driver.find_element(By.ID, self.show_full_menu_id)
-            self.driver.find_element(By.ID, self.users_menu_id)
+            if not self.driver.find_element(By.ID, self.users_menu_id).is_displayed():
+                self.driver.find_element(By.ID, self.show_full_menu_id).click()
+            self.driver.find_element(By.ID, self.users_menu_id).click()
         self.wait_to_click(By.LINK_TEXT, self.mobile_workers_menu_link_text)
         assert "Mobile Workers : Users :: - CommCare HQ" in self.driver.title, "Unable find the Users Menu."
 
@@ -137,6 +137,8 @@ class MobileWorkerPage:
 
     def click_create(self):
         self.wait_to_click(By.XPATH, self.create_button_xpath)
+        WebDriverWait(self.driver, 10).until(ec.presence_of_element_located((
+            By.XPATH, self.NEW))).is_displayed()
         new_user_created = WebDriverWait(self.driver, 3).until(ec.presence_of_element_located((
             By.XPATH, self.new_user_created_xpath)))
         print("Username is : " + new_user_created.text)
@@ -168,6 +170,7 @@ class MobileWorkerPage:
         print("User Field Added")
 
     def select_mobile_worker_created(self):
+        time.sleep(2)
         self.wait_to_click(By.XPATH, self.mobile_worker_on_left_panel)
         time.sleep(2)
         self.search_user()
@@ -204,8 +207,6 @@ class MobileWorkerPage:
             print("Username is " + login_with_username[j].text)
             assert login_with_username[j].text != self.username, "Deactivated mobile worker still visible"
             print("Username not in list - Successfully deactivated!")
-        self.driver.refresh()
-        time.sleep(1)
         self.wait_to_click(By.ID, self.show_full_menu_id)
 
     def reactivate_user(self):
@@ -230,12 +231,14 @@ class MobileWorkerPage:
             if login_with_username[j].text == self.username:
                 self.wait_to_click(By.XPATH, self.webapp_login_with_username + "[" + str(j + 1) + "]")
                 self.wait_to_click(By.ID, self.webapp_login_confirmation)
-                self.wait_to_click(By.ID, self.show_full_menu_id)
                 break
+        self.driver.find_element(By.ID, self.show_full_menu_id).click()
+
         login_username = WebDriverWait(self.driver, 3).until(ec.presence_of_element_located(
             (By.XPATH, self.webapp_working_as)))
         assert login_username.text == self.username, "Reactivated user is not visible."
         print("Working as " + self.username + " : Reactivation successful!")
+        time.sleep(1)
 
     def cleanup_mobile_worker(self):
         try:
