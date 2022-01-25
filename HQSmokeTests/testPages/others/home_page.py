@@ -1,4 +1,4 @@
-from selenium.common.exceptions import TimeoutException
+from selenium.common.exceptions import TimeoutException, ElementClickInterceptedException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as ec
@@ -20,6 +20,7 @@ class HomePage:
         self.show_full_menu_id = "commcare-menu-toggle"
         self.messaging_menu_id = "MessagingTab"
         self.admin_menu_id = "AdminTab"
+        self.alert_button_accept = "hs-eu-confirmation-button"
 
     def wait_to_click(self, *locator, timeout=5):
         clickable = ec.element_to_be_clickable(locator)
@@ -36,8 +37,11 @@ class HomePage:
         try:
             self.wait_to_click(By.ID, self.reports_menu_id)
             self.wait_to_click(By.LINK_TEXT, self.view_all_link_text)
-        except TimeoutException:
-            print("TIMEOUT ERROR: Couldn’t find the Reports menu.")
+        except ElementClickInterceptedException:
+            if self.driver.find_element(By.ID, self.alert_button_accept).is_displayed():
+                self.driver.find_element(By.ID, self.alert_button_accept).click()
+                self.wait_to_click(By.ID, self.reports_menu_id)
+                self.wait_to_click(By.LINK_TEXT, self.view_all_link_text)
         assert "My Saved Reports : Project Reports :: - CommCare HQ" in self.driver.title, "This is not the Reports menu page."
 
     def data_menu(self):
@@ -68,8 +72,11 @@ class HomePage:
         try:
             self.wait_to_click(By.ID, self.messaging_menu_id)
             self.wait_to_click(By.LINK_TEXT, self.view_all_link_text)
-        except TimeoutException:
-            print("TIMEOUT ERROR: Couldn’t find the Messaging menu.")
+        except ElementClickInterceptedException:
+            if self.driver.find_element(By.ID, self.alert_button_accept).is_displayed():
+                self.driver.find_element(By.ID, self.alert_button_accept).click()
+                self.wait_to_click(By.ID, self.messaging_menu_id)
+                self.wait_to_click(By.LINK_TEXT, self.view_all_link_text)
         assert "Dashboard : Messaging :: - CommCare HQ" in self.driver.title, "This is not the Messaging menu page."
 
     def web_apps_menu(self):

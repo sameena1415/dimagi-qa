@@ -1,6 +1,6 @@
 import time
 
-from selenium.common.exceptions import TimeoutException
+from selenium.common.exceptions import TimeoutException, ElementClickInterceptedException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as ec
@@ -63,6 +63,7 @@ class ApplicationPage:
         self.add_ons_tab_content = "add-ons"
         self.advanced_settings_tab = "//a[@href='#commcare-settings']"
         self.advanced_settings_tab_content = "app-settings-options"
+        self.alert_button_accept = "hs-eu-confirmation-button"
 
     def wait_to_click(self, *locator, timeout=10):
         clickable = ec.element_to_be_clickable(locator)
@@ -71,7 +72,12 @@ class ApplicationPage:
     def create_new_application(self):
         self.wait_to_click(By.ID, self.applications_menu_id)
         self.wait_to_click(By.LINK_TEXT, self.new_application)
-        self.wait_to_click(By.XPATH, self.edit_app_name)
+        try:
+            self.wait_to_click(By.XPATH, self.edit_app_name)
+        except ElementClickInterceptedException:
+            if self.driver.find_element(By.ID, self.alert_button_accept).is_displayed():
+                self.driver.find_element(By.ID, self.alert_button_accept).click()
+                self.wait_to_click(By.XPATH, self.edit_app_name)
         self.driver.find_element(By.XPATH, self.app_name_textbox).clear()
         self.driver.find_element(By.XPATH, self.app_name_textbox).send_keys(self.app_name)
         self.wait_to_click(By.XPATH, self.confirm_change)
@@ -92,7 +98,12 @@ class ApplicationPage:
         assert True == WebDriverWait(self.driver, 5).until(ec.presence_of_element_located((
             By.ID, self.menu_settings_content))).is_displayed()
         print("Menu Settings loaded successfully!")
-        self.driver.find_element(By.XPATH, self.form_settings).click()
+        try:
+            self.driver.find_element(By.XPATH, self.form_settings).click()
+        except ElementClickInterceptedException:
+            if self.driver.find_element(By.ID, self.alert_button_accept).is_displayed():
+                self.driver.find_element(By.ID, self.alert_button_accept).click()
+                self.driver.find_element(By.XPATH, self.form_settings).click()
         assert True == WebDriverWait(self.driver, 5).until(ec.presence_of_element_located((
             By.XPATH, self.form_settings_content))).is_displayed()
         print("Form Settings loaded successfully!")
@@ -107,7 +118,12 @@ class ApplicationPage:
         print("Deleted the application")
 
     def form_xml_download_upload(self):
-        self.wait_to_click(By.XPATH, self.actions_tab)
+        try:
+            self.wait_to_click(By.XPATH, self.actions_tab)
+        except ElementClickInterceptedException:
+            if self.driver.find_element(By.ID, self.alert_button_accept).is_displayed():
+                self.driver.find_element(By.ID, self.alert_button_accept).click()
+                self.wait_to_click(By.XPATH, self.actions_tab)
         self.wait_to_click(By.XPATH, self.download_xml)
         time.sleep(1)
         self.wait_to_click(By.XPATH, self.add_form_button)
@@ -136,6 +152,10 @@ class ApplicationPage:
         except TimeoutException:
             self.driver.refresh()
             self.driver.find_element(By.XPATH, self.settings).click()
+        except ElementClickInterceptedException:
+            if self.driver.find_element(By.ID, self.alert_button_accept).is_displayed():
+                self.driver.find_element(By.ID, self.alert_button_accept).click()
+                self.driver.find_element(By.XPATH, self.settings).click()
         assert True == WebDriverWait(self.driver, 5).until(ec.presence_of_element_located((
             By.ID, self.languages_tab_content))).is_displayed()
         self.wait_to_click(By.XPATH, self.multimedia_tab)
@@ -147,6 +167,7 @@ class ApplicationPage:
         self.wait_to_click(By.XPATH, self.add_ons_tab)
         assert True == WebDriverWait(self.driver, 5).until(ec.presence_of_element_located((
             By.ID, self.add_ons_tab_content))).is_displayed()
+        time.sleep(2)
         self.wait_to_click(By.XPATH, self.advanced_settings_tab)
         assert True == WebDriverWait(self.driver, 5).until(ec.presence_of_element_located((
             By.ID, self.advanced_settings_tab_content))).is_displayed()
