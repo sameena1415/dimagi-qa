@@ -96,7 +96,7 @@ class MobileWorkerPage:
 
     def search_user(self):
         WebDriverWait(self.driver, 5).until(ec.presence_of_element_located((
-                By.XPATH, self.search_mw))).send_keys(self.username)
+            By.XPATH, self.search_mw))).send_keys(self.username)
         time.sleep(2)
         self.wait_to_click(By.XPATH, self.search_button_mw)
 
@@ -108,8 +108,9 @@ class MobileWorkerPage:
             self.driver.find_element(By.XPATH, self.search_user_web_apps).send_keys(self.username)
             self.wait_to_click(By.XPATH, self.search_button_we_apps)
             time.sleep(1)
-        except (TimeoutException, NoSuchElementException):
-            print("TIMEOUT ERROR: Couldn't find newly created user to login as on webapps")
+        except (TimeoutException, ElementClickInterceptedException):
+            if self.driver.find_element(By.ID, self.alert_button_accept).is_displayed():
+                self.driver.find_element(By.ID, self.alert_button_accept).click()
 
     def mobile_worker_menu(self):
         try:
@@ -118,7 +119,13 @@ class MobileWorkerPage:
         except TimeoutException:
             if not self.driver.find_element(By.ID, self.users_menu_id).is_displayed():
                 self.driver.find_element(By.ID, self.show_full_menu_id).click()
-            self.driver.find_element(By.ID, self.users_menu_id).click()
+                time.sleep(2)
+                self.driver.find_element(By.ID, self.users_menu_id).click()
+        except ElementClickInterceptedException:
+            if self.driver.find_element(By.ID, self.alert_button_accept).is_displayed():
+                self.driver.find_element(By.ID, self.alert_button_accept).click()
+                time.sleep(2)
+                self.driver.find_element(By.ID, self.users_menu_id).click()
         self.wait_to_click(By.LINK_TEXT, self.mobile_workers_menu_link_text)
         assert "Mobile Workers : Users :: - CommCare HQ" in self.driver.title, "Unable find the Users Menu."
 
@@ -166,7 +173,8 @@ class MobileWorkerPage:
 
     def save_field(self):
         self.wait_to_click(By.ID, self.save_field_id)
-        assert self.driver.find_element(By.XPATH, self.user_field_success_msg).is_displayed(), "Unable to save userfield."
+        assert self.driver.find_element(By.XPATH,
+                                        self.user_field_success_msg).is_displayed(), "Unable to save userfield."
         print("User Field Added")
 
     def select_mobile_worker_created(self):
@@ -180,7 +188,8 @@ class MobileWorkerPage:
     def enter_value_for_created_user_field(self):
         self.wait_to_click(By.ID, self.additional_info_dropdown)
         self.wait_to_click(By.XPATH, self.select_value_dropdown)
-        assert self.driver.find_element(By.XPATH, self.user_file_additional_info).is_displayed(), "Unable to assign user field to user."
+        assert self.driver.find_element(By.XPATH,
+                                        self.user_file_additional_info).is_displayed(), "Unable to assign user field to user."
 
     def update_information(self):
         button = self.driver.find_element(By.XPATH, self.update_info_button)
@@ -300,5 +309,5 @@ class MobileWorkerPage:
     def get_domain(self):
         get_url = self.driver.current_url
         domain_name = get_url.split("/")[4]
-        print("domain: "+domain_name)
+        print("domain: " + domain_name)
         return domain_name
