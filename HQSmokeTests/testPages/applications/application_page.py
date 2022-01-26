@@ -1,6 +1,7 @@
 import time
 
-from selenium.common.exceptions import TimeoutException, ElementClickInterceptedException
+from selenium.common.exceptions import TimeoutException, ElementClickInterceptedException, \
+    UnexpectedAlertPresentException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as ec
@@ -98,8 +99,14 @@ class ApplicationPage:
         time.sleep(2)
         self.driver.find_element(By.XPATH, self.menu_settings).click()
         time.sleep(2)
-        assert True == WebDriverWait(self.driver, 5).until(ec.presence_of_element_located((
-            By.ID, self.menu_settings_content))).is_displayed()
+        try:
+            self.settings_content = WebDriverWait(self.driver, 5).until(ec.presence_of_element_located((
+                By.ID, self.menu_settings_content)))
+        except UnexpectedAlertPresentException:
+            alert = self.driver.switch_to.alert
+            alert.accept()
+            self.settings_content.click()
+        assert self.settings_content.is_displayed()
         print("Menu Settings loaded successfully!")
         try:
             self.driver.find_element(By.XPATH, self.form_settings).click()
