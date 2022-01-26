@@ -260,6 +260,7 @@ class ExportDataPage:
         self.wait_to_click(By.LINK_TEXT, self.view_FormID_CaseID)
         time.sleep(3)
         self.switch_to_next_tab()
+        time.sleep(3)
         womanName_HQ = WebDriverWait(self.driver, 15).until(ec.presence_of_element_located((
             By.XPATH, self.woman_case_name_HQ))).text
         assert woman_name_excel == womanName_HQ
