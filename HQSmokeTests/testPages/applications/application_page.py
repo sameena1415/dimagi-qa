@@ -97,6 +97,7 @@ class ApplicationPage:
     def form_builder_exploration(self):
         time.sleep(2)
         self.driver.find_element(By.XPATH, self.menu_settings).click()
+        time.sleep(2)
         assert True == WebDriverWait(self.driver, 5).until(ec.presence_of_element_located((
             By.ID, self.menu_settings_content))).is_displayed()
         print("Menu Settings loaded successfully!")
