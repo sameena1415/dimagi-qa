@@ -27,7 +27,6 @@ def test_TC_24_daily_saved_exports(driver):
     export = ExportDataPage(driver)
     export.data_tab()
     export.daily_saved_exports_form()
-    export.data_tab()
     export.daily_saved_exports_case()
 
 

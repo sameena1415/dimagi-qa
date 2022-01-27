@@ -126,7 +126,12 @@ class MobileWorkerPage:
                 self.driver.find_element(By.ID, self.alert_button_accept).click()
                 time.sleep(2)
                 self.driver.find_element(By.ID, self.users_menu_id).click()
-        self.wait_to_click(By.LINK_TEXT, self.mobile_workers_menu_link_text)
+        try:
+            self.wait_to_click(By.LINK_TEXT, self.mobile_workers_menu_link_text)
+        except ElementClickInterceptedException:
+            if self.driver.find_element(By.ID, self.alert_button_accept).is_displayed():
+                self.driver.find_element(By.ID, self.alert_button_accept).click()
+                self.wait_to_click(By.LINK_TEXT, self.mobile_workers_menu_link_text)
         assert "Mobile Workers : Users :: - CommCare HQ" in self.driver.title, "Unable find the Users Menu."
 
     def create_mobile_worker(self):
