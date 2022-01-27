@@ -327,6 +327,7 @@ class ExportDataPage:
 
     # Test Case 23_b - Daily saved export, case
     def daily_saved_exports_case(self):
+        self.wait_to_click(By.XPATH, self.export_case_data_link)
         try:
             self.wait_to_click(By.XPATH, self.edit_form_case_export)
         except TimeoutException:
