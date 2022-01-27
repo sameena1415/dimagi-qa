@@ -331,7 +331,7 @@ class ExportDataPage:
         try:
             self.wait_to_click(By.XPATH, self.edit_form_case_export)
         except TimeoutException:
-            self.add_form_exports()
+            self.add_case_exports()
             self.wait_to_click(By.XPATH, self.edit_form_case_export)
         self.wait_to_clear(By.XPATH, self.export_name)
         self.driver.find_element(By.XPATH, self.export_name).send_keys(UserInputsData.case_export_name)
