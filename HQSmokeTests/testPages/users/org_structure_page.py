@@ -203,19 +203,16 @@ class OrganisationStructurePage:
         self.wait_to_click(By.ID, self.save_btn_id)
         print("Location field deleted successfully")
         # Delete Location
+        self.wait_to_click(By.LINK_TEXT, self.org_menu_link_text)
+        time.sleep(2)
         try:
-            self.wait_to_click(By.LINK_TEXT, self.org_menu_link_text)
+            self.wait_to_click(By.XPATH, self.delete_location_created)
+        except (StaleElementReferenceException, TimeoutException):
             self.driver.refresh()
             self.wait_to_click(By.XPATH, self.delete_location_created)
-            time.sleep(1)
-            self.driver.find_element(By.XPATH, self.delete_confirm).send_keys("1")
-            self.driver.find_element(By.XPATH, self.delete_confirm_button).click()
-        except StaleElementReferenceException:
-            self.driver.refresh()
-            self.wait_to_click(By.XPATH, self.delete_location_created)
-            time.sleep(1)
-            self.driver.find_element(By.XPATH, self.delete_confirm).send_keys("1")
-            self.driver.find_element(By.XPATH, self.delete_confirm_button).click()
+        time.sleep(1)
+        self.driver.find_element(By.XPATH, self.delete_confirm).send_keys("1")
+        self.driver.find_element(By.XPATH, self.delete_confirm_button).click()
         assert WebDriverWait(self.driver, 100).until(ec.presence_of_element_located((
             By.XPATH, self.delete_success))).is_displayed(), "Location Not Deleted!"
         print("Location deleted successfully")
