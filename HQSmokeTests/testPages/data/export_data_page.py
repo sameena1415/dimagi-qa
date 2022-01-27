@@ -288,8 +288,6 @@ class ExportDataPage:
 
     # Test Case 23_a - Daily saved export, form
     def daily_saved_exports_form(self):
-        self.wait_to_click(By.LINK_TEXT, self.export_form_data_link)
-        self.driver.refresh()
         try:
             self.wait_to_click(By.XPATH, self.edit_form_case_export)
         except TimeoutException:
@@ -329,7 +327,6 @@ class ExportDataPage:
 
     # Test Case 23_b - Daily saved export, case
     def daily_saved_exports_case(self):
-        self.wait_to_click(By.LINK_TEXT, self.export_case_data_link)
         try:
             self.wait_to_click(By.XPATH, self.edit_form_case_export)
         except TimeoutException:
