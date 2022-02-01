@@ -44,7 +44,7 @@ jobs:
         DIMAGIQA_MAIL_PASSWORD: ${{ secrets.DIMAGIQA_MAIL_PASSWORD }}
       run: |
         echo "client_payload: ${{ toJson(github.event.client_payload) }}"
-        echo "NOW=$(date +'%Y-%m-%d %H:%M:%S')" >> $GITHUB_ENV
+        echo "NOW=$(date +'%Y-%m %H:%M')" >> $GITHUB_ENV
         echo ${{env.NOW}}
         pytest -v -n 2 --dist=loadscope --reruns 1 --html=report.html --self-contained-html
 
@@ -61,7 +61,7 @@ jobs:
         # Optional (recommended) mail server password:
         password: ${{secrets.DIMAGIQA_MAIL_PASSWORD}}
         # Required mail subject:
-        subject: ${{ github.event.client_payload.environment }}  PASS - Job result ${{env.NOW}}  #${{github.run_number}}
+        subject: ${{ github.event.client_payload.environment }}  PASS - Smoke Tests[#${{github.run_number}}], ${{env.NOW}}
         # Required recipients' addresses:
         to: qa@dimagi.com, sameena.shaik@fissionlabs.com, kbordoloi@dimagi.com
         # Required sender full name (address can be skipped):
@@ -79,7 +79,7 @@ jobs:
         server_port: 465
         username: ${{secrets.DIMAGIQA_MAIL_USERNAME}}
         password: ${{secrets.DIMAGIQA_MAIL_PASSWORD}}
-        subject: ${{ github.event.client_payload.environment }} FAIL - Job result ${{env.NOW}}
+        subject: ${{ github.event.client_payload.environment }} FAIL - Smoke Tests[#${{github.run_number}}], ${{env.NOW}}
         to: qa@dimagi.com, sameena.shaik@fissionlabs.com, kbordoloi@dimagi.com
         from: <no-reply@dimagi.com>
         html_body: file:////home/runner/work/dimagi-qa/dimagi-qa/HQSmokeTests/email_fail.html
@@ -94,7 +94,7 @@ jobs:
         server_port: 465
         username: ${{secrets.DIMAGIQA_MAIL_USERNAME}}
         password: ${{secrets.DIMAGIQA_MAIL_PASSWORD}}
-        subject: ${{ github.head_ref }} FAIL - Job result ${{env.NOW}}
+        subject: FAIL - Smoke Tests[#${{github.run_number}}] on branch "${{ github.head_ref }}", ${{env.NOW}}
         to: qa-automation@dimagi.com, kbordoloi@dimagi.com
         from: <no-reply@dimagi.com>
         html_body: file:////home/runner/work/dimagi-qa/dimagi-qa/HQSmokeTests/email_fail.html
@@ -109,7 +109,7 @@ jobs:
         server_port: 465
         username: ${{secrets.DIMAGIQA_MAIL_USERNAME}}
         password: ${{secrets.DIMAGIQA_MAIL_PASSWORD}}
-        subject: ${{ github.head_ref }}  PASS - Job result ${{env.NOW}}
+        subject: PASS - Smoke Tests[#${{github.run_number}}] on branch "${{ github.head_ref }}", ${{env.NOW}}
         to: qa-automation@dimagi.com, kbordoloi@dimagi.com
         from: <no-reply@dimagi.com>
         html_body: file:////home/runner/work/dimagi-qa/dimagi-qa/HQSmokeTests/email_pass.html
