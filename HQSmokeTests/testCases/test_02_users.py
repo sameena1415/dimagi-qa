@@ -116,12 +116,18 @@ def test_TC_12_toggle_option_webapp_permission(driver):
     web.webapp_permission_option_toggle()
 
 
-def test_TC_04_deactivate_and_reactivate_user(driver):
+def test_TC_04_deactivate_user(driver):
 
     user = MobileWorkerPage(driver)
     user.mobile_worker_menu()
     user.deactivate_user()
     user.verify_deactivation_via_login()
+
+
+def test_TC_04_reactivate_user(driver):
+
+    user = MobileWorkerPage(driver)
+    user.mobile_worker_menu()
     user.reactivate_user()
     user.verify_reactivation_via_login()
 
