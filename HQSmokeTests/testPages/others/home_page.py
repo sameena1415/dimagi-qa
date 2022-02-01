@@ -29,8 +29,10 @@ class HomePage:
     def dashboard_menu(self):
         try:
             self.wait_to_click(By.ID, self.dashboard_menu_id)
-        except TimeoutException:
-            print("TIMEOUT ERROR: Couldn’t find the Dashboard menu.")
+        except ElementClickInterceptedException:
+            if self.driver.find_element(By.ID, self.alert_button_accept).is_displayed():
+                self.driver.find_element(By.ID, self.alert_button_accept).click()
+                self.wait_to_click(By.ID, self.dashboard_menu_id)
         assert "CommCare HQ" == self.driver.title, "This is not the Dashboard page."
 
     def reports_menu(self):
@@ -48,24 +50,33 @@ class HomePage:
         try:
             self.wait_to_click(By.ID, self.data_menu_id)
             self.wait_to_click(By.LINK_TEXT, self.view_all_link_text)
-        except TimeoutException:
-            print("TIMEOUT ERROR: Couldn’t find the Data menu.")
+        except ElementClickInterceptedException:
+            if self.driver.find_element(By.ID, self.alert_button_accept).is_displayed():
+                self.driver.find_element(By.ID, self.alert_button_accept).click()
+                self.wait_to_click(By.ID, self.data_menu_id)
+                self.wait_to_click(By.LINK_TEXT, self.view_all_link_text)
         assert "Export Form Data : Data :: - CommCare HQ" in self.driver.title, "This is not the Data menu page."
 
     def applications_menu(self):
         try:
             self.wait_to_click(By.ID, self.applications_menu_id)
             self.wait_to_click(By.LINK_TEXT, self.available_application)
-        except TimeoutException:
-            print("TIMEOUT ERROR: Couldn’t find the Applications menu.")
+        except ElementClickInterceptedException:
+            if self.driver.find_element(By.ID, self.alert_button_accept).is_displayed():
+                self.driver.find_element(By.ID, self.alert_button_accept).click()
+                self.wait_to_click(By.ID, self.applications_menu_id)
+                self.wait_to_click(By.LINK_TEXT, self.available_application)
         assert "Releases - " + UserInputsData.application + " - CommCare HQ" in self.driver.title, "This is not the Applications page."
 
     def users_menu(self):
         try:
             self.wait_to_click(By.ID, self.users_menu_id)
             self.wait_to_click(By.LINK_TEXT, self.view_all_link_text)
-        except TimeoutException:
-            print("TIMEOUT ERROR: Couldn’t find the Users menu.")
+        except ElementClickInterceptedException:
+            if self.driver.find_element(By.ID, self.alert_button_accept).is_displayed():
+                self.driver.find_element(By.ID, self.alert_button_accept).click()
+                self.wait_to_click(By.ID, self.users_menu_id)
+                self.wait_to_click(By.LINK_TEXT, self.view_all_link_text)
         assert "Mobile Workers : Users :: - CommCare HQ" in self.driver.title, "This is not the Users menu page."
 
     def messaging_menu(self):
@@ -83,6 +94,9 @@ class HomePage:
         try:
             self.wait_to_click(By.ID, self.web_apps_menu_id)
             self.wait_to_click(By.ID, self.show_full_menu_id)
-        except TimeoutException:
-            print("TIMEOUT ERROR: Couldn’t find the Webapps menu.")
+        except ElementClickInterceptedException:
+            if self.driver.find_element(By.ID, self.alert_button_accept).is_displayed():
+                self.driver.find_element(By.ID, self.alert_button_accept).click()
+                self.wait_to_click(By.ID, self.web_apps_menu_id)
+                self.wait_to_click(By.ID, self.show_full_menu_id)
         assert "Web Apps - CommCare HQ" in self.driver.title, "This is not the Webaspps menu page."
