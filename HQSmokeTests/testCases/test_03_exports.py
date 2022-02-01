@@ -56,4 +56,9 @@ def test_TC_29_powerBI_tableau_integration_form(driver, settings):
     export = ExportDataPage(driver)
     export.data_tab()
     export.power_bi_tableau_integration_form(username, password)
+
+
+def test_exports_cleanup(driver):
+    export = ExportDataPage(driver)
+    export.data_tab()
     export.delete_all_bulk_exports()
