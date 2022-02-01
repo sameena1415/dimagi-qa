@@ -67,7 +67,7 @@ jobs:
         # Required sender full name (address can be skipped):
         from: <no-reply@dimagi.com> # <user@example.com>
         # Optional plain body:
-        body: Build job of ${{github.repository}} completed successfully!
+        body: Build job ${{github.job}} of ${{github.repository}} completed successfully!
         # Optional HTML body read from file:
         html_body: file:////home/runner/work/dimagi-qa/dimagi-qa/HQSmokeTests/email_pass.html
         # Optional priority: 'high', 'normal' (default) or 'low'
@@ -84,7 +84,7 @@ jobs:
         subject: ${{ github.event.client_payload.environment }} FAIL - Github Actions job result ${{env.NOW}}
         to: qa@dimagi.com, sameena.shaik@fissionlabs.com, kbordoloi@dimagi.com
         from: <no-reply@dimagi.com>
-        body: Build job of ${{github.repository}} completed with failure!
+        body: Build job ${{github.job}} of ${{github.repository}} completed with failure!
         html_body: file:////home/runner/work/dimagi-qa/dimagi-qa/HQSmokeTests/email_fail.html
         attachments: /home/runner/work/dimagi-qa/dimagi-qa/report.html
         priority: normal
@@ -100,7 +100,7 @@ jobs:
         subject: ${{ github.head_ref }} FAIL - Github Actions job result ${{env.NOW}}
         to: qa-automation@dimagi.com, kbordoloi@dimagi.com
         from: <no-reply@dimagi.com>
-        body: Build job of ${{github.repository}} completed with failure!
+        body: Build job ${{github.job}} of ${{github.repository}} completed with failure!
         html_body: file:////home/runner/work/dimagi-qa/dimagi-qa/HQSmokeTests/email_fail.html
         attachments: /home/runner/work/dimagi-qa/dimagi-qa/report.html
         priority: normal
@@ -116,7 +116,7 @@ jobs:
         subject: ${{ github.head_ref }}  PASS - Github Actions job result ${{env.NOW}}
         to: qa-automation@dimagi.com, kbordoloi@dimagi.com
         from: <no-reply@dimagi.com>
-        body: Build job of ${{github.repository}} completed successfully!
+        body: Build job ${{github.job}} of ${{github.repository}} completed successfully!
         html_body: file:////home/runner/work/dimagi-qa/dimagi-qa/HQSmokeTests/email_pass.html
         priority: normal
 
