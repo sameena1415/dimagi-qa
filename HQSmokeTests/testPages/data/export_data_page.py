@@ -49,7 +49,7 @@ class ExportDataPage:
         self.export_form_case_data_button = "(//a[@class='btn btn-primary'])[2]"  # Export button on listing page
         self.prepare_export_button = "//button[@data-bind='disable: disablePrepareExport']"  # click prepare exports
         self.download_button = "//a[@class='btn btn-primary btn-full-width']"  # click download
-        self.date_having_submissions = "2022-01-18 to 2022-01-18"
+        self.date_having_submissions = "2022-01-18 to 2022-02-18"
         self.apply = "//button[@class='applyBtn btn btn-sm btn-primary']"
         self.users_filter = "//span[@class='select2-selection select2-selection--multiple']"
 
