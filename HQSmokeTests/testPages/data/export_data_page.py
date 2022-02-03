@@ -456,6 +456,7 @@ class ExportDataPage:
         self.wait_to_click(By.XPATH, self.select_form)
         self.wait_to_click(By.XPATH, self.add_export_conf)
         print("Odata form Feed added!!")
+        time.sleep(5)
         self.wait_to_clear(By.XPATH, self.export_name)
         self.driver.find_element(By.XPATH, self.export_name).send_keys(UserInputsData.odata_feed_form)
         self.driver.find_element(By.XPATH, self.export_settings_create).click()
