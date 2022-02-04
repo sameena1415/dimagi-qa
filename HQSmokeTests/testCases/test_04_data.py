@@ -2,14 +2,22 @@ from HQSmokeTests.testPages.data.data_page import DataPage
 from HQSmokeTests.testPages.data.export_data_page import ExportDataPage
 from HQSmokeTests.testPages.data.manage_forms_page import ManageFormsPage
 from HQSmokeTests.testPages.data.import_cases_page import ImportCasesPage
+from HQSmokeTests.testPages.data.reassign_cases_page import ReassignCasesPage
 
 
 def test_TC_26_import_cases(driver):
     export = ExportDataPage(driver)
     export.data_tab()
     imp = ImportCasesPage(driver)
-    imp.download_last_import()
     imp.replace_property_and_upload()
+
+
+def test_TC_29_reassign_cases(driver):
+    export = ExportDataPage(driver)
+    export.data_tab()
+    reassign = ReassignCasesPage(driver)
+    reassign.get_cases()
+    reassign.reassign_case()
 
 
 def test_TC_31_manage_forms(driver):
