@@ -42,7 +42,7 @@ def test_TC_26_excel_dashboard_integration_case(driver):
     export.excel_dashboard_integration_case()
 
 
-def test_TC_28_powerBI_tableau_integration_case(driver, settings):
+def test_TC_27_powerBI_tableau_integration_case(driver, settings):
     username = settings["login_username"]
     password = settings["login_password"]
     export = ExportDataPage(driver)
@@ -50,7 +50,7 @@ def test_TC_28_powerBI_tableau_integration_case(driver, settings):
     export.power_bi_tableau_integration_case(username, password)
 
 
-def test_TC_29_powerBI_tableau_integration_form(driver, settings):
+def test_TC_28_powerBI_tableau_integration_form(driver, settings):
     username = settings["login_username"]
     password = settings["login_password"]
     export = ExportDataPage(driver)

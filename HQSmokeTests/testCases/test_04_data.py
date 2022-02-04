@@ -5,14 +5,14 @@ from HQSmokeTests.testPages.data.import_cases_page import ImportCasesPage
 from HQSmokeTests.testPages.data.reassign_cases_page import ReassignCasesPage
 
 
-def test_TC_26_import_cases(driver):
+def test_TC_29_import_cases(driver):
     export = ExportDataPage(driver)
     export.data_tab()
     imp = ImportCasesPage(driver)
     imp.replace_property_and_upload()
 
 
-def test_TC_29_reassign_cases(driver):
+def test_TC_30_reassign_cases(driver):
     export = ExportDataPage(driver)
     export.data_tab()
     reassign = ReassignCasesPage(driver)
