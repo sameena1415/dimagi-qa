@@ -94,6 +94,9 @@ class ExportDataPage:
         self.powerBI_tab_int_link = 'PowerBi/Tableau Integration'
         self.copy_odatafeed_link = "//a[@class='btn btn-default btn-sm']"
         self.edit_button = "//input[@style='']//following::a[@data-bind='click: editExport'][1]"
+        self.select_none = "(//a[@data-bind='click: table.selectNone'])[1]"
+        self.first_checkbox = "(//input[@type='checkbox'])[3]"
+        self.third_checkbox = "(//input[@type='checkbox'])[5]"
 
         # bulk export delete
         self.select_all_btn = '//button[@data-bind="click: selectAll"]'
@@ -486,6 +489,11 @@ class ExportDataPage:
         time.sleep(5)
         self.wait_to_clear(By.XPATH, self.export_name)
         self.driver.find_element(By.XPATH, self.export_name).send_keys(UserInputsData.odata_feed_case)
+        # selcting first three property
+        self.wait_to_click(By.XPATH, self.select_none)
+        self.wait_to_click(By.XPATH, self.first_checkbox)
+        self.wait_to_click(By.XPATH, self.third_checkbox)
+        # saving export
         self.driver.find_element(By.XPATH, self.export_settings_create).click()
         print("Odata Case Feed created!!")
         self.driver.refresh()
