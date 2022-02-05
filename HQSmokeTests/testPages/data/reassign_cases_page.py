@@ -7,7 +7,6 @@ class ReassignCasesPage:
 
     def __init__(self, driver):
         self.driver = driver
-        self.new_user = "henry"
         self.reassign_cases_menu = (By.LINK_TEXT, "Reassign Cases")
         self.apply = (By.ID, "apply-btn")
         self.case_type = (By.ID, "select2-report_filter_case_type-container")
@@ -60,6 +59,3 @@ class ReassignCasesPage:
         self.driver.refresh()
         reassigned_username = self.get_text(self.new_owner_name).split('@')[0]
         assert reassigned_username in assigned_username
-
-
-

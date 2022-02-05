@@ -1,7 +1,6 @@
 import os
 import time
 
-from pathlib import Path
 from openpyxl import load_workbook
 
 from selenium.webdriver.common.by import By
@@ -10,14 +9,6 @@ from selenium.webdriver.support.wait import WebDriverWait
 
 from HQSmokeTests.userInputs.generateUserInputs import fetch_random_string
 from HQSmokeTests.userInputs.userInputsData import UserInputsData
-
-
-def latest_download_file():
-    os.chdir(UserInputsData.download_path)
-    files = sorted(os.listdir(os.getcwd()), key=os.path.getmtime)
-    newest = max(files, key=os.path.getctime)
-    print("File downloaded: " + newest)
-    return newest
 
 
 def edit_spreadsheet(edited_file, cell, renamed_file):
@@ -31,13 +22,10 @@ class ImportCasesPage:
 
     def __init__(self, driver):
         self.driver = driver
-        self.data_folder = Path("..\\userInputs\\test_data\\")
-        self.reassign_cases_file = "reassign_cases.xlsx"
         self.village_name_cell = "C2"
-        self.to_be_edited_file = self.data_folder / self.reassign_cases_file
+        self.to_be_edited_file = os.path.abspath(os.path.join(UserInputsData.BASE_DIR, "test_data/reassign_cases.xlsx"))
         self.file_new_name = "reassign_cases_" + str(fetch_random_string()) + ".xlsx"
-        self.renamed_file = os.path.abspath(os.path.join(self.data_folder, self.file_new_name))
-
+        self.renamed_file = os.path.abspath(os.path.join(UserInputsData.BASE_DIR, "test_data/"+self.file_new_name))
         self.import_cases_menu = (By.LINK_TEXT, "Import Cases from Excel")
         self.download_file = (By.XPATH, "(//span[@data-bind='text: upload_file_name'])[1]")
         self.choose_file = (By.ID, "file")
@@ -58,7 +46,7 @@ class ImportCasesPage:
         element = self.driver.find_element(*locator)
         element.send_keys(user_input)
 
-    def is_displayed(self, locator, timeout=10):
+    def is_displayed(self, locator, timeout=20):
         visible = ec.visibility_of_element_located(locator)
         element = WebDriverWait(self.driver, timeout).until(visible)
         return bool(element)

@@ -15,3 +15,4 @@ class UserInputsData:
     dashboard_feed_case = "CCHQ Smoke Tests Dashboard Case feed"
     odata_feed_form = "CCHQ Smoke Tests Odata Form feed"
     odata_feed_case = "CCHQ Smoke Tests Odata Case feed"
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
