@@ -1,102 +1,100 @@
-from selenium.common.exceptions import TimeoutException, ElementClickInterceptedException
+from selenium.common.exceptions import ElementClickInterceptedException
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.wait import WebDriverWait
-from selenium.webdriver.support import expected_conditions as ec
+
+from HQSmokeTests.testPages.base.base_page import BasePage
 from HQSmokeTests.userInputs.user_inputs import UserData
 
 
-class HomePage:
+class HomePage(BasePage):
 
     def __init__(self, driver):
-        self.driver = driver
-        self.dashboard_menu_id = "DashboardTab"
-        self.reports_menu_id = "ProjectReportsTab"
-        self.view_all_link_text = "View All"
-        self.data_menu_id = "ProjectDataTab"
-        self.users_menu_id = "ProjectUsersTab"
-        self.applications_menu_id = "ApplicationsTab"
-        self.available_application = UserData.village_application
-        self.web_apps_menu_id = "CloudcareTab"
-        self.show_full_menu_id = "commcare-menu-toggle"
-        self.messaging_menu_id = "MessagingTab"
-        self.admin_menu_id = "AdminTab"
-        self.alert_button_accept = "hs-eu-confirmation-button"
+        super().__init__(driver)
 
-    def wait_to_click(self, *locator, timeout=5):
-        clickable = ec.element_to_be_clickable(locator)
-        WebDriverWait(self.driver, timeout).until(clickable).click()
+        self.available_application = UserData.village_application
+
+        self.dashboard_menu = (By.ID, "DashboardTab")
+        self.reports_menu = (By.ID, "ProjectReportsTab")
+        self.view_all = (By.LINK_TEXT, "View All")
+        self.data_menu = (By.ID, "ProjectDataTab")
+        self.users_menu = (By.ID, "ProjectUsersTab")
+        self.applications_menu = (By.ID, "ApplicationsTab")
+        self.web_apps_menu = (By.ID, "CloudcareTab")
+        self.show_full_menu = (By.ID, "commcare-menu-toggle")
+        self.messaging_menu = (By.ID, "MessagingTab")
+        self.admin_menu = (By.ID, "AdminTab")
+        self.alert_button_accept = (By.ID, "hs-eu-confirmation-button")
 
     def dashboard_menu(self):
         try:
-            self.wait_to_click(By.ID, self.dashboard_menu_id)
+            self.wait_to_click(self.dashboard_menu)
         except ElementClickInterceptedException:
-            if self.driver.find_element(By.ID, self.alert_button_accept).is_displayed():
-                self.driver.find_element(By.ID, self.alert_button_accept).click()
-                self.wait_to_click(By.ID, self.dashboard_menu_id)
+            if self.is_visible_and_displayed(self.alert_button_accept):
+                self.click(self.alert_button_accept)
+                self.wait_to_click(self.dashboard_menu)
         assert "CommCare HQ" == self.driver.title, "This is not the Dashboard page."
 
     def reports_menu(self):
         try:
-            self.wait_to_click(By.ID, self.reports_menu_id)
-            self.wait_to_click(By.LINK_TEXT, self.view_all_link_text)
+            self.wait_to_click(self.reports_menu)
+            self.wait_to_click(self.view_all)
         except ElementClickInterceptedException:
-            if self.driver.find_element(By.ID, self.alert_button_accept).is_displayed():
-                self.driver.find_element(By.ID, self.alert_button_accept).click()
-                self.wait_to_click(By.ID, self.reports_menu_id)
-                self.wait_to_click(By.LINK_TEXT, self.view_all_link_text)
+            if self.is_visible_and_displayed(self.alert_button_accept):
+                self.click(self.alert_button_accept)
+                self.wait_to_click(self.reports_menu)
+                self.wait_to_click(self.view_all)
         assert "My Saved Reports : Project Reports :: - CommCare HQ" in self.driver.title, "This is not the Reports menu page."
 
     def data_menu(self):
         try:
-            self.wait_to_click(By.ID, self.data_menu_id)
-            self.wait_to_click(By.LINK_TEXT, self.view_all_link_text)
+            self.wait_to_click(self.data_menu)
+            self.wait_to_click(self.view_all)
         except ElementClickInterceptedException:
-            if self.driver.find_element(By.ID, self.alert_button_accept).is_displayed():
-                self.driver.find_element(By.ID, self.alert_button_accept).click()
-                self.wait_to_click(By.ID, self.data_menu_id)
-                self.wait_to_click(By.LINK_TEXT, self.view_all_link_text)
+            if self.is_visible_and_displayed(self.alert_button_accept):
+                self.click(self.alert_button_accept)
+                self.wait_to_click(self.data_menu)
+                self.wait_to_click(self.view_all)
         assert "Export Form Data : Data :: - CommCare HQ" in self.driver.title, "This is not the Data menu page."
 
     def applications_menu(self):
         try:
-            self.wait_to_click(By.ID, self.applications_menu_id)
-            self.wait_to_click(By.LINK_TEXT, self.available_application)
+            self.wait_to_click(self.applications_menu)
+            self.wait_to_click(self.available_application)
         except ElementClickInterceptedException:
-            if self.driver.find_element(By.ID, self.alert_button_accept).is_displayed():
-                self.driver.find_element(By.ID, self.alert_button_accept).click()
-                self.wait_to_click(By.ID, self.applications_menu_id)
-                self.wait_to_click(By.LINK_TEXT, self.available_application)
+            if self.is_visible_and_displayed(self.alert_button_accept):
+                self.click(self.alert_button_accept)
+                self.wait_to_click(self.applications_menu)
+                self.wait_to_click(self.available_application)
         assert "Releases - " + UserData.village_application + " - CommCare HQ" in self.driver.title, "This is not the Applications page."
 
     def users_menu(self):
         try:
-            self.wait_to_click(By.ID, self.users_menu_id)
-            self.wait_to_click(By.LINK_TEXT, self.view_all_link_text)
+            self.wait_to_click(self.users_menu)
+            self.wait_to_click(self.view_all)
         except ElementClickInterceptedException:
-            if self.driver.find_element(By.ID, self.alert_button_accept).is_displayed():
-                self.driver.find_element(By.ID, self.alert_button_accept).click()
-                self.wait_to_click(By.ID, self.users_menu_id)
-                self.wait_to_click(By.LINK_TEXT, self.view_all_link_text)
+            if self.is_visible_and_displayed(self.alert_button_accept):
+                self.click(self.alert_button_accept)
+                self.wait_to_click(self.users_menu)
+                self.wait_to_click(self.view_all)
         assert "Mobile Workers : Users :: - CommCare HQ" in self.driver.title, "This is not the Users menu page."
 
     def messaging_menu(self):
         try:
-            self.wait_to_click(By.ID, self.messaging_menu_id)
-            self.wait_to_click(By.LINK_TEXT, self.view_all_link_text)
+            self.wait_to_click(self.messaging_menu)
+            self.wait_to_click(self.view_all)
         except ElementClickInterceptedException:
-            if self.driver.find_element(By.ID, self.alert_button_accept).is_displayed():
-                self.driver.find_element(By.ID, self.alert_button_accept).click()
-                self.wait_to_click(By.ID, self.messaging_menu_id)
-                self.wait_to_click(By.LINK_TEXT, self.view_all_link_text)
+            if self.is_visible_and_displayed(self.alert_button_accept):
+                self.click(self.alert_button_accept)
+                self.wait_to_click(self.messaging_menu)
+                self.wait_to_click(self.view_all)
         assert "Dashboard : Messaging :: - CommCare HQ" in self.driver.title, "This is not the Messaging menu page."
 
     def web_apps_menu(self):
         try:
-            self.wait_to_click(By.ID, self.web_apps_menu_id)
-            self.wait_to_click(By.ID, self.show_full_menu_id)
+            self.wait_to_click(self.web_apps_menu)
+            self.wait_to_click(self.show_full_menu)
         except ElementClickInterceptedException:
-            if self.driver.find_element(By.ID, self.alert_button_accept).is_displayed():
-                self.driver.find_element(By.ID, self.alert_button_accept).click()
-                self.wait_to_click(By.ID, self.web_apps_menu_id)
-                self.wait_to_click(By.ID, self.show_full_menu_id)
+            if self.is_visible_and_displayed(self.alert_button_accept):
+                self.click(self.alert_button_accept)
+                self.wait_to_click(self.web_apps_menu)
+                self.wait_to_click(self.show_full_menu)
         assert "Web Apps - CommCare HQ" in self.driver.title, "This is not the Webaspps menu page."

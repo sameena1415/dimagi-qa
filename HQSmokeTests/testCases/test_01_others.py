@@ -1,7 +1,7 @@
 from HQSmokeTests.testPages.home.home_page import HomePage
 
 
-def test_TC_01_menu_visibility(driver):
+def test_case_01_menu_visibility(driver):
 
     visible = HomePage(driver)
     visible.reports_menu()
