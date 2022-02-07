@@ -1,8 +1,10 @@
 import time
 import datetime
 
-from selenium.common.exceptions import TimeoutException
+from selenium.common.exceptions import TimeoutException, ElementClickInterceptedException, \
+    UnexpectedAlertPresentException
 from selenium.webdriver import ActionChains
+from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.support.wait import WebDriverWait
 
@@ -15,9 +17,22 @@ class BasePage:
     def __init__(self, driver):
         self.driver = driver
 
-    def wait_to_click(self, locator, timeout=13):
+        self.alert_button_accept = (By.ID, "hs-eu-confirmation-button")
+
+    def wait_to_click(self, locator, timeout=12):
         clickable = ec.element_to_be_clickable(locator)
-        WebDriverWait(self.driver, timeout).until(clickable).click()
+        element = WebDriverWait(self.driver, timeout).until(clickable)
+        try:
+            element.click()
+        except ElementClickInterceptedException:
+            if self.is_displayed(self.alert_button_accept):
+                self.click(self.alert_button_accept)
+                element.click()
+        except UnexpectedAlertPresentException:
+            alert = self.driver.switch_to.alert
+            alert.accept()
+            element.click()
+
 
     def wait_to_clear(self, locator, timeout=5):
         clickable = ec.visibility_of_element_located(locator)
