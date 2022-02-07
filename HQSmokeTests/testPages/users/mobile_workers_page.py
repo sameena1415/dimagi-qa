@@ -4,7 +4,7 @@ from HQSmokeTests.testPages.base.base_page import BasePage
 from HQSmokeTests.userInputs.generate_random_string import fetch_random_string
 from HQSmokeTests.userInputs.user_inputs import UserData
 from HQSmokeTests.testPages.users.org_structure_page import latest_download_file
-from selenium.common.exceptions import TimeoutException, NoSuchElementException, ElementClickInterceptedException
+from selenium.common.exceptions import TimeoutException, NoSuchElementException
 from selenium.webdriver.common.by import By
 
 
@@ -79,7 +79,6 @@ class MobileWorkerPage(BasePage):
         self.upload = (By.XPATH, "//button[@class='btn btn-primary disable-on-submit']")
         self.import_complete = (By.XPATH, "//legend[text()='Bulk upload complete.']")
         self.download_filter = (By.XPATH, "//button[@data-bind='html: buttonHTML']")
-        self.alert_button_accept = (By.ID, "hs-eu-confirmation-button")
 
     def search_user(self):
         self.wait_to_send_keys(self.search_mw, self.username)
@@ -87,16 +86,12 @@ class MobileWorkerPage(BasePage):
         self.wait_to_click(self.search_button_mw)
 
     def webapp_login_as(self):
-        try:
-            self.wait_to_click(self.web_apps_menu_id)
-            self.wait_to_click(self.webapp_login)
-            time.sleep(1)
-            self.send_keys(self.search_user_web_apps, self.username)
-            self.wait_to_click(self.search_button_we_apps)
-            time.sleep(1)
-        except (TimeoutException, ElementClickInterceptedException):
-            if self.is_visible_and_displayed(self.alert_button_accept):
-                self.click(self.alert_button_accept)
+        self.wait_to_click(self.web_apps_menu_id)
+        self.wait_to_click(self.webapp_login)
+        time.sleep(1)
+        self.send_keys(self.search_user_web_apps, self.username)
+        self.wait_to_click(self.search_button_we_apps)
+        time.sleep(1)
 
     def mobile_worker_menu(self):
         try:
@@ -107,17 +102,7 @@ class MobileWorkerPage(BasePage):
                 self.click(self.show_full_menu_id)
                 time.sleep(2)
                 self.click(self.users_menu_id)
-        except ElementClickInterceptedException:
-            if self.is_displayed(self.alert_button_accept):
-                self.click(self.alert_button_accept)
-                time.sleep(2)
-                self.click(self.users_menu_id)
-        try:
-            self.wait_to_click(self.mobile_workers_menu_link_text)
-        except ElementClickInterceptedException:
-            if self.is_displayed(self.alert_button_accept):
-                self.click(self.alert_button_accept)
-                self.wait_to_click(self.mobile_workers_menu_link_text)
+        self.wait_to_click(self.mobile_workers_menu_link_text)
         assert "Mobile Workers : Users :: - CommCare HQ" in self.driver.title, "Unable find the Users Menu."
 
     def create_mobile_worker(self):
