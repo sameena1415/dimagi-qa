@@ -7,7 +7,7 @@ from HQSmokeTests.testPages.users.org_structure_page import OrganisationStructur
 from HQSmokeTests.testPages.users.webapps_permission_page import WebAppPermissionPage
 
 
-def test_TC_02_create_mobile_worker(driver):
+def test_case_02_create_mobile_worker(driver):
 
     worker = MobileWorkerPage(driver)
     worker.mobile_worker_menu()
@@ -17,7 +17,7 @@ def test_TC_02_create_mobile_worker(driver):
     worker.click_create()
 
 
-def test_TC_03_create_and_assign_user_field(driver):
+def test_case_03_create_and_assign_user_field(driver):
 
     create = MobileWorkerPage(driver)
     create.mobile_worker_menu()
@@ -32,7 +32,7 @@ def test_TC_03_create_and_assign_user_field(driver):
     create.update_information()
 
 
-def test_TC_05_create_group_and_assign_user(driver):
+def test_case_05_create_group_and_assign_user(driver):
 
     menu = HomePage(driver)
     menu.users_menu()
@@ -41,14 +41,14 @@ def test_TC_05_create_group_and_assign_user(driver):
     visible.add_user_to_group()
 
 
-def test_TC_05_edit_user_groups(driver):
+def test_case_05_edit_user_groups(driver):
 
     edit = GroupPage(driver)
     edit.edit_existing_group()
     edit.remove_user_from_group()
 
 
-def test_TC_06_add_role(driver):
+def test_case_06_add_role(driver):
 
     role = RolesPermissionPage(driver)
     role.roles_menu_click()
@@ -58,14 +58,14 @@ def test_TC_06_add_role(driver):
     print("New Role Added")
 
 
-def test_TC_06_edit_role(driver):
+def test_case_06_edit_role(driver):
 
     role = RolesPermissionPage(driver)
     role.edit_role()
     print("Role Edited Successfully")
 
 
-def test_TC_07_create_location(driver):
+def test_case_07_create_location(driver):
 
     create = OrganisationStructurePage(driver)
     create.organisation_menu_open()
@@ -74,14 +74,14 @@ def test_TC_07_create_location(driver):
     print("Location created")
 
 
-def test_TC_07_edit_existing_location(driver):
+def test_case_07_edit_existing_location(driver):
 
     edit = OrganisationStructurePage(driver)
     edit.edit_location()
     print("Location edited")
 
 
-def test_TC_08_edit_location_fields(driver):
+def test_case_08_edit_location_fields(driver):
 
     edit = OrganisationStructurePage(driver)
     edit.edit_location_fields()
@@ -90,33 +90,33 @@ def test_TC_08_edit_location_fields(driver):
     print("Selected location field created, for the location")
 
 
-def test_TC_09_creation_organization_level(driver):
+def test_case_09_creation_organization_level(driver):
 
     org = OrganisationStructurePage(driver)
     org.create_org_level()
 
 
-def test_TC_10_download_and_upload_users(driver):
+def test_case_10_download_and_upload_users(driver):
 
     user = MobileWorkerPage(driver)
     user.download_mobile_worker()
     user.upload_mobile_worker()
 
 
-def test_TC_11_download_and_upload_locations(driver):
+def test_case_11_download_and_upload_locations(driver):
 
     org = OrganisationStructurePage(driver)
     org.download_locations()
     org.upload_locations()
 
 
-def test_TC_12_toggle_option_webapp_permission(driver):
+def test_case_12_toggle_option_webapp_permission(driver):
 
     web = WebAppPermissionPage(driver)
     web.webapp_permission_option_toggle()
 
 
-def test_TC_04_deactivate_user(driver):
+def test_case_04_deactivate_user(driver):
 
     user = MobileWorkerPage(driver)
     user.mobile_worker_menu()
@@ -124,7 +124,7 @@ def test_TC_04_deactivate_user(driver):
     user.verify_deactivation_via_login()
 
 
-def test_TC_04_reactivate_user(driver):
+def test_case_04_reactivate_user(driver):
 
     user = MobileWorkerPage(driver)
     user.mobile_worker_menu()
@@ -160,5 +160,3 @@ def test_cleanup_items_in_users_menu(driver):
 
     clean4.cleanup_location()
     print("Deleted the location and location field")
-
-

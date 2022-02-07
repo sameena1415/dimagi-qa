@@ -370,8 +370,7 @@ class ExportDataPage(BasePage):
         try:
             self.wait_and_sleep_to_click(self.powerBI_tab_int)
         except ElementClickInterceptedException:
-            menu = self.wait_for_element(self.powerBI_tab_int)
-            self.driver.execute_script("arguments[0].click();", menu)
+            self.js_click(self.powerBI_tab_int)
         self.wait_and_sleep_to_click(self.add_export_button)
         self.wait_and_sleep_to_click(self.model_dropdown)
         self.wait_and_sleep_to_click(self.select_form_model)

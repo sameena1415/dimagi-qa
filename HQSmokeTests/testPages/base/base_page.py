@@ -1,6 +1,8 @@
 import time
 import datetime
 
+from selenium.common.exceptions import TimeoutException
+from selenium.webdriver import ActionChains
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.support.wait import WebDriverWait
 
@@ -13,7 +15,7 @@ class BasePage:
     def __init__(self, driver):
         self.driver = driver
 
-    def wait_to_click(self, locator, timeout=10):
+    def wait_to_click(self, locator, timeout=13):
         clickable = ec.element_to_be_clickable(locator)
         WebDriverWait(self.driver, timeout).until(clickable).click()
 
@@ -39,9 +41,22 @@ class BasePage:
         clickable = ec.element_to_be_clickable(locator)
         WebDriverWait(self.driver, timeout).until(clickable).click()
 
+    def find_elements(self, locator):
+        elements = self.driver.find_elements(*locator)
+        return elements
+
     def click(self, locator):
         element = self.driver.find_element(*locator)
         element.click()
+
+    def js_click(self, locator):
+        element = self.driver.find_element(*locator)
+        self.driver.execute_script("arguments[0].click();", element)
+        time.sleep(1)
+
+    def move_to_element_and_click(self, locator):
+        element = self.driver.find_element(*locator)
+        ActionChains(self.driver).move_to_element(element).click(element).perform()
 
     def clear(self, locator):
         element = self.driver.find_element(*locator)
@@ -63,15 +78,27 @@ class BasePage:
         print(element_attribute)
         return element_attribute
 
+    def is_selected(self, locator):
+        element = self.driver.find_element(*locator)
+        is_selected = element.is_selected()
+        return bool(is_selected)
+
+    def is_displayed(self, locator):
+        element = self.driver.find_element(*locator)
+        is_displayed = element.is_displayed()
+        return bool(is_displayed)
+
     def is_visible_and_displayed(self, locator, timeout=20):
         visible = ec.visibility_of_element_located(locator)
         element = WebDriverWait(self.driver, timeout).until(visible, message="Element not displayed")
-        return bool(element)
+        is_displayed = element.is_displayed()
+        return bool(is_displayed)
 
-    def is_present_and_displayed(self, locator, timeout=60):
+    def is_present_and_displayed(self, locator, timeout=100):
         visible = ec.presence_of_element_located(locator)
         element = WebDriverWait(self.driver, timeout).until(visible, message="Element not displayed")
-        return bool(element)
+        is_displayed = element.is_displayed()
+        return bool(is_displayed)
 
     def switch_to_next_tab(self):
         winHandles = self.driver.window_handles
@@ -106,3 +133,12 @@ class BasePage:
         print("Last Modified Time : ", str(modificationTime) + 'Current Time : ', str(timeNow),
               "Diff: " + str(diff_seconds))
         assert file_name in newest_file and diff_seconds in range(0, 600), "Export not completed"
+
+    def accept_pop_up(self):
+        try:
+            WebDriverWait(self.driver, 3).until(ec.alert_is_present(), 'Waiting for popup to appear.')
+            alert = self.driver.switch_to.alert
+            alert.accept()
+            print("alert accepted")
+        except TimeoutException:
+            print("no alert")
