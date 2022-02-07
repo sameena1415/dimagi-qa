@@ -1,6 +1,6 @@
 import time
 
-from HQSmokeTests.userInputs.generateUserInputs import fetch_random_string
+from HQSmokeTests.userInputs.generate_random_string import fetch_random_string
 from selenium.common.exceptions import NoSuchElementException, TimeoutException, StaleElementReferenceException, \
     UnexpectedAlertPresentException
 from selenium.webdriver.common.by import By

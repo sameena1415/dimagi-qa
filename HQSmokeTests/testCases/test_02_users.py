@@ -1,5 +1,5 @@
-from HQSmokeTests.userInputs.generateUserInputs import fetch_random_string
-from HQSmokeTests.testPages.others.home_page import HomePage
+from HQSmokeTests.userInputs.generate_random_string import fetch_random_string
+from HQSmokeTests.testPages.home.home_page import HomePage
 from HQSmokeTests.testPages.users.mobile_workers_page import MobileWorkerPage
 from HQSmokeTests.testPages.users.group_page import GroupPage
 from HQSmokeTests.testPages.users.roles_permissions_page import RolesPermissionPage

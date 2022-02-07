@@ -1,8 +1,8 @@
 import datetime
 import time
 
-from HQSmokeTests.userInputs.generateUserInputs import fetch_random_string
-from HQSmokeTests.userInputs.userInputsData import UserInputsData
+from HQSmokeTests.userInputs.generate_random_string import fetch_random_string
+from HQSmokeTests.userInputs.user_inputs import UserData
 from HQSmokeTests.testPages.users.org_structure_page import latest_download_file
 from selenium.common.exceptions import TimeoutException, NoSuchElementException, ElementClickInterceptedException
 from selenium.webdriver.common.by import By
@@ -286,7 +286,7 @@ class MobileWorkerPage:
             assert False
         # verify_downloaded_workers
         newest_file = latest_download_file()
-        modTimesinceEpoc = (UserInputsData.download_path / newest_file).stat().st_mtime
+        modTimesinceEpoc = (UserData.DOWNLOAD_PATH / newest_file).stat().st_mtime
         modificationTime = datetime.datetime.fromtimestamp(modTimesinceEpoc)
         timeNow = datetime.datetime.now()
         diff_seconds = round((timeNow - modificationTime).total_seconds())
@@ -301,7 +301,7 @@ class MobileWorkerPage:
         try:
             self.driver.find_element(By.LINK_TEXT, self.bulk_upload_btn).click()
             newest_file = latest_download_file()
-            file_that_was_downloaded = UserInputsData.download_path / newest_file
+            file_that_was_downloaded = UserData.DOWNLOAD_PATH / newest_file
             time.sleep(5)
             self.driver.find_element(By.XPATH, self.choose_file).send_keys(str(file_that_was_downloaded))
             self.driver.find_element(By.XPATH, self.upload).click()

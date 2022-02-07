@@ -1,4 +1,4 @@
-from HQSmokeTests.testPages.others.home_page import HomePage
+from HQSmokeTests.testPages.home.home_page import HomePage
 
 
 def test_TC_01_menu_visibility(driver):

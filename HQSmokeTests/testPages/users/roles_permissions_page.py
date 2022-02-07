@@ -2,7 +2,7 @@ import time
 
 from selenium.common.exceptions import TimeoutException, NoSuchElementException
 
-from HQSmokeTests.userInputs.generateUserInputs import fetch_random_string
+from HQSmokeTests.userInputs.generate_random_string import fetch_random_string
 from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as ec

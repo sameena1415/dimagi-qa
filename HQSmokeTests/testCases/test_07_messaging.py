@@ -1,4 +1,4 @@
-from HQSmokeTests.testPages.others.home_page import HomePage
+from HQSmokeTests.testPages.home.home_page import HomePage
 from HQSmokeTests.testPages.messaging.messaging_page import MessagingPage
 
 

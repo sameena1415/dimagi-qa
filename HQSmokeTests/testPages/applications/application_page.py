@@ -6,8 +6,8 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as ec
 
-from HQSmokeTests.userInputs.generateUserInputs import fetch_random_string
-from HQSmokeTests.userInputs.userInputsData import UserInputsData
+from HQSmokeTests.userInputs.generate_random_string import fetch_random_string
+from HQSmokeTests.userInputs.user_inputs import UserData
 from HQSmokeTests.testPages.users.org_structure_page import latest_download_file
 
 
@@ -147,7 +147,7 @@ class ApplicationPage:
         self.wait_to_click(By.XPATH, self.actions_tab)
         self.wait_to_click(By.XPATH, self.upload_xml)
         newest_file = latest_download_file()
-        file_that_was_downloaded = UserInputsData.download_path / newest_file
+        file_that_was_downloaded = UserData.DOWNLOAD_PATH / newest_file
         self.driver.find_element(By.ID, self.choose_file).send_keys(str(file_that_was_downloaded))
         time.sleep(1)
         self.driver.find_element(By.ID, self.upload).click()

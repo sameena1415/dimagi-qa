@@ -3,8 +3,8 @@ import os
 import time
 from datetime import date
 
-from HQSmokeTests.userInputs.generateUserInputs import fetch_random_string
-from HQSmokeTests.userInputs.userInputsData import UserInputsData
+from HQSmokeTests.userInputs.generate_random_string import fetch_random_string
+from HQSmokeTests.userInputs.user_inputs import UserData
 from selenium.common.exceptions import TimeoutException, StaleElementReferenceException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as ec
@@ -14,7 +14,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 def latest_download_file():
     cwd = os.getcwd()
     try:
-        os.chdir(UserInputsData.download_path)
+        os.chdir(UserData.DOWNLOAD_PATH)
         files = sorted(os.listdir(os.getcwd()), key=os.path.getctime)
         print(files)
         if files[-1].endswith(".log"):
@@ -173,7 +173,7 @@ class OrganisationStructurePage:
             assert False
         # verify_downloaded_location
         newest_file = latest_download_file()
-        modTimesinceEpoc = (UserInputsData.download_path / newest_file).stat().st_mtime
+        modTimesinceEpoc = (UserData.DOWNLOAD_PATH / newest_file).stat().st_mtime
         modificationTime = datetime.datetime.fromtimestamp(modTimesinceEpoc)
         timeNow = datetime.datetime.now()
         diff_seconds = round((timeNow - modificationTime).total_seconds())
@@ -186,7 +186,7 @@ class OrganisationStructurePage:
         self.driver.find_element(By.LINK_TEXT, self.org_menu_link_text).click()
         self.driver.find_element(By.LINK_TEXT, self.upload_loc_btn).click()
         newest_file = latest_download_file()
-        file_that_was_downloaded = UserInputsData.download_path / newest_file
+        file_that_was_downloaded = UserData.DOWNLOAD_PATH / newest_file
         self.driver.find_element(By.ID, "id_bulk_upload_file").send_keys(str(file_that_was_downloaded))
         time.sleep(2)
         self.wait_to_click(By.XPATH, self.upload)

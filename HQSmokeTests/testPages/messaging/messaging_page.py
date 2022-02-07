@@ -1,7 +1,7 @@
 import time
 
-from HQSmokeTests.userInputs.generateUserInputs import fetch_random_string
-from HQSmokeTests.userInputs.userInputsData import UserInputsData
+from HQSmokeTests.userInputs.generate_random_string import fetch_random_string
+from HQSmokeTests.userInputs.user_inputs import UserData
 from HQSmokeTests.testPages.users.org_structure_page import latest_download_file
 from selenium.common.exceptions import NoSuchElementException, StaleElementReferenceException, TimeoutException
 from selenium.webdriver.common.by import By
@@ -207,7 +207,7 @@ class MessagingPage:
 
     def cond_alert_upload(self):
         newest_file = latest_download_file()
-        file_that_was_downloaded = UserInputsData.download_path / newest_file
+        file_that_was_downloaded = UserData.DOWNLOAD_PATH / newest_file
         self.driver.find_element(By.XPATH, self.choose_file).send_keys(str(file_that_was_downloaded))
         self.wait_to_click(By.XPATH, self.upload)
         assert True == self.driver.find_element(By.XPATH, self.upload_success_message).is_displayed(), "Conditional Alert upload not completed!"
@@ -380,7 +380,7 @@ class MessagingPage:
 
     def msg_trans_upload(self):
         newest_file = latest_download_file()
-        file_that_was_downloaded = UserInputsData.download_path / newest_file
+        file_that_was_downloaded = UserData.DOWNLOAD_PATH / newest_file
         self.driver.find_element(By.XPATH, self.choose_file).send_keys(str(file_that_was_downloaded))
         button = self.driver.find_element(By.XPATH, self.upload)
         self.driver.execute_script("arguments[0].click();", button)

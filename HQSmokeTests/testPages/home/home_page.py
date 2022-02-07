@@ -2,7 +2,7 @@ from selenium.common.exceptions import TimeoutException, ElementClickIntercepted
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as ec
-from HQSmokeTests.userInputs.userInputsData import UserInputsData
+from HQSmokeTests.userInputs.user_inputs import UserData
 
 
 class HomePage:
@@ -15,7 +15,7 @@ class HomePage:
         self.data_menu_id = "ProjectDataTab"
         self.users_menu_id = "ProjectUsersTab"
         self.applications_menu_id = "ApplicationsTab"
-        self.available_application = UserInputsData.application
+        self.available_application = UserData.village_application
         self.web_apps_menu_id = "CloudcareTab"
         self.show_full_menu_id = "commcare-menu-toggle"
         self.messaging_menu_id = "MessagingTab"
@@ -66,7 +66,7 @@ class HomePage:
                 self.driver.find_element(By.ID, self.alert_button_accept).click()
                 self.wait_to_click(By.ID, self.applications_menu_id)
                 self.wait_to_click(By.LINK_TEXT, self.available_application)
-        assert "Releases - " + UserInputsData.application + " - CommCare HQ" in self.driver.title, "This is not the Applications page."
+        assert "Releases - " + UserData.village_application + " - CommCare HQ" in self.driver.title, "This is not the Applications page."
 
     def users_menu(self):
         try:
