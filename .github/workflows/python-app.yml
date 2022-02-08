@@ -63,9 +63,9 @@ jobs:
         # Required mail subject:
         subject: ${{ github.event.client_payload.environment }}  PASS - Smoke Tests[#${{github.run_number}}], ${{env.NOW}}
         # Required recipients' addresses:
-        to: qa@dimagi.com, sameena.shaik@fissionlabs.com, kbordoloi@dimagi.com
+        to: qa@dimagi.com, sameena.shaik@fissionlabs.com
         # Required sender full name (address can be skipped):
-        from: <no-reply@dimagi.com> # <user@example.com>
+        from: <${{secrets.DIMAGIQA_MAIL_USERNAME}}>
         # Optional HTML body read from file:
         html_body: file:////home/runner/work/dimagi-qa/dimagi-qa/HQSmokeTests/email_pass.html
         # Optional priority: 'high', 'normal' (default) or 'low'
@@ -80,8 +80,8 @@ jobs:
         username: ${{secrets.DIMAGIQA_MAIL_USERNAME}}
         password: ${{secrets.DIMAGIQA_MAIL_PASSWORD}}
         subject: ${{ github.event.client_payload.environment }} FAIL - Smoke Tests[#${{github.run_number}}], ${{env.NOW}}
-        to: qa@dimagi.com, sameena.shaik@fissionlabs.com, kbordoloi@dimagi.com
-        from: <no-reply@dimagi.com>
+        to: qa@dimagi.com, sameena.shaik@fissionlabs.com
+        from: <${{secrets.DIMAGIQA_MAIL_USERNAME}}>
         html_body: file:////home/runner/work/dimagi-qa/dimagi-qa/HQSmokeTests/email_fail.html
         attachments: /home/runner/work/dimagi-qa/dimagi-qa/report.html
         priority: normal
@@ -95,8 +95,8 @@ jobs:
         username: ${{secrets.DIMAGIQA_MAIL_USERNAME}}
         password: ${{secrets.DIMAGIQA_MAIL_PASSWORD}}
         subject: FAIL - Smoke Tests[#${{github.run_number}}] on branch "${{ github.head_ref }}", ${{env.NOW}}
-        to: qa-automation@dimagi.com, kbordoloi@dimagi.com
-        from: <no-reply@dimagi.com>
+        to: qa-automation@dimagi.com
+        from: <${{secrets.DIMAGIQA_MAIL_USERNAME}}>
         html_body: file:////home/runner/work/dimagi-qa/dimagi-qa/HQSmokeTests/email_fail.html
         attachments: /home/runner/work/dimagi-qa/dimagi-qa/report.html
         priority: normal
@@ -110,8 +110,8 @@ jobs:
         username: ${{secrets.DIMAGIQA_MAIL_USERNAME}}
         password: ${{secrets.DIMAGIQA_MAIL_PASSWORD}}
         subject: PASS - Smoke Tests[#${{github.run_number}}] on branch "${{ github.head_ref }}", ${{env.NOW}}
-        to: qa-automation@dimagi.com, kbordoloi@dimagi.com
-        from: <no-reply@dimagi.com>
+        to: qa-automation@dimagi.com
+        from: <${{secrets.DIMAGIQA_MAIL_USERNAME}}>
         html_body: file:////home/runner/work/dimagi-qa/dimagi-qa/HQSmokeTests/email_pass.html
         priority: normal
 
