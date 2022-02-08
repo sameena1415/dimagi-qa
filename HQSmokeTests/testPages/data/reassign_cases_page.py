@@ -27,7 +27,7 @@ class ReassignCasesPage(BasePage):
         self.wait_to_click(self.select_first_case)
         self.wait_to_click(self.user_search_dropdown)
         assigned_username = self.get_text(self.user_to_be_reassigned).split('"')[0]
-        self.wait_to_click(self.user_to_be_reassigned)
+        self.move_to_element_and_click(self.user_to_be_reassigned)
         self.wait_to_click(self.submit)
         self.driver.refresh()
         reassigned_username = self.get_text(self.new_owner_name).split('@')[0]
