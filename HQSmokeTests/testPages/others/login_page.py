@@ -1,7 +1,7 @@
 from selenium.common.exceptions import TimeoutException, NoSuchElementException, ElementNotInteractableException
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as ec
+from selenium.webdriver.support.wait import WebDriverWait
 
 
 class LoginPage:
@@ -11,6 +11,7 @@ class LoginPage:
     submit_button_xpath = '//button[@type="submit"]'
     alert_button_accept = "hs-eu-confirmation-button"
     continue_button_xpath = '//button[@class="btn btn-primary btn-lg" and @type ="button"]'
+    close_notification = "//div[@class='frame-close']/button[1]"
 
     def __init__(self,driver,url):
         self.driver = driver
@@ -46,10 +47,22 @@ class LoginPage:
     def assert_logged_in(self):
         assert "Log In" not in self.driver.title, "Login failed"
 
+    def dismiss_notification(self):
+        try:
+            self.driver.switch_to.frame(self.driver.find_element(By.XPATH, "//iframe[contains(@src,'/embed/frame')]"))
+            WebDriverWait(self.driver, 10).until(ec.presence_of_element_located((
+                By.XPATH, "//*[.='View latest updates']")))
+            b = self.driver.find_element_by_xpath(self.close_notification)
+            self.driver.execute_script("arguments[0].click();", b)
+            self.driver.switch_to.default_content()
+        except TimeoutException:
+            pass  # ignore if alert not on page
+
     def login(self, username, password):
         self.enter_username(username)
         self.click_continue()
         self.enter_password(password)
         self.accept_alert()
+        self.dismiss_notification()
         self.click_submit()
         self.assert_logged_in()
