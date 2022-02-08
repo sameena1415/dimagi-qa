@@ -37,7 +37,6 @@ def environment_settings():
         env = os.environ.get("DIMAGIQA_ENV") or "staging"
         subdomain = "www" if env == "production" else env
         settings["url"] = f"https://{subdomain}.commcarehq.org/"
-        # print(settings)
     return settings
 
 
@@ -46,7 +45,6 @@ def settings(environment_settings):
     if os.environ.get("CI") == "true":
         settings = environment_settings
         settings["CI"] = "true"
-        # print(settings)
         if any(x not in settings for x in ["url", "login_username", "login_password", "mail_username", "mail_password"]):
             lines = environment_settings.__doc__.splitlines()
             vars_ = "\n  ".join(line.strip() for line in lines if "DIMAGIQA_" in line)
@@ -71,7 +69,6 @@ def settings(environment_settings):
 @pytest.fixture(scope="module")
 def driver(settings):
     chrome_options = webdriver.ChromeOptions()
-    # print("settings:", settings)
     if settings.get("CI") == "true":
         chrome_options.add_argument('--no-sandbox')
         chrome_options.add_argument('disable-extensions')
@@ -114,14 +111,11 @@ def driver(settings):
 @pytest.hookimpl(hookwrapper=True)
 # @pytest.mark.hookwrapper
 def pytest_runtest_makereport(item):
-    # print("entering reports formation")
     pytest_html = item.config.pluginmanager.getplugin("html")
     outcome = yield
     report = outcome.get_result()
     extra = getattr(report, 'extra', [])
-    # print(item.fixturenames)
     if report.when == "call" or report.when == "teardown":
-        # print(reports.when)
         xfail = hasattr(report, 'wasxfail')
         if (report.skipped and xfail) or (report.failed and not xfail):
             print("reports skipped or failed")
@@ -132,7 +126,6 @@ def pytest_runtest_makereport(item):
                        'onclick="window.open(this.src)" align="right"/></div>' % screen_img
                 extra.append(pytest_html.extras.html(html))
         report.extra = extra
-        # print("extra added to reports")
 
 
 def _capture_screenshot(driver):
