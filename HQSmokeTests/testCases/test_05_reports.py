@@ -51,6 +51,8 @@ def test_case_19_saved_report(driver):
 
 def test_case_20_scheduled_report(driver):
 
+    report = HomePage(driver)
+    report.reports_menu()
     load = ReportPage(driver)
     load.scheduled_report()
     load.delete_scheduled_and_saved_reports()
