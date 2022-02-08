@@ -1,8 +1,9 @@
 import time
 import datetime
 
+from selenium.webdriver.support.select import Select
 from selenium.common.exceptions import TimeoutException, ElementClickInterceptedException, \
-    UnexpectedAlertPresentException
+    UnexpectedAlertPresentException, StaleElementReferenceException
 from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as ec
@@ -32,7 +33,8 @@ class BasePage:
             alert = self.driver.switch_to.alert
             alert.accept()
             element.click()
-
+        except StaleElementReferenceException:
+            self.js_click(locator)
 
     def wait_to_clear(self, locator, timeout=5):
         clickable = ec.visibility_of_element_located(locator)
@@ -63,6 +65,14 @@ class BasePage:
     def click(self, locator):
         element = self.driver.find_element(*locator)
         element.click()
+
+    def select_by_text(self, source_locator, value):
+        select_source = Select(self.driver.find_element(*source_locator))
+        select_source.select_by_visible_text(value)
+
+    def select_by_value(self, source_locator, value):
+        select_source = Select(self.driver.find_element(*source_locator))
+        select_source.select_by_value(value)
 
     def js_click(self, locator):
         element = self.driver.find_element(*locator)
@@ -97,6 +107,11 @@ class BasePage:
         element = self.driver.find_element(*locator)
         is_selected = element.is_selected()
         return bool(is_selected)
+
+    def is_enabled(self, locator):
+        element = self.driver.find_element(*locator)
+        is_enabled = element.is_enabled()
+        return bool(is_enabled)
 
     def is_displayed(self, locator):
         element = self.driver.find_element(*locator)
