@@ -22,7 +22,8 @@ class BasePage:
 
     def wait_to_click(self, locator, timeout=12):
         clickable = ec.element_to_be_clickable(locator)
-        element = WebDriverWait(self.driver, timeout).until(clickable, message="Couldn't find locator: " + locator)
+        element = WebDriverWait(self.driver, timeout).until(clickable, message="Couldn't find locator: "
+                                                                               + str(locator))
         try:
             element.click()
         except ElementClickInterceptedException:
@@ -38,12 +39,12 @@ class BasePage:
 
     def wait_to_clear(self, locator, timeout=5):
         clickable = ec.visibility_of_element_located(locator)
-        element = WebDriverWait(self.driver, timeout).until(clickable, message="Couldn't find locator: " + locator)
+        element = WebDriverWait(self.driver, timeout).until(clickable, message="Couldn't find locator: " + str(locator))
         element.clear()
 
     def wait_to_send_keys(self, locator, user_input):
         clickable = ec.visibility_of_element_located(locator)
-        element = WebDriverWait(self.driver, 5).until(clickable, message="Couldn't find locator: " + locator)
+        element = WebDriverWait(self.driver, 5).until(clickable, message="Couldn't find locator: " + str(locator))
         element .send_keys(user_input)
 
     def wait_to_get_text(self, locator, timeout=20):
@@ -53,12 +54,12 @@ class BasePage:
 
     def wait_for_element(self, locator, timeout=20):
         clickable = ec.element_to_be_clickable(locator)
-        WebDriverWait(self.driver, timeout).until(clickable, message="Couldn't find locator: " + locator)
+        WebDriverWait(self.driver, timeout).until(clickable, message="Couldn't find locator: " + str(locator))
 
     def wait_and_sleep_to_click(self, locator, timeout=20):
         time.sleep(4)
         clickable = ec.element_to_be_clickable(locator)
-        element = WebDriverWait(self.driver, timeout).until(clickable, message="Couldn't find locator: " + locator)
+        element = WebDriverWait(self.driver, timeout).until(clickable, message="Couldn't find locator: " + str(locator))
         element.click()
 
     def find_elements(self, locator):
@@ -127,13 +128,13 @@ class BasePage:
 
     def is_visible_and_displayed(self, locator, timeout=20):
         visible = ec.visibility_of_element_located(locator)
-        element = WebDriverWait(self.driver, timeout).until(visible, message="Element" + locator + "not displayed")
+        element = WebDriverWait(self.driver, timeout).until(visible, message="Element" + str(locator) + "not displayed")
         is_displayed = element.is_displayed()
         return bool(is_displayed)
 
     def is_present_and_displayed(self, locator, timeout=100):
         visible = ec.presence_of_element_located(locator)
-        element = WebDriverWait(self.driver, timeout).until(visible, message="Element" + locator + "not displayed")
+        element = WebDriverWait(self.driver, timeout).until(visible, message="Element" + str(locator) + "not displayed")
         is_displayed = element.is_displayed()
         return bool(is_displayed)
 
