@@ -103,7 +103,11 @@ class ApplicationPage(BasePage):
         print("Deleted the application")
 
     def form_xml_download_upload(self):
-        self.wait_to_click(self.actions_tab)
+        try:
+            self.wait_to_click(self.actions_tab)
+        except TimeoutException:
+            self.wait_to_click(self.form_settings)
+            self.wait_to_click(self.actions_tab)
         self.wait_to_click(self.download_xml)
         time.sleep(1)
         self.wait_to_click(self.add_form_button)
