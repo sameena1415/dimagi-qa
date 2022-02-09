@@ -1,3 +1,5 @@
+from selenium.common.exceptions import NoSuchElementException
+
 from HQSmokeTests.testPages.base.base_page import BasePage
 
 from selenium.webdriver.common.by import By
@@ -13,9 +15,14 @@ class WebAppPermissionPage(BasePage):
         self.second_radio_button = (By.XPATH, "//input[@name='ko_unique_2']")
         self.save_button = (By.XPATH, "//div[@class='btn btn-primary']")
         self.after_save = (By.XPATH, "//div[@class='btn btn-primary disabled']")
+        self.error_403 = (By.XPATH, "//h1[text()='403 Forbidden']")
 
     def webapp_permission_option_toggle(self):
-        self.click(self.web_app_permissions_menu)
+        try:
+            self.click(self.web_app_permissions_menu)
+        except NoSuchElementException:
+            if self.is_displayed(self.error_403):
+                self.driver.back()
         self.driver.implicitly_wait(2)
         if self.is_selected(self.first_radio_button):
             self.click(self.second_radio_button)
