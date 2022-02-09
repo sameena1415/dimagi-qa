@@ -1,184 +1,148 @@
 import time
 
-from selenium.common.exceptions import TimeoutException, ElementClickInterceptedException, \
-    UnexpectedAlertPresentException
+from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.wait import WebDriverWait
-from selenium.webdriver.support import expected_conditions as ec
 
-from HQSmokeTests.userInputs.generateUserInputs import fetch_random_string
-from HQSmokeTests.userInputs.userInputsData import UserInputsData
+from HQSmokeTests.testPages.base.base_page import BasePage
+from HQSmokeTests.userInputs.generate_random_string import fetch_random_string
+from HQSmokeTests.userInputs.user_inputs import UserData
 from HQSmokeTests.testPages.users.org_structure_page import latest_download_file
 
 
-class ApplicationPage:
+class ApplicationPage(BasePage):
 
     def __init__(self, driver):
-        self.driver = driver
+        super().__init__(driver)
+
+        self.app_name = "App " + fetch_random_string()
+        self.question_display_text_name = "Name"
 
         # Create New Application
-        self.applications_menu_id = "ApplicationsTab"
-        self.new_application = "New Application"
-        self.edit_app_name = '//span[@class="inline-edit-icon h3 app-title"]'
-        self.app_name_textbox = "(//input[@type='text'])[1]"
-        self.app_name = "App "+fetch_random_string()
-        self.confirm_change = "(//button[@data-bind=\"click: save, hasFocus: saveHasFocus, visible: !isSaving()\"])[1]"
-        self.add_module = "//a[@class='appnav-add js-add-new-item']"
-        self.add_case_list = "//button[@data-type='case']"
-        self.add_questions = "//div[@class='dropdown fd-add-question-dropdown']"
-        self.text_question = "//a[@data-qtype='Text']"
-        self.question_display_text = "(//div[@role='textbox'])[1]"
-        self.question_display_text_name = "Name"
-        self.save_button = "//span[text()='Save']"
-        self.app_created = "//span[text()='"+self.app_name+"']"
+        self.applications_menu_id = (By.ID, "ApplicationsTab")
+        self.new_application = (By.LINK_TEXT, "New Application")
+        self.edit_app_name = (By.XPATH, '//span[@class="inline-edit-icon h3 app-title"]')
+        self.app_name_textbox = (By.XPATH, "(//input[@type='text'])[1]")
+        self.confirm_change = (By.XPATH, "(//button[@data-bind=\"click: save, hasFocus: saveHasFocus, visible: !isSaving()\"])[1]")
+        self.add_module = (By.XPATH, "//a[@class='appnav-add js-add-new-item']")
+        self.add_case_list = (By.XPATH, "//button[@data-type='case']")
+        self.add_questions = (By.XPATH, "//div[@class='dropdown fd-add-question-dropdown']")
+        self.text_question = (By.XPATH, "//a[@data-qtype='Text']")
+        self.question_display_text = (By.XPATH, "(//div[@role='textbox'])[1]")
+        self.save_button = (By.XPATH, "//span[text()='Save']")
+        self.app_created = (By.XPATH, "//span[text()='"+self.app_name+"']")
 
         # Delete Application
-        self.settings = "//i[@class='fa fa-gear']"
-        self.delete_app = "//a[@href='#delete-app-modal']"
-        self.delete_confirm = "(//button[@class='disable-on-submit btn btn-danger'])[last()]"
+        self.settings = (By.XPATH, "//i[@class='fa fa-gear']")
+        self.delete_app = (By.XPATH, "//a[@href='#delete-app-modal']")
+        self.delete_confirm = (By.XPATH, "(//button[@class='disable-on-submit btn btn-danger'])[last()]")
 
         # Application Contents
-        self.menu_settings = "//a[@class='appnav-title appnav-title-secondary appnav-responsive']"
-        self.menu_settings_content = "js-appmanager-body"
-        self.form_settings = "(//a[@data-action='View Form'])[1]"
-        self.form_settings_content = "//div[@class='tabbable appmanager-tabs-container']"
+        self.menu_settings = (By.XPATH, "//a[@class='appnav-title appnav-title-secondary appnav-responsive']")
+        self.menu_settings_content = (By.ID, "js-appmanager-body")
+        self.form_settings = (By.XPATH, "(//a[@data-action='View Form'])[1]")
+        self.form_settings_content = (By.XPATH, "//div[@class='tabbable appmanager-tabs-container']")
 
         # Form XML
-        self.download_xml = "//a[contains(i/following-sibling::text(), 'Download')]"
-        self.upload_xml = "//a[@href='#upload-xform']"
-        self.add_form_button = "(//i[@class='fa fa-plus'])[1]"
-        self.register_form = "//button[@data-case-action='open']"
-        self.new_form_settings = "(//a[@data-action='View Form'])[3]"
-        self.choose_file = "xform_file_input"
-        self.upload = 'xform_file_submit'
-        self.same_question_present = "//a[contains(i/following-sibling::text(), 'Name')]"
+        self.download_xml = (By.XPATH, "//a[contains(i/following-sibling::text(), 'Download')]")
+        self.upload_xml = (By.XPATH, "//a[@href='#upload-xform']")
+        self.add_form_button = (By.XPATH, "(//i[@class='fa fa-plus'])[1]")
+        self.register_form = (By.XPATH, "//button[@data-case-action='open']")
+        self.new_form_settings = (By.XPATH, "(//a[@data-action='View Form'])[3]")
+        self.choose_file = (By.ID, "xform_file_input")
+        self.upload = (By.ID, 'xform_file_submit')
+        self.same_question_present = (By.XPATH, "//a[contains(i/following-sibling::text(), 'Name')]")
 
         # App Settings
-        self.languages_tab = "//a[@href='#languages']"
-        self.languages_tab_content = "language-settings-options"
-        self.multimedia_tab = "//a[@href='#multimedia-tab']"
-        self.multimedia_tab_content = "multimedia-tab"
-        self.actions_tab = "//a[text()='Actions']"
-        self.actions_tab_content = "actions"
-        self.add_ons_tab = "//a[@href='#add-ons']"
-        self.add_ons_tab_content = "add-ons"
-        self.advanced_settings_tab = "//a[@href='#commcare-settings']"
-        self.advanced_settings_tab_content = "app-settings-options"
-        self.alert_button_accept = "hs-eu-confirmation-button"
-
-    def wait_to_click(self, *locator, timeout=10):
-        clickable = ec.element_to_be_clickable(locator)
-        WebDriverWait(self.driver, timeout).until(clickable).click()
+        self.languages_tab = (By.XPATH, "//a[@href='#languages']")
+        self.languages_tab_content = (By.ID, "language-settings-options")
+        self.multimedia_tab = (By.XPATH, "//a[@href='#multimedia-tab']")
+        self.multimedia_tab_content = (By.ID, "multimedia-tab")
+        self.actions_tab = (By.XPATH, "//a[text()='Actions']")
+        self.actions_tab_content = (By.ID, "actions")
+        self.add_ons_tab = (By.XPATH, "//a[@href='#add-ons']")
+        self.add_ons_tab_content = (By.ID, "add-ons")
+        self.advanced_settings_tab = (By.XPATH, "//a[@href='#commcare-settings']")
+        self.advanced_settings_tab_content = (By.ID, "app-settings-options")
 
     def create_new_application(self):
-        self.wait_to_click(By.ID, self.applications_menu_id)
-        self.wait_to_click(By.LINK_TEXT, self.new_application)
-        try:
-            self.wait_to_click(By.XPATH, self.edit_app_name)
-        except ElementClickInterceptedException:
-            if self.driver.find_element(By.ID, self.alert_button_accept).is_displayed():
-                self.driver.find_element(By.ID, self.alert_button_accept).click()
-                self.wait_to_click(By.XPATH, self.edit_app_name)
-        self.driver.find_element(By.XPATH, self.app_name_textbox).clear()
-        self.driver.find_element(By.XPATH, self.app_name_textbox).send_keys(self.app_name)
-        self.wait_to_click(By.XPATH, self.confirm_change)
-        self.wait_to_click(By.XPATH, self.add_module)
+        self.wait_to_click(self.applications_menu_id)
+        self.wait_to_click(self.new_application)
+        self.wait_to_click(self.edit_app_name)
+        self.clear(self.app_name_textbox)
+        self.send_keys(self.app_name_textbox, self.app_name)
+        self.wait_to_click(self.confirm_change)
+        self.wait_to_click(self.add_module)
         time.sleep(1)
-        self.wait_to_click(By.XPATH, self.add_case_list)
+        self.wait_to_click(self.add_case_list)
         time.sleep(2)
-        self.wait_to_click(By.XPATH, self.add_questions)
+        self.wait_to_click(self.add_questions)
         time.sleep(2)
-        self.wait_to_click(By.XPATH, self.text_question)
-        self.driver.find_element(By.XPATH, self.question_display_text).send_keys(self.question_display_text_name)
-        self.wait_to_click(By.XPATH, self.save_button)
-        assert True == WebDriverWait(self.driver, 5).until(ec.presence_of_element_located((
-            By.XPATH, self.app_created))).is_displayed()
+        self.wait_to_click(self.text_question)
+        self.send_keys(self.question_display_text, self.question_display_text_name)
+        self.wait_to_click(self.save_button)
+        assert self.is_present_and_displayed(self.app_created)
         print("New App created successfully!")
 
     def form_builder_exploration(self):
         time.sleep(2)
-        self.driver.find_element(By.XPATH, self.menu_settings).click()
+        self.click(self.menu_settings)
         time.sleep(2)
-        try:
-            self.settings_content = WebDriverWait(self.driver, 5).until(ec.presence_of_element_located((
-                By.ID, self.menu_settings_content)))
-        except UnexpectedAlertPresentException:
-            alert = self.driver.switch_to.alert
-            alert.accept()
-            self.settings_content.click()
-        assert self.settings_content.is_displayed()
+        self.wait_for_element(self.menu_settings_content)
+        assert self.is_displayed(self.menu_settings_content)
         print("Menu Settings loaded successfully!")
-        try:
-            self.driver.find_element(By.XPATH, self.form_settings).click()
-        except ElementClickInterceptedException:
-            if self.driver.find_element(By.ID, self.alert_button_accept).is_displayed():
-                self.driver.find_element(By.ID, self.alert_button_accept).click()
-                self.driver.find_element(By.XPATH, self.form_settings).click()
-        assert True == WebDriverWait(self.driver, 5).until(ec.presence_of_element_located((
-            By.XPATH, self.form_settings_content))).is_displayed()
+        self.wait_to_click(self.form_settings)
+        assert self.is_present_and_displayed(self.form_settings_content)
         print("Form Settings loaded successfully!")
 
     def delete_application(self):
         time.sleep(2)
-        settings_button = self.driver.find_element(By.XPATH, self.settings)
-        self.driver.execute_script("arguments[0].click();", settings_button)
-        self.wait_to_click(By.XPATH, self.actions_tab)
-        self.wait_to_click(By.XPATH, self.delete_app)
-        self.wait_to_click(By.XPATH, self.delete_confirm)
+        self.js_click(self.settings)
+        self.wait_to_click(self.actions_tab)
+        self.wait_to_click(self.delete_app)
+        self.wait_to_click(self.delete_confirm)
         print("Deleted the application")
 
     def form_xml_download_upload(self):
         try:
-            self.wait_to_click(By.XPATH, self.actions_tab)
-        except ElementClickInterceptedException:
-            if self.driver.find_element(By.ID, self.alert_button_accept).is_displayed():
-                self.driver.find_element(By.ID, self.alert_button_accept).click()
-                self.wait_to_click(By.XPATH, self.actions_tab)
-        self.wait_to_click(By.XPATH, self.download_xml)
+            self.wait_to_click(self.actions_tab)
+        except TimeoutException:
+            self.wait_to_click(self.form_settings)
+            self.wait_to_click(self.actions_tab)
+        self.wait_to_click(self.download_xml)
         time.sleep(1)
-        self.wait_to_click(By.XPATH, self.add_form_button)
+        self.wait_to_click(self.add_form_button)
         time.sleep(1)
         try:
-            self.wait_to_click(By.XPATH, self.register_form)
+            self.wait_to_click(self.register_form)
             time.sleep(2)
         except TimeoutException:
             self.driver.refresh()
-        self.wait_to_click(By.XPATH, self.new_form_settings)
-        self.wait_to_click(By.XPATH, self.actions_tab)
-        self.wait_to_click(By.XPATH, self.upload_xml)
+        self.wait_to_click(self.new_form_settings)
+        self.wait_to_click(self.actions_tab)
+        self.wait_to_click(self.upload_xml)
         newest_file = latest_download_file()
-        file_that_was_downloaded = UserInputsData.download_path / newest_file
-        self.driver.find_element(By.ID, self.choose_file).send_keys(str(file_that_was_downloaded))
+        file_that_was_downloaded = UserData.DOWNLOAD_PATH / newest_file
+        self.send_keys(self.choose_file, str(file_that_was_downloaded))
         time.sleep(1)
-        self.driver.find_element(By.ID, self.upload).click()
+        self.click(self.upload)
         time.sleep(1)
-        assert True == WebDriverWait(self.driver, 10).until(ec.presence_of_element_located((
-            By.XPATH, self.same_question_present))).is_displayed()
+        assert self.is_present_and_displayed(self.same_question_present)
         print("XML copied successfully!")
 
     def app_settings_exploration(self):
         try:
-            self.wait_to_click(By.XPATH, self.settings)
+            self.wait_to_click(self.settings)
         except TimeoutException:
             self.driver.refresh()
-            self.driver.find_element(By.XPATH, self.settings).click()
-        except ElementClickInterceptedException:
-            if self.driver.find_element(By.ID, self.alert_button_accept).is_displayed():
-                self.driver.find_element(By.ID, self.alert_button_accept).click()
-                self.driver.find_element(By.XPATH, self.settings).click()
-        assert True == WebDriverWait(self.driver, 5).until(ec.presence_of_element_located((
-            By.ID, self.languages_tab_content))).is_displayed()
-        self.wait_to_click(By.XPATH, self.multimedia_tab)
-        assert True == WebDriverWait(self.driver, 5).until(ec.presence_of_element_located((
-            By.ID, self.multimedia_tab_content))).is_displayed()
-        self.wait_to_click(By.XPATH, self.actions_tab)
-        assert True == WebDriverWait(self.driver, 5).until(ec.presence_of_element_located((
-            By.ID, self.actions_tab_content))).is_displayed()
-        self.wait_to_click(By.XPATH, self.add_ons_tab)
-        assert True == WebDriverWait(self.driver, 5).until(ec.presence_of_element_located((
-            By.ID, self.add_ons_tab_content))).is_displayed()
+            self.click(self.settings)
+        assert self.is_present_and_displayed(self.languages_tab_content)
+        self.wait_to_click(self.multimedia_tab)
+        assert self.is_present_and_displayed(self.multimedia_tab_content)
+        self.wait_to_click(self.actions_tab)
+        assert self.is_present_and_displayed(self.actions_tab_content)
+        self.wait_to_click(self.add_ons_tab)
+        assert self.is_present_and_displayed(self.add_ons_tab_content)
         time.sleep(2)
-        self.wait_to_click(By.XPATH, self.advanced_settings_tab)
-        assert True == WebDriverWait(self.driver, 5).until(ec.presence_of_element_located((
-            By.ID, self.advanced_settings_tab_content))).is_displayed()
+        self.wait_to_click(self.advanced_settings_tab)
+        assert self.is_present_and_displayed(self.advanced_settings_tab_content)
         print("App Settings loading successfully!")

@@ -148,6 +148,7 @@ assets
 /HQSmokeTests/testCases/report.html
 /report.html
 
+/HQSmokeTests/userInputs/test_data/reassign_cases_*
 #Ignoring compliled files of FormplayerTests
 
 # dependencies

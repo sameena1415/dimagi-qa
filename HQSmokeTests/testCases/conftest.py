@@ -3,8 +3,8 @@ from configparser import ConfigParser
 from pathlib import Path
 
 import pytest
-from HQSmokeTests.userInputs.userInputsData import UserInputsData
-from HQSmokeTests.testPages.others.login_page import LoginPage
+from HQSmokeTests.userInputs.user_inputs import UserData
+from HQSmokeTests.testPages.base.login_page import LoginPage
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
@@ -37,7 +37,6 @@ def environment_settings():
         env = os.environ.get("DIMAGIQA_ENV") or "staging"
         subdomain = "www" if env == "production" else env
         settings["url"] = f"https://{subdomain}.commcarehq.org/"
-        # print(settings)
     return settings
 
 
@@ -46,7 +45,6 @@ def settings(environment_settings):
     if os.environ.get("CI") == "true":
         settings = environment_settings
         settings["CI"] = "true"
-        # print(settings)
         if any(x not in settings for x in ["url", "login_username", "login_password", "mail_username", "mail_password"]):
             lines = environment_settings.__doc__.splitlines()
             vars_ = "\n  ".join(line.strip() for line in lines if "DIMAGIQA_" in line)
@@ -71,7 +69,6 @@ def settings(environment_settings):
 @pytest.fixture(scope="module")
 def driver(settings):
     chrome_options = webdriver.ChromeOptions()
-    print("settings:", settings)
     if settings.get("CI") == "true":
         chrome_options.add_argument('--no-sandbox')
         chrome_options.add_argument('disable-extensions')
@@ -82,8 +79,9 @@ def driver(settings):
         chrome_options.add_argument('--start-maximized')
         chrome_options.add_argument('--disable-dev-shm-usage')
         chrome_options.add_argument('--headless')
+        chrome_options.add_argument("--disable-notifications")
         chrome_options.add_experimental_option("prefs", {
-            "download.default_directory": str(UserInputsData.download_path),
+            "download.default_directory": str(UserData.DOWNLOAD_PATH),
             "download.prompt_for_download": False,
             "download.directory_upgrade": True,
             "safebrowsing.enabled": True})
@@ -98,7 +96,7 @@ def driver(settings):
         # chrome_options.add_argument('--headless')
         # chrome_options.set_capability("browserVersion", "94.0.4606")
         chrome_options.add_experimental_option("prefs", {
-            "download.default_directory": str(UserInputsData.download_path),
+            "download.default_directory": str(UserData.DOWNLOAD_PATH),
             "download.prompt_for_download": False,
             "safebrowsing.enabled": True})
     web_driver = Service(executable_path=ChromeDriverManager().install(), service_args=['--verbose', 'log_path="/logs/chrome.log"'])
@@ -114,14 +112,11 @@ def driver(settings):
 @pytest.hookimpl(hookwrapper=True)
 # @pytest.mark.hookwrapper
 def pytest_runtest_makereport(item):
-    # print("entering reports formation")
     pytest_html = item.config.pluginmanager.getplugin("html")
     outcome = yield
     report = outcome.get_result()
     extra = getattr(report, 'extra', [])
-    # print(item.fixturenames)
     if report.when == "call" or report.when == "teardown":
-        # print(reports.when)
         xfail = hasattr(report, 'wasxfail')
         if (report.skipped and xfail) or (report.failed and not xfail):
             print("reports skipped or failed")
@@ -132,7 +127,6 @@ def pytest_runtest_makereport(item):
                        'onclick="window.open(this.src)" align="right"/></div>' % screen_img
                 extra.append(pytest_html.extras.html(html))
         report.extra = extra
-        # print("extra added to reports")
 
 
 def _capture_screenshot(driver):

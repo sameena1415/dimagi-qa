@@ -1,69 +1,51 @@
 import time
 
-from selenium.common.exceptions import TimeoutException, NoSuchElementException
+from HQSmokeTests.testPages.base.base_page import BasePage
+from HQSmokeTests.userInputs.generate_random_string import fetch_random_string
 
-from HQSmokeTests.userInputs.generateUserInputs import fetch_random_string
-from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support import expected_conditions as ec
-from selenium.webdriver.support.wait import WebDriverWait
 
 
-class RolesPermissionPage:
+class RolesPermissionPage(BasePage):
 
     def __init__(self, driver):
-        self.driver = driver
-        self.roles_menu_xpath = "//a[@data-title='Roles & Permissions']"
-        self.add_role_btn_xpath = "//button[@data-bind='click: function () {$root.setRoleBeingEdited($root.defaultRole)}']"
-        self.role_name_id = "role-name"
-        self.edit_web_user_checkbox = "edit-web-users-checkbox"
-        self.save_btn_xpath = "//button[@class='btn btn-primary disable-on-submit']"
-        self.role_created = "//span[text()='" + "role_name_" + fetch_random_string() + "']"
-        self.edit_role_xpath = "//span[text()='" + "role_name_" + fetch_random_string() + "']//following::td[10]/button[1]"
-        self.delete_role_xpath = "//span[text()='" + "role_name_" + fetch_random_string() + "']//following::td[10]/button[2]"
-        self.edit_mobile_worker_checkbox = "edit-commcare-users-checkbox"
-        self.role_renamed = "//span[text()='" + "role_name_" + fetch_random_string() + "']"
-        self.confirm_role_delete = "//div[@class='btn btn-danger']"
+        super().__init__(driver)
 
-    def wait_to_click(self, *locator, timeout=3):
-        clickable = ec.element_to_be_clickable(locator)
-        WebDriverWait(self.driver, timeout).until(clickable).click()
+        self.role_name_created = "role_" + fetch_random_string()
+
+        self.roles_menu = (By.XPATH, "//a[@data-title='Roles & Permissions']")
+        self.add_new_role = (By.XPATH, "//button[@data-bind='click: function () {$root.setRoleBeingEdited($root.defaultRole)}']")
+        self.role_name = (By.ID, "role-name")
+        self.edit_web_user_checkbox = (By.ID, "edit-web-users-checkbox")
+        self.save_button = (By.XPATH, "//button[@class='btn btn-primary disable-on-submit']")
+        self.role_created = (By.XPATH, "//span[text()='" + str(self.role_name_created) + "']")
+        self.edit_created_role = (By.XPATH, "//span[text()='" + str(self.role_name_created) + "']//following::td[10]/button[1]")
+        self.delete_role = (By.XPATH, "//span[text()='" + str(self.role_name_created) + "']//following::td[10]/button[2]")
+        self.edit_mobile_worker_checkbox = (By.ID, "edit-commcare-users-checkbox")
+        self.role_renamed = (By.XPATH, "//span[text()='" + str(self.role_name_created) + "']")
+        self.confirm_role_delete = (By.XPATH, "//div[@class='btn btn-danger']")
 
     def roles_menu_click(self):
-        self.wait_to_click(By.XPATH, self.roles_menu_xpath)
+        self.wait_to_click(self.roles_menu)
         assert "Roles & Permissions : Users :: - CommCare HQ" in self.driver.title
 
     def add_role(self):
-        try:
-            self.wait_to_click(By.XPATH, self.add_role_btn_xpath)
-            WebDriverWait(self.driver, 3).until(ec.visibility_of_element_located((
-                By.ID, self.role_name_id))).clear()
-            self.driver.find_element(By.ID, self.role_name_id).send_keys("role_name_" + fetch_random_string())
-            self.driver.find_element(By.ID, self.edit_web_user_checkbox).click()
-            ActionChains(self.driver).move_to_element(
-                self.driver.find_element(By.XPATH, self.save_btn_xpath)).click(
-                self.driver.find_element(By.XPATH, self.save_btn_xpath)).perform()
-        except (TimeoutException, NoSuchElementException):
-            print("TIMEOUT ERROR: Role not added successfully")
-        assert True == WebDriverWait(self.driver, 3).until(ec.presence_of_element_located((
-            By.XPATH, self.role_created))).is_displayed(), "Role not added successfully"
+        self.wait_to_click(self.add_new_role)
+        self.wait_to_clear(self.role_name)
+        self.send_keys(self.role_name, self.role_name_created)
+        self.click(self.edit_web_user_checkbox)
+        self.move_to_element_and_click(self.save_button)
+        assert self.is_present_and_displayed(self.role_created), "Role not added successfully!"
 
     def edit_role(self):
-        try:
-            self.driver.find_element(By.XPATH, self.edit_role_xpath).click()
-            WebDriverWait(self.driver, 3).until(ec.visibility_of_element_located((
-                By.ID, self.role_name_id))).clear()
-            self.driver.find_element(By.ID, self.role_name_id).send_keys("role_name_" + fetch_random_string())
-            self.driver.find_element(By.ID, self.edit_mobile_worker_checkbox).click()
-            ActionChains(self.driver).move_to_element(
-                self.driver.find_element(By.XPATH, self.save_btn_xpath)).click(
-                self.driver.find_element(By.XPATH, self.save_btn_xpath)).perform()
-        except (TimeoutException, NoSuchElementException):
-            print("TIMEOUT ERROR: Role not edited successfully")
-        assert True == WebDriverWait(self.driver, 3).until(ec.presence_of_element_located((
-            By.XPATH, self.role_renamed))).is_displayed(), "Role not edited successfully"
+        self.wait_to_click(self.edit_created_role)
+        self.wait_to_clear(self.role_name)
+        self.send_keys(self.role_name, self.role_name_created)
+        self.move_to_element_and_click(self.edit_mobile_worker_checkbox)
+        self.move_to_element_and_click(self.save_button)
+        assert self.is_present_and_displayed(self.role_renamed), "Role not edited successfully!"
         time.sleep(1)
 
     def cleanup_role(self):
-        self.wait_to_click(By.XPATH, self.delete_role_xpath)
-        self.wait_to_click(By.XPATH, self.confirm_role_delete)
+        self.wait_to_click(self.delete_role)
+        self.wait_to_click(self.confirm_role_delete)

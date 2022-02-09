@@ -12,6 +12,8 @@ Note:
 * To generate pytest_report.html file use following command from the root of repo e.g. py.test --html = log/pytest_report.html
 * To generate pytest_report.log file use following command from the root of repo e.g. py.test -k example_form -r F -v > log/pytest_report.log
 """
+
+"""
 import datetime
 import mimetypes
 import os
@@ -172,4 +174,4 @@ class Email_Pytest_Report:
         server.sendmail(username, self.targets, message.as_string())
         server.quit()
         print("email sent")
-
+"""

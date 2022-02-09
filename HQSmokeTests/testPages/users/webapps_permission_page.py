@@ -1,23 +1,33 @@
+from selenium.common.exceptions import NoSuchElementException
+
+from HQSmokeTests.testPages.base.base_page import BasePage
+
 from selenium.webdriver.common.by import By
 
 
-class WebAppPermissionPage:
+class WebAppPermissionPage(BasePage):
 
     def __init__(self, driver):
-        self.driver = driver
-        self.web_app_permissions_menu = "Web Apps Permissions"
-        self.first_radio_button = "//input[@name='ko_unique_1']"
-        self.second_radio_button = "//input[@name='ko_unique_2']"
-        self.save_button = "//div[@class='btn btn-primary']"
-        self.after_save = "//div[@class='btn btn-primary disabled']"
+        super().__init__(driver)
+
+        self.web_app_permissions_menu = (By.LINK_TEXT, "Web Apps Permissions")
+        self.first_radio_button = (By.XPATH, "//input[@name='ko_unique_1']")
+        self.second_radio_button = (By.XPATH, "//input[@name='ko_unique_2']")
+        self.save_button = (By.XPATH, "//div[@class='btn btn-primary']")
+        self.after_save = (By.XPATH, "//div[@class='btn btn-primary disabled']")
+        self.error_403 = (By.XPATH, "//h1[text()='403 Forbidden']")
 
     def webapp_permission_option_toggle(self):
-        self.driver.find_element(By.LINK_TEXT, self.web_app_permissions_menu).click()
+        try:
+            self.click(self.web_app_permissions_menu)
+        except NoSuchElementException:
+            if self.is_displayed(self.error_403):
+                self.driver.back()
         self.driver.implicitly_wait(2)
-        if self.driver.find_element(By.XPATH, self.first_radio_button).is_selected():
-            self.driver.find_element(By.XPATH, self.second_radio_button).click()
+        if self.is_selected(self.first_radio_button):
+            self.click(self.second_radio_button)
         else:
-            self.driver.find_element(By.XPATH, self.first_radio_button).click()
-        self.driver.find_element(By.XPATH, self.save_button).click()
-        assert True == self.driver.find_element(By.XPATH, self.after_save).is_displayed()
+            self.click(self.first_radio_button)
+        self.click(self.save_button)
+        assert self.is_visible_and_displayed(self.after_save)
         print("Webapps permissions toggled")
