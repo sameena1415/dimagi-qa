@@ -79,6 +79,7 @@ def driver(settings):
         chrome_options.add_argument('--start-maximized')
         chrome_options.add_argument('--disable-dev-shm-usage')
         chrome_options.add_argument('--headless')
+        chrome_options.add_argument("--disable-notifications")
         chrome_options.add_experimental_option("prefs", {
             "download.default_directory": str(UserData.DOWNLOAD_PATH),
             "download.prompt_for_download": False,
