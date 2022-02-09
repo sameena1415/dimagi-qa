@@ -7,8 +7,6 @@ from HQSmokeTests.testPages.users.org_structure_page import latest_download_file
 
 from selenium.common.exceptions import NoSuchElementException, StaleElementReferenceException, TimeoutException
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support import expected_conditions as ec
-from selenium.webdriver.support.wait import WebDriverWait
 
 
 class MessagingPage(BasePage):
