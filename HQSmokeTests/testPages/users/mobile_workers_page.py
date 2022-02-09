@@ -79,6 +79,7 @@ class MobileWorkerPage(BasePage):
         self.upload = (By.XPATH, "//button[@class='btn btn-primary disable-on-submit']")
         self.import_complete = (By.XPATH, "//legend[text()='Bulk upload complete.']")
         self.download_filter = (By.XPATH, "//button[@data-bind='html: buttonHTML']")
+        self.error_403 = (By.XPATH, "//h1[text()='403 Forbidden']")
 
     def search_user(self):
         self.wait_to_send_keys(self.search_mw, self.username)
@@ -101,6 +102,9 @@ class MobileWorkerPage(BasePage):
             if not self.is_displayed(self.users_menu_id):
                 self.click(self.show_full_menu_id)
                 time.sleep(2)
+                self.click(self.users_menu_id)
+            elif self.is_displayed(self.error_403):
+                self.driver.back()
                 self.click(self.users_menu_id)
         self.wait_to_click(self.mobile_workers_menu_link_text)
         assert "Mobile Workers : Users :: - CommCare HQ" in self.driver.title, "Unable find the Users Menu."
