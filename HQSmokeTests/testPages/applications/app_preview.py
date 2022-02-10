@@ -25,7 +25,8 @@ class AppPreviewPage(BasePage):
         self.submit_success = (By.XPATH, "//p[text()='Form successfully saved!']")
 
     def check_access_to_app_preview(self):
-        self.wait_to_click(self.sidebar_open_app_preview)
+        if not self.is_visible_and_displayed(self.app_preview_model):
+            self.wait_to_click(self.sidebar_open_app_preview)
         self.is_visible_and_displayed(self.app_preview_model)
         self.driver.switch_to.frame(self.find_element(self.iframe_app_preview))
         self.wait_to_click(self.start)
@@ -42,7 +43,7 @@ class AppPreviewPage(BasePage):
         except TimeoutException:
             if self.is_displayed(self.next_button):
                 self.click(self.next_button)
-                self.click(self.next_button)
-                self.click(self.complete_button)
+                self.wait_to_click(self.next_button)
+                self.js_click(self.complete_button)
         self.is_visible_and_displayed(self.submit_success)
         self.driver.switch_to.default_content()
