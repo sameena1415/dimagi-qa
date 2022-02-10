@@ -16,12 +16,12 @@ class UserData:
 
     # Pre-setup application names
     village_application = "Village Health"
+    reassign_cases_application = 'Reassign Cases'
 
     #invite_web_user user email
     web_user_mail = 'automation.user.commcarehq+test@gmail.com'
 
     #web app
-    web_app_name = 'Reassign Cases'
     case_list_name = 'Case List'
     form_name = 'Registration Form'
     login_as = 'henry'

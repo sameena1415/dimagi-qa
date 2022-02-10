@@ -19,7 +19,7 @@ class WebAppsPage(BasePage):
         self.confirm_user_login = (By.XPATH, "//button[@id='js-confirmation-confirm']")
 
         self.apps_links = (By.XPATH, "//*[@class='fcc fcc-flower appicon-icon']")
-        self.web_app_link = (By.XPATH, "//*[text()='"+UserData.web_app_name+"']")
+        self.web_app_link = (By.XPATH, "//*[text()='" + UserData.reassign_cases_application + "']")
         self.case_list_link = (By.XPATH, "//*[text()='" + UserData.case_list_name + "']")
         self.form_link = (By.XPATH, "//*[text()='" + UserData.form_name + "']")
         self.form_case_name_input = (By.XPATH, "//textarea[@class='textfield form-control']")

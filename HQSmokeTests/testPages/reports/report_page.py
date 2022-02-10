@@ -9,7 +9,6 @@ from selenium.webdriver import Keys
 from selenium.webdriver.common.by import By
 
 from HQSmokeTests.userInputs.user_inputs import UserData
-from selenium.webdriver.support.select import Select
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as ec
 
@@ -97,13 +96,16 @@ class ReportPage(BasePage):
         # Submit History
         self.users_box = (By.XPATH, "//span[@class='select2-selection select2-selection--multiple']")
         self.select_user = (By.XPATH, "//li[contains(text(),'[Web Users]')]")
-        self.application_select = "//select[@id='report_filter_form_app_id']"
+        self.application_select = (By.XPATH, "//select[@id='report_filter_form_app_id']")
         self.module_select = "//select[@id='report_filter_form_module']"
         self.form_select = "//select[@id='report_filter_form_xmlns']"
         self.date_input = (By.XPATH, "//input[@id='filter_range']")
         self.view_form_link = (By.XPATH, "//tbody/tr[1]/td[1]/a[.='View Form']")
         self.case_name = (By.XPATH, "//td[div[contains(text(),'abc')]]")
         self.submit_history_table = (By.XPATH, "//table[@id='report_table_submit_history']/tbody/tr")
+        self.app = (By.LINK_TEXT, UserData.reassign_cases_application)
+        self.case_list_name = (By.LINK_TEXT, UserData.case_list_name)
+        self.form_name = (By.LINK_TEXT, UserData.form_name)
 
         # Case List
         self.search_input = (By.XPATH, "//input[@id='report_filter_search_query']")
@@ -271,12 +273,9 @@ class ReportPage(BasePage):
         self.wait_to_click(self.submit_history_rep)
         self.wait_to_click(self.users_box)
         self.wait_to_click(self.select_user)
-        select_app = Select(self.driver.find_element_by_xpath(self.application_select))
-        select_app.select_by_visible_text(UserData.web_app_name)
-        select_module = Select(self.driver.find_element_by_xpath(self.module_select))
-        select_module.select_by_visible_text(UserData.case_list_name)
-        select_form = Select(self.driver.find_element_by_xpath(self.form_select))
-        select_form.select_by_visible_text(UserData.form_name)
+        self.select_by_text(self.application_select, self.app)
+        self.select_by_text(self.module_select,self.case_list_name)
+        self.select_by_text(self.form_select, self.form_name)
         date_range = self.get_yesterday_tomorrow_dates()
         self.clear(self.date_input)
         self.send_keys(self.date_input, date_range+Keys.TAB)
