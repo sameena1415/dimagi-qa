@@ -101,7 +101,7 @@ class ReportPage(BasePage):
         self.module_select = "//select[@id='report_filter_form_module']"
         self.form_select = "//select[@id='report_filter_form_xmlns']"
         self.date_input = (By.XPATH, "//input[@id='filter_range']")
-        self.view_form_link = (By.XPATH, "(//td[a[.='View Form']])[1]")
+        self.view_form_link = (By.XPATH, "//tbody/tr[1]/td[1]/a[.='View Form']")
         self.case_name = (By.XPATH, "//td[div[contains(text(),'abc')]]")
         self.submit_history_table = (By.XPATH, "//table[@id='report_table_submit_history']/tbody/tr")
 
@@ -286,7 +286,7 @@ class ReportPage(BasePage):
         self.verify_table_not_empty(self.submit_history_table)
         self.is_present_and_displayed(self.view_form_link)
         form_link = self.get_attribute(self.view_form_link, "href")
-        print("View Form Link: " + form_link)
+        print("View Form Link: ", form_link)
         self.switch_to_new_tab()
         self.driver.get(form_link)
         # self.wait_and_sleep_to_click(self.view_form_link, 30)
