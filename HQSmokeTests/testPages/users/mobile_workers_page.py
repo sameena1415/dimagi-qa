@@ -4,7 +4,7 @@ from HQSmokeTests.testPages.base.base_page import BasePage
 from HQSmokeTests.userInputs.generate_random_string import fetch_random_string
 from HQSmokeTests.userInputs.user_inputs import UserData
 from HQSmokeTests.testPages.users.org_structure_page import latest_download_file
-from selenium.common.exceptions import TimeoutException, NoSuchElementException
+from selenium.common.exceptions import TimeoutException, NoSuchElementException, StaleElementReferenceException
 from selenium.webdriver.common.by import By
 
 
@@ -106,6 +106,9 @@ class MobileWorkerPage(BasePage):
             elif self.is_displayed(self.error_403):
                 self.driver.back()
                 self.click(self.users_menu_id)
+        except StaleElementReferenceException:
+            self.driver.refresh()
+            self.click(self.users_menu_id)
         self.wait_to_click(self.mobile_workers_menu_link_text)
         assert "Mobile Workers : Users :: - CommCare HQ" in self.driver.title, "Unable find the Users Menu."
 
