@@ -257,10 +257,10 @@ class ReportPage(BasePage):
 
     def verify_table_not_empty(self, locator):
         clickable = ec.presence_of_all_elements_located(locator)
-        element = WebDriverWait(self.driver, 10).until(clickable, message="Couldn't find locator: "
+        element = WebDriverWait(self.driver, 30).until(clickable, message="Couldn't find locator: "
                                                                           + str(locator))
         count = len(element)
-        if count >= 1:
+        if count > 0:
             print(count, " rows are present in the web table")
             return True
         else:
@@ -281,20 +281,16 @@ class ReportPage(BasePage):
         self.clear(self.date_input)
         self.send_keys(self.date_input, date_range+Keys.TAB)
         self.wait_to_click(self.apply_id)
-        time.sleep(10)
+        time.sleep(15)
         self.scroll_to_bottom()
-        try:
-            self.verify_table_not_empty(self.submit_history_table)
-            self.is_present_and_displayed(self.view_form_link)
-            self.wait_to_click(self.view_form_link, 30)
-            self.switch_to_next_tab()
-            # assert self.is_present_and_displayed(self.case_name)
-            self.page_source_contains(case_name)
-            assert True, "Case name is present in Submit history"
-            self.driver.close()
-            self.switch_back_to_prev_tab()
-        except:
-            assert False, "Case name not present in Submit History"
+        self.verify_table_not_empty(self.submit_history_table)
+        self.is_present_and_displayed(self.view_form_link)
+        self.wait_to_click(self.view_form_link, 30)
+        self.switch_to_next_tab()
+        self.page_source_contains(case_name)
+        assert True, "Case name is present in Submit history"
+        self.driver.close()
+        self.switch_back_to_prev_tab()
 
 
     def verify_form_data_case_list(self, case_name):
@@ -305,15 +301,11 @@ class ReportPage(BasePage):
         self.wait_to_click(self.apply_id)
         time.sleep(15)
         self.scroll_to_bottom()
-        try:
-            self.verify_table_not_empty(self.case_list_table)
-            # assert self.is_present_and_displayed(self.case_name)
-            self.page_source_contains(case_name)
-            self.wait_to_click_link(case_name)
-            self.switch_to_next_tab()
-            self.page_source_contains(case_name)
-            assert True, "Case name is present in Case List"
-            self.driver.close()
-            self.switch_back_to_prev_tab()
-        except:
-            assert False, "Case name not present in Case List"
+        self.verify_table_not_empty(self.case_list_table)
+        self.page_source_contains(case_name)
+        self.wait_to_click_link(case_name)
+        self.switch_to_next_tab()
+        self.page_source_contains(case_name)
+        assert True, "Case name is present in Case List"
+        self.driver.close()
+        self.switch_back_to_prev_tab()
