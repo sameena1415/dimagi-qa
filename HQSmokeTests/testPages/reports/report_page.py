@@ -287,6 +287,7 @@ class ReportPage(BasePage):
         self.is_present_and_displayed(self.view_form_link)
         self.wait_to_click(self.view_form_link, 30)
         self.switch_to_next_tab()
+        time.sleep(3)
         self.page_source_contains(case_name)
         assert True, "Case name is present in Submit history"
         self.driver.close()
@@ -305,6 +306,7 @@ class ReportPage(BasePage):
         self.page_source_contains(case_name)
         self.wait_to_click_link(case_name)
         self.switch_to_next_tab()
+        time.sleep(3)
         self.page_source_contains(case_name)
         assert True, "Case name is present in Case List"
         self.driver.close()
