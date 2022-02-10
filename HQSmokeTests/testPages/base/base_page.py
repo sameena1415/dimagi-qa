@@ -19,6 +19,8 @@ class BasePage:
         self.driver = driver
 
         self.alert_button_accept = (By.ID, "hs-eu-confirmation-button")
+        self.error_404 = (By.XPATH, "//h1[contains(text(),'404')]")
+        self.homepage = (By.XPATH, "//a[@href='/homepage/']")
 
     def wait_to_click(self, locator, timeout=12):
         clickable = ec.element_to_be_clickable(locator)
@@ -36,6 +38,11 @@ class BasePage:
             element.click()
         except StaleElementReferenceException:
             self.js_click(locator)
+        except TimeoutException:
+            if self.is_displayed(self.error_404):
+                self.click(self.homepage)
+                element.click()
+
 
     def wait_to_clear(self, locator, timeout=5):
         clickable = ec.visibility_of_element_located(locator)
