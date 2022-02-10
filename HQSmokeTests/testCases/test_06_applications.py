@@ -1,4 +1,6 @@
+from HQSmokeTests.testPages.applications.app_preview import AppPreviewPage
 from HQSmokeTests.testPages.applications.application_page import ApplicationPage
+from HQSmokeTests.testPages.home.home_page import HomePage
 
 
 def test_case_35_create_new_app(driver):
@@ -24,3 +26,12 @@ def test_case_39_settings_exploration(driver):
     load = ApplicationPage(driver)
     load.app_settings_exploration()
     load.delete_application()
+
+
+def test_case_40_app_preview(driver):
+
+    menu = HomePage(driver)
+    menu.applications_menu()
+    load = AppPreviewPage(driver)
+    load.check_access_to_app_preview()
+    load.submit_form_on_app_preview()

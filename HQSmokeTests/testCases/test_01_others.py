@@ -11,3 +11,11 @@ def test_case_01_menu_visibility(driver):
     visible.applications_menu()
     visible.messaging_menu()
     visible.web_apps_menu()
+
+
+def test_case_53_rage_clicks(driver):
+
+    visible = HomePage(driver)
+    visible.rage_clicks()
+
+
