@@ -297,7 +297,6 @@ class ReportPage(BasePage):
         self.driver.close()
         self.switch_back_to_prev_tab()
 
-
     def verify_form_data_case_list(self, case_name):
         self.wait_to_click(self.case_list_rep)
         self.wait_to_click(self.users_box)

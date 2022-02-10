@@ -1,6 +1,3 @@
-import time
-
-from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.by import By
 
 from HQSmokeTests.testPages.base.base_page import BasePage
@@ -8,7 +5,6 @@ from HQSmokeTests.userInputs.generate_random_string import fetch_random_string
 from HQSmokeTests.userInputs.user_inputs import UserData
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as ec
-
 
 
 class WebAppsPage(BasePage):
@@ -26,12 +22,10 @@ class WebAppsPage(BasePage):
         self.web_app_link = (By.XPATH, "//*[text()='"+UserData.web_app_name+"']")
         self.case_list_link = (By.XPATH, "//*[text()='" + UserData.case_list_name + "']")
         self.form_link = (By.XPATH, "//*[text()='" + UserData.form_name + "']")
-        self.form_case_name_input = (By.XPATH,"//textarea[@class='textfield form-control']")
+        self.form_case_name_input = (By.XPATH, "//textarea[@class='textfield form-control']")
         self.form_submit_button = (By.XPATH, "//button[@class='submit btn btn-primary']")
         self.success_message = (By.XPATH, "//p[text()='Form successfully saved!']")
         self.show_full_menu_link = (By.LINK_TEXT, "Show Full Menu")
-
-
 
     def verify_apps_presence(self):
         clickable = ec.presence_of_all_elements_located(self.apps_links)
@@ -50,7 +44,6 @@ class WebAppsPage(BasePage):
         self.wait_to_click(self.login_user)
         self.wait_to_click(self.confirm_user_login)
 
-
     def submit_case_form(self):
         self.wait_to_click(self.web_app_link)
         self.wait_to_click(self.case_list_link)
@@ -60,6 +53,3 @@ class WebAppsPage(BasePage):
         assert self.is_displayed(self.success_message), "Form not submitted"
         print("Form successfully submitted")
         return self.case_name_created
-
-
-
