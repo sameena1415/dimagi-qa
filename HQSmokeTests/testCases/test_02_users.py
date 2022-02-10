@@ -163,7 +163,7 @@ def test_cleanup_items_in_users_menu(driver):
     print("Deleted the location and location field")
 
 
-def test_case_13_verify_user(driver):
+def test_case_13_new_webuser_invitation(driver):
 
     webuser = WebUsersPage(driver)
     webuser.invite_new_web_user('admin')
