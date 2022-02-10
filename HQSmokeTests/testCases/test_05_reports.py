@@ -36,37 +36,37 @@ def test_case_15_16_submit_form_verify_formdata_casedata(driver):
     load = ReportPage(driver)
     load.verify_form_data_submit_history(case_name)
     load.verify_form_data_case_list(case_name)
-#
-#
-# def test_case_17_create_form_report(driver):
-#
-#     report = HomePage(driver)
-#     driver.refresh()
-#     report.reports_menu()
-#     load = ReportPage(driver)
-#     load.create_report_builder_form_report()
-#
-#
-# def test_case_18_create_case_report(driver):
-#
-#     report = HomePage(driver)
-#     report.reports_menu()
-#     load = ReportPage(driver)
-#     load.create_report_builder_case_report()
-#
-#
-# def test_case_19_saved_report(driver):
-#
-#     report = HomePage(driver)
-#     report.reports_menu()
-#     load = ReportPage(driver)
-#     load.saved_report()
-#
-#
-# def test_case_20_scheduled_report(driver):
-#
-#     report = HomePage(driver)
-#     report.reports_menu()
-#     load = ReportPage(driver)
-#     load.scheduled_report()
-#     load.delete_scheduled_and_saved_reports()
+
+
+def test_case_17_create_form_report(driver):
+
+    report = HomePage(driver)
+    driver.refresh()
+    report.reports_menu()
+    load = ReportPage(driver)
+    load.create_report_builder_form_report()
+
+
+def test_case_18_create_case_report(driver):
+
+    report = HomePage(driver)
+    report.reports_menu()
+    load = ReportPage(driver)
+    load.create_report_builder_case_report()
+
+
+def test_case_19_saved_report(driver):
+
+    report = HomePage(driver)
+    report.reports_menu()
+    load = ReportPage(driver)
+    load.saved_report()
+
+
+def test_case_20_scheduled_report(driver):
+
+    report = HomePage(driver)
+    report.reports_menu()
+    load = ReportPage(driver)
+    load.scheduled_report()
+    load.delete_scheduled_and_saved_reports()
