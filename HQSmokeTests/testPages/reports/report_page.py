@@ -1,5 +1,5 @@
 import time
-from datetime import datetime, timedelta
+from datetime import datetime
 
 from HQSmokeTests.testPages.base.base_page import BasePage
 from HQSmokeTests.userInputs.generate_random_string import fetch_random_string
@@ -296,8 +296,6 @@ class ReportPage(BasePage):
         print("View Form Link: ", form_link)
         self.switch_to_new_tab()
         self.driver.get(form_link)
-        # self.wait_and_sleep_to_click(self.view_form_link, 30)
-        # self.switch_to_next_tab()
         time.sleep(3)
         self.page_source_contains(case_name)
         assert True, "Case name is present in Submit history"
