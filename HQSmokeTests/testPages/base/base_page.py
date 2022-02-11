@@ -70,7 +70,25 @@ class BasePage:
         time.sleep(4)
         clickable = ec.element_to_be_clickable(locator)
         element = WebDriverWait(self.driver, timeout).until(clickable, message="Couldn't find locator: " + str(locator))
-        element.click()
+        try:
+            element.click()
+        except ElementClickInterceptedException:
+            if self.is_displayed(self.alert_button_accept):
+                self.click(self.alert_button_accept)
+                element.click()
+        except UnexpectedAlertPresentException:
+            alert = self.driver.switch_to.alert
+            alert.accept()
+            element.click()
+        except StaleElementReferenceException:
+            self.js_click(locator)
+        except TimeoutException:
+            if self.is_displayed(self.error_404):
+                self.click(self.homepage)
+                element.click()
+            elif self.is_displayed(self.error_403):
+                self.driver.back()
+                element.click()
 
     def find_elements(self, locator):
         elements = self.driver.find_elements(*locator)
