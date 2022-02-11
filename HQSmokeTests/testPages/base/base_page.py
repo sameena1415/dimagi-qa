@@ -3,7 +3,7 @@ import datetime
 
 from selenium.webdriver.support.select import Select
 from selenium.common.exceptions import TimeoutException, ElementClickInterceptedException, \
-    UnexpectedAlertPresentException, StaleElementReferenceException
+    UnexpectedAlertPresentException, StaleElementReferenceException, NoSuchElementException
 from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as ec
@@ -21,6 +21,20 @@ class BasePage:
         self.alert_button_accept = (By.ID, "hs-eu-confirmation-button")
         self.error_404 = (By.XPATH, "//h1[contains(text(),'404')]")
         self.error_403 = (By.XPATH, "//h1[text()='403 Forbidden']")
+
+    def page_404(self):
+        try:
+            self.page_404_displayed = self.is_displayed(self.error_404)
+        except NoSuchElementException:
+            self.page_404_displayed = False
+        return self.page_404_displayed
+
+    def page_403(self):
+        try:
+            self.page_403_displayed = self.is_displayed(self.error_403)
+        except NoSuchElementException:
+            self.page_403_displayed = False
+        return self.page_403_displayed
 
     def wait_to_click(self, locator, timeout=12):
         element = None
@@ -41,10 +55,10 @@ class BasePage:
         except StaleElementReferenceException:
             self.js_click(locator)
         except TimeoutException:
-            if self.is_displayed(self.error_404):
+            if self.page_403():
                 self.driver.back()
                 element.click()
-            elif self.is_displayed(self.error_403):
+            elif self.page_404():
                 self.driver.back()
                 element.click()
 
@@ -92,10 +106,10 @@ class BasePage:
         except StaleElementReferenceException:
             self.js_click(locator)
         except TimeoutException:
-            if self.is_displayed(self.error_404):
+            if self.page_403():
                 self.driver.back()
                 element.click()
-            elif self.is_displayed(self.error_403):
+            elif self.page_404():
                 self.driver.back()
                 element.click()
 
@@ -149,30 +163,45 @@ class BasePage:
         return element_attribute
 
     def is_selected(self, locator):
-        element = self.driver.find_element(*locator)
-        is_selected = element.is_selected()
+        try:
+            element = self.driver.find_element(*locator)
+            is_selected = element.is_selected()
+        except TimeoutException:
+            is_selected = False
         return bool(is_selected)
 
     def is_enabled(self, locator):
-        element = self.driver.find_element(*locator)
-        is_enabled = element.is_enabled()
+        try:
+            element = self.driver.find_element(*locator)
+            is_enabled = element.is_enabled()
+        except TimeoutException:
+            is_enabled = False
         return bool(is_enabled)
 
     def is_displayed(self, locator):
-        element = self.driver.find_element(*locator)
-        is_displayed = element.is_displayed()
+        try:
+            element = self.driver.find_element(*locator)
+            is_displayed = element.is_displayed()
+        except TimeoutException:
+            is_displayed = False
         return bool(is_displayed)
 
     def is_visible_and_displayed(self, locator, timeout=20):
-        visible = ec.visibility_of_element_located(locator)
-        element = WebDriverWait(self.driver, timeout).until(visible, message="Element" + str(locator) + "not displayed")
-        is_displayed = element.is_displayed()
+        try:
+            visible = ec.visibility_of_element_located(locator)
+            element = WebDriverWait(self.driver, timeout).until(visible, message="Element" + str(locator) + "not displayed")
+            is_displayed = element.is_displayed()
+        except TimeoutException:
+            is_displayed = False
         return bool(is_displayed)
 
     def is_present_and_displayed(self, locator, timeout=100):
-        visible = ec.presence_of_element_located(locator)
-        element = WebDriverWait(self.driver, timeout).until(visible, message="Element" + str(locator) + "not displayed")
-        is_displayed = element.is_displayed()
+        try:
+            visible = ec.presence_of_element_located(locator)
+            element = WebDriverWait(self.driver, timeout).until(visible, message="Element" + str(locator) + "not displayed")
+            is_displayed = element.is_displayed()
+        except TimeoutException:
+            is_displayed = False
         return bool(is_displayed)
 
     def switch_to_next_tab(self):
