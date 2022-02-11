@@ -248,11 +248,11 @@ class ReportPage(BasePage):
         # Get today's date
         presentday = datetime.now()  # or presentday = datetime.today()
         # Get Yesterday
-        yesterday = presentday - timedelta(1)
+        # yesterday = presentday - timedelta(1)
         # Get Tomorrow
-        tomorrow = presentday + timedelta(1)
+        # tomorrow = presentday + timedelta(1)
 
-        return yesterday.strftime('%Y-%m-%d')+" to "+tomorrow.strftime('%Y-%m-%d')
+        return presentday.strftime('%Y-%m-%d')+" to "+presentday.strftime('%Y-%m-%d')
 
     def verify_table_not_empty(self, locator):
         clickable = ec.presence_of_all_elements_located(locator)
@@ -267,6 +267,8 @@ class ReportPage(BasePage):
             return False
 
     def verify_form_data_submit_history(self, case_name):
+        print("Sleeping for sometime for the case to get registered.")
+        time.sleep(20)
         self.wait_to_click(self.submit_history_rep)
         self.wait_to_click(self.users_box)
         self.wait_to_click(self.select_user)
