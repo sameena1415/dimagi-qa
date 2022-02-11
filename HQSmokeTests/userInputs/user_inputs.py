@@ -27,12 +27,14 @@ class UserData:
     login_as = 'henry'
 
     # Export report names
-    form_export_name = "Form Export DSE"
-    case_export_name = "Case Export DSE"
-    dashboard_feed_form = "Dashboard Form feed"
-    dashboard_feed_case = "Dashboard Case feed"
-    odata_feed_form = "Odata Form feed"
-    odata_feed_case = "Odata Case feed"
+    form_export_name = "Smoke Form Export"
+    case_export_name = "Smoke Case Export"
+    form_export_name_dse = "Smoke Form Export DSE"
+    case_export_name_dse = "Smoke Case Export DSE"
+    dashboard_feed_form = "Smoke Dashboard Form feed"
+    dashboard_feed_case = "Smoke Dashboard Case feed"
+    odata_feed_form = "Smoke Odata Form feed"
+    odata_feed_case = "Smoke Odata Case feed"
 
     # Date Filter
     date_having_submissions = "2022-01-18 to 2022-02-18"

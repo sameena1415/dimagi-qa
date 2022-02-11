@@ -312,7 +312,7 @@ class ReportPage(BasePage):
         self.scroll_to_bottom()
         self.verify_table_not_empty(self.case_list_table)
         self.page_source_contains(case_name)
-        self.wait_to_click(By.LINK_TEXT, case_name)
+        self.wait_to_click(By.LINK_TEXT, str(case_name))
         self.switch_to_next_tab()
         time.sleep(3)
         self.page_source_contains(case_name)
