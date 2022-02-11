@@ -220,21 +220,30 @@ class ReportPage(BasePage):
         assert self.is_visible_and_displayed(self.saved_report_created)
         print("Report Saved successfully!")
 
-    def scheduled_report(self):
-        self.wait_to_click(self.scheduled_reports_menu_xpath)
-        time.sleep(2)
+    def create_scheduled_report_button(self):
+        self.wait_and_sleep_to_click(self.scheduled_reports_menu_xpath)
         self.wait_to_click(self.create_scheduled_report)
-        self.wait_to_click(self.available_reports)
+
+    def scheduled_report(self):
+        self.create_scheduled_report_button()
+        try:
+            self.wait_to_click(self.available_reports)
+        except TimeoutException:
+            self.saved_report()
+            self.create_scheduled_report_button()
+            self.wait_to_click(self.available_reports)
         self.wait_to_click(self.submit_id)
         assert self.is_visible_and_displayed(self.success_alert)
         print("Scheduled Report Created Successfully")
 
     def delete_scheduled_and_saved_reports(self):
         self.js_click(self.saved_reports_menu_link)
-        self.click(self.delete_saved)
-        print("Deleted Saved Report")
-        time.sleep(1)
-        self.click(self.scheduled_reports_menu_xpath)
+        try:
+            self.click(self.delete_saved)
+            print("Deleted Saved Report")
+        except NoSuchElementException:
+            print("Not such report found!")
+        self.wait_to_click(self.scheduled_reports_menu_xpath)
         try:
             self.wait_to_click(self.select_all)
             self.wait_to_click(self.delete_selected)
@@ -242,7 +251,7 @@ class ReportPage(BasePage):
             assert self.is_visible_and_displayed(self.delete_success_scheduled)
             print("Deleted Scheduled Report")
         except TimeoutException:
-            print("No exports available")
+            print("No reports available")
 
     def get_yesterday_tomorrow_dates(self):
         # Get today's date
@@ -303,7 +312,7 @@ class ReportPage(BasePage):
         self.scroll_to_bottom()
         self.verify_table_not_empty(self.case_list_table)
         self.page_source_contains(case_name)
-        self.wait_to_click_link(case_name)
+        self.wait_to_click(By.LINK_TEXT, case_name)
         self.switch_to_next_tab()
         time.sleep(3)
         self.page_source_contains(case_name)
