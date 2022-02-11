@@ -115,7 +115,7 @@ class ReportPage(BasePage):
             print("Button Disabled")
         try:
             assert self.is_visible_and_displayed(self.report_content_id)
-        except TimeoutException:
+        except (TimeoutException, AssertionError):
             assert self.is_visible_and_displayed(self.custom_report_content_id)
         print("Report loaded successfully!")
 
@@ -248,7 +248,7 @@ class ReportPage(BasePage):
             self.wait_to_click(self.select_all)
             self.wait_to_click(self.delete_selected)
             self.click(self.delete_scheduled_confirm)
-            assert self.is_visible_and_displayed(self.delete_success_scheduled)
+            self.is_visible_and_displayed(self.delete_success_scheduled)
             print("Deleted Scheduled Report")
         except TimeoutException:
             print("No reports available")
