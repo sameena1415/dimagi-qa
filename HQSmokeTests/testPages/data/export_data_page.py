@@ -161,12 +161,12 @@ class ExportDataPage(BasePage):
                 self.wait_and_sleep_to_click(self.prepare_export_button)
                 self.wait_and_sleep_to_click(self.download_button)
                 time.sleep(5)
-                newest_file = latest_download_file()
-                self.assert_downloaded_file(newest_file, UserData.form_export_name)
                 print("Download form button clicked")
 
     # Test Case 22_a -  Find Data By ID, forms
     def validate_downloaded_form_exports(self):
+        newest_file = latest_download_file()
+        self.assert_downloaded_file(newest_file, UserData.form_export_name)
         self.wait_and_sleep_to_click(self.find_data_by_ID)
         newest_file = latest_download_file()
         print("Newest file:" + newest_file)
@@ -206,12 +206,12 @@ class ExportDataPage(BasePage):
         self.wait_and_sleep_to_click(self.prepare_export_button)
         self.wait_and_sleep_to_click(self.download_button)
         time.sleep(3)
-        newest_file = latest_download_file()
-        self.assert_downloaded_file(newest_file, UserData.case_export_name)
         print("Download form button clicked")
 
     # Test Case 22_b - Find Data by ID for Case Exports
     def validate_downloaded_case_exports(self):
+        newest_file = latest_download_file()
+        self.assert_downloaded_file(newest_file, UserData.case_export_name)
         self.wait_and_sleep_to_click(self.find_data_by_ID)
         newest_file = latest_download_file()
         print("Newest file:" + newest_file)
