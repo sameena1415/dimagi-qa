@@ -1,3 +1,5 @@
+import time
+
 from selenium.webdriver.common.by import By
 from HQSmokeTests.testPages.base.base_page import BasePage
 
@@ -16,6 +18,7 @@ class ReassignCasesPage(BasePage):
         self.user_to_be_reassigned = (By.XPATH, "(//li[contains(.,'Active Mobile Worker')])[1]")
         self.submit = (By.XPATH, "(//button[text()='Reassign'])[1]")
         self.new_owner_name = (By.XPATH, "((//td)[4])[1]")
+        self.out_of_range = (By.XPATH, "(//span[@class='label label-warning'])[1]")
 
     def get_cases(self):
         self.wait_to_click(self.reassign_cases_menu)
@@ -29,6 +32,7 @@ class ReassignCasesPage(BasePage):
         assigned_username = self.get_text(self.user_to_be_reassigned).split('"')[0]
         self.move_to_element_and_click(self.user_to_be_reassigned)
         self.wait_to_click(self.submit)
+        self.is_visible_and_displayed(self.out_of_range)
         self.driver.refresh()
         reassigned_username = self.get_text(self.new_owner_name).split('@')[0]
         assert reassigned_username in assigned_username
