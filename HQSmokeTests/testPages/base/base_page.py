@@ -21,13 +21,14 @@ class BasePage:
         self.alert_button_accept = (By.ID, "hs-eu-confirmation-button")
         self.error_404 = (By.XPATH, "//h1[contains(text(),'404')]")
         self.error_403 = (By.XPATH, "//h1[text()='403 Forbidden']")
-        self.homepage = (By.XPATH, "//a[@href='/homepage/']")
 
     def wait_to_click(self, locator, timeout=12):
-        clickable = ec.element_to_be_clickable(locator)
-        element = WebDriverWait(self.driver, timeout).until(clickable, message="Couldn't find locator: "
-                                                                               + str(locator))
+        element = None
         try:
+            clickable = ec.element_to_be_clickable(locator)
+            element = WebDriverWait(self.driver, timeout).until(clickable,
+                                                                        message="Couldn't find locator: "
+                                                                                + str(locator))
             element.click()
         except ElementClickInterceptedException:
             if self.is_displayed(self.alert_button_accept):
@@ -41,7 +42,7 @@ class BasePage:
             self.js_click(locator)
         except TimeoutException:
             if self.is_displayed(self.error_404):
-                self.click(self.homepage)
+                self.driver.back()
                 element.click()
             elif self.is_displayed(self.error_403):
                 self.driver.back()
@@ -49,13 +50,17 @@ class BasePage:
 
     def wait_to_clear(self, locator, timeout=5):
         clickable = ec.visibility_of_element_located(locator)
-        element = WebDriverWait(self.driver, timeout).until(clickable, message="Couldn't find locator: " + str(locator))
+        element = WebDriverWait(self.driver, timeout).until(clickable,
+                                                                    message="Couldn't find locator: "
+                                                                            + str(locator))
         element.clear()
 
     def wait_to_send_keys(self, locator, user_input):
         clickable = ec.visibility_of_element_located(locator)
-        element = WebDriverWait(self.driver, 5).until(clickable, message="Couldn't find locator: " + str(locator))
-        element .send_keys(user_input)
+        element = WebDriverWait(self.driver, 5).until(clickable,
+                                                              message="Couldn't find locator: "
+                                                                      + str(locator))
+        element.send_keys(user_input)
 
     def wait_to_get_text(self, locator, timeout=20):
         clickable = ec.visibility_of_element_located(locator)
@@ -64,13 +69,17 @@ class BasePage:
 
     def wait_for_element(self, locator, timeout=20):
         clickable = ec.element_to_be_clickable(locator)
-        WebDriverWait(self.driver, timeout).until(clickable, message="Couldn't find locator: " + str(locator))
+        WebDriverWait(self.driver, timeout).until(clickable,
+                                                  message="Couldn't find locator: " + str(locator))
 
     def wait_and_sleep_to_click(self, locator, timeout=20):
-        time.sleep(4)
-        clickable = ec.element_to_be_clickable(locator)
-        element = WebDriverWait(self.driver, timeout).until(clickable, message="Couldn't find locator: " + str(locator))
+        element = None
         try:
+            time.sleep(4)
+            clickable = ec.element_to_be_clickable(locator)
+            element = WebDriverWait(self.driver, timeout).until(clickable,
+                                                                        message="Couldn't find locator: "
+                                                                                + str(locator))
             element.click()
         except ElementClickInterceptedException:
             if self.is_displayed(self.alert_button_accept):
@@ -84,7 +93,7 @@ class BasePage:
             self.js_click(locator)
         except TimeoutException:
             if self.is_displayed(self.error_404):
-                self.click(self.homepage)
+                self.driver.back()
                 element.click()
             elif self.is_displayed(self.error_403):
                 self.driver.back()
