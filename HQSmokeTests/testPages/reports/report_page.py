@@ -267,6 +267,8 @@ class ReportPage(BasePage):
             return False
 
     def verify_form_data_submit_history(self, case_name):
+        print("Sleeping for sometime for the case to get registered.")
+        time.sleep(20)
         self.wait_to_click(self.submit_history_rep)
         self.wait_to_click(self.users_box)
         self.wait_to_click(self.select_user)
