@@ -68,8 +68,8 @@ class ExportDataPage(BasePage):
         self.daily_saved_export_link = (By.LINK_TEXT, 'Daily Saved Exports')
         self.edit_form_case_export = (By.XPATH, "(//a[@data-bind='click: editExport'])[1]")
         self.create_DSE_checkbox = (By.XPATH, '//*[@id="daily-saved-export-checkbox"]')
-        self.download_dse_form = (By.XPATH, "(//span[text()='" + UserData.form_export_name + "']//following::a[@class='btn btn-info btn-xs'])[1]")
-        self.download_dse_case = (By.XPATH, "(//span[text()='" + UserData.case_export_name + "']//following::a[@class='btn btn-info btn-xs'])[1]")
+        self.download_dse_form = (By.XPATH, "(//span[text()='" + UserData.form_export_name_dse + "']//following::a[@class='btn btn-info btn-xs'])[1]")
+        self.download_dse_case = (By.XPATH, "(//span[text()='" + UserData.case_export_name_dse + "']//following::a[@class='btn btn-info btn-xs'])[1]")
         self.data_upload_msg = (By.XPATH, "//*[contains(text(),'Data update complete')]")
 
         # Excel Dashboard Integrations, form, case
@@ -80,8 +80,8 @@ class ExportDataPage(BasePage):
         self.case_type_dropdown = (By.XPATH, '//*[@id="div_id_case_type"]/div/span/span[1]/span')
         self.select_case_type = (By.XPATH, '//*[@id="select2-id_case_type-results"]/li')
         self.update_data = (By.XPATH, "//button[@data-toggle='modal'][1]")
-        self.form_update_data = (By.XPATH, "(//span[text()='" + UserData.form_export_name + "']//following::button[@data-toggle='modal'])[1]")
-        self.case_update_data = (By.XPATH, "(//span[text()='" + UserData.case_export_name + "']//following::button[@data-toggle='modal'])[1]")
+        self.form_update_data = (By.XPATH, "(//span[text()='" + UserData.form_export_name_dse + "']//following::button[@data-toggle='modal'])[1]")
+        self.case_update_data = (By.XPATH, "(//span[text()='" + UserData.case_export_name_dse + "']//following::button[@data-toggle='modal'])[1]")
         self.update_data_conf = (By.XPATH, "//button[@data-bind='click: emailedExport.updateData']")
         self.copy_dashfeed_link = (By.XPATH, "(//span[contains(@data-bind, 'copyLinkRequested')])[1]")
         self.dashboard_feed_link = (
@@ -144,6 +144,8 @@ class ExportDataPage(BasePage):
         self.wait_and_sleep_to_click(self.form_dropdown)
         self.wait_and_sleep_to_click(self.select_form)
         self.wait_and_sleep_to_click(self.add_export_conf)
+        self.wait_to_clear(self.export_name)
+        self.send_keys(self.export_name, UserData.form_export_name)
         self.wait_and_sleep_to_click(self.export_settings_create)
         print("Export created!!")
 
@@ -163,6 +165,8 @@ class ExportDataPage(BasePage):
 
     # Test Case 22_a -  Find Data By ID, forms
     def validate_downloaded_form_exports(self):
+        newest_file = latest_download_file()
+        self.assert_downloaded_file(newest_file, UserData.form_export_name)
         self.wait_and_sleep_to_click(self.find_data_by_ID)
         newest_file = latest_download_file()
         print("Newest file:" + newest_file)
@@ -190,6 +194,8 @@ class ExportDataPage(BasePage):
         self.wait_and_sleep_to_click(self.case_type_dropdown)
         self.wait_and_sleep_to_click(self.select_case_type)
         self.wait_and_sleep_to_click(self.add_export_conf)
+        self.wait_to_clear(self.export_name)
+        self.send_keys(self.export_name, UserData.form_export_name)
         self.wait_and_sleep_to_click(self.export_settings_create)
         print("Export created!!")
 
@@ -200,9 +206,12 @@ class ExportDataPage(BasePage):
         self.wait_and_sleep_to_click(self.prepare_export_button)
         self.wait_and_sleep_to_click(self.download_button)
         time.sleep(3)
+        print("Download form button clicked")
 
     # Test Case 22_b - Find Data by ID for Case Exports
     def validate_downloaded_case_exports(self):
+        newest_file = latest_download_file()
+        self.assert_downloaded_file(newest_file, UserData.case_export_name)
         self.wait_and_sleep_to_click(self.find_data_by_ID)
         newest_file = latest_download_file()
         print("Newest file:" + newest_file)
@@ -242,7 +251,7 @@ class ExportDataPage(BasePage):
             self.add_form_exports()
             self.wait_and_sleep_to_click(self.edit_form_case_export)
         self.wait_to_clear(self.export_name)
-        self.send_keys(self.export_name, UserData.form_export_name)
+        self.send_keys(self.export_name, UserData.form_export_name_dse)
         self.wait_and_sleep_to_click(self.create_DSE_checkbox)
         self.wait_and_sleep_to_click(self.export_settings_create)
         self.wait_and_sleep_to_click(self.update_data)
@@ -273,7 +282,7 @@ class ExportDataPage(BasePage):
             self.add_case_exports()
             self.wait_and_sleep_to_click(self.edit_form_case_export)
         self.wait_to_clear(self.export_name)
-        self.send_keys(self.export_name, UserData.case_export_name)
+        self.send_keys(self.export_name, UserData.case_export_name_dse)
         self.wait_and_sleep_to_click(self.create_DSE_checkbox)
         self.wait_and_sleep_to_click(self.export_settings_create)
         self.wait_and_sleep_to_click(self.update_data)

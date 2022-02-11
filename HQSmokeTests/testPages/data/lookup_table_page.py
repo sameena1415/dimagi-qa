@@ -44,7 +44,7 @@ class LookUpTablePage(BasePage):
         self.wait_to_click(self.view_tables_link)
         self.wait_to_click(self.select_table_drop_down)
         self.wait_to_click(self.select_table_from_dropdown)
-        self.wait_to_click(self.view_table)
+        self.js_click(self.view_table)
         assert self.is_present_and_displayed(self.column_name)
         print("LookUp Table can be viewed successfully!")
 

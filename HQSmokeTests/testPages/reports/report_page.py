@@ -1,5 +1,5 @@
 import time
-from datetime import datetime, timedelta
+from datetime import datetime
 
 from HQSmokeTests.testPages.base.base_page import BasePage
 from HQSmokeTests.userInputs.generate_random_string import fetch_random_string
@@ -115,7 +115,7 @@ class ReportPage(BasePage):
             print("Button Disabled")
         try:
             assert self.is_visible_and_displayed(self.report_content_id)
-        except TimeoutException:
+        except (TimeoutException, AssertionError):
             assert self.is_visible_and_displayed(self.custom_report_content_id)
         print("Report loaded successfully!")
 
@@ -248,7 +248,7 @@ class ReportPage(BasePage):
             self.wait_to_click(self.select_all)
             self.wait_to_click(self.delete_selected)
             self.click(self.delete_scheduled_confirm)
-            assert self.is_visible_and_displayed(self.delete_success_scheduled)
+            self.is_visible_and_displayed(self.delete_success_scheduled)
             print("Deleted Scheduled Report")
         except TimeoutException:
             print("No reports available")
@@ -296,8 +296,6 @@ class ReportPage(BasePage):
         print("View Form Link: ", form_link)
         self.switch_to_new_tab()
         self.driver.get(form_link)
-        # self.wait_and_sleep_to_click(self.view_form_link, 30)
-        # self.switch_to_next_tab()
         time.sleep(3)
         self.page_source_contains(case_name)
         assert True, "Case name is present in Submit history"
@@ -314,7 +312,7 @@ class ReportPage(BasePage):
         self.scroll_to_bottom()
         self.verify_table_not_empty(self.case_list_table)
         self.page_source_contains(case_name)
-        self.wait_to_click(By.LINK_TEXT, case_name)
+        self.wait_and_sleep_to_click((By.LINK_TEXT, str(case_name)))
         self.switch_to_next_tab()
         time.sleep(3)
         self.page_source_contains(case_name)
