@@ -36,6 +36,13 @@ class BasePage:
             self.page_403_displayed = False
         return self.page_403_displayed
 
+    def cookie_alert(self):
+        try:
+            self.cookie_alert_displayed = self.is_displayed(self.alert_button_accept)
+        except NoSuchElementException:
+            self.cookie_alert_displayed = False
+        return self.cookie_alert_displayed
+
     def wait_to_click(self, locator, timeout=12):
         element = None
         try:
@@ -45,7 +52,7 @@ class BasePage:
                                                                                 + str(locator))
             element.click()
         except ElementClickInterceptedException:
-            if self.is_displayed(self.alert_button_accept):
+            if self.cookie_alert():
                 self.click(self.alert_button_accept)
                 element.click()
         except UnexpectedAlertPresentException:
@@ -88,7 +95,7 @@ class BasePage:
                                                                                 + str(locator))
             element.click()
         except ElementClickInterceptedException:
-            if self.is_displayed(self.alert_button_accept):
+            if self.cookie_alert():
                 self.click(self.alert_button_accept)
                 element.click()
         except UnexpectedAlertPresentException:
@@ -178,7 +185,7 @@ class BasePage:
             is_displayed = False
         return bool(is_displayed)
 
-    def is_visible_and_displayed(self, locator, timeout=20):
+    def is_visible_and_displayed(self, locator, timeout=30):
         try:
             visible = ec.visibility_of_element_located(locator)
             element = WebDriverWait(self.driver, timeout).until(visible, message="Element" + str(locator) + "not displayed")

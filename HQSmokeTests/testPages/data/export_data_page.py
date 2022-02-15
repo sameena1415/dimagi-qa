@@ -153,6 +153,7 @@ class ExportDataPage(BasePage):
 
     def add_form_exports(self):
         self.wait_and_sleep_to_click(self.add_export_button)
+        self.is_visible_and_displayed(self.app_type)
         self.select_by_text(self.app_type, UserData.app_type)
         self.select_by_text(self.application, UserData.village_application)
         self.select_by_text(self.module, UserData.case_list_name)
@@ -171,6 +172,7 @@ class ExportDataPage(BasePage):
     def add_case_exports(self):
         self.wait_to_click(self.export_case_data_link)
         self.wait_and_sleep_to_click(self.add_export_button)
+        self.is_visible_and_displayed(self.application)
         self.select_by_text(self.application, UserData.village_application)
         self.select_by_text(self.case, UserData.case_pregnancy)
         self.wait_to_click(self.add_export_conf)
@@ -238,6 +240,7 @@ class ExportDataPage(BasePage):
     def excel_dashboard_integration_form(self):
         self.wait_and_sleep_to_click(self.export_excel_dash_int)
         self.wait_and_sleep_to_click(self.add_export_button)
+        self.is_visible_and_displayed(self.model)
         self.select_by_text(self.model, UserData.model_type_form)
         self.select_by_text(self.app_type, UserData.app_type)
         self.select_by_text(self.application, UserData.village_application)
@@ -259,6 +262,7 @@ class ExportDataPage(BasePage):
     def excel_dashboard_integration_case(self):
         self.wait_and_sleep_to_click(self.export_excel_dash_int)
         self.wait_and_sleep_to_click(self.add_export_button)
+        self.is_visible_and_displayed(self.model)
         self.select_by_text(self.model, UserData.model_type_case)
         self.select_by_text(self.application, UserData.village_application)
         self.select_by_text(self.case, UserData.case_pregnancy)
@@ -298,6 +302,7 @@ class ExportDataPage(BasePage):
         except ElementClickInterceptedException:
             self.js_click(self.powerBI_tab_int)
         self.wait_and_sleep_to_click(self.add_export_button)
+        self.is_visible_and_displayed(self.model)
         self.select_by_text(self.model, UserData.model_type_form)
         self.select_by_text(self.app_type, UserData.app_type)
         self.select_by_text(self.application, UserData.village_application)
@@ -319,6 +324,7 @@ class ExportDataPage(BasePage):
         self.driver.refresh()
         self.wait_to_click(self.powerBI_tab_int)
         self.wait_to_click(self.add_export_button)
+        self.is_visible_and_displayed(self.model)
         self.select_by_text(self.model, UserData.model_type_case)
         self.select_by_text(self.application, UserData.village_application)
         self.select_by_text(self.case, UserData.case_pregnancy)
