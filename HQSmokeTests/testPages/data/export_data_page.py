@@ -150,6 +150,7 @@ class ExportDataPage(BasePage):
         self.switch_back_to_prev_tab()
 
     # Test Case 20_a - Verify Export functionality for Forms
+
     def add_form_exports(self):
         self.wait_and_sleep_to_click(self.add_export_button)
         self.select_by_text(self.app_type, UserData.app_type)
@@ -166,6 +167,7 @@ class ExportDataPage(BasePage):
         self.find_data_by_id_and_verify('form.womans_name', 'formid', UserData.form_export_name, self.woman_form_name_HQ)
 
     # Test Case 20_b - Verify Export functionality for Cases
+
     def add_case_exports(self):
         self.wait_to_click(self.export_case_data_link)
         self.wait_and_sleep_to_click(self.add_export_button)
@@ -182,6 +184,7 @@ class ExportDataPage(BasePage):
         self.find_data_by_id_and_verify('name', 'caseid', UserData.case_export_name, self.woman_case_name_HQ)
 
     # Test Case 21 - Export SMS Messages
+
     def sms_exports(self):
         self.wait_and_sleep_to_click(self.export_sms_link)
         self.prepare_and_download_export()
@@ -193,8 +196,7 @@ class ExportDataPage(BasePage):
     def create_dse_and_download(self, exported_file):
         self.wait_to_click(self.create_DSE_checkbox)
         self.wait_to_click(self.export_settings_create)
-        self.wait_to_click(self.update_data)
-        time.sleep(2)
+        self.wait_and_sleep_to_click(self.update_data)
         self.wait_to_click(self.update_data_conf)
         assert self.is_visible_and_displayed(self.data_upload_msg)
         self.driver.refresh()
@@ -248,24 +250,9 @@ class ExportDataPage(BasePage):
         print("Dashboard Form Feed created!!")
         self.wait_and_sleep_to_click(self.update_data)
         self.wait_and_sleep_to_click(self.update_data_conf)
-        time.sleep(2)
+        assert self.is_visible_and_displayed(self.data_upload_msg)
         self.driver.refresh()
-        try:
-            time.sleep(2)
-            self.click(self.copy_dashfeed_link)
-            dashboard_feed_link = self.get_attribute(self.dashboard_feed_link, "href")
-            print("Feed Link: " + dashboard_feed_link)
-            self.switch_to_new_tab()
-            self.driver.get(dashboard_feed_link)
-            dashboard_feed_data = self.driver.page_source
-            if dashboard_feed_data != "":
-                print("Excel Dashboard form has data")
-            else:
-                print("Excel Dashboard (form) is empty")
-            self.driver.close()
-            self.switch_back_to_prev_tab()
-        except StaleElementReferenceException:
-            print(StaleElementReferenceException)
+        self.check_feed_link()
 
     # Test Case - 25 - Excel Dashboard Integration, case
 
@@ -282,26 +269,29 @@ class ExportDataPage(BasePage):
         print("Dashboard Form Feed created!!")
         self.wait_and_sleep_to_click(self.update_data)
         self.wait_and_sleep_to_click(self.update_data_conf)
-        time.sleep(2)
+        assert self.is_visible_and_displayed(self.data_upload_msg)
         self.driver.refresh()
+        self.check_feed_link()
+
+    def check_feed_link(self):
         try:
-            time.sleep(2)
-            self.click(self.copy_dashfeed_link)
+            self.wait_and_sleep_to_click(self.copy_dashfeed_link)
             dashboard_feed_link = self.get_attribute(self.dashboard_feed_link, "href")
             print(dashboard_feed_link)
             self.switch_to_new_tab()
             self.driver.get(dashboard_feed_link)
             dashboard_feed_data = self.driver.page_source
             if dashboard_feed_data != "":
-                print("Excel Dashboard (case) has data")
+                print("Excel Dashboard has data")
             else:
-                print("Excel Dashboard (case) is empty")
+                print("Excel Dashboard is empty")
             self.driver.close()
             self.switch_back_to_prev_tab()
         except StaleElementReferenceException:
             print(StaleElementReferenceException)
 
     # Test Case - 28 - Power BI / Tableau Integration, Form
+
     def power_bi_tableau_integration_form(self, username, password):
         try:
             self.wait_and_sleep_to_click(self.powerBI_tab_int)
@@ -332,7 +322,6 @@ class ExportDataPage(BasePage):
         self.select_by_text(self.model, UserData.model_type_case)
         self.select_by_text(self.application, UserData.village_application)
         self.select_by_text(self.case, UserData.case_pregnancy)
-        self.select_by_text(self.case, "pregnancy")
         self.wait_and_sleep_to_click(self.add_export_conf)
         print("Odata Case Feed added!!")
         time.sleep(5)
