@@ -6,7 +6,6 @@ def test_case_21_form_exports(driver):
     export.data_tab()
     export.add_form_exports()
     export.form_exports()
-    export.validate_downloaded_form_exports()
 
 
 def test_case_21_case_exports(driver):
@@ -14,7 +13,6 @@ def test_case_21_case_exports(driver):
     export.data_tab()
     export.add_case_exports()
     export.case_exports()
-    export.validate_downloaded_case_exports()
 
 
 def test_case_22_sms_exports(driver):

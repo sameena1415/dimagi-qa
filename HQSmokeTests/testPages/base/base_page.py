@@ -62,18 +62,10 @@ class BasePage:
                 self.driver.back()
                 element.click()
 
-    def wait_to_clear(self, locator, timeout=5):
+    def wait_to_clear_and_send_keys(self, locator, user_input):
         clickable = ec.visibility_of_element_located(locator)
-        element = WebDriverWait(self.driver, timeout).until(clickable,
-                                                                    message="Couldn't find locator: "
-                                                                            + str(locator))
+        element = WebDriverWait(self.driver, 5).until(clickable, message="Couldn't find locator: " + str(locator))
         element.clear()
-
-    def wait_to_send_keys(self, locator, user_input):
-        clickable = ec.visibility_of_element_located(locator)
-        element = WebDriverWait(self.driver, 5).until(clickable,
-                                                              message="Couldn't find locator: "
-                                                                      + str(locator))
         element.send_keys(user_input)
 
     def wait_to_get_text(self, locator, timeout=20):
@@ -89,7 +81,7 @@ class BasePage:
     def wait_and_sleep_to_click(self, locator, timeout=20):
         element = None
         try:
-            time.sleep(4)
+            time.sleep(5)
             clickable = ec.element_to_be_clickable(locator)
             element = WebDriverWait(self.driver, timeout).until(clickable,
                                                                         message="Couldn't find locator: "
