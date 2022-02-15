@@ -81,7 +81,7 @@ class BasePage:
     def wait_and_sleep_to_click(self, locator, timeout=20):
         element = None
         try:
-            time.sleep(5)
+            time.sleep(3)
             clickable = ec.element_to_be_clickable(locator)
             element = WebDriverWait(self.driver, timeout).until(clickable,
                                                                         message="Couldn't find locator: "

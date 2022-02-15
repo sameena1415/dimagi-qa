@@ -105,9 +105,9 @@ class ExportDataPage(BasePage):
         self.driver.get(final_URL_case)
 
     def date_filter(self):
-        self.wait_to_click(self.date_range)
+        self.wait_and_sleep_to_click(self.date_range)
         self.wait_to_clear_and_send_keys(self.date_range, self.date_having_submissions)
-        self.wait_to_click(self.apply)
+        self.wait_and_sleep_to_click(self.apply)
 
     def data_tab(self):
         self.wait_to_click(self.data_dropdown)
