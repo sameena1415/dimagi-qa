@@ -5,7 +5,8 @@ import pandas as pd
 from HQSmokeTests.testPages.base.base_page import BasePage
 from HQSmokeTests.userInputs.user_inputs import UserData
 
-from selenium.common.exceptions import StaleElementReferenceException, TimeoutException, ElementClickInterceptedException
+from selenium.common.exceptions import StaleElementReferenceException, TimeoutException, \
+    ElementClickInterceptedException, NoSuchElementException
 from selenium.webdriver.common.by import By
 
 
@@ -196,10 +197,10 @@ class ExportDataPage(BasePage):
         print("SMS Export successful")
 
     def create_dse_and_download(self, exported_file):
-        self.wait_to_click(self.create_DSE_checkbox)
-        self.wait_to_click(self.export_settings_create)
+        self.wait_and_sleep_to_click(self.create_DSE_checkbox)
+        self.wait_and_sleep_to_click(self.export_settings_create)
         self.wait_and_sleep_to_click(self.update_data)
-        self.wait_to_click(self.update_data_conf)
+        self.wait_and_sleep_to_click(self.update_data_conf)
         assert self.is_visible_and_displayed(self.data_upload_msg)
         self.driver.refresh()
         self.wait_and_sleep_to_click(self.download_dse)
@@ -210,14 +211,10 @@ class ExportDataPage(BasePage):
 
     # Test Case 23_a - Daily saved export, form
     def daily_saved_exports_form(self):
-        # Clean any existing export
-        self.wait_and_sleep_to_click(self.daily_saved_export_link)
-        self.delete_bulk_exports()
-        print("Bulk exports deleted for Daily Saved Export Cases")
-        self.wait_to_click(self.export_case_data_link)
+        self.wait_and_sleep_to_click(self.export_form_data_link)
         try:
-            self.wait_to_click(self.edit_form_case_export)
-        except TimeoutException:
+            self.click(self.edit_form_case_export)
+        except NoSuchElementException:
             self.add_form_exports()
             self.wait_and_sleep_to_click(self.edit_form_case_export)
         self.wait_to_clear_and_send_keys(self.export_name, UserData.form_export_name_dse)
@@ -226,10 +223,10 @@ class ExportDataPage(BasePage):
 
     # Test Case 23_b - Daily saved export, case
     def daily_saved_exports_case(self):
-        self.wait_to_click(self.export_case_data_link)
+        self.wait_and_sleep_to_click(self.export_case_data_link)
         try:
-            self.wait_to_click(self.edit_form_case_export)
-        except TimeoutException:
+            self.click(self.edit_form_case_export)
+        except NoSuchElementException:
             self.add_case_exports()
             self.wait_and_sleep_to_click(self.edit_form_case_export)
         self.wait_to_clear_and_send_keys(self.export_name, UserData.case_export_name_dse)
@@ -241,7 +238,7 @@ class ExportDataPage(BasePage):
         self.wait_and_sleep_to_click(self.export_excel_dash_int)
         self.wait_and_sleep_to_click(self.add_export_button)
         self.is_visible_and_displayed(self.model)
-        self.select_by_text(self.model, UserData.model_type_form)
+        self.select_by_value(self.model, UserData.model_type_form)
         self.select_by_text(self.app_type, UserData.app_type)
         self.select_by_text(self.application, UserData.village_application)
         self.select_by_text(self.module, UserData.case_list_name)
@@ -263,7 +260,7 @@ class ExportDataPage(BasePage):
         self.wait_and_sleep_to_click(self.export_excel_dash_int)
         self.wait_and_sleep_to_click(self.add_export_button)
         self.is_visible_and_displayed(self.model)
-        self.select_by_text(self.model, UserData.model_type_case)
+        self.select_by_value(self.model, UserData.model_type_case)
         self.select_by_text(self.application, UserData.village_application)
         self.select_by_text(self.case, UserData.case_pregnancy)
         self.wait_and_sleep_to_click(self.add_export_conf)
@@ -303,7 +300,7 @@ class ExportDataPage(BasePage):
             self.js_click(self.powerBI_tab_int)
         self.wait_and_sleep_to_click(self.add_export_button)
         self.is_visible_and_displayed(self.model)
-        self.select_by_text(self.model, UserData.model_type_form)
+        self.select_by_value(self.model, UserData.model_type_form)
         self.select_by_text(self.app_type, UserData.app_type)
         self.select_by_text(self.application, UserData.village_application)
         self.select_by_text(self.module, UserData.case_list_name)
@@ -325,7 +322,7 @@ class ExportDataPage(BasePage):
         self.wait_to_click(self.powerBI_tab_int)
         self.wait_to_click(self.add_export_button)
         self.is_visible_and_displayed(self.model)
-        self.select_by_text(self.model, UserData.model_type_case)
+        self.select_by_value(self.model, UserData.model_type_case)
         self.select_by_text(self.application, UserData.village_application)
         self.select_by_text(self.case, UserData.case_pregnancy)
         self.wait_and_sleep_to_click(self.add_export_conf)
