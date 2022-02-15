@@ -24,6 +24,7 @@ def test_case_22_sms_exports(driver):
 def test_case_24_daily_saved_exports(driver):
     export = ExportDataPage(driver)
     export.data_tab()
+    export.cleanup_existing_dse()
     export.daily_saved_exports_form()
     export.daily_saved_exports_case()
 

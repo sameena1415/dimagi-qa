@@ -209,6 +209,11 @@ class ExportDataPage(BasePage):
         print("Newest:", newest_file)
         self.assert_downloaded_file(newest_file, exported_file)
 
+    def cleanup_existing_dse(self):
+        # Cleanup existing exports
+        self.wait_and_sleep_to_click(self.daily_saved_export_link)
+        self.delete_bulk_exports()
+
     # Test Case 23_a - Daily saved export, form
     def daily_saved_exports_form(self):
         self.wait_and_sleep_to_click(self.export_form_data_link)
