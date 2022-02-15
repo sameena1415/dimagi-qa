@@ -313,7 +313,7 @@ class MessagingPage(BasePage):
         self.wait_to_click(self.cond_alerts)
         time.sleep(2)
         self.driver.refresh()
-        self.wait_to_send_keys(self.search_box, self.cond_alert_name_input)
+        self.wait_to_clear_and_send_keys(self.search_box, self.cond_alert_name_input)
         self.wait_to_click(self.search_box)
         time.sleep(3)
         self.wait_to_click(self.delete_cond_alert)
@@ -322,7 +322,7 @@ class MessagingPage(BasePage):
         try:
             time.sleep(2)
             self.driver.refresh()
-            self.wait_to_send_keys(self.search_box, self.cond_alert_name_input)
+            self.wait_to_clear_and_send_keys(self.search_box, self.cond_alert_name_input)
             self.wait_to_click(self.search_box)
             time.sleep(3)
             isPresent = self.is_displayed(self.cond_alert_created)

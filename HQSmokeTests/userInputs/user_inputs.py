@@ -14,17 +14,22 @@ class UserData:
 
     """User Test Data"""
 
-    # Pre-setup application names
+    # Pre-setup application and case names
     village_application = "Village Health"
     reassign_cases_application = 'Reassign Cases'
+    case_pregnancy = "pregnancy"
+    model_type_case = "case"
+    model_type_form = "form"
 
-    #invite_web_user user email
+    # invite_web_user user email
     web_user_mail = 'automation.user.commcarehq+test@gmail.com'
 
-    #web app
+    #  web app
+    app_type = "Applications"
     case_list_name = 'Case List'
     form_name = 'Registration Form'
     login_as = 'henry'
+
 
     # Export report names
     form_export_name = "Smoke Form Export"

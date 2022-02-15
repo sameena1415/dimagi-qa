@@ -48,7 +48,7 @@ class WebAppsPage(BasePage):
         self.wait_to_click(self.web_app_link)
         self.wait_to_click(self.case_list_link)
         self.wait_to_click(self.form_link)
-        self.wait_to_send_keys(self.form_case_name_input, self.case_name_created)
+        self.wait_to_clear_and_send_keys(self.form_case_name_input, self.case_name_created)
         self.wait_to_click(self.form_submit_button)
         assert self.is_displayed(self.success_message), "Form not submitted"
         print("Form successfully submitted")
