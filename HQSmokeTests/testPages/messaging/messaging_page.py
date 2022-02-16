@@ -5,7 +5,8 @@ from HQSmokeTests.userInputs.generate_random_string import fetch_random_string
 from HQSmokeTests.userInputs.user_inputs import UserData
 from HQSmokeTests.testPages.users.org_structure_page import latest_download_file
 
-from selenium.common.exceptions import NoSuchElementException, StaleElementReferenceException, TimeoutException
+from selenium.common.exceptions import NoSuchElementException, StaleElementReferenceException, TimeoutException, \
+    NoAlertPresentException
 from selenium.webdriver.common.by import By
 
 
@@ -318,7 +319,7 @@ class MessagingPage(BasePage):
         try:
             obj = self.driver.switch_to.alert
             obj.accept()
-        except NoSuchElementException:
+        except NoAlertPresentException:
             raise AssertionError("Celery down")
         try:
             time.sleep(2)

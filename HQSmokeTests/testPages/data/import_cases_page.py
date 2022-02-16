@@ -43,4 +43,4 @@ class ImportCasesPage(BasePage):
         self.wait_to_click(self.next_step)
         self.wait_to_click(self.next_step)
         print("Imported case!")
-        assert self.is_visible_and_displayed(self.success)
+        assert self.is_visible_and_displayed(self.success), "Waitinng to start import. Celery might have a high queue."
