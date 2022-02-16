@@ -89,8 +89,7 @@ class OrganisationStructurePage(BasePage):
 
     def create_location(self):
         self.wait_to_click(self.add_loc_btn_xpath)
-        self.clear(self.loc_name_xpath)
-        self.send_keys(self.loc_name_xpath, self.new_location_name)
+        self.wait_to_clear_and_send_keys(self.loc_name_xpath, self.new_location_name)
         self.click(self.create_loc_xpath)
         assert self.is_present_and_displayed(self.loc_saved_success_msg), "Location not created!"
         self.wait_to_click(self.org_menu_link_text)
@@ -104,8 +103,7 @@ class OrganisationStructurePage(BasePage):
         try:
             self.wait_to_click(self.org_menu_link_text)
             self.click(self.edit_loc_button_xpath)
-            self.clear(self.loc_name_input_id)
-            self.send_keys(self.loc_name_input_id, "updated_on:" + str(date.today()))
+            self.wait_to_clear_and_send_keys(self.loc_name_input_id, "updated_on:" + str(date.today()))
             self.click(self.update_loc_xpath)
             time.sleep(2)
             assert self.is_visible_and_displayed(self.loc_saved_success_msg),  "Location editing not successful!"
@@ -119,12 +117,10 @@ class OrganisationStructurePage(BasePage):
         self.click(self.org_menu_link_text)
         self.wait_to_click(self.edit_loc_field_btn_xpath)
         self.wait_to_click(self.add_field_btn_xpath)
-        self.clear(self.loc_property_xpath)
-        self.send_keys(self.loc_property_xpath, self.loc_field_name)
-        self.clear(self.loc_label_xpath)
-        self.send_keys(self.loc_label_xpath, self.loc_field_name)
+        self.wait_to_clear_and_send_keys(self.loc_property_xpath, self.loc_field_name)
+        self.wait_to_clear_and_send_keys(self.loc_label_xpath, self.loc_field_name)
         self.click(self.add_choice_btn_xpath)
-        self.send_keys(self.choice_xpath, self.loc_field_name)
+        self.wait_to_clear_and_send_keys(self.choice_xpath, self.loc_field_name)
         self.click(self.save_btn_id)
         assert self.is_displayed(self.success_msg_xpath), "Location field edit not successful!"
         self.driver.refresh()
@@ -143,7 +139,7 @@ class OrganisationStructurePage(BasePage):
     def create_org_level(self):
         self.click(self.org_level_menu_link_text)
         self.wait_to_click(self.new_org_level_btn_xpath)
-        self.send_keys(self.org_level_value_xpath, self.loc_level_name)
+        self.wait_to_clear_and_send_keys(self.org_level_value_xpath, self.loc_level_name)
         self.wait_to_click(self.save_btn_xpath)
 
     def download_locations(self):

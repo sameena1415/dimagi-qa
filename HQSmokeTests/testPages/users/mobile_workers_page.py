@@ -82,7 +82,7 @@ class MobileWorkerPage(BasePage):
         self.error_403 = (By.XPATH, "//h1[text()='403 Forbidden']")
 
     def search_user(self):
-        self.wait_to_send_keys(self.search_mw, self.username)
+        self.wait_to_clear_and_send_keys(self.search_mw, self.username)
         time.sleep(2)
         self.wait_to_click(self.search_button_mw)
 
@@ -230,7 +230,8 @@ class MobileWorkerPage(BasePage):
         try:
             self.wait_to_click(self.actions_tab_link_text)
             self.wait_to_click(self.delete_mobile_worker)
-            self.wait_to_send_keys(self.enter_username, self.username + "@" + self.get_domain() + ".commcarehq.org")
+            self.wait_to_clear_and_send_keys(self.enter_username, self.username + "@" + self.get_domain()
+                                             + ".commcarehq.org")
             self.wait_to_click(self.confirm_delete_mw)
         except (TimeoutException, NoSuchElementException):
             print("TIMEOUT ERROR: Could not delete the mobile worker")

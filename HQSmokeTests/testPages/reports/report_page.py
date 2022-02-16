@@ -247,7 +247,7 @@ class ReportPage(BasePage):
         try:
             self.wait_to_click(self.select_all)
             self.wait_to_click(self.delete_selected)
-            self.click(self.delete_scheduled_confirm)
+            self.wait_to_click(self.delete_scheduled_confirm)
             self.is_visible_and_displayed(self.delete_success_scheduled)
             print("Deleted Scheduled Report")
         except TimeoutException:

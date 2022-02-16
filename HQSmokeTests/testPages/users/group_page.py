@@ -37,7 +37,7 @@ class GroupPage(BasePage):
 
     def add_group(self):
         self.click_group_menu()
-        self.wait_to_send_keys(self.group_name, self.created_group)
+        self.wait_to_clear_and_send_keys(self.group_name, self.created_group)
         self.wait_to_click(self.add_group_button)
         assert self.is_visible_and_displayed(self.group_created_success), "Group not created successfully"
         print("Group Added")
@@ -58,8 +58,7 @@ class GroupPage(BasePage):
         self.wait_to_click(self.created_group_path)
         self.accept_pop_up()
         self.wait_to_click(self.edit_settings)
-        self.wait_to_clear(self.group_name_input)
-        self.send_keys(self.group_name_input, self.renamed_group)
+        self.wait_to_clear_and_send_keys(self.group_name_input, self.renamed_group)
         self.click(self.save_button)
         assert self.is_visible_and_displayed(self.success_alert), "Group could not be renamed"
         print("Renamed a group")
