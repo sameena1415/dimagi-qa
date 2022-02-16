@@ -112,6 +112,7 @@ class ExportDataPage(BasePage):
         self.wait_and_sleep_to_click(self.apply)
 
     def data_tab(self):
+        self.driver.refresh()
         self.wait_to_click(self.data_dropdown)
         self.wait_to_click(self.view_all_link)
 
