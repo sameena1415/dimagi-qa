@@ -202,7 +202,7 @@ class ExportDataPage(BasePage):
         self.wait_and_sleep_to_click(self.export_settings_create)
         self.wait_and_sleep_to_click(self.update_data)
         self.wait_and_sleep_to_click(self.update_data_conf)
-        assert self.is_visible_and_displayed(self.data_upload_msg)
+        assert self.is_visible_and_displayed(self.data_upload_msg), "Export not completed!"
         self.driver.refresh()
         self.wait_and_sleep_to_click(self.download_dse)
         time.sleep(5)
@@ -256,7 +256,7 @@ class ExportDataPage(BasePage):
         print("Dashboard Form Feed created!!")
         self.wait_and_sleep_to_click(self.update_data)
         self.wait_and_sleep_to_click(self.update_data_conf)
-        assert self.is_visible_and_displayed(self.data_upload_msg)
+        assert self.is_visible_and_displayed(self.data_upload_msg), "Export not completed!"
         self.driver.refresh()
         self.check_feed_link()
 
@@ -276,7 +276,7 @@ class ExportDataPage(BasePage):
         print("Dashboard Form Feed created!!")
         self.wait_and_sleep_to_click(self.update_data)
         self.wait_and_sleep_to_click(self.update_data_conf)
-        assert self.is_visible_and_displayed(self.data_upload_msg)
+        assert self.is_visible_and_displayed(self.data_upload_msg), "Export not completed!"
         self.driver.refresh()
         self.check_feed_link()
 

@@ -310,21 +310,21 @@ class MessagingPage(BasePage):
             print("Structured keyword removed successfully!")
 
     def remove_cond_alert(self):
-        self.wait_to_click(self.cond_alerts)
-        time.sleep(2)
+        self.wait_and_sleep_to_click(self.cond_alerts)
         self.driver.refresh()
         self.wait_to_clear_and_send_keys(self.search_box, self.cond_alert_name_input)
-        self.wait_to_click(self.search_box)
-        time.sleep(3)
+        self.wait_and_sleep_to_click(self.search_box)
         self.wait_to_click(self.delete_cond_alert)
-        obj = self.driver.switch_to.alert
-        obj.accept()
+        try:
+            obj = self.driver.switch_to.alert
+            obj.accept()
+        except NoSuchElementException:
+            raise AssertionError("Celery down")
         try:
             time.sleep(2)
             self.driver.refresh()
             self.wait_to_clear_and_send_keys(self.search_box, self.cond_alert_name_input)
-            self.wait_to_click(self.search_box)
-            time.sleep(3)
+            self.wait_and_sleep_to_click(self.search_box)
             isPresent = self.is_displayed(self.cond_alert_created)
         except NoSuchElementException:
             isPresent = False
