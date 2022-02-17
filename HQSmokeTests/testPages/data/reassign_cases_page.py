@@ -1,7 +1,6 @@
-import time
-
 from selenium.webdriver.common.by import By
 from HQSmokeTests.testPages.base.base_page import BasePage
+from HQSmokeTests.userInputs.user_inputs import UserData
 
 
 class ReassignCasesPage(BasePage):
@@ -11,7 +10,7 @@ class ReassignCasesPage(BasePage):
 
         self.reassign_cases_menu = (By.LINK_TEXT, "Reassign Cases")
         self.apply = (By.ID, "apply-btn")
-        self.case_type = (By.ID, "select2-report_filter_case_type-container")
+        self.case_type = (By.ID, "report_filter_case_type")
         self.case_type_option_value = (By.XPATH, "//option[@value='reassign']")
         self.select_first_case = (By.XPATH, "(//input[@type='checkbox'])[1]")
         self.user_search_dropdown = (By.ID, "select2-reassign_owner_select-container")
@@ -22,8 +21,7 @@ class ReassignCasesPage(BasePage):
 
     def get_cases(self):
         self.wait_to_click(self.reassign_cases_menu)
-        self.wait_to_click(self.case_type)
-        self.wait_to_click(self.case_type_option_value)
+        self.select_by_value(self.case_type, UserData.case_reassign)
         self.wait_to_click(self.apply)
 
     def reassign_case(self):
