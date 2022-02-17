@@ -108,18 +108,15 @@ class ApplicationPage(BasePage):
         except TimeoutException:
             self.wait_to_click(self.form_settings)
             self.wait_to_click(self.actions_tab)
-        self.wait_to_click(self.download_xml)
-        time.sleep(1)
-        self.wait_to_click(self.add_form_button)
-        time.sleep(1)
+        self.wait_and_sleep_to_click(self.download_xml)
+        self.wait_and_sleep_to_click(self.add_form_button)
         try:
-            self.wait_to_click(self.register_form)
-            time.sleep(2)
+            self.wait_and_sleep_to_click(self.register_form)
         except TimeoutException:
             self.driver.refresh()
-        self.wait_to_click(self.new_form_settings)
-        self.wait_to_click(self.actions_tab)
-        self.wait_to_click(self.upload_xml)
+        self.wait_and_sleep_to_click(self.new_form_settings)
+        self.wait_and_sleep_to_click(self.actions_tab)
+        self.wait_and_sleep_to_click(self.upload_xml)
         newest_file = latest_download_file()
         file_that_was_downloaded = UserData.DOWNLOAD_PATH / newest_file
         self.send_keys(self.choose_file, str(file_that_was_downloaded))
