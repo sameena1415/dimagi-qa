@@ -18,6 +18,7 @@ class UserData:
     village_application = "Village Health"
     reassign_cases_application = 'Reassign Cases'
     case_pregnancy = "pregnancy"
+    case_reassign = "reassign"
     model_type_case = "case"
     model_type_form = "form"
 
