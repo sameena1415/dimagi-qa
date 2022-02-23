@@ -294,13 +294,13 @@ class ReportPage(BasePage):
         self.is_present_and_displayed(self.view_form_link)
         form_link = self.get_attribute(self.view_form_link, "href")
         print("View Form Link: ", form_link)
-        self.switch_to_new_tab()
+        # self.switch_to_new_tab()
         self.driver.get(form_link)
         time.sleep(3)
         self.page_source_contains(case_name)
         assert True, "Case name is present in Submit history"
-        self.driver.close()
-        self.switch_back_to_prev_tab()
+        # self.driver.close()
+        # self.switch_back_to_prev_tab()
 
     def verify_form_data_case_list(self, case_name):
         self.wait_to_click(self.case_list_rep)
@@ -313,12 +313,12 @@ class ReportPage(BasePage):
         self.verify_table_not_empty(self.case_list_table)
         self.page_source_contains(case_name)
         self.wait_and_sleep_to_click((By.LINK_TEXT, str(case_name)))
-        self.switch_to_next_tab()
+        # self.switch_to_next_tab()
         time.sleep(3)
         self.page_source_contains(case_name)
         assert True, "Case name is present in Case List"
-        self.driver.close()
-        self.switch_back_to_prev_tab()
+        # self.driver.close()
+        # self.switch_back_to_prev_tab()
 
 
     def verify_app_data_submit_history(self, case_name):
