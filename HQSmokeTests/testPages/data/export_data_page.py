@@ -293,7 +293,7 @@ class ExportDataPage(BasePage):
             else:
                 print("Excel Dashboard is empty")
             # self.driver.close()
-            # self.switch_back_to_prev_tab()
+            self.driver.back()
         except StaleElementReferenceException:
             print(StaleElementReferenceException)
 
@@ -377,4 +377,4 @@ class ExportDataPage(BasePage):
         assert odata_feed_data != ""  # This condition can be improvised
         print("Odata case feed has data")
         # self.driver.close()  # Close the feed URL
-        # self.switch_back_to_prev_tab()
+        self.driver.back()
