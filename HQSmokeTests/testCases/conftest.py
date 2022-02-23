@@ -54,11 +54,11 @@ def settings(environment_settings):
                 "for instructions on how to set them."
             )
         return settings
-    path = Path(__file__).parent.parent / "settings.cfg"
+    path = Path(__file__).parent.parent / "settings-sample.cfg"
     if not path.exists():
         raise RuntimeError(
             f"Not found: {path}\n\n"
-            "Copy settings-sample.cfg to settings.cfg and populate "
+            "Copy settings-sample.cfg to settings-sample.cfg and populate "
             "it with values for the environment you want to test."
         )
     settings = ConfigParser()
@@ -99,8 +99,10 @@ def driver(settings):
             "download.default_directory": str(UserData.DOWNLOAD_PATH),
             "download.prompt_for_download": False,
             "safebrowsing.enabled": True})
-    web_driver = Service(executable_path=ChromeDriverManager().install(), service_args=['--verbose', 'log_path="/logs/chrome.log"'])
-    driver = webdriver.Chrome(service=web_driver, options=chrome_options)
+
+    # web_driver = Service(executable_path=ChromeDriverManager().install(), service_args=['--verbose', 'log_path="/logs/chrome.log"'])
+    # driver = webdriver.Chrome(service=web_driver, options=chrome_options)
+    driver = webdriver.Chrome(executable_path=ChromeDriverManager().install(), options=chrome_options)
     print("Chrome version:", driver.capabilities['browserVersion'])
     login = LoginPage(driver, settings["url"])
     login.login(settings["login_username"], settings["login_password"])
