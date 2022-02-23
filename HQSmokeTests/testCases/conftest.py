@@ -29,7 +29,7 @@ def environment_settings():
             for instructions on how to set them.
             """
     settings = {}
-    for name in ["url", "login_username", "login_password", "mail_username", "mail_password"]:
+    for name in ["url", "login_username", "login_password", "mail_username", "mail_password","bs_user", "bs_key"]:
         var = f"DIMAGIQA_{name.upper()}"
         if var in os.environ:
             settings[name] = os.environ[var]
@@ -45,7 +45,7 @@ def settings(environment_settings):
     if os.environ.get("CI") == "true":
         settings = environment_settings
         settings["CI"] = "true"
-        if any(x not in settings for x in ["url", "login_username", "login_password", "mail_username", "mail_password"]):
+        if any(x not in settings for x in ["url", "login_username", "login_password", "mail_username", "mail_password", "bs_user", "bs_key"]):
             lines = environment_settings.__doc__.splitlines()
             vars_ = "\n  ".join(line.strip() for line in lines if "DIMAGIQA_" in line)
             raise RuntimeError(

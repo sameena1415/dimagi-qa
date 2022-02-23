@@ -38,12 +38,12 @@ def test_case_40_app_preview(driver):
     load.submit_form_on_app_preview()
 
 
-def test_case_38_create_new_build_deploy_to_mobile(driver):
+def test_case_38_create_new_build_deploy_to_mobile(driver, settings):
 
     load = ApplicationPage (driver)
     install_code, field_text = load.update_form_field()
     print(install_code, field_text)
-    mobile = AndroidScreen()
+    mobile = AndroidScreen(settings)
     mobile.install_app_and_submit_form(install_code, field_text)
     mobile.close_android_driver()
     home = HomePage(driver)

@@ -6,11 +6,11 @@ import time
 
 class AndroidScreen:
 
-    def __init__(self):
+    def __init__(self, settings):
         self.desired_cap = {
             # Set your access credentials
-            "browserstack.user": "dimagiqa_6Awyop",
-            "browserstack.key": "2XZYt9sKgfvUSbKEKNis",
+            "browserstack.user": settings["bs_user"],
+            "browserstack.key": settings["bs_key"],
 
             # Set URL of the application under test
             "app": "bs://f2623680346beb48d2d6f12d5e2f8628f3e2278e",
