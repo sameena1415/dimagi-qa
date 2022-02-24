@@ -54,7 +54,7 @@ def settings(environment_settings):
                 "for instructions on how to set them."
             )
         return settings
-    path = Path(__file__).parent.parent / "settings-sample.cfg"
+    path = Path(__file__).parent.parent / "settings.cfg"
     if not path.exists():
         raise RuntimeError(
             f"Not found: {path}\n\n"

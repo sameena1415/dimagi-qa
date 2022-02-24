@@ -56,7 +56,7 @@ class ReportPage(BasePage):
         self.save_xpath = (By.XPATH, "//button[@data-bind='click: setConfigBeingEdited']")
         self.custom_report_content_id = (By.ID, "report_table_configurable_wrapper")
         self.edit_report_id = (By.ID, "edit-report-link")
-        self.delete_report_xpath = (By.XPATH, "//input[@value='Delete Report']")
+        self.delete_report_xpath = (By.XPATH, "//input[contains(@value,'Delete')]")
         self.homepage = (By.XPATH, ".//a[@href='/homepage/']")
 
         # Report Builder
@@ -301,6 +301,7 @@ class ReportPage(BasePage):
         assert True, "Case name is present in Submit history"
         # self.driver.close()
         # self.switch_back_to_prev_tab()
+        self.driver.back()
 
     def verify_form_data_case_list(self, case_name):
         self.wait_to_click(self.case_list_rep)
@@ -319,6 +320,7 @@ class ReportPage(BasePage):
         assert True, "Case name is present in Case List"
         # self.driver.close()
         # self.switch_back_to_prev_tab()
+        self.driver.back()
 
 
     def verify_app_data_submit_history(self, case_name):
