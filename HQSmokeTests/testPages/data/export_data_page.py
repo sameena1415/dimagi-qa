@@ -154,6 +154,7 @@ class ExportDataPage(BasePage):
     # Test Case 20_a - Verify Export functionality for Forms
 
     def add_form_exports(self):
+        self.delete_bulk_exports()
         self.wait_and_sleep_to_click(self.add_export_button)
         self.is_visible_and_displayed(self.app_type)
         self.select_by_text(self.app_type, UserData.app_type)
@@ -173,6 +174,7 @@ class ExportDataPage(BasePage):
 
     def add_case_exports(self):
         self.wait_to_click(self.export_case_data_link)
+        self.delete_bulk_exports()
         self.wait_and_sleep_to_click(self.add_export_button)
         self.is_visible_and_displayed(self.application)
         self.select_by_text(self.application, UserData.village_application)
