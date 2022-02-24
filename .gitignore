@@ -7,4 +7,5 @@ selenium-screenshot*
 .git
 .project
 .pydevproject
+Utilities/user_inputs.robot
 

@@ -18,12 +18,12 @@ ${ci_user}    css:[aria-label='ci_poc'] > .module-column-name
 ${confirm_user_login}    //button[@id="js-confirmation-confirm"]
 
 ${select_app}    xpath://div[@aria-label='NY-CDCMS: Web Apps Testing POC']
-${register_new_contacts_menu}    xpath:(//div[@aria-label='Register New Contact(s)']/div)[1]
+${register_new_contacts_menu}    (//div[@aria-label='Register New Contact(s)']/div)[1]
 ${select_first case_in_caselist}    xpath:(//td[@class='module-caselist-column'])[1]
 ${continue}    id:select-case
 ${register_new_contacts_form}    xpath://tr[@aria-label="Register New Contact(s)"]
 ${contact_first_name}     xpath://span[text()='First name']/following::div[1]/div[@class='widget']/descendant::textarea
-${contact_last_name}     xpath://span[text()='st name']/following::div[1]/div[@class='widget']/descendant::textarea
+${contact_last_name}     xpath://span[text()='Last name']/following::div[1]/div[@class='widget']/descendant::textarea
 ${contact_phone_num}    xpath://span[text()='Phone number:']/following::div[1]/div[@class='widget']/descendant::input
 ${preferred_language}    //p[text()='English']
 ${first_symptom_date}    //span[contains(text(),'When was the last day ')]/following::div[1]//input[@type='text']

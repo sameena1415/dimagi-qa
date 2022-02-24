@@ -36,14 +36,14 @@ Convert_Contact_to_PUI_3
     Change PUI Status form
     Yes, Close the Record 
     ## Redirects to All Suspected Cases (PUIs) menu
-    Search in the case list    ${contact_created} 
+    Search in the case list    ${contact_name} 
     Element Should Not Be Visible    ${contact_created}   
     Log in as ct_user
     All Closed Contacts menu
-    Search in the case list    ${contact_created}
+    Search in the case list    ${contact_name}
     Element Should Be Visible    ${contact_created}    
     All Open Contacts menu
-    Search in the case list    ${contact_created}
+    Search in the case list    ${contact_name}
     Element Should Not Be Visible    ${contact_created}    
     
 Convert_Contact_to_PUI_2	
@@ -54,7 +54,7 @@ Convert_Contact_to_PUI_2
     ${contact_created}    Set Contact Name
     Convert contact to PUI form
     Open All Contacts Unassigned & Open menu
-    Search in the case list    ${contact_created}
+    Search in the case list    ${contact_name}
     Element Should Not Be Visible    ${contact_created}    Contact appearing in menu
     
 Convert_Contact_to_PUI_4
