@@ -18,7 +18,7 @@ Register contact with phone number
    Open Register New Contacts Menu
    Click Element    ${select_first case_in_caselist}
    Click Element    ${continue}
-   Click Element    ${register_new_contacts_form} 
+   Run Keyword And Ignore Error    Click Element    ${register_new_contacts_form} 
    Generate Random Contact Name
    ${name_random}    Get Variable Value    ${name_random}
    Input Text       ${contact_first_name}    ${name_random} 

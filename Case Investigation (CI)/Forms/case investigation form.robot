@@ -22,12 +22,13 @@ ${Q:Search For Address}    //span[text()='Search for Address']/following::div[1]
 ${Address}     South Side River Bourgeois Road, Subdivision A, Nova Scotia B0E 2X0, Canada
 ${Fisrt address}    //li[contains(.,'South Side')]
 
-${Q:County of residence}    //span[text()='County of residence:']/following::span[@title='Please choose an item'][1]
-${A:County of residence}    //li[contains(.,'Albany')]
-${Country success}    //span[text()='County of residence:']/following::i[@class="fa fa-check text-success"][1]
+${Q:County of residence}    (//*[contains(text(),'County')])[1]/following::span[@title='Please choose an item'][1]
+
+${A:County of residence}    //*[contains(text(),'County')][1]/following::ul[@role='listbox']/li[1]
+${Country success}    (//*[contains(text(),'County')])[1]/following::i[@class="fa fa-check text-success"][1]
 
 ${Q:State}    //span[text()='State']/following::span[@title='Please choose an item'][1]
-${A:State}    //li[contains(.,'Alabama')]
+${A:State}    //*[contains(text(),'State')][1]/following::ul[@role='listbox']/li[1]
 ${State success}    //span[text()='State']/following::i[@class="fa fa-check text-success"][1]
 
 ${Q:Zipcode_error}     //span[text()='Zip Code']/following::div[1]/div[@class='widget has-error']/descendant::textarea

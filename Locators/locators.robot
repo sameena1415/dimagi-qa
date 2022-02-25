@@ -15,11 +15,11 @@ ${ct_user}    css:[aria-label='${ct username}'] > .module-column-name
 ${ci_user}    css:[aria-label='${ci username}'] > .module-column-name
 ${confirm_user_login}    //button[@id="js-confirmation-confirm"]
 
-${select_app}    xpath://div[@aria-label='NY-CDCMS: Web Apps Testing POC']
+${select_app}    xpath://div[@aria-label='${app name}']
 ${register_new_contacts_menu}    (//div[@aria-label='Register New Contact(s)']/div)[1]
 ${select_first case_in_caselist}    xpath:(//td[@class='module-caselist-column'])[1]
 ${continue}    id:select-case
-${register_new_contacts_form}    xpath://tr[@aria-label="Register New Contact(s)"]
+${register_new_contacts_form}    //tr[@aria-label="Register New Contact(s)"]
 ${contact_first_name}     xpath://span[text()='First name']/following::div[1]/div[@class='widget']/descendant::textarea
 ${contact_last_name}     xpath://span[text()='Last name']/following::div[1]/div[@class='widget']/descendant::textarea
 ${contact_phone_num}    xpath://span[text()='Phone number:']/following::div[1]/div[@class='widget']/descendant::input
@@ -29,7 +29,7 @@ ${submit_form}     //button[@type='submit' and @class='submit btn btn-primary']
 ${success_message}    //p[text()='Form successfully saved!']
 
 
-${app_home}    xpath://ol//li[contains(.,"NY-CDCMS: Web Apps Testing POC")]
+${app_home}    xpath://ol//li[contains(.,"${app name}")]
 ${contacts_unassigned_open_menu}    (//div[@aria-label='All Contacts: Unassigned & Open']/div)[1]
 ${search_case}    id:searchText
 ${search_button}    id:case-list-search-button    
@@ -50,7 +50,7 @@ ${confirm_yes_convert_pui}    //p[text()='Yes']
 ${covert_to_pui_form}    //tr[@aria-label='Convert Contact to a Suspected Case (PUI)']
 
 ${all_suspected_cases_menu}    (//div[@aria-label='All Suspected Cases (PUIs)']/div)[1]
-${webapps_home}    //a[@href="/a/ush-poc/cloudcare/apps/v2/" and @class="navbar-brand"]
+${webapps_home}    //a[@href="/a/${domain}/cloudcare/apps/v2/" and @class="navbar-brand"]
 ${check_in_menu}   (//div[@aria-label='Check In']/div)[1] 
 ${search all cases}    //button[text()='Search All Cases']
 ${case search submit}    //button[@id='query-submit-button']
@@ -80,7 +80,7 @@ ${mail_label}    xpath://p/strong[text() = '${email_input}']
 
 ${all_closed_contacts_menu}   (//div[@aria-label='All Closed Contacts']/div)[1]
 ${all_open_contacts_menu}    (//div[@aria-label='All Open Contacts']/div)[1]
-${archieved_contact}    xpath://td[text()='${archieved_contact_name}']
+${archieved_contact}    //td[text()='${archieved_contact_name}']
 
 ${sync}    xpath://div[@class='js-sync-item appicon appicon-sync']
 ${sync success}    xpath:(//div[text()='User Data successfully synced.'])[last()]

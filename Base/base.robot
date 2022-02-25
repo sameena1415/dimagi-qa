@@ -22,9 +22,10 @@ HQ Login
     Maximize Browser Window
     Input Text    ${username}    ${email}
     Input Text    ${password}   ${pass}
-    ${IsElementVisible}=  Run Keyword And Return Status    Element Should Be Visible   ${confirm_cookie}
-    Run Keyword If     ${IsElementVisible}    Click Element  ${confirm_cookie}
+    #${IsElementVisible}=  Run Keyword And Return Status    Element Should Be Visible   ${confirm_cookie}
+    #Run Keyword If     ${IsElementVisible}    Click Element  ${confirm_cookie}
     Click Button  ${submit_button}
+    Sleep    20s
     Title Should Be    ${commcare hq title} 
     #Run Keyword And Ignore Error     Click Element    ${confirm_cookie}
     Open Web App

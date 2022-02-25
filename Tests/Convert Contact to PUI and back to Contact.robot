@@ -1,5 +1,6 @@
 *** Settings ***
-Documentation     This is a POC for USH AppsTesting the workflow to convert a symptomatic contact into a suspected case (PUI) and testing the workflow to convert a suspected case (PUI) back into a contact.
+Documentation     Testing the workflow to convert a symptomatic contact into a suspected case (PUI)
+...     and testing the workflow to convert a suspected case (PUI) back into a contact.
 Library  SeleniumLibrary
 Suite Setup    HQ Login
 Resource    ../Contact Tracing (CT)/Forms/change to pui status form.robot

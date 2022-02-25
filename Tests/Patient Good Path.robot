@@ -27,9 +27,8 @@ Patient_Good_1
 
 Patient_Good_2
     [Documentation]    All Cases: Incomplete Demographic Information
-    Log in as ci_user
     Open All Cases: Incomplete Demographic Information Menu
-    Sleep    30s
+    Sleep    20s
     ${case_name}    Get Case Name
     ${case_created}   Set Case Name
     Case Search    ${case_name}
