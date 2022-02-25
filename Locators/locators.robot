@@ -3,8 +3,6 @@ Resource    ../Utilities/user_inputs.robot
 
 
 *** Variables ***
-${LOGIN URL}      https://www.commcarehq.org/accounts/login/
-${BROWSER}        Chrome
 
 ${username}    id:id_auth-username
 ${password}    id:id_auth-password
@@ -13,8 +11,8 @@ ${confirm_cookie}    css:#hs-eu-confirmation-button
 ${commcare hq title}    CommCare HQ
 ${webapps_menu}    css:#CloudcareTab > a
 ${login_as}    css:.js-restore-as-item
-${ct_user}    css:[aria-label='auto_poc'] > .module-column-name
-${ci_user}    css:[aria-label='ci_poc'] > .module-column-name
+${ct_user}    css:[aria-label='${ct username}'] > .module-column-name
+${ci_user}    css:[aria-label='${ci username}'] > .module-column-name
 ${confirm_user_login}    //button[@id="js-confirmation-confirm"]
 
 ${select_app}    xpath://div[@aria-label='NY-CDCMS: Web Apps Testing POC']
