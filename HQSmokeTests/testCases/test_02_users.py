@@ -174,7 +174,10 @@ def test_case_54_add_custom_user_data_profile_to_mobile_worker(driver):
 
     create = MobileWorkerPage(driver)
     create.mobile_worker_menu()
+    create.select_mobile_worker_created()
+    create.cleanup_mobile_worker()
     create.create_mobile_worker()
+    create.mobile_worker_menu()
     create.mobile_worker_enter_username("username_" + str(fetch_random_string()))
     create.mobile_worker_enter_password(fetch_random_string())
     create.click_create()
