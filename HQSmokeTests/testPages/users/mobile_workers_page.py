@@ -22,9 +22,9 @@ class MobileWorkerPage(BasePage):
         self.confirm_user_field_delete = (By.XPATH, "//button[@class='btn btn-danger']")
         self.delete_user_field = (By.XPATH, "(//input[@data-bind='value: slug'])[last()]//following::a[@class='btn btn-danger' and @data-toggle='modal'][1]")
         self.delete_success_mw = (By.XPATH, "//div[@class='alert alert-margin-top fade in alert-success']")
-        self.confirm_delete_mw = (By.XPATH, "//button[@class='btn btn-danger']")
+        self.confirm_delete_mw = (By.ID, "delete-user-icon")
         self.enter_username = (By.XPATH, '//input[@data-bind="value: signOff, valueUpdate: \'textchange\'"]')
-        self.delete_mobile_worker = (By.XPATH, "//a[@class='btn btn-danger']")
+        self.delete_mobile_worker = (By.XPATH, "//div[@class='alert alert-danger']//i[@class='fa fa-trash']")
         self.actions_tab_link_text = (By.LINK_TEXT, "Actions")
         # remove these two after locators page creation: redundant code
         self.web_apps_menu_id = (By.ID, "CloudcareTab")

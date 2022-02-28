@@ -194,6 +194,9 @@ def test_case_54_add_custom_user_data_profile_to_mobile_worker(driver):
     create.update_information()
     create.select_location()
     create.mobile_worker_menu()
+    create.select_mobile_worker_created()
+    create.cleanup_mobile_worker()
+    create.mobile_worker_menu()
     create.edit_user_field()
     create.click_profile()
     create.remove_profile()
@@ -201,7 +204,5 @@ def test_case_54_add_custom_user_data_profile_to_mobile_worker(driver):
     create.click_fields()
     create.remove_user_field()
     create.save_field()
-    create.mobile_worker_menu()
-    create.deactivate_user()
 
 
