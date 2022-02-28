@@ -12,5 +12,4 @@ ${ci username}    ci_1
 ${ct username}    ct_1 
 ${app name}    NY Communicable Disease Case Management System (NY-CDCMS)
 
-
 ${archieved_contact_name}     Vita

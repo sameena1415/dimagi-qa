@@ -6,7 +6,8 @@ Resource    ../Utilities/user_inputs.robot
 
 ${username}    id:id_auth-username
 ${password}    id:id_auth-password
-${submit_button}    //button[@type="submit"]
+${submit_button}   (//button[@type="submit"])[last()]
+${otp_token}    id:id_token-otp_token
 ${confirm_cookie}    css:#hs-eu-confirmation-button
 ${commcare hq title}    CommCare HQ
 ${webapps_menu}    css:#CloudcareTab > a

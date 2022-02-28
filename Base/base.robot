@@ -5,6 +5,7 @@ Library    DateTime
 Resource    ../Locators/locators.robot
 Resource     ../Case Investigation (CI)/Forms/register a new case form.robot
 Resource    ../Contact Tracing (CT)/Forms/register a new contact form.robot
+Library    2FA.py     
 
 
 *** Variables ***
@@ -14,22 +15,24 @@ ${first-name_case_search}    xpath:(//td/div[contains(., "First Name")]/followin
 ${last-name_case_search}    xpath:(//td/div[contains(., "Last Name")]/following::input)[1]
 ${search all cases in the list}    //button[text()='Search All Cases in this List']
 
-
 *** Keywords ***
+    
 HQ Login
     Open Browser    ${LOGIN URL}    ${BROWSER}
     Set Selenium Implicit Wait  ${implcit_wait_time}
     Maximize Browser Window
     Input Text    ${username}    ${email}
     Input Text    ${password}   ${pass}
-    #${IsElementVisible}=  Run Keyword And Return Status    Element Should Be Visible   ${confirm_cookie}
-    #Run Keyword If     ${IsElementVisible}    Click Element  ${confirm_cookie}
+     ${IsElementVisible}=  Run Keyword And Return Status    Element Should Be Visible   ${confirm_cookie}
+     Run Keyword If     ${IsElementVisible}    Click Element  ${confirm_cookie}
     Click Button  ${submit_button}
-    Sleep    20s
+    ${token}    Generate 2FA Token    ${secret}
+    Input Text    ${otp_token}   ${token}
+    Click Button  ${submit_button}
     Title Should Be    ${commcare hq title} 
     #Run Keyword And Ignore Error     Click Element    ${confirm_cookie}
     Open Web App
-    
+
 
 Open Web App
    Click Element    ${webapps_menu}
