@@ -1,7 +1,7 @@
 import time
 
 from HQSmokeTests.testPages.base.base_page import BasePage
-from HQSmokeTests.userInputs.generate_random_string import fetch_random_string
+from HQSmokeTests.userInputs.generate_random_string import fetch_random_string, fetch_phone_number
 from HQSmokeTests.userInputs.user_inputs import UserData
 from HQSmokeTests.testPages.users.org_structure_page import latest_download_file
 from selenium.common.exceptions import TimeoutException, NoSuchElementException, StaleElementReferenceException
@@ -15,6 +15,8 @@ class MobileWorkerPage(BasePage):
 
         self.username = "username_" + fetch_random_string()
         self.login_as_usernames = '(//h3/b)'
+        self.profile_name_text = "test_profile_"+fetch_random_string()
+        self.phone_number = UserData.area_code + fetch_phone_number()
 
         self.username_link = (By.LINK_TEXT, self.username)
         self.confirm_user_field_delete = (By.XPATH, "//button[@class='btn btn-danger']")
@@ -71,6 +73,31 @@ class MobileWorkerPage(BasePage):
         self.view_all_link_text = (By.LINK_TEXT, "View All")
         self.search_user_web_apps = (By.XPATH, "//input[@placeholder='Filter workers']")
         self.search_button_we_apps = (By.XPATH, "//div[@class='input-group-btn']")
+
+        self.field_tab = (By.XPATH, "//a[@href='#tabs-fields']")
+        self.profile_tab = (By.XPATH,"//a[@href='#tabs-profiles']")
+        self.add_new_profile = (By.XPATH, "//button[@data-bind='click: addProfile']")
+        self.profile_name = (By.XPATH, "//tr[last()]//input[@data-bind='value: name']")
+        self.profile_edit_button = (By.XPATH, "//tr[last()]//a[@class='btn btn-default enum-edit']")
+        self.profile_delete_button = (By.XPATH, "//tbody[@data-bind='foreach: profiles']//tr[last()]//td[last()]//i[@class='fa fa-times']")
+        self.add_profile_item = (By.XPATH, "//div[@style='display: block; padding-right: 17px;']//i[@class='fa fa-plus']")
+        self.delete_profile_item = (By.XPATH, "//div[@style='display: block; padding-right: 17px;']//i[@class='fa fa-remove']")
+        self.profile_key = (By.XPATH, "//div[@style='display: block; padding-right: 17px;']//input[@class='form-control enum-key']")
+        self.profile_value = (By.XPATH, "//div[@style='display: block; padding-right: 17px;']//input[@class='form-control enum-value']")
+        self.done_button = (By.XPATH, "//div[@style='display: block; padding-right: 17px;']//button[@class='btn btn-primary']")
+
+        self.field_delete = (By.XPATH, "//tbody[@data-bind='sortable: data_fields']//tr[last()]//td[last()]//i[@class='fa fa-times']")
+        self.profile_combobox = (By.XPATH, "//span[@aria-labelledby='select2-id_data-field-commcare_profile-container']")
+        self.profile_selection = (By.XPATH, "//li[contains(text(),'"+self.profile_name_text+"')]")
+        self.phone_number_field = (By.XPATH, "//input[@name='phone_number']")
+        self.add_number_button = (By.XPATH, "//button[.='Add Number']")
+        self.registered_phone_number = (By.XPATH, "//label[contains(text(),'+"+self.phone_number+"')]")
+
+        self.location_tab = (By.XPATH, "//a[@href='#commtrack-data']")
+        self.location_combobox = (By.XPATH, "//span[@class='select2-selection select2-selection--multiple']")
+        self.location_selection = (By.XPATH, "//li[contains(text(),'updated')]")
+        self.location_update_button = (By.XPATH, "//button[contains(text(),'Update Location Settings')]")
+
         # Download and Upload
         self.download_worker_btn = (By.LINK_TEXT, "Download Mobile Workers")
         self.download_users_btn = (By.LINK_TEXT, "Download Users")
@@ -154,8 +181,8 @@ class MobileWorkerPage(BasePage):
 
     def save_field(self):
         self.wait_to_click(self.save_field_id)
-        assert self.is_displayed(self.user_field_success_msg), "Unable to save userfield."
-        print("User Field Added")
+        assert self.is_displayed(self.user_field_success_msg), "Unable to save userfield/profile."
+        print("User Field/Profile Added")
 
     def select_mobile_worker_created(self):
         time.sleep(2)
@@ -241,6 +268,7 @@ class MobileWorkerPage(BasePage):
         time.sleep(1)
         self.wait_to_click(self.delete_user_field)
         self.wait_to_click(self.confirm_user_field_delete)
+        self.wait_to_click(self.done_button)
 
     def download_mobile_worker(self):
         time.sleep(1)
@@ -271,3 +299,52 @@ class MobileWorkerPage(BasePage):
             print("TIMEOUT ERROR: Could not upload file")
         assert self.is_present_and_displayed(self.import_complete), "Upload Not Completed! Taking Longer to process.."
         print("File uploaded successfully")
+
+    def click_profile(self):
+        self.wait_to_click(self.profile_tab)
+
+    def click_fields(self):
+        self.click(self.field_tab)
+
+    def add_profile(self, user_field):
+        self.wait_to_click(self.add_new_profile)
+        self.wait_to_clear_and_send_keys(self.profile_name, self.profile_name_text)
+        self.wait_to_click(self.profile_edit_button)
+        self.wait_to_click(self.add_profile_item)
+        self.send_keys(self.profile_key, user_field)
+        self.send_keys(self.profile_value, user_field)
+        self.wait_to_click(self.done_button)
+
+    def select_profile(self):
+        self.wait_to_click(self.profile_combobox)
+        time.sleep(1)
+        self.wait_to_click(self.profile_selection)
+
+
+    def add_phone_number(self):
+        self.wait_to_clear_and_send_keys(self.phone_number_field,self.phone_number)
+        time.sleep(1)
+        self.js_click(self.add_number_button)
+        time.sleep(3)
+        assert self.is_present_and_displayed(self.registered_phone_number), "Phone Number not registered."
+        print("Phone Number registered successfully")
+
+    def select_location(self):
+        self.wait_to_click(self.location_tab)
+        self.wait_to_click(self.location_combobox)
+        self.wait_to_click(self.location_selection)
+        self.wait_to_click(self.location_update_button)
+
+
+    def remove_user_field(self):
+        self.wait_to_click(self.field_delete)
+        self.wait_to_click(self.confirm_user_field_delete)
+
+    def remove_profile(self):
+        self.wait_to_click(self.profile_edit_button)
+        self.wait_to_click(self.delete_profile_item)
+        self.wait_to_click(self.done_button)
+        time.sleep(2)
+        self.wait_to_click(self.profile_delete_button)
+        self.wait_to_click(self.confirm_user_field_delete)
+
