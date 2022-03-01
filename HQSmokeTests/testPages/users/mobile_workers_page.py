@@ -319,7 +319,7 @@ class MobileWorkerPage(BasePage):
         time.sleep(2)
         self.wait_to_click(self.profile_edit_button)
         time.sleep(2)
-        self.wait_to_click(self.add_profile_item)
+        self.js_click(self.add_profile_item)
         self.send_keys(self.profile_key, user_field)
         self.send_keys(self.profile_value, user_field)
         self.wait_to_click(self.done_button)
