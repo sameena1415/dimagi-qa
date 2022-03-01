@@ -14,11 +14,13 @@ class MobileWorkerPage(BasePage):
         super().__init__(driver)
 
         self.username = "username_" + fetch_random_string()
+        self.username2 = "user_" + fetch_random_string()
         self.login_as_usernames = '(//h3/b)'
         self.profile_name_text = "test_profile_"+fetch_random_string()
         self.phone_number = UserData.area_code + fetch_phone_number()
 
         self.username_link = (By.LINK_TEXT, self.username)
+        self.username2_link = (By.LINK_TEXT, self.username2)
         self.confirm_user_field_delete = (By.XPATH, "//button[@class='btn btn-danger']")
         self.delete_user_field = (By.XPATH, "(//input[@data-bind='value: slug'])[last()]//following::a[@class='btn btn-danger' and @data-toggle='modal'][1]")
         self.delete_success_mw = (By.XPATH, "//div[@class='alert alert-margin-top fade in alert-success']")
@@ -65,8 +67,13 @@ class MobileWorkerPage(BasePage):
         self.next_page_button_xpath = (By.XPATH, "//a[contains(@data-bind,'click: nextPage')]")
         self.additional_info_dropdown = (By.ID, "select2-id_data-field-" + "user_field_" + fetch_random_string() + "-container")
         self.select_value_dropdown = (By.XPATH, "//select[@name = 'data-field-user_field_" + fetch_random_string() + "']/option[text()='user_field_" + fetch_random_string() + "']")
+
+        self.additional_info_dropdown2 = (By.ID, "select2-id_data-field-" + "field_" + fetch_random_string() + "-container")
+        self.select_value_dropdown2 = (By.XPATH,"//select[@name = 'data-field-field_" + fetch_random_string() + "']/option[text()='field_" + fetch_random_string() + "']")
+
         self.update_info_button = (By.XPATH, "//button[text()='Update Information']")
         self.user_file_additional_info = (By.XPATH, "//label[@for='id_data-field-" + "user_field_" + fetch_random_string() + "']")
+        self.user_file_additional_info2 = (By.XPATH, "//label[@for='id_data-field-" + "field_" + fetch_random_string() + "']")
         self.deactivate_btn_xpath = (By.XPATH, "//td/a/strong[text()='" + self.username + "']/following::td[5]/div[@data-bind='visible: is_active()']/button")
         self.confirm_deactivate = (By.XPATH, "(//button[@class='btn btn-danger'])[1]")
         self.show_full_menu_id = (By.ID, "commcare-menu-toggle")
@@ -348,3 +355,54 @@ class MobileWorkerPage(BasePage):
         self.wait_to_click(self.profile_delete_button)
         self.wait_to_click(self.confirm_user_field_delete)
 
+    def create_new_mobile_worker(self):
+        self.create_mobile_worker()
+        self.mobile_worker_menu()
+        self.mobile_worker_enter_username("user_" + str(fetch_random_string()))
+        self.mobile_worker_enter_password(fetch_random_string())
+        self.wait_to_click(self.create_button_xpath)
+        self.is_present_and_displayed(self.NEW)
+        new_user_created = self.get_text(self.new_user_created_xpath)
+        print("Username is : " + new_user_created)
+        assert self.username2 == new_user_created, "Could find the new mobile worker created"
+        print("Mobile Worker Created")
+
+    def create_new_user_fields(self, userfield):
+        self.edit_user_field()
+        self.add_field()
+        self.add_user_property(userfield)
+        self.add_label(userfield)
+        self.add_choice(userfield)
+        self.save_field()
+
+    def select_user_and_update_fields(self, user):
+        time.sleep(2)
+        self.wait_to_click(self.mobile_worker_on_left_panel)
+        time.sleep(2)
+        self.wait_to_clear_and_send_keys(self.search_mw, user)
+        time.sleep(2)
+        self.wait_to_click(self.search_button_mw)
+        time.sleep(3)
+        self.click(self.username2_link)
+        self.wait_to_click(self.additional_info_dropdown2)
+        self.wait_to_click(self.select_value_dropdown2)
+        assert self.is_displayed(self.user_file_additional_info2), "Unable to assign user field to user."
+
+    def select_and_delete_mobile_worker(self, user):
+        time.sleep(2)
+        self.wait_to_click(self.mobile_worker_on_left_panel)
+        time.sleep(2)
+        self.wait_to_clear_and_send_keys(self.search_mw, user)
+        time.sleep(2)
+        self.wait_to_click(self.search_button_mw)
+        time.sleep(3)
+        self.click(self.username2_link)
+        try:
+            self.wait_to_click(self.actions_tab_link_text)
+            self.wait_to_click(self.delete_mobile_worker)
+            self.wait_to_clear_and_send_keys(self.enter_username, self.username2 + "@" + self.get_domain()
+                                             + ".commcarehq.org")
+            self.wait_to_click(self.confirm_delete_mw)
+        except (TimeoutException, NoSuchElementException):
+            print("TIMEOUT ERROR: Could not delete the mobile worker")
+            self.is_present_and_displayed(self.delete_success_mw), "Mobile User Deletion Unsuccessful"
