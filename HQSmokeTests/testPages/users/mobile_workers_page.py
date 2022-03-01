@@ -316,6 +316,7 @@ class MobileWorkerPage(BasePage):
     def add_profile(self, user_field):
         self.wait_to_click(self.add_new_profile)
         self.wait_to_clear_and_send_keys(self.profile_name, self.profile_name_text)
+        time.sleep(2)
         self.wait_to_click(self.profile_edit_button)
         time.sleep(2)
         self.wait_to_click(self.add_profile_item)
