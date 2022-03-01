@@ -87,7 +87,7 @@ class MobileWorkerPage(BasePage):
         self.profile_name = (By.XPATH, "//tr[last()]//input[@data-bind='value: name']")
         self.profile_edit_button = (By.XPATH, "//tr[last()]//a[@class='btn btn-default enum-edit']")
         self.profile_delete_button = (By.XPATH, "//tbody[@data-bind='foreach: profiles']//tr[last()]//td[last()]//i[@class='fa fa-times']")
-        self.add_profile_item = (By.XPATH, "//div[@style='display: block; padding-right: 17px;']//i[@class='fa fa-plus']")
+        self.add_profile_item = (By.XPATH, "//div[@class='modal fade hq-enum-modal in']//a[@data-enum-action='add']/i[@class='fa fa-plus']")
         self.delete_profile_item = (By.XPATH, "//div[@style='display: block; padding-right: 17px;']//i[@class='fa fa-remove']")
         self.profile_key = (By.XPATH, "//div[@style='display: block; padding-right: 17px;']//input[@class='form-control enum-key']")
         self.profile_value = (By.XPATH, "//div[@style='display: block; padding-right: 17px;']//input[@class='form-control enum-value']")
