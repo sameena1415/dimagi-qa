@@ -416,11 +416,12 @@ class ExportDataPage(BasePage):
         print("Newest file:" + newest_file)
         self.assert_downloaded_file(newest_file, UserData.case_updated_export_name)
         data = pd.read_excel(newest_file)
-        df = pd.DataFrame(data, columns=[UserData.text_value, UserData.random_value])
-        name_row = df[df[UserData.text_value] == case_name].index[0]
-        value_in_file = df[UserData.random_value].loc[name_row]
+        df = pd.DataFrame(data, columns=[UserData.case_id, UserData.text_value, UserData.random_value])
+        case_id_row = df[df[UserData.case_id] == case_id].index[0]
+        name_in_file = df[UserData.text_value].loc[case_id_row]
+        value_in_file = df[UserData.random_value].loc[case_id_row]
         print(name_row, value_in_file)
-        assert str(value_in_file) == value
+        assert str(value_in_file) == value and str(name_in_file) == case_name
         print("Downloaded file has the required data!")
 
     def clean_up_case_data(self):
