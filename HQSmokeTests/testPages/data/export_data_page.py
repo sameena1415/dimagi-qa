@@ -420,7 +420,7 @@ class ExportDataPage(BasePage):
         case_id_row = df[df[UserData.case_id] == case_id].index[0]
         name_in_file = df[UserData.text_value].loc[case_id_row]
         value_in_file = df[UserData.random_value].loc[case_id_row]
-        print(name_row, value_in_file)
+        print(case_id_row, name_in_file, value_in_file)
         assert str(value_in_file) == value and str(name_in_file) == case_name
         print("Downloaded file has the required data!")
 
