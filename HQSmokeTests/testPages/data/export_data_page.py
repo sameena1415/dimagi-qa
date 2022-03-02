@@ -423,3 +423,7 @@ class ExportDataPage(BasePage):
         assert str(value_in_file) == value
         print("Downloaded file has the required data!")
 
+    def clean_up_case_data(self):
+        self.wait_and_sleep_to_click(self.export_case_data_link)
+        self.delete_bulk_exports()
+        print("Bulk exports deleted for Export Case data")

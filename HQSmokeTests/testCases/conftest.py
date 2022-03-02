@@ -58,7 +58,7 @@ def settings(environment_settings):
     if not path.exists():
         raise RuntimeError(
             f"Not found: {path}\n\n"
-            "Copy settings-sample.cfg to settings-sample.cfg and populate "
+            "Copy settings.cfg to settings.cfg and populate "
             "it with values for the environment you want to test."
         )
     settings = ConfigParser()

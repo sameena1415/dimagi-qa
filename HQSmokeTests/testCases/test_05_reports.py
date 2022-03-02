@@ -84,6 +84,11 @@ def test_case_55_update_case_verify_change_in_export_data(driver, settings):
     export.data_tab()
     export.add_updated_case_exports(settings['login_username'])
     export.verify_export_has_updated_case_data(case_id, case_name, value)
+    export.data_tab()
+    export.clean_up_case_data()
+
+
+
 
 
 
