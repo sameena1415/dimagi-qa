@@ -67,6 +67,8 @@ class MobileWorkerPage(BasePage):
         self.next_page_button_xpath = (By.XPATH, "//a[contains(@data-bind,'click: nextPage')]")
         self.additional_info_dropdown = (By.ID, "select2-id_data-field-" + "user_field_" + fetch_random_string() + "-container")
         self.select_value_dropdown = (By.XPATH, "//select[@name = 'data-field-user_field_" + fetch_random_string() + "']/option[text()='user_field_" + fetch_random_string() + "']")
+        self.additional_info_select = (By.XPATH, "//select[@name = 'data-field-user_field_" + fetch_random_string() + "']")
+        self.additional_info_select2 = (By.XPATH, "//select[@name = 'data-field-field_" + fetch_random_string() + "']")
 
         self.additional_info_dropdown2 = (By.ID, "select2-id_data-field-" + "field_" + fetch_random_string() + "-container")
         self.select_value_dropdown2 = (By.XPATH,"//select[@name = 'data-field-field_" + fetch_random_string() + "']/option[text()='field_" + fetch_random_string() + "']")
@@ -200,13 +202,12 @@ class MobileWorkerPage(BasePage):
         self.click(self.username_link)
 
     def enter_value_for_created_user_field(self):
-        self.wait_to_click(self.additional_info_dropdown)
-        self.wait_to_click(self.select_value_dropdown)
-        time.sleep(2)
+        self.select_by_text(self.additional_info_select, "user_field_" + fetch_random_string() )
         assert self.is_displayed(self.user_file_additional_info), "Unable to assign user field to user."
 
     def update_information(self):
-        self.js_click(self.update_info_button)
+        time.sleep(2)
+        self.wait_to_click(self.update_info_button)
         time.sleep(4)
         assert self.is_displayed(self.user_field_success_msg), "Unable to update user."
         print("User Field Visible and Added for User")
@@ -388,8 +389,7 @@ class MobileWorkerPage(BasePage):
         self.wait_to_click(self.search_button_mw)
         time.sleep(3)
         self.click(self.username2_link)
-        self.wait_to_click(self.additional_info_dropdown2)
-        self.wait_to_click(self.select_value_dropdown2)
+        self.select_by_text(self.additional_info_select2, "field_" + fetch_random_string())
         assert self.is_displayed(self.user_file_additional_info2), "Unable to assign user field to user."
 
     def select_and_delete_mobile_worker(self, user):
