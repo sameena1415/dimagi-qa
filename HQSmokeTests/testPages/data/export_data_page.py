@@ -1,14 +1,14 @@
 import os
 import time
 import pandas as pd
+from datetime import datetime, timedelta
 
 from HQSmokeTests.testPages.base.base_page import BasePage
 from HQSmokeTests.userInputs.user_inputs import UserData
-
 from selenium.common.exceptions import StaleElementReferenceException, TimeoutException, \
     ElementClickInterceptedException, NoSuchElementException
 from selenium.webdriver.common.by import By
-
+from selenium.webdriver.common.keys import Keys
 
 def latest_download_file():
     os.chdir(UserData.DOWNLOAD_PATH)
@@ -24,6 +24,10 @@ class ExportDataPage(BasePage):
         super().__init__(driver)
 
         self.date_having_submissions = "2022-01-18 to 2022-02-18"
+        self.presentday = datetime.now()  # or presentday = datetime.today()
+        # Get Yesterday
+        self.yesterday = self.presentday - timedelta(1)
+        self.current_date_range = self.yesterday.strftime('%Y-%m-%d') + " to " + datetime.now().strftime('%Y-%m-%d')
 
         # Add Export
         self.data_dropdown = (By.LINK_TEXT, 'Data')
@@ -33,6 +37,8 @@ class ExportDataPage(BasePage):
         self.export_name = (By.XPATH, '//*[@id="export-name"]')
         self.export_settings_create = (By.XPATH,  "//button[@class='btn btn-lg btn-primary']")
         self.date_range = (By.ID, "id_date_range")
+        self.case_owner = (By.XPATH, "//span[@class='select2-selection select2-selection--multiple']")
+
 
         # Export Form and Case data variables
         self.export_form_data_link = (By.LINK_TEXT, 'Export Form Data')
@@ -41,6 +47,7 @@ class ExportDataPage(BasePage):
         self.prepare_export_button = (By.XPATH, "//button[@data-bind='disable: disablePrepareExport']")
         self.download_button = (By.XPATH, "//a[@class='btn btn-primary btn-full-width']")
         self.apply = (By.XPATH, "//button[@class='applyBtn btn btn-sm btn-primary']")
+        self.export_button = (By.XPATH, "//a[@class='btn btn-primary'][contains(text(),'Export')]")
 
         # Find Data By ID
         self.find_data_by_ID = (By.LINK_TEXT, 'Find Data by ID')
@@ -380,3 +387,47 @@ class ExportDataPage(BasePage):
         print("Odata case feed has data")
         # self.driver.close()  # Close the feed URL
         self.driver.back()
+
+    def add_updated_case_exports(self, username):
+        self.wait_to_click(self.export_case_data_link)
+        self.delete_bulk_exports()
+        self.wait_and_sleep_to_click(self.add_export_button)
+        self.is_visible_and_displayed(self.application)
+        self.select_by_text(self.application, UserData.reassign_cases_application)
+        self.select_by_text(self.case, UserData.case_reassign)
+        self.wait_to_click(self.add_export_conf)
+        self.wait_to_clear_and_send_keys(self.export_name, UserData.case_updated_export_name)
+        self.wait_to_click(self.export_settings_create)
+        print("Export created!!")
+        self.wait_to_click(self.export_button)
+        time.sleep(3)
+        self.wait_to_clear_and_send_keys(self.date_range, self.current_date_range+Keys.TAB)
+        self.wait_and_sleep_to_click(self.prepare_export_button)
+        try:
+            self.wait_and_sleep_to_click(self.download_button)
+            time.sleep(5)
+        except TimeoutException:
+            if self.is_visible_and_displayed(self.failed_to_export):
+                self.driver.refresh()
+                self.wait_and_sleep_to_click(self.prepare_export_button)
+                self.wait_and_sleep_to_click(self.download_button)
+                time.sleep(5)
+                print("Download form button clicked")
+
+    def verify_export_has_updated_case_data(self, case_id, case_name, value):
+        newest_file = latest_download_file()
+        print("Newest file:" + newest_file)
+        self.assert_downloaded_file(newest_file, UserData.case_updated_export_name)
+        data = pd.read_excel(newest_file)
+        df = pd.DataFrame(data, columns=[UserData.case_id, UserData.text_value, UserData.random_value])
+        case_id_row = df[df[UserData.case_id] == case_id].index[0]
+        name_in_file = df[UserData.text_value].loc[case_id_row]
+        value_in_file = df[UserData.random_value].loc[case_id_row]
+        print(case_id_row, name_in_file, value_in_file)
+        assert str(value_in_file) == value and str(name_in_file) == case_name
+        print("Downloaded file has the required data!")
+
+    def clean_up_case_data(self):
+        self.wait_and_sleep_to_click(self.export_case_data_link)
+        self.delete_bulk_exports()
+        print("Bulk exports deleted for Export Case data")
