@@ -206,6 +206,7 @@ class MobileWorkerPage(BasePage):
 
     def update_information(self):
         self.js_click(self.update_info_button)
+        time.sleep(4)
         assert self.is_displayed(self.user_field_success_msg), "Unable to update user."
         print("User Field Visible and Added for User")
         time.sleep(2)
