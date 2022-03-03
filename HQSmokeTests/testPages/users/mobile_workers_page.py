@@ -202,6 +202,7 @@ class MobileWorkerPage(BasePage):
     def enter_value_for_created_user_field(self):
         self.wait_to_click(self.additional_info_dropdown)
         self.wait_to_click(self.select_value_dropdown)
+        time.sleep(2)
         assert self.is_displayed(self.user_file_additional_info), "Unable to assign user field to user."
 
     def update_information(self):
