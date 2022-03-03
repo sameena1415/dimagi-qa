@@ -1,7 +1,7 @@
 import os
 import time
 import pandas as pd
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from HQSmokeTests.testPages.base.base_page import BasePage
 from HQSmokeTests.userInputs.user_inputs import UserData
@@ -24,7 +24,10 @@ class ExportDataPage(BasePage):
         super().__init__(driver)
 
         self.date_having_submissions = "2022-01-18 to 2022-02-18"
-        self.current_date_range = datetime.now().strftime('%Y-%m-%d')+" to "+datetime.now().strftime('%Y-%m-%d')
+        self.presentday = datetime.now()  # or presentday = datetime.today()
+        # Get Yesterday
+        self.yesterday = self.presentday - timedelta(1)
+        self.current_date_range = self.yesterday.strftime('%Y-%m-%d') + " to " + datetime.now().strftime('%Y-%m-%d')
 
         # Add Export
         self.data_dropdown = (By.LINK_TEXT, 'Data')
