@@ -3,6 +3,9 @@ from HQSmokeTests.testPages.reports.report_page import ReportPage
 from HQSmokeTests.testPages.webapps.web_apps_page import WebAppsPage
 from HQSmokeTests.testPages.data.export_data_page import ExportDataPage
 
+""""Contains test cases related to the Data module"""
+
+
 def test_case_14_report_loading(driver):
 
     report = HomePage(driver)

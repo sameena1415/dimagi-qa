@@ -7,6 +7,8 @@ from HQSmokeTests.testPages.base.base_page import BasePage
 from HQSmokeTests.userInputs.generate_random_string import fetch_random_string
 from HQSmokeTests.userInputs.user_inputs import UserData
 
+""""Contains test page elements and functions related to the Import Cases from Excel module"""
+
 
 def edit_spreadsheet(edited_file, cell, renamed_file):
     workbook = load_workbook(filename=edited_file)

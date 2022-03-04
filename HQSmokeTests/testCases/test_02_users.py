@@ -7,6 +7,7 @@ from HQSmokeTests.testPages.users.org_structure_page import OrganisationStructur
 from HQSmokeTests.testPages.users.webapps_permission_page import WebAppPermissionPage
 from HQSmokeTests.testPages.users.web_user_page import WebUsersPage
 
+""""Contains test cases related to the User module"""
 
 def test_case_02_create_mobile_worker(driver):
 

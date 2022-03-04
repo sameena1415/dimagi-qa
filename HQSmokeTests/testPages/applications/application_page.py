@@ -8,6 +8,8 @@ from HQSmokeTests.userInputs.generate_random_string import fetch_random_string
 from HQSmokeTests.userInputs.user_inputs import UserData
 from HQSmokeTests.testPages.users.org_structure_page import latest_download_file
 
+""""Contains test page elements and functions related to the applications on Commcare"""
+
 
 class ApplicationPage(BasePage):
 

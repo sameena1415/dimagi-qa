@@ -4,6 +4,8 @@ from HQSmokeTests.testPages.android.android_screen import AndroidScreen
 from HQSmokeTests.testPages.home.home_page import HomePage
 from HQSmokeTests.testPages.reports.report_page import ReportPage
 
+""""Contains test cases related to the Application module"""
+
 
 def test_case_35_create_new_app(driver):
 

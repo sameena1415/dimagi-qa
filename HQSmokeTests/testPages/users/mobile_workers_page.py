@@ -7,6 +7,8 @@ from HQSmokeTests.testPages.users.org_structure_page import latest_download_file
 from selenium.common.exceptions import TimeoutException, NoSuchElementException, StaleElementReferenceException
 from selenium.webdriver.common.by import By
 
+""""Contains test page elements and functions related to the User's Mobile Workers module"""
+
 
 class MobileWorkerPage(BasePage):
 

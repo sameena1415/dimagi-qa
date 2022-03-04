@@ -10,6 +10,9 @@ from selenium.common.exceptions import StaleElementReferenceException, TimeoutEx
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 
+""""Contains test page elements and functions related to the exports module"""
+
+
 def latest_download_file():
     os.chdir(UserData.DOWNLOAD_PATH)
     files = sorted(os.listdir(os.getcwd()), key=os.path.getmtime)

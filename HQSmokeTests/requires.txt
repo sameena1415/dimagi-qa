@@ -1,3 +1,5 @@
+## Stores information about all the libraries, modules, and packages that are used in this project.
+
 flake8>=3.8.4
 pandas>=1.2.2
 pytest>=6.2.5

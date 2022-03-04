@@ -5,6 +5,8 @@ from HQSmokeTests.testPages.data.reassign_cases_page import ReassignCasesPage
 from HQSmokeTests.testPages.data.auto_case_update_page import AutoCaseUpdatePage
 from HQSmokeTests.testPages.data.lookup_table_page import LookUpTablePage
 
+""""Contains test cases related to the Data module"""
+
 
 def test_case_29_import_cases(driver):
 

@@ -1,11 +1,16 @@
-from selenium.webdriver.common.by import By
 import time
+
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.support import expected_conditions as ec
+from selenium.webdriver.common.by import By
+
 from HQSmokeTests.testPages.base.base_page import BasePage
 from HQSmokeTests.userInputs.generate_random_string import fetch_random_string, fetch_random_digit
 from HQSmokeTests.userInputs.user_inputs import UserData
-from selenium.webdriver.support.wait import WebDriverWait
-from selenium.webdriver.support import expected_conditions as ec
+
+
+""""Contains test page elements and functions related to the Webapps navigation and form submissions"""
 
 
 class WebAppsPage(BasePage):
@@ -17,7 +22,6 @@ class WebAppsPage(BasePage):
         self.text_value = "text_" + fetch_random_string()
         self.random_value = fetch_random_digit()
 
-
         self.login_as_css = (By.CLASS_NAME, "js-restore-as-item")
         self.login_user = (By.XPATH, "//*[text()='" + UserData.login_as + "']")
         self.confirm_user_login = (By.XPATH, "//button[@id='js-confirmation-confirm']")
@@ -26,8 +30,8 @@ class WebAppsPage(BasePage):
         self.web_app_link = (By.XPATH, "//*[text()='" + UserData.reassign_cases_application + "']")
         self.case_list_link = (By.XPATH, "//*[text()='" + UserData.case_list_name + "']")
         self.update_case_change_link = (By.XPATH, "//*[text()='" + UserData.update_case_change_link + "']")
-        self.case_register_form =  (By.XPATH, "//*[text()='" + UserData.case_register_form + "']")
-        self.case_update_form =  (By.XPATH, "//*[text()='" + UserData.case_update_form + "']")
+        self.case_register_form = (By.XPATH, "//*[text()='" + UserData.case_register_form + "']")
+        self.case_update_form = (By.XPATH, "//*[text()='" + UserData.case_update_form + "']")
         self.enter_text_area = (By.XPATH, "//label[./div[./span[contains(text(),'Enter text')]]]/following-sibling::div[@data-bind='css: controlWidth']//div/textarea")
         self.enter_value_area = (By.XPATH, "//label[./div[./span[contains(text(),'Enter a random value')]]]/following-sibling::div[@data-bind='css: controlWidth']//div/textarea")
         self.update_value_area = (By.XPATH, "//label[./div[./span[contains(text(),'Update')]]]/following-sibling::div[@data-bind='css: controlWidth']//div/textarea")

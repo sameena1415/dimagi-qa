@@ -3,14 +3,15 @@ from datetime import datetime
 
 from HQSmokeTests.testPages.base.base_page import BasePage
 from HQSmokeTests.userInputs.generate_random_string import fetch_random_string
+from HQSmokeTests.userInputs.user_inputs import UserData
 
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
-
-from HQSmokeTests.userInputs.user_inputs import UserData
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as ec
+
+""""Contains test page elements and functions related to the Reports module"""
 
 
 class ReportPage(BasePage):

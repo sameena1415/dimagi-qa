@@ -10,6 +10,9 @@ from webdriver_manager.firefox import GeckoDriverManager
 from HQSmokeTests.userInputs.user_inputs import UserData
 from HQSmokeTests.testPages.base.login_page import LoginPage
 
+""""This file provides fixture functions for driver initialization"""
+
+
 global driver
 
 
