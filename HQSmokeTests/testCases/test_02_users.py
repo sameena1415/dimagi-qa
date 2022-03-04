@@ -44,14 +44,18 @@ def test_case_05_create_group_and_assign_user(driver):
 
 
 def test_case_05_edit_user_groups(driver):
-
+    menu = HomePage(driver)
+    menu.users_menu()
     edit = GroupPage(driver)
+    edit.click_group_menu()
     edit.edit_existing_group()
     edit.remove_user_from_group()
 
 
 def test_case_06_add_role(driver):
 
+    menu = HomePage(driver)
+    menu.users_menu()
     role = RolesPermissionPage(driver)
     role.roles_menu_click()
     print("Opened Roles and Permissions Page")
