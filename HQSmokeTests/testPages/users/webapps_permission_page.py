@@ -1,8 +1,9 @@
 from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.common.by import By
 
 from HQSmokeTests.testPages.base.base_page import BasePage
 
-from selenium.webdriver.common.by import By
+""""Contains test page elements and functions related to the User's Webapps Permissions module"""
 
 
 class WebAppPermissionPage(BasePage):

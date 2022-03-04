@@ -1,7 +1,8 @@
 from appium import webdriver
-from appium.webdriver.common.mobileby import MobileBy
 from HQSmokeTests.userInputs.user_inputs import UserData
 import time
+
+""""Contains test page elements and functions related to the app installation and form submission on mobile"""
 
 
 class AndroidScreen:
@@ -37,17 +38,16 @@ class AndroidScreen:
         # Locator
         self.enter_code = "//android.widget.TextView[@text='Enter Code']"
         self.profile_code = "org.commcare.dalvik:id/edit_profile_location"
-        self.start_install =  "org.commcare.dalvik:id/start_install"
+        self.start_install = "org.commcare.dalvik:id/start_install"
         self.install = "//android.widget.TextView[@text='Start Install']"
-        self.username =  "org.commcare.dalvik:id/edit_username"
+        self.username = "org.commcare.dalvik:id/edit_username"
         self.password = "org.commcare.dalvik:id/edit_password"
-        self.login =  "org.commcare.dalvik:id/login_button"
+        self.login = "org.commcare.dalvik:id/login_button"
         self.start_button = "//android.widget.TextView[@text='Start']"
         self.case_list = "//android.widget.TextView[@text='"+UserData.case_list_name+"']"
-        self.form =  "//android.widget.TextView[@text='"+UserData.new_form_name+"']"
+        self.form = "//android.widget.TextView[@text='"+UserData.new_form_name+"']"
         self.text_field = "//android.widget.EditText"
         self.submit_button = "//android.widget.TextView[@text='FINISH']"
-
 
     def click_xpath(self, locator):
         element = self.driver.find_element_by_xpath(locator)
@@ -86,7 +86,7 @@ class AndroidScreen:
         self.driver.find_element_by_xpath(self.text_field).send_keys(random_text)
         self.driver.find_element_by_xpath(self.submit_button).click()
         time.sleep(5)
-        assert self.driver.find_element_by_xpath( "//android.widget.TextView[@text='1 form sent to server!']").is_displayed()
+        assert self.driver.find_element_by_xpath("//android.widget.TextView[@text='1 form sent to server!']").is_displayed()
 
     def close_android_driver(self):
         self.driver.quit()

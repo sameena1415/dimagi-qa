@@ -3,6 +3,8 @@ from selenium.webdriver.common.by import By
 from HQSmokeTests.testPages.base.base_page import BasePage
 from HQSmokeTests.userInputs.user_inputs import UserData
 
+""""Contains test page elements and functions related to the Homepage of Commcare"""
+
 
 class HomePage(BasePage):
 

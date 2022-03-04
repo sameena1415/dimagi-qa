@@ -10,6 +10,9 @@ from selenium.common.exceptions import StaleElementReferenceException, TimeoutEx
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 
+""""Contains test page elements and functions related to the exports module"""
+
+
 def latest_download_file():
     os.chdir(UserData.DOWNLOAD_PATH)
     files = sorted(os.listdir(os.getcwd()), key=os.path.getmtime)
@@ -38,7 +41,6 @@ class ExportDataPage(BasePage):
         self.export_settings_create = (By.XPATH,  "//button[@class='btn btn-lg btn-primary']")
         self.date_range = (By.ID, "id_date_range")
         self.case_owner = (By.XPATH, "//span[@class='select2-selection select2-selection--multiple']")
-
 
         # Export Form and Case data variables
         self.export_form_data_link = (By.LINK_TEXT, 'Export Form Data')
@@ -314,6 +316,7 @@ class ExportDataPage(BasePage):
         except ElementClickInterceptedException:
             self.js_click(self.powerBI_tab_int)
         self.wait_and_sleep_to_click(self.add_export_button)
+        time.sleep(30)
         self.is_visible_and_displayed(self.model)
         self.select_by_value(self.model, UserData.model_type_form)
         self.select_by_text(self.app_type, UserData.app_type)
@@ -374,6 +377,8 @@ class ExportDataPage(BasePage):
         self.wait_and_sleep_to_click(self.daily_saved_export_link)
         self.delete_bulk_exports()
         print("Bulk exports deleted for Daily Saved Export Cases")
+
+    def delete_all_bulk_integration_exports(self):
         self.wait_and_sleep_to_click(self.powerBI_tab_int)
         self.delete_bulk_exports()
         print("Bulk exports deleted for Power BI Reports")

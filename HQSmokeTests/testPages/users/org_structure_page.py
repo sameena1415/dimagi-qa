@@ -8,6 +8,8 @@ from HQSmokeTests.userInputs.user_inputs import UserData
 from selenium.common.exceptions import TimeoutException, StaleElementReferenceException
 from selenium.webdriver.common.by import By
 
+""""Contains test page elements and functions related to the User's Organization structure module"""
+
 
 def latest_download_file():
     cwd = os.getcwd()

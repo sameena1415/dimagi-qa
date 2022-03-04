@@ -5,6 +5,8 @@ from selenium.webdriver.common.by import By
 
 from HQSmokeTests.testPages.base.base_page import BasePage
 
+""""Contains test page elements and functions related to the app preview"""
+
 
 class AppPreviewPage(BasePage):
 

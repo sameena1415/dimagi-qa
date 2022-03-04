@@ -2,10 +2,9 @@ from HQSmokeTests.userInputs.generate_random_string import fetch_random_string
 from HQSmokeTests.testPages.home.home_page import HomePage
 from HQSmokeTests.testPages.users.mobile_workers_page import MobileWorkerPage
 from HQSmokeTests.testPages.users.group_page import GroupPage
-from HQSmokeTests.testPages.users.roles_permissions_page import RolesPermissionPage
-from HQSmokeTests.testPages.users.org_structure_page import OrganisationStructurePage
-from HQSmokeTests.testPages.users.webapps_permission_page import WebAppPermissionPage
 from HQSmokeTests.testPages.users.web_user_page import WebUsersPage
+
+""""Contains test cases related to the User's Mobile Worker module"""
 
 
 def test_case_02_create_mobile_worker(driver):
@@ -43,58 +42,12 @@ def test_case_05_create_group_and_assign_user(driver):
 
 
 def test_case_05_edit_user_groups(driver):
-
+    menu = HomePage(driver)
+    menu.users_menu()
     edit = GroupPage(driver)
+    edit.click_group_menu()
     edit.edit_existing_group()
     edit.remove_user_from_group()
-
-
-def test_case_06_add_role(driver):
-
-    role = RolesPermissionPage(driver)
-    role.roles_menu_click()
-    print("Opened Roles and Permissions Page")
-    role = RolesPermissionPage(driver)
-    role.add_role()
-    print("New Role Added")
-
-
-def test_case_06_edit_role(driver):
-
-    role = RolesPermissionPage(driver)
-    role.edit_role()
-    print("Role Edited Successfully")
-
-
-def test_case_07_create_location(driver):
-
-    create = OrganisationStructurePage(driver)
-    create.organisation_menu_open()
-    print("Opened Organisation StructurePage Page")
-    create.create_location()
-    print("Location created")
-
-
-def test_case_07_edit_existing_location(driver):
-
-    edit = OrganisationStructurePage(driver)
-    edit.edit_location()
-    print("Location edited")
-
-
-def test_case_08_edit_location_fields(driver):
-
-    edit = OrganisationStructurePage(driver)
-    edit.edit_location_fields()
-    print("Location field created")
-    edit.selection_location_field_for_location_created()
-    print("Selected location field created, for the location")
-
-
-def test_case_09_creation_organization_level(driver):
-
-    org = OrganisationStructurePage(driver)
-    org.create_org_level()
 
 
 def test_case_10_download_and_upload_users(driver):
@@ -102,19 +55,6 @@ def test_case_10_download_and_upload_users(driver):
     user = MobileWorkerPage(driver)
     user.download_mobile_worker()
     user.upload_mobile_worker()
-
-
-def test_case_11_download_and_upload_locations(driver):
-
-    org = OrganisationStructurePage(driver)
-    org.download_locations()
-    org.upload_locations()
-
-
-def test_case_12_toggle_option_webapp_permission(driver):
-
-    web = WebAppPermissionPage(driver)
-    web.webapp_permission_option_toggle()
 
 
 def test_case_04_deactivate_user(driver):
@@ -136,8 +76,6 @@ def test_case_04_reactivate_user(driver):
 def test_cleanup_items_in_users_menu(driver):
     clean = MobileWorkerPage(driver)
     clean2 = GroupPage(driver)
-    clean3 = RolesPermissionPage(driver)
-    clean4 = OrganisationStructurePage(driver)
 
     clean.mobile_worker_menu()
     clean.select_mobile_worker_created()
@@ -155,13 +93,6 @@ def test_cleanup_items_in_users_menu(driver):
     clean2.cleanup_group()
     print("Deleted the group")
 
-    clean3.roles_menu_click()
-    clean3.cleanup_role()
-    print("Deleted the role")
-
-    clean4.cleanup_location()
-    print("Deleted the location and location field")
-
 
 def test_case_13_new_webuser_invitation(driver):
 
@@ -169,6 +100,7 @@ def test_case_13_new_webuser_invitation(driver):
     webuser.invite_new_web_user('admin')
     webuser.assert_invite()
     webuser.delete_invite()
+
 
 def test_case_54_add_custom_user_data_profile_to_mobile_worker(driver):
 
@@ -194,5 +126,3 @@ def test_case_54_add_custom_user_data_profile_to_mobile_worker(driver):
     create.click_fields()
     create.remove_user_field()
     create.save_field()
-
-

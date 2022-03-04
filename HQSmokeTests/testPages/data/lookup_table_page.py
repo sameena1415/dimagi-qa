@@ -3,6 +3,8 @@ from HQSmokeTests.userInputs.generate_random_string import fetch_random_string
 
 from selenium.webdriver.common.by import By
 
+""""Contains test page elements and functions related to the Lookup Table module"""
+
 
 class LookUpTablePage(BasePage):
 

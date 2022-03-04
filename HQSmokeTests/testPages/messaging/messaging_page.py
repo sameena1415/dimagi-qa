@@ -9,6 +9,8 @@ from selenium.common.exceptions import NoSuchElementException, StaleElementRefer
     NoAlertPresentException
 from selenium.webdriver.common.by import By
 
+""""Contains test page elements and functions related to the various messaging mediums available on CCHQ"""
+
 
 class MessagingPage(BasePage):
     def __init__(self, driver):

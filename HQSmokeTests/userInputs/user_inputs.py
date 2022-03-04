@@ -1,6 +1,8 @@
 import os
 from pathlib import Path
 
+""""Contains test data that are used as user inputs across various areasn in CCHQ"""
+
 
 class UserData:
 
@@ -24,6 +26,7 @@ class UserData:
     new_form_name = "Android Test Form"
     app_login = "AppiumTest"
     app_password = "pass123"
+    two_fa_user = "2fa.commcare.user@gmail.com"
 
     # Phone Number
     area_code = "91"
@@ -38,7 +41,6 @@ class UserData:
     update_case_change_link = "Case Change"
     case_register_form = "Case Register"
     case_update_form = "Update Case"
-
 
     # Export report names
     form_export_name = "Smoke Form Export"

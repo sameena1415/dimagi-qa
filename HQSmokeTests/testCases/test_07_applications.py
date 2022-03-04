@@ -4,6 +4,8 @@ from HQSmokeTests.testPages.android.android_screen import AndroidScreen
 from HQSmokeTests.testPages.home.home_page import HomePage
 from HQSmokeTests.testPages.reports.report_page import ReportPage
 
+""""Contains test cases related to the Application module"""
+
 
 def test_case_35_create_new_app(driver):
 
@@ -21,6 +23,7 @@ def test_case_37_form_xml_download_upload(driver):
 
     load = ApplicationPage(driver)
     load.form_xml_download_upload()
+
 
 def test_case_39_settings_exploration(driver):
 
@@ -40,7 +43,7 @@ def test_case_40_app_preview(driver):
 
 def test_case_38_create_new_build_deploy_to_mobile(driver, settings):
 
-    load = ApplicationPage (driver)
+    load = ApplicationPage(driver)
     install_code, field_text = load.update_form_field()
     print(install_code, field_text)
     mobile = AndroidScreen(settings)
@@ -50,6 +53,3 @@ def test_case_38_create_new_build_deploy_to_mobile(driver, settings):
     home.reports_menu()
     report = ReportPage(driver)
     report.verify_app_data_submit_history(field_text)
-
-
-

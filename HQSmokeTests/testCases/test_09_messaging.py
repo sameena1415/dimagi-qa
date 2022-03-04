@@ -1,6 +1,8 @@
 from HQSmokeTests.testPages.home.home_page import HomePage
 from HQSmokeTests.testPages.messaging.messaging_page import MessagingPage
 
+""""Contains test cases related to the Messaging module"""
+
 
 def test_case_41_dashboard(driver):
 
