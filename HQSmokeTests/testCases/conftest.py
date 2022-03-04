@@ -118,7 +118,7 @@ def driver(settings, browser):
 
 def pytest_addoption(parser):
     """CLI args which can be used to run the tests with specified values."""
-    parser.addoption("--browser", action="append", default='chrome', choices=['chrome', 'firefox'],
+    parser.addoption("--browser", action="store", default='chrome', choices=['chrome', 'firefox'],
                      help='Your choice of browser to run tests.')
 
 
