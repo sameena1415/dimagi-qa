@@ -36,6 +36,9 @@ class UserData:
     case_list_name = 'Case List'
     form_name = 'Registration Form'
     login_as = 'henry'
+    update_case_change_link = "Case Change"
+    case_register_form = "Case Register"
+    case_update_form = "Update Case"
 
     # Export report names
     form_export_name = "Smoke Form Export"
@@ -46,6 +49,13 @@ class UserData:
     dashboard_feed_case = "Smoke Dashboard Case feed"
     odata_feed_form = "Smoke Odata Form feed"
     odata_feed_case = "Smoke Odata Case feed"
+    case_updated_export_name = "Smoke Updated Case Export"
 
     # Date Filter
     date_having_submissions = "2022-01-18 to 2022-02-18"
+
+    # Excel column names
+    case_id = 'caseid'
+    text_value = 'name'
+    random_value = 'enter_a_random_value'
+
