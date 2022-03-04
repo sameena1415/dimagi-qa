@@ -53,6 +53,3 @@ def test_case_38_create_new_build_deploy_to_mobile(driver, settings):
     home.reports_menu()
     report = ReportPage(driver)
     report.verify_app_data_submit_history(field_text)
-
-
-

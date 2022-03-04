@@ -3,7 +3,7 @@ from HQSmokeTests.testPages.home.home_page import HomePage
 from HQSmokeTests.testPages.reports.report_page import ReportPage
 from HQSmokeTests.testPages.webapps.web_apps_page import WebAppsPage
 
-""""Contains test cases related to the Export module"""
+""""Contains test cases related to the Exports module"""
 
 
 def test_case_21_form_exports(driver):

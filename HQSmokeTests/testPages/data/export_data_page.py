@@ -377,6 +377,8 @@ class ExportDataPage(BasePage):
         self.wait_and_sleep_to_click(self.daily_saved_export_link)
         self.delete_bulk_exports()
         print("Bulk exports deleted for Daily Saved Export Cases")
+
+    def delete_all_bulk_integration_exports(self):
         self.wait_and_sleep_to_click(self.powerBI_tab_int)
         self.delete_bulk_exports()
         print("Bulk exports deleted for Power BI Reports")

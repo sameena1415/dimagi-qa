@@ -70,7 +70,7 @@ def settings(environment_settings):
     return settings["default"]
 
 
-@pytest.fixture(scope="class", autouse=True)
+@pytest.fixture(scope="module", autouse=True)
 def driver(settings, browser):
     web_driver = None
     chrome_options = webdriver.ChromeOptions()
@@ -116,7 +116,6 @@ def driver(settings, browser):
     login.login(settings["login_username"], settings["login_password"])
     yield web_driver
     web_driver.close()
-    web_driver.quit()
 
 
 def pytest_addoption(parser):
@@ -125,7 +124,7 @@ def pytest_addoption(parser):
                      help='Your choice of browser to run tests.')
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture(scope="module")
 def browser(request):
     """Pytest fixture for browser"""
     return request.config.getoption("--browser")
