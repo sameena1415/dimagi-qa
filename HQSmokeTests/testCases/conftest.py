@@ -6,9 +6,7 @@ import pytest
 from HQSmokeTests.userInputs.user_inputs import UserData
 from HQSmokeTests.testPages.base.login_page import LoginPage
 from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
-# from HQSmokeTests.utilities.email_pytest_report import Email_Pytest_Report
 
 
 global driver
@@ -133,37 +131,3 @@ def pytest_runtest_makereport(item):
 
 def _capture_screenshot(driver):
     return driver.get_screenshot_as_base64()
-
-
-'''
-#Email Utility (For reference)
-@pytest.fixture
-def email_pytest_report(req):
-    "pytest fixture for device flag"
-    return req.config.getoption("--email_pytest_report")
-
-# Command line options:
-def pytest_addoption(parser):
-    parser.addoption("--email_pytest_report",
-                 dest="email_pytest_report",
-                 help="Email pytest reports: Y or N",
-                 default="Y")
-
-
-def pytest_terminal_summary(terminalreporter, exitstatus):
-    "add additional section in terminal summary reporting."
-    username = os.environ.get("DIMAGIQA_MAIL_USERNAME")
-    password = os.environ.get("DIMAGIQA_MAIL_PASSWORD")
-    print(username, password)
-    print("entering the terminal summery")
-    if not hasattr(terminalreporter.config, 'workerinput'):
-        print("terminalreporter has workerinput")
-        print(terminalreporter.config.getoption("--email_pytest_report"))
-        if terminalreporter.config.getoption("--email_pytest_report").lower() == 'y':
-            print("creating email")
-            # Initialize the Email_Pytest_Report object
-            email_obj = Email_Pytest_Report()
-            # Send html formatted email body message with pytest reports as an attachment
-            email_obj.send_test_report_email(username,password,html_body_flag=True, attachment_flag=True, report_file_path='reports.html')
-            print("send email: Yes")
-'''
