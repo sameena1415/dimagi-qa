@@ -99,6 +99,7 @@ class ReportPage(BasePage):
         self.application_select = (By.XPATH, "//select[@id='report_filter_form_app_id']")
         self.module_select = (By.XPATH, "//select[@id='report_filter_form_module']")
         self.form_select = (By.XPATH, "//select[@id='report_filter_form_xmlns']")
+        self.case_type_select = (By.XPATH, "//select[@id='report_filter_case_type']")
         self.date_input = (By.XPATH, "//input[@id='filter_range']")
         self.view_form_link = (By.XPATH, "//tbody/tr[1]/td[1]/a[.='View Form']")
         self.case_name = (By.XPATH, "//td[div[contains(text(),'abc')]]")
@@ -107,6 +108,7 @@ class ReportPage(BasePage):
         # Case List
         self.search_input = (By.XPATH, "//input[@id='report_filter_search_query']")
         self.case_list_table = (By.XPATH, "//table[@id='report_table_case_list']/tbody/tr")
+        self.case_id_block = (By.XPATH, "//th[@title='_id']/following-sibling::td")
 
     def check_if_report_loaded(self):
         try:
@@ -348,3 +350,13 @@ class ReportPage(BasePage):
         time.sleep(3)
         self.page_source_contains(case_name)
         assert True, "Case name is present in Submit history"
+
+    def verify_updated_data_in_case_list(self, case_name, value):
+        self.page_source_contains(case_name)
+        self.wait_and_sleep_to_click((By.LINK_TEXT, str(case_name)))
+        time.sleep(3)
+        self.page_source_contains(case_name)
+        assert self.is_present_and_displayed((By.XPATH,"//div[@id='properties']//td[contains(text(),'"+value+"')]")), "Case property not updated."
+        print("Case is updated successfully")
+        case_id = self.get_text(self.case_id_block)
+        return case_id
