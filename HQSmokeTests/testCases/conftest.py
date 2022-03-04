@@ -1,13 +1,13 @@
 import os
+import pytest
+
 from configparser import ConfigParser
 from pathlib import Path
-
-import pytest
-from HQSmokeTests.userInputs.user_inputs import UserData
-from HQSmokeTests.testPages.base.login_page import LoginPage
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
 
+from HQSmokeTests.userInputs.user_inputs import UserData
+from HQSmokeTests.testPages.base.login_page import LoginPage
 
 global driver
 
@@ -27,7 +27,7 @@ def environment_settings():
             for instructions on how to set them.
             """
     settings = {}
-    for name in ["url", "login_username", "login_password", "mail_username", "mail_password","bs_user", "bs_key"]:
+    for name in ["url", "login_username", "login_password", "mail_username", "mail_password", "bs_user", "bs_key"]:
         var = f"DIMAGIQA_{name.upper()}"
         if var in os.environ:
             settings[name] = os.environ[var]
@@ -83,34 +83,16 @@ def driver(settings):
             "download.prompt_for_download": False,
             "download.directory_upgrade": True,
             "safebrowsing.enabled": True})
-    else:
-        chrome_options.add_argument('--safebrowsing-disable-download-protection')
-        chrome_options.add_argument('--safebrowsing-disable-extension-blacklist')
-        # Local Headless
-        # chrome_options.add_argument("--window-size=1920,1080")
-        # chrome_options.add_argument('--start-maximized')
-        # chrome_options.add_argument('--no-sandbox')
-        # chrome_options.add_argument("--disable-extensions")
-        # chrome_options.add_argument('--headless')
-        # chrome_options.set_capability("browserVersion", "94.0.4606")
-        chrome_options.add_experimental_option("prefs", {
-            "download.default_directory": str(UserData.DOWNLOAD_PATH),
-            "download.prompt_for_download": False,
-            "safebrowsing.enabled": True})
-
-    # web_driver = Service(executable_path=ChromeDriverManager().install(), service_args=['--verbose', 'log_path="/logs/chrome.log"'])
-    # driver = webdriver.Chrome(service=web_driver, options=chrome_options)
-    driver = webdriver.Chrome(executable_path=ChromeDriverManager().install(), options=chrome_options)
-    print("Chrome version:", driver.capabilities['browserVersion'])
-    login = LoginPage(driver, settings["url"])
+    web_driver = webdriver.Chrome(executable_path=ChromeDriverManager().install(), options=chrome_options)
+    print("Chrome version:", web_driver.capabilities['browserVersion'])
+    login = LoginPage(web_driver, settings["url"])
     login.login(settings["login_username"], settings["login_password"])
-    yield driver
-    driver.close()
-    driver.quit()
+    yield web_driver
+    web_driver.close()
+    web_driver.quit()
 
 
 @pytest.hookimpl(hookwrapper=True)
-# @pytest.mark.hookwrapper
 def pytest_runtest_makereport(item):
     pytest_html = item.config.pluginmanager.getplugin("html")
     outcome = yield
@@ -129,5 +111,5 @@ def pytest_runtest_makereport(item):
         report.extra = extra
 
 
-def _capture_screenshot(driver):
-    return driver.get_screenshot_as_base64()
+def _capture_screenshot(web_driver):
+    return web_driver.get_screenshot_as_base64()
