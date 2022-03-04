@@ -24,6 +24,7 @@ class UserData:
     new_form_name = "Android Test Form"
     app_login = "AppiumTest"
     app_password = "pass123"
+    two_fa_user = "2fa.commcare.user@gmail.com"
 
     # Phone Number
     area_code = "91"
@@ -35,7 +36,6 @@ class UserData:
     case_list_name = 'Case List'
     form_name = 'Registration Form'
     login_as = 'henry'
-
 
     # Export report names
     form_export_name = "Smoke Form Export"
