@@ -5,6 +5,7 @@ from configparser import ConfigParser
 from pathlib import Path
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
+from webdriver_manager.firefox import GeckoDriverManager
 
 from HQSmokeTests.userInputs.user_inputs import UserData
 from HQSmokeTests.testPages.base.login_page import LoginPage
@@ -27,7 +28,8 @@ def environment_settings():
             for instructions on how to set them.
             """
     settings = {}
-    for name in ["url", "login_username", "login_password", "mail_username", "mail_password", "bs_user", "bs_key"]:
+    for name in ["url", "login_username", "login_password", "mail_username",
+                 "mail_password", "bs_user", "bs_key", "auth_key"]:
         var = f"DIMAGIQA_{name.upper()}"
         if var in os.environ:
             settings[name] = os.environ[var]
@@ -43,7 +45,8 @@ def settings(environment_settings):
     if os.environ.get("CI") == "true":
         settings = environment_settings
         settings["CI"] = "true"
-        if any(x not in settings for x in ["url", "login_username", "login_password", "mail_username", "mail_password", "bs_user", "bs_key"]):
+        if any(x not in settings for x in ["url", "login_username", "login_password",
+                                           "mail_username", "mail_password", "bs_user", "bs_key", "auth_key"]):
             lines = environment_settings.__doc__.splitlines()
             vars_ = "\n  ".join(line.strip() for line in lines if "DIMAGIQA_" in line)
             raise RuntimeError(
@@ -64,32 +67,65 @@ def settings(environment_settings):
     return settings["default"]
 
 
-@pytest.fixture(scope="module")
-def driver(settings):
+@pytest.fixture(scope="class", autouse=True)
+def driver(settings, browser):
+    web_driver = None
     chrome_options = webdriver.ChromeOptions()
+    firefox_options = webdriver.FirefoxOptions()
     if settings.get("CI") == "true":
-        chrome_options.add_argument('--no-sandbox')
-        chrome_options.add_argument('disable-extensions')
-        chrome_options.add_argument('--safebrowsing-disable-download-protection')
-        chrome_options.add_argument('--safebrowsing-disable-extension-blacklist')
-        chrome_options.add_argument('window-size=1920,1080')
-        chrome_options.add_argument("--disable-setuid-sandbox")
-        chrome_options.add_argument('--start-maximized')
-        chrome_options.add_argument('--disable-dev-shm-usage')
-        chrome_options.add_argument('--headless')
-        chrome_options.add_argument("--disable-notifications")
-        chrome_options.add_experimental_option("prefs", {
-            "download.default_directory": str(UserData.DOWNLOAD_PATH),
-            "download.prompt_for_download": False,
-            "download.directory_upgrade": True,
-            "safebrowsing.enabled": True})
-    web_driver = webdriver.Chrome(executable_path=ChromeDriverManager().install(), options=chrome_options)
-    print("Chrome version:", web_driver.capabilities['browserVersion'])
+        if browser == "chrome":
+            chrome_options.add_argument('--no-sandbox')
+            chrome_options.add_argument('disable-extensions')
+            chrome_options.add_argument('--safebrowsing-disable-download-protection')
+            chrome_options.add_argument('--safebrowsing-disable-extension-blacklist')
+            chrome_options.add_argument('window-size=1920,1080')
+            chrome_options.add_argument("--disable-setuid-sandbox")
+            chrome_options.add_argument('--start-maximized')
+            chrome_options.add_argument('--disable-dev-shm-usage')
+            chrome_options.add_argument('--headless')
+            chrome_options.add_argument("--disable-notifications")
+            chrome_options.add_experimental_option("prefs", {
+                "download.default_directory": str(UserData.DOWNLOAD_PATH),
+                "download.prompt_for_download": False,
+                "download.directory_upgrade": True,
+                "safebrowsing.enabled": True})
+        elif browser == "firefox":
+            firefox_options.set_headless()
+            firefox_options.add_argument('--no-sandbox')
+            firefox_options.add_argument('disable-extensions')
+            firefox_options.add_argument('--safebrowsing-disable-download-protection')
+            firefox_options.add_argument('--safebrowsing-disable-extension-blacklist')
+            firefox_options.add_argument('window-size=1920,1080')
+            firefox_options.add_argument("--disable-setuid-sandbox")
+            firefox_options.add_argument('--start-maximized')
+            firefox_options.add_argument('--disable-dev-shm-usage')
+            firefox_options.add_argument('--headless')
+            firefox_options.add_argument("--disable-notifications")
+            firefox_options.set_preference("browser.download.dir", str(UserData.DOWNLOAD_PATH))
+    if browser == "chrome":
+        web_driver = webdriver.Chrome(executable_path=ChromeDriverManager().install(), options=chrome_options)
+        print("Chrome version:", web_driver.capabilities['browserVersion'])
+    elif browser == "firefox":
+        web_driver = webdriver.Firefox(executable_path=GeckoDriverManager().install(), options=firefox_options)
+    else:
+        print("Provide valid browser")
     login = LoginPage(web_driver, settings["url"])
     login.login(settings["login_username"], settings["login_password"])
     yield web_driver
     web_driver.close()
     web_driver.quit()
+
+
+def pytest_addoption(parser):
+    """CLI args which can be used to run the tests with specified values."""
+    parser.addoption("--browser", action="append", default='chrome', choices=['chrome', 'firefox'],
+                     help='Your choice of browser to run tests.')
+
+
+@pytest.fixture(scope="session")
+def browser(request):
+    """Pytest fixture for browser"""
+    return request.config.getoption("--browser")
 
 
 @pytest.hookimpl(hookwrapper=True)
