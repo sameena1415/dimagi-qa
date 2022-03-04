@@ -109,6 +109,8 @@ class ApplicationPage(BasePage):
         print("New App created successfully!")
 
     def form_builder_exploration(self):
+        self.wait_to_click(self.applications_menu_id)
+        self.wait_to_click(self.app_created)
         time.sleep(2)
         self.click(self.menu_settings)
         time.sleep(2)

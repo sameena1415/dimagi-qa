@@ -24,6 +24,7 @@ def test_case_37_form_xml_download_upload(driver):
     load = ApplicationPage(driver)
     load.form_xml_download_upload()
 
+
 def test_case_39_settings_exploration(driver):
 
     load = ApplicationPage(driver)
@@ -42,7 +43,7 @@ def test_case_40_app_preview(driver):
 
 def test_case_38_create_new_build_deploy_to_mobile(driver, settings):
 
-    load = ApplicationPage (driver)
+    load = ApplicationPage(driver)
     install_code, field_text = load.update_form_field()
     print(install_code, field_text)
     mobile = AndroidScreen(settings)
