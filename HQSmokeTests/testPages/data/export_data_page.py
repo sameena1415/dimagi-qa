@@ -42,7 +42,6 @@ class ExportDataPage(BasePage):
         self.date_range = (By.ID, "id_date_range")
         self.case_owner = (By.XPATH, "//span[@class='select2-selection select2-selection--multiple']")
 
-
         # Export Form and Case data variables
         self.export_form_data_link = (By.LINK_TEXT, 'Export Form Data')
         self.export_case_data_link = (By.LINK_TEXT, 'Export Case Data')
@@ -317,6 +316,7 @@ class ExportDataPage(BasePage):
         except ElementClickInterceptedException:
             self.js_click(self.powerBI_tab_int)
         self.wait_and_sleep_to_click(self.add_export_button)
+        time.sleep(20)
         self.is_visible_and_displayed(self.model)
         self.select_by_value(self.model, UserData.model_type_form)
         self.select_by_text(self.app_type, UserData.app_type)
@@ -393,7 +393,7 @@ class ExportDataPage(BasePage):
         # self.driver.close()  # Close the feed URL
         self.driver.back()
 
-    def add_updated_case_exports(self, username):
+    def add_updated_case_exports(self):
         self.wait_to_click(self.export_case_data_link)
         self.delete_bulk_exports()
         self.wait_and_sleep_to_click(self.add_export_button)
