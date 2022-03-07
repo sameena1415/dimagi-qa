@@ -5,11 +5,8 @@ This is a POC of NY USH App workflow. To start:
 ```
 pip install -r requirements.txt
 ```
-##### Replace the webuser credentials in file /Loccators/user_inputs.robot 
-```
-${email}    sample
-${pass}    sample
-```
+##### Copy file Populate /Utilities/user_input-sample.robot and save it as user_input.robot. Add the required credentials in to the file.
+
 
 ##### The test cases are located in the Tests directory. They can be executed using the robot command:
 ```
