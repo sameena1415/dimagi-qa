@@ -2,6 +2,7 @@
 Library  SeleniumLibrary
 Library    String
 Library    DateTime
+Resource    ../../Base/base.robot 
 
 
 *** Variables ***
@@ -28,12 +29,11 @@ Register New Case
     ${name_random}    Get Variable Value    ${name_random}
     Input Text       ${patient_first_name}    ${name_random}
     Input Text       ${patient_last_name}    ${name_random}
-    Execute Javascript    document.evaluate(" ${submit_form}",document.body,null,9,null).singleNodeValue.click();
-    Element Should Be Visible    ${success_message} 
+    Submit Form and Check Success
     
 Get Case Name
     ${name_random}    Get Variable Value    ${name_random} 
-    #${name_random}     Set Variable     Patient-c55f
+    #${name_random}     Set Variable     Patient-1632
     Log    ${name_random}
     [Return]    ${name_random}
 

@@ -12,7 +12,7 @@ PUI form submission
     
 
 Search Archieved Case in All Suspected Cases (PUIs) menu
-    All Suspected Cases (PUIs) menu
+    Open All Suspected Cases (PUIs) menu
     Wait Until Element Is Enabled    ${search all cases}
     JS Click    ${search all cases} 
     Input Text    ${first-name_case_search}    ${archieved_contact_name}
@@ -20,7 +20,7 @@ Search Archieved Case in All Suspected Cases (PUIs) menu
     JS Click    ${case search submit}
 
 Search Case in All Suspected Cases (PUIs) menu
-    All Suspected Cases (PUIs) menu
+    Open All Suspected Cases (PUIs) menu
     Wait Until Element Is Enabled    ${search all cases}
     JS Click     ${search all cases}
     Wait Until Element Is Enabled    ${case search submit}

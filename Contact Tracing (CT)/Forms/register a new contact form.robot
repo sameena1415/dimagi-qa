@@ -13,11 +13,10 @@ Generate Random Contact Name
     ${name_random} =     Catenate	SEPARATOR=-	Contact	${hex}
     Set Suite Variable  ${name_random}
 
-
+   
 Register contact with phone number
    Open Register New Contacts Menu
-   Click Element    ${select_first case_in_caselist}
-   Click Element    ${continue}
+   Select Created Case    ${select_first case_in_caselist}
    Run Keyword And Ignore Error    Click Element    ${register_new_contacts_form} 
    Generate Random Contact Name
    ${name_random}    Get Variable Value    ${name_random}
@@ -26,15 +25,35 @@ Register contact with phone number
    ${Mobile number}    Generate Mobile Number
    Input Text       ${contact_phone_num}    ${Mobile number}
    JS Click    ${preferred_language}
-   JS Click    ${first_symptom_date}
+   JS Click   ${last_contact_date}
    ${Yesterday's date}    Yesterday's Date
-   Input Text    ${first_symptom_date}    ${Yesterday's date}
-   JS Click    ${first_symptom_date}
+   Input Text    ${last_contact_date}   ${Yesterday's date}
+   JS Click    ${last_contact_date}
    Submit Form and Check Success  
    
+Register contact without phone number
+   Open Register New Contacts Menu
+   ${case_name}    Get Case Name
+   ${case_created}   Set Case Name
+   Case Search    ${case_name}    
+   Search in the case list    ${case_name}
+   Select Created Case    ${case_created}
+   Run Keyword And Ignore Error    Click Element    ${register_new_contacts_form}
+   Generate Random Contact Name
+   ${name_random}    Get Variable Value    ${name_random}
+   Input Text       ${contact_first_name}    ${name_random} 
+   Input Text       ${contact_last_name}    ${name_random}   
+   JS Click    ${preferred_language}
+   JS Click   ${last_contact_date}
+   ${Yesterday's date}    Yesterday's Date
+   Input Text    ${last_contact_date}   ${Yesterday's date}
+   JS Click    ${last_contact_date}
+   Submit Form and Check Success   
+
+
 Get Contact Name
     ${name_random}    Get Variable Value    ${name_random} 
-    # ${name_random}     Set Variable     Patient-fbe5
+   #${name_random}     Set Variable     Contact-8d99
     Log    ${name_random}
     [Return]    ${name_random}
 

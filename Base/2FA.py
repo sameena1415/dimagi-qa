@@ -1,6 +1,6 @@
 import base64
-
 import pyotp
+
 from robot.api.deco import keyword
 
 

@@ -5,7 +5,7 @@ Library    DateTime
 Resource    ../Locators/locators.robot
 Resource     ../Case Investigation (CI)/Forms/register a new case form.robot
 Resource    ../Contact Tracing (CT)/Forms/register a new contact form.robot
-Library    2FA.py     
+Library    2FA.py
 
 
 *** Variables ***
@@ -13,7 +13,7 @@ Library    2FA.py
 # Case Search
 ${first-name_case_search}    xpath:(//td/div[contains(., "First Name")]/following::input)[1]
 ${last-name_case_search}    xpath:(//td/div[contains(., "Last Name")]/following::input)[1]
-${search all cases in the list}    //button[text()='Search All Cases in this List']
+${search all cases in the list}    //button[contains(., 'Search All')]
 
 *** Keywords ***
     
@@ -75,6 +75,7 @@ Log in as ct_user
 
 JS Click
     [Arguments]    ${element}
+    Wait Until Element Is Enabled    ${element}    
     Execute JavaScript    document.evaluate("${element}",document.body,null,9,null).singleNodeValue.click();
 
 Generate Mobile Number
@@ -116,14 +117,20 @@ Select Created Case
     Wait Until Element Is Enabled    ${continue}
     Sleep    2s 
     Scroll Element Into View    ${continue}
-    Click Element    ${continue}  
+    Click Element    ${continue} 
     
-Case Search
-    [Arguments]     ${case_created}   
+Case Search Search All
     Wait Until Element Is Enabled    ${search all cases in the list}
     JS Click    ${search all cases in the list}
-    Input Text    ${first-name_case_search}    ${case_created}
-    Input Text    ${last-name_case_search}    ${case_created}
+    Wait Until Element Is Enabled    ${case search submit}
+    JS Click    ${case search submit}
+    
+Case Search
+    [Arguments]     ${case_or_contact_created}   
+    Wait Until Element Is Enabled    ${search all cases in the list}
+    JS Click    ${search all cases in the list}
+    Input Text    ${first-name_case_search}    ${case_or_contact_created} 
+    Input Text    ${last-name_case_search}    ${case_or_contact_created} 
     Wait Until Element Is Enabled    ${case search submit}
     JS Click    ${case search submit}
     

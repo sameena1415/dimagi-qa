@@ -40,10 +40,10 @@ Convert_Contact_to_PUI_3
     Search in the case list    ${contact_name} 
     Element Should Not Be Visible    ${contact_created}   
     Log in as ct_user
-    All Closed Contacts menu
+    Open All Closed Contacts menu
     Search in the case list    ${contact_name}
     Element Should Be Visible    ${contact_created}    
-    All Open Contacts menu
+    Open All Open Contacts menu
     Search in the case list    ${contact_name}
     Element Should Not Be Visible    ${contact_created}    
     
@@ -74,7 +74,7 @@ Convert_Contact_to_PUI_4
     Search in the case list    ${contact_name}
     Element Should Not Be Visible    ${contact_created}   
     Log in as ct_user 
-    All Open Contacts menu
+    Open All Open Contacts menu
     Search in the case list    ${contact_name}
     Element Should Be Visible    ${contact_created}   
     

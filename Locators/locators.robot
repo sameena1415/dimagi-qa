@@ -12,12 +12,12 @@ ${confirm_cookie}    css:#hs-eu-confirmation-button
 ${commcare hq title}    CommCare HQ
 ${webapps_menu}    css:#CloudcareTab > a
 ${login_as}    css:.js-restore-as-item
-${ct_user}    css:[aria-label='${ct username}'] > .module-column-name
-${ci_user}    css:[aria-label='${ci username}'] > .module-column-name
+${ct_user}    //span[contains(., "CT")]
+${ci_user}    //span[contains(., "CI")]
 ${confirm_user_login}    //button[@id="js-confirmation-confirm"]
 
-${select_app}    xpath://div[@aria-label='${app name}']
-${register_new_contacts_menu}    (//div[@aria-label='Register New Contact(s)']/div)[1]
+${select_app}    xpath://div[contains(@aria-label,"${app name}")]
+
 ${select_first case_in_caselist}    xpath:(//td[@class='module-caselist-column'])[1]
 ${continue}    id:select-case
 ${register_new_contacts_form}    //tr[@aria-label="Register New Contact(s)"]
@@ -25,19 +25,20 @@ ${contact_first_name}     xpath://span[text()='First name']/following::div[1]/di
 ${contact_last_name}     xpath://span[text()='Last name']/following::div[1]/div[@class='widget']/descendant::textarea
 ${contact_phone_num}    xpath://span[text()='Phone number:']/following::div[1]/div[@class='widget']/descendant::input
 ${preferred_language}    //p[text()='English']
-${first_symptom_date}    //span[contains(text(),'When was the last day ')]/following::div[1]//input[@type='text']
+${last_contact_date}    //span[contains(text(),'When was the last day ')]/following::div[1]//input[@type='text']
 ${submit_form}     //button[@type='submit' and @class='submit btn btn-primary']
 ${success_message}    //p[text()='Form successfully saved!']
 
 
 ${app_home}    xpath://ol//li[contains(.,"${app name}")]
-${contacts_unassigned_open_menu}    (//div[@aria-label='All Contacts: Unassigned & Open']/div)[1]
+
 ${search_case}    id:searchText
 ${search_button}    id:case-list-search-button    
 ${contact_monitoring_form}    xpath://tr[@aria-label="Contact Monitoring"]
 ${initial_interview_disposition}    //p[text()='Reached person, agreed to call']
 ${final_disposition2}    //p[text()='Reached, completed investigation']
-${symptom_fever}    //p[text()='Fever (subjective or measured)']
+${symptom_fever}    //p[contains(.,'Fever')]
+${symptom_chill}    //p[contains(.,'Chills')]
 ${symptom_fatigue}    //p[text()='Fatigue']
 ${symptom_congestion}    //p[text()='Congestion']
 ${symptom_runny_nose}    //p[text()='Runny nose']
@@ -46,11 +47,12 @@ ${gender}    //p[text()='Female']
 ${race}    //p[text()='Asian']
 ${ethnicity}    //p[text()='Hispanic/Latino']
 ${yes_convert_pui}    //p[text()='Yes, convert contact/traveler to PUI']
+${no_convert_pui}    //p[contains(.,'No, do NOT convert')]
 ${pui_form_header}    //h1[text()='Convert Contact to a Suspected Case (PUI)' and @class='title']
 ${confirm_yes_convert_pui}    //p[text()='Yes']   
 ${covert_to_pui_form}    //tr[@aria-label='Convert Contact to a Suspected Case (PUI)']
 
-${all_suspected_cases_menu}    (//div[@aria-label='All Suspected Cases (PUIs)']/div)[1]
+
 ${webapps_home}    //a[@href="/a/${domain}/cloudcare/apps/v2/" and @class="navbar-brand"]
 ${check_in_menu}   (//div[@aria-label='Check In']/div)[1] 
 ${search all cases}    //button[text()='Search All Cases']
@@ -79,8 +81,6 @@ ${email_input}    test@test.in
 ${mail_label}    xpath://p/strong[text() = '${email_input}']
 
 
-${all_closed_contacts_menu}   (//div[@aria-label='All Closed Contacts']/div)[1]
-${all_open_contacts_menu}    (//div[@aria-label='All Open Contacts']/div)[1]
 ${archieved_contact}    //td[text()='${archieved_contact_name}']
 
 ${sync}    xpath://div[@class='js-sync-item appicon appicon-sync']
