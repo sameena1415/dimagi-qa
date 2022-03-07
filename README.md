@@ -1,5 +1,5 @@
 ## Robot Framework
-This is a POC of NY USH App workflow. To start:
+Script for NY USH App QA workflows. To start:
 
 ##### Install Robot Framework and SeleniumLibrary along with its dependencies using pip package manager. 
 ```
