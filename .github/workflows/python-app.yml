@@ -5,9 +5,9 @@ name: HQ Smoke Tests
 
 on:
   push:
-    branches: [ master ]
+    branches: [ benchmark ]
   pull_request:
-    branches: [ master ]
+    branches: [ benchmark ]
   repository_dispatch:
     types: [ deploy_success ]
 
@@ -26,7 +26,7 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install -r HQSmokeTests/requires.txt
+        pip install -r BenchmarkTests/requires.txt
 
     - name: Lint with flake8
       run: |
@@ -35,7 +35,7 @@ jobs:
         # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
 
-    - name: CCHQ Smoke Test with pytest
+    - name: Benchmark Performance Test with pytest
       env:
         DIMAGIQA_ENV: ${{ github.event.client_payload.environment }}  #${{ secrets.DIMAGIQA_URL }}
         DIMAGIQA_LOGIN_USERNAME: ${{ secrets.DIMAGIQA_LOGIN_USERNAME }}
@@ -49,7 +49,7 @@ jobs:
         echo "client_payload: ${{ toJson(github.event.client_payload) }}"
         echo "NOW=$(date +'%m-%d %H:%M')" >> $GITHUB_ENV
         echo ${{env.NOW}}
-        pytest -v --rootdir= HQSmokeTests/testCases
+        pytest -v --rootdir= BenchmarkTests/testCases
 
     - name: Send Pass Email On Deploy Event
       uses: dawidd6/action-send-mail@v3
@@ -66,11 +66,11 @@ jobs:
         # Required mail subject:
         subject: ${{ github.event.client_payload.environment }}  PASS - Smoke Tests[#${{github.run_number}}], ${{env.NOW}}
         # Required recipients' addresses:
-        to: qa@dimagi.com, sameena.shaik@fissionlabs.com
+        to: kbordoloi@dimagi.com
         # Required sender full name (address can be skipped):
         from: <${{secrets.DIMAGIQA_MAIL_USERNAME}}>
         # Optional HTML body read from file:
-        html_body: file:////home/runner/work/dimagi-qa/dimagi-qa/HQSmokeTests/email_pass.html
+        html_body: file:////home/runner/work/dimagi-qa/dimagi-qa/BenchmarkTests/email_pass.html
         # Optional priority: 'high', 'normal' (default) or 'low'
         priority: normal
 
@@ -83,9 +83,9 @@ jobs:
         username: ${{secrets.DIMAGIQA_MAIL_USERNAME}}
         password: ${{secrets.DIMAGIQA_MAIL_PASSWORD}}
         subject: ${{ github.event.client_payload.environment }} FAIL - Smoke Tests[#${{github.run_number}}], ${{env.NOW}}
-        to: qa@dimagi.com, sameena.shaik@fissionlabs.com
+        to: kbordoloi@dimagi.com
         from: <${{secrets.DIMAGIQA_MAIL_USERNAME}}>
-        html_body: file:////home/runner/work/dimagi-qa/dimagi-qa/HQSmokeTests/email_fail.html
+        html_body: file:////home/runner/work/dimagi-qa/dimagi-qa/BenchmarkTests/email_fail.html
         attachments: /home/runner/work/dimagi-qa/dimagi-qa/report.html
         priority: normal
 
@@ -98,9 +98,9 @@ jobs:
         username: ${{secrets.DIMAGIQA_MAIL_USERNAME}}
         password: ${{secrets.DIMAGIQA_MAIL_PASSWORD}}
         subject: FAIL - Smoke Tests[#${{github.run_number}}] on branch "${{ github.head_ref }}", ${{env.NOW}}
-        to: qa-automation@dimagi.com
+        to: kbordoloi@dimagi.com
         from: <${{secrets.DIMAGIQA_MAIL_USERNAME}}>
-        html_body: file:////home/runner/work/dimagi-qa/dimagi-qa/HQSmokeTests/email_fail.html
+        html_body: file:////home/runner/work/dimagi-qa/dimagi-qa/BenchmarkTests/email_fail.html
         attachments: /home/runner/work/dimagi-qa/dimagi-qa/report.html
         priority: normal
 
@@ -113,9 +113,9 @@ jobs:
         username: ${{secrets.DIMAGIQA_MAIL_USERNAME}}
         password: ${{secrets.DIMAGIQA_MAIL_PASSWORD}}
         subject: PASS - Smoke Tests[#${{github.run_number}}] on branch "${{ github.head_ref }}", ${{env.NOW}}
-        to: qa-automation@dimagi.com
+        to: kbordoloi@dimagi.com
         from: <${{secrets.DIMAGIQA_MAIL_USERNAME}}>
-        html_body: file:////home/runner/work/dimagi-qa/dimagi-qa/HQSmokeTests/email_pass.html
+        html_body: file:////home/runner/work/dimagi-qa/dimagi-qa/BenchmarkTests/email_pass.html
         priority: normal
 
     - name: Archive test results
