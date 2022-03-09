@@ -45,6 +45,7 @@ class BenchmarkPage(BasePage):
         self.export_settings_create = (By.XPATH, "//button[@class='btn btn-lg btn-primary']")
         self.date_range = (By.ID, "id_date_range")
         self.case_owner = (By.XPATH, "//span[@class='select2-selection select2-selection--multiple']")
+
         # Export Form and Case data variables
         self.export_form_data_link = (By.LINK_TEXT, 'Export Form Data')
         self.export_case_data_link = (By.LINK_TEXT, 'Export Case Data')
@@ -54,6 +55,8 @@ class BenchmarkPage(BasePage):
         self.apply = (By.XPATH, "//button[@class='applyBtn btn btn-sm btn-primary']")
         self.export_button = (By.XPATH, "//a[@class='btn btn-primary'][contains(text(),'Export')]")
         self.codes = (By.XPATH, "//table//tr//code[starts-with(text(),'name')]")
+        self.edit_form_case_export = (By.XPATH, "(//a[@data-bind='click: editExport'])[1]")
+
         # Export Modal
         self.app_type = (By.ID, "id_app_type")
         self.application = (By.ID, "id_application")
@@ -61,8 +64,12 @@ class BenchmarkPage(BasePage):
         self.form = (By.ID, "id_form")
         self.case = (By.ID, "id_case_type")
         self.model = (By.ID, "id_model_type")
-
-
+        # bulk export delete
+        self.select_all_btn = (By.XPATH, '//button[@data-bind="click: selectAll"]')
+        self.delete_selected_exports = (By.XPATH, '//a[@href= "#bulk-delete-export-modal"]')
+        self.bulk_delete_confirmation_btn = (By.XPATH, '//button[@data-bind="click: BulkExportDelete"]')
+        self.alert_button_accept = (By.ID, "hs-eu-confirmation-button")
+        self.success_message = (By.XPATH, "//*[@class='alert alert-margin-top fade in alert-success']")
     # os.mkdir(TestData.output_path)
     def dismiss_notification(self):
         try:
@@ -108,8 +115,18 @@ class BenchmarkPage(BasePage):
     def excel_download(self):
         self.wait_to_click(self.case_id_download)
 
+    def delete_bulk_exports(self):
+        try:
+            self.wait_to_click(self.select_all_btn)
+            self.wait_to_click(self.delete_selected_exports)
+            self.wait_to_click(self.bulk_delete_confirmation_btn)
+            time.sleep(5)
+            # assert self.is_visible_and_displayed(self.success_message), "Cases upload not completed!"
+            # print("Cases uploaded successfully!")
+        except TimeoutException:
+            print("No exports available")
 
-    def wait_for_page_load_completion(self, cols):
+    def wait_for_export_page_load_completion(self, cols):
         self.driver.refresh()
         self.wait_to_click(self.export_case_data_link)
         self.wait_and_sleep_to_click(self.add_export_button)
@@ -139,3 +156,44 @@ class BenchmarkPage(BasePage):
             fieldnames = ['property_count','load_time']
             writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
             writer.writerow({'property_count': cols,'load_time':load_time})
+
+    def add_case_export(self, cols):
+        self.driver.refresh()
+        self.wait_to_click(self.export_case_data_link)
+        self.delete_bulk_exports()
+        self.wait_and_sleep_to_click(self.add_export_button)
+        self.is_visible_and_displayed(self.app_type)
+        self.select_by_text(self.application, TestData.benchmark_application)
+        self.select_by_text(self.case, TestData.case_type)
+        self.wait_to_click(self.add_export_conf)
+        start_time = time.time()
+        WebDriverWait(self.driver, 100000).until(lambda driver: driver.execute_script('return document.readyState') == 'complete')
+        res = self.wait_and_find_elements(self.codes,cols)
+        count = self.find_elements(self.codes)
+        print(res, len(count))
+        # assert self.is_present_and_displayed(self.export_settings_create)
+        self.wait_to_clear_and_send_keys(self.export_name, TestData.case_export_name)
+        self.wait_to_click(self.export_settings_create)
+        print("Export created!!")
+        time.sleep(30)
+
+    def edit_case_exports(self, cols):
+        WebDriverWait(self.driver, 10000).until(
+            lambda driver: driver.execute_script('return document.readyState') == 'complete')
+        self.wait_and_sleep_to_click(self.export_case_data_link)
+        time.sleep(5)
+        self.wait_to_click(self.edit_form_case_export)
+        start_time = time.time()
+        WebDriverWait(self.driver, 100000).until(
+            lambda driver: driver.execute_script('return document.readyState') == 'complete')
+        res = self.wait_and_find_elements(self.codes, cols)
+        count = self.find_elements(self.codes)
+        print(res, len(count))
+        assert len(count) >= cols, "All properties are not loaded"
+        print("All properties are loaded. Total properties: ", len(count))
+        # assert self.is_present_and_displayed(self.export_settings_create)
+        end_time = time.time()
+        total_time = end_time - start_time
+        # total_time = time.strftime("%H:%M:%S", time.gmtime(total_time))
+        print("Total time taken to execute the code: ", total_time)
+        return str(total_time)

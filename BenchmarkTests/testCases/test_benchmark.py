@@ -12,7 +12,8 @@ def test_case_benchmaark(driver):
     bench = BenchmarkPage(driver)
     filename = bench.create_excel(TestData.col_start, TestData.col_end, TestData.output_path, data_dict)
     bench.excel_upload(TestData.output_path, filename)
-    # caseid = bench.excel_download()
-    load_time = bench.wait_for_page_load_completion(TestData.col_end,)
+    # load_time = bench.wait_for_export_page_load_completion(TestData.col_end,)
+    bench.add_case_export(TestData.col_end )
+    load_time = bench.edit_case_exports(TestData.col_end)
     bench.write_time_to_output(TestData.col_start, TestData.col_end,TestData.output_csv,load_time)
 
