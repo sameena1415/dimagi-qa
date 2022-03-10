@@ -40,8 +40,11 @@ def test_exports_cleanup(driver):
     export.data_tab()
     export.delete_all_bulk_integration_exports()
 
-
 def test_case_55_update_case_verify_change_in_export_data(driver, settings):
+    if settings["url"] == "https://staging.commcarehq.org/":
+        import pytest
+        pytest.xfail("Failing due to an issue in Staging")
+
     case = HomePage(driver)
     case.web_apps_menu()
     webapps = WebAppsPage(driver)

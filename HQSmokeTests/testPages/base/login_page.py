@@ -62,7 +62,7 @@ class LoginPage(BasePage):
     def accept_alert(self):
         try:
             self.click(self.alert_button_accept)
-        except TimeoutException:
+        except (TimeoutException, NoSuchElementException):
             pass  # ignore if alert not on page
 
     def logout(self):

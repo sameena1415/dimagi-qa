@@ -43,7 +43,7 @@ def environment_settings():
     return settings
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture(scope="session", autouse=True)
 def settings(environment_settings):
     if os.environ.get("CI") == "true":
         settings = environment_settings
@@ -115,7 +115,7 @@ def driver(settings, browser):
     login = LoginPage(web_driver, settings["url"])
     login.login(settings["login_username"], settings["login_password"])
     yield web_driver
-    web_driver.close()
+    web_driver.quit()
 
 
 def pytest_addoption(parser):
