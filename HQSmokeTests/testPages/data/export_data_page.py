@@ -254,6 +254,7 @@ class ExportDataPage(BasePage):
     def excel_dashboard_integration_form(self):
         self.wait_and_sleep_to_click(self.export_excel_dash_int)
         self.wait_and_sleep_to_click(self.add_export_button)
+        time.sleep(5)
         self.is_visible_and_displayed(self.model)
         self.select_by_value(self.model, UserData.model_type_form)
         self.select_by_text(self.app_type, UserData.app_type)
@@ -276,6 +277,7 @@ class ExportDataPage(BasePage):
     def excel_dashboard_integration_case(self):
         self.wait_and_sleep_to_click(self.export_excel_dash_int)
         self.wait_and_sleep_to_click(self.add_export_button)
+        time.sleep(5)
         self.is_visible_and_displayed(self.model)
         self.select_by_value(self.model, UserData.model_type_case)
         self.select_by_text(self.application, UserData.village_application)
@@ -339,6 +341,7 @@ class ExportDataPage(BasePage):
         self.driver.refresh()
         self.wait_to_click(self.powerBI_tab_int)
         self.wait_to_click(self.add_export_button)
+        time.sleep(10)
         self.is_visible_and_displayed(self.model)
         self.select_by_value(self.model, UserData.model_type_case)
         self.select_by_text(self.application, UserData.village_application)
@@ -396,10 +399,11 @@ class ExportDataPage(BasePage):
     def add_updated_case_exports(self, username):
         self.wait_to_click(self.export_case_data_link)
         self.delete_bulk_exports()
+        time.sleep(5)
         self.wait_and_sleep_to_click(self.add_export_button)
         self.is_visible_and_displayed(self.application)
         self.select_by_text(self.application, UserData.reassign_cases_application)
-        self.select_by_text(self.case, UserData.case_reassign)
+        self.select_by_text(self.case, UserData.case_update_name)
         self.wait_to_click(self.add_export_conf)
         self.wait_to_clear_and_send_keys(self.export_name, UserData.case_updated_export_name)
         self.wait_to_click(self.export_settings_create)

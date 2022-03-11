@@ -41,7 +41,7 @@ class UserData:
     update_case_change_link = "Case Change"
     case_register_form = "Case Register"
     case_update_form = "Update Case"
-
+    case_update_name = "reassign_change"
     # Export report names
     form_export_name = "Smoke Form Export"
     case_export_name = "Smoke Case Export"
