@@ -32,5 +32,3 @@ def test_case_two_factor_auth(driver, settings):
         return
     login = LoginPage(driver, settings["url"])
     login.two_factor_auth(UserData.two_fa_user, settings["login_password"], settings["auth_key"])
-
-
