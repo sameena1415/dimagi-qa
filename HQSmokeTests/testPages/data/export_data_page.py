@@ -396,7 +396,9 @@ class ExportDataPage(BasePage):
         # self.driver.close()  # Close the feed URL
         self.driver.back()
 
-    def add_updated_case_exports(self, username):
+    def add_updated_case_exports(self):
+        print("Sleeping for some time for the cases to be updated in the exports")
+        time.sleep(100)
         self.wait_to_click(self.export_case_data_link)
         self.delete_bulk_exports()
         time.sleep(5)
@@ -424,6 +426,7 @@ class ExportDataPage(BasePage):
                 print("Download form button clicked")
 
     def verify_export_has_updated_case_data(self, case_id, case_name, value):
+        print(case_id, case_name, value)
         newest_file = latest_download_file()
         print("Newest file:" + newest_file)
         self.assert_downloaded_file(newest_file, UserData.case_updated_export_name)
