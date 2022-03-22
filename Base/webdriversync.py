@@ -1,5 +1,6 @@
 from robot.api.deco import keyword
 from selenium import webdriver
+from selenium.webdriver.common.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 
 
@@ -20,7 +21,7 @@ def get_chromedriver_path():
         "download.prompt_for_download": False,
         "download.directory_upgrade": True,
         "safebrowsing.enabled": True})
-
-    driver_path = webdriver.Chrome(executable_path=ChromeDriverManager().install(), options=chrome_options)
+    service = Service(ChromeDriverManager().install())
+    driver_path = webdriver.Chrome(service=service, options=chrome_options)
     print(driver_path)
     return driver_path
