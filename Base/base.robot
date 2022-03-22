@@ -5,6 +5,7 @@ Library    DateTime
 Resource    ../Locators/locators.robot
 Resource     ../Case Investigation (CI)/Forms/register a new case form.robot
 Resource    ../Contact Tracing (CT)/Forms/register a new contact form.robot
+Library     webdriversync.py
 Library    2FA.py
 
 
@@ -18,7 +19,8 @@ ${search all cases in the list}    //button[contains(., 'Search All')]
 *** Keywords ***
     
 HQ Login
-    Open Browser    ${LOGIN URL}    ${BROWSER}
+    ${chromedriver_path}    webdriversync.Get Chromedriver Path
+    Open Browser    ${LOGIN URL}    ${BROWSER}  executable_path=${chromedriver_path}
     Set Selenium Implicit Wait  ${implcit_wait_time}
     Maximize Browser Window
     Input Text    ${username}    ${email}
