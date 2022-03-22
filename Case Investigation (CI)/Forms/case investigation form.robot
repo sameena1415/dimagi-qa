@@ -68,7 +68,8 @@ Fill up and Submit Case Investigation Form
 Add Address
    # Select Address
    Run Keyword And Ignore Error    Input Text    ${Q:Search For Address}   ${Address}
-   Click Element    ${Fisrt address}
+   Press Keys   ${Q:Search For Address}     ENTER   TAB
+#   JS Click    ${Fisrt address}
    
    # Zipcode
    Wait Until Element Is Visible    ${Zipcode failure}    80s

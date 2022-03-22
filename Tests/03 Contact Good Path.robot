@@ -6,6 +6,8 @@ Resource    ../Contact Tracing (CT)/Menu/menu.robot
 Resource    ../Contact Tracing (CT)/Forms/register a new contact form.robot  
 Resource    ../Contact Tracing (CT)/Forms/contact montitoring form.robot
 Resource    ../Contact Tracing (CT)/Forms/assign or reaasign contact.robot
+Resource    ../Tests/02 Patient Good Path.robot
+Suite Teardown  Close Browser
 
 
        
@@ -13,17 +15,13 @@ Resource    ../Contact Tracing (CT)/Forms/assign or reaasign contact.robot
 
 Contact_Good_1
     [Documentation]    All Contacts: Incomplete Contact Information
-		
     Log in as ct_user
-    
-    Register contact without phone number
+    Register contact without phone number   ${case_name}    ${case_created}
     ${contact_name}    Get Contact Name
     ${contact_created}   Set Contact Name
-    
     Open All Contacts Unassigned & Open menu
     Search in the case list     ${contact_name}  
     Element Should Not Be Visible    ${contact_created}
-    
     Open All Contacts: Incomplete Contact Information
     Search in the case list     ${contact_name}  
     Element Should Be Visible    ${contact_created}

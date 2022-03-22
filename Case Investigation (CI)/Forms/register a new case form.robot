@@ -13,6 +13,7 @@ ${patient_first_name}     //span[text()='Patient First Name']/following::div[1]/
 ${patient_last_name}     //span[text()='Patient Last Name']/following::div[1]/div[@class='widget']/descendant::textarea
 ${submit_form}     //button[@type='submit' and @class='submit btn btn-primary']
 ${success_message}    //p[text()='Form successfully saved!']
+${case_created}
 
 *** Keywords ***
 
@@ -32,15 +33,15 @@ Register New Case
     Submit Form and Check Success
     
 Get Case Name
-    ${name_random}    Get Variable Value    ${name_random} 
-    #${name_random}     Set Variable     Patient-1632
+    ${name_random}    Get Variable Value    ${name_random}
+#    ${name_random}     Set Variable     Patient-bf57
     Log    ${name_random}
     [Return]    ${name_random}
 
 Set Case Name
-    ${name_random}    Get Case Name
+    ${name_random}  Get Case Name
     ${case_created}   Set Variable    //td[text()='${name_random}' and @class='module-caselist-column']
     Log    ${case_created}
-    Set Suite Variable    ${case_created} 
+    Set Global Variable    ${case_created}
     [Return]    ${case_created}    
     

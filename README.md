@@ -10,5 +10,6 @@ pip install -r requirements.txt
 
 ##### The test cases are located in the Tests directory. They can be executed using the robot command:
 ```
+webdrivermanager chrome
 robot Tests
 ```

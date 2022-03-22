@@ -23,11 +23,13 @@ HQ Login
     Maximize Browser Window
     Input Text    ${username}    ${email}
     Input Text    ${password}   ${pass}
-     ${IsElementVisible}=  Run Keyword And Return Status    Element Should Be Visible   ${confirm_cookie}
-     Run Keyword If     ${IsElementVisible}    Click Element  ${confirm_cookie}
-    Click Button  ${submit_button}
-    ${token}    Generate 2FA Token    ${secret}
-    Input Text    ${otp_token}   ${token}
+#    ${IsElementVisible}=  Run Keyword And Return Status    Element Should Be Visible   ${confirm_cookie}
+    Run Keyword And Ignore Error    wait until page contains element    ${confirm_cookie}   10
+    ${IsElementVisible}=  Run Keyword And Return Status    Element Should Be Visible   ${confirm_cookie}
+    Run Keyword If     ${IsElementVisible}    Click Element  ${confirm_cookie}
+    #Click Button  ${submit_button}
+    #${token}    Generate 2FA Token    ${secret}
+    #Input Text    ${otp_token}   ${token}
     Click Button  ${submit_button}
     Title Should Be    ${commcare hq title} 
     #Run Keyword And Ignore Error     Click Element    ${confirm_cookie}
@@ -76,6 +78,7 @@ Log in as ct_user
 JS Click
     [Arguments]    ${element}
     Wait Until Element Is Enabled    ${element}    
+#    Execute JavaScript  document.evaluate("${element}", document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null).snapshotItem(0).click();
     Execute JavaScript    document.evaluate("${element}",document.body,null,9,null).singleNodeValue.click();
 
 Generate Mobile Number
@@ -138,4 +141,5 @@ Submit Form and Check Success
     Element Should Be Enabled    ${submit_form} 
     JS Click   ${submit_form}
     Wait Until Element Is Visible    ${success_message}    60s
-    Element Should Be Visible    ${success_message} 
+    Element Should Be Visible    ${success_message}
+

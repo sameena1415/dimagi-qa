@@ -6,9 +6,12 @@ Resource    ../Case Investigation (CI)/Menu/menu.robot
 Resource    ../Case Investigation (CI)/Forms/register a new case form.robot
 Resource    ../Case Investigation (CI)/Forms/case investigation form.robot
 Resource    ../Case Investigation (CI)/Forms/assign or reassign form.robot
+Suite Teardown  Close Browser
 
+*** Variables ***
+${case_name}
+${case_created}
 
-       
 *** Test Cases ***
 
 Patient_Good_1
@@ -138,4 +141,3 @@ Patient_Good_7
     Open All Open Cases
     Search in the case list     ${case_name}   
     Element Should Not Be Visible    ${case_created}
-    

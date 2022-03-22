@@ -18,9 +18,10 @@ ${confirm_user_login}    //button[@id="js-confirmation-confirm"]
 
 ${select_app}    xpath://div[contains(@aria-label,"${app name}")]
 
-${select_first case_in_caselist}    xpath:(//td[@class='module-caselist-column'])[1]
+${select_first case_in_caselist}    //tbody[@class='wrapper js-case-container']/tr[1]
 ${continue}    id:select-case
-${register_new_contacts_form}    //tr[@aria-label="Register New Contact(s)"]
+${register_new_contacts_form}    //h3[.='Register New Contact(s)']
+#//tr[@aria-label="Register New Contact(s)"]
 ${contact_first_name}     xpath://span[text()='First name']/following::div[1]/div[@class='widget']/descendant::textarea
 ${contact_last_name}     xpath://span[text()='Last name']/following::div[1]/div[@class='widget']/descendant::textarea
 ${contact_phone_num}    xpath://span[text()='Phone number:']/following::div[1]/div[@class='widget']/descendant::input
@@ -42,7 +43,7 @@ ${symptom_chill}    //p[contains(.,'Chills')]
 ${symptom_fatigue}    //p[text()='Fatigue']
 ${symptom_congestion}    //p[text()='Congestion']
 ${symptom_runny_nose}    //p[text()='Runny nose']
-${date_of_symptomp_onset}    //span[contains(text(),'date of onset')]/following::div[1]//input[@type='text']
+${date_of_symptomp_onset}    //label[.//span[contains(text(),'date of onset')]]/following-sibling::div//input[contains(@id,'date')]
 ${gender}    //p[text()='Female']
 ${race}    //p[text()='Asian']
 ${ethnicity}    //p[text()='Hispanic/Latino']

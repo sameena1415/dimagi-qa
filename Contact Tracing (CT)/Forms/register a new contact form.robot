@@ -4,7 +4,7 @@ Library    String
 Library    DateTime
 Resource    ../Menu/menu.robot
 Resource    ../../Base/base.robot
-             									
+
 
 *** Keywords ***  
 
@@ -17,7 +17,8 @@ Generate Random Contact Name
 Register contact with phone number
    Open Register New Contacts Menu
    Select Created Case    ${select_first case_in_caselist}
-   Run Keyword And Ignore Error    Click Element    ${register_new_contacts_form} 
+   Wait Until Element Is Visible    ${register_new_contacts_form}
+   Run Keyword And Ignore Error    JS Click    ${register_new_contacts_form}
    Generate Random Contact Name
    ${name_random}    Get Variable Value    ${name_random}
    Input Text       ${contact_first_name}    ${name_random} 
@@ -32,13 +33,16 @@ Register contact with phone number
    Submit Form and Check Success  
    
 Register contact without phone number
+   [Arguments]  ${case_name}    ${case_created}
+
    Open Register New Contacts Menu
    ${case_name}    Get Case Name
    ${case_created}   Set Case Name
    Case Search    ${case_name}    
    Search in the case list    ${case_name}
    Select Created Case    ${case_created}
-   Run Keyword And Ignore Error    Click Element    ${register_new_contacts_form}
+   Wait Until Element Is Visible    ${register_new_contacts_form}
+   Run Keyword And Ignore Error    JS Click    ${register_new_contacts_form}
    Generate Random Contact Name
    ${name_random}    Get Variable Value    ${name_random}
    Input Text       ${contact_first_name}    ${name_random} 
@@ -54,12 +58,12 @@ Register contact without phone number
 Get Contact Name
     ${name_random}    Get Variable Value    ${name_random} 
    #${name_random}     Set Variable     Contact-8d99
-    Log    ${name_random}
+    Log         ${name_random}
     [Return]    ${name_random}
 
 Set Contact Name
-    ${name_random}    Get Contact Name
-    ${contact_created}   Set Variable    //td[text()='${name_random}' and @class='module-caselist-column']
+    ${name_random}  Get Contact Name
+    ${contact_created}  Set Variable    //td[text()='${name_random}' and @class='module-caselist-column']
     Log    ${contact_created}
     Set Suite Variable   ${contact_created} 
     [Return]    ${contact_created} 

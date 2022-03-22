@@ -24,7 +24,8 @@ ${Q:Zipcode_error}     (//span[contains(text(), 'Zip Code')])[1]/following::div[
 ${Q:Zipcode_normal}     (//span[contains(text(), 'Zip Code')])[1]/following::div[1]/div[@class='widget']/descendant::textarea
 ${Zipcode success}    (//span[contains(text(), 'Zip Code')])[1]/following::i[@class="fa fa-check text-success"][1]
 ${Zipcode failure}    (//span[contains(text(), 'Zip Code')])[1]/following::i[@class="fa fa-warning text-danger clickable"][1]
-${Q:Transer Patient A: No}    //p[contains(.,'No, do not transfer')]
+${Q:Transer Patient A:No}  //p[contains(.,'No, do not transfer')]
+${Q:Convert Contact A:Yes}  //p[contains(.,'Yes, convert contact/traveler to PUI')]
 
 ${Q:Interview Disposition A:Reached person, agreed to call}    //p[text()='Reached person, agreed to call']
 
@@ -58,14 +59,15 @@ Convert contact to PUI using CM form
         JS Click    ${ethnicity}
         JS Click    ${gender}
         JS Click    ${symptom_congestion}
-        JS Click   ${symptom_fatigue}      
+        JS Click    ${symptom_fatigue}
         JS Click    ${symptom_fever}
         JS Click    ${symptom_runny_nose} 
-        JS Click    ${date_of_symptomp_onset} 
-        Input Text    ${date_of_symptomp_onset}    Yesterday's Date
-        JS Click    ${date_of_symptomp_onset} 
-        JS Click    ${Q:Transer Patient A: No}
-        
+#        JS Click    ${date_of_symptomp_onset}
+        ${Yesterday's date}    Yesterday's Date
+        Input Text    ${date_of_symptomp_onset}   ${Yesterday's date}
+        JS Click    ${date_of_symptomp_onset}
+        JS Click    ${Q:Convert Contact A:Yes}
+        Submit Form and Check Success
 
 Unable to reach (CM) 
    JS Click    ${Q:Interview Disposition A:Attempted for two days and unable to reach}
@@ -104,9 +106,10 @@ Reached and Agreed to Call (CM)
 Requires Follow-up (CM)
      JS Click    ${symptom_fever}
      JS Click    ${symptom_chill}
-     JS Click    ${date_of_symptomp_onset} 
-     Input Text    ${date_of_symptomp_onset}    Yesterday's Date
-     JS Click    ${date_of_symptomp_onset}  
+     JS Click    ${date_of_symptomp_onset}
+     ${Yesterday's date}    Yesterday's Date
+     Input Text    ${date_of_symptomp_onset}   ${Yesterday's date}
+     JS Click    ${date_of_symptomp_onset}
      JS Click    ${no_convert_pui}
      JS Click    ${Q:Transer Patient A: No}
      Submit Form and Check Success
