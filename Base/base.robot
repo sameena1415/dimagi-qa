@@ -20,7 +20,8 @@ ${search all cases in the list}    //button[contains(., 'Search All')]
     
 HQ Login
     ${chromedriver_path}    webdriversync.Get Chromedriver Path
-    Open Browser    ${LOGIN URL}    ${BROWSER}  executable_path=${chromedriver_path}
+
+    Open Browser    {LOGIN URL}    ${BROWSER}  executable_path=${chromedriver_path}
     Set Selenium Implicit Wait  ${implcit_wait_time}
     Maximize Browser Window
     Input Text    ${username}    ${email}
