@@ -9,6 +9,6 @@ ${email}    kbordoloi+ush@dimagi.com
 ${pass}    pass@123
 ${implcit_wait_time}    20
 ${app name}    NY
-${executable_path}  /home/runner/chromedriver/chromedriver.exe
+${executable_path}  /home/runner/chromedriver.exe
 
 ${archieved_contact_name}     Vita
