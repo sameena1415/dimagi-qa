@@ -29,6 +29,8 @@ jobs:
 
     - name: Robot Framework
       uses: joonvena/robotframework-docker-action@v1.0
+      
+    - name: NY App Tests
       env:
         DIMAGIQA_MAIL_USERNAME: ${{ secrets.DIMAGIQA_MAIL_USERNAME }}
         DIMAGIQA_MAIL_PASSWORD: ${{ secrets.DIMAGIQA_MAIL_PASSWORD }}
