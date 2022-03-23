@@ -26,9 +26,12 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
-
-    - name: Robot Framework
-      uses: joonvena/robotframework-docker-action@v1.0
+    - name: Execute tests
+      uses: joonvena/robotframework-docker-action@v0.1
+      env:
+        BROWSER: chrome
+        ROBOT_TESTS_DIR: ${{ github.workspace }}/robot_tests
+        ROBOT_REPORTS_DIR: ${{ github.workspace }}/reports
         
     - name: NY App Tests
       env:
@@ -37,6 +40,7 @@ jobs:
       run: |
         echo "NOW=$(date +'%m-%d %H:%M')" >> $GITHUB_ENV
         echo ${{env.NOW}}
+        echo $HOME
 
     - name: Send Failure Email on Deploy Event
       uses: dawidd6/action-send-mail@v3

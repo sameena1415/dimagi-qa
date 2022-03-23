@@ -25,7 +25,7 @@ HQ Login
 #    Call Method    ${chrome_options}    add_argument    --headless
 #    Call Method    ${chrome_options}    add_argument    --disable-dev-shm-usage
 #    Call Method    ${chrome_options}    add_argument    --no-sandbox
-#    Open Browser    {LOGIN URL}    ${BROWSER}   chrome_options=${chrome_options}    executable_path=${driver_path}
+#    Open Browser    {LOGIN URL}    ${BROWSER}   chrome_options=${chrome_options}
     Open Browser    {LOGIN URL}    ${BROWSER}
     Set Selenium Implicit Wait  ${implcit_wait_time}
     Maximize Browser Window
