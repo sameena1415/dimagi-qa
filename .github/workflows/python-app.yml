@@ -29,11 +29,8 @@ jobs:
 
     - name: Robot Framework
       uses: joonvena/robotframework-docker-action@v1.0
-      with:
-        robot_tests_dir: Tests
-        robot_reports_dir: /home/runner/work/dimagi-qa/dimagi-qa/
-
-    - name: NY App
+        
+    - name: NY App Tests
       env:
         DIMAGIQA_MAIL_USERNAME: ${{ secrets.DIMAGIQA_MAIL_USERNAME }}
         DIMAGIQA_MAIL_PASSWORD: ${{ secrets.DIMAGIQA_MAIL_PASSWORD }}
@@ -53,7 +50,7 @@ jobs:
         to: kbordoloi@dimagi.com
         from: <${{secrets.DIMAGIQA_MAIL_USERNAME}}>
         html_body: Please find attached the run report.
-        attachments: /home/runner/work/dimagi-qa/dimagi-qa/report.html
+        attachments: /home/runner/work/dimagi-qa/dimagi-qa/reports/report.html
         priority: normal
 
     - name: Archive test results
@@ -61,5 +58,5 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: test-result-reports
-        path: /home/runner/work/dimagi-qa/dimagi-qa/report.html
+        path: /home/runner/work/dimagi-qa/dimagi-qa/reports/report.html
         retention-days: 2
