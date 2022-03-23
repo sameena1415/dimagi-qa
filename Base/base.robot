@@ -27,6 +27,8 @@ HQ Login
     Call Method    ${chrome_options}    add_argument    --disable-dev-shm-usage
     Call Method    ${chrome_options}    add_argument    --no-sandbox
     Open Browser    ${LOGIN URL}    ${BROWSER}      executable_path=${chromedriver_path}       options=${chrome_options}
+
+    Set Window Size    1920    1080
     Set Selenium Implicit Wait  ${implcit_wait_time}
     Maximize Browser Window
     Input Text    ${username}    ${email}
