@@ -19,9 +19,12 @@ ${search all cases in the list}    //button[contains(., 'Search All')]
 *** Keywords ***
     
 HQ Login
-#    ${chromedriver_path}    webdriversync.Get Chromedriver Path
-
-    Open Browser    {LOGIN URL}    ${BROWSER}
+    ${chrome_options}=  Evaluate  sys.modules['selenium.webdriver'].ChromeOptions()  sys, selenium.webdriver
+    Call Method    ${chrome_options}    add_argument    --disable-extensions
+    Call Method    ${chrome_options}    add_argument    --headless
+    Call Method    ${chrome_options}    add_argument    --disable-gpu
+    Call Method    ${chrome_options}    add_argument    --no-sandbox
+    Open Browser    {LOGIN URL}    ${BROWSER}   chrome_options=${chrome_options}
     Set Selenium Implicit Wait  ${implcit_wait_time}
     Maximize Browser Window
     Input Text    ${username}    ${email}
