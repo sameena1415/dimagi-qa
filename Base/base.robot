@@ -24,7 +24,8 @@ HQ Login
     Call Method    ${chrome_options}    add_argument    --headless
     Call Method    ${chrome_options}    add_argument    --disable-gpu
     Call Method    ${chrome_options}    add_argument    --no-sandbox
-    Open Browser    {LOGIN URL}    ${BROWSER}   chrome_options=${chrome_options}
+
+    Open Browser    {LOGIN URL}    ${BROWSER}   chrome_options=${chrome_options}    executable_path=/home/runner/.local/share/WebDriverManager/chrome/98.0.4758.102/chromedriver_linux64/chromedriver
     Set Selenium Implicit Wait  ${implcit_wait_time}
     Maximize Browser Window
     Input Text    ${username}    ${email}
