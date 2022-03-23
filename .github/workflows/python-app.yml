@@ -34,7 +34,7 @@ jobs:
       run: |
         echo "NOW=$(date +'%m-%d %H:%M')" >> $GITHUB_ENV
         echo ${{env.NOW}}
-        webdrivermanager --linkpath AUTO chrome
+        webdrivermanager chrome --linkpath /home/runner/chromedriver
         robot Tests
 
     - name: Send Failure Email on Deploy Event
@@ -45,8 +45,8 @@ jobs:
         server_port: 465
         username: ${{secrets.DIMAGIQA_MAIL_USERNAME}}
         password: ${{secrets.DIMAGIQA_MAIL_PASSWORD}}
-        subject: FAIL - Smoke Tests[#${{github.run_number}}], ${{env.NOW}}
-        to: ${{secrets.DIMAGIQA_MAIL_USERNAME}}
+        subject: NY App Tests[#${{github.run_number}}], ${{env.NOW}}
+        to: kbordoloi@dimagi.com
         from: <${{secrets.DIMAGIQA_MAIL_USERNAME}}>
         html_body: Please find attached the run report.
         attachments: /home/runner/work/dimagi-qa/dimagi-qa/report.html

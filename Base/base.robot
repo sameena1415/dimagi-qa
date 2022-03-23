@@ -5,7 +5,7 @@ Library    DateTime
 Resource    ../Locators/locators.robot
 Resource     ../Case Investigation (CI)/Forms/register a new case form.robot
 Resource    ../Contact Tracing (CT)/Forms/register a new contact form.robot
-#Library     webdriversync.py
+
 Library    2FA.py
 
 
@@ -22,10 +22,10 @@ HQ Login
     ${chrome_options}=  Evaluate  sys.modules['selenium.webdriver'].ChromeOptions()  sys, selenium.webdriver
     Call Method    ${chrome_options}    add_argument    --disable-extensions
     Call Method    ${chrome_options}    add_argument    --headless
-    Call Method    ${chrome_options}    add_argument    --disable-gpu
+    Call Method    ${chrome_options}    add_argument    --disable-dev-shm-usage
     Call Method    ${chrome_options}    add_argument    --no-sandbox
+    Open Browser    {LOGIN URL}    ${BROWSER}   chrome_options=${chrome_options}    executable_path={executable_path}
 
-    Open Browser    {LOGIN URL}    ${BROWSER}   chrome_options=${chrome_options}    executable_path=/home/runner/.local/share/WebDriverManager/chrome/98.0.4758.102/chromedriver_linux64/chromedriver
     Set Selenium Implicit Wait  ${implcit_wait_time}
     Maximize Browser Window
     Input Text    ${username}    ${email}

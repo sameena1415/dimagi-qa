@@ -11,3 +11,4 @@ ${implcit_wait_time}    20
 ${app name}    NY
 
 ${archieved_contact_name}     Vita
+${executable_path}  /home/runner/chromedriver
