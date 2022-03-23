@@ -55,7 +55,7 @@ jobs:
         to: kbordoloi@dimagi.com
         from: <${{secrets.DIMAGIQA_MAIL_USERNAME}}>
         html_body: Please find attached the run report.
-        attachments: /home/runner/work/dimagi-qa/dimagi-qa/reports/report.html
+        attachments: /home/runner/work/dimagi-qa/dimagi-qa/report.html
         priority: normal
 
     - name: Archive test results
@@ -63,5 +63,5 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: test-result-reports
-        path: /home/runner/work/dimagi-qa/dimagi-qa/reports/report.html
+        path: /home/runner/work/dimagi-qa/dimagi-qa/report.html
         retention-days: 2
