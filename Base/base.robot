@@ -5,7 +5,7 @@ Library    DateTime
 Resource    ../Locators/locators.robot
 Resource     ../Case Investigation (CI)/Forms/register a new case form.robot
 Resource    ../Contact Tracing (CT)/Forms/register a new contact form.robot
-
+Library     driverpath.py
 Library    2FA.py
 
 
@@ -19,14 +19,13 @@ ${search all cases in the list}    //button[contains(., 'Search All')]
 *** Keywords ***
     
 HQ Login
-#    ${driver_path}= Evaluate    os.path.dirname(sys.executable) sys, os
-#    ${chrome_options}=  Evaluate  sys.modules['selenium.webdriver'].ChromeOptions()  sys, selenium.webdriver
-#    Call Method    ${chrome_options}    add_argument    --disable-extensions
-#    Call Method    ${chrome_options}    add_argument    --headless
-#    Call Method    ${chrome_options}    add_argument    --disable-dev-shm-usage
-#    Call Method    ${chrome_options}    add_argument    --no-sandbox
-#    Open Browser    {LOGIN URL}    ${BROWSER}   chrome_options=${chrome_options}
-    Open Browser    {LOGIN URL}    ${BROWSER}
+    ${chromedriver_path}=   driverpath.Get Driver Path
+    ${chrome_options}=  Evaluate  sys.modules['selenium.webdriver'].ChromeOptions()  sys, selenium.webdriver
+    Call Method    ${chrome_options}    add_argument    --disable-extensions
+    Call Method    ${chrome_options}    add_argument    --headless
+    Call Method    ${chrome_options}    add_argument    --disable-dev-shm-usage
+    Call Method    ${chrome_options}    add_argument    --no-sandbox
+    Open Browser    ${LOGIN URL}    ${BROWSER}      executable_path=${chromedriver_path}       options=${chrome_options}
     Set Selenium Implicit Wait  ${implcit_wait_time}
     Maximize Browser Window
     Input Text    ${username}    ${email}
