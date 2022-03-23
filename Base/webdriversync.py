@@ -1,7 +1,7 @@
 from robot.api.deco import keyword
 from selenium import webdriver
 from selenium.webdriver.common.service import Service
-from webdrivermanager.chrome import ChromeDriverManager
+from webdriver_manager.chrome import ChromeDriverManager
 
 
 @keyword("Get Chromedriver Path")
