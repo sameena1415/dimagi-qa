@@ -70,12 +70,13 @@ Add Address
    Run Keyword And Ignore Error    Input Text    ${Q:Search For Address}   ${Address}
    Press Keys   ${Q:Search For Address}     ENTER   TAB
 #   JS Click    ${Fisrt address}
-   
+   Sleep    10s
    # Zipcode
-   Wait Until Element Is Visible    ${Zipcode failure}    80s
+   Run Keyword And Ignore Error     Wait Until Element Is Visible    ${Zipcode failure}    80s
    Wait Until Element Is Enabled   ${Q:Zipcode_error}     60s
    Clear Element Text    ${Q:Zipcode_error}
-   Input Text    ${Q:Zipcode_normal}   12345    ${Zipcode success}
+   Press Keys    ${Q:Zipcode_normal}   12345    TAB
+   Wait Until Element Is Visible    ${Zipcode success}  30s
   
    # Contry and State 
    Answer Dropdown    ${Q:County of residence}    ${A:County of residence}
