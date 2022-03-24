@@ -73,7 +73,7 @@ Add Address
    
    # Zipcode
    Wait Until Element Is Visible    ${Zipcode failure}    80s
-   Wait Until Element Is Enabled   ${Q:Zipcode_error}
+   Wait Until Element Is Enabled   ${Q:Zipcode_error}     60s
    Clear Element Text    ${Q:Zipcode_error}
    Input Text    ${Q:Zipcode_normal}   12345    ${Zipcode success}
   

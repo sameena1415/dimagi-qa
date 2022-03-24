@@ -34,7 +34,7 @@ HQ Login
     Input Text    ${username}    ${email}
     Input Text    ${password}   ${pass}
 #    ${IsElementVisible}=  Run Keyword And Return Status    Element Should Be Visible   ${confirm_cookie}
-    Run Keyword And Ignore Error    wait until page contains element    ${confirm_cookie}   20
+    Run Keyword And Ignore Error    wait until page contains element    ${confirm_cookie}   30
     ${IsElementVisible}=  Run Keyword And Return Status    Element Should Be Visible   ${confirm_cookie}
     Run Keyword If     ${IsElementVisible}    Click Element  ${confirm_cookie}
     #Click Button  ${submit_button}
@@ -47,7 +47,9 @@ HQ Login
 
 
 Open Web App
-   Click Element    ${webapps_menu}
+    ${IsElementVisible}=  Run Keyword And Return Status    Element Should Be Visible   ${confirm_cookie}
+    Run Keyword If     ${IsElementVisible}    Click Element  ${confirm_cookie}
+    Click Element    ${webapps_menu}
    
 Open App Home Screen
     Sleep    3s
@@ -153,3 +155,17 @@ Submit Form and Check Success
     Wait Until Element Is Visible    ${success_message}    60s
     Element Should Be Visible    ${success_message}
 
+Click Element
+    [Arguments]     ${element}
+    Wait Until Element Is Visible    ${element}     40s
+    Click Element    ${element}
+
+Click Button
+    [Arguments]     ${element}
+    Wait Until Element Is Visible    ${element}     40s
+    Click Button    ${element}
+
+Input Text
+    [Arguments]    ${element}     ${text}
+    Wait Until Element Is Visible    ${element}     60s
+    Input Text    ${element}     ${text}

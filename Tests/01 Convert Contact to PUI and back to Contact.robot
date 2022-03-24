@@ -13,8 +13,7 @@ Suite Teardown  Close Browser
 
 
 Convert_Contact_to_PUI_1
-    [Tags]  Scenario1
-    [Documentation]    Convert contact to PUI using "Contact Monitoring" form					
+    [Documentation]    Convert contact to PUI using "Contact Monitoring" form
     Log in as ct_user
     Register contact with phone number
     ${contact_name}    Get Contact Name
@@ -27,8 +26,7 @@ Convert_Contact_to_PUI_1
     Element Should Not Be Visible    ${contact_created}   
     
 Convert_Contact_to_PUI_3
-    [Tags]  Scenario1
-    [Documentation]    Convert PUI back to contact - close record   
+    [Documentation]    Convert PUI back to contact - close record
     Log in as ci_user	
     Search Case in All Suspected Cases (PUIs) menu
     ${contact_name}    Get Contact Name
@@ -49,7 +47,6 @@ Convert_Contact_to_PUI_3
     Element Should Not Be Visible    ${contact_created}    
     
 Convert_Contact_to_PUI_2	
-    [Tags]  Scenario2
     [Documentation]    Convert contact to PUI using "Convert Contact to Suspected Case (PUI)" form
     Open App Home Screen
     Register contact with phone number
@@ -61,7 +58,6 @@ Convert_Contact_to_PUI_2
     Element Should Not Be Visible    ${contact_created}    Contact appearing in menu
     
 Convert_Contact_to_PUI_4
-    [Tags]  Scenario2
     [Documentation]    Convert PUI back to contact - do not close record
     Log    Sleeping ES to update..
     Sleep     2 minutes	
