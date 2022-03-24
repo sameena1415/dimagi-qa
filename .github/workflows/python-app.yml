@@ -55,7 +55,7 @@ jobs:
         to: kbordoloi@dimagi.com
         from: <${{secrets.DIMAGIQA_MAIL_USERNAME}}>
         html_body: Please find attached the run report.
-        attachments: /home/runner/work/dimagi-qa/dimagi-qa/report.html
+        attachments: /home/runner/work/dimagi-qa/dimagi-qa/report.html, /home/runner/work/dimagi-qa/dimagi-qa/log.html, /home/runner/work/dimagi-qa/dimagi-qa/output.xml
         priority: normal
 
     - name: Archive test results
