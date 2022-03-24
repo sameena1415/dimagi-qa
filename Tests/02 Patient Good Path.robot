@@ -8,10 +8,6 @@ Resource    ../Case Investigation (CI)/Forms/case investigation form.robot
 Resource    ../Case Investigation (CI)/Forms/assign or reassign form.robot
 Suite Teardown  Close Browser
 
-*** Variables ***
-${case_name}
-${case_created}
-
 *** Test Cases ***
 
 Patient_Good_1
@@ -26,6 +22,8 @@ Patient_Good_1
     Open All Open Cases
     Search in the case list     ${case_name}   
     Element Should Be Visible    ${case_created}
+    Set Global Variable    ${case_name}
+    Set Global Variable    ${case_created}
     
 
 Patient_Good_2

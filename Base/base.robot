@@ -34,7 +34,7 @@ HQ Login
     Input Text    ${username}    ${email}
     Input Text    ${password}   ${pass}
 #    ${IsElementVisible}=  Run Keyword And Return Status    Element Should Be Visible   ${confirm_cookie}
-    Run Keyword And Ignore Error    wait until page contains element    ${confirm_cookie}   10
+    Run Keyword And Ignore Error    wait until page contains element    ${confirm_cookie}   20
     ${IsElementVisible}=  Run Keyword And Return Status    Element Should Be Visible   ${confirm_cookie}
     Run Keyword If     ${IsElementVisible}    Click Element  ${confirm_cookie}
     #Click Button  ${submit_button}

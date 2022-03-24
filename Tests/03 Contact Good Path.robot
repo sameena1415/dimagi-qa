@@ -16,7 +16,8 @@ Suite Teardown  Close Browser
 Contact_Good_1
     [Documentation]    All Contacts: Incomplete Contact Information
     Log in as ct_user
-    Register contact without phone number   ${case_name}    ${case_created}
+    Log    ${case_name}+"and"+${case_created}
+    Register contact without phone number    ${case_name}    ${case_created}
     ${contact_name}    Get Contact Name
     ${contact_created}   Set Contact Name
     Open All Contacts Unassigned & Open menu
