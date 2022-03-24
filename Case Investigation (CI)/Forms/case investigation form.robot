@@ -70,7 +70,7 @@ Add Address
    Run Keyword And Ignore Error    Input Text    ${Q:Search For Address}   ${Address}
    Press Keys   ${Q:Search For Address}     ENTER   TAB
 #   JS Click    ${Fisrt address}
-   Sleep    10s
+   Sleep    12s
    # Zipcode
    Run Keyword And Ignore Error     Wait Until Element Is Visible    ${Zipcode failure}    80s
    Wait Until Element Is Enabled   ${Q:Zipcode_error}     60s
