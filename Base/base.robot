@@ -158,14 +158,14 @@ Submit Form and Check Success
 Click Element
     [Arguments]     ${element}
     Wait Until Element Is Visible    ${element}     40s
-    Click Element    ${element}
+    SeleniumLibrary.Click Element    ${element}
 
 Click Button
     [Arguments]     ${element}
     Wait Until Element Is Visible    ${element}     40s
-    Click Button    ${element}
+    SeleniumLibrary.Click Button    ${element}
 
 Input Text
     [Arguments]    ${element}     ${text}
     Wait Until Element Is Visible    ${element}     60s
-    Input Text    ${element}     ${text}
+    SeleniumLibrary.Input Text    ${element}     ${text}
