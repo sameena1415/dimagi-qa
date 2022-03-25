@@ -9,8 +9,6 @@ on:
   pull_request:
     branches: [ kb/nyapp ]
   workflow_dispatch:
-  
-
 
 jobs:
   build:
@@ -46,9 +44,11 @@ jobs:
         robot -d ./Reports Tests
 
     - name: Zip Reports folder
-      uses: montudor/action-zip@v1
+      uses: papeloto/action-zip@v1
+      if: always()
       with:
-        args: zip -qq -r Reports.zip Reports
+          files: Reports/
+          dest: Reports.zip
 
     - name: Send Failure Email on Deploy Event
       uses: dawidd6/action-send-mail@v3
@@ -70,5 +70,5 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: test-result-reports
-        path: /home/runner/work/dimagi-qa/dimagi-qa/Reports.zip
+        path: /home/runner/work/dimagi-qa/dimagi-qa/Reports
         retention-days: 2
