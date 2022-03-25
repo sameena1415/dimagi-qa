@@ -86,7 +86,8 @@ Add Address
    Wait Until Element Is Visible    ${Zipcode failure}    80s
    Wait Until Element Is Enabled   ${Q:Zipcode_error}
    Clear Element Text    ${Q:Zipcode_error}
-   Input Text    ${Q:Zipcode_normal}   12345    ${Zipcode success}
+   Press Keys   ${Q:Zipcode_normal}   12345     TAB
+   Wait Until Element Is Visible    ${Zipcode success}     30s
   
    # Contry and State 
    Answer Dropdown    ${Q:County of residence}    ${A:County of residence}
