@@ -70,7 +70,7 @@ Add Address
    Run Keyword And Ignore Error    Input Text    ${Q:Search For Address}   ${Address}
    Press Keys   ${Q:Search For Address}     ENTER   TAB
 #   Click Element    ${Fisrt address}
-
+   Sleep    15s
    # Contry and State
    Answer Dropdown    ${Q:County of residence}    ${A:County of residence}
    Answer Dropdown    ${Q:State}    ${A:State}

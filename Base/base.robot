@@ -59,6 +59,8 @@ Open App Home Screen
       
 Open WebApp Home
     Sleep    3s
+    ${IsElementVisible}=  Run Keyword And Return Status    Element Should Be Visible   ${confirm_cookie}
+    Run Keyword If     ${IsElementVisible}    Click Element  ${confirm_cookie}
     Wait Until Element Is Enabled    ${webapps_home}
     Click Element    ${webapps_home}
     
