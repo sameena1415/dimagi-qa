@@ -31,10 +31,10 @@ ${Q:State}    //span[text()='State']/following::span[@title='Please choose an it
 ${A:State}    //*[contains(text(),'State')][1]/following::ul[@role='listbox']/li[1]
 ${State success}    //span[text()='State']/following::i[@class="fa fa-check text-success"][1]
 
-${Q:Zipcode_error}     //span[text()='Zip Code']/following::div[1]/div[@class='widget has-error']/descendant::textarea
-${Q:Zipcode_normal}     //span[text()='Zip Code']/following::div[1]/div[@class='widget']/descendant::textarea
-${Zipcode success}    //span[text()='Zip Code']/following::i[@class="fa fa-check text-success"][1]
-${Zipcode failure}    //span[text()='Zip Code']/following::i[@class="fa fa-warning text-danger clickable"][1]
+${Q:Zipcode_error}     //label[.//span[text()='Zip Code']]/following-sibling::div//textarea[contains(@data-bind,'value: $data.rawAnswer')]
+${Q:Zipcode_normal}     //label[.//span[text()='Zip Code']]/following-sibling::div//textarea
+${Zipcode success}    //label[.//span[text()='Zip Code']]/following-sibling::div//i[@class="fa fa-check text-success"]
+${Zipcode failure}    //label[.//span[text()='Zip Code']]/following-sibling::div//i[@class="fa fa-warning text-danger clickable"]
 
 ${Q:Transer Patient A: No}    //p[contains(.,'No, do not transfer')]
 
@@ -68,11 +68,12 @@ Fill up and Submit Case Investigation Form
 Add Address
    # Select Address
    Run Keyword And Ignore Error    Input Text    ${Q:Search For Address}   ${Address}
-   Press Keys   ${Q:Search For Address}     ENTER   TAB
-#   JS Click    ${Fisrt address}
-   Sleep    12s
+#   Press Keys   ${Q:Search For Address}     ENTER   TAB
+   Click Element    ${Fisrt address}
+
    # Zipcode
-   Run Keyword And Ignore Error     Wait Until Element Is Visible    ${Zipcode failure}    80s
+   Scroll Element Into View    ${Q:Zipcode_normal}
+   Wait Until Element Is Visible    ${Zipcode failure}    80s
    Wait Until Element Is Enabled   ${Q:Zipcode_error}     60s
    Clear Element Text    ${Q:Zipcode_error}
    Press Keys    ${Q:Zipcode_normal}   12345    TAB
