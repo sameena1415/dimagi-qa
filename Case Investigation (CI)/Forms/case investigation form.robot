@@ -78,7 +78,7 @@ Add Address
 
    # Zipcode
    Scroll Element Into View    ${Q:Zipcode_normal}
-   Wait Until Element Is Visible    ${Zipcode failure}    80s
+#   Wait Until Element Is Visible    ${Zipcode failure}    80s
    Wait Until Element Is Enabled   ${Q:Zipcode_error}     60s
    Clear Element Text    ${Q:Zipcode_error}
    Press Keys    ${Q:Zipcode_normal}   12345    TAB
