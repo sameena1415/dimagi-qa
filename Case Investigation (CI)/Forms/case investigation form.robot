@@ -70,12 +70,11 @@ Fill up and Submit Case Investigation Form
 Add Address
    # Select Address
    Run Keyword And Ignore Error    Input Text    ${Q:Search For Address}   ${Address}
-   Press Keys   ${Q:Search For Address}     ENTER
+   Press Keys   ${Q:Search For Address}     ENTER   TAB
 #   Click Element    ${Fisrt address}
    Sleep    15s
-   # Contry and State
+   # Contry
    Select Dropdown   ${Q:County of residence}    ${A:County of residence}
-   Select Dropdown    ${Q:State}    ${A:State}
 
    # Zipcode
    Scroll Element Into View    ${Q:Zipcode_normal}
@@ -83,8 +82,11 @@ Add Address
    Wait Until Element Is Enabled   ${Q:Zipcode_error}     60s
    Clear Element Text    ${Q:Zipcode_error}
    Press Keys    ${Q:Zipcode_normal}   12345    TAB
-   Wait Until Element Is Visible    ${Zipcode success}  30s
+   Wait Until Element Is Visible    ${Zipcode success}  60s
 
+   # State
+   Select Dropdown   ${Q:County of residence}    ${A:County of residence}
+   Select Dropdown    ${Q:State}    ${A:State}
    Transfer Patient - No
    
 Transfer Patient - No
