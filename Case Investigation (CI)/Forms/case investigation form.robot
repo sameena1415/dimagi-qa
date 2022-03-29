@@ -82,6 +82,7 @@ Add Address
    Wait Until Element Is Enabled   ${Q:Zipcode_error}     60s
    Clear Element Text    ${Q:Zipcode_error}
    Press Keys    ${Q:Zipcode_normal}   12345    TAB
+   Sleep    10s
    Wait Until Element Is Visible    ${Zipcode success}  60s
 
    # State
