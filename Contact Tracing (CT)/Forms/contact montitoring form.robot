@@ -13,11 +13,13 @@ ${Fisrt address}    //li[contains(.,'South Side')]
 
 ${Q:County of residence}    (//*[contains(text(),'County')])[1]/following::span[@title='Please choose an item'][1]
 
-${A:County of residence}    //*[contains(text(),'County')][1]/following::ul[@role='listbox']/li[1]
+${A:County of residence}    //label[.//span[contains(text(),'County')]]/following-sibling::div//select
+#//*[contains(text(),'County')][1]/following::ul[@role='listbox']/li[1]
 ${Country success}    (//*[contains(text(),'County')])[1]/following::i[@class="fa fa-check text-success"][1]
 
 ${Q:State}    //span[text()='State']/following::span[@title='Please choose an item'][1]
-${A:State}    //*[contains(text(),'State')][1]/following::ul[@role='listbox']/li[1]
+${A:State}    //label[.//span[.='State']]/following-sibling::div//select
+#//*[contains(text(),'State')][1]/following::ul[@role='listbox']/li[1]
 ${State success}    //span[text()='State']/following::i[@class="fa fa-check text-success"][1]
 
 ${Q:Zipcode_error}     (//span[contains(text(), 'Zip Code')])[1]/following::div[1]/div[@class='widget has-error']/descendant::textarea
@@ -90,8 +92,8 @@ Add Address
    Wait Until Element Is Visible    ${Zipcode success}     30s
   
    # Contry and State 
-   Answer Dropdown    ${Q:County of residence}    ${A:County of residence}
-   Answer Dropdown    ${Q:State}    ${A:State}
+   Select Dropdown   ${Q:County of residence}    ${A:County of residence}
+   Select Dropdown    ${Q:State}    ${A:State}
    
    # Do not Transfer
    JS Click    ${Q:Transer Patient A: No}

@@ -24,11 +24,13 @@ ${Fisrt address}    //li[contains(.,'South Side')]
 
 ${Q:County of residence}    (//*[contains(text(),'County')])[1]/following::span[@title='Please choose an item'][1]
 
-${A:County of residence}    //*[contains(text(),'County')][1]/following::ul[@role='listbox']/li[1]
+${A:County of residence}    //label[.//span[contains(text(),'County')]]/following-sibling::div//select
+#//*[contains(text(),'County')][1]/following::ul[@role='listbox']/li[1]
 ${Country success}    (//*[contains(text(),'County')])[1]/following::i[@class="fa fa-check text-success"][1]
 
 ${Q:State}    //span[text()='State']/following::span[@title='Please choose an item'][1]
-${A:State}    //*[contains(text(),'State')][1]/following::ul[@role='listbox']/li[1]
+${A:State}    //label[.//span[.='State']]/following-sibling::div//select
+#//*[contains(text(),'State')][1]/following::ul[@role='listbox']/li[1]
 ${State success}    //span[text()='State']/following::i[@class="fa fa-check text-success"][1]
 
 ${Q:Zipcode_error}     //label[.//span[text()='Zip Code']]/following-sibling::div//textarea[contains(@data-bind,'value: $data.rawAnswer')]
@@ -68,12 +70,12 @@ Fill up and Submit Case Investigation Form
 Add Address
    # Select Address
    Run Keyword And Ignore Error    Input Text    ${Q:Search For Address}   ${Address}
-   Press Keys   ${Q:Search For Address}     ENTER   TAB
+   Press Keys   ${Q:Search For Address}     ENTER
 #   Click Element    ${Fisrt address}
    Sleep    15s
    # Contry and State
-   Answer Dropdown    ${Q:County of residence}    ${A:County of residence}
-   Answer Dropdown    ${Q:State}    ${A:State}
+   Select Dropdown   ${Q:County of residence}    ${A:County of residence}
+   Select Dropdown    ${Q:State}    ${A:State}
 
    # Zipcode
    Scroll Element Into View    ${Q:Zipcode_normal}
