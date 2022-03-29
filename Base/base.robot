@@ -18,7 +18,7 @@ ${search all cases in the list}    //button[contains(., 'Search All')]
 
 *** Keywords ***
     
-#HQ Login
+HQ Login
     ${chromedriver_path}=   driverpath.Get Driver Path
     ${chrome_options}=  Evaluate  sys.modules['selenium.webdriver'].ChromeOptions()  sys, selenium.webdriver
     Call Method    ${chrome_options}    add_argument    --disable-extensions
