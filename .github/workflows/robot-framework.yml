@@ -42,7 +42,7 @@ jobs:
       run: |
         echo "NOW=$(date +'%m-%d %H:%M')" >> $GITHUB_ENV
         echo ${{env.NOW}}
-        robot -d ./Reports ./Tests/02 Patient Good Path.robot
+        robot -d ./Reports './Tests/02 Patient Good Path.robot'
 
     - name: Zip Reports folder
       uses: papeloto/action-zip@v1
