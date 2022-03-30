@@ -26,6 +26,7 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
+        pip install xvfb
 
     # - name: Execute tests
     #   uses: joonvena/robotframework-docker-action@v0.1
@@ -41,7 +42,7 @@ jobs:
       run: |
         echo "NOW=$(date +'%m-%d %H:%M')" >> $GITHUB_ENV
         echo ${{env.NOW}}
-        robot -d ./Reports Tests
+        robot -d ./Reports ./Tests/02 Patient Good Path.robot
 
     - name: Zip Reports folder
       uses: papeloto/action-zip@v1
