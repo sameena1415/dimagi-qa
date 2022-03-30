@@ -6,3 +6,8 @@ pyotp >= 2.6.0
 webdriver-manager
 robotframework-screencaplibrary
 robotframework-xvfb
+xvfbwrapper
+mss
+numpy
+opencv-python
+pynput
