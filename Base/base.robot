@@ -2,6 +2,7 @@
 Library  SeleniumLibrary
 Library    String
 Library    DateTime
+Library     XvfbRobot
 Resource    ../Locators/locators.robot
 Resource     ../Case Investigation (CI)/Forms/register a new case form.robot
 Resource    ../Contact Tracing (CT)/Forms/register a new contact form.robot
@@ -19,6 +20,7 @@ ${search all cases in the list}    //button[contains(., 'Search All')]
 *** Keywords ***
     
 HQ Login
+    Start Virtual Display    1920    1080
     ${chromedriver_path}=   driverpath.Get Driver Path
     ${chrome_options}=  Evaluate  sys.modules['selenium.webdriver'].ChromeOptions()  sys, selenium.webdriver
     Call Method    ${chrome_options}    add_argument    --disable-extensions
