@@ -3,6 +3,7 @@ Documentation     Workflow to test Patient Good Path
 Suite Setup    HQ Login
 Library  SeleniumLibrary
 Library  ScreenCapLibrary
+Library  ../Base/video_recorder.py
 Resource    ../Case Investigation (CI)/Menu/menu.robot
 Resource    ../Case Investigation (CI)/Forms/register a new case form.robot
 Resource    ../Case Investigation (CI)/Forms/case investigation form.robot
@@ -29,7 +30,7 @@ Patient_Good_1
 
 Patient_Good_2
     [Documentation]    All Cases: Incomplete Demographic Information
-    Start Video Recording   alias=None  name=Reports\video  fps=None    size_percentage=1   embed=True  embed_width=100px   monitor=1
+    Start Recorder  filename=Reports/video.webm  compress=False
     Open All Cases: Incomplete Demographic Information Menu
     Sleep    20s
     ${case_name}    Get Case Name
@@ -48,7 +49,7 @@ Patient_Good_2
     Open All Cases: Unassigned & Open
     Search in the case list     ${case_name}   
     Element Should Be Visible    ${case_created}
-    Stop Video Recording    alias=None
+    Stop Recorder
 
 Patient_Good_3
     [Documentation]    All Cases: Assigned & Open
