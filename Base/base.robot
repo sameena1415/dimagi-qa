@@ -19,7 +19,6 @@ ${search all cases in the list}    //button[contains(., 'Search All')]
 *** Keywords ***
     
 HQ Login
-    Register Keyword To Run On Failure      NONE
     ${chromedriver_path}=   driverpath.Get Driver Path
     ${chrome_options}=  Evaluate  sys.modules['selenium.webdriver'].ChromeOptions()  sys, selenium.webdriver
     Call Method    ${chrome_options}    add_argument    --disable-extensions
@@ -181,7 +180,3 @@ Input Text
     [Arguments]    ${element}     ${text}
     Wait Until Element Is Visible    ${element}     60s
     SeleniumLibrary.Input Text    ${element}     ${text}
-
-Close Browser
-    Run Keyword If Test Failed    Capture Page Screenshot
-    SeleniumLibrary.Close Browser
