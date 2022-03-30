@@ -30,7 +30,7 @@ Patient_Good_1
 
 Patient_Good_2
     [Documentation]    All Cases: Incomplete Demographic Information
-    Start Recorder  filename=Reports/video.webm  compress=False
+    video_recorder.Start Recorder  filename=Reports/video.webm  compress=False
     Open All Cases: Incomplete Demographic Information Menu
     Sleep    20s
     ${case_name}    Get Case Name
@@ -49,7 +49,7 @@ Patient_Good_2
     Open All Cases: Unassigned & Open
     Search in the case list     ${case_name}   
     Element Should Be Visible    ${case_created}
-    Stop Recorder
+    video_recorder.Stop Recorder
 
 Patient_Good_3
     [Documentation]    All Cases: Assigned & Open
