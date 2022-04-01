@@ -36,16 +36,12 @@ Patient_Good_2
     Search in the case list      ${case_name}  
     Element Should Be Visible    ${case_created}
     Select Created Case    ${case_created}
-    Capture Page Screenshot
     Fill up and Submit Case Investigation Form
-    Capture Page Screenshot
     ## Landed on Incomplete Demographic page
-    Search in the case list     ${case_name}
-    Capture Page Screenshot
+    Search in the case list     ${case_name}   
+    Wait Until Element Is Not Visible    ${case_created}
     Element Should Not Be Visible    ${case_created}
-    Capture Page Screenshot
     Open All Open Cases
-    Capture Page Screenshot
     Search in the case list     ${case_name}   
     Element Should Be Visible    ${case_created}
     Open All Cases: Unassigned & Open
