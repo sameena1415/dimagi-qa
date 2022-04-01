@@ -65,6 +65,7 @@ Fill up and Submit Case Investigation Form
    Add Address
    ${Yesterday's date}    Yesterday's Date   
    Input Text    ${Q:Date Tested}    ${Yesterday's date}
+   Capture Page Screenshot
    Submit Form and Check Success 
    
 Add Address
@@ -72,23 +73,26 @@ Add Address
    Run Keyword And Ignore Error    Input Text    ${Q:Search For Address}   ${Address}
    Press Keys   ${Q:Search For Address}     ENTER   TAB
 #   Click Element    ${Fisrt address}
+   Capture Page Screenshot
    Sleep    15s
    # Contry
    Select Dropdown   ${Q:County of residence}    ${A:County of residence}
-
+   Capture Page Screenshot
    # Zipcode
    Scroll Element Into View    ${Q:Zipcode_normal}
 #   Wait Until Element Is Visible    ${Zipcode failure}    80s
    Wait Until Element Is Enabled   ${Q:Zipcode_error}     60s
    Clear Element Text    ${Q:Zipcode_error}
    Press Keys    ${Q:Zipcode_normal}   12345    TAB
+   Capture Page Screenshot
    Sleep    10s
    Wait Until Element Is Visible    ${Zipcode success}  60s
 
    # State
-   Select Dropdown   ${Q:County of residence}    ${A:County of residence}
    Select Dropdown    ${Q:State}    ${A:State}
+   Capture Page Screenshot
    Transfer Patient - No
+   Capture Page Screenshot
    
 Transfer Patient - No
    Wait Until Element Is Enabled    ${Q:Transer Patient A: No} 
