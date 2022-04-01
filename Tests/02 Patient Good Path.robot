@@ -39,7 +39,7 @@ Patient_Good_2
     Fill up and Submit Case Investigation Form
     ## Landed on Incomplete Demographic page
     Search in the case list     ${case_name}   
-    Wait Until Element Is Not Visible    ${case_created}
+    Wait Until Element Is Not Visible    ${case_created}    30s
     Element Should Not Be Visible    ${case_created}
     Open All Open Cases
     Search in the case list     ${case_name}   
