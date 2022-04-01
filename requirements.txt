@@ -4,10 +4,3 @@ robotframework-pythonlibcore >= 3.0.0
 robotframework-seleniumlibrary >= 3.3.1
 pyotp >= 2.6.0
 webdriver-manager
-robotframework-screencaplibrary
-robotframework-xvfb
-xvfbwrapper
-mss
-numpy
-opencv-python
-pynput
