@@ -17,6 +17,8 @@ ${ci_user}    //span[contains(., "CI")]
 ${confirm_user_login}    //button[@id="js-confirmation-confirm"]
 
 ${select_app}    xpath://div[contains(@aria-label,"${app name}")]
+${home_btn}     //*[@class="fa fa-home"]
+
 
 ${select_first case_in_caselist}    //tbody[@class='wrapper js-case-container']/tr[1]
 ${continue}    id:select-case

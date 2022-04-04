@@ -22,7 +22,7 @@ HQ Login
     ${chromedriver_path}=   driverpath.Get Driver Path
     ${chrome_options}=  Evaluate  sys.modules['selenium.webdriver'].ChromeOptions()  sys, selenium.webdriver
     Call Method    ${chrome_options}    add_argument    --disable-extensions
-    Call Method    ${chrome_options}    add_argument    --headless
+#    Call Method    ${chrome_options}    add_argument    --headless
     Call Method    ${chrome_options}    add_argument    --start-maximized
     Call Method    ${chrome_options}    add_argument    --disable-dev-shm-usage
     Call Method    ${chrome_options}    add_argument    --no-sandbox
@@ -37,9 +37,9 @@ HQ Login
     Run Keyword And Ignore Error    wait until page contains element    ${confirm_cookie}   30
     ${IsElementVisible}=  Run Keyword And Return Status    Element Should Be Visible   ${confirm_cookie}
     Run Keyword If     ${IsElementVisible}    Click Element  ${confirm_cookie}
-    #Click Button  ${submit_button}
-    #${token}    Generate 2FA Token    ${secret}
-    #Input Text    ${otp_token}   ${token}
+    Click Button  ${submit_button}
+    ${token}    Generate 2FA Token    ${secret}
+    Input Text    ${otp_token}   ${token}
     Click Button  ${submit_button}
     Title Should Be    ${commcare hq title} 
     #Run Keyword And Ignore Error     Click Element    ${confirm_cookie}
@@ -69,7 +69,14 @@ Sync App
     Click Element    ${sync}
     Sleep    5s
     Wait Until Element Is Visible    ${sync success}    
-   
+
+Go Back Home and Sync App
+    Click Button    ${home_btn}
+    Click Element    ${sync}
+    Sleep    5s
+    Wait Until Element Is Visible    ${sync success}
+
+
 Log in as ci_user
    Sync App
    Click Element    ${login_as}
@@ -161,7 +168,7 @@ Case Search
     JS Click    ${case search submit}
     
 Submit Form and Check Success
-    Element Should Be Enabled    ${submit_form} 
+    Element Should Be Enabled    ${submit_form}
     JS Click   ${submit_form}
     Wait Until Element Is Visible    ${success_message}    60s
     Element Should Be Visible    ${success_message}
