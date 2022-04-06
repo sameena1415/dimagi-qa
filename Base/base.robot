@@ -71,8 +71,8 @@ Sync App
     Wait Until Element Is Visible    ${sync success}    
 
 Go Back Home and Sync App
-    Click Button    ${home_btn}
-    Click Element    ${sync}
+    JS Click    ${home_btn}
+    JS Click    ${sync}
     Sleep    5s
     Wait Until Element Is Visible    ${sync success}
 
