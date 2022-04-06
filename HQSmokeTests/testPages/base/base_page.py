@@ -185,7 +185,7 @@ class BasePage:
             is_displayed = False
         return bool(is_displayed)
 
-    def is_visible_and_displayed(self, locator, timeout=30):
+    def is_visible_and_displayed(self, locator, timeout=50):
         try:
             visible = ec.visibility_of_element_located(locator)
             element = WebDriverWait(self.driver, timeout).until(visible, message="Element" + str(locator) + "not displayed")

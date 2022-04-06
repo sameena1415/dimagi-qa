@@ -25,6 +25,7 @@ class LookUpTablePage(BasePage):
         self.save_table = (By.XPATH, "(//button[@data-bind='click: saveEdit'])[last()]")
         self.table_created_path = (By.XPATH, self.table_created)
         self.view_tables_link = (By.LINK_TEXT, "View Tables")
+        self.select_table = "//select[@id='report_filter_table_id']"
         self.select_table_drop_down = (By.ID, "select2-report_filter_table_id-container")
         self.select_table_from_dropdown = (By.XPATH, "//li[contains(.,'" + self.table_id_name + "')]")
         self.view_table = (By.ID, "apply-btn")
@@ -44,8 +45,9 @@ class LookUpTablePage(BasePage):
 
     def view_lookup_table(self):
         self.wait_to_click(self.view_tables_link)
-        self.wait_to_click(self.select_table_drop_down)
-        self.wait_to_click(self.select_table_from_dropdown)
+        self.select_by_text(self.select_table, self.table_id_name)
+        # self.wait_to_click(self.select_table_drop_down)
+        # self.wait_to_click(self.select_table_from_dropdown)
         self.js_click(self.view_table)
         assert self.is_present_and_displayed(self.column_name)
         print("LookUp Table can be viewed successfully!")
