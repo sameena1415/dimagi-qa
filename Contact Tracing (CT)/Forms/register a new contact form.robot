@@ -62,7 +62,7 @@ Get Contact Name
 
 Set Contact Name
     ${name_random}  Get Contact Name
-    ${contact_created}  Set Variable    //td[text()='${name_random}' and @class='module-caselist-column']
+    ${contact_created}  Set Variable    //td[text()='${name_random}' and @class='module-case-list-column']
     Log    ${contact_created}
     Set Suite Variable   ${contact_created}
     [Return]    ${contact_created} 

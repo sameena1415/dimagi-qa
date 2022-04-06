@@ -27,26 +27,26 @@ Convert_Contact_to_PUI_1
     
 Convert_Contact_to_PUI_3
     [Documentation]    Convert PUI back to contact - close record
-    Log in as ci_user	
+    Log in as ci_user
     Search Case in All Suspected Cases (PUIs) menu
     ${contact_name}    Get Contact Name
     ${contact_created}    Set Contact Name
-    Search in the case list    ${contact_name}  
-    Select Created Case    ${contact_created}    
+    Search in the case list    ${contact_name}
+    Select Created Case    ${contact_created}
     Change PUI Status form
-    Yes, Close the Record 
+    Yes, Close the Record
     ## Redirects to All Suspected Cases (PUIs) menu
-    Search in the case list    ${contact_name} 
-    Element Should Not Be Visible    ${contact_created}   
+    Search in the case list    ${contact_name}
+    Element Should Not Be Visible    ${contact_created}
     Log in as ct_user
     Open All Closed Contacts menu
     Search in the case list    ${contact_name}
-    Element Should Be Visible    ${contact_created}    
+    Element Should Be Visible    ${contact_created}
     Open All Open Contacts menu
     Search in the case list    ${contact_name}
-    Element Should Not Be Visible    ${contact_created}    
-    
-Convert_Contact_to_PUI_2	
+    Element Should Not Be Visible    ${contact_created}
+
+Convert_Contact_to_PUI_2
     [Documentation]    Convert contact to PUI using "Convert Contact to Suspected Case (PUI)" form
     Open App Home Screen
     Register contact with phone number
@@ -56,26 +56,26 @@ Convert_Contact_to_PUI_2
     Open All Contacts Unassigned & Open menu
     Search in the case list    ${contact_name}
     Element Should Not Be Visible    ${contact_created}    Contact appearing in menu
-    
+
 Convert_Contact_to_PUI_4
     [Documentation]    Convert PUI back to contact - do not close record
     Log    Sleeping ES to update..
-    Sleep     2 minutes	
-    Log in as ci_user	 
+    Sleep     2 minutes
+    Log in as ci_user
     Search Case in All Suspected Cases (PUIs) menu
     ${contact_name}    Get Contact Name
     ${contact_created}    Set Contact Name
     Search in the case list    ${contact_name}
     Select Created Case    ${contact_created}
-    Change PUI Status form	
+    Change PUI Status form
     No , Close the Record
     ## Redirects to All Suspected Cases (PUIs) menu
     Search in the case list    ${contact_name}
-    Element Should Not Be Visible    ${contact_created}   
-    Log in as ct_user 
+    Element Should Not Be Visible    ${contact_created}
+    Log in as ct_user
     Open All Open Contacts menu
     Search in the case list    ${contact_name}
-    Element Should Be Visible    ${contact_created}   
+    Element Should Be Visible    ${contact_created}
 #
 #Convert_Contact_to_PUI_6
 #    [Documentation]    convert PUI back to contact (archived contact) - do not close record

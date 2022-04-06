@@ -54,8 +54,8 @@ Convert contact to PUI using CM form
         ${contact_name}    Get Contact Name
         ${contact_created}   Set Contact Name
         Search in the case list    ${contact_name}
-        Select Created Case    ${contact_created}         
-        Click Element    ${contact_monitoring_form}   
+        Select Created Case    ${contact_created}
+        Click Element    ${contact_monitoring_form}
         JS Click    ${initial_interview_disposition}
         JS Click    ${race}
         JS Click    ${ethnicity}
