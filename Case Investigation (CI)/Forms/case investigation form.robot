@@ -62,10 +62,10 @@ Fill up and Submit Case Investigation Form
    Wait Until Element Is Enabled    ${Q:Case Interview Disposition A:Reached person, agreed to call}    
    JS Click    ${Q: Case Interview Disposition A:Reached person, agreed to call}
    Add User Details
-   Add Address
-   ${Yesterday's date}    Yesterday's Date   
+   ${Yesterday's date}    Yesterday's Date
    Input Text    ${Q:Date Tested}    ${Yesterday's date}
-   Submit Form and Check Success 
+   Add Address
+   Submit Form and Check Success
    
 Add Address
    # Select Address

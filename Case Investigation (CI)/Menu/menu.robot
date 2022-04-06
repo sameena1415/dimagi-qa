@@ -49,7 +49,7 @@ Open All Cases: Incomplete Demographic Information Menu
     Open App Home Screen
     Sleep    2s
     Wait Until Element Is Enabled    ${All Cases: Incomplete Demographic Information}
-    JS Click    ${All Cases: Incomplete Demographic Information} 
+    JS Click    ${All Cases: Incomplete Demographic Information}
 
 Open All Cases: Unassigned & Open
     Open App Home Screen

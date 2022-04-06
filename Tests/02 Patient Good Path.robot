@@ -37,19 +37,15 @@ Patient_Good_2
     Element Should Be Visible    ${case_created}
     Select Created Case    ${case_created}
     Fill up and Submit Case Investigation Form
-#    Log    Sleeping ES to update..
-#    Sleep     1 minutes
-    Go Back Home and Sync App
-    Open All Cases: Incomplete Demographic Information Menu
     ## Landed on Incomplete Demographic page
     Search in the case list     ${case_name}
     Element Should Not Be Visible    ${case_created}
     Capture Page Screenshot
     Open All Open Cases
-    Search in the case list     ${case_name}   
+    Search in the case list     ${case_name}
     Element Should Be Visible    ${case_created}
     Open All Cases: Unassigned & Open
-    Search in the case list     ${case_name}   
+    Search in the case list     ${case_name}
     Element Should Be Visible    ${case_created}
 
 
