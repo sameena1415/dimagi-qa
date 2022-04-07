@@ -19,7 +19,7 @@ jobs:
   
     - name: Install dependencies
       run: |
-        npm install -g newman newman-reporter-html
+        npm install -g newman newman-reporter-htmlextra
 
     - name: Test
       env:
@@ -43,7 +43,7 @@ jobs:
         # Required mail subject:
         subject: Postman Test Report 
         # Required recipients' addresses:
-        to: nsaxena@dimagi.com
+        to: nsaxena@dimagi.com, kbordoloi@dimagi.com
         # Required sender full name (address can be skipped):
         from: <${{secrets.DIMAGIQA_MAIL_USERNAME}}>
         # Optional HTML body read from file:
