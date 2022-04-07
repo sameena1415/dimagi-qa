@@ -37,34 +37,36 @@ jobs:
         DIMAGIQA_MAIL_USERNAME: ${{ secrets.DIMAGIQA_MAIL_USERNAME }}
         DIMAGIQA_MAIL_PASSWORD: ${{ secrets.DIMAGIQA_MAIL_PASSWORD }}
       run: |
-        newman run test_collection.json -e test_env.json -r htmlextra --reporter-htmlextra-export testResults/report.html
+        newman run test_collection.json -e test_env.json -r htmlextra
+    
+    - name: Zip Reports folder
+      uses: papeloto/action-zip@v1
+      if: always()
+      with:
+          files: newman/
+          dest: Reports.zip
 
-    # - name: Send Email
-    #   uses: dawidd6/action-send-mail@v3
-    #   if: always()
-    #   with:
-    #     # Required mail server address:
-    #     server_address: smtp.gmail.com
-    #     # Required mail server port:
-    #     server_port: 465
-    #     # Optional (recommended): mail server username:
-    #     username: ${{secrets.DIMAGIQA_MAIL_USERNAME}}
-    #     # Optional (recommended) mail server password:
-    #     password: ${{secrets.DIMAGIQA_MAIL_PASSWORD}}
-    #     # Required mail subject:
-    #     subject: Postman Test Report 
-    #     # Required recipients' addresses:
-    #     to: nsaxena@dimagi.com, kbordoloi@dimagi.com
-    #     # Required sender full name (address can be skipped):
-    #     from: <${{secrets.DIMAGIQA_MAIL_USERNAME}}>
-    #     # Optional HTML body read from file:
-    #     html_body: file:////home/runner/work/dimagi-qa/dimagi-qa/testResults/report.html
-    #     # Optional priority: 'high', 'normal' (default) or 'low'
-    #     priority: normal
+    - name: Send Email
+      uses: dawidd6/action-send-mail@v3
+      if: always()
+      with:
+        # Required mail server address:
+        server_address: smtp.gmail.com
+        # Required mail server port:
+        server_port: 465
+        # Optional (recommended): mail server username:
+        username: ${{secrets.DIMAGIQA_MAIL_USERNAME}}
+        # Optional (recommended) mail server password:
+        password: ${{secrets.DIMAGIQA_MAIL_PASSWORD}}
+        # Required mail subject:
+        subject: Postman Test Report 
+        # Required recipients' addresses:
+        to: nsaxena@dimagi.com, kbordoloi@dimagi.com
+        # Required sender full name (address can be skipped):
+        from: <${{secrets.DIMAGIQA_MAIL_USERNAME}}>
+        # Optional HTML body read from file:
+        html_body: file:////home/runner/work/dimagi-qa/dimagi-qa/Reports.zip
+        # Optional priority: 'high', 'normal' (default) or 'low'
+        priority: normal
 
-    - name: Output the run Details
-      uses: actions/upload-artifact@v2
-      with: 
-       name: RunReports
-       path: testResults
 
