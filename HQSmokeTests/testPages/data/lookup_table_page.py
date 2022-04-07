@@ -41,6 +41,7 @@ class LookUpTablePage(BasePage):
         self.send_keys(self.field_name, self.table_id_name)
         print(self.table_id_name)
         self.wait_to_click(self.save_table)
+        time.sleep(2)
         assert self.is_present_and_displayed(self.table_created_path)
         print("LookUp Table created successfully!")
 
