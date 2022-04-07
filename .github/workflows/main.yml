@@ -39,6 +39,8 @@ jobs:
         DIMAGIQA_MAIL_USERNAME: ${{ secrets.DIMAGIQA_MAIL_USERNAME }}
         DIMAGIQA_MAIL_PASSWORD: ${{ secrets.DIMAGIQA_MAIL_PASSWORD }}
       run: |
+        echo "NOW=$(date +'%m-%d %H:%M')" >> $GITHUB_ENV
+        echo ${{env.NOW}}
         newman run test_collection.json -e test_env.json -r htmlextra
     
     - name: Zip Reports folder
@@ -61,7 +63,7 @@ jobs:
         # Optional (recommended) mail server password:
         password: ${{secrets.DIMAGIQA_MAIL_PASSWORD}}
         # Required mail subject:
-        subject: Postman Test Report 
+        subject: Postman Test Report [#${{github.run_number}}], ${{env.NOW}}
         # Required recipients' addresses:
         to: nsaxena@dimagi.com, kbordoloi@dimagi.com
         # Required sender full name (address can be skipped):
