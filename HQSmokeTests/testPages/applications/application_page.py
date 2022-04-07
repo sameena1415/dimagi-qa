@@ -147,7 +147,7 @@ class ApplicationPage(BasePage):
         self.send_keys(self.choose_file, str(file_that_was_downloaded))
         time.sleep(1)
         self.click(self.upload)
-        time.sleep(1)
+        time.sleep(5)
         assert self.is_present_and_displayed(self.same_question_present)
         print("XML copied successfully!")
 
