@@ -1,0 +1,53 @@
+name: Postman Test Run
+
+on:
+  push:
+    branches: [ ns/postman ]
+  pull_request:
+    branches: [ ns/postman ]
+  repository_dispatch:
+    types: [ deploy_success ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2       
+  
+    - name: Install dependencies
+      run: |
+        npm install -g newman newman-reporter-html
+
+    - name: Test
+      env:
+        DIMAGIQA_MAIL_USERNAME: ${{ secrets.DIMAGIQA_MAIL_USERNAME }}
+        DIMAGIQA_MAIL_PASSWORD: ${{ secrets.DIMAGIQA_MAIL_PASSWORD }}
+      run: |
+        node_modules/.bin/newman run test_collection.json -e test_env.json -r htmlextra --reporter-htmlextra-export /report.html
+
+    - name: Send Email
+      uses: dawidd6/action-send-mail@v3
+      if: always()
+      with:
+        # Required mail server address:
+        server_address: smtp.gmail.com
+        # Required mail server port:
+        server_port: 465
+        # Optional (recommended): mail server username:
+        username: ${{secrets.DIMAGIQA_MAIL_USERNAME}}
+        # Optional (recommended) mail server password:
+        password: ${{secrets.DIMAGIQA_MAIL_PASSWORD}}
+        # Required mail subject:
+        subject: Postman Test Report 
+        # Required recipients' addresses:
+        to: nsaxena@dimagi.com
+        # Required sender full name (address can be skipped):
+        from: <${{secrets.DIMAGIQA_MAIL_USERNAME}}>
+        # Optional HTML body read from file:
+        html_body: file:////home/runner/work/postman-test/report.html
+        # Optional priority: 'high', 'normal' (default) or 'low'
+        priority: normal
+
+
