@@ -26,6 +26,7 @@ jobs:
       run: |
         npm install -g newman
         npm install -g newman-reporter-htmlextra
+        npm install -g newman-reporter-html
 
     # Make directory to upload the test results
     - name: Make Directory for results
@@ -37,7 +38,7 @@ jobs:
         DIMAGIQA_MAIL_USERNAME: ${{ secrets.DIMAGIQA_MAIL_USERNAME }}
         DIMAGIQA_MAIL_PASSWORD: ${{ secrets.DIMAGIQA_MAIL_PASSWORD }}
       run: |
-        newman run test_collection.json -e test_env.json
+        newman run test_collection.json -e test_env.json -r htmlextra --reporter-htmlextra-export testResults/report.html
 
     # - name: Send Email
     #   uses: dawidd6/action-send-mail@v3
