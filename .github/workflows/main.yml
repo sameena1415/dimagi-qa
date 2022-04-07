@@ -22,7 +22,7 @@ jobs:
       uses: actions/setup-node@v1
       with: 
         node-version: '12.x'
-        
+
     - name: Install dependencies
       run: |
         npm install -g newman
@@ -31,12 +31,13 @@ jobs:
     - name: Make Directory for results
       run: mkdir -p testResults
 
+    # newman run test_collection.json -e test_env.json -r htmlextra --reporter-htmlextra-export testResults/report.html
     - name: Test
       env:
         DIMAGIQA_MAIL_USERNAME: ${{ secrets.DIMAGIQA_MAIL_USERNAME }}
         DIMAGIQA_MAIL_PASSWORD: ${{ secrets.DIMAGIQA_MAIL_PASSWORD }}
       run: |
-        newman run test_collection.json -e test_env.json -r htmlextra --reporter-htmlextra-export testResults/report.html
+        newman run ./test_collection.json -e ./test_env.json -r htmlextra --reporter-htmlextra-export testResults/htmlreport.html --reporter-htmlextra-darkTheme  > testResults/runreport1.html   
 
     - name: Send Email
       uses: dawidd6/action-send-mail@v3
@@ -57,7 +58,7 @@ jobs:
         # Required sender full name (address can be skipped):
         from: <${{secrets.DIMAGIQA_MAIL_USERNAME}}>
         # Optional HTML body read from file:
-        html_body: file:////home/runner/work/postman-test/testResults/report.html
+        html_body: file:////home/runner/work/dimagi-qa/dimagi-qa/testResults/report.html
         # Optional priority: 'high', 'normal' (default) or 'low'
         priority: normal
 
