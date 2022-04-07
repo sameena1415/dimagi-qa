@@ -2,11 +2,12 @@ name: Postman Test Run
 
 on:
   push:
-    branches: [ ns/postman ]
+    branches: [ kb/newman ]
   pull_request:
-    branches: [ ns/postman ]
+    branches: [ kb/newman ]
   repository_dispatch:
     types: [ deploy_success ]
+  workflow_dispatch:
 
 jobs:
   build:
