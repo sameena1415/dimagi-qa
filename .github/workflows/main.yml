@@ -24,8 +24,10 @@ jobs:
 
     - name: Install dependencies
       run: |
-        npm uninstall -g newman newman-reporter-htmlextra newman-reporter-html
-        npm install -g newman newman-reporter-htmlextra newman-reporter-html
+        npm uninstall -g newman 
+        npm uninstall -g newman-reporter-htmlextra
+        npm install -g newman 
+        npm install -g newman-reporter-htmlextra
 
     # Make directory to upload the test results
     - name: Make Directory for results
@@ -65,7 +67,9 @@ jobs:
         # Required sender full name (address can be skipped):
         from: <${{secrets.DIMAGIQA_MAIL_USERNAME}}>
         # Optional HTML body read from file:
-        html_body: file:////home/runner/work/dimagi-qa/dimagi-qa/Reports.zip
+        html_body: Please find attached the run report.
+        # Optional attachment
+        attachments: /home/runner/work/dimagi-qa/dimagi-qa/Reports.zip
         # Optional priority: 'high', 'normal' (default) or 'low'
         priority: normal
 
