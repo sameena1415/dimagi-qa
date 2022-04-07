@@ -69,7 +69,7 @@ jobs:
         # Required sender full name (address can be skipped):
         from: <${{secrets.DIMAGIQA_MAIL_USERNAME}}>
         # Optional HTML body read from file:
-        html_body: Please find attached the run report.
+        html_body: file:////home/runner/work/dimagi-qa/dimagi-qa/email.html
         # Optional attachment
         attachments: /home/runner/work/dimagi-qa/dimagi-qa/Reports.zip
         # Optional priority: 'high', 'normal' (default) or 'low'
