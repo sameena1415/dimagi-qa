@@ -60,7 +60,7 @@ jobs:
         username: ${{secrets.DIMAGIQA_MAIL_USERNAME}}
         password: ${{secrets.DIMAGIQA_MAIL_PASSWORD}}
         subject: NY App Tests[#${{github.run_number}}], ${{env.NOW}}
-        to: kbordoloi@dimagi.com
+        to: kbordoloi@dimagi.com, ktripathy@dimagi.com
         from: <${{secrets.DIMAGIQA_MAIL_USERNAME}}>
         html_body: Please find attached the run report.
         attachments: /home/runner/work/dimagi-qa/dimagi-qa/Reports.zip

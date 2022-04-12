@@ -11,7 +11,7 @@ Suite Teardown  Close Browser
        
 *** Test Cases ***
 
-
+#
 Convert_Contact_to_PUI_1
     [Documentation]    Convert contact to PUI using "Contact Monitoring" form
     Log in as ct_user
@@ -19,12 +19,12 @@ Convert_Contact_to_PUI_1
     ${contact_name}    Get Contact Name
     ${contact_created}    Set Contact Name
     Convert contact to PUI using CM form
-    Page Should Contain Element    ${pui_form_header} 
+    Page Should Contain Element    ${pui_form_header}
     PUI form submission
     Open All Contacts Unassigned & Open menu
     Search in the case list    ${contact_name}
-    Element Should Not Be Visible    ${contact_created}   
-    
+    Element Should Not Be Visible    ${contact_created}
+
 Convert_Contact_to_PUI_3
     [Documentation]    Convert PUI back to contact - close record
     Log in as ci_user
@@ -56,7 +56,7 @@ Convert_Contact_to_PUI_2
     Open All Contacts Unassigned & Open menu
     Search in the case list    ${contact_name}
     Element Should Not Be Visible    ${contact_created}    Contact appearing in menu
-
+#
 Convert_Contact_to_PUI_4
     [Documentation]    Convert PUI back to contact - do not close record
     Log    Sleeping ES to update..
@@ -76,24 +76,23 @@ Convert_Contact_to_PUI_4
     Open All Open Contacts menu
     Search in the case list    ${contact_name}
     Element Should Be Visible    ${contact_created}
-#
-#Convert_Contact_to_PUI_6
-#    [Documentation]    convert PUI back to contact (archived contact) - do not close record
-#    Log in as ci_user
-#    Search Archieved Case in All Suspected Cases (PUIs) menu
-#    Search and Select Archieved Case
-#    Change PUI Status form
-#    No , Close the Archieved Record
-#    Search in the case list    ${archieved_contact_name}
-#    Element Should Be Visible    ${archieved_contact}
-#
-#Convert_Contact_to_PUI_5
-#    [Documentation]    convert PUI back to contact (archived contact) - close record
-#    Log in as ci_user
-#    Search Archieved Case in All Suspected Cases (PUIs) menu
-#    Search and Select Archieved Case
-#    Change PUI Status form
-#    Yes, Close the Archieved Record
-#    Search in the case list    ${archieved_contact_name}
-#    Element Should Not Be Visible     ${archieved_contact}
-#
+
+Convert_Contact_to_PUI_6
+    [Documentation]    convert PUI back to contact (archived contact) - do not close record
+    Log in as ci_user
+    Search Archieved Case in All Suspected Cases (PUIs) menu
+    Search and Select Archieved Case
+    Change PUI Status form
+    No , Close the Archieved Record
+    Search in the case list    ${archieved_contact_name}
+    Element Should Be Visible    ${archieved_contact}
+##
+Convert_Contact_to_PUI_5
+    [Documentation]    convert PUI back to contact (archived contact) - close record
+    Log in as ci_user
+    Search Archieved Case in All Suspected Cases (PUIs) menu
+    Search and Select Archieved Case
+    Change PUI Status form
+    Yes, Close the Archieved Record
+    Search in the case list    ${archieved_contact_name}
+    Element Should Not Be Visible     ${archieved_contact}

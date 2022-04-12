@@ -32,7 +32,8 @@ Change PUI Status form
     JS Click    ${change pui status form}
     Wait Until Element Is Enabled    ${convert_back_to_contact}
     JS Click    ${convert_back_to_contact}
-
+    Run Keyword And Ignore Error    Wait Until Element Is Enabled    ${convert_this_suspected_case}
+    Run Keyword And Ignore Error    JS Click    ${convert_this_suspected_case}
     
 Yes, Close the Record
     Wait Until Element Is Enabled    ${are_you_sure}
@@ -86,15 +87,17 @@ Search and Select Archieved Case
 Yes, Close the Archieved Record
     Wait Until Element Is Enabled     ${close_record}
     Click Element    ${close_record}
-    Element Should Be Visible    ${no_longer_active_message}  
+    Run Keyword And Ignore Error  Element Should Be Visible    ${no_longer_active_message}
+    Run Keyword And Ignore Error  Element Should Be Visible    ${close_yes_message}
     Wait Until Element Is Enabled    ${final_disposition2} 
     Click Element     ${final_disposition2}    
     Submit Form and Check Success
-    
+
 No , Close the Archieved Record
     Wait Until Element Is Enabled     ${dont_close_record} 
     Click Element    ${dont_close_record} 
-    Element Should Be Visible    ${no_longer_active_message}  
+    Run Keyword And Ignore Error  Element Should Be Visible    ${no_longer_active_message}
+    Run Keyword And Ignore Error  Element Should Be Visible    ${no_longer_active_message2}
     Submit Form and Check Success 
      
     

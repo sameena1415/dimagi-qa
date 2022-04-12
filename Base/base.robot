@@ -146,7 +146,8 @@ Select Created Case
     [Arguments]    ${case_or_contact_created}
     Wait Until Element Is Enabled    ${case_or_contact_created}
     Sleep    2s 
-    JS Click    ${case_or_contact_created}      
+    JS Click    ${case_or_contact_created}
+    Sleep    2s
     Wait Until Element Is Enabled    ${continue}
     Sleep    2s 
     Scroll Element Into View    ${continue}

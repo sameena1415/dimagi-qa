@@ -31,7 +31,7 @@ ${preferred_language}    //p[text()='English']
 ${last_contact_date}    //span[contains(text(),'When was the last day ')]/following::div[1]//input[@type='text']
 ${submit_form}     //button[@type='submit' and @class='submit btn btn-primary']
 ${success_message}    //p[text()='Form successfully saved!']
-
+${phone_no_not_matching}    //label[.//*[contains(text(),'phone number the same as the case')]]/following-sibling::div//*[.='No']
 
 ${app_home}    xpath://ol//li[contains(.,"${app name}")]
 
@@ -65,7 +65,9 @@ ${convert_back_to_contact}    //p[contains(.,'Convert this Suspected Case back t
 ${are_you_sure}    //p[text()='Yes, convert this Suspected Case back into a Contact']
 ${close_record}    //p[text()="Yes"]
 ${dont_close_record}    //p[text()="No"]
+${convert_this_suspected_case}    //p[contains(.,'Yes, convert this Suspected Case back into a Contact')]
 ${no_longer_active_message}    //strong[text()="This Suspected Case's contact record is no longer active, so you may not choose to convert it back to a contact."]
+${no_longer_active_message2}       //p[contains(.,'This Suspected Case (PUI) will be converted back to being a contact. The Contact Tracing team will resume monitoring of this patient.')]
 ${close_yes_message}    //p[text()="The Suspected Case (PUI) will be closed, as will the associated contact record."]
 ${close_yes_message2}    //strong[text()="In order for the contact to be monitored again, the Contact Tracing team must re-open their record."]
 ${close_no_message}    //p[text()="This Suspected Case (PUI) will be converted back to being a contact. The Contact Tracing team will resume monitoring of this patient."]

@@ -17,12 +17,13 @@ Generate Random Contact Name
 Register contact with phone number
    Open Register New Contacts Menu
    Select Created Case    ${select_first case_in_caselist}
-   Wait Until Element Is Visible    ${register_new_contacts_form}
+   Run Keyword And Ignore Error     Wait Until Element Is Visible    ${register_new_contacts_form}
    Run Keyword And Ignore Error    JS Click    ${register_new_contacts_form}
    Generate Random Contact Name
    ${name_random}    Get Variable Value    ${name_random}
    Input Text       ${contact_first_name}    ${name_random} 
-   Input Text       ${contact_last_name}    ${name_random}  
+   Input Text       ${contact_last_name}    ${name_random}
+   Run Keyword And Ignore Error     Phone No not Matching
    ${Mobile number}    Generate Mobile Number
    Input Text       ${contact_phone_num}    ${Mobile number}
    JS Click    ${preferred_language}
@@ -31,7 +32,7 @@ Register contact with phone number
    Input Text    ${last_contact_date}   ${Yesterday's date}
    JS Click    ${last_contact_date}
    Submit Form and Check Success  
-   
+
 Register contact without phone number
    [Arguments]  ${case_name}    ${case_created}
    Open Register New Contacts Menu
@@ -53,6 +54,9 @@ Register contact without phone number
    JS Click    ${last_contact_date}
    Submit Form and Check Success   
 
+Phone No Not Matching
+    Wait Until Element Is Visible    ${phone_no_not_matching}
+    JS Click    ${phone_no_not_matching}
 
 Get Contact Name
     ${name_random}    Get Variable Value    ${name_random} 
