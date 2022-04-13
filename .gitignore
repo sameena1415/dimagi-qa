@@ -12,5 +12,6 @@ selenium-screenshot*
 libspecs
 red.xml
 Reports
+*.zip
 
 

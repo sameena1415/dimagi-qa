@@ -13,7 +13,7 @@ ${Fisrt address}    //li[contains(.,'South Side')]
 
 ${Q:County of residence}    (//*[contains(text(),'County')])[1]/following::span[@title='Please choose an item'][1]
 
-${A:County of residence}    //label[.//span[contains(text(),'County')]]/following-sibling::div//select
+${A:County of residence}    //label[.//*[contains(text(),'County')]]/following-sibling::div//select
 #//*[contains(text(),'County')][1]/following::ul[@role='listbox']/li[1]
 ${Country success}    (//*[contains(text(),'County')])[1]/following::i[@class="fa fa-check text-success"][1]
 
@@ -22,10 +22,15 @@ ${A:State}    //label[.//span[.='State']]/following-sibling::div//select
 #//*[contains(text(),'State')][1]/following::ul[@role='listbox']/li[1]
 ${State success}    //span[text()='State']/following::i[@class="fa fa-check text-success"][1]
 
-${Q:Zipcode_error}     (//span[contains(text(), 'Zip Code')])[1]/following::div[1]/div[@class='widget has-error']/descendant::textarea
-${Q:Zipcode_normal}     (//span[contains(text(), 'Zip Code')])[1]/following::div[1]/div[@class='widget']/descendant::textarea
-${Zipcode success}    (//span[contains(text(), 'Zip Code')])[1]/following::i[@class="fa fa-check text-success"][1]
-${Zipcode failure}    (//span[contains(text(), 'Zip Code')])[1]/following::i[@class="fa fa-warning text-danger clickable"][1]
+${Q:Zipcode_error}     //label[.//span[text()='Zip Code']]/following-sibling::div//textarea[contains(@data-bind,'value: $data.rawAnswer')]
+${Q:Zipcode_normal}     //label[.//span[text()='Zip Code']]/following-sibling::div//textarea
+${Zipcode success}    //label[.//span[text()='Zip Code']]/following-sibling::div//i[@class="fa fa-check text-success"]
+${Zipcode failure}    //label[.//span[text()='Zip Code']]/following-sibling::div//i[@class="fa fa-warning text-danger clickable"]
+
+#${Q:Zipcode_error}     (//span[contains(text(), 'Zip Code')])[1]/following::div[1]/div[@class='widget has-error']/descendant::textarea
+#${Q:Zipcode_normal}     (//span[contains(text(), 'Zip Code')])[1]/following::div[1]/div[@class='widget']/descendant::textarea
+#${Zipcode success}    (//span[contains(text(), 'Zip Code')])[1]/following::i[@class="fa fa-check text-success"][1]
+#${Zipcode failure}    (//span[contains(text(), 'Zip Code')])[1]/following::i[@class="fa fa-warning text-danger clickable"][1]
 ${Q:Transer Patient A:No}  //p[contains(.,'No, do not transfer')]
 ${Q:Convert Contact A:Yes}  //p[contains(.,'Yes, convert contact/traveler to PUI')]
 
@@ -83,16 +88,19 @@ Add Address
    # Select Address
    Run Keyword And Ignore Error    Input Text    ${Q:Search For Address}   ${Address}
    Click Element    ${Fisrt address}
-   
+   Sleep    15s
+   # Country
+   Select Dropdown   ${Q:County of residence}    ${A:County of residence}
+
    # Zipcode
+   Scroll Element Into View    ${Q:Zipcode_normal}
    Wait Until Element Is Visible    ${Zipcode failure}    80s
    Wait Until Element Is Enabled   ${Q:Zipcode_error}
    Clear Element Text    ${Q:Zipcode_error}
    Press Keys   ${Q:Zipcode_normal}   12345     TAB
    Wait Until Element Is Visible    ${Zipcode success}     30s
   
-   # Contry and State 
-   Select Dropdown   ${Q:County of residence}    ${A:County of residence}
+   # State
    Select Dropdown    ${Q:State}    ${A:State}
    
    # Do not Transfer

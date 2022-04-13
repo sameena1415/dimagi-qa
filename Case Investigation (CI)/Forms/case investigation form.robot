@@ -24,12 +24,12 @@ ${Fisrt address}    //li[contains(.,'South Side')]
 
 ${Q:County of residence}    (//*[contains(text(),'County')])[1]/following::span[@title='Please choose an item'][1]
 
-${A:County of residence}    //label[.//span[contains(text(),'County')]]/following-sibling::div//select
+${A:County of residence}    //label[.//*[contains(text(),'County')]]/following-sibling::div//select
 #//*[contains(text(),'County')][1]/following::ul[@role='listbox']/li[1]
 ${Country success}    (//*[contains(text(),'County')])[1]/following::i[@class="fa fa-check text-success"][1]
 
 ${Q:State}    //span[text()='State']/following::span[@title='Please choose an item'][1]
-${A:State}    //label[.//span[.='State']]/following-sibling::div//select
+${A:State}    //label[.//*[.='State']]/following-sibling::div//select
 #//*[contains(text(),'State')][1]/following::ul[@role='listbox']/li[1]
 ${State success}    //span[text()='State']/following::i[@class="fa fa-check text-success"][1]
 

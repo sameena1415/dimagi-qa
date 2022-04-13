@@ -39,7 +39,8 @@ Get Case Name
 
 Set Case Name
     ${name_random}  Get Case Name
-    ${case_created}   Set Variable    //tr[.//td[text()='${name_random}' and @class='module-case-list-column']]
+#    ${case_created}   Set Variable    //tr[.//td[text()='${name_random}' and @class='module-case-list-column']]
+    ${case_created}   Set Variable    //tr[.//td[text()='${name_random}']]
     Log    ${case_created}
     Set Suite Variable    ${case_created}
     [Return]    ${case_created}    

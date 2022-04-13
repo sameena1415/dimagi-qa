@@ -41,7 +41,7 @@ Register contact without phone number
    Case Search    ${case_name}    
    Search in the case list    ${case_name}
    Select Created Case    ${case_created}
-   Wait Until Element Is Visible    ${register_new_contacts_form}
+   Run Keyword And Ignore Error     Wait Until Element Is Visible    ${register_new_contacts_form}
    Run Keyword And Ignore Error    JS Click    ${register_new_contacts_form}
    Generate Random Contact Name
    ${name_random}    Get Variable Value    ${name_random}
@@ -66,7 +66,8 @@ Get Contact Name
 
 Set Contact Name
     ${name_random}  Get Contact Name
-    ${contact_created}  Set Variable    //td[text()='${name_random}' and @class='module-case-list-column']
+    ${contact_created}  Set Variable    //tr[.//td[text()='${name_random}']]
+#    ${contact_created}  Set Variable    //tr[.//td[text()='${name_random}']  and @class='module-case-list-column']
     Log    ${contact_created}
     Set Suite Variable   ${contact_created}
     [Return]    ${contact_created} 
