@@ -22,10 +22,10 @@ ${A:State}    //label[.//span[.='State']]/following-sibling::div//select
 #//*[contains(text(),'State')][1]/following::ul[@role='listbox']/li[1]
 ${State success}    //span[text()='State']/following::i[@class="fa fa-check text-success"][1]
 
-${Q:Zipcode_error}     //label[.//span[text()='Zip Code']]/following-sibling::div//textarea[contains(@data-bind,'value: $data.rawAnswer')]
-${Q:Zipcode_normal}     //label[.//span[text()='Zip Code']]/following-sibling::div//textarea
-${Zipcode success}    //label[.//span[text()='Zip Code']]/following-sibling::div//i[@class="fa fa-check text-success"]
-${Zipcode failure}    //label[.//span[text()='Zip Code']]/following-sibling::div//i[@class="fa fa-warning text-danger clickable"]
+${Q:Zipcode_error}     (//label[.//*[contains(text(),'Zip Code')]]/following-sibling::div//textarea[contains(@data-bind,'value: $data.rawAnswer')])[1]
+${Q:Zipcode_normal}     (//label[.//*[contains(text(),'Zip Code')]]/following-sibling::div//textarea)[1]
+${Zipcode success}    (//label[.//*[contains(text(),'Zip Code')]]/following-sibling::div//i[@class="fa fa-check text-success"])[1]
+${Zipcode failure}    (//label[.//*[contains(text(),'Zip Code')]]/following-sibling::div//i[@class="fa fa-warning text-danger clickable"])[1]
 
 #${Q:Zipcode_error}     (//span[contains(text(), 'Zip Code')])[1]/following::div[1]/div[@class='widget has-error']/descendant::textarea
 #${Q:Zipcode_normal}     (//span[contains(text(), 'Zip Code')])[1]/following::div[1]/div[@class='widget']/descendant::textarea
