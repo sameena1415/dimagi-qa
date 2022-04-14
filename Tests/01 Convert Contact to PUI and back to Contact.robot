@@ -84,7 +84,7 @@ Convert_Contact_to_PUI_6
     Search and Select Archieved Case
     Change PUI Status form
     No , Close the Archieved Record
-    IF    ${archieved_contact_lname} == None
+    IF    '${archieved_contact_lname}' == '\'
         Search in the case list    ${archieved_contact_name}
     ELSE
          Search in the case list    ${archieved_contact_name} ${archieved_contact_lname}
@@ -98,7 +98,7 @@ Convert_Contact_to_PUI_5
     Search and Select Archieved Case
     Change PUI Status form
     Yes, Close the Archieved Record
-    IF    ${archieved_contact_lname} == None
+    IF    '${archieved_contact_lname}' == '\'
         Search in the case list    ${archieved_contact_name}
     ELSE
          Search in the case list    ${archieved_contact_name} ${archieved_contact_lname}

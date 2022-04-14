@@ -15,7 +15,7 @@ Search Archieved Case in All Suspected Cases (PUIs) menu
     Open All Suspected Cases (PUIs) menu
     Wait Until Element Is Enabled    ${search all cases}
     JS Click    ${search all cases}
-    IF    ${archieved_contact_lname} == None
+    IF    '${archieved_contact_lname}' == '\'
         Input Text    ${first-name_case_search}    ${archieved_contact_name}
     ELSE
          Input Text    ${first-name_case_search}    ${archieved_contact_name}
@@ -86,7 +86,7 @@ No , Close the Record
     Submit Form and Check Success
         
 Search and Select Archieved Case
-    IF    ${archieved_contact_lname} == None
+    IF    '${archieved_contact_lname}' == '\'
         Search in the case list    ${archieved_contact_name}
     ELSE
          Search in the case list    ${archieved_contact_name} ${archieved_contact_lname}
