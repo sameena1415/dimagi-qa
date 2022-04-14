@@ -24,11 +24,10 @@ def test_case_53_rage_clicks(driver):
     visible.rage_clicks()
 
 
-@pytest.mark.skip
 def test_case_two_factor_auth(driver, settings):
-    # if settings["url"] == "https://www.commcarehq.org/":
-    #     import pytest
-    #     pytest.skip("Two factor authentication is not yet testable in Prod")
-    #     return
     login = LoginPage(driver, settings["url"])
-    login.two_factor_auth(UserData.two_fa_user, settings["login_password"], settings["auth_key"])
+    print(settings["url"])
+    if "staging" in settings["url"]:
+        login.two_factor_auth(UserData.two_fa_user, settings["login_password"], settings["staging_auth_key"])
+    else:
+        login.two_factor_auth(UserData.two_fa_user, settings["login_password"], settings["prod_auth_key"])
