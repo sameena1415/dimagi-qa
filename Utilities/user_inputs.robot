@@ -8,5 +8,5 @@ ${email}    ktripathy+ush@dimagi.com
 ${pass}    Kiran@123
 ${implcit_wait_time}    20
 ${app name}    NY
-${archieved_contact_name}     PUI contact two
-${archieved_contact_lname}      15th April 2021
+${archieved_contact_name}     PUI_Monitoring_2
+${archieved_contact_lname}

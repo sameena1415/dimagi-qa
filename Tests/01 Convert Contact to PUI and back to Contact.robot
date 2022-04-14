@@ -84,7 +84,11 @@ Convert_Contact_to_PUI_6
     Search and Select Archieved Case
     Change PUI Status form
     No , Close the Archieved Record
-    Search in the case list    ${archieved_contact_name} ${archieved_contact_lname}
+    IF    ${archieved_contact_lname} == None
+        Search in the case list    ${archieved_contact_name}
+    ELSE
+         Search in the case list    ${archieved_contact_name} ${archieved_contact_lname}
+    END
     Element Should Be Visible    ${archieved_contact}
 
 Convert_Contact_to_PUI_5
@@ -94,5 +98,10 @@ Convert_Contact_to_PUI_5
     Search and Select Archieved Case
     Change PUI Status form
     Yes, Close the Archieved Record
+    IF    ${archieved_contact_lname} == None
+        Search in the case list    ${archieved_contact_name}
+    ELSE
+         Search in the case list    ${archieved_contact_name} ${archieved_contact_lname}
+    END
     Search in the case list    ${archieved_contact_name} ${archieved_contact_lname}
     Element Should Not Be Visible     ${archieved_contact}

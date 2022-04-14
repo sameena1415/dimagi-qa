@@ -14,9 +14,13 @@ PUI form submission
 Search Archieved Case in All Suspected Cases (PUIs) menu
     Open All Suspected Cases (PUIs) menu
     Wait Until Element Is Enabled    ${search all cases}
-    JS Click    ${search all cases} 
-    Input Text    ${first-name_case_search}    ${archieved_contact_name}
-    Input Text    ${last-name_case_search}    ${archieved_contact_lname}
+    JS Click    ${search all cases}
+    IF    ${archieved_contact_lname} == None
+        Input Text    ${first-name_case_search}    ${archieved_contact_name}
+    ELSE
+         Input Text    ${first-name_case_search}    ${archieved_contact_name}
+         Input Text    ${last-name_case_search}    ${archieved_contact_lname}
+    END
     Wait Until Element Is Enabled    ${case search submit}
     JS Click    ${case search submit}
 
@@ -82,9 +86,13 @@ No , Close the Record
     Submit Form and Check Success
         
 Search and Select Archieved Case
-    Search in the case list    ${archieved_contact_lname}
+    IF    ${archieved_contact_lname} == None
+        Search in the case list    ${archieved_contact_name}
+    ELSE
+         Search in the case list    ${archieved_contact_name} ${archieved_contact_lname}
+    END
     Select Created Case    ${archieved_contact}
-    
+
 Yes, Close the Archieved Record
     Wait Until Element Is Enabled     ${close_record}
     Click Element    ${close_record}
