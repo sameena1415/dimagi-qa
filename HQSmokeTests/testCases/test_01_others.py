@@ -1,8 +1,7 @@
 from HQSmokeTests.testPages.home.home_page import HomePage
 from HQSmokeTests.testPages.base.login_page import LoginPage
 from HQSmokeTests.userInputs.user_inputs import UserData
-from HQSmokeTests.testCases.conftest import settings
-import pytest
+
 """"Contains all test cases that aren't specifically related any menu modules"""
 
 
@@ -25,8 +24,8 @@ def test_case_53_rage_clicks(driver):
 
 
 def test_case_two_factor_auth(driver, settings):
+
     login = LoginPage(driver, settings["url"])
-    print(settings["url"])
     if "staging" in settings["url"]:
         login.two_factor_auth(UserData.two_fa_user, settings["login_password"], settings["staging_auth_key"])
     else:
