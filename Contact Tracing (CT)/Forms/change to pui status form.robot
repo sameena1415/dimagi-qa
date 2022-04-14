@@ -91,6 +91,7 @@ Search and Select Archieved Case
     ELSE
          Search in the case list    ${archieved_contact_name} ${archieved_contact_lname}
     END
+    Sleep    10s
     Select Created Case    ${archieved_contact}
 
 Yes, Close the Archieved Record
