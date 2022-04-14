@@ -16,6 +16,7 @@ Search Archieved Case in All Suspected Cases (PUIs) menu
     Wait Until Element Is Enabled    ${search all cases}
     JS Click    ${search all cases} 
     Input Text    ${first-name_case_search}    ${archieved_contact_name}
+    Input Text    ${last-name_case_search}    ${archieved_contact_lname}
     Wait Until Element Is Enabled    ${case search submit}
     JS Click    ${case search submit}
 
@@ -81,7 +82,7 @@ No , Close the Record
     Submit Form and Check Success
         
 Search and Select Archieved Case
-    Search in the case list    ${archieved_contact_name}
+    Search in the case list    ${archieved_contact_lname}
     Select Created Case    ${archieved_contact}
     
 Yes, Close the Archieved Record
@@ -89,8 +90,8 @@ Yes, Close the Archieved Record
     Click Element    ${close_record}
     Run Keyword And Ignore Error  Element Should Be Visible    ${no_longer_active_message}
     Run Keyword And Ignore Error  Element Should Be Visible    ${close_yes_message}
-    Wait Until Element Is Enabled    ${final_disposition2} 
-    Click Element     ${final_disposition2}    
+    Run Keyword And Ignore Error    JS Click     ${final_disposition2}
+    Run Keyword And Ignore Error    JS Click       ${final_disposition}
     Submit Form and Check Success
 
 No , Close the Archieved Record

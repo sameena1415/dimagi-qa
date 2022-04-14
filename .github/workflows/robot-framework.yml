@@ -59,7 +59,7 @@ jobs:
         server_port: 465
         username: ${{secrets.DIMAGIQA_MAIL_USERNAME}}
         password: ${{secrets.DIMAGIQA_MAIL_PASSWORD}}
-        subject: NY App Tests[#${{github.run_number}}], ${{env.NOW}}
+        subject: NY App Tests in ny-staging-cdms domain[#${{github.run_number}}], ${{env.NOW}}
         to: kbordoloi@dimagi.com, ktripathy@dimagi.com
         from: <${{secrets.DIMAGIQA_MAIL_USERNAME}}>
         html_body: Please find attached the run report.
