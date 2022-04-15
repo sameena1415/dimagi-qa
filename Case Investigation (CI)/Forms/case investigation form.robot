@@ -77,7 +77,8 @@ Add Address
    Select Dropdown   ${Q:County of residence}    ${A:County of residence}
 
    # Zipcode
-   Scroll Element Into View    ${Q:Zipcode_normal}
+#   Execute JavaScript    window.document.evaluate(${Q:Zipcode_normal}, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue.scrollIntoView(true);
+   Scroll Element Into View    ${Q:Zipcode_error}
 #   Wait Until Element Is Visible    ${Zipcode failure}    80s
    Wait Until Element Is Enabled   ${Q:Zipcode_error}     60s
    Clear Element Text    ${Q:Zipcode_error}
