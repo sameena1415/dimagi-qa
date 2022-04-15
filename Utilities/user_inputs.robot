@@ -8,5 +8,5 @@ ${email}    ktripathy+ush@dimagi.com
 ${pass}    Kiran@123
 ${implcit_wait_time}    20
 ${app name}    NY
-${archieved_contact_name}     Dewey
-${archieved_contact_lname}      SEPTEMBER13
+${archieved_contact_name}     Pura
+${archieved_contact_lname}      Centeno

@@ -65,6 +65,7 @@ ${convert_back_to_contact}    //p[contains(.,'Convert this Suspected Case back t
 ${are_you_sure}    //p[text()='Yes, convert this Suspected Case back into a Contact']
 ${close_record}    //p[text()="Yes"]
 ${dont_close_record}    //p[text()="No"]
+${do_you_want_to_close_record}     //label[.//*[.='Do you want to close this record?']]/self::label
 ${convert_this_suspected_case}    //p[contains(.,'Yes, convert this Suspected Case back into a Contact')]
 ${no_longer_active_message}    //strong[text()="This Suspected Case's contact record is no longer active, so you may not choose to convert it back to a contact."]
 ${no_longer_active_message2}       //p[contains(.,'This Suspected Case (PUI) will be converted back to being a contact. The Contact Tracing team will resume monitoring of this patient.')]

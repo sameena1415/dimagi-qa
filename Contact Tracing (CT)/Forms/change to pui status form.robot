@@ -96,7 +96,12 @@ Search and Select Archieved Case
 
 Yes, Close the Archieved Record
     Wait Until Element Is Enabled     ${close_record}
-    Click Element    ${close_record}
+    Scroll Element Into View    ${close_record}
+#    Click Element    ${close_record}
+    Execute Javascript    window.scrollTo(0, document.body.scrollHeight)
+    ${parent_id}=   SeleniumLibrary.Get Element Attribute    ${do_you_want_to_close_record}     for
+    Log To Console    ${parent_id}
+    Select Radio Button    ${parent_id}   Yes
     Run Keyword And Ignore Error  Element Should Be Visible    ${no_longer_active_message}
     Run Keyword And Ignore Error  Element Should Be Visible    ${close_yes_message}
     Run Keyword And Ignore Error    JS Click     ${final_disposition2}
@@ -105,7 +110,12 @@ Yes, Close the Archieved Record
 
 No , Close the Archieved Record
     Wait Until Element Is Enabled     ${dont_close_record} 
-    Click Element    ${dont_close_record} 
+    Scroll Element Into View    ${dont_close_record}
+#    Click Element    ${dont_close_record}
+    Execute Javascript    window.scrollTo(0, document.body.scrollHeight)
+    ${parent_id}=   SeleniumLibrary.Get Element Attribute    ${do_you_want_to_close_record}     for
+    Log To Console    ${parent_id}
+    Select Radio Button    ${parent_id}   No
     Run Keyword And Ignore Error  Element Should Be Visible    ${no_longer_active_message}
     Run Keyword And Ignore Error  Element Should Be Visible    ${no_longer_active_message2}
     Submit Form and Check Success 
