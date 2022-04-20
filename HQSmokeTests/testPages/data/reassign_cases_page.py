@@ -41,5 +41,6 @@ class ReassignCasesPage(BasePage):
         self.wait_to_clear_and_send_keys(self.search_query, case_being_reassgined)
         self.send_keys(self.search_query, Keys.TAB)
         self.wait_to_click(self.apply)
+        self.wait_for_element(self.new_owner_name)
         reassigned_username = self.get_text(self.new_owner_name).split('@')[0]
         assert reassigned_username in assigned_username
