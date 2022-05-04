@@ -1,0 +1,35 @@
+{
+    "FUNC_HOME_SCREEN": {
+        "title":"Locust Scripts"
+    },
+    "FUNC_ALL_CASES_CASE_LIST": {
+        "selections":"1", "title":"All Cases"
+    },
+    "CASES_LIST_FILTER": {
+        "all_cases_filter":""
+    },
+    "FUNC_CASE_DETAILS": {
+        "selections":"1", "checkKey":"details", "checkLen":1
+    },
+    "FUNC_CI_FORM": {
+        "selections":"1", "title":"Followup Form", "subselections":"0"
+    },
+    "FUNC_PART_OF_CLUSTER": {
+        "answer":"1", "ix":"0" , "title": "Followup Form"
+    },
+    "FUNC_HOSPITAL_NAME": {
+        "answer":"something", "ix":"1" ,"title": "Followup Form"
+    },
+    "FUNC_CI_FORM_SUBMIT": {
+        "answers-key1":"0", "answers-value1":"1", "answers-key2":"1", "answers-value2":"something", "submitResponseMessage":"Form successfully saved!"
+    },
+    "FUNC_REG_FORM": {
+        "selections":"0", "title":"Registration Form", "subselections":"0"
+    },
+    "FUNC_ADD_CASE": {
+        "answer": "Jacob", "ix": "0", "title": "Registration Form"
+    },
+    "FUNC_REGISTRATION_FORM_SUBMIT": {
+        "answers-key1":"0", "answers-value1":"Jacob", "submitResponseMessage":"Form successfully saved!"
+    }
+}

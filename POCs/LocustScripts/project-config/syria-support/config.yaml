@@ -1,0 +1,9 @@
+host: https://staging.commcarehq.org
+domain: syria-support
+## Model Iteration
+app_id: 40d89c8325b2952833cdd0a648541df2
+domain_user_credential: project-config/syria-support/user_credentials.json
+owner_id: c441cdad1c2240f89107146978598cf8
+case_type: locust
+app_config: project-config/syria-support/app_config.json
+login_as: kiran
