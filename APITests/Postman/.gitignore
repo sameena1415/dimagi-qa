@@ -132,7 +132,7 @@ dmypy.json
 .pyre/
 
 #Ignoring compliled files of HQSmokeTests
-.idea/
+../.idea/
 HQSmokeTests/Pages/__pycache__/
 HQSmokeTests/TestBase/__pycache__/
 HQSmokeTests/TestScripts/__pycache__/
