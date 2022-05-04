@@ -1,0 +1,82 @@
+<?xml version='1.0' ?>
+<data uiVersion="1" version="2843" name="Vaccine Stock Management" xmlns:jrm="http://dev.commcarehq.org/jr/xforms" xmlns="http://openrosa.org/formdesigner/DD8B35A8-0B0C-40E5-93EC-E72DC8406A07">
+<form_introductory_label>OK</form_introductory_label>
+<vaccination_centre_id>{vaccination_centre_id}</vaccination_centre_id>
+<formatted_loaded_date>13/09/2021</formatted_loaded_date>
+<vaccine_name>{vaccine_name}</vaccine_name>
+<vaccine_id>{vaccine_id}</vaccine_id>
+<vaccine_group>
+<last_stock_input_details_group>
+<last_stock_input_date_label>OK</last_stock_input_date_label>
+<last_number_of_vials_reported_label>OK</last_number_of_vials_reported_label>
+</last_stock_input_details_group>
+<date_of_stock_input>{date_of_stock_input}</date_of_stock_input>
+<formatted_input_date>13/09/2021</formatted_input_date>
+<minimum_maximum_stock_levels_group>
+<stock_level_img_label>OK</stock_level_img_label>
+<min_stock_level />
+<max_stock_level />
+</minimum_maximum_stock_levels_group>
+<final_minimum_stock_level />
+<final_maximum_stock_level />
+<stock_beginning_of_day>
+<vaccine_vial_stock_img_label>OK</vaccine_vial_stock_img_label>
+<lbl_vials_last_reported>OK</lbl_vials_last_reported>
+<number_of_new_vials_received>10</number_of_new_vials_received>
+<vials_current_count>30</vials_current_count>
+<lbl_vials_current_count>OK</lbl_vials_current_count>
+</stock_beginning_of_day>
+<vials_details_group>
+<vaccine_vial_stock_img_label>OK</vaccine_vial_stock_img_label>
+<open_vials>0</open_vials>
+<closed_vials>20</closed_vials>
+<vials_consumed_today>10</vials_consumed_today>
+<number_of_vials_in_hand>20</number_of_vials_in_hand>
+<total_vials_consumed>10</total_vials_consumed>
+</vials_details_group>
+<remaining_stock_summary>
+<lbl_vials_in_hand>OK</lbl_vials_in_hand>
+<vials_consumed_lbl>OK</vials_consumed_lbl>
+<average_consumption_rate>10</average_consumption_rate>
+<rounded_average_consumption_rate>10</rounded_average_consumption_rate>
+<number_of_days_stock_will_last>2</number_of_days_stock_will_last>
+</remaining_stock_summary>
+<potential_stockouts_oversupply_group>
+<vaccine_vial_stockout_img_label>OK</vaccine_vial_stockout_img_label>
+<run_out_days_label>OK</run_out_days_label>
+<report_potential_stockout_check>{report_potential_stockout_check}</report_potential_stockout_check>
+<report_oversupply_check>{report_oversupply_check}</report_oversupply_check>
+<date_last_oversupply_reported>2021-09-13</date_last_oversupply_reported>
+</potential_stockouts_oversupply_group>
+<report_wastage>no</report_wastage>
+</vaccine_group>
+<form_success_label>OK</form_success_label>
+<n0:case case_id="c3dc610e-de3b-4341-9c02-2e1bd6e8cfc9" date_modified="2021-09-13T20:55:56.115+05:30" user_id="ed3ffaa928014078bab1e5985fd98e76" xmlns:n0="http://commcarehq.org/case/transaction/v2">
+<n0:update>
+<n0:average_consumption_rate>10</n0:average_consumption_rate>
+<n0:closed_vials>20</n0:closed_vials>
+<n0:date_last_oversupply_reported>2021-09-13</n0:date_last_oversupply_reported>
+<n0:date_of_stock_input>2021-09-13</n0:date_of_stock_input>
+<n0:max_stock_level />
+<n0:min_stock_level />
+<n0:number_of_days_stock_will_last>2</n0:number_of_days_stock_will_last>
+<n0:number_of_new_vials_received>10</n0:number_of_new_vials_received>
+<n0:number_of_vials_in_hand>20</n0:number_of_vials_in_hand>
+<n0:open_vials>0</n0:open_vials>
+<n0:report_oversupply_check>yes</n0:report_oversupply_check>
+<n0:report_potential_stockout_check>no</n0:report_potential_stockout_check>
+<n0:report_wastage>no</n0:report_wastage>
+<n0:vaccination_centre_id>5198771a9a8a4b56b405d526a8a0af04</n0:vaccination_centre_id>
+</n0:update>
+</n0:case>
+<n1:meta xmlns:n1="http://openrosa.org/jr/xforms">
+<n1:deviceID>commcare_b0fd11d0-afe0-4dd0-ac20-1cfb332069a0</n1:deviceID>
+<n1:timeStart>2021-09-13T20:51:02.995+05:30</n1:timeStart>
+<n1:timeEnd>2021-09-13T20:55:56.115+05:30</n1:timeEnd>
+<n1:username>uat.vsm</n1:username>
+<n1:userID>ed3ffaa928014078bab1e5985fd98e76</n1:userID>
+<n1:instanceID>{instance}</n1:instanceID>
+<n2:appVersion xmlns:n2="http://commcarehq.org/xforms">CommCare Android, version "2.52.0"(464179). App v2845. CommCare Version 2.52.0. Build 464179, built on: 2021-07-26</n2:appVersion>
+<n1:drift>0</n1:drift>
+</n1:meta>
+</data>
