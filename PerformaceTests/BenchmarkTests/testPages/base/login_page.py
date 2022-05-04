@@ -1,7 +1,7 @@
 from selenium.common.exceptions import TimeoutException, NoSuchElementException, ElementNotInteractableException
 from selenium.webdriver.common.by import By
 
-from HQSmokeTests.testPages.base.base_page import BasePage
+from PerformaceTests.BenchmarkTests.testPages.base.base_page import BasePage
 
 
 class LoginPage(BasePage):

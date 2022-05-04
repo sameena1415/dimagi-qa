@@ -9,7 +9,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.support.wait import WebDriverWait
 
-from HQSmokeTests.userInputs.user_inputs import UserData
+from PerformaceTests.BenchmarkTests.userInputs.user_inputs import UserData
 
 """This class contains all the generic methods and utilities for all pages"""
 

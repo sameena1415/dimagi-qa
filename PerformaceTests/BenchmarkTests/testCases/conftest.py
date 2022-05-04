@@ -3,8 +3,8 @@ from configparser import ConfigParser
 from pathlib import Path
 
 import pytest
-from HQSmokeTests.userInputs.user_inputs import UserData
-from HQSmokeTests.testPages.base.login_page import LoginPage
+from PerformaceTests.BenchmarkTests.userInputs.user_inputs import UserData
+from PerformaceTests.BenchmarkTests.testPages.base.login_page import LoginPage
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager

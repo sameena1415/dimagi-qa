@@ -1,6 +1,7 @@
-from HQSmokeTests.testPages.home.home_page import HomePage
-from HQSmokeTests.testPages.benchmark.benchmark_page import BenchmarkPage
-from HQSmokeTests.userInputs.test_data import TestData
+from PerformaceTests.BenchmarkTests.testPages.home.home_page import HomePage
+from PerformaceTests.BenchmarkTests.testPages.benchmark.benchmark_page import BenchmarkPage
+from PerformaceTests.BenchmarkTests.userInputs.test_data import TestData
+
 
 def test_case_benchmaark(driver):
     col_list = ['caseid', 'name']  # declaring an empty list for the randomly generated case names

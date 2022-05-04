@@ -1,7 +1,7 @@
 from selenium.webdriver.common.by import By
 
-from HQSmokeTests.testPages.base.base_page import BasePage
-from HQSmokeTests.userInputs.user_inputs import UserData
+from PerformaceTests.BenchmarkTests.testPages.base.base_page import BasePage
+from PerformaceTests.BenchmarkTests.userInputs.user_inputs import UserData
 
 
 class HomePage(BasePage):
