@@ -1,0 +1,78 @@
+name: Postman Test Run
+
+on:
+  push:
+    branches: [ kb/newman ]
+  pull_request:
+    branches: [ kb/newman ]
+  repository_dispatch:
+    types: [ deploy_success ]
+  workflow_dispatch:
+
+jobs:
+  test-api:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2       
+  
+  # INstall Node on the runner
+    - name: Install Node
+      uses: actions/setup-node@v1
+      with: 
+        node-version: '16.x'
+
+    - name: Install dependencies
+      run: |
+        npm uninstall -g newman 
+        npm uninstall -g newman-reporter-htmlextra
+        npm install -g newman 
+        npm install -g newman-reporter-htmlextra
+
+    # Make directory to upload the test results
+    - name: Make Directory for results
+      run: mkdir -p testResults
+
+    # newman run test_collection.json -e test_env.json -r htmlextra --reporter-htmlextra-export testResults/report.html
+    - name: Test
+      env:
+        DIMAGIQA_MAIL_USERNAME: ${{ secrets.DIMAGIQA_MAIL_USERNAME }}
+        DIMAGIQA_MAIL_PASSWORD: ${{ secrets.DIMAGIQA_MAIL_PASSWORD }}
+      run: |
+        echo "NOW=$(date +'%m-%d %H:%M')" >> $GITHUB_ENV
+        echo ${{env.NOW}}
+        newman run test_collection.json -e test_env.json -r htmlextra
+    
+    - name: Zip Reports folder
+      uses: papeloto/action-zip@v1
+      if: always()
+      with:
+          files: newman/
+          dest: Reports.zip
+
+    - name: Send Email
+      uses: dawidd6/action-send-mail@v3
+      if: always()
+      with:
+        # Required mail server address:
+        server_address: smtp.gmail.com
+        # Required mail server port:
+        server_port: 465
+        # Optional (recommended): mail server username:
+        username: ${{secrets.DIMAGIQA_MAIL_USERNAME}}
+        # Optional (recommended) mail server password:
+        password: ${{secrets.DIMAGIQA_MAIL_PASSWORD}}
+        # Required mail subject:
+        subject: Postman Test Report [#${{github.run_number}}], ${{env.NOW}}
+        # Required recipients' addresses:
+        to: qa@dimagi.com
+        # Required sender full name (address can be skipped):
+        from: <${{secrets.DIMAGIQA_MAIL_USERNAME}}>
+        # Optional HTML body read from file:
+        html_body: file:////home/runner/work/dimagi-qa/dimagi-qa/email.html
+        # Optional attachment
+        attachments: /home/runner/work/dimagi-qa/dimagi-qa/Reports.zip
+        # Optional priority: 'high', 'normal' (default) or 'low'
+        priority: normal
+
+

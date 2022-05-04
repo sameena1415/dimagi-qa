@@ -1,0 +1,1536 @@
+{
+	"info": {
+		"_postman_id": "68812dac-f413-4208-a059-3146da5a510a",
+		"name": "Dynamic V1 APIs",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Mobile Workers",
+			"item": [
+				{
+					"name": "Create Mobile Worker",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Parsing the JSON response and storing the value in a variable \"MobileWorkerId\" \r",
+									"console.log(pm.response.json())\r",
+									"var jsonData = JSON.parse(responseBody);\r",
+									"postman.setEnvironmentVariable(\"MobileWorkerId\", jsonData.id);\r",
+									"\r",
+									"//Assertion Test for Status Code\r",
+									"pm.test(\"Status code is 201\", function () {\r",
+									"  pm.response.to.have.status(201);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"\r",
+									"//Assigning a random username to the Mobile Worker \r",
+									"  \r",
+									"var MobileWorker = \"Test User\" +  pm.variables.replaceIn('{{$randomInt}}')\r",
+									"pm.environment.set(\"mobileuser\", MobileWorker)\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n \"username\": \"{{mobileuser}}\",\r\n \"password\": \"qwer1234\",\r\n \"first_name\": \"{{$randomFirstName}}\",\r\n \"last_name\": \"{{$randomLastName}}\",\r\n \"email\": \"{{$randomEmail}}\",\r\n \"language\": \"en\",\r\n \"phone_numbers\": [\r\n     \"{{$randomPhoneNumber}}\"\r\n ],\r\n \"groups\": [],\r\n \"user_data\": {\r\n \"commcare_project\": \"api-tests\"\r\n }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/{{domain}}/api/v0.5/user/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{domain}}",
+								"api",
+								"v0.5",
+								"user",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Mobile Workers",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/{{domain}}/api/v0.5/user/{{MobileWorkerId}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{domain}}",
+								"api",
+								"v0.5",
+								"user",
+								"{{MobileWorkerId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit Mobile Worker",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n \"username\": \"{{$randomUserName}}\",\r\n \"password\": \"123\",\r\n \"first_name\": \"{{$randomFirstName}}\",\r\n \"last_name\": \"{{$randomLastName}}\",\r\n \"email\": \"{{$randomEmail}}\",\r\n \"language\": \"en\",\r\n \"phone_numbers\": [\r\n     \"{{$randomPhoneNumber}}\"\r\n ],\r\n \"groups\": [],\r\n \"user_data\": {\r\n \"commcare_project\": \"{{domain}}\"\r\n }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/{{domain}}/api/v0.5/user/{{MobileWorkerId}}/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{domain}}",
+								"api",
+								"v0.5",
+								"user",
+								"{{MobileWorkerId}}",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Mobile Worker",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 204\", function () {\r",
+									"pm.collectionVariables.get(\"variable_key\");\r",
+									"  pm.response.to.have.status(204);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/{{domain}}/api/v0.5/user/{{MobileWorkerId}}/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{domain}}",
+								"api",
+								"v0.5",
+								"user",
+								"{{MobileWorkerId}}",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Web Users",
+			"item": [
+				{
+					"name": "User Creation (Web User)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"console.log(pm.response.json())\r",
+									"\r",
+									"var jsonData = JSON.parse(responseBody);\r",
+									"postman.setEnvironmentVariable(\"WU_id\", jsonData.id);\r",
+									"\r",
+									"pm.test(\"Status code is 201\", function () {\r",
+									"  pm.response.to.have.status(201);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n \"password\": \"qwer1234\",\r\n \"email\":\"xyz@example.com\",\r\n \"first_name\":\"{Joe}\",\r\n \"is_admin\": true,\r\n \"last_name\":\"Admin\",\r\n \"permissions\":{\r\n \"edit_apps\":true,\r\n \"edit_commcare_users\":true,\r\n \"edit_data\":true,\r\n \"edit_web_users\":true,\r\n \"view_report_list\":[\r\n ],\r\n \"view_reports\":true\r\n },\r\n \"phone_numbers\":[\r\n ],\r\n \"role\":\"Admin\",\r\n \"username\":\"xyz@example.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/{{domain}}/api/v0.5/web-user/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{domain}}",
+								"api",
+								"v0.5",
+								"web-user",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Web Users",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "nsaxena@dimagi.com",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "Nikhil@03nitin",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/{{domain}}/api/v0.5/web-user/{{WebUserId}}/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{domain}}",
+								"api",
+								"v0.5",
+								"web-user",
+								"{{WebUserId}}",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "User Edit (Web User)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n        \"email\":\"admin@example.com\",\r\n        \"first_name\":\"Joe\",\r\n        \"is_admin\": true,\r\n        \"last_name\":\"Admin\",\r\n        \"permissions\":{\r\n           \"edit_apps\":true,\r\n           \"edit_commcare_users\":true,\r\n           \"edit_data\":true,\r\n           \"edit_web_users\":true,\r\n           \"view_report_list\":[\r\n           ],\r\n           \"view_reports\":true\r\n        },\r\n        \"phone_numbers\":[\"+1654323456\"\r\n        ],\r\n        \"role\":\"Admin\",\r\n        \"username\":\"admin@example.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/{{domain}}/api/v0.5/web-user/{{WebUserId}}/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{domain}}",
+								"api",
+								"v0.5",
+								"web-user",
+								"{{WebUserId}}",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Groups",
+			"item": [
+				{
+					"name": "Bulk API - Create Group",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"console.log(pm.response.json())\r",
+									"\r",
+									"var jsonData = JSON.parse(responseBody);\r",
+									"postman.setEnvironmentVariable(\"GroupId\", jsonData.id);\r",
+									"\r",
+									"pm.test(\"Status code is 201\", function () {\r",
+									"  pm.response.to.have.status(201);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n \"case_sharing\": {{$randomBoolean}},\r\n \"metadata\": {\r\n  \"localization\": \"Ghana\"\r\n },\r\n \"name\": \"{{$randomFirstName}}\",\r\n \"reporting\": {{$randomBoolean}},\r\n \"users\": [\r\n\r\n ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/{{domain}}/api/v0.5/group/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{domain}}",
+								"api",
+								"v0.5",
+								"group",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Groups",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/{{domain}}/api/v0.5/group/{{Group_id}}/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{domain}}",
+								"api",
+								"v0.5",
+								"group",
+								"{{Group_id}}",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Bulk API - Create  Multiple Groups",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {\r",
+									"  pm.response.to.have.status(201);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "Nikhil@03nitin",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "nsaxena@dimagi.com",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n \"objects\": [\r\n  {\r\n   \"case_sharing\": false,\r\n   \"name\": \"Demo Group1\",\r\n   \"reporting\": true\r\n  },\r\n  {\r\n   \"case_sharing\": true,\r\n   \"name\": \"Demo Group2\",\r\n   \"reporting\": true\r\n  }\r\n ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/{{domain}}/api/v0.5/group",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{domain}}",
+								"api",
+								"v0.5",
+								"group"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Individual API- Get Group",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/{{domain}}/api/v0.5/group/{{GroupId}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{domain}}",
+								"api",
+								"v0.5",
+								"group",
+								"{{GroupId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Individual API - Edit Group",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n \"case_sharing\": {{$randomBoolean}},\r\n \"metadata\": {\r\n  \"localization\": \"Ghana\"\r\n },\r\n \"name\": \"{{$randomFirstName}}\",\r\n \"reporting\": {{$randomBoolean}},\r\n \"users\": [\r\n\r\n ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/{{domain}}/api/v0.5/group/{{GroupId}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{domain}}",
+								"api",
+								"v0.5",
+								"group",
+								"{{GroupId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Individual API- Delete Group",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 204\", function () {\r",
+									"  pm.response.to.have.status(204);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/{{domain}}/api/v0.5/group/{{GroupId}}/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{domain}}",
+								"api",
+								"v0.5",
+								"group",
+								"{{GroupId}}",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Application",
+			"item": [
+				{
+					"name": "List of Application  API",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"console.log(pm.response.json())\r",
+									"\r",
+									"var jsonData = JSON.parse(responseBody);\r",
+									"postman.setEnvironmentVariable(\"AppId\", jsonData.objects.id);\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/{{domain}}/api/v0.5/application/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{domain}}",
+								"api",
+								"v0.5",
+								"application",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Application Structure API",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/{{domain}}/api/v0.5/application/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{domain}}",
+								"api",
+								"v0.5",
+								"application",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Reports",
+			"item": [
+				{
+					"name": "List Reports API",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/{{domain}}/api/v0.5/simplereportconfiguration/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{domain}}",
+								"api",
+								"v0.5",
+								"simplereportconfiguration",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Download Report API",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/{{domain}}/api/v0.5/simplereportconfiguration/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{domain}}",
+								"api",
+								"v0.5",
+								"simplereportconfiguration",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Cases",
+			"item": [
+				{
+					"name": "List  all Cases  API",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/{{domain}}/api/v0.5/case",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{domain}}",
+								"api",
+								"v0.5",
+								"case"
+							],
+							"query": [
+								{
+									"key": "format",
+									"value": "xml/",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Case Data  API",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/{{domain}}/api/v0.5/case/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{domain}}",
+								"api",
+								"v0.5",
+								"case",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Forms",
+			"item": [
+				{
+					"name": "List Forms  API",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/{{domain}}/api/v0.5/form",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{domain}}",
+								"api",
+								"v0.5",
+								"form"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Form Data  API",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/{{domain}}/api/v0.5/form/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{domain}}",
+								"api",
+								"v0.5",
+								"form",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Fixtures",
+			"item": [
+				{
+					"name": "List of Fixture Types (All Lokkup tables)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/{{domain}}/api/v0.5/fixture",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{domain}}",
+								"api",
+								"v0.5",
+								"fixture"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Specific Fixture Type API (Single fixture item)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/{{domain}}/api/v0.5/fixture/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{domain}}",
+								"api",
+								"v0.5",
+								"fixture",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Specific Fixture Type API (Specific fixture  table)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let FixtureParams = '?fixture_type=case_search_choices';\r",
+									"pm.globals.set('FixtureParams', FixtureParams);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/{{domain}}/api/v0.5/fixture/{{FixtureParams}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{domain}}",
+								"api",
+								"v0.5",
+								"fixture",
+								"{{FixtureParams}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Miscellaneous",
+			"item": [
+				{
+					"name": "SMS Mobile Worker Registration API",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"app_id\": \"c93b569f23c3401ea504664f8d2090c0\",\r\n  \"users\": [\r\n    {\"phone_number\": \"+16174655292\"}\r\n  ]\r\n}\r\n\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/{{domain}}/api/v0.5/sms_user_registration/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{domain}}",
+								"api",
+								"v0.5",
+								"sms_user_registration",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "SSO API",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\"username\":\"nsaxena@dimagi.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/{{domain}}/api/v0.5/sso/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{domain}}",
+								"api",
+								"v0.5",
+								"sso",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Data Forwarding  API",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/{{domain}}/api/v0.5/data-forwarding/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{domain}}",
+								"api",
+								"v0.5",
+								"data-forwarding",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "User Identity API",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v0.5/identity/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v0.5",
+								"identity",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "User Domain List API",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v0.5/user_domains/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v0.5",
+								"user_domains",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Locations",
+			"item": [
+				{
+					"name": "List Location",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/{{domain}}/api/v0.5/location/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{domain}}",
+								"api",
+								"v0.5",
+								"location",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Location Data",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/{{domain}}/api/v0.5/location/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{domain}}",
+								"api",
+								"v0.5",
+								"location",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Location Types",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/{{domain}}/api/v0.5/location_type/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{domain}}",
+								"api",
+								"v0.5",
+								"location_type",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Location Types Data",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/{{domain}}/api/v0.5/location_type/ ",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{domain}}",
+								"api",
+								"v0.5",
+								"location_type",
+								" "
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Curl APIs",
+			"item": [
+				{
+					"name": "Submission API",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "xml_submission_file",
+									"type": "file",
+									"src": "/C:/Users/dsi-user/Desktop/Test Form.xml"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/{{domain}}/api/v0.5/receiver/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{domain}}",
+								"api",
+								"v0.5",
+								"receiver",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Restore OTA",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let queryParams = '?version=2.0';\r",
+									"pm.globals.set('queryParams', queryParams);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/ccqa2-2phone/restore/{{queryParams}}/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"ccqa2-2phone",
+								"restore",
+								"{{queryParams}}",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Lookup Table Upload",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file-to-upload",
+									"type": "file",
+									"src": "/C:/Users/dsi-user/Downloads/case search.xlsx"
+								},
+								{
+									"key": "replace",
+									"value": "true",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/myproject/fixtures/fixapi/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"myproject",
+								"fixtures",
+								"fixapi",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Import Cases from Excel",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/C:/Users/dsi-user/Desktop/Samveg/Test File.xlsx"
+								},
+								{
+									"key": "case_type",
+									"value": "Rch_id",
+									"type": "text"
+								},
+								{
+									"key": "search_field",
+									"value": "external_id",
+									"type": "text"
+								},
+								{
+									"key": "search_column",
+									"value": "Rch_id",
+									"type": "text"
+								},
+								{
+									"key": "create_new_cases",
+									"value": "on",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/samveg-quick/importer/excel/bulk_upload_api",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"samveg-quick",
+								"importer",
+								"excel",
+								"bulk_upload_api"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Form Data Export",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"export_tag\": \"http://openrosa.org/formdesigner/18EA0DD3-A469-4273-86DE-2C3F164AA2B7\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/ccqa2-2/reports/export/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"ccqa2-2",
+								"reports",
+								"export",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "basic",
+		"basic": [
+			{
+				"key": "password",
+				"value": "Nikhil@03nitin",
+				"type": "string"
+			},
+			{
+				"key": "username",
+				"value": "nsaxena@dimagi.com",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
