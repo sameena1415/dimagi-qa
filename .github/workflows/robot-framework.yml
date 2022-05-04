@@ -1,0 +1,75 @@
+# This workflow will install Python dependencies, run tests and lint with a single version of Python
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
+
+name: NY App Tests
+
+on:
+  push:
+    branches: [ kb/nyapp ]
+  pull_request:
+    branches: [ kb/nyapp ]
+  workflow_dispatch:
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python 3.9
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.9
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        sudo apt-get install xvfb
+
+    # - name: Execute tests
+    #   uses: joonvena/robotframework-docker-action@v0.1
+    #   env:
+    #     BROWSER: chrome
+    #     ROBOT_TESTS_DIR: ${{ github.workspace }}/robot_tests
+    #     ROBOT_REPORTS_DIR: ${{ github.workspace }}/reports
+        
+    - name: NY App Tests
+      env:
+        DIMAGIQA_MAIL_USERNAME: ${{ secrets.DIMAGIQA_MAIL_USERNAME }}
+        DIMAGIQA_MAIL_PASSWORD: ${{ secrets.DIMAGIQA_MAIL_PASSWORD }}
+      run: |
+        echo "NOW=$(date +'%m-%d %H:%M')" >> $GITHUB_ENV
+        echo ${{env.NOW}}
+        robot -d ./Reports './Tests'
+
+    - name: Zip Reports folder
+      uses: papeloto/action-zip@v1
+      if: always()
+      with:
+          files: Reports/
+          dest: Reports.zip
+
+    - name: Send Failure Email on Deploy Event
+      uses: dawidd6/action-send-mail@v3
+      if: always()
+      with:
+        server_address: smtp.gmail.com
+        server_port: 465
+        username: ${{secrets.DIMAGIQA_MAIL_USERNAME}}
+        password: ${{secrets.DIMAGIQA_MAIL_PASSWORD}}
+        subject: NY App Tests in ny-staging-cdms domain[#${{github.run_number}}], ${{env.NOW}}
+        to: kbordoloi@dimagi.com, ktripathy@dimagi.com
+        from: <${{secrets.DIMAGIQA_MAIL_USERNAME}}>
+        html_body: Please find attached the run report.
+        attachments: /home/runner/work/dimagi-qa/dimagi-qa/Reports.zip
+        priority: normal
+
+    - name: Archive test results
+      if: always()
+      uses: actions/upload-artifact@v2
+      with:
+        name: test-result-reports
+        path: /home/runner/work/dimagi-qa/dimagi-qa/Reports
+        retention-days: 2

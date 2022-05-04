@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 HQSmokeTests/report.html
 HQSmokeTests/settings.cfg
 
@@ -161,3 +162,24 @@ FormplayerTests/videos
 FormplayerTests/test.ts
 FormplayerTests/screenshots
 FormplayerTests/.vscode
+=======
+## NY App Script
+
+venv
+log.html
+report.html
+output.xml
+selenium-screenshot*
+.idea
+.git
+.project
+.pydevproject
+/USH Apps/NY_CICT/Utilities/user_inputs.robot/
+/USH Apps/NY_CICT/Base/__pycache__
+libspecs
+red.xml
+Reports
+*.zip
+
+
+>>>>>>> 6d924c4d1f7b420e26c30b6d836b4eeed207ee8a
