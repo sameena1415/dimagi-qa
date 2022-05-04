@@ -1,3 +1,5 @@
+## NY App Script
+
 venv
 log.html
 report.html
@@ -7,8 +9,8 @@ selenium-screenshot*
 .git
 .project
 .pydevproject
-/Utilities/user_inputs.robot/
-/Base/__pycache__
+/USH Apps/NY_CICT/Utilities/user_inputs.robot/
+/USH Apps/NY_CICT/Base/__pycache__
 libspecs
 red.xml
 Reports
