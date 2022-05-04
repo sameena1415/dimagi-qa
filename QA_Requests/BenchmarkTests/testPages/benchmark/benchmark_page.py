@@ -1,13 +1,12 @@
 import os
-import time
 import csv
 from selenium.webdriver.common.by import By
 import time
 import pandas as pd
 
-from PerformaceTests.BenchmarkTests.testPages.base.base_page import BasePage
-from PerformaceTests.BenchmarkTests.userInputs.test_data import TestData
-from PerformaceTests.BenchmarkTests.userInputs.user_inputs import UserData
+from QA_Requests.BenchmarkTests.testPages.base.base_page import BasePage
+from QA_Requests.BenchmarkTests.userInputs.test_data import TestData
+from QA_Requests.BenchmarkTests.userInputs.user_inputs import UserData
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.common.exceptions import TimeoutException
 

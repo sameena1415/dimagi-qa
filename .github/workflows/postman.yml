@@ -1,4 +1,4 @@
-name: Postman Test Run
+name: PostmanAPI Test Run
 
 on:
   push:
@@ -63,7 +63,7 @@ jobs:
         # Optional (recommended) mail server password:
         password: ${{secrets.DIMAGIQA_MAIL_PASSWORD}}
         # Required mail subject:
-        subject: Postman Test Report [#${{github.run_number}}], ${{env.NOW}}
+        subject: PostmanAPI Test Report [#${{github.run_number}}], ${{env.NOW}}
         # Required recipients' addresses:
         to: qa@dimagi.com
         # Required sender full name (address can be skipped):

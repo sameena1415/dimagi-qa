@@ -1,8 +1,7 @@
 import csv
 import xml.etree.ElementTree as ET
-from DataGeneration.Vaccine.Tests.RandomFormValueGenerator import *
-from DataGeneration.Vaccine.Tests.APITests import post_form_API
-from DataGeneration.Vaccine.Config.config import TestData
+from DataGeneration import post_form_API
+from QA_Requests.Vaccine.Config.config import TestData
 
 
 def create_forms(output_path, input_xml,owner,form_counts,instance_id_list):

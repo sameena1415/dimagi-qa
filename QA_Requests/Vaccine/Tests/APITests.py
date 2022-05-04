@@ -2,7 +2,7 @@ import json
 import csv
 import time
 import requests
-from DataGeneration.Vaccine.Config.config import TestData
+from QA_Requests.Vaccine.Config.config import TestData
 from requests.auth import HTTPBasicAuth
 
 

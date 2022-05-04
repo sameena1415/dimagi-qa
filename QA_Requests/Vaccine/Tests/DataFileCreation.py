@@ -2,8 +2,7 @@ import csv
 from pandas import *
 import math
 
-from DataGeneration.Vaccine.Tests.RandomStringGenerator import *
-from DataGeneration.Vaccine.Tests.CommonFunctions import age_calculator
+from DataGeneration import age_calculator
 
 
 def create_household_data(output_path,owner,household_counts,case_name_list):

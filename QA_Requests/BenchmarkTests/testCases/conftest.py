@@ -3,10 +3,9 @@ from configparser import ConfigParser
 from pathlib import Path
 
 import pytest
-from PerformaceTests.BenchmarkTests.userInputs.user_inputs import UserData
-from PerformaceTests.BenchmarkTests.testPages.base.login_page import LoginPage
+from QA_Requests.BenchmarkTests.userInputs.user_inputs import UserData
+from QA_Requests.BenchmarkTests.testPages.base.login_page import LoginPage
 from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 # from HQSmokeTests.utilities.email_pytest_report import Email_Pytest_Report
 

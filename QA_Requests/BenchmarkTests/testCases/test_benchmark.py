@@ -1,6 +1,6 @@
-from PerformaceTests.BenchmarkTests.testPages.home.home_page import HomePage
-from PerformaceTests.BenchmarkTests.testPages.benchmark.benchmark_page import BenchmarkPage
-from PerformaceTests.BenchmarkTests.userInputs.test_data import TestData
+from QA_Requests.BenchmarkTests.testPages.home.home_page import HomePage
+from QA_Requests.BenchmarkTests.testPages.benchmark.benchmark_page import BenchmarkPage
+from QA_Requests.BenchmarkTests.userInputs.test_data import TestData
 
 
 def test_case_benchmaark(driver):
