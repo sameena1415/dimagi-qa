@@ -1,11 +1,10 @@
 import json
 import csv
-import subprocess
 import time
 import requests
-from Config.config import TestData
+from DataGeneration.Vaccine.Config.config import TestData
 from requests.auth import HTTPBasicAuth
-import pandas as pd
+
 
 def post_form_API(data, url): ## API post method for form submission
 

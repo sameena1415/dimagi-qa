@@ -1,20 +1,19 @@
-from random import choice, shuffle
 import datetime
 import random
 import string
-import re
 
-#function to randomly generate household names
+
+# Function to randomly generate household names
 def household_name_genrator(prefix_text,total_case_counts):
-    case_set=set() #declaring an empty set to store the unique household names
+    case_set=set() # declaring an empty set to store the unique household names
 
-    for i in range(total_case_counts): #loop to generate the household names
+    for i in range(total_case_counts): # loop to generate the household names
         # generating 5 charaters long alphanumeric household  names
-        str=''.join(random.choices(string.ascii_letters+string.digits,k=5))
-
-        #adding prefix to the random string: HH_ for household and CL_ for person
+        str = ''.join(random.choices(string.ascii_letters+string.digits,k=5))
+        # adding prefix to the random string: HH_ for household and CL_ for person
         case_set.add(prefix_text+str)
     return case_set
+
 
 # function to generate registration dates between 01-09-2020 and 01-09-2021
 def household_date_of_registration_generator():

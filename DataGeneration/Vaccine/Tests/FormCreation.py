@@ -1,9 +1,9 @@
-import time
 import csv
 import xml.etree.ElementTree as ET
-from Tests.RandomFormValueGenerator import *
-from Tests.APITests import post_form_API
-from Config.config import TestData
+from DataGeneration.Vaccine.Tests.RandomFormValueGenerator import *
+from DataGeneration.Vaccine.Tests.APITests import post_form_API
+from DataGeneration.Vaccine.Config.config import TestData
+
 
 def create_forms(output_path, input_xml,owner,form_counts,instance_id_list):
     tree = ET.parse(input_xml)

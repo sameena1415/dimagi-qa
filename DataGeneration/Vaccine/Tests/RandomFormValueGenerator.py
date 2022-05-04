@@ -1,8 +1,5 @@
-from random import choice, shuffle
 import datetime
 import random
-import string
-import re
 import uuid
 import pandas as pd
 
@@ -64,6 +61,7 @@ def session_feedback():
                               'Awareness campaigns frequently held','Healthcare workers not trained']
     feedback = random.choice(session_feedback_range)
     return feedback
+
 
 def add_remaining_columns(owner_list, output_path):
     # response_list = pd.read_csv(output_path + '/JSON_Response_filtered.csv')
