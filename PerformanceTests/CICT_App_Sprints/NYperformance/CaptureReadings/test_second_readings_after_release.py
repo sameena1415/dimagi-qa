@@ -4,9 +4,9 @@ import pytest
 import pandas as pd
 from openpyxl import load_workbook
 
-from PerformaceTests.CICT_App_Sprints.NYperformance.WorkflowActions.base.decorators import first_dump_filename
-from PerformaceTests.CICT_App_Sprints.NYperformance.WorkflowActions.workflows.dataframe_actions import write_readings_for
-from PerformaceTests.CICT_App_Sprints.NYperformance.WorkflowActions.workflows.hq_actions import HomePage
+from PerformanceTests.CICT_App_Sprints.NYperformance.WorkflowActions.base.decorators import first_dump_filename
+from PerformanceTests.CICT_App_Sprints.NYperformance.WorkflowActions.workflows.dataframe_actions import write_readings_for
+from PerformanceTests.CICT_App_Sprints.NYperformance.WorkflowActions.workflows.hq_actions import HomePage
 from NYperformance.UserInputs.user_inputs import UserData
 
 """"Runs all workflows and captures the readings for the app version AFTER release"""
