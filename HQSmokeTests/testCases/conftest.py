@@ -39,6 +39,9 @@ def environment_settings():
     if "url" not in settings:
         env = os.environ.get("DIMAGIQA_ENV") or "staging"
         subdomain = "www" if env == "production" else env
+        ## updates the url with the project domain while testing in CI
+        project = "a/qa-automation-prod" if env == "production" else "a/qa-automation"
+        settings["url"] = f"https://{subdomain}.commcarehq.org/{project}"
     return settings
 
 @pytest.fixture(scope="session", autouse=True)
@@ -55,11 +58,6 @@ def settings(environment_settings):
                 "See https://docs.github.com/en/actions/reference/encrypted-secrets "
                 "for instructions on how to set them."
             )
-        ## updates the url with the project domain while testing in CI
-        if settings["url"] == "https://www.commcarehq.org/":
-            settings["url"] = f"{settings['url']}a/qa-automation-prod"
-        else:
-            settings["url"] = f"{settings['url']}a/qa-automation"
         return settings
     path = Path(__file__).parent.parent / "settings.cfg"
     if not path.exists():
