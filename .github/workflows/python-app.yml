@@ -11,15 +11,7 @@ on:
   repository_dispatch:
     types: [ deploy_success ]
   workflow_dispatch:
-    inputs:
-      environment:
-        description: 'Environment to run tests against'
-        type: environment
-        default: 'staging'
-        options:
-          - staging
-          - production
-        required: true
+
 
 jobs:
   build:
