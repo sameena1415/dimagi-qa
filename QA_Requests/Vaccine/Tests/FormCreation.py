@@ -1,6 +1,6 @@
 import csv
 import xml.etree.ElementTree as ET
-from DataGeneration import post_form_API
+from QA_Requests.Vaccine.Tests.APITests import post_form_API
 from QA_Requests.Vaccine.Config.config import TestData
 
 

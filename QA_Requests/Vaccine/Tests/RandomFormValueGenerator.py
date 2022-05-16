@@ -66,13 +66,13 @@ def session_feedback():
 def add_remaining_columns(owner_list, output_path):
     # response_list = pd.read_csv(output_path + '/JSON_Response_filtered.csv')
     final_df=pd.DataFrame()
-    add_se_injection_site_swell(owner_list, output_path)
-    add_se_fever(owner_list, output_path)
-    add_se_nausea(owner_list, output_path)
-    add_se_diarrhea(owner_list, output_path)
-    add_se_loss_of_taste(owner_list, output_path)
-    add_se_breathing_difficulty(owner_list, output_path)
-    add_se_other(owner_list, output_path)
+    # add_se_injection_site_swell(owner_list, output_path)
+    # add_se_fever(owner_list, output_path)
+    # add_se_nausea(owner_list, output_path)
+    # add_se_diarrhea(owner_list, output_path)
+    # add_se_loss_of_taste(owner_list, output_path)
+    # add_se_breathing_difficulty(owner_list, output_path)
+    # add_se_other(owner_list, output_path)
 
     populated_response_list=pd.read_csv(output_path + '/List_with_other.csv')
     populated_response_list=populated_response_list.drop(populated_response_list.columns[[0, 1, 2,3,4,5]],
