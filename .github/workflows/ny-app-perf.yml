@@ -5,16 +5,9 @@ name: NY Sprint Performance
 
 on:
   push:
-    branches: [ master, kt/ny_sprint_perf ]
+    branches: [ kt/ny_sprint_perf ]
   workflow_dispatch:
-    logLevel:
-      description: 'Log level'
-      required: true
-      default: 'warning'
-    environment:
-      description: 'Environment to run tests against'
-      type: environment
-      required: true
+
 
 jobs:
   build:
@@ -51,9 +44,9 @@ jobs:
         echo "client_payload: ${{ toJson(github.event.client_payload) }}"
         echo "NOW=$(date +'%m-%d %H:%M')" >> $GITHUB_ENV
         echo ${{env.NOW}}
-        pytest -v --rootdir= NYperformance/CaptureReadings
+        pytest -v --rootdir= PerformanceTests/CICT_App_Sprints/NYperformance/CaptureReadings --repeat-scope=function
 
-    - name: Send Failure Email on Push or Pull
+    - name: Send Failure Email
       uses: dawidd6/action-send-mail@v3
       if: ${{ failure() && github.event_name != 'repository_dispatch' }}
       with:
@@ -61,14 +54,14 @@ jobs:
         server_port: 465
         username: ${{secrets.DIMAGIQA_MAIL_USERNAME}}
         password: ${{secrets.DIMAGIQA_MAIL_PASSWORD}}
-        subject: FAIL - Smoke Tests[#${{github.run_number}}] on branch "${{ github.head_ref }}", ${{env.NOW}}
+        subject: FAIL - NY Perf Tests [#${{github.run_number}}] on branch "${{ github.head_ref }}", ${{env.NOW}}
         to: ktripathy@dimagi.com
-        from: <ktripathy@dimagi.com>
+        from: <qa-no-reply@dimagi.com>
         html_body: file:////home/runner/work/dimagi-qa/dimagi-qa/NYperformance/UserInputs/email_fail.html
-        attachments: /home/runner/work/dimagi-qa/dimagi-qa/report.html
+        attachments: /home/runner/work/dimagi-qa/dimagi-qa/NY_final_reading.xlsx, /home/runner/work/dimagi-qa/dimagi-qa/report.html
         priority: normal
 
-    - name: Send Pass Email on Push or Pull
+    - name: Send Pass Email
       uses: dawidd6/action-send-mail@v3
       if: ${{ success() && github.event_name != 'repository_dispatch' }}
       with:
@@ -76,11 +69,11 @@ jobs:
         server_port: 465
         username: ${{secrets.DIMAGIQA_MAIL_USERNAME}}
         password: ${{secrets.DIMAGIQA_MAIL_PASSWORD}}
-        subject: PASS - NY Perf Tests[#${{github.run_number}}] on branch "${{ github.head_ref }}", ${{env.NOW}}
+        subject: PASS - NY Perf Tests [#${{github.run_number}}] on branch "${{ github.head_ref }}", ${{env.NOW}}
         to: ktripathy@dimagi.com
-        from: <ktripathy@dimagi.com>
+        from: <qa-no-reply@dimagi.com>
         html_body: file:////home/runner/work/dimagi-qa/dimagi-qa/NYperformance/UserInputs/email_pass.html
-        attachments: /home/runner/work/dimagi-qa/dimagi-qa/NY_final_reading.xlsx
+        attachments: /home/runner/work/dimagi-qa/dimagi-qa/NY_final_reading.xlsx, /home/runner/work/dimagi-qa/dimagi-qa/report.html
         priority: normal
 
     - name: Archive report

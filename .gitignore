@@ -1,6 +1,3 @@
-HQSmokeTests/report.html
-HQSmokeTests/settings.cfg
-
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -136,9 +133,7 @@ dmypy.json
 HQSmokeTests/Pages/__pycache__/
 HQSmokeTests/TestBase/__pycache__/
 HQSmokeTests/TestScripts/__pycache__/
-TestSuites/__pycache__/
 HQSmokeTests/Pages/generatedUserInputs.csv
-TestSuites/generatedUserInputs.csv
 HQSmokeTests/TestScripts/generatedUserInputs.csv
 AutomationTestReports/
 output.json
@@ -147,17 +142,36 @@ archive
 assets
 /HQSmokeTests/testCases/report.html
 /report.html
-
+HQSmokeTests/report.html
+HQSmokeTests/settings.cfg
 /HQSmokeTests/userInputs/test_data/reassign_cases_*
-#Ignoring compliled files of FormplayerTests
 
-# dependencies
-FormplayerTests/node_modules
 
-# misc
-FormplayerTests/cypress.env.json
-FormplayerTests/npm-debug.log
-FormplayerTests/videos
-FormplayerTests/test.ts
-FormplayerTests/screenshots
-FormplayerTests/.vscode
+#Ignoring compliled files of POCs
+
+## Formplayer ##
+POCs/CypressFormplayerTests/node_modules
+POCs/CypressFormplayerTests/cypress.env.json
+POCs/CypressFormplayerTests/npm-debug.log
+POCs/CypressFormplayerTests/videos
+POCs/CypressFormplayerTests/test.ts
+POCs/CypressFormplayerTests/screenshots
+POCs/CypressFormplayerTests/.vscode
+
+## Locust Scripts ##
+
+POCs/LocustScripts/project-config/syria-support/user_credentials.json
+../../../.idea/workspace.xml
+
+
+#Ignoring compliled files of USH Apps
+USH_Apps/NY_CICT/Reports/*
+USH_Apps/NY_CICT/Utilities/user_inputs.robot/
+USH_Apps/NY_CICT/Base/__pycache__
+
+#Ignoring compliled files of NY Performance
+PerformanceTests/CICT_App_Sprints/NYperformance/CaptureReadings/report.html
+PerformanceTests/CICT_App_Sprints//NYperformance/CaptureReadings/NY_reading.csv
+PerformanceTests/CICT_App_Sprints/NYperformance/CaptureReadings/final_reading.xlsx
+PerformanceTests/CICT_App_Sprints/NYperformance/report.html
+PerformanceTests/CICT_App_Sprints/NYperformance/settings.cfg

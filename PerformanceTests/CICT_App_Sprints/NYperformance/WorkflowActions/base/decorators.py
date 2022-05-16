@@ -7,6 +7,8 @@ from NYperformance.UserInputs.user_inputs import UserData
 
 header_workflow = 'workflow'
 header_load_time = 'load_time'
+header_username = 'username'
+header_app = 'application'
 first_dump_filename = os.path.abspath(os.path.join(UserData.BASE_DIR, "NY_reading.csv"))
 
 
@@ -21,6 +23,7 @@ def timer(func):
 
         start_time = time.perf_counter()  # Start capturing time
         result = func(*args, **kwargs)  # Run workflow
+        print(func.__name__, kwargs)
         end_time = time.perf_counter()  # Stop capturing time
         run_time = end_time - start_time
         print(f'Function {func.__name__!r} executed in {run_time :.2f}s')
@@ -29,11 +32,12 @@ def timer(func):
 
         file_exists = os.path.isfile(first_dump_filename)
         with open(first_dump_filename, 'a', newline='') as csvfile:
-            fieldnames = [header_workflow, header_load_time]
+            fieldnames = [header_workflow, header_load_time, header_username, header_app]
             writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
             if not file_exists:
                 writer.writeheader()
-            writer.writerow({header_workflow: func.__name__, header_load_time: run_time})
+            writer.writerow({header_workflow: func.__name__, header_load_time: run_time,
+                             header_username: kwargs["username"],  header_app: kwargs["application_name"]})
 
         return result
 

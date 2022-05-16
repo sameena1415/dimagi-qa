@@ -35,7 +35,7 @@ def environment_settings():
             settings[name] = os.environ[var]
     if "url" not in settings:
         subdomain = "staging" if UserData.env == "staging" else UserData.env
-        settings["url"] = f"https://{subdomain}.commcarehq.org/a/{UserData.project_space}/cloudcare/apps/v2/#apps"
+        settings["url"] = f"https://{subdomain}.commcarehq.org/a/{UserData.project_space}/cloudcare/apps/v2/"
     return settings
 
 
