@@ -2,6 +2,10 @@ import csv
 import xml.etree.ElementTree as ET
 from QA_Requests.Vaccine.Tests.APITests import post_form_API
 from QA_Requests.Vaccine.Config.config import TestData
+from QA_Requests.Vaccine.Tests.RandomFormValueGenerator import event_session_date_generator, counselling_type, \
+    session_participants, event_topic, reasons_antivaccine, session_feedback, date_format, \
+    side_effect_dose_name_generator, side_effects_reported_date_generator, date_of_stock_generator, \
+    report_oversupply_check_generator, vaccine_name_generator, vaccine_id_generator
 
 
 def create_forms(output_path, input_xml,owner,form_counts,instance_id_list):
