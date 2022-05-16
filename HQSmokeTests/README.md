@@ -1,6 +1,8 @@
 # QA Automation scripts
 
-Setup test environment
+- Setup test environment
+  -   [More on setting up virtual environments](https://confluence.dimagi.com/display/GTD/QA+and+Python+Virtual+Environments)
+
 
 ```sh
 # create and activate a virtualenv using your preferred method. Example:
@@ -12,11 +14,11 @@ pip install -r requires.txt
 
 ```
 
-Copy `settings-sample.cfg` to `settings.cfg` and populate `settings.cfg` for
+  -   Copy `settings-sample.cfg` to `settings.cfg` and populate `settings.cfg` for
 the environment you want to test.
 
 
-Run tests
+- Run tests
 
 ```sh
 command to execute the scripts with 2 reruns
