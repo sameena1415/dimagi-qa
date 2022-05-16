@@ -1,6 +1,6 @@
 # QA Automation Scripts
 
-####This repository is the home QA automation scripts for various projects and endeavours in Dimagi.
+#### This repository is the home QA automation scripts for various projects and endeavours in Dimagi.
 
 What you'll find here:
 
@@ -18,7 +18,7 @@ What you'll find here:
   - Here are automated regression tests to cater to various USH web applications.
   - They're further categorized by applications and sites.
 
-##Some More Notes
+### Some More Notes
 
 - This will guide you through  [making your first contribution](MAKING%20FIRST%20CONTRIBUTION.md)
 - Make sure you include a readme with your contributions according to the [template](README%20TEMPLATE.md).
