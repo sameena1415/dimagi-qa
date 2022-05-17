@@ -1,10 +1,11 @@
-from selenium.common.exceptions import TimeoutException
 import random
 
-from NYperformance.WorkflowActions.base.decorators import *
+from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.by import By
-from NYperformance.WorkflowActions.base.base_page import BasePage
-from NYperformance.UserInputs.user_inputs import UserData
+
+from PerformanceTests.CICT_App_Sprints.NYperformance.WorkflowActions.base.decorators import *
+from PerformanceTests.CICT_App_Sprints.NYperformance.WorkflowActions.base.base_page import BasePage
+from PerformanceTests.CICT_App_Sprints.NYperformance.UserInputs.user_inputs import UserData
 
 """"Contains test page elements and functions related to workflows in test"""
 
