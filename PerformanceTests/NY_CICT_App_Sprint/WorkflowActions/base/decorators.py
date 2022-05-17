@@ -3,7 +3,7 @@ import functools
 import os
 import time
 
-from PerformanceTests.CICT_App_Sprints.NYperformance.UserInputs.user_inputs import UserData
+from PerformanceTests.NY_CICT_App_Sprint.UserInputs.user_inputs import UserData
 
 header_workflow = 'workflow'
 header_load_time = 'load_time'

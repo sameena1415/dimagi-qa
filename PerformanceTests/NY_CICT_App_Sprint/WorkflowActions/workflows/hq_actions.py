@@ -3,9 +3,8 @@ import random
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.by import By
 
-from PerformanceTests.CICT_App_Sprints.NYperformance.WorkflowActions.base.decorators import *
-from PerformanceTests.CICT_App_Sprints.NYperformance.WorkflowActions.base.base_page import BasePage
-from PerformanceTests.CICT_App_Sprints.NYperformance.UserInputs.user_inputs import UserData
+from PerformanceTests.NY_CICT_App_Sprint.WorkflowActions.base.base_page import BasePage
+from PerformanceTests.NY_CICT_App_Sprint.UserInputs.user_inputs import UserData
 
 """"Contains test page elements and functions related to workflows in test"""
 

@@ -7,8 +7,8 @@ from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
 from webdriver_manager.firefox import GeckoDriverManager
 
-from PerformanceTests.CICT_App_Sprints.NYperformance.UserInputs.user_inputs import UserData
-from PerformanceTests.CICT_App_Sprints.NYperformance.WorkflowActions.base.login_page import LoginPage
+from PerformanceTests.NY_CICT_App_Sprint.UserInputs.user_inputs import UserData
+from PerformanceTests.NY_CICT_App_Sprint.WorkflowActions.base.login_page import LoginPage
 
 """"This file provides fixture functions for driver initialization"""
 

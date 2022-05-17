@@ -1,6 +1,6 @@
 import pandas as pd
 
-from PerformanceTests.CICT_App_Sprints.NYperformance.WorkflowActions.base.decorators import header_load_time, \
+from PerformanceTests.NY_CICT_App_Sprint.WorkflowActions.base.decorators import header_load_time, \
     header_workflow, header_username, header_app, first_dump_filename
 
 

@@ -2,8 +2,8 @@ import os
 import pandas as pd
 from openpyxl import load_workbook
 
-from PerformanceTests.CICT_App_Sprints.NYperformance.WorkflowActions.workflows.dataframe_actions import write_readings_for
-from PerformanceTests.CICT_App_Sprints.NYperformance.UserInputs.user_inputs import UserData
+from PerformanceTests.NY_CICT_App_Sprint.WorkflowActions.workflows.dataframe_actions import write_readings_for
+from PerformanceTests.NY_CICT_App_Sprint.UserInputs.user_inputs import UserData
 
 """Create dataframe and write to excel"""
 

@@ -1,8 +1,8 @@
 from selenium.common.exceptions import TimeoutException, NoSuchElementException, ElementNotInteractableException
 from selenium.webdriver.common.by import By
 
-from PerformanceTests.CICT_App_Sprints.NYperformance.WorkflowActions.base.base_page import BasePage
-from PerformanceTests.CICT_App_Sprints.NYperformance.WorkflowActions.base.generate_2FA import generate_auth_token
+from PerformanceTests.NY_CICT_App_Sprint.WorkflowActions.base.base_page import BasePage
+from PerformanceTests.NY_CICT_App_Sprint.WorkflowActions.base.generate_2FA import generate_auth_token
 
 """"Contains test page elements and functions to login into the application"""
 
