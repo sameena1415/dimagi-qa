@@ -1,5 +1,8 @@
-## Robot Framework
-Script for NY USH App QA workflows. To start:
+## New York CICT Regression using Robot Framework
+
+Script for NY USH App Regression workflows. 
+
+## Execution of Scripts
 
 ##### Install Robot Framework and SeleniumLibrary along with its dependencies using pip package manager. 
 ```

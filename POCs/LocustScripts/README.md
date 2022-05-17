@@ -1,11 +1,16 @@
-# Installation and setup
+# Locust Scripts
+
+An open source load testing tool. Define user behaviour with Python code, and swarm your system with millions of simultaneous users.
+
+
+## Installation and setup
 pip install -r requirements.txt
 
 A CommCareHQ web user who is a member of the test domain is required. This user's username and password should be specified as the environment variables LOCUST_USERNAME and LOCUST_PASSWORD.
 
 Domain and application, both required, are specified in config.yaml. Username to login as may also be included.
 
-# Configuring and running
+## Configuring and running
 Copy user_credentials_sample.json to user_credentials.json and populate user_credentials.json for the user  you want to test.
 
 Basic usage, for a single test user:

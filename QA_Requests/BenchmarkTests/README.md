@@ -1,6 +1,10 @@
-# QA Automation scripts
+## Benchmark case export config page performance
 
-Setup test environment
+QA Ticket: [QA-3939](https://dimagi-dev.atlassian.net/browse/QA-3939)
+
+###Setting up and Running tests
+
+- Setup Environment
 
 ```sh
 # create and activate a virtualenv using your preferred method. Example:
@@ -12,17 +16,14 @@ pip install -r requires.txt
 
 ```
 
-Copy `settings-sample.cfg` to `settings.cfg` and populate `settings.cfg` for
+- Copy `settings-sample.cfg` to `settings.cfg` and populate `settings.cfg` for
 the environment you want to test.
 
-Provide the start value of case properties and end value in userInput -> test_data sheet for 'col_start' and 'col_end'.
+- Provide the start value of case properties and end value in `userInput -> test_data` sheet for `col_start` and `col_end`.
 
-Run tests
+- Run tests
 
 ```sh
-command to execute the scripts with 2 reruns
-pytest -v --reruns 2 --capture=tee-sys --html=report.html --self-contained-html
-
-command to execute the scripts with 2 reruns and in parallel
-pytest -v -n auto --reruns 2 --capture=tee-sys --html=report.html --self-contained-html
+command to execute the scripts
+pytest -v 
 ```
