@@ -2,7 +2,7 @@
 
 QA Ticket: [QA-3939](https://dimagi-dev.atlassian.net/browse/QA-3352)
 
-###Setting up and Running tests
+### Setting up and Running tests
 
 - Setup Environment
 

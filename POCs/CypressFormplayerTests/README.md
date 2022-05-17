@@ -6,17 +6,22 @@ We explored Cypress to run our Formplayer tests. One can find a detailed analysi
 
 ### <ins> Setting up the environment </ins>
 
+#### Install and start local server
+```sh
 #### install the node_modules
 npm install
 
 #### start the local webserver
 npm start
+```
 
 #### Add credentials
 Create `cypress.env.json` and populate `user_name`. `user_password`. and `user_login_url`.
 
 ### <ins> Running Tests </ins>
 
+```sh
 #### To run the test
 npm run cypress:open
+```
 
