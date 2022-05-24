@@ -4,10 +4,6 @@
 name: NY App Tests
 
 on:
-  push:
-    branches: [ kb/nyapp ]
-  pull_request:
-    branches: [ kb/nyapp ]
   workflow_dispatch:
 
 jobs:

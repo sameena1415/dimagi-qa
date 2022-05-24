@@ -1,12 +1,6 @@
 name: PostmanAPI Test Run
 
 on:
-  push:
-    branches: [ kb/newman ]
-  pull_request:
-    branches: [ kb/newman ]
-  repository_dispatch:
-    types: [ deploy_success ]
   workflow_dispatch:
 
 jobs:
