@@ -44,7 +44,7 @@ jobs:
         echo "client_payload: ${{ toJson(github.event.client_payload) }}"
         echo "NOW=$(date +'%m-%d %H:%M')" >> $GITHUB_ENV
         echo ${{env.NOW}}
-        pytest -v --rootdir= NYperformance/CaptureReadings
+        pytest -v --rootdir= PerformanceTests/NY_CICT_App_Sprint/CaptureReadings --repeat-scope=function
 
     - name: Send Failure Email
       uses: dawidd6/action-send-mail@v3
@@ -56,8 +56,8 @@ jobs:
         password: ${{secrets.DIMAGIQA_MAIL_PASSWORD}}
         subject: FAIL - NY Perf Tests [#${{github.run_number}}] on branch "${{ github.head_ref }}", ${{env.NOW}}
         to: ktripathy@dimagi.com
-        from: <ktripathy@dimagi.com>
-        html_body: file:////home/runner/work/dimagi-qa/dimagi-qa/NYperformance/UserInputs/email_fail.html
+        from: <qa-no-reply@dimagi.com>
+        html_body: file:////home/runner/work/dimagi-qa/dimagi-qa/NY_CICT_App_Sprint/UserInputs/email_fail.html
         attachments: /home/runner/work/dimagi-qa/dimagi-qa/NY_final_reading.xlsx, /home/runner/work/dimagi-qa/dimagi-qa/report.html
         priority: normal
 
@@ -71,8 +71,8 @@ jobs:
         password: ${{secrets.DIMAGIQA_MAIL_PASSWORD}}
         subject: PASS - NY Perf Tests [#${{github.run_number}}] on branch "${{ github.head_ref }}", ${{env.NOW}}
         to: ktripathy@dimagi.com
-        from: <ktripathy@dimagi.com>
-        html_body: file:////home/runner/work/dimagi-qa/dimagi-qa/NYperformance/UserInputs/email_pass.html
+        from: <qa-no-reply@dimagi.com>
+        html_body: file:////home/runner/work/dimagi-qa/dimagi-qa/NY_CICT_App_Sprint/UserInputs/email_pass.html
         attachments: /home/runner/work/dimagi-qa/dimagi-qa/NY_final_reading.xlsx, /home/runner/work/dimagi-qa/dimagi-qa/report.html
         priority: normal
 
