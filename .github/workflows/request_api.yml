@@ -6,9 +6,9 @@ name: Python Request API
 on:
   workflow_dispatch:
   push:
-    branches: [ kb/updatedAPI ]
+    branches: [ master ]
   pull_request:
-    branches: [ kb/updatedAPI ]
+    branches: [ master ]
   repository_dispatch:
     types: [ deploy_success ]
 
