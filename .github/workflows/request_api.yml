@@ -1,0 +1,89 @@
+# This workflow will install Python dependencies, run tests and lint with a single version of Python
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
+
+name: Python Request API
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ kb/updatedAPI ]
+  pull_request:
+    branches: [ kb/updatedAPI ]
+  repository_dispatch:
+    types: [ deploy_success ]
+
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python 3.9
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.9
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r RequestAPI/requirements.txt
+
+    - name: Lint with flake8
+      run: |
+        # stop the build if there are Python syntax errors or undefined names
+        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+        # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
+        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+
+    - name: Requests API tests with pytest
+      env:
+        DIMAGIQA_URL: ${{ secrets.DIMAGIQA_API_BASE_URL }}  #${{ secrets.DIMAGIQA_URL }}
+        DIMAGIQA_PASSWORD: ${{ secrets.DIMAGIQA_API_PASSWORD }}
+        DIMAGIQA_LOGIN_USER: ${{ secrets.DIMAGIQA_APILOGIN_USERNAME }}
+        DIMAGIQA_LOGIN_PASS: ${{ secrets.DIMAGIQA_APILOGIN_PASSWORD }}
+      run: |
+        echo "client_payload: ${{ toJson(github.event.client_payload) }}"
+        echo "NOW=$(date +'%m-%d %H:%M')" >> $GITHUB_ENV
+        echo ${{env.NOW}}
+        pytest -v --tb=short -n auto --dist=loadfile --reruns 1 --html=report.html --self-contained-html --rootdir= RequestAPI/testCases
+
+
+    - name: Send Failure Email
+      uses: dawidd6/action-send-mail@v3
+      if: failure()
+      with:
+        server_address: smtp.gmail.com
+        server_port: 465
+        username: ${{secrets.DIMAGIQA_MAIL_USERNAME}}
+        password: ${{secrets.DIMAGIQA_MAIL_PASSWORD}}
+        subject: FAIL - Request API Tests[#${{github.run_number}}] on branch "${{ github.ref_name }}", ${{env.NOW}}
+        to: qa-automation@dimagi.com
+        from: <${{secrets.DIMAGIQA_MAIL_USERNAME}}>
+        html_body: file:////home/runner/work/dimagi-qa/dimagi-qa/RequestAPI/email_fail.html
+        attachments: /home/runner/work/dimagi-qa/dimagi-qa/report.html
+        priority: normal
+
+    - name: Send Pass Email
+      uses: dawidd6/action-send-mail@v3
+      if: success()
+      with:
+        server_address: smtp.gmail.com
+        server_port: 465
+        username: ${{secrets.DIMAGIQA_MAIL_USERNAME}}
+        password: ${{secrets.DIMAGIQA_MAIL_PASSWORD}}
+        subject: PASS - Request API Tests[#${{github.run_number}}] on branch "${{ github.ref_name }}", ${{env.NOW}}
+        to: qa-automation@dimagi.com
+        from: <${{secrets.DIMAGIQA_MAIL_USERNAME}}>
+        html_body: file:////home/runner/work/dimagi-qa/dimagi-qa/RequestAPI/email_pass.html
+        attachments: /home/runner/work/dimagi-qa/dimagi-qa/report.html
+        priority: normal
+
+    - name: Archive test results
+      if: always()
+      uses: actions/upload-artifact@v2
+      with:
+        name: test-result-reports
+        path: /home/runner/work/dimagi-qa/dimagi-qa/report.html
+        retention-days: 2

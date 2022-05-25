@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8"/>
+    <title>Test Report</title>
+    <style>body {
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 12px;
+  /* do not increase min-width as some may use split screens */
+  min-width: 800px;
+  color: #999;
+}
+
+h1 {
+  font-size: 24px;
+  color: black;
+}
+
+h2 {
+  font-size: 16px;
+  color: black;
+}
+
+p {
+  color: black;
+}
+
+a {
+  color: #999;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+/******************************
+ * SUMMARY INFORMATION
+ ******************************/
+#environment td {
+  padding: 5px;
+  border: 1px solid #E6E6E6;
+}
+#environment tr:nth-child(odd) {
+  background-color: #f6f6f6;
+}
+
+/******************************
+ * TEST RESULT COLORS
+ ******************************/
+span.passed,
+.passed .col-result {
+  color: green;
+}
+
+span.skipped,
+span.xfailed,
+span.rerun,
+.skipped .col-result,
+.xfailed .col-result,
+.rerun .col-result {
+  color: orange;
+}
+
+span.error,
+span.failed,
+span.xpassed,
+.error .col-result,
+.failed .col-result,
+.xpassed .col-result {
+  color: red;
+}
+
+/******************************
+ * RESULTS TABLE
+ *
+ * 1. Table Layout
+ * 2. Extra
+ * 3. Sorting items
+ *
+ ******************************/
+/*------------------
+ * 1. Table Layout
+ *------------------*/
+#results-table {
+  border: 1px solid #e6e6e6;
+  color: #999;
+  font-size: 12px;
+  width: 100%;
+}
+#results-table th,
+#results-table td {
+  padding: 5px;
+  border: 1px solid #E6E6E6;
+  text-align: left;
+}
+#results-table th {
+  font-weight: bold;
+}
+
+/*------------------
+ * 2. Extra
+ *------------------*/
+.log {
+  background-color: #e6e6e6;
+  border: 1px solid #e6e6e6;
+  color: black;
+  display: block;
+  font-family: "Courier New", Courier, monospace;
+  height: 230px;
+  overflow-y: scroll;
+  padding: 5px;
+  white-space: pre-wrap;
+}
+.log:only-child {
+  height: inherit;
+}
+
+div.image {
+  border: 1px solid #e6e6e6;
+  float: right;
+  height: 240px;
+  margin-left: 5px;
+  overflow: hidden;
+  width: 320px;
+}
+div.image img {
+  width: 320px;
+}
+
+div.video {
+  border: 1px solid #e6e6e6;
+  float: right;
+  height: 240px;
+  margin-left: 5px;
+  overflow: hidden;
+  width: 320px;
+}
+div.video video {
+  overflow: hidden;
+  width: 320px;
+  height: 240px;
+}
+
+.collapsed {
+  display: none;
+}
+
+.expander::after {
+  content: " (show details)";
+  color: #BBB;
+  font-style: italic;
+  cursor: pointer;
+}
+
+.collapser::after {
+  content: " (hide details)";
+  color: #BBB;
+  font-style: italic;
+  cursor: pointer;
+}
+
+/*------------------
+ * 3. Sorting items
+ *------------------*/
+.sortable {
+  cursor: pointer;
+}
+
+.sort-icon {
+  font-size: 0px;
+  float: left;
+  margin-right: 5px;
+  margin-top: 5px;
+  /*triangle*/
+  width: 0;
+  height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+}
+.inactive .sort-icon {
+  /*finish triangle*/
+  border-top: 8px solid #E6E6E6;
+}
+.asc.active .sort-icon {
+  /*finish triangle*/
+  border-bottom: 8px solid #999;
+}
+.desc.active .sort-icon {
+  /*finish triangle*/
+  border-top: 8px solid #999;
+}
+</style></head>
+  <body onLoad="init()">
+    <script>/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this file,
+ * You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+
+function toArray(iter) {
+    if (iter === null) {
+        return null;
+    }
+    return Array.prototype.slice.call(iter);
+}
+
+function find(selector, elem) { // eslint-disable-line no-redeclare
+    if (!elem) {
+        elem = document;
+    }
+    return elem.querySelector(selector);
+}
+
+function findAll(selector, elem) {
+    if (!elem) {
+        elem = document;
+    }
+    return toArray(elem.querySelectorAll(selector));
+}
+
+function sortColumn(elem) {
+    toggleSortStates(elem);
+    const colIndex = toArray(elem.parentNode.childNodes).indexOf(elem);
+    let key;
+    if (elem.classList.contains('result')) {
+        key = keyResult;
+    } else if (elem.classList.contains('links')) {
+        key = keyLink;
+    } else {
+        key = keyAlpha;
+    }
+    sortTable(elem, key(colIndex));
+}
+
+function showAllExtras() { // eslint-disable-line no-unused-vars
+    findAll('.col-result').forEach(showExtras);
+}
+
+function hideAllExtras() { // eslint-disable-line no-unused-vars
+    findAll('.col-result').forEach(hideExtras);
+}
+
+function showExtras(colresultElem) {
+    const extras = colresultElem.parentNode.nextElementSibling;
+    const expandcollapse = colresultElem.firstElementChild;
+    extras.classList.remove('collapsed');
+    expandcollapse.classList.remove('expander');
+    expandcollapse.classList.add('collapser');
+}
+
+function hideExtras(colresultElem) {
+    const extras = colresultElem.parentNode.nextElementSibling;
+    const expandcollapse = colresultElem.firstElementChild;
+    extras.classList.add('collapsed');
+    expandcollapse.classList.remove('collapser');
+    expandcollapse.classList.add('expander');
+}
+
+function showFilters() {
+    const filterItems = document.getElementsByClassName('filter');
+    for (let i = 0; i < filterItems.length; i++)
+        filterItems[i].hidden = false;
+}
+
+function addCollapse() {
+    // Add links for show/hide all
+    const resulttable = find('table#results-table');
+    const showhideall = document.createElement('p');
+    showhideall.innerHTML = '<a href="javascript:showAllExtras()">Show all details</a> / ' +
+                            '<a href="javascript:hideAllExtras()">Hide all details</a>';
+    resulttable.parentElement.insertBefore(showhideall, resulttable);
+
+    // Add show/hide link to each result
+    findAll('.col-result').forEach(function(elem) {
+        const collapsed = getQueryParameter('collapsed') || 'Passed';
+        const extras = elem.parentNode.nextElementSibling;
+        const expandcollapse = document.createElement('span');
+        if (extras.classList.contains('collapsed')) {
+            expandcollapse.classList.add('expander');
+        } else if (collapsed.includes(elem.innerHTML)) {
+            extras.classList.add('collapsed');
+            expandcollapse.classList.add('expander');
+        } else {
+            expandcollapse.classList.add('collapser');
+        }
+        elem.appendChild(expandcollapse);
+
+        elem.addEventListener('click', function(event) {
+            if (event.currentTarget.parentNode.nextElementSibling.classList.contains('collapsed')) {
+                showExtras(event.currentTarget);
+            } else {
+                hideExtras(event.currentTarget);
+            }
+        });
+    });
+}
+
+function getQueryParameter(name) {
+    const match = RegExp('[?&]' + name + '=([^&]*)').exec(window.location.search);
+    return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
+}
+
+function init () { // eslint-disable-line no-unused-vars
+    resetSortHeaders();
+
+    addCollapse();
+
+    showFilters();
+
+    sortColumn(find('.initial-sort'));
+
+    findAll('.sortable').forEach(function(elem) {
+        elem.addEventListener('click',
+            function() {
+                sortColumn(elem);
+            }, false);
+    });
+}
+
+function sortTable(clicked, keyFunc) {
+    const rows = findAll('.results-table-row');
+    const reversed = !clicked.classList.contains('asc');
+    const sortedRows = sort(rows, keyFunc, reversed);
+    /* Whole table is removed here because browsers acts much slower
+     * when appending existing elements.
+     */
+    const thead = document.getElementById('results-table-head');
+    document.getElementById('results-table').remove();
+    const parent = document.createElement('table');
+    parent.id = 'results-table';
+    parent.appendChild(thead);
+    sortedRows.forEach(function(elem) {
+        parent.appendChild(elem);
+    });
+    document.getElementsByTagName('BODY')[0].appendChild(parent);
+}
+
+function sort(items, keyFunc, reversed) {
+    const sortArray = items.map(function(item, i) {
+        return [keyFunc(item), i];
+    });
+
+    sortArray.sort(function(a, b) {
+        const keyA = a[0];
+        const keyB = b[0];
+
+        if (keyA == keyB) return 0;
+
+        if (reversed) {
+            return keyA < keyB ? 1 : -1;
+        } else {
+            return keyA > keyB ? 1 : -1;
+        }
+    });
+
+    return sortArray.map(function(item) {
+        const index = item[1];
+        return items[index];
+    });
+}
+
+function keyAlpha(colIndex) {
+    return function(elem) {
+        return elem.childNodes[1].childNodes[colIndex].firstChild.data.toLowerCase();
+    };
+}
+
+function keyLink(colIndex) {
+    return function(elem) {
+        const dataCell = elem.childNodes[1].childNodes[colIndex].firstChild;
+        return dataCell == null ? '' : dataCell.innerText.toLowerCase();
+    };
+}
+
+function keyResult(colIndex) {
+    return function(elem) {
+        const strings = ['Error', 'Failed', 'Rerun', 'XFailed', 'XPassed',
+            'Skipped', 'Passed'];
+        return strings.indexOf(elem.childNodes[1].childNodes[colIndex].firstChild.data);
+    };
+}
+
+function resetSortHeaders() {
+    findAll('.sort-icon').forEach(function(elem) {
+        elem.parentNode.removeChild(elem);
+    });
+    findAll('.sortable').forEach(function(elem) {
+        const icon = document.createElement('div');
+        icon.className = 'sort-icon';
+        icon.textContent = 'vvv';
+        elem.insertBefore(icon, elem.firstChild);
+        elem.classList.remove('desc', 'active');
+        elem.classList.add('asc', 'inactive');
+    });
+}
+
+function toggleSortStates(elem) {
+    //if active, toggle between asc and desc
+    if (elem.classList.contains('active')) {
+        elem.classList.toggle('asc');
+        elem.classList.toggle('desc');
+    }
+
+    //if inactive, reset all other functions and add ascending active
+    if (elem.classList.contains('inactive')) {
+        resetSortHeaders();
+        elem.classList.remove('inactive');
+        elem.classList.add('active');
+    }
+}
+
+function isAllRowsHidden(value) {
+    return value.hidden == false;
+}
+
+function filterTable(elem) { // eslint-disable-line no-unused-vars
+    const outcomeAtt = 'data-test-result';
+    const outcome = elem.getAttribute(outcomeAtt);
+    const classOutcome = outcome + ' results-table-row';
+    const outcomeRows = document.getElementsByClassName(classOutcome);
+
+    for(let i = 0; i < outcomeRows.length; i++){
+        outcomeRows[i].hidden = !elem.checked;
+    }
+
+    const rows = findAll('.results-table-row').filter(isAllRowsHidden);
+    const allRowsHidden = rows.length == 0 ? true : false;
+    const notFoundMessage = document.getElementById('not-found-message');
+    notFoundMessage.hidden = !allRowsHidden;
+}
+</script>
+    <h1>report.html</h1>
+    <p>Report generated on 24-May-2022 at 16:43:54 by <a href="https://pypi.python.org/pypi/pytest-html">pytest-html</a> v3.1.1</p>
+    <h2>Environment</h2>
+    <table id="environment">
+      <tr>
+        <td>JAVA_HOME</td>
+        <td>C:\Program Files\Java\jdk-11.0.14</td></tr>
+      <tr>
+        <td>Packages</td>
+        <td>{"pluggy": "1.0.0", "py": "1.11.0", "pytest": "7.1.2"}</td></tr>
+      <tr>
+        <td>Platform</td>
+        <td>Windows-10-10.0.19044-SP0</td></tr>
+      <tr>
+        <td>Plugins</td>
+        <td>{"forked": "1.4.0", "html": "3.1.1", "metadata": "2.0.1", "rerunfailures": "10.2", "xdist": "2.5.0"}</td></tr>
+      <tr>
+        <td>Python</td>
+        <td>3.10.1</td></tr></table>
+    <h2>Summary</h2>
+    <p>39 tests ran in 48.70 seconds. </p>
+    <p class="filter" hidden="true">(Un)check the boxes to filter the results.</p><input checked="true" class="filter" data-test-result="passed" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="passed">32 passed</span>, <input checked="true" class="filter" data-test-result="skipped" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="skipped">0 skipped</span>, <input checked="true" class="filter" data-test-result="failed" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="failed">0 failed</span>, <input checked="true" class="filter" data-test-result="error" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="error">0 errors</span>, <input checked="true" class="filter" data-test-result="xfailed" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="xfailed">7 expected failures</span>, <input checked="true" class="filter" data-test-result="xpassed" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="xpassed">0 unexpected passes</span>, <input checked="true" class="filter" data-test-result="rerun" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="rerun">0 rerun</span>
+    <h2>Results</h2>
+    <table id="results-table">
+      <thead id="results-table-head">
+        <tr>
+          <th class="sortable result initial-sort" col="result">Result</th>
+          <th class="sortable" col="name">Test</th>
+          <th class="sortable" col="duration">Duration</th>
+          <th class="sortable links" col="links">Links</th></tr>
+        <tr hidden="true" id="not-found-message">
+          <th colspan="4">No results found. Try to check the filters</th></tr></thead>
+      <tbody class="xfailed results-table-row">
+        <tr>
+          <td class="col-result">XFailed</td>
+          <td class="col-name">RequestAPI/testCases/test_02_web_user.py::test_case_5_web_user_creation</td>
+          <td class="col-duration">1.12</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log">testCases\test_02_web_user.py:12: in test_case_5_web_user_creation<br/>    mobile_user_id = mw.web_user_creation(uri, &quot;POST_web_user.json&quot;, settings[&#x27;login_user&#x27;], settings[&#x27;login_pass&#x27;])<br/>testMethods\web_user_methods.py:26: in web_user_creation<br/>    result = self.post_api(URL, request_input, login_user, login_pass, self.headers)<br/>testMethods\base.py:18: in post_api<br/>    assert response.status_code == 201<br/><span class="error">E   AssertionError</span><br/> ------------------------------Captured stdout call------------------------------ <br/>{&#x27;default_phone_number&#x27;: None, &#x27;password&#x27;: &#x27;qwer1234&#x27;, &#x27;email&#x27;: &#x27;xyz@example.com&#x27;, &#x27;first_name&#x27;: &#x27;Web_wwczlf&#x27;, &#x27;is_admin&#x27;: True, &#x27;last_name&#x27;: &#x27;Admin&#x27;, &#x27;permissions&#x27;: {&#x27;edit_apps&#x27;: True, &#x27;edit_commcare_users&#x27;: True, &#x27;edit_data&#x27;: True, &#x27;edit_web_users&#x27;: True, &#x27;view_report_list&#x27;: [], &#x27;view_reports&#x27;: True}, &#x27;phone_numbers&#x27;: [], &#x27;role&#x27;: &#x27;Admin&#x27;, &#x27;username&#x27;: &#x27;xyz@example.com&#x27;} https://staging.commcarehq.org/a/api-tests/api/v0.5/web-user/
+405
+<br/></div></td></tr></tbody>
+      <tbody class="xfailed results-table-row">
+        <tr>
+          <td class="col-result">XFailed</td>
+          <td class="col-name">RequestAPI/testCases/test_02_web_user.py::test_case_6_web_user_edit</td>
+          <td class="col-duration">0.00</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log">testCases\test_02_web_user.py:19: in test_case_6_web_user_edit<br/>    mw.web_user_edit(uri,settings[&quot;web_user_id&quot;], &quot;POST_web_user.json&quot;, settings[&#x27;login_user&#x27;],<br/>C:\Python310\lib\configparser.py:1258: in __getitem__<br/>    raise KeyError(key)<br/><span class="error">E   KeyError: &#x27;web_user_id&#x27;</span><br/></div></td></tr></tbody>
+      <tbody class="xfailed results-table-row">
+        <tr>
+          <td class="col-result">XFailed</td>
+          <td class="col-name">RequestAPI/testCases/test_03_group.py::test_case_10_bulk_api_create_multiple_group</td>
+          <td class="col-duration">1.12</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log">testCases\test_03_group.py:26: in test_case_10_bulk_api_create_multiple_group<br/>    mw.bulk_api_create_multiple_group(uri, &quot;PATCH_group.json&quot;, settings[&#x27;login_user&#x27;],<br/>testMethods\groups_methods.py:47: in bulk_api_create_multiple_group<br/>    self.patch_api(URL, request_input, login_user, login_pass, self.headers)<br/>testMethods\base.py:46: in patch_api<br/>    assert response.status_code == 201<br/><span class="error">E   AssertionError</span><br/> ------------------------------Captured stdout call------------------------------ <br/>{&#x27;objects&#x27;: [{&#x27;case_sharing&#x27;: False, &#x27;name&#x27;: &#x27;Demo Group1&#x27;, &#x27;reporting&#x27;: True}, {&#x27;case_sharing&#x27;: True, &#x27;name&#x27;: &#x27;Demo Group2&#x27;, &#x27;reporting&#x27;: True}]} https://staging.commcarehq.org/a/api-tests/api/v0.5/group/
+405
+<br/></div></td></tr></tbody>
+      <tbody class="xfailed results-table-row">
+        <tr>
+          <td class="col-result">XFailed</td>
+          <td class="col-name">RequestAPI/testCases/test_04_application.py::test_case_16_sms_mobile_worker_registration_api</td>
+          <td class="col-duration">1.12</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log">testCases\test_04_application.py:25: in test_case_16_sms_mobile_worker_registration_api<br/>    mw.sms_mobile_worker_registration_api(uri,test_data[&#x27;app_id&#x27;], &quot;POST_sms_mobile_worker.json&quot;, settings[&#x27;login_user&#x27;], settings[&#x27;login_pass&#x27;])<br/>testMethods\mobile_worker_methods.py:65: in sms_mobile_worker_registration_api<br/>    self.post_api(URL, request_input, login_user, login_pass, self.headers)<br/>testMethods\base.py:18: in post_api<br/>    assert response.status_code == 201<br/><span class="error">E   AssertionError</span><br/> ------------------------------Captured stdout call------------------------------ <br/>{&#x27;app_id&#x27;: &#x27;373f7c9fdc12f63145c2263171eed8b7&#x27;, &#x27;users&#x27;: [{&#x27;phone_number&#x27;: &#x27;6196798541&#x27;}]} https://staging.commcarehq.org/a/api-tests/api/v0.5/sms_user_registration/
+404
+<br/></div></td></tr></tbody>
+      <tbody class="xfailed results-table-row">
+        <tr>
+          <td class="col-result">XFailed</td>
+          <td class="col-name">RequestAPI/testCases/test_04_application.py::test_case_17_send_cc_install_info_over_sms</td>
+          <td class="col-duration">1.10</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log">testCases\test_04_application.py:31: in test_case_17_send_cc_install_info_over_sms<br/>    mw.sms_cc_install_over_sms(uri, test_data[&quot;app_id&quot;], &quot;POST_sms_mobile_worker.json&quot;,<br/>testMethods\mobile_worker_methods.py:74: in sms_cc_install_over_sms<br/>    self.post_api(URL, request_input, login_user, login_pass, self.headers)<br/>testMethods\base.py:18: in post_api<br/>    assert response.status_code == 201<br/><span class="error">E   AssertionError</span><br/> ------------------------------Captured stdout call------------------------------ <br/>{&#x27;app_id&#x27;: &#x27;373f7c9fdc12f63145c2263171eed8b7&#x27;, &#x27;users&#x27;: [{&#x27;phone_number&#x27;: &#x27;5579897109&#x27;}]} https://staging.commcarehq.org/a/api-tests/api/v0.5/sms_user_registration_reinstall/
+404
+<br/></div></td></tr></tbody>
+      <tbody class="xfailed results-table-row">
+        <tr>
+          <td class="col-result">XFailed</td>
+          <td class="col-name">RequestAPI/testCases/test_10_misc.py::test_case_31_sso_api</td>
+          <td class="col-duration">1.11</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log">testCases\test_10_misc.py:13: in test_case_31_sso_api<br/>    mw.sso_api_post(uri, &quot;POST_sso_api.json&quot;, settings[&#x27;login_user&#x27;], settings[&#x27;login_pass&#x27;])<br/>testMethods\miscellaneous_methods.py:20: in sso_api_post<br/>    self.post_api(URL, request_input, login_user, login_pass, self.headers)<br/>testMethods\base.py:18: in post_api<br/>    assert response.status_code == 201<br/><span class="error">E   AssertionError</span><br/> ------------------------------Captured stdout call------------------------------ <br/>{&#x27;username&#x27;: &#x27;kbordoloi@dimagi.com&#x27;} https://staging.commcarehq.org/a/api-tests/api/v0.5/sso/
+400
+<br/></div></td></tr></tbody>
+      <tbody class="xfailed results-table-row">
+        <tr>
+          <td class="col-result">XFailed</td>
+          <td class="col-name">RequestAPI/testCases/test_11_curl_apis.py::test_case_39_form_data_export</td>
+          <td class="col-duration">1.12</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log">testCases\test_11_curl_apis.py:32: in test_case_39_form_data_export<br/>    mw.post_form_data_export(uri, &quot;POST_form_data_export.json&quot;, settings[&#x27;login_user&#x27;], settings[&#x27;login_pass&#x27;])<br/>testMethods\forms_methods.py:32: in post_form_data_export<br/>    response = self.post_api(URL, request_input, login_user, login_pass, self.headers,&quot;json&quot;)<br/>testMethods\base.py:18: in post_api<br/>    assert response.status_code == 201<br/><span class="error">E   AssertionError</span><br/> ------------------------------Captured stdout call------------------------------ <br/>403
+<br/></div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">RequestAPI/testCases/test_01_mobile_worker.py::test_case_1_mobile_worker_creation</td>
+          <td class="col-duration">2.24</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>{&#x27;username&#x27;: &#x27;Test_wwczlf&#x27;, &#x27;password&#x27;: &#x27;qwer1234&#x27;, &#x27;first_name&#x27;: &#x27;wwczlf&#x27;, &#x27;last_name&#x27;: &#x27;wwczlf&#x27;, &#x27;email&#x27;: &#x27;test@test.com&#x27;, &#x27;language&#x27;: &#x27;en&#x27;, &#x27;phone_numbers&#x27;: &#x27;3467901940&#x27;, &#x27;groups&#x27;: [], &#x27;user_data&#x27;: {&#x27;commcare_project&#x27;: &#x27;api-tests&#x27;}} https://staging.commcarehq.org/a/api-tests/api/v0.5/user/
+201
+becf0d6f81b740f98e6d349da9106455
+becf0d6f81b740f98e6d349da9106455
+<br/></div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">RequestAPI/testCases/test_01_mobile_worker.py::test_case_2_mobile_worker_edit</td>
+          <td class="col-duration">2.04</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>becf0d6f81b740f98e6d349da9106455
+{&#x27;password&#x27;: &#x27;qwer1234&#x27;, &#x27;first_name&#x27;: &#x27;wwczlf update&#x27;, &#x27;last_name&#x27;: &#x27;wwczlf update&#x27;, &#x27;email&#x27;: &#x27;test@test.com&#x27;, &#x27;language&#x27;: &#x27;en&#x27;, &#x27;phone_numbers&#x27;: &#x27;8576490916&#x27;, &#x27;groups&#x27;: [], &#x27;user_data&#x27;: {&#x27;commcare_project&#x27;: &#x27;api-tests&#x27;}} https://staging.commcarehq.org/a/api-tests/api/v0.5/user/becf0d6f81b740f98e6d349da9106455/
+200
+<br/></div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">RequestAPI/testCases/test_01_mobile_worker.py::test_case_3_mobile_worker_get</td>
+          <td class="col-duration">1.22</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>becf0d6f81b740f98e6d349da9106455
+{&quot;default_phone_number&quot;: &quot;8&quot;, &quot;email&quot;: &quot;test@test.com&quot;, &quot;first_name&quot;: &quot;wwczlf update&quot;, &quot;groups&quot;: [], &quot;id&quot;: &quot;becf0d6f81b740f98e6d349da9106455&quot;, &quot;last_name&quot;: &quot;wwczlf update&quot;, &quot;phone_numbers&quot;: [&quot;8&quot;, &quot;5&quot;, &quot;7&quot;, &quot;4&quot;, &quot;0&quot;, &quot;9&quot;, &quot;1&quot;, &quot;6&quot;], &quot;resource_uri&quot;: &quot;/a/api-tests/api/v0.5/user/becf0d6f81b740f98e6d349da9106455/&quot;, &quot;user_data&quot;: {&quot;commcare_project&quot;: &quot;api-tests&quot;}, &quot;username&quot;: &quot;test_wwczlf&quot;}
+<br/></div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">RequestAPI/testCases/test_01_mobile_worker.py::test_case_4_mobile_worker_delete</td>
+          <td class="col-duration">1.63</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>becf0d6f81b740f98e6d349da9106455
+204
+<br/></div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">RequestAPI/testCases/test_02_web_user.py::test_case_7_web_user_get</td>
+          <td class="col-duration">1.36</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>{&quot;meta&quot;: {&quot;limit&quot;: 20, &quot;next&quot;: null, &quot;offset&quot;: 0, &quot;previous&quot;: null, &quot;total_count&quot;: 3}, &quot;objects&quot;: [{&quot;default_phone_number&quot;: &quot;16174655890&quot;, &quot;email&quot;: &quot;avarshney@dimagi.com&quot;, &quot;first_name&quot;: &quot;Akanksha&quot;, &quot;id&quot;: &quot;d11afaf2ee9b51361ca3b28a6b8a332f&quot;, &quot;is_admin&quot;: true, &quot;last_name&quot;: &quot;Varshney&quot;, &quot;permissions&quot;: {&quot;access_all_locations&quot;: true, &quot;access_api&quot;: true, &quot;access_default_login_as_user&quot;: true, &quot;access_mobile_endpoints&quot;: true, &quot;access_release_management&quot;: true, &quot;access_web_apps&quot;: true, &quot;doc_type&quot;: &quot;Permissions&quot;, &quot;download_reports&quot;: true, &quot;edit_apps&quot;: true, &quot;edit_billing&quot;: true, &quot;edit_commcare_users&quot;: true, &quot;edit_data&quot;: true, &quot;edit_file_dropzone&quot;: true, &quot;edit_groups&quot;: true, &quot;edit_locations&quot;: true, &quot;edit_messaging&quot;: true, &quot;edit_motech&quot;: true, &quot;edit_reports&quot;: true, &quot;edit_shared_exports&quot;: true, &quot;edit_ucrs&quot;: true, &quot;edit_users_in_groups&quot;: true, &quot;edit_users_in_locations&quot;: true, &quot;edit_web_users&quot;: true, &quot;limited_login_as&quot;: true, &quot;login_as_all_users&quot;: true, &quot;manage_data_registry&quot;: true, &quot;manage_data_registry_list&quot;: [], &quot;report_an_issue&quot;: true, &quot;view_apps&quot;: true, &quot;view_commcare_users&quot;: true, &quot;view_data_registry_contents&quot;: true, &quot;view_data_registry_contents_list&quot;: [], &quot;view_file_dropzone&quot;: true, &quot;view_groups&quot;: true, &quot;view_locations&quot;: true, &quot;view_report_list&quot;: [], &quot;view_reports&quot;: true, &quot;view_roles&quot;: true, &quot;view_tableau&quot;: true, &quot;view_tableau_list&quot;: [], &quot;view_web_users&quot;: true}, &quot;phone_numbers&quot;: [&quot;16174655890&quot;], &quot;resource_uri&quot;: &quot;/a/api-tests/api/v0.5/web-user/d11afaf2ee9b51361ca3b28a6b8a332f/&quot;, &quot;role&quot;: &quot;Admin&quot;, &quot;username&quot;: &quot;avarshney@dimagi.com&quot;}, {&quot;default_phone_number&quot;: &quot;919261437577&quot;, &quot;email&quot;: &quot;nsaxena@dimagi.com&quot;, &quot;first_name&quot;: &quot;Nitin&quot;, &quot;id&quot;: &quot;b349927dfc06bf228c54c66639cd1d8c&quot;, &quot;is_admin&quot;: true, &quot;last_name&quot;: &quot;Saxena&quot;, &quot;permissions&quot;: {&quot;access_all_locations&quot;: true, &quot;access_api&quot;: true, &quot;access_default_login_as_user&quot;: true, &quot;access_mobile_endpoints&quot;: true, &quot;access_release_management&quot;: true, &quot;access_web_apps&quot;: true, &quot;doc_type&quot;: &quot;Permissions&quot;, &quot;download_reports&quot;: true, &quot;edit_apps&quot;: true, &quot;edit_billing&quot;: true, &quot;edit_commcare_users&quot;: true, &quot;edit_data&quot;: true, &quot;edit_file_dropzone&quot;: true, &quot;edit_groups&quot;: true, &quot;edit_locations&quot;: true, &quot;edit_messaging&quot;: true, &quot;edit_motech&quot;: true, &quot;edit_reports&quot;: true, &quot;edit_shared_exports&quot;: true, &quot;edit_ucrs&quot;: true, &quot;edit_users_in_groups&quot;: true, &quot;edit_users_in_locations&quot;: true, &quot;edit_web_users&quot;: true, &quot;limited_login_as&quot;: true, &quot;login_as_all_users&quot;: true, &quot;manage_data_registry&quot;: true, &quot;manage_data_registry_list&quot;: [], &quot;report_an_issue&quot;: true, &quot;view_apps&quot;: true, &quot;view_commcare_users&quot;: true, &quot;view_data_registry_contents&quot;: true, &quot;view_data_registry_contents_list&quot;: [], &quot;view_file_dropzone&quot;: true, &quot;view_groups&quot;: true, &quot;view_locations&quot;: true, &quot;view_report_list&quot;: [], &quot;view_reports&quot;: true, &quot;view_roles&quot;: true, &quot;view_tableau&quot;: true, &quot;view_tableau_list&quot;: [], &quot;view_web_users&quot;: true}, &quot;phone_numbers&quot;: [&quot;919261437577&quot;], &quot;resource_uri&quot;: &quot;/a/api-tests/api/v0.5/web-user/b349927dfc06bf228c54c66639cd1d8c/&quot;, &quot;role&quot;: &quot;Admin&quot;, &quot;username&quot;: &quot;nsaxena@dimagi.com&quot;}, {&quot;default_phone_number&quot;: null, &quot;email&quot;: &quot;nsaxena+1@dimagi.com&quot;, &quot;first_name&quot;: &quot;Pen&quot;, &quot;id&quot;: &quot;624054cf1c2da5a81b3b386a2837e6b3&quot;, &quot;is_admin&quot;: true, &quot;last_name&quot;: &quot;Test&quot;, &quot;permissions&quot;: {&quot;access_all_locations&quot;: true, &quot;access_api&quot;: true, &quot;access_default_login_as_user&quot;: true, &quot;access_mobile_endpoints&quot;: true, &quot;access_release_management&quot;: true, &quot;access_web_apps&quot;: true, &quot;doc_type&quot;: &quot;Permissions&quot;, &quot;download_reports&quot;: true, &quot;edit_apps&quot;: true, &quot;edit_billing&quot;: true, &quot;edit_commcare_users&quot;: true, &quot;edit_data&quot;: true, &quot;edit_file_dropzone&quot;: true, &quot;edit_groups&quot;: true, &quot;edit_locations&quot;: true, &quot;edit_messaging&quot;: true, &quot;edit_motech&quot;: true, &quot;edit_reports&quot;: true, &quot;edit_shared_exports&quot;: true, &quot;edit_ucrs&quot;: true, &quot;edit_users_in_groups&quot;: true, &quot;edit_users_in_locations&quot;: true, &quot;edit_web_users&quot;: true, &quot;limited_login_as&quot;: true, &quot;login_as_all_users&quot;: true, &quot;manage_data_registry&quot;: true, &quot;manage_data_registry_list&quot;: [], &quot;report_an_issue&quot;: true, &quot;view_apps&quot;: true, &quot;view_commcare_users&quot;: true, &quot;view_data_registry_contents&quot;: true, &quot;view_data_registry_contents_list&quot;: [], &quot;view_file_dropzone&quot;: true, &quot;view_groups&quot;: true, &quot;view_locations&quot;: true, &quot;view_report_list&quot;: [], &quot;view_reports&quot;: true, &quot;view_roles&quot;: true, &quot;view_tableau&quot;: true, &quot;view_tableau_list&quot;: [], &quot;view_web_users&quot;: true}, &quot;phone_numbers&quot;: [], &quot;resource_uri&quot;: &quot;/a/api-tests/api/v0.5/web-user/624054cf1c2da5a81b3b386a2837e6b3/&quot;, &quot;role&quot;: &quot;Admin&quot;, &quot;username&quot;: &quot;nsaxena+1@dimagi.com&quot;}]}
+<br/></div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">RequestAPI/testCases/test_03_group.py::test_case_8_bulk_api_create_group</td>
+          <td class="col-duration">1.22</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>{&#x27;default_phone_number&#x27;: None, &#x27;password&#x27;: &#x27;qwer1234&#x27;, &#x27;email&#x27;: &#x27;xyz@example.com&#x27;, &#x27;first_name&#x27;: &#x27;&#x27;, &#x27;is_admin&#x27;: True, &#x27;last_name&#x27;: &#x27;Admin&#x27;, &#x27;permissions&#x27;: {&#x27;edit_apps&#x27;: True, &#x27;edit_commcare_users&#x27;: True, &#x27;edit_data&#x27;: True, &#x27;edit_web_users&#x27;: True, &#x27;view_report_list&#x27;: [], &#x27;view_reports&#x27;: True}, &#x27;phone_numbers&#x27;: [], &#x27;role&#x27;: &#x27;Admin&#x27;, &#x27;username&#x27;: &#x27;xyz@example.com&#x27;, &#x27;case_sharing&#x27;: False, &#x27;name&#x27;: &#x27;Group_wwczlf&#x27;, &#x27;reporting&#x27;: True} https://staging.commcarehq.org/a/api-tests/api/v0.5/group/
+201
+0e478e1f5430c8efad06a2c88f8e6927
+<br/></div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">RequestAPI/testCases/test_03_group.py::test_case_9_list_group</td>
+          <td class="col-duration">1.22</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>{&quot;meta&quot;: {&quot;limit&quot;: 20, &quot;next&quot;: &quot;?limit=20&amp;offset=20&quot;, &quot;offset&quot;: 0, &quot;previous&quot;: null, &quot;total_count&quot;: 58}, &quot;objects&quot;: [{&quot;case_sharing&quot;: false, &quot;domain&quot;: &quot;api-tests&quot;, &quot;id&quot;: &quot;0e478e1f5430c8efad06a2c88f8e5df0&quot;, &quot;metadata&quot;: {}, &quot;name&quot;: &quot;&quot;, &quot;reporting&quot;: true, &quot;resource_uri&quot;: &quot;/a/api-tests/api/v0.5/group/0e478e1f5430c8efad06a2c88f8e5df0/&quot;, &quot;users&quot;: []}, {&quot;case_sharing&quot;: false, &quot;domain&quot;: &quot;api-tests&quot;, &quot;id&quot;: &quot;196dc5d2425c6fd320ab8ab0d287fc8a&quot;, &quot;metadata&quot;: {}, &quot;name&quot;: &quot;&quot;, &quot;reporting&quot;: true, &quot;resource_uri&quot;: &quot;/a/api-tests/api/v0.5/group/196dc5d2425c6fd320ab8ab0d287fc8a/&quot;, &quot;users&quot;: []}, {&quot;case_sharing&quot;: false, &quot;domain&quot;: &quot;api-tests&quot;, &quot;id&quot;: &quot;3de43f2115a7c8895d3b9441e737d346&quot;, &quot;metadata&quot;: {&quot;localization&quot;: &quot;Ghana&quot;}, &quot;name&quot;: &quot;Adela&quot;, &quot;reporting&quot;: true, &quot;resource_uri&quot;: &quot;/a/api-tests/api/v0.5/group/3de43f2115a7c8895d3b9441e737d346/&quot;, &quot;users&quot;: []}, {&quot;case_sharing&quot;: true, &quot;domain&quot;: &quot;api-tests&quot;, &quot;id&quot;: &quot;373f7c9fdc12f63145c2263171feea3a&quot;, &quot;metadata&quot;: {&quot;localization&quot;: &quot;Ghana&quot;}, &quot;name&quot;: &quot;Adolf&quot;, &quot;reporting&quot;: true, &quot;resource_uri&quot;: &quot;/a/api-tests/api/v0.5/group/373f7c9fdc12f63145c2263171feea3a/&quot;, &quot;users&quot;: []}, {&quot;case_sharing&quot;: false, &quot;domain&quot;: &quot;api-tests&quot;, &quot;id&quot;: &quot;92beed4ae29043e1da3e98bbdc776ca4&quot;, &quot;metadata&quot;: {&quot;localization&quot;: &quot;Ghana&quot;}, &quot;name&quot;: &quot;Anthony&quot;, &quot;reporting&quot;: true, &quot;resource_uri&quot;: &quot;/a/api-tests/api/v0.5/group/92beed4ae29043e1da3e98bbdc776ca4/&quot;, &quot;users&quot;: []}, {&quot;case_sharing&quot;: false, &quot;domain&quot;: &quot;api-tests&quot;, &quot;id&quot;: &quot;e0f0d6415d063c0eead77f48864457cc&quot;, &quot;metadata&quot;: {&quot;localization&quot;: &quot;Ghana&quot;}, &quot;name&quot;: &quot;Barrett&quot;, &quot;reporting&quot;: false, &quot;resource_uri&quot;: &quot;/a/api-tests/api/v0.5/group/e0f0d6415d063c0eead77f48864457cc/&quot;, &quot;users&quot;: []}, {&quot;case_sharing&quot;: false, &quot;domain&quot;: &quot;api-tests&quot;, &quot;id&quot;: &quot;92beed4ae29043e1da3e98bbdc762b50&quot;, &quot;metadata&quot;: {&quot;localization&quot;: &quot;Ghana&quot;}, &quot;name&quot;: &quot;Collin&quot;, &quot;reporting&quot;: true, &quot;resource_uri&quot;: &quot;/a/api-tests/api/v0.5/group/92beed4ae29043e1da3e98bbdc762b50/&quot;, &quot;users&quot;: []}, {&quot;case_sharing&quot;: true, &quot;domain&quot;: &quot;api-tests&quot;, &quot;id&quot;: &quot;92beed4ae29043e1da3e98bbdc73078f&quot;, &quot;metadata&quot;: {&quot;localization&quot;: &quot;Ghana&quot;}, &quot;name&quot;: &quot;Dagmar&quot;, &quot;reporting&quot;: true, &quot;resource_uri&quot;: &quot;/a/api-tests/api/v0.5/group/92beed4ae29043e1da3e98bbdc73078f/&quot;, &quot;users&quot;: []}, {&quot;case_sharing&quot;: false, &quot;domain&quot;: &quot;api-tests&quot;, &quot;id&quot;: &quot;e0f0d6415d063c0eead77f48864450f9&quot;, &quot;metadata&quot;: {&quot;localization&quot;: &quot;Ghana&quot;}, &quot;name&quot;: &quot;Dannie&quot;, &quot;reporting&quot;: true, &quot;resource_uri&quot;: &quot;/a/api-tests/api/v0.5/group/e0f0d6415d063c0eead77f48864450f9/&quot;, &quot;users&quot;: []}, {&quot;case_sharing&quot;: false, &quot;domain&quot;: &quot;api-tests&quot;, &quot;id&quot;: &quot;373f7c9fdc12f63145c2263171fef1e3&quot;, &quot;metadata&quot;: {}, &quot;name&quot;: &quot;Demo Group1&quot;, &quot;reporting&quot;: true, &quot;resource_uri&quot;: &quot;/a/api-tests/api/v0.5/group/373f7c9fdc12f63145c2263171fef1e3/&quot;, &quot;users&quot;: []}, {&quot;case_sharing&quot;: true, &quot;domain&quot;: &quot;api-tests&quot;, &quot;id&quot;: &quot;373f7c9fdc12f63145c2263171ff012f&quot;, &quot;metadata&quot;: {}, &quot;name&quot;: &quot;Demo Group2&quot;, &quot;reporting&quot;: true, &quot;resource_uri&quot;: &quot;/a/api-tests/api/v0.5/group/373f7c9fdc12f63145c2263171ff012f/&quot;, &quot;users&quot;: []}, {&quot;case_sharing&quot;: false, &quot;domain&quot;: &quot;api-tests&quot;, &quot;id&quot;: &quot;92beed4ae29043e1da3e98bbdc75b406&quot;, &quot;metadata&quot;: {&quot;localization&quot;: &quot;Ghana&quot;}, &quot;name&quot;: &quot;Destini&quot;, &quot;reporting&quot;: true, &quot;resource_uri&quot;: &quot;/a/api-tests/api/v0.5/group/92beed4ae29043e1da3e98bbdc75b406/&quot;, &quot;users&quot;: []}, {&quot;case_sharing&quot;: true, &quot;domain&quot;: &quot;api-tests&quot;, &quot;id&quot;: &quot;25e3328078c6e2d032219a28e382171b&quot;, &quot;metadata&quot;: {&quot;localization&quot;: &quot;Ghana&quot;}, &quot;name&quot;: &quot;Earnestine&quot;, &quot;reporting&quot;: false, &quot;resource_uri&quot;: &quot;/a/api-tests/api/v0.5/group/25e3328078c6e2d032219a28e382171b/&quot;, &quot;users&quot;: []}, {&quot;case_sharing&quot;: true, &quot;domain&quot;: &quot;api-tests&quot;, &quot;id&quot;: &quot;3de43f2115a7c8895d3b9441e732eb78&quot;, &quot;metadata&quot;: {&quot;localization&quot;: &quot;Ghana&quot;}, &quot;name&quot;: &quot;Efren&quot;, &quot;reporting&quot;: false, &quot;resource_uri&quot;: &quot;/a/api-tests/api/v0.5/group/3de43f2115a7c8895d3b9441e732eb78/&quot;, &quot;users&quot;: []}, {&quot;case_sharing&quot;: false, &quot;domain&quot;: &quot;api-tests&quot;, &quot;id&quot;: &quot;3de43f2115a7c8895d3b9441e738f662&quot;, &quot;metadata&quot;: {&quot;localization&quot;: &quot;Ghana&quot;}, &quot;name&quot;: &quot;Eliseo&quot;, &quot;reporting&quot;: true, &quot;resource_uri&quot;: &quot;/a/api-tests/api/v0.5/group/3de43f2115a7c8895d3b9441e738f662/&quot;, &quot;users&quot;: []}, {&quot;case_sharing&quot;: false, &quot;domain&quot;: &quot;api-tests&quot;, &quot;id&quot;: &quot;92beed4ae29043e1da3e98bbdc6e8ca6&quot;, &quot;metadata&quot;: {&quot;localization&quot;: &quot;Ghana&quot;}, &quot;name&quot;: &quot;Eloisa&quot;, &quot;reporting&quot;: false, &quot;resource_uri&quot;: &quot;/a/api-tests/api/v0.5/group/92beed4ae29043e1da3e98bbdc6e8ca6/&quot;, &quot;users&quot;: []}, {&quot;case_sharing&quot;: true, &quot;domain&quot;: &quot;api-tests&quot;, &quot;id&quot;: &quot;3de43f2115a7c8895d3b9441e739e8f5&quot;, &quot;metadata&quot;: {&quot;localization&quot;: &quot;Ghana&quot;}, &quot;name&quot;: &quot;Fritz&quot;, &quot;reporting&quot;: true, &quot;resource_uri&quot;: &quot;/a/api-tests/api/v0.5/group/3de43f2115a7c8895d3b9441e739e8f5/&quot;, &quot;users&quot;: []}, {&quot;case_sharing&quot;: false, &quot;domain&quot;: &quot;api-tests&quot;, &quot;id&quot;: &quot;196dc5d2425c6fd320ab8ab0d23d4c08&quot;, &quot;metadata&quot;: {&quot;localization&quot;: &quot;Ghana&quot;}, &quot;name&quot;: &quot;Gabe&quot;, &quot;reporting&quot;: true, &quot;resource_uri&quot;: &quot;/a/api-tests/api/v0.5/group/196dc5d2425c6fd320ab8ab0d23d4c08/&quot;, &quot;users&quot;: []}, {&quot;case_sharing&quot;: true, &quot;domain&quot;: &quot;api-tests&quot;, &quot;id&quot;: &quot;92beed4ae29043e1da3e98bbdc762021&quot;, &quot;metadata&quot;: {&quot;localization&quot;: &quot;Ghana&quot;}, &quot;name&quot;: &quot;Gisselle&quot;, &quot;reporting&quot;: false, &quot;resource_uri&quot;: &quot;/a/api-tests/api/v0.5/group/92beed4ae29043e1da3e98bbdc762021/&quot;, &quot;users&quot;: []}, {&quot;case_sharing&quot;: false, &quot;domain&quot;: &quot;api-tests&quot;, &quot;id&quot;: &quot;3de43f2115a7c8895d3b9441e739e4ca&quot;, &quot;metadata&quot;: {&quot;localization&quot;: &quot;Ghana&quot;}, &quot;name&quot;: &quot;Gretchen&quot;, &quot;reporting&quot;: false, &quot;resource_uri&quot;: &quot;/a/api-tests/api/v0.5/group/3de43f2115a7c8895d3b9441e739e4ca/&quot;, &quot;users&quot;: []}]}
+200
+<br/></div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">RequestAPI/testCases/test_03_group.py::test_case_11_individual_api_get_group</td>
+          <td class="col-duration">1.12</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>{&quot;case_sharing&quot;: false, &quot;domain&quot;: &quot;api-tests&quot;, &quot;id&quot;: &quot;0e478e1f5430c8efad06a2c88f8e6927&quot;, &quot;metadata&quot;: {}, &quot;name&quot;: &quot;Group_wwczlf&quot;, &quot;reporting&quot;: true, &quot;resource_uri&quot;: &quot;/a/api-tests/api/v0.5/group/0e478e1f5430c8efad06a2c88f8e6927/&quot;, &quot;users&quot;: []}
+200
+<br/></div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">RequestAPI/testCases/test_03_group.py::test_case_12_individual_api_edit_group</td>
+          <td class="col-duration">1.13</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>{&#x27;default_phone_number&#x27;: None, &#x27;password&#x27;: &#x27;qwer1234&#x27;, &#x27;email&#x27;: &#x27;xyz@example.com&#x27;, &#x27;first_name&#x27;: &#x27;&#x27;, &#x27;is_admin&#x27;: True, &#x27;last_name&#x27;: &#x27;Admin&#x27;, &#x27;permissions&#x27;: {&#x27;edit_apps&#x27;: True, &#x27;edit_commcare_users&#x27;: True, &#x27;edit_data&#x27;: True, &#x27;edit_web_users&#x27;: True, &#x27;view_report_list&#x27;: [], &#x27;view_reports&#x27;: True}, &#x27;phone_numbers&#x27;: [], &#x27;role&#x27;: &#x27;Admin&#x27;, &#x27;username&#x27;: &#x27;xyz@example.com&#x27;, &#x27;case_sharing&#x27;: True, &#x27;name&#x27;: &#x27;Updated_Group_wwczlf&#x27;, &#x27;reporting&#x27;: False} https://staging.commcarehq.org/a/api-tests/api/v0.5/group/0e478e1f5430c8efad06a2c88f8e6927/
+200
+<br/></div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">RequestAPI/testCases/test_03_group.py::test_case_13_individual_api_delete_group</td>
+          <td class="col-duration">1.28</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>204
+<br/></div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">RequestAPI/testCases/test_04_application.py::test_case_14_list_of_application</td>
+          <td class="col-duration">1.16</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>{&quot;meta&quot;: {&quot;limit&quot;: null, &quot;next&quot;: null, &quot;offset&quot;: 0, &quot;previous&quot;: null, &quot;total_count&quot;: 1}, &quot;objects&quot;: [{&quot;build_comment&quot;: null, &quot;built_from_app_id&quot;: null, &quot;built_on&quot;: null, &quot;id&quot;: &quot;373f7c9fdc12f63145c2263171eed8b7&quot;, &quot;is_released&quot;: false, &quot;modules&quot;: [], &quot;name&quot;: &quot;Untitled Application&quot;, &quot;resource_uri&quot;: &quot;&quot;, &quot;version&quot;: 1, &quot;versions&quot;: []}]}
+373f7c9fdc12f63145c2263171eed8b7
+373f7c9fdc12f63145c2263171eed8b7
+<br/></div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">RequestAPI/testCases/test_04_application.py::test_case_15_application_structure</td>
+          <td class="col-duration">1.18</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>{&quot;build_comment&quot;: null, &quot;built_from_app_id&quot;: null, &quot;built_on&quot;: null, &quot;id&quot;: &quot;373f7c9fdc12f63145c2263171eed8b7&quot;, &quot;is_released&quot;: false, &quot;modules&quot;: [], &quot;name&quot;: &quot;Untitled Application&quot;, &quot;resource_uri&quot;: &quot;&quot;, &quot;version&quot;: 1, &quot;versions&quot;: []}
+200
+<br/></div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">RequestAPI/testCases/test_05_reports.py::test_case_18_list_of_reports</td>
+          <td class="col-duration">1.20</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>{&quot;meta&quot;: {&quot;total_count&quot;: 0}, &quot;objects&quot;: []}
+200
+<br/></div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">RequestAPI/testCases/test_05_reports.py::test_case_19_application_structure</td>
+          <td class="col-duration">1.01</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>{&quot;meta&quot;: {&quot;total_count&quot;: 0}, &quot;objects&quot;: []}
+200
+<br/></div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">RequestAPI/testCases/test_06_cases.py::test_case_20_list_of_all_cases</td>
+          <td class="col-duration">1.15</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>{&quot;meta&quot;: {&quot;limit&quot;: 20, &quot;next&quot;: null, &quot;offset&quot;: 0, &quot;previous&quot;: null, &quot;total_count&quot;: 0}, &quot;objects&quot;: []}
+200
+<br/></div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">RequestAPI/testCases/test_06_cases.py::test_case_21_case_data_list</td>
+          <td class="col-duration">1.18</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>{&quot;meta&quot;: {&quot;limit&quot;: 20, &quot;next&quot;: null, &quot;offset&quot;: 0, &quot;previous&quot;: null, &quot;total_count&quot;: 0}, &quot;objects&quot;: []}
+200
+<br/></div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">RequestAPI/testCases/test_07_forms.py::test_case_22_list_of_all_forms</td>
+          <td class="col-duration">1.12</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>{&quot;meta&quot;: {&quot;limit&quot;: 20, &quot;next&quot;: null, &quot;offset&quot;: 0, &quot;previous&quot;: null, &quot;total_count&quot;: 0}, &quot;objects&quot;: []}
+200
+<br/></div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">RequestAPI/testCases/test_07_forms.py::test_case_23_form_data_list</td>
+          <td class="col-duration">1.12</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>{&quot;meta&quot;: {&quot;limit&quot;: 20, &quot;next&quot;: null, &quot;offset&quot;: 0, &quot;previous&quot;: null, &quot;total_count&quot;: 0}, &quot;objects&quot;: []}
+200
+<br/></div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">RequestAPI/testCases/test_08_locations.py::test_case_24_list_of_location</td>
+          <td class="col-duration">1.01</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>{&quot;meta&quot;: {&quot;limit&quot;: 20, &quot;next&quot;: null, &quot;offset&quot;: 0, &quot;previous&quot;: null, &quot;total_count&quot;: 0}, &quot;objects&quot;: []}
+<br/></div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">RequestAPI/testCases/test_08_locations.py::test_case_25_location_data</td>
+          <td class="col-duration">1.04</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>{&quot;meta&quot;: {&quot;limit&quot;: 20, &quot;next&quot;: null, &quot;offset&quot;: 0, &quot;previous&quot;: null, &quot;total_count&quot;: 0}, &quot;objects&quot;: []}
+200
+<br/></div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">RequestAPI/testCases/test_08_locations.py::test_case_26_list_of_location_type</td>
+          <td class="col-duration">0.99</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>{&quot;meta&quot;: {&quot;limit&quot;: 20, &quot;next&quot;: null, &quot;offset&quot;: 0, &quot;previous&quot;: null, &quot;total_count&quot;: 0}, &quot;objects&quot;: []}
+<br/></div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">RequestAPI/testCases/test_08_locations.py::test_case_27_location_type_data</td>
+          <td class="col-duration">1.02</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>{&quot;meta&quot;: {&quot;limit&quot;: 20, &quot;next&quot;: null, &quot;offset&quot;: 0, &quot;previous&quot;: null, &quot;total_count&quot;: 0}, &quot;objects&quot;: []}
+200
+<br/></div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">RequestAPI/testCases/test_09_fixtures.py::test_case_28_list_of_fixture_type_api_all_lookup_table</td>
+          <td class="col-duration">1.08</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>{&quot;meta&quot;: {&quot;limit&quot;: 1000, &quot;next&quot;: null, &quot;offset&quot;: 0, &quot;previous&quot;: null, &quot;total_count&quot;: 0}, &quot;objects&quot;: []}
+<br/></div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">RequestAPI/testCases/test_09_fixtures.py::test_case_29_specific_fixture_type_api_single_fixture_item</td>
+          <td class="col-duration">1.16</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>{&quot;meta&quot;: {&quot;limit&quot;: 1000, &quot;next&quot;: null, &quot;offset&quot;: 0, &quot;previous&quot;: null, &quot;total_count&quot;: 0}, &quot;objects&quot;: []}
+200
+<br/></div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">RequestAPI/testCases/test_09_fixtures.py::test_case_30_specific_fixture_type_api_specific_fixture_table</td>
+          <td class="col-duration">1.00</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>{&quot;meta&quot;: {&quot;limit&quot;: 1000, &quot;next&quot;: null, &quot;offset&quot;: 0, &quot;previous&quot;: null, &quot;total_count&quot;: 0}, &quot;objects&quot;: []}
+<br/></div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">RequestAPI/testCases/test_10_misc.py::test_case_32_list_data_forwarding_api</td>
+          <td class="col-duration">1.01</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>{&quot;meta&quot;: {&quot;limit&quot;: 20, &quot;next&quot;: null, &quot;offset&quot;: 0, &quot;previous&quot;: null, &quot;total_count&quot;: 0}, &quot;objects&quot;: []}
+200
+<br/></div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">RequestAPI/testCases/test_10_misc.py::test_case_33_user_identity_api</td>
+          <td class="col-duration">1.10</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>{&quot;id&quot;: &quot;e448bfc1ea255cfd14c56902ea2e0852&quot;, &quot;username&quot;: &quot;kbordoloi@dimagi.com&quot;, &quot;first_name&quot;: &quot;Kankana&quot;, &quot;last_name&quot;: &quot;Bordoloi&quot;, &quot;email&quot;: &quot;kbordoloi@dimagi.com&quot;}
+200
+<br/></div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">RequestAPI/testCases/test_10_misc.py::test_case_34_user_domain_list_api</td>
+          <td class="col-duration">1.42</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>{&quot;meta&quot;: {&quot;limit&quot;: 20, &quot;next&quot;: null, &quot;offset&quot;: 0, &quot;previous&quot;: null, &quot;total_count&quot;: 2}, &quot;objects&quot;: [{&quot;domain_name&quot;: &quot;qateam&quot;, &quot;project_name&quot;: &quot;qateam&quot;}, {&quot;domain_name&quot;: &quot;ccqa&quot;, &quot;project_name&quot;: &quot;CCQA test space&quot;}]}
+200
+<br/></div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">RequestAPI/testCases/test_11_curl_apis.py::test_case_35_submission_api</td>
+          <td class="col-duration">1.93</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>&lt;?xml version=&quot;1.0&quot; ?&gt;
+&lt;data xmlns:jrm=&quot;http://dev.commcarehq.org/jr/xforms&quot; xmlns=&quot;http://openrosa.org/formdesigner/D1FC6A9B-2E26-4114-A22A-9762EE41A582&quot; uiVersion=&quot;1&quot; version=&quot;31&quot; name=&quot;Registration Form&quot;&gt;
+	&lt;name&gt;nik&lt;/name&gt;
+	&lt;age&gt;6&lt;/age&gt;
+	&lt;n0:case xmlns:n0=&quot;http://commcarehq.org/case/transaction/v2&quot; case_id=&quot;84788776-7694-4162-912e-cf5b46ce196e&quot; date_modified=&quot;2022-04-21T19:13:48.960+05:30&quot; user_id=&quot;b96755aee94949b38fa80143766e25df&quot;&gt;
+		&lt;n0:create&gt;
+			&lt;n0:case_name&gt;nik&lt;/n0:case_name&gt;
+			&lt;n0:owner_id&gt;b96755aee94949b38fa80143766e25df&lt;/n0:owner_id&gt;
+			&lt;n0:case_type&gt;case&lt;/n0:case_type&gt;
+		&lt;/n0:create&gt;
+	&lt;/n0:case&gt;
+	&lt;n1:meta xmlns:n1=&quot;http://openrosa.org/jr/xforms&quot;&gt;
+		&lt;n1:deviceID&gt;Formplayer&lt;/n1:deviceID&gt;
+		&lt;n1:timeStart&gt;2022-04-21T19:13:43.131+05:30&lt;/n1:timeStart&gt;
+		&lt;n1:timeEnd&gt;2022-04-21T19:13:48.960+05:30&lt;/n1:timeEnd&gt;
+		&lt;n1:username&gt;jenny&lt;/n1:username&gt;
+		&lt;n1:userID&gt;b96755aee94949b38fa80143766e25df&lt;/n1:userID&gt;
+		&lt;n1:instanceID&gt;b7c169cb-ae74-489a-b1f0-c683b2e4a7fe&lt;/n1:instanceID&gt;
+		&lt;n2:appVersion xmlns:n2=&quot;http://commcarehq.org/xforms&quot;&gt;Formplayer Version: 2.53&lt;/n2:appVersion&gt;
+		&lt;n1:drift&gt;0&lt;/n1:drift&gt;
+	&lt;/n1:meta&gt;
+&lt;/data&gt;
+ https://staging.commcarehq.org/a/api-tests/receiver/
+201
+<br/></div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">RequestAPI/testCases/test_11_curl_apis.py::test_case_36_restore_ota</td>
+          <td class="col-duration">1.14</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>200
+<br/></div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">RequestAPI/testCases/test_11_curl_apis.py::test_case_37_lookup_table_upload</td>
+          <td class="col-duration">2.12</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>200
+<br/></div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">RequestAPI/testCases/test_11_curl_apis.py::test_case_38_import_cases_from_excel</td>
+          <td class="col-duration">1.52</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log"> ------------------------------Captured stdout call------------------------------ <br/>200
+<br/></div></td></tr></tbody></table></body></html>
