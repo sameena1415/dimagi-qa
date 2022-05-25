@@ -33,6 +33,15 @@ MANIFEST
 *.manifest
 *.spec
 
+#Ignoring compliled files of RequestAPI
+.idea/
+pytest_html_report.html
+archive
+assets
+/report.html
+RequestAPI/report.html
+RequestAPI/settings.cfg
+
 # Installer logs
 pip-log.txt
 pip-delete-this-directory.txt
