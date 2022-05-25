@@ -17,6 +17,10 @@ What you'll find here:
 - **USH_Apps**
   - Here are automated regression tests to cater to various USH web applications.
   - They're further categorized by applications and sites.
+- **RequestAPI**
+  -  In order to test [Data APIs](https://confluence.dimagi.com/display/commcarepublic/Data+APIs), their access and functionality, we have a collection of automated API requests.
+
+
 
 ### Some More Notes
 

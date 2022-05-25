@@ -1,0 +1,14 @@
+{
+    "username": "",
+    "password": "",
+    "first_name": "",
+    "last_name": "",
+     "email": "",
+    "language": "en",
+    "phone_numbers": [],
+    "groups": [],
+    "user_data": {
+    "commcare_project": "api-tests"
+    }
+   }
+   

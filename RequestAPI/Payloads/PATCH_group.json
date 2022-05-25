@@ -1,0 +1,14 @@
+{
+    "objects": [
+     {
+      "case_sharing": false,
+      "name": "Demo Group1",
+      "reporting": true
+     },
+     {
+      "case_sharing": true,
+      "name": "Demo Group2",
+      "reporting": true
+     }
+    ]
+   }

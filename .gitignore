@@ -33,6 +33,17 @@ MANIFEST
 *.manifest
 *.spec
 
+#Ignoring compliled files of RequestAPI
+.idea/
+pytest_html_report.html
+archive
+assets
+*/report.html
+RequestAPI/report.html
+RequestAPI/settings.cfg
+
+
+
 # Installer logs
 pip-log.txt
 pip-delete-this-directory.txt
@@ -175,3 +186,4 @@ PerformanceTests/NY_CICT_App_Sprint/NYperformance/CaptureReadings/NY_reading.csv
 PerformanceTests/NY_CICT_App_Sprint/CaptureReadings/final_reading.xlsx
 PerformanceTests/NY_CICT_App_Sprint/report.html
 PerformanceTests/NY_CICT_App_Sprint/settings.cfg
+
