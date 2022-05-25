@@ -28,8 +28,7 @@ pytest -v
 pytest -v -n auto --dist=loadfile --reruns 2 --capture=tee-sys  --tb=short
 
 ## command to execute individual test module or test case
-pytest -v -k <complete or partial test module name/complete or partial test case name> 
-# Example: 
+# Example: pytest -v -k <complete or partial test module name/complete or partial test case name> 
 pytest -v -k test_01/test_case_1 
 
 ```
