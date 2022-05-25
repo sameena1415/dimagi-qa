@@ -38,9 +38,11 @@ MANIFEST
 pytest_html_report.html
 archive
 assets
-/report.html
+*/report.html
 RequestAPI/report.html
 RequestAPI/settings.cfg
+
+
 
 # Installer logs
 pip-log.txt

@@ -8,7 +8,10 @@ class UserData:
 
     """Path Settings"""
     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-    ROOT = os.path.abspath(os.pardir)+"/dimagi-qa"
+    if os.environ.get("CI") == "true":
+        ROOT = os.path.abspath(os.pardir)+"/dimagi-qa"
+    else:
+        ROOT = os.path.abspath(os.pardir)
     if os.environ.get("CI") == "true":
         DOWNLOAD_PATH = Path("/home/runner/work/dimagi-qa/dimagi-qa")
     else:

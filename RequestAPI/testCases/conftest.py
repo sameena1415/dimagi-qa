@@ -32,6 +32,7 @@ def settings():
             )
         settings = ConfigParser()
         settings.read(path)
+        settings["default"]["password"]=settings["default"].pop("json_password")
         settings = settings["default"]
     ## updates the url with the project domain while testing in local
     yield settings
