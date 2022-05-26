@@ -68,18 +68,17 @@ class WebUsersPage(BasePage):
             select_role.select_by_value(role)
             self.wait_to_click(self.send_invite)
 
-
     def assert_invitation_sent(self):
         time.sleep(10)
         self.wait_to_click(self.users_menu_id)
         self.wait_to_click(self.web_users_menu)
         assert self.is_visible_and_displayed(self.verify_user), "Unable to find delivered invite."
         print("Web user invitation sent successfully")
+
+    def assert_invitation_received(self, mail_url, mail_username, mail_password):
         self.wait_to_click(self.settings)
         self.wait_to_click(self.sign_out)
         print("Signed out successfully")
-
-    def assert_invitation_received(self, mail_url, mail_username, mail_password):
         self.driver.get(mail_url)
         self.wait_to_clear_and_send_keys(self.login_username, mail_username)
         self.wait_and_sleep_to_click(self.next_button)

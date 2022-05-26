@@ -119,9 +119,9 @@ def test_case_54_add_custom_user_data_profile_to_mobile_worker(driver):
 
 def test_case_13_new_webuser_invitation(driver, settings):
     webuser = WebUsersPage(driver)
-    yahoo_password = settings['invited_webuser_password']
     webuser.invite_new_web_user('admin')
     webuser.assert_invitation_sent()
+    # yahoo_password = settings['invited_webuser_password']
     # webuser.assert_invitation_received(UserData.yahoo_url, UserData.yahoo_user_name, yahoo_password)
     # webuser.accept_webuser_invite(UserData.yahoo_user_name, yahoo_password)
     # login = LoginPage(driver, settings["url"])
