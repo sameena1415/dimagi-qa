@@ -30,8 +30,7 @@ class UserData:
 
     # Phone Number
     area_code = "91"
-    # invite_web_user user email
-    web_user_mail = 'automation.user.commcarehq+test@gmail.com'
+
 
     #  web app
     app_type = "Applications"
@@ -61,3 +60,6 @@ class UserData:
     text_value = 'name'
     random_value = 'enter_a_random_value'
 
+    """New web user invitation"""
+    yahoo_url = "https://login.yahoo.com/"
+    yahoo_user_name = 'automation_user_commcare@yahoo.com'

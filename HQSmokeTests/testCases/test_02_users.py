@@ -1,14 +1,17 @@
 from HQSmokeTests.userInputs.generate_random_string import fetch_random_string
+# from HQSmokeTests.testPages.base.login_page import LoginPage
 from HQSmokeTests.testPages.home.home_page import HomePage
 from HQSmokeTests.testPages.users.mobile_workers_page import MobileWorkerPage
 from HQSmokeTests.testPages.users.group_page import GroupPage
 from HQSmokeTests.testPages.users.web_user_page import WebUsersPage
 
+# from HQSmokeTests.userInputs.user_inputs import UserData
+
+
 """"Contains test cases related to the User's Mobile Worker module"""
 
 
 def test_case_02_create_mobile_worker(driver):
-
     worker = MobileWorkerPage(driver)
     worker.mobile_worker_menu()
     worker.create_mobile_worker()
@@ -18,7 +21,6 @@ def test_case_02_create_mobile_worker(driver):
 
 
 def test_case_03_create_and_assign_user_field(driver):
-
     create = MobileWorkerPage(driver)
     create.mobile_worker_menu()
     create.edit_user_field()
@@ -33,7 +35,6 @@ def test_case_03_create_and_assign_user_field(driver):
 
 
 def test_case_05_create_group_and_assign_user(driver):
-
     menu = HomePage(driver)
     menu.users_menu()
     visible = GroupPage(driver)
@@ -51,14 +52,12 @@ def test_case_05_edit_user_groups(driver):
 
 
 def test_case_10_download_and_upload_users(driver):
-
     user = MobileWorkerPage(driver)
     user.download_mobile_worker()
     user.upload_mobile_worker()
 
 
 def test_case_04_deactivate_user(driver):
-
     user = MobileWorkerPage(driver)
     user.mobile_worker_menu()
     user.deactivate_user()
@@ -66,7 +65,6 @@ def test_case_04_deactivate_user(driver):
 
 
 def test_case_04_reactivate_user(driver):
-
     user = MobileWorkerPage(driver)
     user.mobile_worker_menu()
     user.reactivate_user()
@@ -94,16 +92,7 @@ def test_cleanup_items_in_users_menu(driver):
     print("Deleted the group")
 
 
-def test_case_13_new_webuser_invitation(driver):
-
-    webuser = WebUsersPage(driver)
-    webuser.invite_new_web_user('admin')
-    webuser.assert_invite()
-    webuser.delete_invite()
-
-
 def test_case_54_add_custom_user_data_profile_to_mobile_worker(driver):
-
     create = MobileWorkerPage(driver)
     create.mobile_worker_menu()
     create.create_new_mobile_worker()
@@ -126,3 +115,15 @@ def test_case_54_add_custom_user_data_profile_to_mobile_worker(driver):
     create.click_fields()
     create.remove_user_field()
     create.save_field()
+
+
+def test_case_13_new_webuser_invitation(driver, settings):
+    webuser = WebUsersPage(driver)
+    yahoo_password = settings['invited_webuser_password']
+    webuser.invite_new_web_user('admin')
+    webuser.assert_invitation_sent()
+    # webuser.assert_invitation_received(UserData.yahoo_url, UserData.yahoo_user_name, yahoo_password)
+    # webuser.accept_webuser_invite(UserData.yahoo_user_name, yahoo_password)
+    # login = LoginPage(driver, settings["url"])
+    # login.login(settings["login_username"], settings["login_password"])
+    webuser.delete_invite()
