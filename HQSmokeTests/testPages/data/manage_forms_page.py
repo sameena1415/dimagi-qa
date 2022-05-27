@@ -4,7 +4,7 @@ from selenium.webdriver.common.by import By
 
 from HQSmokeTests.testPages.base.base_page import BasePage
 from HQSmokeTests.userInputs.user_inputs import UserData
-from selenium.common.exceptions im
+
 """"Contains test page elements and functions related to the Manage Forms module"""
 
 
@@ -82,6 +82,3 @@ class ManageFormsPage(BasePage):
         self.wait_and_sleep_to_click(self.archive_button)
         assert self.is_present_and_displayed(self.success_message)
         print("Forms Restoration successful!!")
-        try:
-
-        except IndexError:
