@@ -14,6 +14,13 @@ def settings():
             var = f"DIMAGIQA_{name.upper()}"
             if var in os.environ:
                 settings[name] = os.environ[var]
+        if "url" not in settings:
+            env = os.environ.get("DIMAGIQA_ENV") or "staging"
+            subdomain = "www" if env == "production" else env
+            ## updates the url with the project domain while testing in CI
+            settings["url"] = f"https://{subdomain}.commcarehq.org/"
+            settings['api_key'] = settings['prod_api_key'] if env == "production" else settings['staging_api_key']
+
         if any(x not in settings for x in ["url", "password","login_user", "login_pass", "prod_api_key", "staging_api_key"]):
             lines = settings.__doc__.splitlines()
             vars_ = "\n  ".join(line.strip() for line in lines if "DIMAGIQA_" in line)
@@ -22,12 +29,7 @@ def settings():
                 "See https://docs.github.com/en/actions/reference/encrypted-secrets "
                 "for instructions on how to set them."
             )
-        if "url" not in settings:
-            env = os.environ.get("DIMAGIQA_ENV") or "staging"
-            subdomain = "www" if env == "production" else env
-            ## updates the url with the project domain while testing in CI
-            settings["url"] = f"https://{subdomain}.commcarehq.org/"
-            settings['api_key'] = settings['prod_api_key'] if env == "production" else settings['staging_api_key']
+
     else:
         path = Path(__file__).parent.parent / "settings.cfg"
         if not path.exists():
