@@ -7,7 +7,7 @@ class CasesMethods(Base):
         self.filepath = UserData.ROOT+"/RequestAPI/Payloads/"
         self.password = settings["password"]
         self.headers={'Content-Type':'application/json',
-                      'Authorization': settings["login_pass"]}
+                      'Authorization': 'ApiKey '+settings['login_user']+':'+settings['api_key']}
 
 
     def get_all_cases_list(self, uri, login_user, login_pass):
