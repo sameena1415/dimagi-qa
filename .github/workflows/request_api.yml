@@ -44,7 +44,7 @@ jobs:
         DIMAGIQA_LOGIN_USER: ${{ secrets.DIMAGIQA_APILOGIN_USERNAME }}
         DIMAGIQA_LOGIN_PASS: ${{ secrets.DIMAGIQA_APILOGIN_PASSWORD }}
         DIMAGIQA_PROD_API_KEY: ${{secrets.DIMAGIQA_APIPROD_API_KEY}}
-        DIMAGIQA_STAGING_API_KEY: {{secrets.DIMAGIQA_APISTAGING_API_KEY}}
+        DIMAGIQA_STAGING_API_KEY: ${{secrets.DIMAGIQA_APISTAGING_API_KEY}}
       run: |
         echo "client_payload: ${{ toJson(github.event.client_payload) }}"
         echo "NOW=$(date +'%m-%d %H:%M')" >> $GITHUB_ENV
