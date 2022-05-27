@@ -10,11 +10,18 @@ from pathlib import Path
 def settings():
     if os.environ.get("CI") == "true":
         settings = {}
-        for name in ["url", "password", "login_user", "login_pass"]:
+        for name in ["url", "password", "login_user", "login_pass", "prod_api_key","staging_api_key"]:
             var = f"DIMAGIQA_{name.upper()}"
             if var in os.environ:
                 settings[name] = os.environ[var]
-        if any(x not in settings for x in ["url", "password","login_user", "login_pass"]):
+        if "url" not in settings:
+            env = os.environ.get("DIMAGIQA_ENV") or "staging"
+            subdomain = "www" if env == "production" else env
+            ## updates the url with the project domain while testing in CI
+            settings["url"] = f"https://{subdomain}.commcarehq.org/"
+            settings['api_key'] = settings['prod_api_key'] if env == "production" else settings['staging_api_key']
+
+        if any(x not in settings for x in ["url", "password","login_user", "login_pass", "prod_api_key", "staging_api_key"]):
             lines = settings.__doc__.splitlines()
             vars_ = "\n  ".join(line.strip() for line in lines if "DIMAGIQA_" in line)
             raise RuntimeError(
@@ -22,6 +29,7 @@ def settings():
                 "See https://docs.github.com/en/actions/reference/encrypted-secrets "
                 "for instructions on how to set them."
             )
+
     else:
         path = Path(__file__).parent.parent / "settings.cfg"
         if not path.exists():
@@ -33,6 +41,10 @@ def settings():
         settings = ConfigParser()
         settings.read(path)
         settings["default"]["password"]=settings["default"].pop("json_password")
+        if settings["default"]["url"] == "https://www.commcarehq.org/":
+            settings["default"]["api_key"] = settings['default']['prod_api_key']
+        else:
+            settings["default"]["api_key"] = settings['default']['staging_api_key']
         settings = settings["default"]
     ## updates the url with the project domain while testing in local
     yield settings

@@ -9,7 +9,7 @@ class MiscellaneousMethods(Base):
         self.filepath = UserData.ROOT+"/RequestAPI/Payloads/"
         self.password = settings["password"]
         self.headers={'Content-Type':'application/json',
-                      'Authorization': settings["login_pass"]}
+                    'Authorization': 'ApiKey '+settings['login_user']+':'+settings['api_key']}
 
     def sso_api_post(self, uri, input_file, login_user, login_pass):
         URL = uri + 'sso/'

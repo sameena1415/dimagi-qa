@@ -7,7 +7,7 @@ class FixturesMethods(Base):
         self.filepath = UserData.ROOT+"/RequestAPI/Payloads/"
         self.password = settings["password"]
         self.headers={'Content-Type':'application/json',
-                      'Authorization': settings["login_pass"]}
+                      'Authorization': 'ApiKey '+settings['login_user']+':'+settings['api_key']}
 
 
     def get_list_of_fixture_type_api_all_lookup_table(self, uri, login_user, login_pass):
