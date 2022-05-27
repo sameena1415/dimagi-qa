@@ -26,7 +26,6 @@ def settings():
             env = os.environ.get("DIMAGIQA_ENV") or "staging"
             subdomain = "www" if env == "production" else env
             ## updates the url with the project domain while testing in CI
-            project = "a/qa-automation-prod" if env == "production" else "a/qa-automation"
             settings["url"] = f"https://{subdomain}.commcarehq.org/"
             settings['api_key'] = settings['prod_api_key'] if env == "production" else settings['staging_api_key']
     else:
