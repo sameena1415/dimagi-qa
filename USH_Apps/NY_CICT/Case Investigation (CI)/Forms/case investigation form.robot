@@ -2,7 +2,7 @@
 Library  SeleniumLibrary
 Library    String
 Library    DateTime
-Resource    ../../Base/base.robot 
+Resource    ../../Base/base.robot
 
 
 *** Variables ***
@@ -58,7 +58,7 @@ ${Success Message}    //p[text()='Form successfully saved!']
 
 
 
-*** Keywords *** 
+*** Keywords ***
     
 Open Case Investigation Form
     Sleep    2s

@@ -6,11 +6,10 @@ Resource    ../Contact Tracing (CT)/Menu/menu.robot
 Resource    ../Contact Tracing (CT)/Forms/register a new contact form.robot  
 Resource    ../Contact Tracing (CT)/Forms/contact montitoring form.robot
 Resource    ../Contact Tracing (CT)/Forms/assign or reaasign contact.robot
-Resource    ../Tests/02 Patient Good Path.robot
+Resource    ../Tests/01 Patient Good Path.robot
 Suite Teardown  Close Browser
 
 
-       
 *** Test Cases ***
 
 Contact_Good_1

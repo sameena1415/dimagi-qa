@@ -8,7 +8,7 @@ Resource    ../Case Investigation (CI)/Forms/case investigation form.robot
 Resource    ../Case Investigation (CI)/Forms/close the patient record form.robot
 Resource    ../Case Investigation (CI)/Forms/close the patient record form.robot
 Suite Teardown  Close Browser
-       
+
 *** Test Cases ***
 
 Close_Case_and_Contact_1

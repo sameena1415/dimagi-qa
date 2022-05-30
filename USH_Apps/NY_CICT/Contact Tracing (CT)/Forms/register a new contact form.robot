@@ -6,7 +6,7 @@ Resource    ../Menu/menu.robot
 Resource    ../../Base/base.robot
 
 
-*** Keywords ***  
+*** Keywords ***
 
 Generate Random Contact Name
     ${hex} =    Generate Random String	4	[NUMBERS]abcdef

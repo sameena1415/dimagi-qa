@@ -15,7 +15,7 @@ Resource    ../Case Investigation (CI)/Forms/change pui status form.robot
 Resource    ../Case Investigation (CI)/Forms/search for duplicate patient.robot
 Resource    ../Case Investigation (CI)/Forms/case investigation form.robot
 Suite Teardown  Close Browser
-       
+
 *** Test Cases ***
 
 

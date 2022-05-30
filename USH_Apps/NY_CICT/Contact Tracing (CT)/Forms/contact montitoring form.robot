@@ -48,7 +48,7 @@ ${Q: Initial interview complete A: No}    //p[contains(.,'No, partial interview 
 ${View/Update the rest of the Contact's info}    //label[contains(.,'View/Update')]
 ${Q:Initial interview disposition A: Refused}    //p[contains(.,'Reached person, refused to participate')]
 
-*** Keywords *** 
+*** Keywords ***
 
 Open Contact Monitoring Form
     Click Element    ${contact_monitoring_form}
