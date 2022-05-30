@@ -22,13 +22,19 @@ Generate Random Patient Name
     Set Suite Variable  ${name_random}
 
 Register New Case
+    [Arguments]     ${name}=${null}
     Sleep    2s
     Wait Until Element Is Enabled    ${Register a New Case}
     Click Element    ${Register a New Case}
-    Generate Random Patient Name
-    ${name_random}    Get Variable Value    ${name_random}
-    Input Text       ${patient_first_name}    ${name_random}
-    Input Text       ${patient_last_name}    ${name_random}
+    IF    "${name}" != "${null}"
+        Input Text       ${patient_first_name}    ${name}
+        Input Text       ${patient_last_name}    ${name}
+    ELSE
+        Generate Random Patient Name
+        ${name_random}    Get Variable Value    ${name_random}
+        Input Text       ${patient_first_name}    ${name_random}
+        Input Text       ${patient_last_name}    ${name_random}
+    END
     Submit Form and Check Success
     
 Get Case Name

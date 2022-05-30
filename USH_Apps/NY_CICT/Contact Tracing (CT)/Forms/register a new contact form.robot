@@ -32,6 +32,8 @@ Register contact with phone number
    Input Text    ${last_contact_date}   ${Yesterday's date}
    JS Click    ${last_contact_date}
    Submit Form and Check Success  
+   [Return]  ${name_random}  ${Mobile number}
+
 
 Register contact without phone number
    [Arguments]  ${case_name}    ${case_created}
@@ -59,8 +61,8 @@ Phone No Not Matching
     JS Click    ${phone_no_not_matching}
 
 Get Contact Name
-    ${name_random}    Get Variable Value    ${name_random} 
-   #${name_random}     Set Variable     Contact-8d99
+    ${name_random}    Get Variable Value    ${name_random}
+#    ${name_random}     Set Variable     Contact-3bba
     Log         ${name_random}
     [Return]    ${name_random}
 

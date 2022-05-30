@@ -6,7 +6,7 @@ Resource    ../Case Investigation (CI)/Menu/menu.robot
 Resource    ../Case Investigation (CI)/Forms/register a new case form.robot
 Resource    ../Case Investigation (CI)/Forms/case investigation form.robot
 Resource    ../Case Investigation (CI)/Forms/assign or reassign form.robot
-Suite Teardown  Close Browser
+#Suite Teardown  Close Browser
 
 *** Test Cases ***
 

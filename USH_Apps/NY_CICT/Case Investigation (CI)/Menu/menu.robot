@@ -17,7 +17,7 @@ ${My Cases}    (//div[@aria-label='My Cases']/div)[1]
 ${All Closed Cases}    (//div[@aria-label='All Closed Cases']/div)[1]
 ${All Cases}   (//div[@aria-label='All Cases']/div)[1]
 ${All Cases: Unable to Reach}    (//div[@aria-label='All Cases: Unable to Reach']/div)[1]    
-
+${Register New Contact without index}    (//div[@aria-label='Register New Contact(s) without Index Case']/div)[1]
 
 *** Keywords ***
     
@@ -25,7 +25,7 @@ Open All Cases
     Open App Home Screen
     Sleep    2s
     Wait Until Element Is Enabled    ${All Cases} 
-    JS Click    ${All Open Cases}
+    JS Click    ${All Cases}
 
 Open All Open Cases
     Open App Home Screen
@@ -69,3 +69,9 @@ Open My Cases
     Sleep    2s
     Wait Until Element Is Enabled    ${My Cases}
     JS Click    ${My Cases}
+
+Open Register New Contact without index
+    Open App Home Screen
+    Sleep    2s
+    Wait Until Element Is Enabled    ${Register New Contact without index}
+    Click Element    ${Register New Contact without index}

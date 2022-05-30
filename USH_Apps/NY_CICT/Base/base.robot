@@ -7,6 +7,7 @@ Resource     ../Case Investigation (CI)/Forms/register a new case form.robot
 Resource    ../Contact Tracing (CT)/Forms/register a new contact form.robot
 Library     driverpath.py
 Library    2FA.py
+Library    Collections
 
 
 *** Variables ***
@@ -22,7 +23,7 @@ HQ Login
     ${chromedriver_path}=   driverpath.Get Driver Path
     ${chrome_options}=  Evaluate  sys.modules['selenium.webdriver'].ChromeOptions()  sys, selenium.webdriver
     Call Method    ${chrome_options}    add_argument    --disable-extensions
-    Call Method    ${chrome_options}    add_argument    --headless
+#    Call Method    ${chrome_options}    add_argument    --headless
     Call Method    ${chrome_options}    add_argument    --start-maximized
     Call Method    ${chrome_options}    add_argument    --disable-dev-shm-usage
     Call Method    ${chrome_options}    add_argument    --no-sandbox
@@ -110,7 +111,12 @@ Yesterday's Date
    ${date}     Get Current Date    result_format=%m/%d/%Y    increment=-1 day
    [Return]   ${date}
    
-       
+Past Date Generator
+   [Arguments]      ${n}
+   ${date}     Get Current Date    result_format=%m/%d/%Y    increment=-${n} day
+   [Return]   ${date}
+
+
 Select Dropdown
    [Arguments]    ${question}    ${answer}
    Wait Until Element Is Enabled   ${question}
@@ -152,7 +158,38 @@ Select Created Case
     Sleep    2s 
     Scroll Element Into View    ${continue}
     Click Element    ${continue} 
-    
+
+
+Select Created Case with no lab result
+    [Arguments]    ${case_or_contact_created}
+    Wait Until Element Is Enabled    (//tr[.//td[text()='${case_or_contact_created}']]/self::tr//td[6][(normalize-space())])
+    Sleep    2s
+    JS Click    (//tr[.//td[text()='${case_or_contact_created}']]/self::tr//td[6][(normalize-space())])
+    Wait Until Element Is Enabled    ${continue}
+    Sleep    2s
+#    Scroll Element Into View    ${continue}
+    Click Element    ${continue}
+
+Select Created Case with lab result
+    [Arguments]    ${case_or_contact_created}
+    Wait Until Element Is Enabled    (//tr[.//td[text()='${case_or_contact_created}']]/self::tr//td[6][not(normalize-space())])
+    Sleep    2s
+    JS Click    (//tr[.//td[text()='${case_or_contact_created}']]/self::tr//td[6][not(normalize-space())])
+    Wait Until Element Is Enabled    ${continue}
+    Sleep    2s
+#    Scroll Element Into View    ${continue}
+    Click Element    ${continue}
+
+Select Case with Open Status
+    [Arguments]    ${case_or_contact_created}
+    Wait Until Element Is Enabled    (//tr[.//td[text()='${case_or_contact_created}']]/self::tr//td[9][normalize-space()='Open']
+    Sleep    2s
+    JS Click    (//tr[.//td[text()='${case_or_contact_created}']]/self::tr//td[9][normalize-space()='Open']
+    Wait Until Element Is Enabled    ${continue}
+    Sleep    2s
+#    Scroll Element Into View    ${continue}
+    Click Element    ${continue}
+
 Case Search Search All
     Wait Until Element Is Enabled    ${search all cases in the list}
     JS Click    ${search all cases in the list}
@@ -163,11 +200,15 @@ Case Search
     [Arguments]     ${case_or_contact_created}   
     Wait Until Element Is Enabled    ${search all cases in the list}
     JS Click    ${search all cases in the list}
+    Sleep    5s
+    Wait Until Element Is Visible    ${first-name_case_search}
     Input Text    ${first-name_case_search}    ${case_or_contact_created} 
     Input Text    ${last-name_case_search}    ${case_or_contact_created} 
     Wait Until Element Is Enabled    ${case search submit}
     JS Click    ${case search submit}
-    
+
+
+
 Submit Form and Check Success
     Element Should Be Enabled    ${submit_form}
     JS Click   ${submit_form}

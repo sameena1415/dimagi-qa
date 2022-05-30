@@ -41,13 +41,21 @@ ${Zipcode failure}    //label[.//span[text()='Zip Code']]/following-sibling::div
 ${Q:Transer Patient A: No}    //p[contains(.,'No, do not transfer')]
 
 ${Q:Activity complete A: Yes}    //span[contains(.,'Is all activity for this case complete')]/following::p[text()='Yes']
+${Q:Activity complete A: No}    //span[contains(.,'Is all activity for this case complete')]/following::p[text()='No']
+${Q:Case Interview complete A: No}    //span[contains(.,'Is the case interview complete?')]/following::p[text()='No']
+${Q:Case Interview complete A: Yes}    //span[contains(.,'Is the case interview complete?')]/following::p[text()='Yes']
+${Q:Needs Daily Monitoring}    //label[.//span[contains(.,'Does the case need daily monitoring?')]]
+${Q:Needs Daily Monitoring A: No}    //label[.//span[contains(.,'Does the case need daily monitoring?')]]/following-sibling::div//p[text()='No']
+${Q:Needs Daily Monitoring A: Yes}    //label[.//span[contains(.,'Does the case need daily monitoring?')]]/following-sibling::div//label//input[@value='Yes']
 ${Q:Final Disposition A:Reached, completed investigation}    //p[text()='Reached, completed investigation']
-
+${Q: Willing to receive survey via SMS}       //label//span[contains(.,'willing to receive a daily survey via SMS?')]
+${Q: Willing to receive survey via SMS A: No}       //label//span[contains(.,'willing to receive a daily survey via SMS?')]//following::p[text()='No']
 ${Q:Gender A:Female}    //p[text()='Female']
 ${Q:Race A:Asian}    //p[text()='Asian']
 ${Q:Ethnicity A:Hispanic/Latino}    //p[text()='Hispanic/Latino']
 ${Submit Form}     //button[@type='submit' and @class='submit btn btn-primary']
 ${Success Message}    //p[text()='Form successfully saved!']
+
 
 
 *** Keywords *** 
@@ -121,3 +129,79 @@ Activity for case complete
     Run Keyword And Ignore Error    Transfer Patient - No
     Submit Form and Check Success 
 
+Add Phone Number in Case Investigation form
+   [Arguments]      ${phone}
+   Wait Until Element Is Enabled    ${Q:Case Interview Disposition A:Reached person, agreed to call}
+   JS Click    ${Q: Case Interview Disposition A:Reached person, agreed to call}
+   Input Text       ${Q:Home/Cell Phone}     ${phone}
+   Submit Form and Check Success
+
+
+Activity for case complete - Yes
+    Wait Until Element Is Enabled    ${no_attempts_made_disposition}
+    JS Click    ${no_attempts_made_disposition}
+    Wait Until Element Is Enabled    ${Q:Activity complete A: Yes}
+    JS Click    ${Q:Activity complete A: Yes}
+    Wait Until Element Is Visible    ${Q:Final Disposition A:Reached, completed investigation}
+    JS Click    ${Q:Final Disposition A:Reached, completed investigation}
+    Submit Form and Check Success
+
+Activity for case complete - No
+    Wait Until Element Is Enabled    ${no_attempts_made_disposition}
+    JS Click    ${no_attempts_made_disposition}
+    Wait Until Element Is Enabled    ${Q:Activity complete A: No}
+    JS Click    ${Q:Activity complete A: No}
+    Submit Form and Check Success
+
+Complete full interview
+   [Arguments]      ${case_interview}   ${daily_monitoring}     ${activity_complete}
+   Wait Until Element Is Enabled    ${Q:Case Interview Disposition A:Reached person, agreed to call}
+   JS Click    ${Q: Case Interview Disposition A:Reached person, agreed to call}
+   ${Mobile number}    Generate Mobile Number
+   Input Text       ${Q:Home/Cell Phone}   ${Mobile number}
+   Add User Details
+   ${Yesterday's date}    Yesterday's Date
+   Input Text    ${Q:Date Tested}    ${Yesterday's date}
+   JS Click    ${Q:Case Interview complete A: ${case_interview}}
+   JS Click    ${Q:Needs Daily Monitoring A: ${daily_monitoring}}
+   JS Click    ${Q:Activity complete A: ${activity_complete}}
+   Submit Form and Check Success
+
+Daily Monitoring - Yes
+    Open Case Investigation Form
+    Wait Until Element Is Visible    ${interview_info_section}
+    ${IsElementPresent}=     Element Should Be Visible    ${interview_info_section}
+    IF    ${IsElementPresent}
+       Log To Console    Interview Information section is present
+    END
+    Scroll Element Into View    ${Q:Needs Daily Monitoring A: No}
+    JS Click    ${Q:Needs Daily Monitoring A: Yes}
+
+#    ${IsElementPresent}=    Element Should Not Be Visible    ${daily_monitoring_section}
+#    Sleep    2s
+#    IF    not ${IsElementPresent}
+#       Log To Console    Daily Monitoring section is not present
+#    END
+#    Sleep    10s
+#    Wait for condition  return window.document.readyState === 'complete'
+##    Sleep    10s
+#    Wait Until Element Is Enabled    ${Q: Willing to receive survey via SMS A: No}
+#    Scroll Element Into View    ${Q: Willing to receive survey via SMS}
+##    ${IsElementPresent}=    Element Should Be Visible    ${Q: Willing to receive survey via SMS}
+##    Log To Console    ${IsElementPresent}
+#    Wait Until Element Is Visible    ${Q: Willing to receive survey via SMS A: No}
+#    Click Element    ${Q: Willing to receive survey via SMS A: No}
+#    Element Should Not Be Visible    ${daily_monitoring_section}
+#    Submit Form and Check Success
+
+Verify Daily Monitoring Status
+    [Arguments]  ${case_name}      ${daily_monitoring_status}
+    Wait Until Element Is Visible    //tr[.//td[text()='${case_name}']]
+    Element Should Be Visible    //tr[.//td[text()='${case_name}']]/self::tr//td[8][normalize-space()='${daily_monitoring_status}']
+
+Verify Daily Monitoring Section
+    Open Case Investigation Form
+    Wait Until Element Is Visible    ${submit_form}
+    Element Should Be Visible    ${daily_monitoring_section}
+    Element Should Be Visible    ${view_update_rest_of_the_case_info}
+    Element Should Not Be Visible    ${interview_info_section}

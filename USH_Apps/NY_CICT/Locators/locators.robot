@@ -40,6 +40,8 @@ ${search_button}    id:case-list-search-button
 ${contact_monitoring_form}    xpath://tr[@aria-label="Contact Monitoring"]
 ${initial_interview_disposition}    //p[text()='Reached person, agreed to call']
 ${final_disposition2}    //p[text()='Reached, completed investigation']
+${no_attempts_made_disposition}    //p[text()='No attempt made yet']
+${follow_up_complete_disposition}       //p[text()='Follow up completed']
 ${symptom_fever}    //p[contains(.,'Fever')]
 ${symptom_chill}    //p[contains(.,'Chills')]
 ${symptom_fatigue}    //p[text()='Fatigue']
@@ -50,9 +52,12 @@ ${gender}    //p[text()='Female']
 ${race}    //p[text()='Asian']
 ${ethnicity}    //p[text()='Hispanic/Latino']
 ${yes_convert_pui}    //p[text()='Yes, convert contact/traveler to PUI']
+${enter_case_dob}     //p[text()="Enter the case's Date of Birth"]
+${date_of_birth}        //*[text()='Date of birth']/following::div[1]/div[@class='widget']/descendant::input
 ${no_convert_pui}    //p[contains(.,'No, do NOT convert')]
 ${pui_form_header}    //h1[text()='Convert Contact to a Suspected Case (PUI)' and @class='title']
-${confirm_yes_convert_pui}    //p[text()='Yes']   
+${confirm_yes_convert_pui}    //p[text()='Yes']
+${confirm_no_convert_pui}    //p[text()='No']
 ${covert_to_pui_form}    //tr[@aria-label='Convert Contact to a Suspected Case (PUI)']
 
 
@@ -92,3 +97,22 @@ ${archieved_contact}    //td[text()='${archieved_contact_name}']
 ${sync}    xpath://div[@class='js-sync-item appicon appicon-sync']
 ${sync success}    xpath:(//div[text()='User Data successfully synced.'])[last()]
 ${first-name_case_search}    xpath:(//td/div[contains(., "First Name")]/following::input)[1]
+
+${specimen_collection_date}   //span[contains(text(),'Specimen Collection Date')]/following::div[1]//input[@type='text']
+${lab_result_positive}      //input[@value='Positive']
+${accession_number}     //span[contains(text(),'Accession Number')]/following::div[1]//textarea[1]
+
+${suspected_to_confirmed_case}      //input[@value='Convert this Suspected Case to a **Confirmed Case**']
+${confirm_suspected_to_confirmed_case}      //p[text()='Yes, convert this Suspected Case into a Confirmed Case']
+
+${selected_patient_is_duplicate}    //p[text()='The selected patient is a duplicate of the current patient']
+${keep_current_close_selected}      //input[@value='Keep the **Current Patient** and close the **Selected Patient**']
+
+${lab_result_tab}       //a[text()='Lab Results' and @role='tab']
+${list_is_empty_message}        //*[text()='List is empty.']
+${lab_result_tab_positive}  //tr[.//td[text()='positive']]
+${close_dialog}     //div//a[text()='Lab Results']/preceding::div[@class='modal-header']/button[@class='close']
+
+${interview_info_section}       //div[@class='collapsible-icon-container']/following-sibling::span[text()='Interview Info']
+${daily_monitoring_section}     //*[text()='Daily Follow Up Monitoring']
+${view_update_rest_of_the_case_info}        //*[text()="View/Update the rest of the Case's information"]
