@@ -405,6 +405,24 @@ Enter any needs
         Input Text    ${help_needed_field}      ${help_needed_text}
     END
 
+Enter Symptoms improving
+    [Arguments]     ${selection}
+    Wait Until Element Is Visible    ${are_symptoms_improving}
+    Element Should Be Visible    ${are_symptoms_improving}
+    IF    "${selection}" == "No"
+        JS Click    ${are_symptoms_improving_no}
+        Wait Until Element Is Visible    ${emergency_warning_signs}
+        JS Click    ${emergency_warning_signs_none}
+        Wait Until Element Is Visible    ${message_on_no_warning_signs}
+        Page Should Contain Element    ${message_on_no_warning_signs}
+        JS Click    ${emergency_warning_signs_none}
+    ELSE
+        JS Click    ${are_symptoms_improving_yes}
+    END
+    Sleep    3s
+
+    JS Click    ${are_symptoms_improving_yes}
+
 
 Verify fever, symptoms, help all no logs
     Scroll Element Into View    ${daily_monitoring_section}
@@ -434,4 +452,52 @@ Verify unsuccessful logs
     JS Click    ${view_follow_up_logs}
     Page Should Contain Element     ${verify_unsuccess_attempt}
     Page Should Contain Element     ${verify_notes}\[contains(text(),'${log}')]
-    
+
+Fill up PUI Category for Positive test
+    Wait Until Element Is Visible    ${pui_category}
+    JS Click    ${symptomatic_individual}
+    JS Click    ${able_to_schedule_appointment}
+    ${Yesterday's date}    Yesterday's Date
+    Input Text    ${test_scheduled_date}    ${Yesterday's date}
+    JS Click    ${test_scheduled_date}
+    Wait Until Element Is Visible    ${have_you_been_tested_yes}
+    JS Click    ${have_you_been_tested_yes}
+    Wait Until Element Is Visible    ${do_you_have_results_yes}
+    JS Click    ${do_you_have_results_yes}
+    Wait Until Element Is Visible    ${results_are_positive}
+    JS Click    ${results_are_positive}
+    Wait Until Element Is Visible    ${message_quarantine_1}
+    Page Should Contain Element    ${message_quarantine_1}
+    Page Should Contain Element    ${message_quarantine_2}
+    Enter fever greater than 100    Yes
+    Enter any other symptoms    Yes
+    Enter Symptoms improving    Yes
+    Enter any needs    No
+    Submit Form and Check Success
+
+
+Fill up PUI Category for Negative test
+    Wait Until Element Is Visible    ${pui_category}
+    JS Click    ${subjected_to_quarantine}
+    JS Click    ${able_to_schedule_appointment}
+    ${Yesterday's date}    Yesterday's Date
+    Input Text    ${test_scheduled_date}    ${Yesterday's date}
+    JS Click    ${test_scheduled_date}
+    Wait Until Element Is Visible    ${have_you_been_tested_yes}
+    JS Click    ${have_you_been_tested_yes}
+    Wait Until Element Is Visible    ${do_you_have_results_yes}
+    JS Click    ${do_you_have_results_yes}
+    Wait Until Element Is Visible    ${results_are_negative}
+    JS Click    ${results_are_negative}
+    Wait Until Element Is Visible    ${message_quarantine_2}
+    Page Should Contain Element    ${message_quarantine_2}
+    Enter fever greater than 100    Yes
+    Enter any other symptoms    No
+    Enter any needs    No
+    Submit Form and Check Success
+
+
+Verify results received
+    [Arguments]  ${case_name}
+    Wait Until Element Is Visible    //tr[.//td[text()='${case_name}']]
+    Element Should Be Visible    //tr[.//td[text()='${case_name}']]/self::tr//td[10][normalize-space()='Received Results']

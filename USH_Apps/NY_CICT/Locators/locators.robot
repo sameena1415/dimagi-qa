@@ -175,3 +175,16 @@ ${warning_sign_log}    //div[.//*[.='Daily Follow Up Monitoring']]/following::di
 ${provider_section}     //*[.='Provider Info']
 ${provider_name}        //span[text()='Provider Name']/following::div[1]/div[@class='widget']/descendant::textarea
 ${dr_name}      Doctor Nick
+
+${pui_category}     //label//*[contains(text(),'PUI Category')]
+${symptomatic_individual}       //label[.//*[contains(text(),'PUI Category')]]/following-sibling::div//p[.='Symptomatic individual']
+${subjected_to_quarantine}       //label[.//*[contains(text(),'PUI Category')]]/following-sibling::div//p[.='Individual who is subject to precautionary or mandatory quarantine']
+${able_to_schedule_appointment}     //label[.//*[text()='Were you able to schedule an appointment to be tested?']]/following-sibling::div//p[.='Yes']
+${test_scheduled_date}      //label[.//*[text()='When is your test scheduled for?']]/following-sibling::div//input
+${have_you_been_tested_yes}     //label[.//*[text()='Have you been tested?']]/following-sibling::div//p[.='Yes']
+${have_you_been_tested_no}     //label[.//*[text()='Have you been tested?']]/following-sibling::div//p[.='No']
+${do_you_have_results_yes}     //label[.//*[text()='Do you have your results?']]/following-sibling::div//p[.='Yes']
+${results_are_positive}     //label[.//*[text()='What are your results?']]/following-sibling::div//p[.='Positive']
+${results_are_negative}     //label[.//*[text()='What are your results?']]/following-sibling::div//p[.='Negative']
+${message_quarantine_1}     //*[contains(text(),'You are now considered to be a confirmed case and need to isolate for 10 days from the time your symptoms started')]
+${message_quarantine_2}     //*[contains(text(),'Once you have confirmed these results in CommCare or ECLRS')][./strong[contains(text(),'Change PUI Status')]]

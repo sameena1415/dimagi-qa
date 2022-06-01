@@ -75,7 +75,8 @@ Open All Contacts Unassigned & Open menu
     JS Click    ${All Contacts: Unassigned & Open}     
    
 Open All Suspected Cases (PUIs) menu
+    Open App Home Screen
     Sleep    2s
-    JS Click    ${All Suspected Cases (PUIs)} 
+    JS Click    ${All Suspected Cases (PUIs)}
 
 
