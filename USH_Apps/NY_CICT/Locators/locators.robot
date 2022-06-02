@@ -14,6 +14,11 @@ ${webapps_menu}    css:#CloudcareTab > a
 ${login_as}    css:.js-restore-as-item
 ${ct_user}    //span[contains(., "CT")]
 ${ci_user}    //span[contains(., "CI")]
+${ctsup_user}    (//span[contains(., "CT Sup")])[1]
+${cisup_user}    (//span[contains(., "CI Sup")])[1]
+${search_username}      //input[@placeholder='Filter workers']
+${search_user_button}       //*[@class='fa fa-search']
+
 ${confirm_user_login}    //button[@id="js-confirmation-confirm"]
 
 ${select_app}    xpath://div[contains(@aria-label,"${app name}")]
@@ -115,4 +120,71 @@ ${close_dialog}     //div//a[text()='Lab Results']/preceding::div[@class='modal-
 
 ${interview_info_section}       //div[@class='collapsible-icon-container']/following-sibling::span[text()='Interview Info']
 ${daily_monitoring_section}     //*[text()='Daily Follow Up Monitoring']
-${view_update_rest_of_the_case_info}        //*[text()="View/Update the rest of the Case's information"]
+${status_section}     //*[text()='Status']
+${view_update_rest_of_the_case_info}        //*[.='Case Details']/following::span[./p/strong]/preceding-sibling::input
+${case_details_section}     //*[text()="Case Details"]
+${view_all_notes}       //p[.='View all notes']
+${view_follow_up_logs}      //p[.='View Follow Up Log']
+${add_new_note}     //p[.='Add a new note']
+${add_new_follow_up_log}     //p[.='Record a new Follow Up Attempt']
+${follow_up_attempt_success}     //label[.//span[.='Follow Up Attempt Result']]/following-sibling::div//p[.='Successful']
+${follow_up_attempt_unsuccess}     //label[.//span[.='Follow Up Attempt Result']]/following-sibling::div//p[.='Unsuccessful']
+${add_new_note_field}       //label[.//span[.='Add a new note']]/following-sibling::div//textarea
+${add_follow_up_log_field}      //label[.//span[.='Follow Up Attempt Notes']]/following-sibling::div//textarea
+${patient_notes}        //h1[.='Patient Notes']
+
+${fever_greater_than_100_no}    //label[.//span[contains(text(),'had a fever of greater than 100 degrees')]]/following-sibling::div//p[.='No']
+${fever_reducing_medication_no}     //label[.//span[contains(text(),'used fever-reducing medication')]]/following-sibling::div//p[.='No']
+${any_other_symptoms_no}    //label[.//span[contains(text(),'Do you have any other symptoms')]]/following-sibling::div//p[.='No']
+${two_negative_results_no}     //label[.//span[contains(text(),'two negative results taken 24 hours apart')]]/following-sibling::div//p[.='No']
+${help_for_isolation_no}    //label[.//span[contains(text(),'help with food, or any of your medical, mental health or other social service')]]/following-sibling::div//p[.='No']
+${fever_greater_than_100_yes}    //label[.//span[contains(text(),'had a fever of greater than 100 degrees')]]/following-sibling::div//p[.='Yes']
+${fever_reducing_medication_yes}     //label[.//span[contains(text(),'used fever-reducing medication')]]/following-sibling::div//p[.='Yes']
+${any_other_symptoms_yes}    //label[.//span[contains(text(),'Do you have any other symptoms')]]/following-sibling::div//p[.='Yes']
+${two_negative_results_yes}     //label[.//span[contains(text(),'two negative results taken 24 hours apart')]]/following-sibling::div//p[.='Yes']
+${help_for_isolation_yes}    //label[.//span[contains(text(),'help with food, or any of your medical, mental health or other social service')]]/following-sibling::div//p[.='Yes']
+${fever_greater_than_100_clear}    //label[.//span[contains(text(),'had a fever of greater than 100 degrees')]]/following-sibling::div//button
+${fever_reducing_medication_clear}     //label[.//span[contains(text(),'used fever-reducing medication')]]/following-sibling::div//button
+${any_other_symptoms_clear}    //label[.//span[contains(text(),'Do you have any other symptoms')]]/following-sibling::div//button
+${two_negative_results_clear}     //label[.//span[contains(text(),'two negative results taken 24 hours apart')]]/following-sibling::div//button
+${help_for_isolation_clear}    //label[.//span[contains(text(),'help with food, or any of your medical, mental health or other social service')]]/following-sibling::div//button
+${highest_temp_field}       //label[.//span[contains(text(),'What was your highest temperature in the last 24 hours?')]]/following-sibling::div//input
+${had_following_symptoms}       //p[text()='Have you had any of the following symptoms?']
+${are_symptoms_improving}       //*[text()='Are the symptoms improving']
+${are_symptoms_improving_no}       //label[.//*[text()='Are the symptoms improving']]/following-sibling::div//p[.='No']
+${are_symptoms_improving_yes}       //label[.//*[text()='Are the symptoms improving']]/following-sibling::div//p[.='Yes']
+${are_symptoms_improving_clear}       //label[.//*[text()='Are the symptoms improving']]/following-sibling::div//button
+${help_needed_field}        //label[.//span[contains(text(),'Please describe the help needed')]]/following-sibling::div//textarea
+${help_needed_text}     help needed
+${emergency_warning_signs}      //*[contains(text(),'Are you experiencing any emergency warning signs such as')]
+${emergency_warning_signs_none}     //label[.//*[contains(text(),'Are you experiencing any emergency warning signs such as')]]/following-sibling::div//p[.='None']
+${emergency_warning_signs_value}     //label[.//*[contains(text(),'Are you experiencing any emergency warning signs such as')]]/following-sibling::div//p[.='New confusion']
+${message_on_no_warning_signs}        //strong[contains(text(),'so glad to hear that') and contains(text(),'we went over some of the things you might need during isolation and some of the ways we can help you')]
+${message_on_warning_signs}     //strong[contains(text(),'Encourage the case to call 9-1-1') and contains(text(),'remind them to tell the operator that they have been diagnosed')]
+
+${verify_attempt}   //div[.//*[.='Daily Follow Up Monitoring']]/following::div//p[contains(text(),'Successful')][./strong[text()='Attempt Status:']]
+${verify_unsuccess_attempt}   //div[.//*[.='Daily Follow Up Monitoring']]/following::div//p[contains(text(),'Unsuccessful')][./strong[text()='Attempt Status:']]
+${verify_fever}     //div[.//*[.='Daily Follow Up Monitoring']]/following::div//p[./strong[text()='Fever:']]
+${verify_fever_temp}       //div[.//*[.='Daily Follow Up Monitoring']]/following::div//p[./strong[text()='Fever Temp:']]
+${verify_other_symptoms}    //div[.//*[.='Daily Follow Up Monitoring']]/following::div//p[./strong[text()='Other Symptoms:']]
+${verify_needs}     //div[.//*[.='Daily Follow Up Monitoring']]/following::div//p[./strong[text()='New Needs:']]
+${verify_notes}     //div[.//*[.='Daily Follow Up Monitoring']]/following::div//p[./strong[text()='Notes:']]
+${symptoms_improving_log}    //div[.//*[.='Daily Follow Up Monitoring']]/following::div//p[./strong[text()='Symptoms Improving:']]
+${warning_sign_log}    //div[.//*[.='Daily Follow Up Monitoring']]/following::div//p[./strong[text()='Emergency Warning Signs:']]
+
+${provider_section}     //*[.='Provider Info']
+${provider_name}        //span[text()='Provider Name']/following::div[1]/div[@class='widget']/descendant::textarea
+${dr_name}      Doctor Nick
+
+${pui_category}     //label//*[contains(text(),'PUI Category')]
+${symptomatic_individual}       //label[.//*[contains(text(),'PUI Category')]]/following-sibling::div//p[.='Symptomatic individual']
+${subjected_to_quarantine}       //label[.//*[contains(text(),'PUI Category')]]/following-sibling::div//p[.='Individual who is subject to precautionary or mandatory quarantine']
+${able_to_schedule_appointment}     //label[.//*[text()='Were you able to schedule an appointment to be tested?']]/following-sibling::div//p[.='Yes']
+${test_scheduled_date}      //label[.//*[text()='When is your test scheduled for?']]/following-sibling::div//input
+${have_you_been_tested_yes}     //label[.//*[text()='Have you been tested?']]/following-sibling::div//p[.='Yes']
+${have_you_been_tested_no}     //label[.//*[text()='Have you been tested?']]/following-sibling::div//p[.='No']
+${do_you_have_results_yes}     //label[.//*[text()='Do you have your results?']]/following-sibling::div//p[.='Yes']
+${results_are_positive}     //label[.//*[text()='What are your results?']]/following-sibling::div//p[.='Positive']
+${results_are_negative}     //label[.//*[text()='What are your results?']]/following-sibling::div//p[.='Negative']
+${message_quarantine_1}     //*[contains(text(),'You are now considered to be a confirmed case and need to isolate for 10 days from the time your symptoms started')]
+${message_quarantine_2}     //*[contains(text(),'Once you have confirmed these results in CommCare or ECLRS')][./strong[contains(text(),'Change PUI Status')]]

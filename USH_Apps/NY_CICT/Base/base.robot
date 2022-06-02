@@ -23,7 +23,7 @@ HQ Login
     ${chromedriver_path}=   driverpath.Get Driver Path
     ${chrome_options}=  Evaluate  sys.modules['selenium.webdriver'].ChromeOptions()  sys, selenium.webdriver
     Call Method    ${chrome_options}    add_argument    --disable-extensions
-#    Call Method    ${chrome_options}    add_argument    --headless
+    Call Method    ${chrome_options}    add_argument    --headless
     Call Method    ${chrome_options}    add_argument    --start-maximized
     Call Method    ${chrome_options}    add_argument    --disable-dev-shm-usage
     Call Method    ${chrome_options}    add_argument    --no-sandbox
@@ -96,6 +96,32 @@ Log in as ct_user
    Click Element    ${confirm_user_login}
    Sync App
    Click Element    ${select_app} 
+
+Log in as ctsup_user
+   Sync App
+   Click Element    ${login_as}
+   Input Text    ${search_username}     CT Supervisor
+   Click Element    ${search_user_button}
+   Sleep    2s
+   Click Element    ${ctsup_user}
+   Sleep    2s
+   Click Element    ${confirm_user_login}
+   Sleep    2s
+   Sync App
+   Click Element    ${select_app}
+
+Log in as cisup_user
+   Sync App
+   Click Element    ${login_as}
+   Input Text    ${search_username}     CI Supervisor
+   Click Element    ${search_user_button}
+   Sleep    2s
+   Click Element    ${cisup_user}
+   Sleep    2s
+   Click Element    ${confirm_user_login}
+   Sleep    2s
+   Sync App
+   Click Element    ${select_app}
 
 JS Click
     [Arguments]    ${element}
