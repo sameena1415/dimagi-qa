@@ -28,7 +28,6 @@ ${home_btn}     //*[@class="fa fa-home"]
 ${select_first case_in_caselist}    //tbody[@class='wrapper js-case-container']/tr[1]
 ${continue}    id:select-case
 ${register_new_contacts_form}    //h3[.='Register New Contact(s)']
-#//tr[@aria-label="Register New Contact(s)"]
 ${contact_first_name}     xpath://span[text()='First name']/following::div[1]/div[@class='widget']/descendant::textarea
 ${contact_last_name}     xpath://span[text()='Last name']/following::div[1]/div[@class='widget']/descendant::textarea
 ${contact_phone_num}    xpath://span[text()='Phone number:']/following::div[1]/div[@class='widget']/descendant::input
@@ -188,3 +187,44 @@ ${results_are_positive}     //label[.//*[text()='What are your results?']]/follo
 ${results_are_negative}     //label[.//*[text()='What are your results?']]/following-sibling::div//p[.='Negative']
 ${message_quarantine_1}     //*[contains(text(),'You are now considered to be a confirmed case and need to isolate for 10 days from the time your symptoms started')]
 ${message_quarantine_2}     //*[contains(text(),'Once you have confirmed these results in CommCare or ECLRS')][./strong[contains(text(),'Change PUI Status')]]
+
+
+## Clusters
+${cluster_name_field}     //label[.//*[.='Cluster Name']]/following-sibling::div//textarea
+${cluster_investigation}       //label[.//*[.='Cluster Type']]/following-sibling::div//p[.='Investigation']
+${cluster_outbreak}     //label[.//*[.='Cluster Type']]/following-sibling::div//p[.='Outbreak']
+${cluster_mass_testing}     //label[.//*[.='Cluster Type']]/following-sibling::div//p[.='Mass Testing']
+${cluster_setting_childcare}    //label[.//*[.='Cluster Setting']]/following-sibling::div//p[.='Childcare']
+${cluster_setting_school}       //label[.//*[.='Cluster Setting']]/following-sibling::div//p[.='School (PreK-12)']
+${cluster_shelter}       //label[.//*[.='Cluster Setting']]/following-sibling::div//p[.='Shelter']
+${clutter_college}      //label[.//*[.='Cluster Setting']]/following-sibling::div//p[contains(text(),'College')]
+${description_of_cluster}       //label[.//*[.='Description of the cluster']]/following-sibling::div//textarea
+${cluster_site_info}        //*[.='Cluster Site Info']
+${cluster_site_name}        //label[.//*[.='Site Name']]/following-sibling::div//textarea
+${cluster_phone}        //label[.//*[.='Site Main Phone Number']]/following-sibling::div//input
+${cluster_street_address}       //label[.//*[.='Street Address']]/following-sibling::div//textarea
+${cluster_city}     //label[.//*[.='City']]/following-sibling::div//textarea
+${cluster_state}    //label[.//*[.='State']]/following-sibling::div//select
+${cluster_zip}      //label[.//*[.='Zip Code']]/following-sibling::div//textarea
+${cluster_site_contact_person}      //label[.//*[.='Site Contact Person Name']]/following-sibling::div//textarea
+${cluster_site_contact_person_title}    //label[.//*[.='Site Contact Person Title']]/following-sibling::div//textarea
+${cluster_number_of_individuals_on_site}        //label[.//*[.='Number of Individuals on Site']]/following-sibling::div//input
+${cluster_id}       //*[contains(text(),'New Cluster ID:')]
+${cluster_select_school}    //label[.//*[.='Select school or university']]/following-sibling::div//select
+
+${verify_specimen_collection}       //strong[text()='Specimen Collection Date:']/parent::li
+${cluster_section}      //*[.='Clusters']
+${case_part_of_cluster_yes}       //label[.//*[.='Is this case part of a cluster?']]/following-sibling::div//p[.='Yes']
+${how_many_cluster}     //label[.//*[.='How many clusters?']]/following-sibling::div//select
+${cluster_1}        //fieldset[.//*[.='Cluster 1']]/following-sibling::div//label[.//*[.='Select the cluster']]/following-sibling::div//select
+${cluster_2}        //fieldset[.//*[.='Cluster 2']]/following-sibling::div//label[.//*[.='Select the cluster']]/following-sibling::div//select
+${specimen_date_of_first_case}      //span[contains(text(),'Specimen Collection Date of First Positive Case:')]
+
+${last_date_of_contact_with_confirmed_case}        //label[.//*[text()='Last date of contact with the confirmed case:']]//following-sibling::div//input
+${contact_part_of_cluster_yes}       //label[.//*[.='Is this contact/traveler part of an Cluster?']]/following-sibling::div//p[.='Yes']
+${close_cluster_section}        //*[.='Close Cluster']
+${close_cluster_yes}        //label[.//*[.='Do you want to close the cluster?']]/following-sibling::div//p[.='Yes']
+${cluster_closure_reason}       //label[.//*[.='Select the reason for closing the cluster:']]/following-sibling::div//p[.='Outbreak ended']
+${reopen_cluster_section}        //*[.='Reopen Cluster']
+${reopen_cluster_yes}        //label[.//*[.='Are you sure you want to reopen the cluster?']]/following-sibling::div//p[.='Yes, reopen this Cluster']
+${cluster_closure_registered_in_error}       //label[.//*[.='Select the reason for closing the cluster:']]/following-sibling::div//p[.='Registered in error']

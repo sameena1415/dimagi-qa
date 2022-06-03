@@ -501,3 +501,31 @@ Verify results received
     [Arguments]  ${case_name}
     Wait Until Element Is Visible    //tr[.//td[text()='${case_name}']]
     Element Should Be Visible    //tr[.//td[text()='${case_name}']]/self::tr//td[10][normalize-space()='Received Results']
+
+Get specimen collection date
+    ${string}=      Get Text    ${verify_specimen_collection}
+    ${str}=       String.Split String    ${string}    :
+    ${str}=     String.Strip String    ${str}[1]
+    [Return]     ${str}
+
+Add Case Disposition
+    Wait Until Element Is Enabled    ${no_attempts_made_disposition}
+    JS Click    ${no_attempts_made_disposition}
+
+Add Cluster Information To Case
+    [Arguments]     ${cluster1_name}    ${cluster1_id}      ${cluster2_name}    ${cluster2_id}
+    Scroll Element Into View    ${cluster_section}
+    JS Click    ${case_part_of_cluster_yes}
+    Wait Until Element Is Visible    ${how_many_cluster}
+    Select From List By Label    ${how_many_cluster}    2
+    Wait Until Element Is Visible    ${cluster_1}
+    Select From List By Label    ${cluster_1}    ${cluster1_name}
+    Wait Until Page Contains    ${cluster1_id}
+    Page Should Contain    ${cluster1_id}
+    Wait Until Element Is Visible    ${cluster_2}
+    Select From List By Label    ${cluster_2}    ${cluster2_name}
+    Wait Until Page Contains    ${cluster2_id}
+    Page Should Contain    ${cluster2_id}
+    Submit Form and Check Success
+
+

@@ -149,7 +149,26 @@ Interview Complete (CM)
     Sleep    5s
     Submit Form and Check Success 
 
-    
+Add Contact Monitoring Details
+    Wait Until Element Is Enabled    ${Q:Interview Disposition A:Reached person, agreed to call}
+    JS Click    ${Q:Interview Disposition A:Reached person, agreed to call}
+    JS Click    ${Q:Gender A:Female}
+    JS Click    ${Q:Race A:Asian}
+    JS Click    ${Q:Ethnicity A:Hispanic/Latino}
+    ${Past date}    Past Date Generator     2
+    Input Text    ${last_date_of_contact_with_confirmed_case}   ${Past date}
+
+Add Cluster Information To Contact
+    [Arguments]     ${cluster1_name}    ${cluster1_id}
+    Scroll Element Into View    ${cluster_section}
+    JS Click    ${contact_part_of_cluster_yes}
+    Wait Until Element Is Visible    ${how_many_cluster}
+    Select From List By Label    ${how_many_cluster}    1
+    Wait Until Element Is Visible    ${cluster_1}
+    Select From List By Label    ${cluster_1}    ${cluster1_name}
+    Wait Until Page Contains    ${cluster1_id}
+    Page Should Contain    ${cluster1_id}
+    Submit Form and Check Success
 
 
 

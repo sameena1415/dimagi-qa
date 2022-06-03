@@ -185,6 +185,13 @@ Select Created Case
     Scroll Element Into View    ${continue}
     Click Element    ${continue} 
 
+Select Cluster
+    [Arguments]    ${case_or_contact_created}
+    Wait Until Element Is Enabled    //tr[.//td[text()='${case_or_contact_created}']]
+    Sleep    2s
+    JS Click    //tr[.//td[text()='${case_or_contact_created}']]
+
+
 
 Select Created Case with no lab result
     [Arguments]    ${case_or_contact_created}
