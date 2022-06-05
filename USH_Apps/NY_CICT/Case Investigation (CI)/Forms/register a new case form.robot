@@ -39,7 +39,7 @@ Register New Case
     
 Get Case Name
     ${name_random}    Get Variable Value    ${name_random}
-#    ${name_random}     Set Variable     Patient-bf57
+    #${name_random}     Set Variable     Patient-8a32
     Log    ${name_random}
     [Return]    ${name_random}
 

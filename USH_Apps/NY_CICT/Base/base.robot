@@ -6,7 +6,7 @@ Resource    ../Locators/locators.robot
 Resource     ../Case Investigation (CI)/Forms/register a new case form.robot
 Resource    ../Contact Tracing (CT)/Forms/register a new contact form.robot
 Library     driverpath.py
-Library    2FA.py
+Library    base_python_functions.py
 Library    Collections
 
 
