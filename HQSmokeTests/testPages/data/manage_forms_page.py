@@ -46,6 +46,15 @@ class ManageFormsPage(BasePage):
         self.wait_and_sleep_to_click(self.apply_button)
         time.sleep(5)
 
+    def asser_normal_form_view(self):
+        self.wait_and_sleep_to_click(self.view_form_link)
+        self.switch_to_next_tab()
+        normal_form_data = self.driver.page_source
+        assert normal_form_data != ""  # This condition can be improvised
+        print("normal_form has data")
+        self.driver.close()
+        self.switch_back_to_prev_tab()
+
     def view_normal_form(self):
         result = self.is_present_and_displayed(self.view_form_link)
         if result == False:
@@ -53,23 +62,18 @@ class ManageFormsPage(BasePage):
             self.wait_to_click(self.apply_button)
             self.restore_all_forms()
             self.get_normal_forms()
+            self.asser_normal_form_view()
         else:
-            self.wait_and_sleep_to_click(self.view_form_link)
-            self.switch_to_next_tab()
-            normal_form_data = self.driver.page_source
-            assert normal_form_data != ""  # This condition can be improvised
-            print("normal_form has data")
-            self.driver.close()
-            self.switch_back_to_prev_tab()
+            self.asser_normal_form_view()
 
-    def archieve_forms(self):
+    def archive_forms(self):
         self.wait_and_sleep_to_click(self.first_form_checkbox)
         self.wait_and_sleep_to_click(self.archive_button)
         assert self.is_present_and_displayed(self.success_message)
         print("Forms archival successful!!")
         time.sleep(3)
 
-    def get_archieved_forms(self):
+    def get_archived_forms(self):
         self.wait_and_sleep_to_click(self.manage_forms_link)
         self.wait_and_sleep_to_click(self.select_app_dropdown)
         self.wait_and_sleep_to_click(self.basic_tests_app)
@@ -78,7 +82,7 @@ class ManageFormsPage(BasePage):
         self.wait_and_sleep_to_click(self.apply_button)
         self.driver.refresh()
 
-    def view_archieved_forms(self):
+    def view_archived_forms(self):
         self.wait_and_sleep_to_click(self.view_form_link)
         self.switch_to_next_tab()
         normal_form_data = self.driver.page_source
