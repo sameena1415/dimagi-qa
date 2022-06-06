@@ -32,9 +32,9 @@ def test_case_31_manage_forms(driver):
     export.data_tab()
     manage.get_normal_forms()
     manage.view_normal_form()
-    manage.achieve_forms()
-    manage.get_archieved_forms()
-    manage.view_archieved_forms()
+    manage.archive_forms()
+    manage.get_archived_forms()
+    manage.view_archived_forms()
     manage.restore_forms()
 
 
