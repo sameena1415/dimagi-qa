@@ -46,7 +46,7 @@ class ManageFormsPage(BasePage):
         self.wait_and_sleep_to_click(self.apply_button)
         time.sleep(5)
 
-    def asser_normal_form_view(self):
+    def assert_normal_form_view(self):
         self.wait_and_sleep_to_click(self.view_form_link)
         self.switch_to_next_tab()
         normal_form_data = self.driver.page_source
@@ -62,9 +62,9 @@ class ManageFormsPage(BasePage):
             self.wait_to_click(self.apply_button)
             self.restore_all_forms()
             self.get_normal_forms()
-            self.asser_normal_form_view()
+            self.assert_normal_form_view()
         else:
-            self.asser_normal_form_view()
+            self.assert_normal_form_view()
 
     def archive_forms(self):
         self.wait_and_sleep_to_click(self.first_form_checkbox)
