@@ -23,7 +23,7 @@ def test_case_37_lookup_table_upload(settings):
 def test_case_38_import_cases_from_excel(settings):
     uri = settings["url"]
     mw = CurlMethods(settings)
-    mw.post_import_cases_from_excel(uri, "Test File.xlsx", settings['login_user'], settings['login_pass'])
+    mw.post_import_cases_from_excel(uri, "Child.xlsx", settings['login_user'], settings['login_pass'])
 
 @pytest.mark.xfail
 def test_case_39_form_data_export(settings):

@@ -6,7 +6,9 @@ class CurlMethods(Base):
     def __init__(self, settings):
         self.filepath = UserData.ROOT+"/RequestAPI/Payloads/"
         self.password = settings["password"]
-        self.headers={'Content-Type':'application/xml'}
+        self.api_key = settings['api_key']
+        self.headers={'Content-Type':'application/xml',
+                      'Authorization': 'ApiKey '+settings['login_user']+':'+settings['api_key']}
 
 
     def submission_api(self, uri, input_file, login_user, login_pass):
@@ -19,7 +21,8 @@ class CurlMethods(Base):
 
     def get_restore_ota(self, uri, login_user, login_pass):
         URL = uri+'phone/restore/?version=2.0'
-        result = self.get_api(URL, login_user, login_pass)
+        headers = {'Authorization': 'ApiKey ' + login_user + ':' + self.api_key}
+        result = self.get_api(URL, login_user, login_pass, headers)
         print(result.status_code)
         assert result.status_code == 200
 
@@ -29,17 +32,19 @@ class CurlMethods(Base):
         file = [
             ('file-to-upload', ('case search.xlsx', open(self.filepath + input_file, 'rb'),
                                 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'))]
-        result = self.post_api_file_upload(URL, data, login_user, login_pass, file)
+        headers = {'Authorization': 'ApiKey ' + login_user + ':' + self.api_key}
+        result = self.post_api_file_upload(URL, data, login_user, login_pass, file, headers)
         assert result.status_code == 200
 
     def post_import_cases_from_excel(self, uri, input_file, login_user, login_pass):
-        URL = uri+'a/samveg-quick/importer/excel/bulk_upload_api/'
-        data = {'case_type': 'household',
+        URL = uri+'a/qateam/importer/excel/bulk_upload_api/'
+        data = {'case_type': 'Child',
                 'search_field': 'external_id',
                 'search_column': 'household_id',
                 'create_new_cases': 'on'}
         file = [
             ('file', ('case search.xlsx', open(self.filepath + input_file, 'rb'),
                                 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'))]
-        result = self.post_api_file_upload(URL, data, login_user, login_pass, file)
+        headers = {'Authorization': 'ApiKey ' + login_user+ ':' + self.api_key}
+        result = self.post_api_file_upload(URL, data, login_user, login_pass, file, headers)
         assert result.status_code == 200

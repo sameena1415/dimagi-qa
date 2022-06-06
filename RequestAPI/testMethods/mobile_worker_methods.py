@@ -12,7 +12,7 @@ class MobileWorkerMethods(Base):
         self.filepath = UserData.ROOT+"/RequestAPI/Payloads/"
         self.password = settings["password"]
         self.headers={'Content-Type':'application/json; charset=utf-8',
-                      'Authorization': settings["login_pass"]}
+                      'Authorization': 'ApiKey '+settings['login_user']+':'+settings['api_key']}
 
 
     def mobile_worker_creation(self, uri, input_file, login_user, login_pass):

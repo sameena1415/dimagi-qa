@@ -11,7 +11,7 @@ class GroupsMethods(Base):
         self.filepath = UserData.ROOT+"/RequestAPI/Payloads/"
         self.password = settings["password"]
         self.headers={'Content-Type':'application/json',
-                      'Authorization': settings["login_pass"]}
+                      'Authorization': 'ApiKey '+settings['login_user']+':'+settings['api_key']}
 
     def get_group_list(self, uri,  login_user, login_pass):
         URL = uri + 'group/'
