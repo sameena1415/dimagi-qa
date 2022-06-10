@@ -16,10 +16,10 @@ def test_case_29_import_cases(driver):
     imp.replace_property_and_upload()
 
 
-def test_case_30_reassign_cases(driver):
+def test_case_30_reassign_cases(driver, settings):
 
     export = ExportDataPage(driver)
-    reassign = ReassignCasesPage(driver)
+    reassign = ReassignCasesPage(driver, settings)
     export.data_tab()
     reassign.get_cases()
     reassign.reassign_case()

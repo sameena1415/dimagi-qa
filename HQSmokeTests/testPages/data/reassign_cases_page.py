@@ -10,9 +10,10 @@ from HQSmokeTests.userInputs.user_inputs import UserData
 
 class ReassignCasesPage(BasePage):
 
-    def __init__(self, driver):
+    def __init__(self, driver, settings):
         super().__init__(driver)
 
+        self.env_url = settings["url"]
         self.reassign_cases_menu = (By.LINK_TEXT, "Reassign Cases")
         self.apply = (By.ID, "apply-btn")
         self.case_type = (By.ID, "report_filter_case_type")
@@ -45,5 +46,8 @@ class ReassignCasesPage(BasePage):
         self.wait_to_click(self.apply)
         time.sleep(5)
         self.wait_for_element(self.new_owner_name)
-        reassigned_username = self.get_text(self.new_owner_name).split('"')[0]
+        if "www" in self.env_url:
+            reassigned_username = self.get_text(self.new_owner_name).split('@')[0]
+        else:
+            reassigned_username = self.get_text(self.new_owner_name).split('"')[0]
         assert reassigned_username in assigned_username
