@@ -2,7 +2,8 @@
 Library  SeleniumLibrary
 Library    String
 Library    DateTime
-Resource    ../../Base/base.robot 
+Resource    ../../Base/base.robot
+Resource    ../../Case Investigation (CI)/Forms/hub cases.robot
 
 
 *** Variables ***
@@ -58,7 +59,10 @@ ${Q:Ethnicity A:Hispanic/Latino}    //p[text()='Hispanic/Latino']
 
 ${Submit Form}     //button[@type='submit' and @class='submit btn btn-primary']
 ${Success Message}    //p[text()='Form successfully saved!']
-
+@{living_situation_option}      'Group Home for'    'Other Adult Group'     'All Shelters'      'Jails'       'Temporary'
+@{living_option_health}      'Long-term Care Facility'    'Post Acute Care'     'Care Inpatient'
+@{workplace_option_health}      'Healthcare facility'    'Long-term care'     'Other care'
+@{workplace_option_student}     'Daycare'      'College'
 
 
 *** Keywords *** 
@@ -78,6 +82,13 @@ Fill up and Submit Case Investigation Form
    Add Address
    Submit Form and Check Success
    
+Simple Form Fill up
+   Wait Until Element Is Enabled    ${no_attempts_made_disposition}
+   JS Click    ${no_attempts_made_disposition}
+   Add User Details
+   Submit Form and Check Success
+
+
 Add Address
    # Select Address
    Run Keyword And Ignore Error    Input Text    ${Q:Search For Address}   ${Address}
@@ -528,4 +539,345 @@ Add Cluster Information To Case
     Page Should Contain    ${cluster2_id}
     Submit Form and Check Success
 
+Fill up Healthcare section
+    Wait Until Element Is Visible    ${occupation_section}
+    Scroll Element Into View    ${occupation_section}
+    Select Healthcare, verify Hub Section
+    Unselect Healthcare, verify Hub Section
+    JS Click    ${went_to_work}
+    Scroll Element Into View    ${workplace_setting_type_section}
+    Validate Workplace Setting Type Healthcare Hub
+    JS Click    ${went_to_work}
+    Verify Hub Section      No
+    JS Click    ${visited_healthcare_facility}
+    Verify Hub Section      Yes
+    JS Click    ${visited_healthcare_facility}
+    Verify Hub Section      No
+    JS Click    ${visited_long_term_care}
+    Verify Hub Section      Yes
+    JS Click    ${visited_long_term_care}
+    Verify Hub Section      No
+    Sleep    5s
+    Scroll Element Into View    ${adult_congregate_living_facility}
+    JS Click    ${adult_congregate_living_facility}
+    Verify Hub Section      Yes
+    JS Click    ${adult_congregate_living_facility}
+    Verify Hub Section      No
+    Validate Living Situation Healthcare Hub
+    Select Healthcare, verify Hub Section
+    Submit Form and Check Success
 
+Fill up Congregate section
+    Wait Until Element Is Visible    ${living_situation_section}
+    Scroll Element Into View    ${living_situation_section}
+    Validate Living Situation Congregate
+    JS Click    ${correctional_worker}
+    Verify Congregate Section      Yes
+    JS Click    ${correctional_worker}
+    Verify Congregate Section      No
+    Scroll Element Into View    ${exposures_section}
+    Scroll Element Into View    ${did_you_visit_adult_congregate}
+    JS Click    ${did_you_visit_adult_congregate}
+    Verify Congregate Section      Yes
+    JS Click    ${did_you_visit_adult_congregate}
+    Verify Congregate Section      No
+    JS Click    ${did_you_visit_correctional}
+    Verify Congregate Section      Yes
+    JS Click    ${did_you_visit_correctional}
+    Verify Congregate Section      No
+    JS Click    ${did_you_visit_adult_congregate}
+    Verify Congregate Section      Yes
+    Submit Form and Check Success
+
+Fill up Cluster section
+    Wait Until Element Is Visible    ${case_part_of_cluster_yes}
+    Scroll Element Into View    ${case_part_of_cluster_yes}
+    JS Click    ${case_part_of_cluster_no}
+    Verify Cluster Hub Section      No
+    JS Click    ${case_part_of_cluster_yes}
+    Verify Cluster Hub Section      Yes
+    Submit Form and Check Success
+
+Fill up CSS section
+    Wait Until Element Is Visible    ${living_situation_section}
+    Scroll Element Into View    ${living_situation_section}
+    JS Click    ${living_situation_unsheltered}
+    Verify CSS Hub Section      Yes
+    JS Click    ${living_situation_clear}
+    Verify CSS Hub Section      No
+#    JS Click    ${are_you_able_to_isolate_no}
+#    Verify CSS Hub Section      Yes
+#    JS Click    ${are_you_able_to_isolate_clear}
+#    JS Click    ${are_you_able_to_isolate_yes}
+#    Verify CSS Hub Section      No
+#    JS Click    ${bathroom_only_used_by_patient_no}
+#    Verify CSS Hub Section      Yes
+#    JS Click    ${bathroom_only_used_by_patient_clear}
+#    JS Click    ${bathroom_only_used_by_patient_yes}
+#    Verify CSS Hub Section      No
+    JS Click    ${need_additional_help_with_food_yes}
+    Verify CSS Hub Section      Yes
+    JS Click    ${need_additional_help_with_food_clear}
+    JS Click    ${need_additional_help_with_food_no}
+    Verify CSS Hub Section      No
+    JS Click    ${living_situation_unsheltered}
+    Verify CSS Hub Section      Yes
+    Submit Form and Check Success
+
+Fill up School section
+    Wait Until Element Is Visible    ${living_situation_section}
+    Scroll Element Into View    ${living_situation_student}
+    JS Click    ${living_situation_student}
+    Verify Student Hub Section      Yes
+    JS Click    ${living_situation_clear}
+    Verify Student Hub Section    No
+    JS Click    ${occupation_child_care}
+    Verify Student Hub Section      Yes
+    JS Click    ${occupation_child_care}
+    Verify Student Hub Section      No
+    JS Click    ${occupation_school}
+    Verify Student Hub Section      Yes
+    JS Click    ${occupation_school}
+    Verify Student Hub Section      No
+    JS Click    ${went_to_work}
+    Validate Workplace Setting Type School Hub
+    JS Click    ${went_to_work}
+    Scroll Element Into View    ${exposures_section}
+    JS Click    ${visited_school}
+    Verify Student Hub Section      Yes
+    JS Click    ${visited_school}
+    Verify Student Hub Section      No
+    JS Click    ${contact_with_covid_patient_yes}
+    JS Click    ${contact_at_daycare}
+    Verify Student Hub Section      Yes
+    JS Click    ${contact_at_daycare}
+    Verify Student Hub Section      No
+    JS Click    ${contact_at_daycare}
+    Verify Student Hub Section      Yes
+    ${school}       ${date}=    Fill up school detail section
+    Update School Hub Status    In Progress
+    [Return]    ${school}   ${date}
+
+Fill up school detail section
+     Scroll Element Into View    ${student_details_section}
+     JS Click    ${type_of_school_prek}
+     ${past_date}=      Past Date Generator    1
+     Input Text    ${last_date_at_location_school}    ${past_date}
+     Wait Until Element Is Visible    ${is_case_a_school}
+     JS Click    ${is_case_a_school}
+     Wait Until Element Is Visible    ${school_name}
+     Select From List By Index    ${school_name}       2
+     ${school}=     Get Selected List Label    ${school_name}
+     [Return]   ${school}   ${past_date}
+
+Enter value for other School
+     Scroll Element Into View    ${student_details_section}
+     ${isNotSelected}=     Run Keyword And Return Status    Checkbox Should Not Be Selected    ${type_of_school_prek}
+     IF    ${isNotSelected}
+          JS Click    ${type_of_school_prek}
+     END
+     ${past_date}=      Past Date Generator    1
+     Input Text    ${last_date_at_location_school}    ${past_date}
+     Wait Until Element Is Visible    ${is_case_a_school}
+     JS Click    ${is_case_a_school}
+     Wait Until Element Is Visible    ${school_name}
+     Select From List By Label    ${school_name}    Other
+     ${alpha_num}=     Generate Random String	4	[NUMBERS]abcdef
+     ${name}=      Set Variable      school test ${past_date} ${alpha_num} name
+     Input Text    ${school_other_name}    ${name}
+     ${Mobile number}    Generate Mobile Number
+     Input Text       ${school_other_phone}     ${Mobile number}
+     ${address}=     Set Variable        school test ${past_date} ${alpha_num} address
+     Input Text    ${school_other_address}    ${address}
+     ${phone}    Get Text    ${school_other_phone_value}
+     [Return]    ${name}     ${address}      ${phone}        ${past_date}
+
+Enter value for other College
+     Scroll Element Into View    ${student_details_section}
+     ${isNotSelected}=     Run Keyword And Return Status    Checkbox Should Not Be Selected    ${type_of_college}
+     IF    ${isNotSelected}
+          JS Click    ${type_of_college}
+     END
+     ${past_date}=      Past Date Generator    1
+     Input Text    ${last_date_at_location_college}    ${past_date}
+     Wait Until Element Is Visible    ${is_case_a_college}
+     JS Click    ${is_case_a_college}
+     Wait Until Element Is Visible    ${college_name}
+     Select From List By Index    ${college_name}       1
+     ${alpha_num}=     Generate Random String	4	[NUMBERS]abcdef
+     ${name}=      Set Variable      school test ${past_date} ${alpha_num} name
+     Input Text    ${college_other_name}    ${name}
+     ${Mobile number}    Generate Mobile Number
+     Input Text       ${college_other_phone}     ${Mobile number}
+     ${address}=     Set Variable        school test ${past_date} ${alpha_num} address
+     Input Text    ${college_other_address}    ${address}
+     ${phone}    Get Text    ${college_other_phone_value}
+     [Return]    ${name}     ${address}      ${phone}        ${past_date}
+
+
+Fill up college detail section
+     Scroll Element Into View    ${student_details_section}
+     JS Click    ${type_of_college}
+     ${past_date}=      Past Date Generator    1
+     Input Text    ${last_date_at_location_college}    ${past_date}
+     Wait Until Element Is Visible    ${is_case_a_college}
+     JS Click    ${is_case_a_college}
+     Wait Until Element Is Visible    ${college_name}
+     Select From List By Index    ${college_name}       2
+     ${college}=     Get Selected List Label    ${college_name}
+     [Return]   ${college}   ${past_date}
+
+Enter Information in School College Details section
+    Wait Until Element Is Visible    ${living_situation_section}
+    Scroll Element Into View    ${living_situation_student}
+    JS Click    ${living_situation_student}
+    Verify Student Hub Section      Yes
+    ${school}       ${school_date}=    Fill up school detail section
+    ${college}       ${college_date}=    Fill up college detail section
+    ${cc_name}     ${cc_address}      ${cc_phone}        ${cc_date}=    Fill up childcare detail section
+    ${school_name}      ${school_address}       ${school_phone}=    Get school or college details      ${school}
+    ${college_name}      ${college_address}       ${college_phone}=    Get school or college details      ${college}
+    Verify School Details present in Hub section    ${school_name}      ${school_address}       ${school_phone}     ${school_date}
+    Verify School Details present in Hub section    ${college_name}      ${college_address}       ${college_phone}     ${college_date}
+    Verify School Details present in Hub section    ${cc_name}      ${cc_address}       ${cc_phone}     ${cc_date}
+    ${otherschool_name}     ${otherschool_address}      ${otherschool_phone}        ${otherschool_date}=    Enter value for other School
+    ${othercollege_name}     ${othercollege_address}      ${othercollege_phone}        ${othercollege_date}=    Enter value for other College
+    Verify School Details present in Hub section    ${otherschool_name}     ${otherschool_address}      ${otherschool_phone}        ${otherschool_date}
+    Verify School Details present in Hub section    ${othercollege_name}     ${othercollege_address}      ${othercollege_phone}        ${othercollege_date}
+    Submit Form and Check Success
+
+Get school or college details
+    [Arguments]     ${school}
+    ${string}=      String.Split String    ${school}    -
+    ${name}     String.Strip String    ${string}[0]
+    Page Should Contain Element    //p[.='${name}']
+    ${value}=       Get Text    //p[.='${name}']/following-sibling::ul/li[contains(text(),'Address')]
+    ${address}=      String.Split String    ${value}    :
+    ${value}=       Get Text    //p[.='${name}']/following-sibling::ul/li[contains(text(),'Phone')]
+    ${phone}=       String.Split String    ${value}    :
+    [Return]        ${name}     ${address}[1]       ${phone}[1]
+
+Fill up childcare detail section
+    Scroll Element Into View    ${student_details_section}
+    JS Click    ${type_of_childcare}
+    Sleep    3s
+    Scroll Element Into View    ${childcare_name}
+    ${past_date}=      Past Date Generator    1
+    ${alpha_num}=     Generate Random String	4	[NUMBERS]abcdef
+    ${name}=      Set Variable      childcare test ${past_date} ${alpha_num} name
+    Input Text    ${childcare_name}    ${name}
+    ${Mobile number}    Generate Mobile Number
+    Input Text       ${childcare_phone}     ${Mobile number}
+    ${address}=     Set Variable        childcare test ${past_date} ${alpha_num} address
+    Input Text    ${childcare_address}    ${address}
+    ${phone}    Get Text    ${childcare_phone_value}
+    Input Text    ${last_date_at_location_childcare}    ${past_date}
+    JS Click    ${is_case_a_childcare}
+    [Return]    ${name}     ${address}      ${phone}        ${past_date}
+
+
+Select Healthcare, verify Hub Section
+    JS Click    ${occupation_healthcare}
+    Checkbox Should Be Selected    ${occupation_checkbox}\[@value='Healthcare Worker (HCW)']
+    Verify Hub Section      Yes
+
+
+Unselect Healthcare, verify Hub Section
+    JS Click    ${occupation_healthcare}
+    Checkbox Should Not Be Selected    ${occupation_checkbox}\[@value='Healthcare Worker (HCW)']
+    Verify Hub Section      No
+
+Verify Hub Section
+    [Arguments]     ${yes_no}
+    IF    "${yes_no}" == "Yes"
+        Page Should Contain Element    ${healthcare_hub_section}
+        Page Should Contain Element    ${heathcare_facility_details_section}
+    ELSE
+        Page Should Not Contain    ${healthcare_hub_section}
+        Page Should Not Contain    ${heathcare_facility_details_section}
+    END
+
+Verify Congregate Section
+    [Arguments]     ${yes_no}
+    IF    "${yes_no}" == "Yes"
+        Page Should Contain Element    ${congregate_setting_hub_section}
+    ELSE
+        Page Should Not Contain    ${congregate_setting_hub_section}
+    END
+
+Verify Cluster Hub Section
+    [Arguments]     ${yes_no}
+    IF    "${yes_no}" == "Yes"
+        Page Should Contain Element    ${clusters_hub_section}
+    ELSE
+        Page Should Not Contain    ${clusters_hub_section}
+    END
+
+Verify CSS Hub Section
+    [Arguments]     ${yes_no}
+    IF    "${yes_no}" == "Yes"
+        Page Should Contain Element    ${css_section}
+    ELSE
+        Page Should Not Contain    ${css_section}
+    END
+
+Verify Student Hub Section
+    [Arguments]     ${yes_no}
+    IF    "${yes_no}" == "Yes"
+        Page Should Contain Element    ${student_hub_section}
+        Page Should Contain Element    ${student_details_section}
+    ELSE
+        Page Should Not Contain    ${student_hub_section}
+        Page Should Not Contain    ${student_details_section}
+    END
+
+
+Validate Living Situation Congregate
+    Scroll Element Into View    ${living_situation_section}
+    FOR    ${option}    IN    @{living_situation_option}
+            JS Click    ${living_situation_selection}\[contains(text(),${option})]
+            Sleep    3s
+            Verify Congregate Section      Yes
+    END
+    JS Click    ${living_situation_selection}\[.='Other']
+    Sleep    3s
+    Verify Congregate Section      No
+
+Validate Living Situation Healthcare Hub
+    Scroll Element Into View    ${living_situation_section}
+    FOR    ${option}    IN    @{living_option_health}
+            JS Click    ${living_situation_selection}\[contains(text(),${option})]
+            Sleep    3s
+            Verify Hub Section      Yes
+    END
+    JS Click    ${living_situation_selection}\[.='Other']
+    Sleep    3s
+    Verify Hub Section      No
+
+
+Validate Workplace Setting Type Healthcare Hub
+    Scroll Element Into View    ${workplace_setting_type_section}
+    FOR    ${option}    IN    @{workplace_option_health}
+            JS Click    ${workplace_setting_type_selection}\[contains(text(),${option})]
+            Sleep    3s
+            Verify Hub Section      Yes
+    END
+
+Validate Workplace Setting Type School Hub
+    Scroll Element Into View    ${workplace_setting_type_section}
+    FOR    ${option}    IN    @{workplace_option_student}
+            JS Click    ${workplace_setting_type_selection}\[contains(text(),${option})]
+            Sleep    3s
+            Verify Student Hub Section    Yes
+    END
+
+Verify School Details present in Hub section
+    [Arguments]    ${name}      ${address}       ${phone}     ${date}
+    ${name}     String.Strip String    ${name}
+    ${address}     String.Strip String    ${address}
+    ${phone}     String.Strip String    ${phone}
+    Page Should Contain Element    //li[contains(text(),'School Name: ${name}')]
+    Page Should Contain Element    //li[contains(text(),'School Address: ${address}')]
+    Page Should Contain Element    //li[contains(text(),'School Phone Number: ${phone}')]
+    Page Should Contain Element    //li[contains(text(),'Last date at this location: ${date}')]
+    Page Should Contain Element    //li[contains(text(),'Case is a: Student')]

@@ -17,7 +17,7 @@ ${success_message}    //p[text()='Form successfully saved!']
 *** Keywords ***
 
 Generate Random Patient Name
-    ${hex} =    Generate Random String	4	[NUMBERS]abcdef
+    ${hex} =    Generate Random String	5	[NUMBERS]abcdef
     ${name_random} =     Catenate	SEPARATOR=-	Patient	${hex}
     Set Suite Variable  ${name_random}
 
