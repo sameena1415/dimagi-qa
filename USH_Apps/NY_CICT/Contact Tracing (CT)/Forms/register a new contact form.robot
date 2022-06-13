@@ -6,12 +6,13 @@ Resource    ../Menu/menu.robot
 Resource    ../../Base/base.robot
 
 
-*** Keywords ***  
+*** Keywords ***
 
 Generate Random Contact Name
-    ${hex} =    Generate Random String	4	[NUMBERS]abcdef
-    ${name_random} =     Catenate	SEPARATOR=-	Contact	${hex}
-    Set Suite Variable  ${name_random}
+    ${hex} =    Generate Random String	6	[NUMBERS]abcdef
+    ${contact_name_random} =     Catenate	SEPARATOR=-	Contact	${hex}
+    Set Suite Variable  ${contact_name_random}
+    [Return]    ${contact_name_random}
 
    
 Register contact with phone number
@@ -61,7 +62,7 @@ Phone No Not Matching
     JS Click    ${phone_no_not_matching}
 
 Get Contact Name
-    ${name_random}    Get Variable Value    ${name_random}
+    ${name_random}    Get Variable Value    ${contact_name_random}
 #    ${name_random}     Set Variable     Contact-3bba
     Log         ${name_random}
     [Return]    ${name_random}
@@ -69,7 +70,6 @@ Get Contact Name
 Set Contact Name
     ${name_random}  Get Contact Name
     ${contact_created}  Set Variable    //tr[.//td[text()='${name_random}']]
-#    ${contact_created}  Set Variable    //tr[.//td[text()='${name_random}']  and @class='module-case-list-column']
     Log    ${contact_created}
     Set Suite Variable   ${contact_created}
     [Return]    ${contact_created} 

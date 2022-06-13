@@ -5,7 +5,7 @@ Resource    ../../Base/base.robot
 *** Variables ***
 ${Convert Contact to a Suspected Case PUI Form}    //tr[@aria-label='Convert Contact to a Suspected Case (PUI)']
 
-*** Keywords *** 
+*** Keywords ***
      
 Open Convert Contact to a Suspected Case (PUI) Form
     Sleep    2s

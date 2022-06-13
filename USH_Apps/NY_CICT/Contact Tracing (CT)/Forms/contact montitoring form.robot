@@ -12,25 +12,19 @@ ${Address}     South Side River Bourgeois Road, Subdivision A, Nova Scotia B0E 2
 ${Fisrt address}    //li[contains(.,'South Side')]
 
 ${Q:County of residence}    (//*[contains(text(),'County')])[1]/following::span[@title='Please choose an item'][1]
-
 ${A:County of residence}    //label[.//*[contains(text(),'County')]]/following-sibling::div//select
-#//*[contains(text(),'County')][1]/following::ul[@role='listbox']/li[1]
 ${Country success}    (//*[contains(text(),'County')])[1]/following::i[@class="fa fa-check text-success"][1]
 
 ${Q:State}    //span[text()='State']/following::span[@title='Please choose an item'][1]
 ${A:State}    //label[.//span[.='State']]/following-sibling::div//select
-#//*[contains(text(),'State')][1]/following::ul[@role='listbox']/li[1]
+${State_Value}    (//span[text()='State']/following::span//following::span[1])[2]
 ${State success}    //span[text()='State']/following::i[@class="fa fa-check text-success"][1]
 
 ${Q:Zipcode_error}     (//label[.//*[contains(text(),'Zip Code')]]/following-sibling::div//textarea[contains(@data-bind,'value: $data.rawAnswer')])[1]
-${Q:Zipcode_normal}     (//label[.//*[contains(text(),'Zip Code')]]/following-sibling::div//textarea)[1]
+${Q:Zipcode_normal}     (//label[.//*[contains(text(),'Zip')]]/following-sibling::div//textarea)[1]
 ${Zipcode success}    (//label[.//*[contains(text(),'Zip Code')]]/following-sibling::div//i[@class="fa fa-check text-success"])[1]
 ${Zipcode failure}    (//label[.//*[contains(text(),'Zip Code')]]/following-sibling::div//i[@class="fa fa-warning text-danger clickable"])[1]
 
-#${Q:Zipcode_error}     (//span[contains(text(), 'Zip Code')])[1]/following::div[1]/div[@class='widget has-error']/descendant::textarea
-#${Q:Zipcode_normal}     (//span[contains(text(), 'Zip Code')])[1]/following::div[1]/div[@class='widget']/descendant::textarea
-#${Zipcode success}    (//span[contains(text(), 'Zip Code')])[1]/following::i[@class="fa fa-check text-success"][1]
-#${Zipcode failure}    (//span[contains(text(), 'Zip Code')])[1]/following::i[@class="fa fa-warning text-danger clickable"][1]
 ${Q:Transer Patient A:No}  //p[contains(.,'No, do not transfer')]
 ${Q:Convert Contact A:Yes}  //p[contains(.,'Yes, convert contact/traveler to PUI')]
 
@@ -48,7 +42,16 @@ ${Q: Initial interview complete A: No}    //p[contains(.,'No, partial interview 
 ${View/Update the rest of the Contact's info}    //label[contains(.,'View/Update')]
 ${Q:Initial interview disposition A: Refused}    //p[contains(.,'Reached person, refused to participate')]
 
-*** Keywords *** 
+
+${Street}   (//label[.//*[contains(text(),'Street')]]/following-sibling::div//textarea)[1]
+${City}   (//label[.//*[contains(text(),'City')]]/following-sibling::div//textarea)[1]
+${Street_input}     test street
+${City_input}     test city
+${Zip_input}     11111
+${permanent_address}    //p[contains(text(),'permanent address')]/following-sibling::p
+
+
+*** Keywords ***
 
 Open Contact Monitoring Form
     Click Element    ${contact_monitoring_form}
@@ -105,7 +108,31 @@ Add Address
    
    # Do not Transfer
    JS Click    ${Q:Transer Patient A: No}
-   
+
+Change Address
+   Input Text    ${Street}    ${Street_input}
+   Input Text    ${City}    ${City_input}
+   Scroll Element Into View    ${Q:Zipcode_normal}
+   Input Text    ${Q:Zipcode_normal}    ${Zip_input}
+   # State
+   Scroll Element Into View     ${A:State}
+   Select From List By Index    ${A:State}  ${37}
+
+
+Verify Address
+    [Arguments]     ${address}=${EMPTY}
+    ${permanent_address}    Get Text    ${permanent_address}
+    IF  "${address}"!="${EMPTY}"
+        Should Contain  ${permanent_address}  ${Street_input}
+        Should Contain  ${permanent_address}  ${City_input}
+        Should Contain  ${permanent_address}  ${Zip_input}
+        Should Contain  ${permanent_address}  NY
+    ELSE
+        Should Not Contain  ${permanent_address}  ${Street_input}
+        Should Not Contain  ${permanent_address}  ${City_input}
+        Should Not Contain  ${permanent_address}  ${Zip_input}
+    END
+
 Reached and Agreed to Call (CM)   
    JS Click    ${Q:Interview Disposition A:Reached person, agreed to call}
    JS Click    ${Q:Gender A:Female}

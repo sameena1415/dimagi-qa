@@ -10,7 +10,7 @@ Resource    ../Case Investigation (CI)/Forms/close the patient record form.robot
 Resource    ../Contact Tracing (CT)/Forms/close the contact record form.robot
 Resource    ../Contact Tracing (CT)/Forms/register a new contact form.robot
 Suite Teardown  Close Browser
-       
+
 *** Test Cases ***
 
 Reopen_Case_and_Contact_1

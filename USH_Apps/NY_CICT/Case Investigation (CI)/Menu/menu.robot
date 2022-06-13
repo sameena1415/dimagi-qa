@@ -28,7 +28,7 @@ ${Hub: Community Support Specialist Cases}     (//div[@aria-label='Hub: Communit
     
 Open All Cases
     Open App Home Screen
-    Sleep    2s
+    Sleep    3s
     Wait Until Element Is Enabled    ${All Cases} 
     JS Click    ${All Cases}
 

@@ -4,7 +4,7 @@ Resource    ../../Base/base.robot
 Resource    change to pui status form.robot
 
 
-*** Keywords *** 
+*** Keywords ***
 
 Convert contact to PUI form
     Open All Contacts Unassigned & Open menu

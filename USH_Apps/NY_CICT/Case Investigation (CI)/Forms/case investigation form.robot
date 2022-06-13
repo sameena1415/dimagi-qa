@@ -35,9 +35,8 @@ ${A:State}    //label[.//*[.='State']]/following-sibling::div//select
 ${State success}    //span[text()='State']/following::i[@class="fa fa-check text-success"][1]
 
 ${Q:Zipcode_error}     //label[.//span[text()='Zip Code']]/following-sibling::div//textarea[contains(@data-bind,'value: $data.rawAnswer')]
-${Q:Zipcode_normal}     //label[.//span[text()='Zip Code']]/following-sibling::div//textarea
+${Q:Zipcode_normal}     //label[.//span[contains(text(),'Zip Code')]]/following-sibling::div//textarea
 ${Zipcode success}    //label[.//span[text()='Zip Code']]/following-sibling::div//i[@class="fa fa-check text-success"]
-${Zipcode failure}    //label[.//span[text()='Zip Code']]/following-sibling::div//i[@class="fa fa-warning text-danger clickable"]
 
 ${Q:Transer Patient A: No}    //p[contains(.,'No, do not transfer')]
 
@@ -55,17 +54,18 @@ ${Q: Willing to receive survey via SMS}       //label//span[contains(.,'willing 
 ${Q: Willing to receive survey via SMS A: No}       //label//span[contains(.,'willing to receive a daily survey via SMS?')]//following::p[text()='No']
 ${Q:Gender A:Female}    //p[text()='Female']
 ${Q:Race A:Asian}    //p[text()='Asian']
-${Q:Ethnicity A:Hispanic/Latino}    //p[text()='Hispanic/Latino']
+${Q:Ethnicity A:Non-Hispanic/Latino}    //p[contains(text(),'-Hispanic')]
 
 ${Submit Form}     //button[@type='submit' and @class='submit btn btn-primary']
 ${Success Message}    //p[text()='Form successfully saved!']
+
 @{living_situation_option}      'Group Home for'    'Other Adult Group'     'All Shelters'      'Jails'       'Temporary'
 @{living_option_health}      'Long-term Care Facility'    'Post Acute Care'     'Care Inpatient'
 @{workplace_option_health}      'Healthcare facility'    'Long-term care'     'Other care'
 @{workplace_option_student}     'Daycare'      'College'
 
 
-*** Keywords *** 
+*** Keywords ***
     
 Open Case Investigation Form
     Sleep    2s
@@ -73,13 +73,14 @@ Open Case Investigation Form
     JS Click    ${Case Investigation Form} 
     
 Fill up and Submit Case Investigation Form
-   Open Case Investigation Form
+   Run Keyword And Ignore Error     Open Case Investigation Form
    Wait Until Element Is Enabled    ${Q:Case Interview Disposition A:Reached person, agreed to call}    
    JS Click    ${Q: Case Interview Disposition A:Reached person, agreed to call}
    Add User Details
    ${Yesterday's date}    Yesterday's Date
-   Input Text    ${Q:Date Tested}    ${Yesterday's date}
-   Add Address
+   Input Text      ${Q:Date Tested}    ${Yesterday's date}
+   Press Keys      ${Q:Date Tested}    ESC
+   case investigation form.Add Address
    Submit Form and Check Success
    
 Simple Form Fill up
@@ -92,6 +93,7 @@ Simple Form Fill up
 Add Address
    # Select Address
    Run Keyword And Ignore Error    Input Text    ${Q:Search For Address}   ${Address}
+   Sleep    5s
    Press Keys   ${Q:Search For Address}     ENTER   TAB
 #   Click Element    ${Fisrt address}
    Sleep    15s
@@ -101,7 +103,7 @@ Add Address
    # Zipcode
 #   Execute JavaScript    window.document.evaluate(${Q:Zipcode_normal}, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue.scrollIntoView(true);
    Scroll Element Into View    ${Q:Zipcode_error}
-#   Wait Until Element Is Visible    ${Zipcode failure}    80s
+   Execute Javascript       window.scrollBy(0,80)
    Wait Until Element Is Enabled   ${Q:Zipcode_error}     60s
    Clear Element Text    ${Q:Zipcode_error}
    Press Keys    ${Q:Zipcode_normal}   12345    TAB
@@ -117,14 +119,21 @@ Transfer Patient - No
    Wait Until Element Is Enabled    ${Q:Transer Patient A: No} 
    Scroll Element Into View    ${Q:Transer Patient A: No}     
    JS Click    ${Q:Transer Patient A: No}
-   
+   Sleep    5s
+
 Add User Details
    JS Click    ${Q:Preferred Language A:English}
    ${Mobile number}    Generate Mobile Number
    Input Text       ${Q:Home/Cell Phone}     ${Mobile number}
-   JS Click    ${Q:Gender A:Female}
    JS Click    ${Q:Race A:Asian}
-   JS Click    ${Q:Ethnicity A:Hispanic/Latino} 
+   Sleep    2s
+   JS Click    ${Q:Ethnicity A:Non-Hispanic/Latino}
+   Sleep    2s
+   JS Click    ${Q:Gender A:Female}
+   Sleep    2s
+
+
+
     
 
 Unable to reach

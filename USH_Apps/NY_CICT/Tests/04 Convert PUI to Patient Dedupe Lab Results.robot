@@ -10,12 +10,12 @@ Resource    ../Contact Tracing (CT)/Forms/register a new contact form.robot
 Resource    ../Case Investigation (CI)/Menu/menu.robot
 Resource    ../Case Investigation (CI)/Forms/register a new case form.robot
 Resource    ../Case Investigation (CI)/Forms/view record lab results.robot
-Resource    ../Case Investigation (CI)/Forms/register a new contacts without index form.robot
+Resource    ../Case Investigation (CI)/Forms/register new contacts form.robot
 Resource    ../Case Investigation (CI)/Forms/change pui status form.robot
 Resource    ../Case Investigation (CI)/Forms/search for duplicate patient.robot
 Resource    ../Case Investigation (CI)/Forms/case investigation form.robot
 Suite Teardown  Close Browser
-       
+
 *** Test Cases ***
 
 

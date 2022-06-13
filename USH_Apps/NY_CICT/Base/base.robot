@@ -6,7 +6,7 @@ Resource    ../Locators/locators.robot
 Resource     ../Case Investigation (CI)/Forms/register a new case form.robot
 Resource    ../Contact Tracing (CT)/Forms/register a new contact form.robot
 Library     driverpath.py
-Library    2FA.py
+Library    base_python_functions.py
 Library    Collections
 
 
@@ -34,7 +34,7 @@ HQ Login
     Maximize Browser Window
     Input Text    ${username}    ${email}
     Input Text    ${password}   ${pass}
-#    ${IsElementVisible}=  Run Keyword And Return Status    Element Should Be Visible   ${confirm_cookie}
+    ${IsElementVisible}=  Run Keyword And Return Status    Element Should Be Visible   ${confirm_cookie}
     Run Keyword And Ignore Error    wait until page contains element    ${confirm_cookie}   30
     ${IsElementVisible}=  Run Keyword And Return Status    Element Should Be Visible   ${confirm_cookie}
     Run Keyword If     ${IsElementVisible}    Click Element  ${confirm_cookie}
@@ -144,6 +144,10 @@ Past Date Generator
    ${date}     Get Current Date    result_format=%m/%d/%Y    increment=-${n} day
    [Return]   ${date}
 
+Today's Date
+   ${date}     Get Current Date    result_format=%m/%d/%Y
+   [Return]   ${date}
+
 
 Select Dropdown
    [Arguments]    ${question}    ${answer}
@@ -237,11 +241,12 @@ Case Search
     Wait Until Element Is Enabled    ${search all cases in the list}
     JS Click    ${search all cases in the list}
     Sleep    5s
-    Wait Until Element Is Visible    ${first-name_case_search}
-    Input Text    ${first-name_case_search}    ${case_or_contact_created} 
-    Input Text    ${last-name_case_search}    ${case_or_contact_created} 
+    Wait Until Element Is Enabled    ${first-name_case_search}
+    Wait Until Keyword Succeeds  3x  500ms  Input Text    ${first-name_case_search}    ${case_or_contact_created}
+    Wait Until Keyword Succeeds  3x  500ms  Input Text    ${last-name_case_search}    ${case_or_contact_created}
     Wait Until Element Is Enabled    ${case search submit}
-    JS Click    ${case search submit}
+    Wait Until Keyword Succeeds  3x  500ms  JS Click    ${case search submit}
+
 
 
 

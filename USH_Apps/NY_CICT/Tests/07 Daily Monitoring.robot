@@ -1,5 +1,5 @@
 *** Settings ***
-Documentation     Workflow to test Patient Good Path
+Documentation     Testing the workflow to conduct daily monitoring of eligible cases and contacts.
 Suite Setup    HQ Login
 Library  SeleniumLibrary
 Resource    ../Case Investigation (CI)/Menu/menu.robot

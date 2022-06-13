@@ -21,7 +21,7 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install -r requirements.txt
+        pip install -r USH_Apps/NY_CICT/requirements.txt
         sudo apt-get install xvfb
 
     # - name: Execute tests

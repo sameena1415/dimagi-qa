@@ -8,7 +8,7 @@ Resource    ../Contact Tracing (CT)/Forms/contact montitoring form.robot
 Resource    ../Contact Tracing (CT)/Forms/convert contact to suspected case (PUI) form.robot  
 Resource    ../Contact Tracing (CT)/Forms/register a new contact form.robot
 Suite Teardown  Close Browser
-       
+
 *** Test Cases ***
 
 
