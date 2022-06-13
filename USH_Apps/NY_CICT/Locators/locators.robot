@@ -29,11 +29,11 @@ ${select_first case_in_caselist}    //tbody[@class='wrapper js-case-container']/
 ${continue}    id:select-case
 ${register_new_contacts_form}    //h3[.='Register New Contact(s)']
 #//tr[@aria-label="Register New Contact(s)"]
-${contact_first_name}     xpath://span[text()='First name']/following::div[1]/div[@class='widget']/descendant::textarea
-${contact_last_name}     xpath://span[text()='Last name']/following::div[1]/div[@class='widget']/descendant::textarea
+${contact_first_name}     (//span[text()='First name']/following::div[1]/div[@class='widget']/descendant::textarea)
+${contact_last_name}     (//span[text()='Last name']/following::div[1]/div[@class='widget']/descendant::textarea)
 ${contact_phone_num}    xpath://span[text()='Phone number:']/following::div[1]/div[@class='widget']/descendant::input
-${preferred_language}    //p[text()='English']
-${last_contact_date}    //span[contains(text(),'When was the last day ')]/following::div[1]//input[@type='text']
+${preferred_language}    (//p[text()='English'])
+${last_contact_date}    (//span[contains(text(),'When was the last day ')]/following::div[1]//input[@type='text'])
 ${submit_form}     //button[@type='submit' and @class='submit btn btn-primary']
 ${success_message}    //p[text()='Form successfully saved!']
 ${phone_no_not_matching}    //label[.//*[contains(text(),'phone number the same as the case')]]/following-sibling::div//*[.='No']

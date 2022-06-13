@@ -34,7 +34,7 @@ ${A:State}    //label[.//*[.='State']]/following-sibling::div//select
 ${State success}    //span[text()='State']/following::i[@class="fa fa-check text-success"][1]
 
 ${Q:Zipcode_error}     //label[.//span[text()='Zip Code']]/following-sibling::div//textarea[contains(@data-bind,'value: $data.rawAnswer')]
-${Q:Zipcode_normal}     //label[.//span[text()='Zip Code']]/following-sibling::div//textarea
+${Q:Zipcode_normal}     //label[.//span[contains(text(),'Zip Code')]]/following-sibling::div//textarea
 ${Zipcode success}    //label[.//span[text()='Zip Code']]/following-sibling::div//i[@class="fa fa-check text-success"]
 
 ${Q:Transer Patient A: No}    //p[contains(.,'No, do not transfer')]
@@ -75,7 +75,7 @@ Fill up and Submit Case Investigation Form
    ${Yesterday's date}    Yesterday's Date
    Input Text      ${Q:Date Tested}    ${Yesterday's date}
    Press Keys      ${Q:Date Tested}    ESC
-   Add Address
+   case investigation form.Add Address
    Submit Form and Check Success
    
 Add Address
