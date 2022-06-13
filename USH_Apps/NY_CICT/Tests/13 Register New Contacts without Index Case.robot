@@ -1,6 +1,6 @@
 *** Settings ***
 Library    Collections
-Documentation     Workflow to test Register New Contacts
+Documentation     Testing workflow to create contacts that have no confirmed exposures or index patient cases in the system.
 Suite Setup    HQ Login
 Library  SeleniumLibrary
 Resource    ../Case Investigation (CI)/Menu/menu.robot

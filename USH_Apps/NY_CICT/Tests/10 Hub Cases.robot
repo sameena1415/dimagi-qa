@@ -1,5 +1,5 @@
 *** Settings ***
-Documentation     Workflow to test Patient Good Path
+Documentation     Workflow to test Hub criteria and display in queues
 Suite Setup    HQ Login
 Library  SeleniumLibrary
 Resource    ../Case Investigation (CI)/Menu/menu.robot

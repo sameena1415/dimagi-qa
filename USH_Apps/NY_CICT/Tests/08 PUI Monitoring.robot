@@ -1,5 +1,5 @@
 *** Settings ***
-Documentation     Workflow to test Patient Good Path
+Documentation     Testing the workflow to deduplicate a suspected case (PUI) record against a confirmed case record with one attached lab results and one attached contact
 Suite Setup    HQ Login
 Library  SeleniumLibrary
 Resource    ../Contact Tracing (CT)/Menu/menu.robot

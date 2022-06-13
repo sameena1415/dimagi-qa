@@ -1,5 +1,5 @@
 *** Settings ***
-Documentation     Workflow to test Patient Good Path
+Documentation     Testing workflow to create new clusters and assign cases/contacts to those clusters.
 Suite Setup    HQ Login
 Library  SeleniumLibrary
 Resource    ../Case Investigation (CI)/Menu/menu.robot
