@@ -40,15 +40,16 @@ Register New Case
     END
     Submit Form and Check Success
   [Return]  {mpi_id}
-    
+
 Get Case Name
     ${name_random}    Get Variable Value    ${name_random}
-   # ${name_random}     Set Variable     Patient-7acb
+#    ${name_random}     Set Variable     Patient-bf57
     Log    ${name_random}
     [Return]    ${name_random}
 
 Set Case Name
     ${name_random}  Get Case Name
+#    ${case_created}   Set Variable    //tr[.//td[text()='${name_random}' and @class='module-case-list-column']]
     ${case_created}   Set Variable    //tr[.//td[text()='${name_random}']]
     Log    ${case_created}
     Set Suite Variable    ${case_created}

@@ -76,6 +76,8 @@ Go Back Home and Sync App
     Click Element    ${sync}
     Sleep    5s
     Wait Until Element Is Visible    ${sync success}
+    Sleep    5s
+    Run Keyword And Ignore Error    Click Element    ${select_app}
 
 
 Log in as ci_user
@@ -174,8 +176,9 @@ Answer Input Text
    
 Search in the case list   
     [Arguments]    ${case_or_contact_created}
-    Input Text    ${search_case}    ${case_or_contact_created} 
-    Click Element    ${search_button}       
+    Input Text    ${search_case}    ${case_or_contact_created}
+    Sleep    2s
+    Click Element    ${search_button}
     
 
 Select Created Case
@@ -188,6 +191,13 @@ Select Created Case
     Sleep    2s 
     Scroll Element Into View    ${continue}
     Click Element    ${continue} 
+
+Select Cluster
+    [Arguments]    ${case_or_contact_created}
+    Wait Until Element Is Enabled    //tr[.//td[text()='${case_or_contact_created}']]
+    Sleep    2s
+    JS Click    //tr[.//td[text()='${case_or_contact_created}']]
+
 
 
 Select Created Case with no lab result
