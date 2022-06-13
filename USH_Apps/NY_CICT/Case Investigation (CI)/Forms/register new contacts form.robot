@@ -6,58 +6,6 @@ Resource    ../../Base/base.robot
 Resource    ../Menu/menu.robot
 Resource    ../../Contact Tracing (CT)/Forms/contact montitoring form.robot
 
-*** Variables ***
-
-## Register New Contact(s) Form
-
-${how_many_new_contacts}     //span[contains(text(),'contacts do you want to record?')]/following::div[1]/div[@class='widget']/descendant::input
-${close_contacts_header}    //h1[text()='Close Contacts']
-
-${type_of_contact_household}      //p[contains(text(),'Household')]
-${type_of_contact_international_traveller}      //p[contains(text(),'International Travel')]
-${arrival_date_in_us}   (//span[contains(text(),'Arrival date')]/following::div[1]//input[@type='text'])
-${calendar_close}   //a[@data-action='close']
-${type_of_contact_visitor_traveling}    //p[contains(text(),'visitor traveling from a')]
-${Date_last_impacted_states}   (//span[contains(text(),' impacted states')]/following::div[1]//input[@type='text'])
-${state_traveled_from}  //span[text()='State traveled from']/following::span[@title='Please choose an item'][1]
-${state_traveled_from_select}   //label[.//*[contains(.,'State travel')]]/following-sibling::div//select
-${transportation_airline}   //span[contains(text(), 'transportation')]/following::input[@value='Airline']
-${airline}  (//span[text()='Airline']/following::div[1]/div[@class='widget']/descendant::textarea)
-${date_of_flight}    (//span[contains(text(),' flight')]/following::div[1]//input[@type='text'])
-${type_of_contact_ooj_case}      //p[contains(text(),'OOJ case')]
-
-${contact_details_contact_type}  (//strong[contains(text(),'Type of Contact')]//ancestor::li)
-${contact_details_exposure date}  (//strong[contains(text(),'Travel Date')]//ancestor::li)
-
-${contact_id}   (//strong[contains(text(),'Contact ID')]//ancestor::p)
-${contact_id_without_index}   (//h2[contains(text(),'ID')])
-${contact_first_name}     (//span[text()='First name']/following::div[1]/div[@class='widget']/descendant::textarea)
-${contact_last_name}     (//span[text()='Last name']/following::div[1]/div[@class='widget']/descendant::textarea)
-${contact_phone_num}    (//span[text()='Phone number:']/following::div[1]/div[@class='widget']/descendant::input)
-${preferred_language}    (//p[text()='English'])
-${last_contact_date}    (//span[contains(text(),'When was the last day ')]/following::div[1]//input[@type='text'])
-${email_id}  (//span[contains(text(),'mail')]/following::div[1]/div[@class='widget']/descendant::textarea)
-${address_same_yes}     (//p[contains(text(), 'address the same as the case')]/following::p[text()='Yes'][1])
-${address_same_no}     (//p[contains(text(), 'address the same as the case')]/following::p[text()='No'][1])
-${address_value}     (//p[contains(text(), 'address the same as the case')]/following::strong[1])
-${number_same}     (//p[contains(text(), 'number the same as the case')]/following::p[text()='No'][1])
-${add_note}    (//span[text()='Add a note']/following::div[1]/div[@class='widget']/descendant::textarea)
-${symptomatic_yes}     (//span[contains(text(), 'Symptomatic')]/following::p[text()='Yes'][1])
-
-${submit_form}     //button[@type='submit' and @class='submit btn btn-primary']
-${success_message}    //p[text()='Form successfully saved!']
-
-${already_registered_label}      (//h1[contains(text(), 'Already Registered Contacts')])
-${already_registered_contact_name}       (//h1[contains(text(), 'Already Registered Contacts')]/following::strong[contains(text(),'Contact Name')]//ancestor::p[1])
-${already_registered_most_recent_note}       (//h1[contains(text(), 'Already Registered Contacts')]/following::strong[contains(text(),'Recent Note')]//following::p[1])
-######
-
-${contact_info_contact_name}       (//h1[contains(text(), 'Contact Info')]/following::strong[contains(text(),'Name')]//ancestor::li[1])[1]
-${contact_info_email}       (//h1[contains(text(), 'Contact Info')]/following::strong[contains(text(),'Email')]//ancestor::li[1])[1]
-${contact_info_language}       (//h1[contains(text(), 'Contact Info')]/following::strong[contains(text(),'Language')]//ancestor::li[1])[1]
-${contact_info_last_exposure}       (//h1[contains(text(), 'Contact Info')]/following::strong[contains(text(),'Last Exposure')]//ancestor::li[1])[1]
-${contact_info_phone_num}       (//h1[contains(text(), 'Contact Info')]/following::strong[contains(text(),'Phone Number')]//ancestor::li[1])[1]
-
 
 *** Keywords ***
 
