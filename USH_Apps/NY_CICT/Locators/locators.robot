@@ -263,6 +263,7 @@ ${specimen_date_of_first_case}      //span[contains(text(),'Specimen Collection 
 
 ${last_date_of_contact_with_confirmed_case}        //label[.//*[text()='Last date of contact with the confirmed case:']]//following-sibling::div//input
 ${contact_part_of_cluster_yes}       //label[.//*[.='Is this contact/traveler part of an Cluster?']]/following-sibling::div//p[.='Yes']
+${contact_part_of_cluster_no}       //label[.//*[.='Is this contact/traveler part of an Cluster?']]/following-sibling::div//p[.='No']
 ${close_cluster_section}        //*[.='Close Cluster']
 ${close_cluster_yes}        //label[.//*[.='Do you want to close the cluster?']]/following-sibling::div//p[.='Yes']
 ${cluster_closure_reason}       //label[.//*[.='Select the reason for closing the cluster:']]/following-sibling::div//p[.='Outbreak ended']
@@ -279,10 +280,13 @@ ${occupation_school}        //label[.//*[.='Occupation']]/following-sibling::div
 ${healthcare_hub_section}       //span[.='Health Care Hub']
 ${heathcare_facility_details_section}       //span[.='Healthcare Facility Details']
 ${living_situation_section}     //span[.='Living Situation']
+${contact_living_situation}     //label[.//*[.='How would they describe their living situation?']]/following-sibling::div//p
 ${living_situation_selection}       //label[.//*[.='How would you describe their living situation?']]/following-sibling::div//p
 ${living_situation_unsheltered}     //label[.//*[.='How would you describe their living situation?']]/following-sibling::div//p[contains(text(),'Unsheltered')]
 ${living_situation_student}     //label[.//*[.='How would you describe their living situation?']]/following-sibling::div//p[contains(text(),'Student Housing')]
+${contact_living_situation_student}     //label[.//*[.='How would they describe their living situation?']]/following-sibling::div//p[contains(text(),'Student Housing')]
 ${living_situation_clear}     //label[.//*[.='How would you describe their living situation?']]/following-sibling::div//button
+${contact_living_situation_clear}     //label[.//*[.='How would they describe their living situation?']]/following-sibling::div//button
 ${are_you_able_to_isolate_yes}      //label[.//*[contains(text(),'Are you able to isolate yourself at home')]]/following-sibling::div//p[.='Yes']
 ${are_you_able_to_isolate_no}      //label[.//*[contains(text(),'Are you able to isolate yourself at home')]]/following-sibling::div//p[.='No']
 ${are_you_able_to_isolate_clear}      //label[.//*[contains(text(),'Are you able to isolate yourself at home')]]/following-sibling::div//button
@@ -299,17 +303,21 @@ ${exposures_section}       //span[.='Exposures']
 ${went_to_work}     //p[.='Went to work']
 ${correctional_worker}     //p[.='Correctional worker']
 ${visited_healthcare_facility}     //p[.='Visited a healthcare facility']
+${contact_attended_health_care}     //p[.='Health Care']
+${contact_attended_nursing}     //p[.='Nursing / assisted living home']
+${type_of_contact_clear}     //label[.//*[.='Type of Contact']]/following-sibling::div//button
 ${visited_long_term_care}     //p[.='Visited a long-term care or skilled nursing type of facility']
 ${visited_school}     //p[.='School / University / Childcare Center']
 ${adult_congregate_living_facility}     //p[.='Adult Congregate Living Facility']
 ${workplace_setting_type_section}       //label[.//span[.='Workplace Setting Type']]
 ${workplace_setting_type_selection}     //label[.//span[.='Workplace Setting Type']]/following-sibling::div//p
-${hub_task_force_followup}     //*[.='Hub/Task Force Followup']
+${hub_task_force_followup}     //*[contains(text(),'Hub/Task Force')]
 ${hub_status_selection}     //label[.//span[.='Hub Status']]/following-sibling::div//p
 ${congregate_hub_status_selection}      //fieldset//*[.='Congregate Settings Hub']/following::div//label[.//span[.='Hub Status']]/following-sibling::div//p
 ${cluster_hub_status_selection}     //label[.//span[.='Status']]/following-sibling::div//p
 ${did_you_visit_adult_congregate}      //div[.//*[.='Did you visit/attend a:']]/following-sibling::div//p[.='Adult Congregate Living Facility']
 ${did_you_visit_correctional}      //div[.//*[.='Did you visit/attend a:']]/following-sibling::div//p[.='Correctional Facility']
+${multi_family_dwelling}    //label[.//*[contains(text(),'Describe your contact with the known')]]/following-sibling::div//p[contains(text(),'Multi-family')]
 ${student_hub_section}      //*[.='School Hub']
 ${student_details_section}      //*[.='Childcare/School/College/Summer Camp Details']
 ${contact_with_covid_patient_yes}       //label[.//*[.='In the past 14 days, have you been in contact with a COVID-19 Case?']]/following-sibling::div//p[.='Yes']
@@ -318,13 +326,16 @@ ${type_of_school_prek}      //*[contains(text(),'Type of School')]/following::*[
 ${type_of_childcare}      //*[contains(text(),'Type of School')]/following::*[.='Childcare']
 ${type_of_college}      //*[contains(text(),'Type of School')]/following::p[contains(text(),'College')]
 ${is_case_a_school}        //fieldset[.//strong[contains(text(),'Info about PreK')]]/following-sibling::div//label[.//*[contains(text(),'Is case a')]]/following-sibling::div//p[.='Student']
+${is_contact_a_school}        //fieldset[.//strong[contains(text(),'Info about PreK')]]/following-sibling::div//label[.//*[contains(text(),'Is contact a')]]/following-sibling::div//p[.='Student']
 ${school_name}      //label[.//*[.='Name of school']]/following-sibling::div//select
 ${is_case_a_college}        //fieldset[.//strong[contains(text(),'Info about University')]]/following-sibling::div//label[.//*[contains(text(),'Is case a')]]/following-sibling::div//p[.='Student']
+${is_contact_a_college}        //fieldset[.//strong[contains(text(),'Info about University')]]/following-sibling::div//label[.//*[contains(text(),'Is contact a')]]/following-sibling::div//p[.='Student']
 ${college_name}      //label[.//*[.='Name of university/college']]/following-sibling::div//select
 ${last_date_at_location_school}      //fieldset[.//strong[contains(text(),'Info about PreK')]]/following-sibling::div//label[.//*[.='Last date at location']]/following-sibling::div//input
 ${last_date_at_location_college}      //fieldset[.//strong[contains(text(),'Info about University')]]/following-sibling::div//label[.//*[.='Last date at location']]/following-sibling::div//input
 ${school_hub_status_selection}     //label[.//span[contains(text(),'Status')]]/following-sibling::div//p
 ${is_case_a_childcare}        //fieldset[.//strong[contains(text(),'Info about Childcare')]]/following-sibling::div//label[.//*[contains(text(),'Is case a')]]/following-sibling::div//p[.='Student']
+${is_contact_a_childcare}        //fieldset[.//strong[contains(text(),'Info about Childcare')]]/following-sibling::div//label[.//*[contains(text(),'Is contact a')]]/following-sibling::div//p[.='Student']
 ${college_name}      //label[.//*[.='Name of university/college']]/following-sibling::div//select
 ${last_date_at_location_childcare}      //fieldset[.//strong[contains(text(),'Info about Childcare')]]/following-sibling::div//label[.//*[.='Last date at location']]/following-sibling::div//input
 ${childcare_name}       //label[.//*[.='Name of childcare center']]/following-sibling::div//textarea
@@ -338,4 +349,6 @@ ${school_other_phone_value}     //*[contains(text(),'The school phone number is 
 ${college_other_name}       //label[.//*[.='Name of university/college']]/following-sibling::div//textarea
 ${college_other_address}    //label[.//*[.='University/college address']]/following-sibling::div//textarea
 ${college_other_phone}      //label[.//*[.='University/college phone number']]/following-sibling::div//input
+${college_other_phone_value}    //*[contains(text(),'The university/college phone number is saved as')]/strong
+${college_other_name_contact}       //label[.//*[.='University/college Name']]/following-sibling::div//textarea
 ${college_other_phone_value}    //*[contains(text(),'The university/college phone number is saved as')]/strong

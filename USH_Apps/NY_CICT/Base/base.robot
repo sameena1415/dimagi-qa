@@ -144,8 +144,15 @@ Past Date Generator
    ${date}     Get Current Date    result_format=%m/%d/%Y    increment=-${n} day
    [Return]   ${date}
 
+<<<<<<< Updated upstream
 Today's Date
    ${date}     Get Current Date    result_format=%m/%d/%Y
+   [Return]   ${date}
+
+
+Future Date Generator
+   [Arguments]      ${n}
+   ${date}     Get Current Date    result_format=%m/%d/%Y    increment=${n} day
    [Return]   ${date}
 
 

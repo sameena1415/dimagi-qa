@@ -19,6 +19,12 @@ ${All Contacts: Assigned & Open}    (//div[@aria-label='All Contacts: Assigned &
 ${My Contacts: Require Follow-up}    (//div[@aria-label='My Contacts: Require Follow-up']/div)[1]
 ${All Contacts: Require Follow-up}    (//div[@aria-label='All Contacts: Require Follow-up']/div)[1]
 ${All Contacts}    (//div[@aria-label='All Contacts']/div)[1]    
+${Hub: Healthcare Contacts}    (//div[@aria-label='Hub: Healthcare (Contacts)']/div)[1]
+${Hub: Congregate Contacts}    (//div[@aria-label='Hub: Congregate Settings (Contacts)']/div)[1]
+${Hub: Clusters Contacts}    (//div[@aria-label='Hub: Clusters (Contacts)']/div)[1]
+${Hub: School Contacts}    (//div[@aria-label='Hub: School (Contacts)']/div)[1]
+
+
 
 *** Keywords ***
 
@@ -79,4 +85,27 @@ Open All Suspected Cases (PUIs) menu
     Sleep    2s
     JS Click    ${All Suspected Cases (PUIs)}
 
+Open Hub Healthcare Contacts
+    Open App Home Screen
+    Sleep    2s
+    Wait Until Element Is Enabled    ${Hub: Healthcare Contacts}
+    JS Click    ${Hub: Healthcare Contacts}
+
+Open Hub Congregate Settings Contacts
+    Open App Home Screen
+    Sleep    2s
+    Wait Until Element Is Enabled    ${Hub: Congregate Contacts}
+    JS Click    ${Hub: Congregate Contacts}
+
+Open Hub Clusters Contacts
+    Open App Home Screen
+    Sleep    2s
+    Wait Until Element Is Enabled    ${Hub: Clusters Contacts}
+    JS Click    ${Hub: Clusters Contacts}
+
+Open Hub School Contacts
+    Open App Home Screen
+    Sleep    2s
+    Wait Until Element Is Enabled    ${Hub: School Contacts}
+    JS Click    ${Hub: School Contacts}
 
