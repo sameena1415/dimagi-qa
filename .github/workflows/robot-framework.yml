@@ -35,6 +35,8 @@ jobs:
       env:
         DIMAGIQA_MAIL_USERNAME: ${{ secrets.DIMAGIQA_MAIL_USERNAME }}
         DIMAGIQA_MAIL_PASSWORD: ${{ secrets.DIMAGIQA_MAIL_PASSWORD }}
+        DIMAGIQA_RF_SECRETS:  ${{ secrets.DIMAGIQA_RF_SECRETS }}
+        DIMAGIQA_RF_PASSWORD:  ${{ secrets.DIMAGIQA_RF_PASSWORD }}
       run: |
         echo "NOW=$(date +'%m-%d %H:%M')" >> $GITHUB_ENV
         echo ${{env.NOW}}

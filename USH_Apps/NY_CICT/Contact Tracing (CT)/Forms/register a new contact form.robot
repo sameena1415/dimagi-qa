@@ -21,8 +21,8 @@ Register contact with phone number
    Run Keyword And Ignore Error     Wait Until Element Is Visible    ${register_new_contacts_form}
    Run Keyword And Ignore Error    JS Click    ${register_new_contacts_form}
    Generate Random Contact Name
-   ${name_random}    Get Variable Value    ${name_random}
-   Input Text       ${contact_first_name}    ${name_random} 
+   ${name_random}    Get Variable Value    ${contact_name_random}
+   Input Text       ${contact_first_name}    ${name_random}
    Input Text       ${contact_last_name}    ${name_random}
    Run Keyword And Ignore Error     Phone No not Matching
    ${Mobile number}    Generate Mobile Number
@@ -47,7 +47,7 @@ Register contact without phone number
    Run Keyword And Ignore Error     Wait Until Element Is Visible    ${register_new_contacts_form}
    Run Keyword And Ignore Error    JS Click    ${register_new_contacts_form}
    Generate Random Contact Name
-   ${name_random}    Get Variable Value    ${name_random}
+   ${name_random}    Get Variable Value    ${contact_name_random}
    Input Text       ${contact_first_name}    ${name_random} 
    Input Text       ${contact_last_name}    ${name_random}   
    JS Click    ${preferred_language}

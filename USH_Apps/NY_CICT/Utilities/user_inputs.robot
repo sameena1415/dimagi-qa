@@ -1,11 +1,11 @@
 *** Variables ***
 ${LOGIN URL}      https://www.commcarehq.org/a/${domain}/login/
 ${BROWSER}        Chrome
-${secret}    "6XIHCZXSXDXAD6Q5PZIJBT75GOBW7MNO"
+${secret}    "%{DIMAGIQA_RF_SECRETS}"
 #${domain}    ush-poc
 ${domain}    ny-staging-cdcms
 ${email}    ktripathy+ush@dimagi.com
-${pass}    Kiran@123
+${pass}    %{DIMAGIQA_RF_PASSWORD}
 ${implcit_wait_time}    20
 ${app name}    NY
 ${archieved_contact_name}     Dewey
