@@ -24,6 +24,24 @@ def test_case_07_edit_existing_location(driver):
     print("Location edited")
 
 
+def test_case_56_archive_location(driver):
+
+    menu = HomePage(driver)
+    menu.users_menu()
+    archive = OrganisationStructurePage(driver)
+    archive.archive_location()
+    print("Location is Successfully Archived")
+
+
+def test_case_57_unarchive_location(driver):
+
+    menu = HomePage(driver)
+    menu.users_menu()
+    unarchive = OrganisationStructurePage(driver)
+    unarchive.unarchive_location()
+    print("Location is successfully Unarchived")
+
+
 def test_case_08_edit_location_fields(driver):
 
     menu = HomePage(driver)
