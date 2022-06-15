@@ -26,7 +26,7 @@ class ExportDataPage(BasePage):
     def __init__(self, driver):
         super().__init__(driver)
 
-        self.date_having_submissions = "2022-01-18 to 2022-02-18"
+        self.date_having_submissions = "2022-01-18 to 2022-06-19"
         self.presentday = datetime.now()  # or presentday = datetime.today()
         # Get Yesterday
         self.yesterday = self.presentday - timedelta(1)
