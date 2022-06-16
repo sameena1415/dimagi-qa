@@ -59,8 +59,14 @@ Open All Cases: Incomplete Demographic Information Menu
 Open All Cases: Unassigned & Open
     Open App Home Screen
     Sleep    2s
-    Wait Until Element Is Enabled    ${All Cases: Unassigned & Open}
-    JS Click    ${All Cases: Unassigned & Open}    
+    TRY
+        Wait Until Element Is Enabled    ${All Cases: Unassigned & Open}
+        JS Click    ${All Cases: Unassigned & Open}
+    EXCEPT
+        Click Element    ${app_home}
+        Sleep    5s
+        JS Click    ${All Cases: Unassigned & Open}
+    END
 
 Open All Cases: Assigned & Open
     Open App Home Screen
@@ -79,7 +85,7 @@ Open Register New Contact without index
     Open App Home Screen
     Sleep    2s
     Wait Until Element Is Enabled    ${Register New Contact without index}
-    Click Element    ${Register New Contact without index}
+    JS Click    ${Register New Contact without index}
 
 Open Clusters PUIs, Cases, Contacts
     Open App Home Screen

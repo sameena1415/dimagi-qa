@@ -1,7 +1,7 @@
 *** Settings ***
 Library    Collections
 Documentation     Testing workflow to create contacts indexed to confirmed patient cases in the system.
-Suite Setup    HQ Login
+Suite Setup    Driver Launch
 Library  SeleniumLibrary
 Resource    ../Case Investigation (CI)/Menu/menu.robot
 Resource    ../Case Investigation (CI)/Forms/register a new case form.robot
@@ -15,6 +15,8 @@ Suite Teardown  Close Browser
 
 Register New Contact 1
     [Documentation]    register a single contact with a phone number and the case's address
+    Sleep   400s
+    HQ Login
     Log in as ci_user
     Register New Case
     Fill up and Submit Case Investigation Form

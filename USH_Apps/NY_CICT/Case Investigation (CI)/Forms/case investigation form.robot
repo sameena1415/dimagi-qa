@@ -5,66 +5,6 @@ Library    DateTime
 Resource    ../../Base/base.robot
 Resource    ../../Case Investigation (CI)/Forms/hub cases.robot
 
-
-*** Variables ***
-
-## Case Investigation Form ##
-
-${Case Investigation Form}    //tr[@aria-label='Case Investigation']
-
-${Q:Case Interview Disposition A:Reached person, agreed to call}    //p[text()='Reached person, agreed to call']
-${Q:Case Interview Disposition A:Attempted for two days and unable to reach}    //p[text()='Attempted for two days and unable to reach']
-
-${Q:Home/Cell Phone}    //span[text()='Home/Cell Phone']/following::div[1]/div[@class='widget']/descendant::input
-${Q:Date Tested}    //p[text()='What date did you get tested?']/following::div[1]/div[@class='widget']/descendant::input
-${Q:Preferred Language A:English}    //p[text()='English']
-
-${Q:Search For Address}    //span[text()='Search for Address']/following::div[1]/div[@class='widget']/descendant::input
-${Address}     South Side River Bourgeois Road, Subdivision A, Nova Scotia B0E 2X0, Canada
-${Fisrt address}    //li[contains(.,'South Side')]
-
-${Q:County of residence}    (//*[contains(text(),'County')])[1]/following::span[@title='Please choose an item'][1]
-
-${A:County of residence}    //label[.//*[contains(text(),'County')]]/following-sibling::div//select
-#//*[contains(text(),'County')][1]/following::ul[@role='listbox']/li[1]
-${Country success}    (//*[contains(text(),'County')])[1]/following::i[@class="fa fa-check text-success"][1]
-
-${Q:State}    //span[text()='State']/following::span[@title='Please choose an item'][1]
-${A:State}    //label[.//*[.='State']]/following-sibling::div//select
-#//*[contains(text(),'State')][1]/following::ul[@role='listbox']/li[1]
-${State success}    //span[text()='State']/following::i[@class="fa fa-check text-success"][1]
-
-${Q:Zipcode_error}     //label[.//span[text()='Zip Code']]/following-sibling::div//textarea[contains(@data-bind,'value: $data.rawAnswer')]
-${Q:Zipcode_normal}     //label[.//span[contains(text(),'Zip Code')]]/following-sibling::div//textarea
-${Zipcode success}    //label[.//span[text()='Zip Code']]/following-sibling::div//i[@class="fa fa-check text-success"]
-
-${Q:Transer Patient A: No}    //p[contains(.,'No, do not transfer')]
-
-${Q:Activity complete A: Yes}    //span[contains(.,'Is all activity for this case complete')]/following::p[text()='Yes']
-${Q:Activity complete A: No}    //span[contains(.,'Is all activity for this case complete')]/following::p[text()='No']
-${Q:Case Interview complete A: No}    //span[contains(.,'Is the case interview complete?')]/following::p[text()='No']
-${Q:Case Interview complete A: Yes}    //span[contains(.,'Is the case interview complete?')]/following::p[text()='Yes']
-${Clear Case Interview complete}     //label[.//span[contains(.,'Is the case interview complete?')]]/following-sibling::div//button
-${Q:Needs Daily Monitoring}    //label[.//span[contains(.,'Does the case need daily monitoring?')]]
-${Q:Needs Daily Monitoring A: No}    //label[.//span[contains(.,'Does the case need daily monitoring?')]]/following-sibling::div//p[text()='No']
-${Q:Needs Daily Monitoring A: Yes}    //label[.//span[contains(.,'Does the case need daily monitoring?')]]/following-sibling::div//label//input[@value='Yes']
-${Clear Daily monitoring selection}     //label[.//span[contains(.,'Does the case need daily monitoring?')]]/following-sibling::div//button
-${Q:Final Disposition A:Reached, completed investigation}    //p[text()='Reached, completed investigation']
-${Q: Willing to receive survey via SMS}       //label//span[contains(.,'willing to receive a daily survey via SMS?')]
-${Q: Willing to receive survey via SMS A: No}       //label//span[contains(.,'willing to receive a daily survey via SMS?')]//following::p[text()='No']
-${Q:Gender A:Female}    //p[text()='Female']
-${Q:Race A:Asian}    //p[text()='Asian']
-${Q:Ethnicity A:Non-Hispanic/Latino}    //p[contains(text(),'-Hispanic')]
-
-${Submit Form}     //button[@type='submit' and @class='submit btn btn-primary']
-${Success Message}    //p[text()='Form successfully saved!']
-
-@{living_situation_option}      'Group Home for'    'Other Adult Group'     'All Shelters'      'Jails'       'Temporary'
-@{living_option_health}      'Long-term Care Facility'    'Post Acute Care'     'Care Inpatient'
-@{workplace_option_health}      'Healthcare facility'    'Long-term care'     'Other care'
-@{workplace_option_student}     'Daycare'      'College'
-
-
 *** Keywords ***
     
 Open Case Investigation Form
@@ -80,7 +20,7 @@ Fill up and Submit Case Investigation Form
    ${Yesterday's date}    Yesterday's Date
    Input Text      ${Q:Date Tested}    ${Yesterday's date}
    Press Keys      ${Q:Date Tested}    ESC
-   case investigation form.Add Address
+   Add Address
    Submit Form and Check Success
    
 Simple Form Fill up
@@ -101,7 +41,6 @@ Add Address
    Select Dropdown   ${Q:County of residence}    ${A:County of residence}
 
    # Zipcode
-#   Execute JavaScript    window.document.evaluate(${Q:Zipcode_normal}, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue.scrollIntoView(true);
    Scroll Element Into View    ${Q:Zipcode_error}
    Execute Javascript       window.scrollBy(0,80)
    Wait Until Element Is Enabled   ${Q:Zipcode_error}     60s
@@ -273,7 +212,7 @@ Follow up attempt notes
 Add new follow up log
     [Arguments]     ${result}
     JS Click    ${add_new_follow_up_log}
-    Wait Until Element Is Visible    ${follow_up_attempt_${result}}
+    Wait Until Keyword Succeeds  2 min  5 sec   Wait Until Element Is Visible    ${follow_up_attempt_${result}}
     JS Click    ${follow_up_attempt_${result}}
 
 Add follow up unsuccess notes
@@ -497,7 +436,7 @@ Fill up PUI Category for Positive test
 
 
 Fill up PUI Category for Negative test
-    Wait Until Element Is Visible    ${pui_category}
+    Wait Until Keyword Succeeds  2 min  5 sec    Wait Until Element Is Visible    ${pui_category}
     JS Click    ${subjected_to_quarantine}
     JS Click    ${able_to_schedule_appointment}
     ${Yesterday's date}    Yesterday's Date
@@ -551,8 +490,8 @@ Add Cluster Information To Case
 Fill up Healthcare section
     Wait Until Element Is Visible    ${occupation_section}
     Scroll Element Into View    ${occupation_section}
-    Select Healthcare, verify Hub Section
-    Unselect Healthcare, verify Hub Section
+    case investigation form.Select Healthcare, verify Hub Section
+    case investigation form.Unselect Healthcare, verify Hub Section
     JS Click    ${went_to_work}
     Scroll Element Into View    ${workplace_setting_type_section}
     Validate Workplace Setting Type Healthcare Hub

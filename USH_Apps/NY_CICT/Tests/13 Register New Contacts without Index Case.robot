@@ -1,7 +1,7 @@
 *** Settings ***
 Library    Collections
 Documentation     Testing workflow to create contacts that have no confirmed exposures or index patient cases in the system.
-Suite Setup    HQ Login
+Suite Setup    Driver Launch
 Library  SeleniumLibrary
 Resource    ../Case Investigation (CI)/Menu/menu.robot
 Resource    ../Case Investigation (CI)/Forms/register a new case form.robot
@@ -15,15 +15,19 @@ Suite Teardown  Close Browser
 
 Register New Contact No Index 1
     [Documentation]   register a single contact with a phone number
+    Sleep   440s
+    HQ Login
     Log in as ci_user
     ${contact_names}     Generate Contact New Names     1
     ${phone}    Generate Mobile Number
     Register New Contacts for Case having address and phone number    1    generated_names=${contact_names}    phone=${phone}    contact_type=international_travel  without_index=yes
 
     Log in as ct_user
+    Sleep    60s
     Open All Contacts Unassigned & Open menu
     ${contact_created}  Search the contact created  ${contact_names}
     Element Should Be Visible    ${contact_created}
+
 
 Register New Contact No Index 2
     [Documentation]    register multiple contacts with phone numbers
@@ -60,6 +64,7 @@ Register New Contact No Index 4
     Register New Contacts for Case having address and phone number    1    generated_names=${contact_names}    phone=${phone}    contact_type=ooj_case   symptomatic=yes   without_index=yes
 
     Open All Contacts: Require Follow-Up
+    Sleep    60s
     ${contact_created}  Search the contact created  ${contact_names}
     Element Should Be Visible    ${contact_created}
 

@@ -1,6 +1,6 @@
 *** Settings ***
 Documentation     Testing the workflow to conduct daily monitoring of eligible cases and contacts.
-Suite Setup    HQ Login
+Suite Setup    Driver Launch
 Library  SeleniumLibrary
 Resource    ../Case Investigation (CI)/Menu/menu.robot
 Resource    ../Case Investigation (CI)/Forms/register a new case form.robot
@@ -13,6 +13,8 @@ Suite Teardown  Close Browser
 
 Daily_Monitoring_1
     [Documentation]    Daily monitoring not selected, then selected
+    Sleep   200s
+    HQ Login
     Log in as ci_user
     Register New Case
     ${case_interview}=  Set variable    Yes

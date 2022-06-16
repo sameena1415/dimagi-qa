@@ -9,29 +9,23 @@ Library     driverpath.py
 Library    base_python_functions.py
 Library    Collections
 
-
-*** Variables ***
-
-# Case Search
-${first-name_case_search}    xpath:(//td/div[contains(., "First Name")]/following::input)[1]
-${last-name_case_search}    xpath:(//td/div[contains(., "Last Name")]/following::input)[1]
-${search all cases in the list}    //button[contains(., 'Search All')]
-
 *** Keywords ***
     
-HQ Login
-    ${chromedriver_path}=   driverpath.Get Driver Path
+Driver Launch
+    ${chromedriver_path}=   Wait Until Keyword Succeeds  2 min  5 sec   driverpath.Get Driver Path
     ${chrome_options}=  Evaluate  sys.modules['selenium.webdriver'].ChromeOptions()  sys, selenium.webdriver
     Call Method    ${chrome_options}    add_argument    --disable-extensions
     Call Method    ${chrome_options}    add_argument    --headless
     Call Method    ${chrome_options}    add_argument    --start-maximized
     Call Method    ${chrome_options}    add_argument    --disable-dev-shm-usage
     Call Method    ${chrome_options}    add_argument    --no-sandbox
-    Open Browser    ${LOGIN URL}    ${BROWSER}      executable_path=${chromedriver_path}       options=${chrome_options}
+    Wait Until Keyword Succeeds  2 min  5 sec        Open Browser    ${LOGIN URL}    ${BROWSER}      executable_path=${chromedriver_path}       options=${chrome_options}
 
     Set Window Size    1920    1080
     Set Selenium Implicit Wait  ${implcit_wait_time}
     Maximize Browser Window
+
+HQ Login
     Input Text    ${username}    ${email}
     Input Text    ${password}   ${pass}
     ${IsElementVisible}=  Run Keyword And Return Status    Element Should Be Visible   ${confirm_cookie}
@@ -42,8 +36,7 @@ HQ Login
     ${token}    Generate 2FA Token    ${secret}
     Input Text    ${otp_token}   ${token}
     Click Button  ${submit_button}
-    Title Should Be    ${commcare hq title} 
-    #Run Keyword And Ignore Error     Click Element    ${confirm_cookie}
+    Title Should Be    ${commcare hq title}
     Open Web App
 
 
@@ -54,10 +47,14 @@ Open Web App
    
 Open App Home Screen
     Sleep    3s
-    Wait Until Element Is Visible    ${app_home}  
-    Wait Until Element Is Enabled    ${app_home}     
-    Click Element    ${app_home}
-      
+    TRY
+        Wait Until Element Is Visible    ${app_home}
+        Wait Until Element Is Enabled    ${app_home}
+        Click Element    ${app_home}
+    EXCEPT
+        Click Element    ${select_app}
+    END
+
 Open WebApp Home
     Sleep    3s
     ${IsElementVisible}=  Run Keyword And Return Status    Element Should Be Visible   ${confirm_cookie}
@@ -102,11 +99,18 @@ Log in as ct_user
 Log in as ctsup_user
    Sync App
    Click Element    ${login_as}
-   Input Text    ${search_username}     CT Supervisor
-   Click Element    ${search_user_button}
+   #Wait Until Element Is Enabled    ${search_username}  60s
+   Wait Until Keyword Succeeds  2 min  5 sec   Input Text    ${search_username}     CT Supervisor
    Sleep    2s
-   Click Element    ${ctsup_user}
+   JS Click    ${search_user_button}
    Sleep    2s
+   TRY
+        Click Element    ${ctsup_user}
+   EXCEPT
+        Input Text    ${search_username}     CT Supervisor
+        Click Element    ${search_user_button}
+        Click Element    ${ctsup_user}
+   END
    Click Element    ${confirm_user_login}
    Sleep    2s
    Sync App
@@ -183,7 +187,7 @@ Answer Input Text
    
 Search in the case list   
     [Arguments]    ${case_or_contact_created}
-    Sleep    60s
+    Sleep    120s
     Input Text    ${search_case}    ${case_or_contact_created}
     Click Element    ${search_button}
     
@@ -195,8 +199,8 @@ Select Created Case
     Sleep    2s
     Wait Until Element Is Enabled    ${continue}
     Sleep    2s 
-    Scroll Element Into View    ${continue}
-    Wait Until Keyword Succeeds  3x  500ms  Click Element    ${continue}
+    Wait Until Keyword Succeeds  2 min  5 sec   Scroll Element Into View    ${continue}
+    Wait Until Keyword Succeeds  2 min  5 sec   Click Element    ${continue}
 
 Select Cluster
     [Arguments]    ${case_or_contact_created}

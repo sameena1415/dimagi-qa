@@ -1,6 +1,6 @@
 *** Settings ***
 Documentation     Testing the workflow to deduplicate a suspected case (PUI) record against a confirmed case record with one attached lab results and one attached contact
-Suite Setup    HQ Login
+Suite Setup    Driver Launch
 Library  SeleniumLibrary
 Resource    ../Contact Tracing (CT)/Menu/menu.robot
 Resource    ../Contact Tracing (CT)/Forms/register a new contact form.robot
@@ -12,6 +12,8 @@ Suite Teardown  Close Browser
 
 Pui_Monitoring_1
     [Documentation]    PUI with a positive test result
+    Sleep   240s
+    HQ Login
     Log in as ctsup_user
     Register contact with phone number
     ${contact_name}    Get Contact Name
@@ -22,6 +24,7 @@ Pui_Monitoring_1
     Open Convert Contact to a Suspected Case (PUI) Form
     PUI form submission
     Log in as ci_user
+    Sleep    60s
     Search Case in All Suspected Cases (PUIs) menu
     Search in the case list    ${contact_name}
     Select Created Case    ${contact_created}
@@ -44,6 +47,7 @@ Pui_Monitoring_2
     Open Convert Contact to a Suspected Case (PUI) Form
     PUI form submission
     Log in as ci_user
+    Sleep    90s
     Search Case in All Suspected Cases (PUIs) menu
     Search in the case list    ${contact_name}
     Select Created Case    ${contact_created}

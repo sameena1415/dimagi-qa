@@ -1,6 +1,6 @@
 *** Settings ***
 Documentation     Workflow to test Patient Good Path
-Suite Setup    HQ Login
+Suite Setup    Driver Launch
 Library  SeleniumLibrary
 Resource    ../Contact Tracing (CT)/Menu/menu.robot
 Resource    ../Contact Tracing (CT)/Forms/register a new contact form.robot
@@ -13,6 +13,8 @@ Suite Teardown  Close Browser
 
 Hub_Contacts_1
     [Documentation]    Mark a Contact eligible for a Healthcare Hub
+    Sleep   360s
+    HQ Login
     Log in as ct_user
     Register contact with phone number
     ${contact_name}    Get Contact Name

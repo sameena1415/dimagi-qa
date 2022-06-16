@@ -5,16 +5,6 @@ Library    DateTime
 Resource    ../../Base/base.robot
 
 
-*** Variables ***
-
-## Register a New Case Form
-${Register a New Case}    (//div[@aria-label='Register a New Case']/div)[1]
-${mpi_id_input}     //span[text()='DOH MPI ID']/following::div[1]/div[@class='widget']/descendant::textarea
-${patient_first_name}     //span[text()='Patient First Name']/following::div[1]/div[@class='widget']/descendant::textarea
-${patient_last_name}     //span[text()='Patient Last Name']/following::div[1]/div[@class='widget']/descendant::textarea
-${submit_form}     //button[@type='submit' and @class='submit btn btn-primary']
-${success_message}    //p[text()='Form successfully saved!']
-
 *** Keywords ***
 
 Generate Random Patient Name

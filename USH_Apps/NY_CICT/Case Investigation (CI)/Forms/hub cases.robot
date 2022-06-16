@@ -2,14 +2,8 @@
 Library  SeleniumLibrary
 Library    String
 Library    DateTime
-Resource    ../../Base/base.robot 
+Resource    ../../Base/base.robot
 
-
-*** Variables ***
-
-## Case Investigation Form ##
-
-${Case Investigation Form}    //tr[@aria-label='Case Investigation']
 
 *** Keywords *** 
 

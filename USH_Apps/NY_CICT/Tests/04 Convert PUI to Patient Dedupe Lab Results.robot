@@ -2,7 +2,7 @@
 Documentation     Testing the workflow to deduplicate a suspected case (PUI) record against a confirmed
 ...               case record with one attached lab results and one attached contact.
 Library  SeleniumLibrary
-Suite Setup    HQ Login
+Suite Setup    Driver Launch
 Resource    ../Contact Tracing (CT)/Forms/change to pui status form.robot
 Resource    ../Contact Tracing (CT)/Forms/contact montitoring form.robot
 Resource    ../Contact Tracing (CT)/Forms/convert contact to suspected case (PUI) form.robot  
@@ -21,6 +21,8 @@ Suite Teardown  Close Browser
 
 Convert_PUI_to_Patient_1
     [Documentation]    Convert Contact to PUI using Convert Contact to Suspected Case (PUI) form
+    Sleep   80s
+    HQ Login
     Log in as ct_user
     ${created_name}  ${phone}   Register contact with phone number
     ${contact_name}    Get Contact Name

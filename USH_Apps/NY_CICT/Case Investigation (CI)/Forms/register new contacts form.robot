@@ -81,9 +81,10 @@ Register New Contacts for Case having address and phone number
        Check Contact header, count and label    ${without_index}    ${existing_count}   ${n}    ${j}
        ${name} =	Get From List	${generated_names}     ${i}
        ${note}=   Catenate    SEPARATOR=-     ${name}   note
+       ${full_name}=   Catenate   ${name}   ${name}
        Enter Contact Details    ${j}    ${name}     ${phone}    ${note}     ${address_reset}    ${symptomatic}    ${mpi_id}    ${without_index}
 
-       Collections.Append To List    ${name_list}   ${name}
+       Collections.Append To List    ${name_list}    ${full_name}
        Collections.Append To List    ${recent_note_list}   ${note}
        Collections.Append To List    ${mph_id_list}   ${mpi_id}
        Collections.Append To List    ${contact_monitoring_details}   ${name}    ${email}    English     ${Yesterday's date}    ${phone}
@@ -94,7 +95,7 @@ Register New Contacts for Case having address and phone number
 
 Check Contact ID is Alphanum
     [Arguments]     ${id}
-    ${contact_id}        Get Text   ${id}
+    ${contact_id}    Wait Until Keyword Succeeds  2 min  5 sec   Get Text   ${id}
     ${true_or_false}     Check Contact ID   ${contact_id}
     Should Be True   ${true_or_false} == True
     [Return]    ${contact_id}
@@ -122,14 +123,8 @@ Check Already Registered Contacts
         ${loop_count}=    Evaluate    ${i} + 1
         Log      ${master_list}
         ${name_list} =   Get From List  ${master_list}  0
-        #Reverse List    ${name_list}
         ${recent_note_list} =   Get From List  ${master_list}  1
-        #Reverse List    ${recent_note_list}
         ${mph_id_list} =   Get From List  ${master_list}  2
-        #Reverse List    ${mph_id_list}
-        ${name_element_in_list} =	Get From List	${name_list}     ${i}
-        ${note_element_in_list} =	Get From List	${recent_note_list}     ${i}
-        ${mph_element_in_list} =	Get From List	${mph_id_list}     ${i}
 
         ${already_registered_contact_name_loop}=   Catenate    SEPARATOR=     ${already_registered_contact_name}   [    ${loop_count}    ]
         ${already_registered_most_recent_note_loop}=   Catenate    SEPARATOR=     ${already_registered_most_recent_note}   [    ${loop_count}    ]
@@ -137,13 +132,16 @@ Check Already Registered Contacts
 
         # Checking if Contact Name is same as registered
         ${contact_name}   Get Text From Element     ${already_registered_contact_name_loop}
-        Should Contain    ${contact_name}   ${name_element_in_list}
+        List Should Contain Value    ${name_list}  ${contact_name}
         # Checking if Note is same as registered
         ${note}  Get Text   ${already_registered_most_recent_note_loop}
-        Should Contain  ${note}     ${note_element_in_list}
+        List Should Contain Value    ${recent_note_list}  ${note}
         # Checking mph id
-        ${mph_id}  Get Text   ${already_registered_mph_id_loop}
-        Should Contain  ${mph_id}     ${mph_element_in_list}
+        IF  "${mph_id_list}"!="${EMPTY}"
+            ${mph_element_in_list} =	Get From List	${mph_id_list}     ${i}
+            ${mph_id}  Get Text   ${already_registered_mph_id_loop}
+            Should Contain  ${mph_id}     ${mph_element_in_list}
+        END
     END
 
 Check Registered Contact Details on Contact Monitoring
