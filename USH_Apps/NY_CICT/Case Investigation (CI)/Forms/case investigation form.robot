@@ -886,7 +886,8 @@ Verify School Details present in Hub section
     ${address}     String.Strip String    ${address}
     ${phone}     String.Strip String    ${phone}
     Page Should Contain Element    //li[contains(text(),'School Name: ${name}')]
-    Page Should Contain Element    //li[contains(text(),'School Address: ${address}')]
+    Run Keyword And Ignore Error    Page Should Contain Element    //li[contains(text(),'${address}')]
+    Run Keyword And Ignore Error    Page Should Contain Element    //li[contains(text(),'School Address: ${address}')]
     Page Should Contain Element    //li[contains(text(),'School Phone Number: ${phone}')]
     Page Should Contain Element    //li[contains(text(),'Last date at this location: ${date}')]
     Page Should Contain Element    //li[contains(text(),'Case is a: Student')]

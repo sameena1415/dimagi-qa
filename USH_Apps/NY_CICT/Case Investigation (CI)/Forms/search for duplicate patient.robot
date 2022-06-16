@@ -34,11 +34,11 @@ Open Search for Duplicate Patients
 Search Duplicate Patient
     [Arguments]     ${contact_name}
     Open Search for Duplicate Patients
-    Wait Until Element Is Enabled    ${search-first_name}
+#    Wait Until Element Is Enabled    ${search-first_name}
 #    Input Text    ${search-first_name}    ${contact_name}
 #    Input Text    ${search-last_name}    ${contact_name}
 #    Clear Element Text    ${search-phone}
-    JS Click    ${search-submit}
+     Wait Until Keyword Succeeds  3x  500ms     JS Click    ${search-submit}
     Wait Until Element Is Visible    //tr[.//td[text()='${contact_name}']]
     JS Click    //tr[.//td[text()='${contact_name}']]
     Wait Until Element Is Enabled    ${continue}
@@ -68,6 +68,5 @@ Verify Lab result for open case
 Verify Registered Contacts for open case
      [Arguments]    ${created_name}
      JS Click    ${register_new_contacts_form}
-     Element Should Be Visible    //p['Contact Name:'][contains(text(),'${created_name}_1 ${created_name}_1')]
-     Sleep    2s
+     Wait Until Keyword Succeeds    2 min  5 sec    Element Should Be Visible    //p['Contact Name:'][contains(text(),'${created_name}_1 ${created_name}_1')]
      Element Should Be Visible    //p['Contact Name:'][contains(text(),'${created_name}_2 ${created_name}_2')]
