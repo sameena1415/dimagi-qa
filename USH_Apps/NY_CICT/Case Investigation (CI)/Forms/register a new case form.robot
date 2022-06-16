@@ -19,7 +19,8 @@ ${success_message}    //p[text()='Form successfully saved!']
 
 Generate Random Patient Name
     ${hex} =    Generate Random String	6	[NUMBERS]abcdef
-    ${name_random} =     Catenate	SEPARATOR=-	Patient	${hex}
+    ${date}     Get Current Date    result_format=%m/%d/%Y
+    ${name_random} =     Catenate	SEPARATOR=-	Patient	${hex} ${date}
     Set Suite Variable  ${name_random}
 
 Register New Case
@@ -39,7 +40,7 @@ Register New Case
         Input Text       ${mpi_id_input}      ${mpi_id}
     END
     Submit Form and Check Success
-  [Return]  {mpi_id}
+  [Return]  ${mpi_id}   ${name}
 
 Get Case Name
     ${name_random}    Get Variable Value    ${name_random}

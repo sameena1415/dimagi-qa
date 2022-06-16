@@ -46,8 +46,8 @@ jobs:
       uses: papeloto/action-zip@v1
       if: always()
       with:
-          files: Reports/
-          dest: Reports.zip
+          files: ./USH_Apps/NY_CICT/Reports/
+          dest: ./USH_Apps/NY_CICT/Reports.zip
 
     - name: Send Failure Email on Deploy Event
       uses: dawidd6/action-send-mail@v3
@@ -61,7 +61,7 @@ jobs:
         to: kbordoloi@dimagi.com, ktripathy@dimagi.com
         from: <${{secrets.DIMAGIQA_MAIL_USERNAME}}>
         html_body: Please find attached the run report.
-        attachments: /home/runner/work/dimagi-qa/dimagi-qa/Reports.zip
+        attachments:  /home/runner/work/dimagi-qa/dimagi-qa/USH_Apps/NY_CICT/Reports.zip
         priority: normal
 
     - name: Archive test results
@@ -69,5 +69,5 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: test-result-reports
-        path: /home/runner/work/dimagi-qa/dimagi-qa/Reports
+        path: /home/runner/work/dimagi-qa/dimagi-qa/USH_Apps/NY_CICT/Reports.zip
         retention-days: 2
