@@ -1,4 +1,4 @@
-## Benchmark case export config page performance
+## Dummy Data Generation
 
 QA Ticket: [QA-4268](https://dimagi-dev.atlassian.net/browse/QA-4268)
 
