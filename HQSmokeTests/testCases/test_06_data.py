@@ -1,3 +1,5 @@
+from HQSmokeTests.testPages.data.data_dictionary_page import DataDictionaryPage
+from HQSmokeTests.testPages.data.deduplicate_case_page import DeduplicateCasePage
 from HQSmokeTests.testPages.data.export_data_page import ExportDataPage
 from HQSmokeTests.testPages.data.manage_forms_page import ManageFormsPage
 from HQSmokeTests.testPages.data.import_cases_page import ImportCasesPage
@@ -63,3 +65,23 @@ def test_case_34_view_lookup_table(driver):
     export.data_tab()
     data.view_lookup_table()
     data.delete_lookup_table()
+
+
+def test_case_58_deduplicate_cases(driver):
+
+    export = ExportDataPage(driver)
+    export.data_tab()
+    data = DeduplicateCasePage(driver)
+    data.open_deduplicate_case_page()
+    data.add_new_rule()
+    data.remove_rule()
+
+
+def test_case_59_data_dictionary(driver):
+
+    export = ExportDataPage(driver)
+    export.data_tab()
+    data = DataDictionaryPage(driver)
+    data.open_data_dictionary_case_page()
+    data.export_data_dictionary()
+    data.import_data_dictionary()

@@ -127,3 +127,9 @@ def test_case_13_new_webuser_invitation(driver, settings):
     # login = LoginPage(driver, settings["url"])
     # login.login(settings["login_username"], settings["login_password"])
     webuser.delete_invite()
+
+
+def test_case_57_download_and_upload_web_users(driver):
+    user = WebUsersPage(driver)
+    user.download_web_users()
+    user.upload_web_users()

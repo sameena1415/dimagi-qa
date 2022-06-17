@@ -75,11 +75,11 @@ class OrganisationStructurePage(BasePage):
         self.import_complete = (By.XPATH, "//legend[text()='Import complete.']")
         self.download_filter = (By.XPATH, "//button[@data-bind='html: buttonHTML']")
         self.bulk_upload_id = (By.ID, "id_bulk_upload_file")
-        self.archive_this_loc = (By.XPATH, "(//span[contains(text(),'Test Location [DO NOT DELETE!!!')])[1]")
+        self.test_location = (By.XPATH, "(//span[contains(text(),'Test Location [DO NOT DELETE!!!')])[1]")
         self.archive_buttton = (By.XPATH, '''//div[.//span[.='Test Location [DO NOT DELETE!!!]']]/preceding-sibling::div/button[normalize-space()= "Archive"]''')
         self.archive_button_popup = (By.XPATH, "//button[@data-bind='click: archive_fn']")
         self.archive_success_message = (By.XPATH, "//span[@data-bind='html: message']")
-        self.show_arhcived_locations = (By.XPATH, "//a[@class='btn btn-default pull-right']")
+        self.show_arhcived_locations_button = (By.XPATH, "//a[@class='btn btn-default pull-right']")
         self.show_active_locations = (By.XPATH, "//a[@class='btn btn-default pull-right']")
         self.unarchive_button = (By.XPATH, '''//div[.//span[.='Test Location [DO NOT DELETE!!!]']]/preceding-sibling::div/button[normalize-space()= "Unarchive"]''')
 
@@ -208,21 +208,50 @@ class OrganisationStructurePage(BasePage):
 
     def archive_location(self):
         self.wait_to_click(self.org_menu_link_text)
-        active_loc = self.get_text(self.archive_this_loc)
+        active_loc = self.is_present_and_displayed(self.test_location, 10)
+        if not active_loc:
+            self.wait_to_click(self.show_arhcived_locations_button)
+            self.wait_to_click(self.unarchive_button)
+            self.assert_archived_location()
+        else:
+            self.assert_archived_location()
+
+    def assert_archived_location(self):
+        self.wait_to_click(self.org_menu_link_text)
+        self.is_present_and_displayed(self.test_location)
+        active_loc = self.get_text(self.test_location)
         self.wait_to_click(self.archive_buttton)
         self.wait_to_click(self.archive_button_popup)
         self.is_present_and_displayed(self.archive_success_message)
-        self.wait_to_click(self.show_arhcived_locations)
-        self.is_present_and_displayed(self.archive_this_loc)
-        archived_loc = self.get_text(self.archive_this_loc)
+        self.driver.refresh()
+        check_archived_loc = self.is_present_and_displayed(self.test_location, 10)
+        assert not check_archived_loc, "Location is still Active"
+        self.wait_to_click(self.show_arhcived_locations_button)
+        self.is_present_and_displayed(self.test_location, 10)
+        archived_loc = self.get_text(self.test_location)
         assert archived_loc == active_loc, "Location is not Archived"
 
     def unarchive_location(self):
         self.wait_to_click(self.org_menu_link_text)
-        self.wait_to_click(self.show_arhcived_locations)
-        archived_loc =self.get_text(self.archive_this_loc)
+        self.wait_to_click(self.show_arhcived_locations_button)
+        archived_loc = self.is_present_and_displayed(self.test_location, 10)
+        if not archived_loc:
+            self.wait_to_click(self.show_active_locations)
+            self.wait_to_click(self.archive_buttton)
+            self.wait_to_click(self.archive_button_popup)
+            self.assert_unarchived_location()
+        else:
+            self.assert_unarchived_location()
+
+    def assert_unarchived_location(self):
+        self.wait_to_click(self.org_menu_link_text)
+        self.wait_to_click(self.show_arhcived_locations_button)
+        archived_loc = self.get_text(self.test_location)
         self.wait_to_click(self.unarchive_button)
+        self.driver.refresh()
+        check_unarchived_loc = self.is_present_and_displayed(self.test_location)
+        assert not check_unarchived_loc, "Location is still Unarchived"
         self.wait_to_click(self.show_active_locations)
-        self.is_present_and_displayed(self.archive_this_loc)
-        unarchived_loc = self.get_text(self.archive_this_loc)
-        assert unarchived_loc == archived_loc, "Location not unarchived successfully"
+        self.is_present_and_displayed(self.test_location)
+        unarchived_loc = self.get_text(self.test_location)
+        assert unarchived_loc == archived_loc, "Location not Unarchived successfully"
