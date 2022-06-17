@@ -9,6 +9,8 @@ from selenium.webdriver.support.select import Select
 
 from HQSmokeTests.testPages.base.base_page import BasePage
 from HQSmokeTests.userInputs.user_inputs import UserData
+from HQSmokeTests.testPages.users.org_structure_page import latest_download_file
+from selenium.common.exceptions import NoSuchElementException
 
 """"Contains test page elements and functions related to the User's Web Users module"""
 
@@ -51,6 +53,13 @@ class WebUsersPage(BasePage):
         self.password_textbox = (By.ID, 'id_auth-password')
         self.submit_button_xpath = (By.XPATH, '(//button[@type="submit"])[last()]')
         self.existing_error = (By.ID, 'error_1_id_email')
+        self.download_worker_btn = (By.LINK_TEXT, "Download Web Users")
+        self.download_filter = (By.XPATH, "//button[@class='btn btn btn-primary']")
+        self.download_users_btn = (By.LINK_TEXT, "Download Users")
+        self.bulk_upload_btn = (By.ID, "bulk_upload")
+        self.choose_file = (By.XPATH, "//input[@id='id_bulk_upload_file']")
+        self.upload = (By.XPATH, "//button[@class='btn btn-primary disable-on-submit']")
+        self.import_complete = (By.XPATH, "//legend[text()='Bulk upload complete.']")
 
     def invite_new_web_user(self, role):
         self.wait_to_click(self.users_menu_id)
@@ -131,5 +140,35 @@ class WebUsersPage(BasePage):
             self.js_click(self.delete_confirm_webuser)
         print("Invitation deleted")
 
+    def download_web_users(self):
+        time.sleep(1)
+        self.wait_to_click(self.users_menu_id)
+        self.wait_to_click(self.web_users_menu)
+        self.wait_to_click(self.download_worker_btn)
+        self.wait_to_click(self.download_filter)
+        try:
+            self.wait_and_sleep_to_click(self.download_users_btn)
+            time.sleep(5)
+        except TimeoutException:
+            print("TIMEOUT ERROR: Still preparing for download..Celery might be down..")
+            assert False
+        # verify_downloaded_workers
+        newest_file = latest_download_file()
+        self.assert_downloaded_file(newest_file, "_users_"), "Download Not Completed!"
+        print("File download successful")
 
+    def upload_web_users(self):
+        self.wait_to_click(self.users_menu_id)
+        self.wait_to_click(self.web_users_menu)
+        try:
+            self.click(self.bulk_upload_btn)
+            newest_file = latest_download_file()
+            file_that_was_downloaded = UserData.DOWNLOAD_PATH / newest_file
+            time.sleep(5)
+            self.send_keys(self.choose_file, str(file_that_was_downloaded))
+            self.wait_and_sleep_to_click(self.upload)
+        except (TimeoutException, NoSuchElementException):
+            print("TIMEOUT ERROR: Could not upload file")
+        assert self.is_present_and_displayed(self.import_complete), "Upload Not Completed! Taking Longer to process.."
+        print("File uploaded successfully")
 
