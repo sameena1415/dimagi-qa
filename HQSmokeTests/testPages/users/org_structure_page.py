@@ -218,11 +218,11 @@ class OrganisationStructurePage(BasePage):
 
     def assert_archived_location(self):
         self.wait_to_click(self.org_menu_link_text)
-        self.is_present_and_displayed(self.test_location)
+        self.is_present_and_displayed(self.test_location, 10)
         active_loc = self.get_text(self.test_location)
         self.wait_to_click(self.archive_buttton)
         self.wait_to_click(self.archive_button_popup)
-        self.is_present_and_displayed(self.archive_success_message)
+        self.is_present_and_displayed(self.archive_success_message, 10)
         self.driver.refresh()
         check_archived_loc = self.is_present_and_displayed(self.test_location, 10)
         assert not check_archived_loc, "Location is still Active"
@@ -232,8 +232,8 @@ class OrganisationStructurePage(BasePage):
         assert archived_loc == active_loc, "Location is not Archived"
 
     def unarchive_location(self):
-        self.wait_to_click(self.org_menu_link_text)
-        self.wait_to_click(self.show_arhcived_locations_button)
+        # self.wait_to_click(self.org_menu_link_text)
+        # self.wait_to_click(self.show_arhcived_locations_button)
         archived_loc = self.is_present_and_displayed(self.test_location, 10)
         if not archived_loc:
             self.wait_to_click(self.show_active_locations)
@@ -249,9 +249,9 @@ class OrganisationStructurePage(BasePage):
         archived_loc = self.get_text(self.test_location)
         self.wait_to_click(self.unarchive_button)
         self.driver.refresh()
-        check_unarchived_loc = self.is_present_and_displayed(self.test_location)
+        check_unarchived_loc = self.is_present_and_displayed(self.test_location, 10)
         assert not check_unarchived_loc, "Location is still Unarchived"
         self.wait_to_click(self.show_active_locations)
-        self.is_present_and_displayed(self.test_location)
+        self.is_present_and_displayed(self.test_location, 10)
         unarchived_loc = self.get_text(self.test_location)
         assert unarchived_loc == archived_loc, "Location not Unarchived successfully"
