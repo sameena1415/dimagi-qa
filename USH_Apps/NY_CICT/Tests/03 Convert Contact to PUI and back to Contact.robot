@@ -2,18 +2,20 @@
 Documentation     Testing the workflow to convert a symptomatic contact into a suspected case (PUI)
 ...     and testing the workflow to convert a suspected case (PUI) back into a contact.
 Library  SeleniumLibrary
-Suite Setup    HQ Login
+Suite Setup    Driver Launch
 Resource    ../Contact Tracing (CT)/Forms/change to pui status form.robot
 Resource    ../Contact Tracing (CT)/Forms/contact montitoring form.robot
 Resource    ../Contact Tracing (CT)/Forms/convert contact to suspected case (PUI) form.robot  
 Resource    ../Contact Tracing (CT)/Forms/register a new contact form.robot
 Suite Teardown  Close Browser
-       
+
 *** Test Cases ***
 
 
 Convert_Contact_to_PUI_1
     [Documentation]    Convert contact to PUI using "Contact Monitoring" form
+    Sleep   40s
+    HQ Login
     Log in as ct_user
     Register contact with phone number
     ${contact_name}    Get Contact Name
@@ -56,7 +58,7 @@ Convert_Contact_to_PUI_2
     Open All Contacts Unassigned & Open menu
     Search in the case list    ${contact_name}
     Element Should Not Be Visible    ${contact_created}    Contact appearing in menu
-#
+
 Convert_Contact_to_PUI_4
     [Documentation]    Convert PUI back to contact - do not close record
     Log    Sleeping ES to update..
@@ -77,31 +79,31 @@ Convert_Contact_to_PUI_4
     Search in the case list    ${contact_name}
     Element Should Be Visible    ${contact_created}
 
-Convert_Contact_to_PUI_6
-    [Documentation]    convert PUI back to contact (archived contact) - do not close record
-    Log in as ci_user
-    Search Archieved Case in All Suspected Cases (PUIs) menu
-    Search and Select Archieved Case
-    Change PUI Status form
-    No , Close the Archieved Record
-    IF    '${archieved_contact_lname}' == '\'
-        Search in the case list    ${archieved_contact_name}
-    ELSE
-         Search in the case list    ${archieved_contact_name} ${archieved_contact_lname}
-    END
-    Element Should Be Visible    ${archieved_contact}
-
-Convert_Contact_to_PUI_5
-    [Documentation]    convert PUI back to contact (archived contact) - close record
-    Log in as ci_user
-    Search Archieved Case in All Suspected Cases (PUIs) menu
-    Search and Select Archieved Case
-    Change PUI Status form
-    Yes, Close the Archieved Record
-    IF    '${archieved_contact_lname}' == '\'
-        Search in the case list    ${archieved_contact_name}
-    ELSE
-         Search in the case list    ${archieved_contact_name} ${archieved_contact_lname}
-    END
-    Search in the case list    ${archieved_contact_name} ${archieved_contact_lname}
-    Element Should Not Be Visible     ${archieved_contact}
+#Convert_Contact_to_PUI_6
+#    [Documentation]    convert PUI back to contact (archived contact) - do not close record
+#    Log in as ci_user
+#    Search Archieved Case in All Suspected Cases (PUIs) menu
+#    Search and Select Archieved Case
+#    Change PUI Status form
+#    No , Close the Archieved Record
+#    IF    '${archieved_contact_lname}' == '\'
+#        Search in the case list    ${archieved_contact_name}
+#    ELSE
+#         Search in the case list    ${archieved_contact_name} ${archieved_contact_lname}
+#    END
+#    Element Should Be Visible    ${archieved_contact}
+#
+#Convert_Contact_to_PUI_5
+#    [Documentation]    convert PUI back to contact (archived contact) - close record
+#    Log in as ci_user
+#    Search Archieved Case in All Suspected Cases (PUIs) menu
+#    Search and Select Archieved Case
+#    Change PUI Status form
+#    Yes, Close the Archieved Record
+#    IF    '${archieved_contact_lname}' == '\'
+#        Search in the case list    ${archieved_contact_name}
+#    ELSE
+#         Search in the case list    ${archieved_contact_name} ${archieved_contact_lname}
+#    END
+#    Search in the case list    ${archieved_contact_name} ${archieved_contact_lname}
+#    Element Should Not Be Visible     ${archieved_contact}

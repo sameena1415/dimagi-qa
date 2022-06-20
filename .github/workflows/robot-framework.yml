@@ -21,45 +21,56 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install -r requirements.txt
+        pip install -r USH_Apps/NY_CICT/requirements.txt
         sudo apt-get install xvfb
-
-    # - name: Execute tests
-    #   uses: joonvena/robotframework-docker-action@v0.1
-    #   env:
-    #     BROWSER: chrome
-    #     ROBOT_TESTS_DIR: ${{ github.workspace }}/robot_tests
-    #     ROBOT_REPORTS_DIR: ${{ github.workspace }}/reports
         
     - name: NY App Tests
       env:
         DIMAGIQA_MAIL_USERNAME: ${{ secrets.DIMAGIQA_MAIL_USERNAME }}
         DIMAGIQA_MAIL_PASSWORD: ${{ secrets.DIMAGIQA_MAIL_PASSWORD }}
+        DIMAGIQA_RF_SECRETS:  ${{ secrets.DIMAGIQA_RF_SECRETS }}
+        DIMAGIQA_RF_PASSWORD:  ${{ secrets.DIMAGIQA_RF_PASSWORD }}
       run: |
         echo "NOW=$(date +'%m-%d %H:%M')" >> $GITHUB_ENV
         echo ${{env.NOW}}
-        robot -d robot -d ./USH_Apps/NY_CICT/Reports './USH_Apps/NY_CICT/Tests'
+        pabot --processes 6 --outputdir ./USH_Apps/NY_CICT/Reports  ./USH_Apps/NY_CICT/Tests/*.robot
+
 
     - name: Zip Reports folder
       uses: papeloto/action-zip@v1
       if: always()
       with:
-          files: Reports/
-          dest: Reports.zip
+          files: ./USH_Apps/NY_CICT/Reports/
+          dest: ./USH_Apps/NY_CICT/Reports.zip
 
-    - name: Send Failure Email on Deploy Event
+    - name: Send Failure Email on Trigger
       uses: dawidd6/action-send-mail@v3
-      if: always()
+      if: ${{ failure() }}
       with:
         server_address: smtp.gmail.com
         server_port: 465
         username: ${{secrets.DIMAGIQA_MAIL_USERNAME}}
         password: ${{secrets.DIMAGIQA_MAIL_PASSWORD}}
-        subject: NY App Tests in ny-staging-cdms domain[#${{github.run_number}}], ${{env.NOW}}
-        to: kbordoloi@dimagi.com, ktripathy@dimagi.com
+        subject: FAIL - NY App Tests (ny-staging-cdms) [#${{github.run_number}}], ${{env.NOW}}
+        to: qa-automation@dimagi.com
         from: <${{secrets.DIMAGIQA_MAIL_USERNAME}}>
-        html_body: Please find attached the run report.
-        attachments: /home/runner/work/dimagi-qa/dimagi-qa/Reports.zip
+        html_body: Please find the attached report. To access screenshots, download the test results artifacted in the respective job run.
+        attachments:  /home/runner/work/dimagi-qa/dimagi-qa/USH_Apps/NY_CICT/Reports/report.html
+        priority: normal
+
+    - name: Send Success Email on Trigger
+      uses: dawidd6/action-send-mail@v3
+      if: ${{ success() }}
+      with:
+        server_address: smtp.gmail.com
+        server_port: 465
+        username: ${{secrets.DIMAGIQA_MAIL_USERNAME}}
+        password: ${{secrets.DIMAGIQA_MAIL_PASSWORD}}
+        subject: PASS - NY App Tests (ny-staging-cdms) [#${{github.run_number}}], ${{env.NOW}}
+        to: qa-automation@dimagi.com
+        from: <${{secrets.DIMAGIQA_MAIL_USERNAME}}>
+        html_body: Please find the attached report. To access screenshots, download the test results artifacted in the respective job run.
+        attachments: /home/runner/work/dimagi-qa/dimagi-qa/USH_Apps/NY_CICT/Reports/report.html
         priority: normal
 
     - name: Archive test results
@@ -67,5 +78,4 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: test-result-reports
-        path: /home/runner/work/dimagi-qa/dimagi-qa/Reports
-        retention-days: 2
+        path: /home/runner/work/dimagi-qa/dimagi-qa/USH_Apps/NY_CICT/Reports.zip

@@ -2,14 +2,24 @@
 Library  SeleniumLibrary
 Resource    ../../Base/base.robot
 
-*** Keywords *** 
+
+*** Keywords ***
      
-   
+Open Convert Contact to a Suspected Case (PUI) Form
+    Sleep    2s
+    Wait Until Element Is Enabled    ${Convert Contact to a Suspected Case PUI Form}
+    JS Click    ${Convert Contact to a Suspected Case PUI Form}
+
+
 PUI form submission
     Wait Until Element Is Enabled    ${confirm_yes_convert_pui}
     JS Click    ${confirm_yes_convert_pui}
     Submit Form and Check Success
-    
+
+PUI form submission - No
+    Wait Until Element Is Enabled    ${confirm_no_convert_pui}
+    JS Click    ${confirm_no_convert_pui}
+    Submit Form and Check Success
 
 Search Archieved Case in All Suspected Cases (PUIs) menu
     Open All Suspected Cases (PUIs) menu
