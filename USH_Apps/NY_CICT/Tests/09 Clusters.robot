@@ -1,6 +1,6 @@
 *** Settings ***
 Documentation     Testing workflow to create new clusters and assign cases/contacts to those clusters.
-Suite Setup    HQ Login
+Suite Setup    Driver Launch
 Library  SeleniumLibrary
 Resource    ../Case Investigation (CI)/Menu/menu.robot
 Resource    ../Case Investigation (CI)/Forms/create a new cluster form.robot
@@ -16,6 +16,8 @@ Resource    ../Case Investigation (CI)/Forms/create a new cluster form.robot
 
 Clusters_1
     [Documentation]    Create cluster - non school/college
+    Sleep   280s
+    HQ Login
     Log in as ci_user
     Open Clusters PUIs, Cases, Contacts
     ${cluster_non_id_created}=      Create New Cluster - non school/college

@@ -1,6 +1,6 @@
 *** Settings ***
 Documentation     Workflow to test Hub criteria and display in queues
-Suite Setup    HQ Login
+Suite Setup    Driver Launch
 Library  SeleniumLibrary
 Resource    ../Case Investigation (CI)/Menu/menu.robot
 Resource    ../Case Investigation (CI)/Forms/register a new case form.robot
@@ -13,6 +13,8 @@ Suite Teardown  Close Browser
 
 Hub_Cases_1
     [Documentation]    Mark a Case eligible for a Healthcare Hub
+    Sleep   320s
+    HQ Login
     Log in as ci_user
     Register New Case
     Simple Form Fill up

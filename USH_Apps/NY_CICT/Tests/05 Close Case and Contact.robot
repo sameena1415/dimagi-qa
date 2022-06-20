@@ -1,7 +1,7 @@
 *** Settings ***
 Documentation     Testing the workflow to close a patient record and record the case's final disposition.
 Library  SeleniumLibrary
-Suite Setup    HQ Login
+Suite Setup    Driver Launch
 Resource    ../Case Investigation (CI)/Menu/menu.robot
 Resource    ../Case Investigation (CI)/Forms/register a new case form.robot
 Resource    ../Case Investigation (CI)/Forms/case investigation form.robot
@@ -13,6 +13,8 @@ Suite Teardown  Close Browser
 
 Close_Case_and_Contact_1
     [Documentation]    Patient record does not close, then does close (close record form)
+    Sleep   120s
+    HQ Login
     Log in as ci_user
     Register New Case
     Open All Cases

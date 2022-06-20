@@ -4,24 +4,6 @@ Library    String
 Library    DateTime
 Resource    ../../Base/base.robot
 
-
-*** Variables ***
-
-## Close the Contact Record Form
-${Close the Contact Record}    //tr[@aria-label='Close the Contact Record']
-${Q: Close the Contact}    //p[text()='Are you sure you want to close this record?']
-${A: Yes, close contact}     //p[text()='Yes, close this contact']
-${A: No, do not close contact}     //p[text()='No, do not close this contact']
-${Message: Contact will be closed}       //p[text()='This Contact will be closed with the following properties:']
-${Q: Reopen the Contact}     //*[text()='Are you sure you want to reopen it?']
-${A: Yes, reopen contact}     //p[text()='Yes, reopen this Contact']
-${A: No, do not reopen contact}     //p[text()='No, keep the record closed']
-${Message: contact will be reopen}       //p[text()='This Contact will be reopened with the following properties:']
-${Message: final disposition blank}     //li[contains(normalize-space(),'blank')]/strong[text()='Final Disposition:']
-
-${submit_form}
-${success_message}    //p[text()='Form successfully saved!']
-
 *** Keywords ***
 
 

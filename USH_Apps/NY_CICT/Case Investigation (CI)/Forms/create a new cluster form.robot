@@ -5,11 +5,6 @@ Library    DateTime
 Resource    ../../Base/base.robot
 
 
-*** Variables ***
-
-## Register a New Case Form
-${Create New Cluster Form}      //tr[@aria-label='Create New Cluster']
-${View Update Cluster Info Form}      //tr[@aria-label='View/Update Cluster Info']
 *** Keywords ***
 
 Generate Random Cluster Name
@@ -35,7 +30,7 @@ Create New Cluster - non school/college
     ${date}    Get Current Date    result_format=%#m/%#d/%Y
     Generate Random Cluster Name
     ${name_random}    Get Variable Value    ${name_random}
-    Wait Until Element Is Visible    ${cluster_name_field}
+    Wait Until Keyword Succeeds  2 min  5 sec   Wait Until Element Is Visible    ${cluster_name_field}
     Input Text    ${cluster_name_field}       ${name_random}
     JS Click    ${cluster_investigation}
     JS Click    ${cluster_setting_childcare}

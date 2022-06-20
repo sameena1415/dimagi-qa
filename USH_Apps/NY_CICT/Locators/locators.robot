@@ -4,13 +4,17 @@ Resource    ../Utilities/user_inputs.robot
 
 *** Variables ***
 
-# User Login
+## User HQ Login ##
+
 ${username}    id:id_auth-username
 ${password}    id:id_auth-password
 ${submit_button}   (//button[@type="submit"])[last()]
 ${otp_token}    id:id_token-otp_token
 ${confirm_cookie}    css:#hs-eu-confirmation-button
 ${commcare hq title}    CommCare HQ
+
+## Webapps Login  ##
+
 ${webapps_menu}    css:#CloudcareTab > a
 ${login_as}    css:.js-restore-as-item
 ${ct_user}    //span[contains(., "CT")]
@@ -19,16 +23,31 @@ ${ctsup_user}    (//span[contains(., "CT Sup")])[1]
 ${cisup_user}    (//span[contains(., "CI Sup")])[1]
 ${search_username}      //input[@placeholder='Filter workers']
 ${search_user_button}       //*[@class='fa fa-search']
-
 ${confirm_user_login}    //button[@id="js-confirmation-confirm"]
 ${select_app}    xpath://div[contains(@aria-label,"${app name}")]
 ${home_btn}     //*[@class="fa fa-home"]
+${app_home}    xpath://ol//li[contains(.,"${app name}")]
+${webapps_home}    //a[@href="/a/${domain}/cloudcare/apps/v2/" and @class="navbar-brand"]
+${check_in_menu}   (//div[@aria-label='Check In']/div)[1]
+
+## Sync App ##
+
+${sync}    xpath://div[@class='js-sync-item appicon appicon-sync']
+${sync success}    xpath:(//div[text()='User Data successfully synced.'])[last()]
+${first-name_case_search}    xpath:(//td/div[contains(., "First Name")]/following::input)[1]
+
+## Case Search ##
+${first-name_case_search}    xpath:(//td/div[contains(., "First Name")]/following::input)[1]
+${last-name_case_search}    xpath:(//td/div[contains(., "Last Name")]/following::input)[1]
+${search all cases in the list}    //button[contains(., 'Search All')]
 
 ## Register New Contact(s) Form
+
 ${register_new_contacts_form}    //h3[.='Register New Contact(s)']
 ${how_many_new_contacts}     //span[contains(text(),'contacts do you want to record?')]/following::div[1]/div[@class='widget']/descendant::input
 ${close_contacts_header}    //h1[text()='Close Contacts']
 
+# Type of Contacts
 ${type_of_contact_household}      //p[contains(text(),'Household')]
 ${type_of_contact_international_traveller}      //p[contains(text(),'International Travel')]
 ${arrival_date_in_us}   (//span[contains(text(),'Arrival date')]/following::div[1]//input[@type='text'])
@@ -41,10 +60,9 @@ ${transportation_airline}   //span[contains(text(), 'transportation')]/following
 ${airline}  (//span[text()='Airline']/following::div[1]/div[@class='widget']/descendant::textarea)
 ${date_of_flight}    (//span[contains(text(),' flight')]/following::div[1]//input[@type='text'])
 ${type_of_contact_ooj_case}      //p[contains(text(),'OOJ case')]
-
 ${contact_details_contact_type}  (//strong[contains(text(),'Type of Contact')]//ancestor::li)
 ${contact_details_exposure date}  (//strong[contains(text(),'Travel Date')]//ancestor::li)
-
+##
 ${contact_id}   (//strong[contains(text(),'Contact ID')]//ancestor::p)
 ${contact_id_without_index}   (//h2[contains(text(),'ID')])
 ${contact_first_name}     (//span[text()='First name']/following::div[1]/div[@class='widget']/descendant::textarea)
@@ -64,22 +82,24 @@ ${symptomatic_yes}     (//span[contains(text(), 'Symptomatic')]/following::p[tex
 ${submit_form}     //button[@type='submit' and @class='submit btn btn-primary']
 ${success_message}    //p[text()='Form successfully saved!']
 
+# Already registered contacts
 ${already_registered_label}      (//h1[contains(text(), 'Already Registered Contacts')])
 ${already_registered_contact_name}       (//h1[contains(text(), 'Already Registered Contacts')]/following::strong[contains(text(),'Contact Name')]//ancestor::p[1])
 ${already_registered_most_recent_note}       (//h1[contains(text(), 'Already Registered Contacts')]/following::strong[contains(text(),'Recent Note')]//following::p[1])
 
-# Contact Monitoring
+## Contact Monitoring ##
 ${contact_info_contact_name}       (//h1[contains(text(), 'Contact Info')]/following::strong[contains(text(),'Name')]//ancestor::li[1])[1]
 ${contact_info_email}       (//h1[contains(text(), 'Contact Info')]/following::strong[contains(text(),'Email')]//ancestor::li[1])[1]
 ${contact_info_language}       (//h1[contains(text(), 'Contact Info')]/following::strong[contains(text(),'Language')]//ancestor::li[1])[1]
 ${contact_info_last_exposure}       (//h1[contains(text(), 'Contact Info')]/following::strong[contains(text(),'Last Exposure')]//ancestor::li[1])[1]
 ${contact_info_phone_num}       (//h1[contains(text(), 'Contact Info')]/following::strong[contains(text(),'Phone Number')]//ancestor::li[1])[1]
 
-# Case Investigation
+## Case Investigation  ##
+${Case Investigation Form}    //tr[@aria-label='Case Investigation']
 ${select_first case_in_caselist}    //tbody[@class='wrapper js-case-container']/tr[1]
 ${continue}    id:select-case
 ${search_case}    id:searchText
-${search_button}    id:case-list-search-button    
+${search_button}    id:case-list-search-button
 ${contact_monitoring_form}    xpath://tr[@aria-label="Contact Monitoring"]
 ${initial_interview_disposition}    //p[text()='Reached person, agreed to call']
 ${final_disposition2}    //p[text()='Reached, completed investigation']
@@ -94,6 +114,11 @@ ${date_of_symptomp_onset}    //label[.//span[contains(text(),'date of onset')]]/
 ${gender}    //p[text()='Female']
 ${race}    //p[text()='Asian']
 ${ethnicity}    //p[text()='Hispanic/Latino']
+
+## Convert Contact to a Suspected Case PUI Form ##
+
+${covert_to_pui_form}    //tr[@aria-label='Convert Contact to a Suspected Case (PUI)']
+${Convert Contact to a Suspected Case PUI Form}    //tr[@aria-label='Convert Contact to a Suspected Case (PUI)']
 ${yes_convert_pui}    //p[text()='Yes, convert contact/traveler to PUI']
 ${enter_case_dob}     //p[text()="Enter the case's Date of Birth"]
 ${date_of_birth}        //*[text()='Date of birth']/following::div[1]/div[@class='widget']/descendant::input
@@ -101,11 +126,6 @@ ${no_convert_pui}    //p[contains(.,'No, do NOT convert')]
 ${pui_form_header}    //h1[text()='Convert Contact to a Suspected Case (PUI)' and @class='title']
 ${confirm_yes_convert_pui}    //p[text()='Yes']
 ${confirm_no_convert_pui}    //p[text()='No']
-${covert_to_pui_form}    //tr[@aria-label='Convert Contact to a Suspected Case (PUI)']
-
-${app_home}    xpath://ol//li[contains(.,"${app name}")]
-${webapps_home}    //a[@href="/a/${domain}/cloudcare/apps/v2/" and @class="navbar-brand"]
-${check_in_menu}   (//div[@aria-label='Check In']/div)[1] 
 ${search all cases}    //button[text()='Search All Cases']
 ${case search submit}    //button[@id='query-submit-button']
 ${change pui status form}    //tr[@aria-label='Change PUI Status']
@@ -134,12 +154,7 @@ ${what_address}    xpath:(//span[text()='What email address should the notice be
 ${email_input}    test@test.in
 ${mail_label}    xpath://p/strong[text() = '${email_input}']
 
-
 ${archieved_contact}    //td[text()='${archieved_contact_name}']
-
-${sync}    xpath://div[@class='js-sync-item appicon appicon-sync']
-${sync success}    xpath:(//div[text()='User Data successfully synced.'])[last()]
-${first-name_case_search}    xpath:(//td/div[contains(., "First Name")]/following::input)[1]
 
 ${specimen_collection_date}   //span[contains(text(),'Specimen Collection Date')]/following::div[1]//input[@type='text']
 ${lab_result_positive}      //input[@value='Positive']
@@ -151,11 +166,14 @@ ${confirm_suspected_to_confirmed_case}      //p[text()='Yes, convert this Suspec
 ${selected_patient_is_duplicate}    //p[text()='The selected patient is a duplicate of the current patient']
 ${keep_current_close_selected}      //input[@value='Keep the **Current Patient** and close the **Selected Patient**']
 
+## View/Record Lab Result Form ##
+${View Record Lab results}    //tr[@aria-label='View / Record Lab Results']
 ${lab_result_tab}       //a[text()='Lab Results' and @role='tab']
 ${list_is_empty_message}        //*[text()='List is empty.']
 ${lab_result_tab_positive}  //tr[.//td[text()='positive']]
 ${close_dialog}     //div//a[text()='Lab Results']/preceding::div[@class='modal-header']/button[@class='close']
 
+## Daily Monitoring Form ##
 ${interview_info_section}       //div[@class='collapsible-icon-container']/following-sibling::span[text()='Interview Info']
 ${daily_monitoring_section}     //*[text()='Daily Follow Up Monitoring']
 ${status_section}     //*[text()='Status']
@@ -228,7 +246,7 @@ ${message_quarantine_1}     //*[contains(text(),'You are now considered to be a 
 ${message_quarantine_2}     //*[contains(text(),'Once you have confirmed these results in CommCare or ECLRS')][./strong[contains(text(),'Change PUI Status')]]
 
 
-## Clusters
+## Clusters and Hub ##
 ${cluster_name_field}     //label[.//*[.='Cluster Name']]/following-sibling::div//textarea
 ${cluster_investigation}       //label[.//*[.='Cluster Type']]/following-sibling::div//p[.='Investigation']
 ${cluster_outbreak}     //label[.//*[.='Cluster Type']]/following-sibling::div//p[.='Outbreak']
@@ -352,3 +370,140 @@ ${college_other_phone}      //label[.//*[.='University/college phone number']]/f
 ${college_other_phone_value}    //*[contains(text(),'The university/college phone number is saved as')]/strong
 ${college_other_name_contact}       //label[.//*[.='University/college Name']]/following-sibling::div//textarea
 ${college_other_phone_value}    //*[contains(text(),'The university/college phone number is saved as')]/strong
+
+## Case Investigation Form ##
+
+${Case Investigation Form}    //tr[@aria-label='Case Investigation']
+${Q:Case Interview Disposition A:Reached person, agreed to call}    //p[text()='Reached person, agreed to call']
+${Q:Case Interview Disposition A:Attempted for two days and unable to reach}    //p[text()='Attempted for two days and unable to reach']
+
+${Q:Home/Cell Phone}    //span[text()='Home/Cell Phone']/following::div[1]/div[@class='widget']/descendant::input
+${Q:Date Tested}    //p[text()='What date did you get tested?']/following::div[1]/div[@class='widget']/descendant::input
+${Q:Preferred Language A:English}    //p[text()='English']
+${Q:Transer Patient A: No}    //p[contains(.,'No, do not transfer')]
+
+${Q:Activity complete A: Yes}    //span[contains(.,'Is all activity for this case complete')]/following::p[text()='Yes']
+${Q:Activity complete A: No}    //span[contains(.,'Is all activity for this case complete')]/following::p[text()='No']
+${Q:Case Interview complete A: No}    //span[contains(.,'Is the case interview complete?')]/following::p[text()='No']
+${Q:Case Interview complete A: Yes}    //span[contains(.,'Is the case interview complete?')]/following::p[text()='Yes']
+${Clear Case Interview complete}     //label[.//span[contains(.,'Is the case interview complete?')]]/following-sibling::div//button
+${Q:Needs Daily Monitoring}    //label[.//span[contains(.,'Does the case need daily monitoring?')]]
+${Q:Needs Daily Monitoring A: No}    //label[.//span[contains(.,'Does the case need daily monitoring?')]]/following-sibling::div//p[text()='No']
+${Q:Needs Daily Monitoring A: Yes}    //label[.//span[contains(.,'Does the case need daily monitoring?')]]/following-sibling::div//label//input[@value='Yes']
+${Clear Daily monitoring selection}     //label[.//span[contains(.,'Does the case need daily monitoring?')]]/following-sibling::div//button
+${Q:Final Disposition A:Reached, completed investigation}    //p[text()='Reached, completed investigation']
+${Q: Willing to receive survey via SMS}       //label//span[contains(.,'willing to receive a daily survey via SMS?')]
+${Q: Willing to receive survey via SMS A: No}       //label//span[contains(.,'willing to receive a daily survey via SMS?')]//following::p[text()='No']
+${Q:Ethnicity A:Non-Hispanic/Latino}    //p[contains(text(),'-Hispanic')]
+@{living_situation_option}      'Group Home for'    'Other Adult Group'     'All Shelters'      'Jails'       'Temporary'
+@{living_option_health}      'Long-term Care Facility'    'Post Acute Care'     'Care Inpatient'
+@{workplace_option_health}      'Healthcare facility'    'Long-term care'     'Other care'
+@{workplace_option_student}     'Daycare'      'College'
+
+## Add Address ##
+
+${Q:Search For Address}    //span[text()='Search for Address']/following::div[1]/div[@class='widget']/descendant::input
+${Address}     South Side River Bourgeois Road, Subdivision A, Nova Scotia B0E 2X0, Canada
+${Fisrt address}    //li[contains(.,'South Side')]
+${Q:County of residence}    (//*[contains(text(),'County')])[1]/following::span[@title='Please choose an item'][1]
+${A:County of residence}    //label[.//*[contains(text(),'County')]]/following-sibling::div//select
+${Country success}    (//*[contains(text(),'County')])[1]/following::i[@class="fa fa-check text-success"][1]
+
+${Q:State}    //span[text()='State']/following::span[@title='Please choose an item'][1]
+${A:State}    //label[.//*[.='State']]/following-sibling::div//select
+${State success}    //span[text()='State']/following::i[@class="fa fa-check text-success"][1]
+
+${State_Value}    (//span[text()='State']/following::span//following::span[1])[2]
+${Street}   (//label[.//*[contains(text(),'Street')]]/following-sibling::div//textarea)[1]
+${City}   (//label[.//*[contains(text(),'City')]]/following-sibling::div//textarea)[1]
+${Street_input}     test street
+${City_input}     test city
+${Zip_input}     11111
+
+${Q:Zipcode_error}     (//label[.//*[contains(text(),'Zip Code')]]/following-sibling::div//textarea[contains(@data-bind,'value: $data.rawAnswer')])[1]
+${Q:Zipcode_normal}     (//label[.//*[contains(text(),'Zip')]]/following-sibling::div//textarea)[1]
+${Zipcode success}    (//label[.//*[contains(text(),'Zip Code')]]/following-sibling::div//i[@class="fa fa-check text-success"])[1]
+
+## Close the Patient Record Form ##
+
+${Close the Patient Record}    //tr[@aria-label='Close the Patient Record']
+${Q: Close the Record}    //p[text()='Are you sure you want to close this record?']
+${A: Yes, close record}     //p[text()='Yes, close this case']
+${A: No, do not close record}     //p[text()='No, do not close this case']
+${Message: Record will remain open}     //p[text()='This record will remain open.']
+${Message: Record will be closed}       //p[text()='This record will be closed with the following properties:']
+${Q: Reopen the Record}     //*[text()='Are you sure you want to reopen it?']
+${A: Yes, reopen record}     //p[text()='Yes, reopen this record']
+${A: No, do not reopen record}     //p[text()='No, keep the record closed']
+${Message: record will be reopen}       //p[text()='This Patient Record will be reopened with the following properties:']
+
+## Register a New Case Form ##
+
+${Create New Cluster Form}      //tr[@aria-label='Create New Cluster']
+${View Update Cluster Info Form}      //tr[@aria-label='View/Update Cluster Info']
+
+${Register a New Case}    (//div[@aria-label='Register a New Case']/div)[1]
+${mpi_id_input}     //span[text()='DOH MPI ID']/following::div[1]/div[@class='widget']/descendant::textarea
+${patient_first_name}     //span[text()='Patient First Name']/following::div[1]/div[@class='widget']/descendant::textarea
+${patient_last_name}     //span[text()='Patient Last Name']/following::div[1]/div[@class='widget']/descendant::textarea
+
+
+## Search for Duplicate Patients ##
+
+${Search for Duplicate Patients}    //tr[@aria-label='Search for Duplicate Patients']
+${search-first_name}    //input[@aria-label='First Name text entry']
+${search-last_name}     //input[@aria-label='Last Name text entry']
+${search-submit}        //button[@type='submit' and @id='query-submit-button']
+${search-phone}     //input[@aria-label='Home Phone Number text entry"']
+${Record New Result}    //button[text()='Record New Result']
+${patient_first_name}     //span[text()='Patient First Name']/following::div[1]/div[@class='widget']/descendant::textarea
+${patient_last_name}     //span[text()='Patient Last Name']/following::div[1]/div[@class='widget']/descendant::textarea
+
+## Assign or Reassign Contacts Form ##
+
+${Assign or Reassign Contact Form}    //tr[contains(@aria-label,'Assign or Re')]
+${Permanently assign}    //p[contains(.,'Permanently assign')]
+${Q:Permanently reassign to}    //span[contains(text(),'Permanently reassign')]/following::span[@title='Please choose an item'][1]
+${A:Permanently reassign to ct}   //li[contains(.,'CT 1')]
+${A:Permanently reassign to poc ct}   //li[contains(.,'CT')]
+${A:Permanently unassign}    //p[contains(.,'from its current primary owner')]
+${Submit Form}     //button[@type='submit' and @class='submit btn btn-primary']
+${Success Message}    //p[text()='Form successfully saved!']
+
+## Assign or Reassign Cases Form ##
+${Assign or Reassign Case Form}    //tr[@aria-label='Assign or Reassign the Case']
+${A:Permanently reassign to ci}   //li[contains(.,'CI 1')]
+${A:Permanently reassign to poc ci}   //li[contains(.,'CI')]
+
+
+## Contact Monitoring Form ##
+
+${Q:Interview Disposition A:Attempted for two days and unable to reach}    //p[text()='Attempted for two days and unable to reach']
+${Q:Home/Cell Phone}    //span[text()='Home/Cell Phone']/following::div[1]/div[@class='widget']/descendant::input
+${Q:Convert Contact A:Yes}  //p[contains(.,'Yes, convert contact/traveler to PUI')]
+${Q:Interview Disposition A:Reached person, agreed to call}    //p[text()='Reached person, agreed to call']
+${Q:Gender A:Female}    //p[text()='Female']
+${Q:Race A:Asian}    //p[text()='Asian']
+${Q:Ethnicity A:Hispanic/Latino}    //p[text()='Hispanic/Latino']
+${Q:Initial interview complete A: Yes}    //p[contains(.,'Yes, the interview is successfully complete')]
+${Q: Willing to receive SMS A: Yes}     //span[contains(.,'receive a daily survey via SMS?')]/following::p[contains(.,'Yes')][1]
+${Q: Number confirm A: Yes}    //span[contains(.,'would like to receive the SMS on?')]/following::p[contains(.,'Yes')][1]
+${Q: Initial interview complete A: No}    //p[contains(.,'No, partial interview needing call back')]
+${View/Update the rest of the Contact's info}    //label[contains(.,'View/Update')]
+${Q:Initial interview disposition A: Refused}    //p[contains(.,'Reached person, refused to participate')]
+${permanent_address}    //p[contains(text(),'permanent address')]/following-sibling::p
+@{contact_living_situation_option}      'Group Home for'    'Other Adult Group'     'All Shelters'      'Jails'       'Temporary'
+@{contact_living_option_health}      'Long-term Care Facility'    'Post Acute Care'     'Care Inpatient'    'Assisted Living'
+
+
+## Close the Contact Record Form ##
+${Close the Contact Record}    //tr[@aria-label='Close the Contact Record']
+${Q: Close the Contact}    //p[text()='Are you sure you want to close this record?']
+${A: Yes, close contact}     //p[text()='Yes, close this contact']
+${A: No, do not close contact}     //p[text()='No, do not close this contact']
+${Message: Contact will be closed}       //p[text()='This Contact will be closed with the following properties:']
+${Q: Reopen the Contact}     //*[text()='Are you sure you want to reopen it?']
+${A: Yes, reopen contact}     //p[text()='Yes, reopen this Contact']
+${A: No, do not reopen contact}     //p[text()='No, keep the record closed']
+${Message: contact will be reopen}       //p[text()='This Contact will be reopened with the following properties:']
+${Message: final disposition blank}     //li[contains(normalize-space(),'blank')]/strong[text()='Final Disposition:']

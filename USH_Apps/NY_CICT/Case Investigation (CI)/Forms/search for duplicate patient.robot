@@ -5,20 +5,6 @@ Library    DateTime
 Resource    ../../Base/base.robot
 
 
-*** Variables ***
-
-## Search for Duplicate Patients
-${Search for Duplicate Patients}    //tr[@aria-label='Search for Duplicate Patients']
-${search-first_name}    //input[@aria-label='First Name text entry']
-${search-last_name}     //input[@aria-label='Last Name text entry']
-${search-submit}        //button[@type='submit' and @id='query-submit-button']
-${search-phone}     //input[@aria-label='Home Phone Number text entry"']
-${Record New Result}    //button[text()='Record New Result']
-${patient_first_name}     //span[text()='Patient First Name']/following::div[1]/div[@class='widget']/descendant::textarea
-${patient_last_name}     //span[text()='Patient Last Name']/following::div[1]/div[@class='widget']/descendant::textarea
-${submit_form}     //button[@type='submit' and @class='submit btn btn-primary']
-${success_message}    //p[text()='Form successfully saved!']
-
 *** Keywords ***
 
 

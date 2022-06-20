@@ -182,6 +182,8 @@ USH_Apps/NY_CICT/Tests/output.xml
 /selenium*
 /log.html
 /output.xml
+/.pabotsuitenames
+/pabot_results/*
 
 
 #Ignoring compliled files of NY Performance

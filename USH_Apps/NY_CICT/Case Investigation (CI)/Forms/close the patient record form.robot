@@ -5,23 +5,6 @@ Library    DateTime
 Resource    ../../Base/base.robot
 
 
-*** Variables ***
-
-## Close the Patient Record Form
-${Close the Patient Record}    //tr[@aria-label='Close the Patient Record']
-${Q: Close the Record}    //p[text()='Are you sure you want to close this record?']
-${A: Yes, close record}     //p[text()='Yes, close this case']
-${A: No, do not close record}     //p[text()='No, do not close this case']
-${Message: Record will remain open}     //p[text()='This record will remain open.']
-${Message: Record will be closed}       //p[text()='This record will be closed with the following properties:']
-${Q: Reopen the Record}     //*[text()='Are you sure you want to reopen it?']
-${A: Yes, reopen record}     //p[text()='Yes, reopen this record']
-${A: No, do not reopen record}     //p[text()='No, keep the record closed']
-${Message: record will be reopen}       //p[text()='This Patient Record will be reopened with the following properties:']
-
-${submit_form}
-${success_message}    //p[text()='Form successfully saved!']
-
 *** Keywords ***
 
 
