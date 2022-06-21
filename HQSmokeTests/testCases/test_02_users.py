@@ -133,3 +133,9 @@ def test_case_57_download_and_upload_web_users(driver):
     user = WebUsersPage(driver)
     user.download_web_users()
     user.upload_web_users()
+
+
+def test_case_60_check_group_in_file(driver):
+    worker = MobileWorkerPage(driver)
+    worker.mobile_worker_menu()
+    worker.check_for_group_in_downloaded_file()
