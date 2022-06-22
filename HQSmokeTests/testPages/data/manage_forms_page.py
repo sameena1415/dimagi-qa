@@ -1,5 +1,6 @@
 import time
 
+from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.by import By
 
 from HQSmokeTests.testPages.base.base_page import BasePage
@@ -31,6 +32,7 @@ class ManageFormsPage(BasePage):
         self.date_range_manage_forms = (By.ID, "filter_range")
         self.village_app = (By.XPATH, "//option[text()='Village Health']")
         self.select_archive_restore = (By.XPATH, "//select[@name='archive_or_restore']")
+        self.check_data = (By.XPATH, "//tr[@class = 'form-data-question ']")
 
     def get_normal_forms(self):
         self.wait_and_sleep_to_click(self.manage_forms_link)
@@ -50,7 +52,8 @@ class ManageFormsPage(BasePage):
         self.wait_and_sleep_to_click(self.view_form_link)
         self.switch_to_next_tab()
         normal_form_data = self.driver.page_source
-        assert normal_form_data != ""  # This condition can be improvised
+        verify_data = self.find_elements(self.check_data)
+        assert len(verify_data) > 0, "normal_form has no data"
         print("normal_form has data")
         self.driver.close()
         self.switch_back_to_prev_tab()

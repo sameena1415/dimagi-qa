@@ -38,7 +38,7 @@ class ExportDataPage(BasePage):
         self.add_export_button = (By.XPATH, "//a[@href='#createExportOptionsModal']")
         self.add_export_conf = (By.XPATH, "//button[@data-bind='visible: showSubmit, disable: disableSubmit']")
         self.export_name = (By.XPATH, '//*[@id="export-name"]')
-        self.export_settings_create = (By.XPATH,  "//button[@class='btn btn-lg btn-primary']")
+        self.export_settings_create = (By.XPATH, "//button[@class='btn btn-lg btn-primary']")
         self.date_range = (By.ID, "id_date_range")
         self.case_owner = (By.XPATH, "//span[@class='select2-selection select2-selection--multiple']")
 
@@ -76,11 +76,14 @@ class ExportDataPage(BasePage):
         self.copy_dashfeed_link = (By.XPATH, "(//span[contains(@data-bind, 'copyLinkRequested')])[1]")
         self.dashboard_feed_link = (
             By.XPATH, "//span[@class='input-group-btn']//preceding::a[@class='btn btn-info btn-xs']")
+        self.check_data = (By.XPATH, "//*[contains(text(), '@odata.context')]")
 
         # Power BI / Tableau Integration, Form
         self.powerBI_tab_int = (By.LINK_TEXT, 'PowerBi/Tableau Integration')
-        self.edit_button_case = (By.XPATH, "(//span[text()='"+UserData.odata_feed_case+"']//following::a[@data-bind='click: editExport'])[1]")
-        self.edit_button_form = (By.XPATH, "(//span[text()='"+UserData.odata_feed_form+"']//following::a[@data-bind='click: editExport'])[1]")
+        self.edit_button_case = (By.XPATH,
+                                 "(//span[text()='" + UserData.odata_feed_case + "']//following::a[@data-bind='click: editExport'])[1]")
+        self.edit_button_form = (By.XPATH,
+                                 "(//span[text()='" + UserData.odata_feed_form + "']//following::a[@data-bind='click: editExport'])[1]")
         self.select_none = (By.XPATH, "(//a[@data-bind='click: table.selectNone'])[1]")
         self.first_checkbox = (By.XPATH, "(//input[@type='checkbox'])[3]")
         self.third_checkbox = (By.XPATH, "(//input[@type='checkbox'])[5]")
@@ -105,7 +108,7 @@ class ExportDataPage(BasePage):
         time.sleep(5)
         get_url = self.driver.current_url
         ID = get_url.split("/")[10]
-        odata_feed_link_case = "https://" + self.get_environment() + "/a/" + self.get_domain() + "/api/v0.5/odata/"+item+"/" + ID + "/feed/"
+        odata_feed_link_case = "https://" + self.get_environment() + "/a/" + self.get_domain() + "/api/v0.5/odata/" + item + "/" + ID + "/feed/"
         self.driver.back()
         # self.switch_to_new_tab()
         return odata_feed_link_case
@@ -177,7 +180,8 @@ class ExportDataPage(BasePage):
 
     def form_exports(self):
         self.prepare_and_download_export()
-        self.find_data_by_id_and_verify('form.womans_name', 'formid', UserData.form_export_name, self.woman_form_name_HQ)
+        self.find_data_by_id_and_verify('form.womans_name', 'formid', UserData.form_export_name,
+                                        self.woman_form_name_HQ)
 
     # Test Case 20_b - Verify Export functionality for Cases
 
@@ -393,8 +397,8 @@ class ExportDataPage(BasePage):
 
     def assert_odata_feed_data(self):
         odata_feed_data = self.driver.page_source
-        assert odata_feed_data != ""  # This condition can be improvised
-        print("Odata case feed has data")
+        verify_data = self.find_elements(self.check_data)
+        assert len(verify_data) > 0, "Odata feed is Empty "
         # self.driver.close()  # Close the feed URL
         self.driver.back()
 
@@ -414,7 +418,7 @@ class ExportDataPage(BasePage):
         print("Export created!!")
         self.wait_to_click(self.export_button)
         time.sleep(3)
-        self.wait_to_clear_and_send_keys(self.date_range, self.current_date_range+Keys.TAB)
+        self.wait_to_clear_and_send_keys(self.date_range, self.current_date_range + Keys.TAB)
         self.wait_and_sleep_to_click(self.prepare_export_button)
         try:
             self.wait_and_sleep_to_click(self.download_button)
