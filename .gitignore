@@ -140,7 +140,6 @@ dmypy.json
 .pyre/
 
 #Ignoring compliled files of HQSmokeTests
-.idea/
 HQSmokeTests/Pages/__pycache__/
 HQSmokeTests/TestBase/__pycache__/
 HQSmokeTests/TestScripts/__pycache__/
@@ -148,9 +147,6 @@ HQSmokeTests/Pages/generatedUserInputs.csv
 HQSmokeTests/TestScripts/generatedUserInputs.csv
 AutomationTestReports/
 output.json
-pytest_html_report.html
-archive
-assets
 /HQSmokeTests/testCases/report.html
 /report.html
 HQSmokeTests/report.html
@@ -177,8 +173,18 @@ POCs/LocustScripts/project-config/syria-support/user_credentials.json
 
 #Ignoring compliled files of USH Apps
 USH_Apps/NY_CICT/Reports/*
-USH_Apps/NY_CICT/Utilities/user_inputs.robot/
+USH_Apps/NY_CICT/Utilities/user_inputs.robot
 USH_Apps/NY_CICT/Base/__pycache__
+USH_Apps/NY_CICT/Tests/selenium*
+USH_Apps/NY_CICT/Tests/log.html
+USH_Apps/NY_CICT/Tests/report.html
+USH_Apps/NY_CICT/Tests/output.xml
+/selenium*
+/log.html
+/output.xml
+/.pabotsuitenames
+/pabot_results/*
+
 
 #Ignoring compliled files of NY Performance
 PerformanceTests/NY_CICT_App_Sprint/CaptureReadings/report.html

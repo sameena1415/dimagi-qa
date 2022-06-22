@@ -24,7 +24,7 @@ What you'll find here:
 
 ### Some More Notes
 
-- This will guide you through  [making your first contribution](MAKING%20FIRST%20CONTRIBUTION.md)
+- This will guide you through  [making your first contribution](CONTRIBUTING.md)
 - Make sure you include a readme with your contributions according to the [template](README%20TEMPLATE.md).
 - Following the READMEs in the respective test directories is the best way to run the tests.
 - For more information, go to [this wiki.](https://confluence.dimagi.com/pages/viewpage.action?spaceKey=GTD&title=QA+Automation)

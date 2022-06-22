@@ -5,10 +5,6 @@ name: Python Request API
 
 on:
   workflow_dispatch:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
   repository_dispatch:
     types: [ deploy_success ]
 
@@ -39,10 +35,12 @@ jobs:
 
     - name: Requests API tests with pytest
       env:
-        DIMAGIQA_URL: ${{ secrets.DIMAGIQA_API_BASE_URL }}  #${{ secrets.DIMAGIQA_URL }}
+        DIMAGIQA_ENV: ${{ github.event.client_payload.environment }}  #${{ secrets.DIMAGIQA_URL }}
         DIMAGIQA_PASSWORD: ${{ secrets.DIMAGIQA_API_PASSWORD }}
         DIMAGIQA_LOGIN_USER: ${{ secrets.DIMAGIQA_APILOGIN_USERNAME }}
         DIMAGIQA_LOGIN_PASS: ${{ secrets.DIMAGIQA_APILOGIN_PASSWORD }}
+        DIMAGIQA_PROD_API_KEY: ${{secrets.DIMAGIQA_APIPROD_API_KEY}}
+        DIMAGIQA_STAGING_API_KEY: ${{secrets.DIMAGIQA_APISTAGING_API_KEY}}
       run: |
         echo "client_payload: ${{ toJson(github.event.client_payload) }}"
         echo "NOW=$(date +'%m-%d %H:%M')" >> $GITHUB_ENV
@@ -59,7 +57,7 @@ jobs:
         username: ${{secrets.DIMAGIQA_MAIL_USERNAME}}
         password: ${{secrets.DIMAGIQA_MAIL_PASSWORD}}
         subject: FAIL - Request API Tests[#${{github.run_number}}] on branch "${{ github.ref_name }}", ${{env.NOW}}
-        to: qa-automation@dimagi.com
+        to: qa@dimagi.com
         from: <${{secrets.DIMAGIQA_MAIL_USERNAME}}>
         html_body: file:////home/runner/work/dimagi-qa/dimagi-qa/RequestAPI/email_fail.html
         attachments: /home/runner/work/dimagi-qa/dimagi-qa/report.html
@@ -74,7 +72,7 @@ jobs:
         username: ${{secrets.DIMAGIQA_MAIL_USERNAME}}
         password: ${{secrets.DIMAGIQA_MAIL_PASSWORD}}
         subject: PASS - Request API Tests[#${{github.run_number}}] on branch "${{ github.ref_name }}", ${{env.NOW}}
-        to: qa-automation@dimagi.com
+        to: qa@dimagi.com
         from: <${{secrets.DIMAGIQA_MAIL_USERNAME}}>
         html_body: file:////home/runner/work/dimagi-qa/dimagi-qa/RequestAPI/email_pass.html
         attachments: /home/runner/work/dimagi-qa/dimagi-qa/report.html

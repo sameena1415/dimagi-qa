@@ -6,12 +6,14 @@ Resource    ../Menu/menu.robot
 Resource    ../../Base/base.robot
 
 
-*** Keywords ***  
+*** Keywords ***
 
 Generate Random Contact Name
-    ${hex} =    Generate Random String	4	[NUMBERS]abcdef
-    ${name_random} =     Catenate	SEPARATOR=-	Contact	${hex}
-    Set Suite Variable  ${name_random}
+    ${hex} =    Generate Random String	6	[NUMBERS]abcdef
+    ${date}     Get Current Date    result_format=%m/%d/%Y
+    ${contact_name_random} =     Catenate	SEPARATOR=-	Contact	${hex}  ${date}
+    Set Suite Variable  ${contact_name_random}
+    [Return]    ${contact_name_random}
 
    
 Register contact with phone number
@@ -20,8 +22,8 @@ Register contact with phone number
    Run Keyword And Ignore Error     Wait Until Element Is Visible    ${register_new_contacts_form}
    Run Keyword And Ignore Error    JS Click    ${register_new_contacts_form}
    Generate Random Contact Name
-   ${name_random}    Get Variable Value    ${name_random}
-   Input Text       ${contact_first_name}    ${name_random} 
+   ${name_random}    Get Variable Value    ${contact_name_random}
+   Input Text       ${contact_first_name}    ${name_random}
    Input Text       ${contact_last_name}    ${name_random}
    Run Keyword And Ignore Error     Phone No not Matching
    ${Mobile number}    Generate Mobile Number
@@ -32,6 +34,8 @@ Register contact with phone number
    Input Text    ${last_contact_date}   ${Yesterday's date}
    JS Click    ${last_contact_date}
    Submit Form and Check Success  
+   [Return]  ${name_random}  ${Mobile number}
+
 
 Register contact without phone number
    [Arguments]  ${case_name}    ${case_created}
@@ -44,7 +48,7 @@ Register contact without phone number
    Run Keyword And Ignore Error     Wait Until Element Is Visible    ${register_new_contacts_form}
    Run Keyword And Ignore Error    JS Click    ${register_new_contacts_form}
    Generate Random Contact Name
-   ${name_random}    Get Variable Value    ${name_random}
+   ${name_random}    Get Variable Value    ${contact_name_random}
    Input Text       ${contact_first_name}    ${name_random} 
    Input Text       ${contact_last_name}    ${name_random}   
    JS Click    ${preferred_language}
@@ -59,15 +63,14 @@ Phone No Not Matching
     JS Click    ${phone_no_not_matching}
 
 Get Contact Name
-    ${name_random}    Get Variable Value    ${name_random} 
-   #${name_random}     Set Variable     Contact-8d99
+    ${name_random}    Get Variable Value    ${contact_name_random}
+#    ${name_random}     Set Variable     Contact-3bba
     Log         ${name_random}
     [Return]    ${name_random}
 
 Set Contact Name
     ${name_random}  Get Contact Name
     ${contact_created}  Set Variable    //tr[.//td[text()='${name_random}']]
-#    ${contact_created}  Set Variable    //tr[.//td[text()='${name_random}']  and @class='module-case-list-column']
     Log    ${contact_created}
     Set Suite Variable   ${contact_created}
     [Return]    ${contact_created} 
