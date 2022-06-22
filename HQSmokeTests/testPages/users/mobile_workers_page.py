@@ -9,9 +9,8 @@ from HQSmokeTests.userInputs.user_inputs import UserData
 from HQSmokeTests.testPages.users.org_structure_page import latest_download_file
 from selenium.common.exceptions import TimeoutException, NoSuchElementException, StaleElementReferenceException
 from selenium.webdriver.common.by import By
-from selenium import webdriver
+from HQSmokeTests.testPages.users.group_page import GroupPage
 
-# from HQSmokeTests.testPages.users.group_page import add_group
 
 """"Contains test page elements and functions related to the User's Mobile Workers module"""
 
@@ -126,14 +125,6 @@ class MobileWorkerPage(BasePage):
         self.error_403 = (By.XPATH, "//h1[text()='403 Forbidden']")
 
         # add MW to group
-        self.click_group_menu = (By.LINK_TEXT, "Groups")
-        self.group_name = (By.ID, "id_group_name")
-        self.created_group = "group_" + fetch_random_string()
-        self.created_group_path = (By.LINK_TEXT, self.created_group)
-        self.add_group_button = (By.XPATH, "//button[@type='submit' and @class='btn btn-primary']")
-        self.users_drop_down = (By.XPATH, "//span[@class='select2-selection select2-selection--multiple']")
-        self.select_user = (By.XPATH,  "//li[text()='username_123'")
-        self.update_button = (By.ID, "submit-id-submit")
         self.delete_group = (By.XPATH, "//a[@href='#delete_group_modal']")
         self.confirm_delete = (By.XPATH, "//button[@class='btn btn-danger disable-on-submit']")
         self.delete_success_message = (By.XPATH, "//div[@class='alert alert-margin-top fade in html alert-success']")
@@ -190,28 +181,16 @@ class MobileWorkerPage(BasePage):
         assert self.username == new_user_created, "Could find the new mobile worker created"
         print("Mobile Worker Created")
 
-    def check_for_group_in_downloaded_file(self):
-        self.wait_to_click(self.click_group_menu)
-        self.wait_to_clear_and_send_keys(self.group_name, self.created_group)
-        self.wait_to_click(self.add_group_button)
-        self.send_keys(self.users_drop_down, "username_123")
-        self.wait_to_click(self.select_user)
-        self.wait_to_click(self.update_button)
-        group_id_value = self.driver.current_url.split("/")[8]
-        print(group_id_value)
-        time.sleep(2)
-        self.download_mobile_worker()
-        newest_file = latest_download_file()
+
+    def check_for_group_in_downloaded_file(self, newest_file, group_id_value):
         path = os.path.join(UserData.DOWNLOAD_PATH, newest_file)
+        print(path)
+        time.sleep(5)
         data = pd.read_excel(path, sheet_name='groups')
         df = pd.DataFrame(data, columns=['id'])
         assert group_id_value in df['id'].values, "Group is not present"
-        time.sleep(10)
-        self.wait_to_click(self.click_group_menu)
-        self.wait_to_click(self.created_group_path)
-        self.wait_to_click(self.delete_group)
-        self.wait_to_click(self.confirm_delete)
-        assert self.is_visible_and_displayed(self.delete_success_message), "Group deletion not successful"
+
+
 
     def edit_user_field(self):
         self.wait_to_click(self.edit_user_field_xpath)
@@ -339,6 +318,7 @@ class MobileWorkerPage(BasePage):
         newest_file = latest_download_file()
         self.assert_downloaded_file(newest_file, "_users_"), "Download Not Completed!"
         print("File download successful")
+        return newest_file
 
     def upload_mobile_worker(self):
         self.mobile_worker_menu()

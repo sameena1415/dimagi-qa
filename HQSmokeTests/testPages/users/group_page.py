@@ -44,15 +44,18 @@ class GroupPage(BasePage):
         assert self.is_visible_and_displayed(self.group_created_success), "Group not created successfully"
         print("Group Added")
 
-    def add_user_to_group(self):
-        self.send_keys(self.users_drop_down, "username_" + fetch_random_string())
+    def add_user_to_group(self, username):
+        self.send_keys(self.users_drop_down, username)
         self.wait_to_click(self.select_user)
         self.wait_to_click(self.update_button)
+        group_id_value = self.driver.current_url.split("/")[8]
+        print(group_id_value)
         time.sleep(2)
         self.click_group_menu()
         assert self.is_visible_and_displayed(self.created_group_path), "User could not be assigned to the group"
         self.accept_pop_up()
         print("User Added to Group")
+        return group_id_value
 
     def edit_existing_group(self):
         self.click_group_menu()

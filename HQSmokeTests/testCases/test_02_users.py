@@ -39,8 +39,15 @@ def test_case_05_create_group_and_assign_user(driver):
     menu.users_menu()
     visible = GroupPage(driver)
     visible.add_group()
-    visible.add_user_to_group()
+    global group_id_value
+    group_id_value = visible.add_user_to_group("username_" + fetch_random_string())
 
+
+def test_case_10_download_and_upload_users(driver):
+    user = MobileWorkerPage(driver)
+    newest_file = user.download_mobile_worker()
+    user.check_for_group_in_downloaded_file(newest_file, group_id_value)
+    user.upload_mobile_worker()
 
 def test_case_05_edit_user_groups(driver):
     menu = HomePage(driver)
@@ -51,10 +58,7 @@ def test_case_05_edit_user_groups(driver):
     edit.remove_user_from_group()
 
 
-def test_case_10_download_and_upload_users(driver):
-    user = MobileWorkerPage(driver)
-    user.download_mobile_worker()
-    user.upload_mobile_worker()
+
 
 
 def test_case_04_deactivate_user(driver):
@@ -135,7 +139,4 @@ def test_case_57_download_and_upload_web_users(driver):
     user.upload_web_users()
 
 
-def test_case_60_check_group_in_file(driver):
-    worker = MobileWorkerPage(driver)
-    worker.mobile_worker_menu()
-    worker.check_for_group_in_downloaded_file()
+
