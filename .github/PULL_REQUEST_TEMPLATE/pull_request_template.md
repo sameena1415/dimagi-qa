@@ -1,22 +1,30 @@
-## Title
+## Summary
 <!--
     Provide a brief description of the change
 -->
 
+## Description
 
-## Change/Update Description
+<!-- Provide a description of the change -->
 
-<!-- Identify the related test coverage and the tests it would catch -->
-
-
-## Type of Change
-
-- [ ] New update to existing framework
-- [ ] Script fix
-- [ ] New Addition to the repo
-
-
-### Link to Jira Ticket
+### Link to Jira Ticket (if applicable)
 <!--
 Provide link to Jira ticket if applicable
 --> 
+
+## Type of Change
+
+- [ ] New Addition or Enhancement
+- [ ] Script Error Fix
+- [ ] Framework/ Workflow Change
+- [ ] Documentation
+
+## Divison
+
+- [ ] Global Tech
+- [ ] SaaS
+- [ ] USH
+- [ ] Solutions
+- [ ] India Div
+- [ ] FocusMDM
+
