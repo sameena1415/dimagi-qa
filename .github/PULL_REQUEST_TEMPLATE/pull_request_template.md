@@ -1,15 +1,15 @@
-## Summary
+## Title
 <!--
     Provide a brief description of the change
 -->
 
 
-## Automated test coverage
+## Change/Update Description
 
 <!-- Identify the related test coverage and the tests it would catch -->
 
 
-## Safety Assurance
+## Type of Change
 
 - [ ] New update to existing framework
 - [ ] Script fix
