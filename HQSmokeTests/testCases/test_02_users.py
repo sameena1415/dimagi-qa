@@ -49,6 +49,7 @@ def test_case_10_download_and_upload_users(driver):
     user.check_for_group_in_downloaded_file(newest_file, group_id_value)
     user.upload_mobile_worker()
 
+
 def test_case_05_edit_user_groups(driver):
     menu = HomePage(driver)
     menu.users_menu()
@@ -56,9 +57,6 @@ def test_case_05_edit_user_groups(driver):
     edit.click_group_menu()
     edit.edit_existing_group()
     edit.remove_user_from_group()
-
-
-
 
 
 def test_case_04_deactivate_user(driver):

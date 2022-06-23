@@ -124,11 +124,6 @@ class MobileWorkerPage(BasePage):
         self.download_filter = (By.XPATH, "//button[@data-bind='html: buttonHTML']")
         self.error_403 = (By.XPATH, "//h1[text()='403 Forbidden']")
 
-        # add MW to group
-        self.delete_group = (By.XPATH, "//a[@href='#delete_group_modal']")
-        self.confirm_delete = (By.XPATH, "//button[@class='btn btn-danger disable-on-submit']")
-        self.delete_success_message = (By.XPATH, "//div[@class='alert alert-margin-top fade in html alert-success']")
-
     def search_user(self):
         self.wait_to_clear_and_send_keys(self.search_mw, self.username)
         time.sleep(2)
@@ -181,7 +176,6 @@ class MobileWorkerPage(BasePage):
         assert self.username == new_user_created, "Could find the new mobile worker created"
         print("Mobile Worker Created")
 
-
     def check_for_group_in_downloaded_file(self, newest_file, group_id_value):
         path = os.path.join(UserData.DOWNLOAD_PATH, newest_file)
         print(path)
@@ -189,8 +183,6 @@ class MobileWorkerPage(BasePage):
         data = pd.read_excel(path, sheet_name='groups')
         df = pd.DataFrame(data, columns=['id'])
         assert group_id_value in df['id'].values, "Group is not present"
-
-
 
     def edit_user_field(self):
         self.wait_to_click(self.edit_user_field_xpath)
