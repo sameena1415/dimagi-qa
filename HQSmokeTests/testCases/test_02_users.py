@@ -1,3 +1,5 @@
+import pytest
+
 from HQSmokeTests.userInputs.generate_random_string import fetch_random_string
 # from HQSmokeTests.testPages.base.login_page import LoginPage
 from HQSmokeTests.testPages.home.home_page import HomePage
@@ -11,6 +13,7 @@ from HQSmokeTests.testPages.users.web_user_page import WebUsersPage
 """"Contains test cases related to the User's Mobile Worker module"""
 
 
+@pytest.mark.run(order=0)
 def test_case_02_create_mobile_worker(driver):
     worker = MobileWorkerPage(driver)
     worker.mobile_worker_menu()
@@ -39,7 +42,15 @@ def test_case_05_create_group_and_assign_user(driver):
     menu.users_menu()
     visible = GroupPage(driver)
     visible.add_group()
-    visible.add_user_to_group()
+    global group_id_value
+    group_id_value = visible.add_user_to_group("username_" + fetch_random_string())
+
+
+def test_case_10_download_and_upload_users(driver):
+    user = MobileWorkerPage(driver)
+    newest_file = user.download_mobile_worker()
+    user.check_for_group_in_downloaded_file(newest_file, group_id_value)
+    user.upload_mobile_worker()
 
 
 def test_case_05_edit_user_groups(driver):
@@ -49,12 +60,6 @@ def test_case_05_edit_user_groups(driver):
     edit.click_group_menu()
     edit.edit_existing_group()
     edit.remove_user_from_group()
-
-
-def test_case_10_download_and_upload_users(driver):
-    user = MobileWorkerPage(driver)
-    user.download_mobile_worker()
-    user.upload_mobile_worker()
 
 
 def test_case_04_deactivate_user(driver):

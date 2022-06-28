@@ -1,4 +1,7 @@
+import os
 import time
+
+import pandas as pd
 
 from HQSmokeTests.testPages.base.base_page import BasePage
 from HQSmokeTests.userInputs.generate_random_string import fetch_random_string, fetch_phone_number
@@ -6,6 +9,8 @@ from HQSmokeTests.userInputs.user_inputs import UserData
 from HQSmokeTests.testPages.users.org_structure_page import latest_download_file
 from selenium.common.exceptions import TimeoutException, NoSuchElementException, StaleElementReferenceException
 from selenium.webdriver.common.by import By
+from HQSmokeTests.testPages.users.group_page import GroupPage
+
 
 """"Contains test page elements and functions related to the User's Mobile Workers module"""
 
@@ -171,6 +176,14 @@ class MobileWorkerPage(BasePage):
         assert self.username == new_user_created, "Could find the new mobile worker created"
         print("Mobile Worker Created")
 
+    def check_for_group_in_downloaded_file(self, newest_file, group_id_value):
+        path = os.path.join(UserData.DOWNLOAD_PATH, newest_file)
+        print(path)
+        time.sleep(5)
+        data = pd.read_excel(path, sheet_name='groups')
+        df = pd.DataFrame(data, columns=['id'])
+        assert group_id_value in df['id'].values, "Group is not present"
+
     def edit_user_field(self):
         self.wait_to_click(self.edit_user_field_xpath)
 
@@ -297,6 +310,7 @@ class MobileWorkerPage(BasePage):
         newest_file = latest_download_file()
         self.assert_downloaded_file(newest_file, "_users_"), "Download Not Completed!"
         print("File download successful")
+        return newest_file
 
     def upload_mobile_worker(self):
         self.mobile_worker_menu()
