@@ -48,7 +48,7 @@ class GroupPage(BasePage):
         self.send_keys(self.users_drop_down, username)
         self.wait_to_click(self.select_user)
         self.wait_to_click(self.update_button)
-        group_id_value = self.driver.current_url.split("/")[8]
+        group_id_value = self.driver.current_url.split("/")[-1]
         print(group_id_value)
         time.sleep(2)
         self.click_group_menu()

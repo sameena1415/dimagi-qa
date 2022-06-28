@@ -1,3 +1,5 @@
+import pytest
+
 from HQSmokeTests.userInputs.generate_random_string import fetch_random_string
 # from HQSmokeTests.testPages.base.login_page import LoginPage
 from HQSmokeTests.testPages.home.home_page import HomePage
@@ -11,6 +13,7 @@ from HQSmokeTests.testPages.users.web_user_page import WebUsersPage
 """"Contains test cases related to the User's Mobile Worker module"""
 
 
+@pytest.mark.run(order=0)
 def test_case_02_create_mobile_worker(driver):
     worker = MobileWorkerPage(driver)
     worker.mobile_worker_menu()
@@ -135,6 +138,3 @@ def test_case_57_download_and_upload_web_users(driver):
     user = WebUsersPage(driver)
     user.download_web_users()
     user.upload_web_users()
-
-
-
