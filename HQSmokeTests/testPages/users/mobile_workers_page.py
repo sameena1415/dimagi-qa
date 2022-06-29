@@ -45,7 +45,7 @@ class MobileWorkerPage(BasePage):
         self.webapp_login_with_username = (By.XPATH, self.login_as_usernames)
         self.webapp_login = (By.XPATH, "(//div[@class='js-restore-as-item appicon appicon-restore-as'])")
         self.confirm_reactivate_xpath_list = (By.XPATH, "((//div[@class='modal-footer'])/button[@data-bind='click: function(user) { user.is_active(true); }'])")
-        self.reactivate_buttons_list = (By.XPATH, "//td/div[@data-bind='visible: !is_active()']//button[@class='btn btn-default']")
+        self.reactivate_buttons_list = (By.XPATH, "//td/div[@data-bind='visible: !is_active() && is_account_confirmed()']//button[@class='btn btn-default']")
         self.confirm_deactivate_xpath_list = (By.XPATH, "((//div[@class='modal-footer'])/button[@class='btn btn-danger'])")
         self.deactivate_buttons_list = (By.XPATH, "(//td/div[@data-bind='visible: is_active()']/button[@class='btn btn-default'])")
         self.show_deactivated_users_btn = (By.XPATH, '//button[@data-bind="visible: !deactivatedOnly(), click: function() { deactivatedOnly(true); }"]')
@@ -66,6 +66,7 @@ class MobileWorkerPage(BasePage):
         self.add_field_xpath = (By.XPATH, "//button[@data-bind='click: addField']")
         self.user_property_xpath = (By.XPATH, "(//input[@data-bind='value: slug'])[last()]")
         self.label_xpath = (By.XPATH, "(//input[@data-bind='value: label'])[last()]")
+        self.choices_button_xpath = (By.XPATH, "(//div[contains(text(), 'Choices')])[last()]")
         self.add_choice_button_xpath = (By.XPATH, "(//button[@data-bind='click: addChoice'])[last()]")
         self.choice_xpath = (By.XPATH, "(//input[@data-bind='value: value'])[last()]")
         self.save_field_id = (By.ID, "save-custom-fields")
@@ -199,6 +200,7 @@ class MobileWorkerPage(BasePage):
         self.send_keys(self.label_xpath, label)
 
     def add_choice(self, choice):
+        self.wait_to_click(self.choices_button_xpath)
         self.wait_to_click(self.add_choice_button_xpath)
         self.clear(self.choice_xpath)
         self.send_keys(self.choice_xpath, choice)
