@@ -64,7 +64,7 @@ class ExportDataPage(BasePage):
 
         # Daily Saved Export variables, form, case
         self.daily_saved_export_link = (By.LINK_TEXT, 'Daily Saved Exports')
-        self.edit_form_case_export = (By.XPATH, "(//a[@data-bind='click: editExport'])[1]")
+        self.edit_form_case_export = (By.XPATH, "(//a[@data-bind='attr: {href: editUrl}'])[1]")
         self.create_DSE_checkbox = (By.XPATH, '//*[@id="daily-saved-export-checkbox"]')
         self.download_dse = (By.XPATH, "(//a[@class='btn btn-info btn-xs'])[1]")
         self.data_upload_msg = (By.XPATH, "//*[contains(text(),'Data update complete')]")
@@ -81,9 +81,9 @@ class ExportDataPage(BasePage):
         # Power BI / Tableau Integration, Form
         self.powerBI_tab_int = (By.LINK_TEXT, 'PowerBi/Tableau Integration')
         self.edit_button_case = (By.XPATH,
-                                 "(//span[text()='" + UserData.odata_feed_case + "']//following::a[@data-bind='click: editExport'])[1]")
+                                 "(//span[contains(text(), 'Copy & Edit Feed')])")
         self.edit_button_form = (By.XPATH,
-                                 "(//span[text()='" + UserData.odata_feed_form + "']//following::a[@data-bind='click: editExport'])[1]")
+                                 "(//span[text()='" + UserData.odata_feed_form + "']//following::a[@data-bind='attr: {href: editUrl}'])[1]")
         self.select_none = (By.XPATH, "(//a[@data-bind='click: table.selectNone'])[1]")
         self.first_checkbox = (By.XPATH, "(//input[@type='checkbox'])[3]")
         self.third_checkbox = (By.XPATH, "(//input[@type='checkbox'])[5]")
