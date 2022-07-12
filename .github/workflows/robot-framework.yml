@@ -54,8 +54,8 @@ jobs:
         server_port: 465
         username: ${{secrets.DIMAGIQA_MAIL_USERNAME}}
         password: ${{secrets.DIMAGIQA_MAIL_PASSWORD}}
-        subject: FAIL - NY App Tests (ny-staging-cdms) [#${{github.run_number}}], ${{env.NOW}}
-        to: qa-automation@dimagi.com
+        subject: ${{ github.event.client_payload.environment }} - FAIL - NY App Tests (ny-staging-cdms) [#${{github.run_number}}], ${{env.NOW}}
+        to: qa@dimagi.com
         from: <${{secrets.DIMAGIQA_MAIL_USERNAME}}>
         html_body: Please find the attached report. To access screenshots, download the test results artifacted in the respective job run.
         attachments:  /home/runner/work/dimagi-qa/dimagi-qa/USH_Apps/NY_CICT/Reports/report.html
@@ -69,8 +69,8 @@ jobs:
         server_port: 465
         username: ${{secrets.DIMAGIQA_MAIL_USERNAME}}
         password: ${{secrets.DIMAGIQA_MAIL_PASSWORD}}
-        subject: PASS - NY App Tests (ny-staging-cdms) [#${{github.run_number}}], ${{env.NOW}}
-        to: qa-automation@dimagi.com
+        subject: ${{ github.event.client_payload.environment }} - PASS - NY App Tests (ny-staging-cdms) [#${{github.run_number}}], ${{env.NOW}}
+        to: qa@dimagi.com
         from: <${{secrets.DIMAGIQA_MAIL_USERNAME}}>
         html_body: Please find the attached report. To access screenshots, download the test results artifacted in the respective job run.
         attachments: /home/runner/work/dimagi-qa/dimagi-qa/USH_Apps/NY_CICT/Reports/report.html
