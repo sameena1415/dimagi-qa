@@ -24,8 +24,8 @@ class UserData:
     model_type_case = "case"
     model_type_form = "form"
     new_form_name = "Android Test Form"
-    app_login = "AppiumTest"
-    app_password = "pass123"
+    app_login = "appiumtest"
+    app_password = "Pass@123"
     two_fa_user = "2fa.commcare.user@gmail.com"
 
     # Phone Number
