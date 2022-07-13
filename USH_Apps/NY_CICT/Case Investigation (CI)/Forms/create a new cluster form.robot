@@ -30,7 +30,8 @@ Create New Cluster - non school/college
     ${date}    Get Current Date    result_format=%#m/%#d/%Y
     Generate Random Cluster Name
     ${name_random}    Get Variable Value    ${name_random}
-    Wait Until Keyword Succeeds  2 min  5 sec   Wait Until Element Is Visible    ${cluster_name_field}
+    Wait Until Element Is Visible    ${cluster_name_field}  timeout=120
+    Wait Until Element Is Enabled    ${cluster_name_field}  timeout=120
     Input Text    ${cluster_name_field}       ${name_random}
     JS Click    ${cluster_investigation}
     JS Click    ${cluster_setting_childcare}

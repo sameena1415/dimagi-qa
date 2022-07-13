@@ -263,7 +263,7 @@ Case Search
 Submit Form and Check Success
     Element Should Be Enabled    ${submit_form}
     JS Click   ${submit_form}
-    Wait Until Element Is Visible    ${success_message}    60s
+    Wait Until Element Is Visible    ${success_message}    200s
     Element Should Be Visible    ${success_message}
 
 Click Element
