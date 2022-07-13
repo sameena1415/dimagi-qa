@@ -15,7 +15,7 @@ on:
 
 jobs:
   build:
-
+    name: Smoke on '${{ github.event.client_payload.environment || 'staging' }}'
     runs-on: ubuntu-latest
 
     steps:
