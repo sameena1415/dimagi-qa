@@ -20,12 +20,10 @@ jobs:
     steps:
       - id: set-matrix
         if: ${{ github.event.client_payload.environment != null }}
-       - run: |
-          echo "::set-output name=matrix::{\"environment\": [\"${{ github.event.client_payload.environment }}\"]}"
+        run: echo "::set-output name=matrix::{\"environment\": [\"${{ github.event.client_payload.environment }}\"]}"
       - id: set-matrix-default
         if: ${{ github.event.client_payload.environment == null }}
-       - run: |
-          echo "::set-output name=matrix::{\"environment\": [\"production\", \"staging\"]}"
+        run: echo "::set-output name=matrix::{\"environment\": [\"production\", \"staging\"]}"
   build:
     needs: set_matrix
     strategy:
