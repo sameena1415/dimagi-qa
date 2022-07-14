@@ -33,38 +33,31 @@ jobs:
     name: Smoke on '${{ matrix.environment }}'
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up Python 3.9
-      uses: actions/setup-python@v2
-      with:
-       python-version: 3.9
-    - name: Install dependencies
-      run: |
-       python -m pip install --upgrade pip
-       pip install -r HQSmokeTests/requires.txt
+      - uses: actions/checkout@v2
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r HQSmokeTests/requires.txt
 
-    - name: Lint with flake8
-      run: |
-#         stop the build if there are Python syntax errors or undefined names
-        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-#         exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
-        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
-
-    - name: CCHQ Smoke Test with pytest
-      env:
-        DIMAGIQA_ENV: ${{ matrix.environment }}  #${{ secrets.DIMAGIQA_URL }}
-        DIMAGIQA_LOGIN_USERNAME: ${{ secrets.DIMAGIQA_LOGIN_USERNAME }}
-        DIMAGIQA_LOGIN_PASSWORD: ${{ secrets.DIMAGIQA_LOGIN_PASSWORD }}
-        DIMAGIQA_MAIL_USERNAME: ${{ secrets.DIMAGIQA_MAIL_USERNAME }}
-        DIMAGIQA_MAIL_PASSWORD: ${{ secrets.DIMAGIQA_MAIL_PASSWORD }}
-        DIMAGIQA_BS_USER: ${{ secrets.DIMAGIQA_BS_USER }}
-        DIMAGIQA_BS_KEY: ${{ secrets.DIMAGIQA_BS_KEY }}
-        DIMAGIQA_STAGING_AUTH_KEY: ${{ secrets.DIMAGIQA_STAGING_AUTH_KEY }}
-        DIMAGIQA_PROD_AUTH_KEY: ${{ secrets.DIMAGIQA_PROD_AUTH_KEY }}
-        DIMAGIQA_INVITED_WEBUSER_PASSWORD: ${{ secrets.DIMAGIQA_INVITED_WEBUSER_PASSWORD }}
-      run: |
-        echo "client_payload: ${{ toJson(github.event.client_payload) }}"
-        echo "matrix environment: ${{ matrix.environment }}"
-        echo "NOW=$(date +'%m-%d %H:%M')" >> $GITHUB_ENV
-        echo ${{env.NOW}}
-        pytest -v -k test_01_ --rootdir= HQSmokeTests/testCases --html=report_${{ matrix.environment }}.html
+      - name: CCHQ Smoke Test with pytest
+        env:
+          DIMAGIQA_ENV: ${{ matrix.environment }}  #${{ secrets.DIMAGIQA_URL }}
+          DIMAGIQA_LOGIN_USERNAME: ${{ secrets.DIMAGIQA_LOGIN_USERNAME }}
+          DIMAGIQA_LOGIN_PASSWORD: ${{ secrets.DIMAGIQA_LOGIN_PASSWORD }}
+          DIMAGIQA_MAIL_USERNAME: ${{ secrets.DIMAGIQA_MAIL_USERNAME }}
+          DIMAGIQA_MAIL_PASSWORD: ${{ secrets.DIMAGIQA_MAIL_PASSWORD }}
+          DIMAGIQA_BS_USER: ${{ secrets.DIMAGIQA_BS_USER }}
+          DIMAGIQA_BS_KEY: ${{ secrets.DIMAGIQA_BS_KEY }}
+          DIMAGIQA_STAGING_AUTH_KEY: ${{ secrets.DIMAGIQA_STAGING_AUTH_KEY }}
+          DIMAGIQA_PROD_AUTH_KEY: ${{ secrets.DIMAGIQA_PROD_AUTH_KEY }}
+          DIMAGIQA_INVITED_WEBUSER_PASSWORD: ${{ secrets.DIMAGIQA_INVITED_WEBUSER_PASSWORD }}
+        run: |
+          echo "client_payload: ${{ toJson(github.event.client_payload) }}"
+          echo "matrix environment: ${{ matrix.environment }}"
+          echo "NOW=$(date +'%m-%d %H:%M')" >> $GITHUB_ENV
+          echo ${{env.NOW}}
+          pytest -v -k test_01_ --rootdir= HQSmokeTests/testCases --html=report_${{ matrix.environment }}.html
