@@ -49,15 +49,14 @@ jobs:
         DIMAGIQA_STAGING_AUTH_KEY: ${{ secrets.DIMAGIQA_STAGING_AUTH_KEY }}
         DIMAGIQA_PROD_AUTH_KEY: ${{ secrets.DIMAGIQA_PROD_AUTH_KEY }}
         DIMAGIQA_INVITED_WEBUSER_PASSWORD: ${{ secrets.DIMAGIQA_INVITED_WEBUSER_PASSWORD }}
-
       run: |
         echo "client_payload: ${{ toJson(github.event.client_payload) }}"
         echo "NOW=$(date +'%m-%d %H:%M')" >> $GITHUB_ENV
         echo ${{env.NOW}}
         pytest -v --rootdir= HQSmokeTests/testCases -n 4 --dist=loadfile --reruns 1
 
-    - name: CCHQ Smoke Test with pytest on Production
-      if: ${{ github.event_name == 'push'}}
+    - name: CCHQ Smoke Test with pytest on production
+      if: github.event_name == 'push'
       env:
         DIMAGIQA_URL: ${{ secrets.DIMAGIQA_PROD_URL }}  #${{ secrets.DIMAGIQA_URL }}
         DIMAGIQA_LOGIN_USERNAME: ${{ secrets.DIMAGIQA_LOGIN_USERNAME }}
@@ -69,14 +68,14 @@ jobs:
         DIMAGIQA_STAGING_AUTH_KEY: ${{ secrets.DIMAGIQA_STAGING_AUTH_KEY }}
         DIMAGIQA_PROD_AUTH_KEY: ${{ secrets.DIMAGIQA_PROD_AUTH_KEY }}
         DIMAGIQA_INVITED_WEBUSER_PASSWORD: ${{ secrets.DIMAGIQA_INVITED_WEBUSER_PASSWORD }}
-
       run: |
         echo "client_payload: ${{ toJson(github.event.client_payload) }}"
         echo "NOW=$(date +'%m-%d %H:%M')" >> $GITHUB_ENV
         echo ${{env.NOW}}
         pytest -v --rootdir= HQSmokeTests/testCases -n 4 --dist=loadfile --reruns 1 --html=report_prod.html
 
-- name: Send Pass Email On Deploy Event
+
+    - name: Send Pass Email On Deploy Event
       uses: dawidd6/action-send-mail@v3
       if: ${{ success() && github.event_name == 'repository_dispatch' }}
       with:
