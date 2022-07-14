@@ -37,25 +37,8 @@ jobs:
         # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
 
-    - name: CCHQ Smoke Test with pytest
-      env:
-        DIMAGIQA_ENV: ${{ github.event.client_payload.environment }}  #${{ secrets.DIMAGIQA_URL }}
-        DIMAGIQA_LOGIN_USERNAME: ${{ secrets.DIMAGIQA_LOGIN_USERNAME }}
-        DIMAGIQA_LOGIN_PASSWORD: ${{ secrets.DIMAGIQA_LOGIN_PASSWORD }}
-        DIMAGIQA_MAIL_USERNAME: ${{ secrets.DIMAGIQA_MAIL_USERNAME }}
-        DIMAGIQA_MAIL_PASSWORD: ${{ secrets.DIMAGIQA_MAIL_PASSWORD }}
-        DIMAGIQA_BS_USER: ${{ secrets.DIMAGIQA_BS_USER }}
-        DIMAGIQA_BS_KEY: ${{ secrets.DIMAGIQA_BS_KEY }}
-        DIMAGIQA_STAGING_AUTH_KEY: ${{ secrets.DIMAGIQA_STAGING_AUTH_KEY }}
-        DIMAGIQA_PROD_AUTH_KEY: ${{ secrets.DIMAGIQA_PROD_AUTH_KEY }}
-        DIMAGIQA_INVITED_WEBUSER_PASSWORD: ${{ secrets.DIMAGIQA_INVITED_WEBUSER_PASSWORD }}
-      run: |
-        echo "client_payload: ${{ toJson(github.event.client_payload) }}"
-        echo "NOW=$(date +'%m-%d %H:%M')" >> $GITHUB_ENV
-        echo ${{env.NOW}}
-        pytest -v --rootdir= HQSmokeTests/testCases -n 4 --dist=loadfile --reruns 1
-
-    - name: Send Pass Email On Deploy Event
+  reporting:
+      - name: Send Pass Email On Deploy Event
       uses: dawidd6/action-send-mail@v3
       if: ${{ success() && github.event_name == 'repository_dispatch' }}
       with:
@@ -129,3 +112,52 @@ jobs:
         name: test-result-reports
         path: /home/runner/work/dimagi-qa/dimagi-qa/report.html
         retention-days: 2
+
+  deploy-runs:
+    - needs: build
+    - name: CCHQ Smoke Test with pytest
+      env:
+        DIMAGIQA_ENV: ${{ github.event.client_payload.environment }}  #${{ secrets.DIMAGIQA_URL }}
+        DIMAGIQA_LOGIN_USERNAME: ${{ secrets.DIMAGIQA_LOGIN_USERNAME }}
+        DIMAGIQA_LOGIN_PASSWORD: ${{ secrets.DIMAGIQA_LOGIN_PASSWORD }}
+        DIMAGIQA_MAIL_USERNAME: ${{ secrets.DIMAGIQA_MAIL_USERNAME }}
+        DIMAGIQA_MAIL_PASSWORD: ${{ secrets.DIMAGIQA_MAIL_PASSWORD }}
+        DIMAGIQA_BS_USER: ${{ secrets.DIMAGIQA_BS_USER }}
+        DIMAGIQA_BS_KEY: ${{ secrets.DIMAGIQA_BS_KEY }}
+        DIMAGIQA_STAGING_AUTH_KEY: ${{ secrets.DIMAGIQA_STAGING_AUTH_KEY }}
+        DIMAGIQA_PROD_AUTH_KEY: ${{ secrets.DIMAGIQA_PROD_AUTH_KEY }}
+        DIMAGIQA_INVITED_WEBUSER_PASSWORD: ${{ secrets.DIMAGIQA_INVITED_WEBUSER_PASSWORD }}
+
+      run: |
+        echo "client_payload: ${{ toJson(github.event.client_payload) }}"
+        echo "NOW=$(date +'%m-%d %H:%M')" >> $GITHUB_ENV
+        echo ${{env.NOW}}
+        pytest -v --rootdir= HQSmokeTests/testCases -n 4 --dist=loadfile --reruns 1
+
+    - name: Deploy Reporting and Archiving tests
+      needs: reporting
+
+  prod-runs:
+    - needs: build
+    - name: CCHQ Smoke Test with pytest on Production
+      if: ${{ github.event_name == 'push'}}
+      env:
+          DIMAGIQA_URL: ${{ secrets.DIMAGIQA_PROD_URL }}
+          DIMAGIQA_LOGIN_USERNAME: ${{ secrets.DIMAGIQA_LOGIN_USERNAME }}
+          DIMAGIQA_LOGIN_PASSWORD: ${{ secrets.DIMAGIQA_LOGIN_PASSWORD }}
+          DIMAGIQA_MAIL_USERNAME: ${{ secrets.DIMAGIQA_MAIL_USERNAME }}
+          DIMAGIQA_MAIL_PASSWORD: ${{ secrets.DIMAGIQA_MAIL_PASSWORD }}
+          DIMAGIQA_BS_USER: ${{ secrets.DIMAGIQA_BS_USER }}
+          DIMAGIQA_BS_KEY: ${{ secrets.DIMAGIQA_BS_KEY }}
+          DIMAGIQA_STAGING_AUTH_KEY: ${{ secrets.DIMAGIQA_STAGING_AUTH_KEY }}
+          DIMAGIQA_PROD_AUTH_KEY: ${{ secrets.DIMAGIQA_PROD_AUTH_KEY }}
+          DIMAGIQA_INVITED_WEBUSER_PASSWORD: ${{ secrets.DIMAGIQA_INVITED_WEBUSER_PASSWORD }}
+
+        run: |
+          echo "client_payload: ${{ toJson(github.event.client_payload) }}"
+          echo "NOW=$(date +'%m-%d %H:%M')" >> $GITHUB_ENV
+          echo ${{env.NOW}}
+          pytest -v --rootdir= HQSmokeTests/testCases -n 4 --dist=loadfile --reruns 1
+
+    - name: Production Reporting and Archiving tests
+      needs: reporting
