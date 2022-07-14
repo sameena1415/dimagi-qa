@@ -37,7 +37,27 @@ jobs:
         # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
 
-  reporting:
+  deploy-runs:
+    - needs: build
+    - name: CCHQ Smoke Test with pytest
+      env:
+        DIMAGIQA_ENV: ${{ github.event.client_payload.environment }}  #${{ secrets.DIMAGIQA_URL }}
+        DIMAGIQA_LOGIN_USERNAME: ${{ secrets.DIMAGIQA_LOGIN_USERNAME }}
+        DIMAGIQA_LOGIN_PASSWORD: ${{ secrets.DIMAGIQA_LOGIN_PASSWORD }}
+        DIMAGIQA_MAIL_USERNAME: ${{ secrets.DIMAGIQA_MAIL_USERNAME }}
+        DIMAGIQA_MAIL_PASSWORD: ${{ secrets.DIMAGIQA_MAIL_PASSWORD }}
+        DIMAGIQA_BS_USER: ${{ secrets.DIMAGIQA_BS_USER }}
+        DIMAGIQA_BS_KEY: ${{ secrets.DIMAGIQA_BS_KEY }}
+        DIMAGIQA_STAGING_AUTH_KEY: ${{ secrets.DIMAGIQA_STAGING_AUTH_KEY }}
+        DIMAGIQA_PROD_AUTH_KEY: ${{ secrets.DIMAGIQA_PROD_AUTH_KEY }}
+        DIMAGIQA_INVITED_WEBUSER_PASSWORD: ${{ secrets.DIMAGIQA_INVITED_WEBUSER_PASSWORD }}
+
+      run: |
+        echo "client_payload: ${{ toJson(github.event.client_payload) }}"
+        echo "NOW=$(date +'%m-%d %H:%M')" >> $GITHUB_ENV
+        echo ${{env.NOW}}
+        pytest -v --rootdir= HQSmokeTests/testCases -n 4 --dist=loadfile --reruns 1
+
     - name: Send Pass Email On Deploy Event
       uses: dawidd6/action-send-mail@v3
       if: ${{ success() && github.event_name == 'repository_dispatch' }}
@@ -113,11 +133,12 @@ jobs:
         path: /home/runner/work/dimagi-qa/dimagi-qa/report.html
         retention-days: 2
 
-  deploy-runs:
+  prod-runs:
     - needs: build
-    - name: CCHQ Smoke Test with pytest
+    - name: CCHQ Smoke Test with pytest on Production
+      if: ${{ github.event_name == 'push'}}
       env:
-        DIMAGIQA_ENV: ${{ github.event.client_payload.environment }}  #${{ secrets.DIMAGIQA_URL }}
+        DIMAGIQA_URL: ${{ secrets.DIMAGIQA_PROD_URL }}  #${{ secrets.DIMAGIQA_URL }}
         DIMAGIQA_LOGIN_USERNAME: ${{ secrets.DIMAGIQA_LOGIN_USERNAME }}
         DIMAGIQA_LOGIN_PASSWORD: ${{ secrets.DIMAGIQA_LOGIN_PASSWORD }}
         DIMAGIQA_MAIL_USERNAME: ${{ secrets.DIMAGIQA_MAIL_USERNAME }}
@@ -134,5 +155,39 @@ jobs:
         echo ${{env.NOW}}
         pytest -v --rootdir= HQSmokeTests/testCases -n 4 --dist=loadfile --reruns 1
 
-    - name: Deploy Reporting and Archiving tests
-      needs: reporting
+    - name: Send Failure Email on Push or Pull
+      uses: dawidd6/action-send-mail@v3
+      if: ${{ failure() && github.event_name != 'repository_dispatch' }}
+      with:
+        server_address: smtp.gmail.com
+        server_port: 465
+        username: ${{secrets.DIMAGIQA_MAIL_USERNAME}}
+        password: ${{secrets.DIMAGIQA_MAIL_PASSWORD}}
+        subject: FAIL - Smoke Tests[#${{github.run_number}}] on branch "${{ github.head_ref }}", ${{env.NOW}}
+        to: qa-automation@dimagi.com
+        from: <${{secrets.DIMAGIQA_MAIL_USERNAME}}>
+        html_body: file:////home/runner/work/dimagi-qa/dimagi-qa/HQSmokeTests/email_fail.html
+        attachments: /home/runner/work/dimagi-qa/dimagi-qa/report.html
+        priority: normal
+
+    - name: Send Pass Email on Push or Pull
+      uses: dawidd6/action-send-mail@v3
+      if: ${{ success() && github.event_name != 'repository_dispatch' }}
+      with:
+        server_address: smtp.gmail.com
+        server_port: 465
+        username: ${{secrets.DIMAGIQA_MAIL_USERNAME}}
+        password: ${{secrets.DIMAGIQA_MAIL_PASSWORD}}
+        subject: PASS - Smoke Tests[#${{github.run_number}}] on branch "${{ github.head_ref }}", ${{env.NOW}}
+        to: qa-automation@dimagi.com
+        from: <${{secrets.DIMAGIQA_MAIL_USERNAME}}>
+        html_body: file:////home/runner/work/dimagi-qa/dimagi-qa/HQSmokeTests/email_pass.html
+        priority: normal
+
+    - name: Archive test results
+      if: always()
+      uses: actions/upload-artifact@v2
+      with:
+        name: test-result-reports
+        path: /home/runner/work/dimagi-qa/dimagi-qa/report.html
+        retention-days: 2
