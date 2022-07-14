@@ -148,17 +148,5 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: test-result-reports
-        path: /home/runner/work/dimagi-qa/dimagi-qa/report.html
-        retention-days: 2
-
-  - name: Archive Prod test results
-      if: ${{ github.event_name == 'push'}}
-      uses: actions/upload-artifact@v2
-      with:
-        name: test-result-reports
-        path: /home/runner/work/dimagi-qa/dimagi-qa/report.html
-        retention-days: 2
-
-        name: prod-test-result-reports
-        path: /home/runner/work/dimagi-qa/dimagi-qa/report_prod.html
+        path: /home/runner/work/dimagi-qa/dimagi-qa/report*.html
         retention-days: 2
