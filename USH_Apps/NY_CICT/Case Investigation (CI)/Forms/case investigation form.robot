@@ -161,7 +161,7 @@ Verify Daily Monitoring Status
 
 Verify Daily Monitoring Section
 
-    Wait Until Element Is Visible    ${submit_form}
+    Wait Until Element Is Visible    ${submit_form}      200s
     Element Should Be Visible    ${daily_monitoring_section}
     Element Should Be Visible    ${view_update_rest_of_the_case_info}
     Element Should Not Be Visible    ${interview_info_section}
@@ -211,7 +211,7 @@ Follow up attempt notes
 
 Add new follow up log
     [Arguments]     ${result}
-    JS Click    ${add_new_follow_up_log}
+    Wait Until Keyword Succeeds  5 min  1 min   JS Click    ${add_new_follow_up_log}
     Wait Until Keyword Succeeds  2 min  5 sec   Wait Until Element Is Visible    ${follow_up_attempt_${result}}
     JS Click    ${follow_up_attempt_${result}}
 
@@ -300,6 +300,7 @@ Enter Provider Info
     Submit Form and Check Success
     
 Validate Provider Info
+    Wait Until Element Is Enabled    ${view_update_rest_of_the_case_info}
     Scroll Element Into View    ${view_update_rest_of_the_case_info}
     JS Click    ${view_update_rest_of_the_case_info}
     ${name}   get element attribute    ${provider_name}     value

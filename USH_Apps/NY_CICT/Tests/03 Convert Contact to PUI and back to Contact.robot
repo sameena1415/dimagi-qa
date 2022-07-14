@@ -1,7 +1,7 @@
 *** Settings ***
 Documentation     Testing the workflow to convert a symptomatic contact into a suspected case (PUI)
 ...     and testing the workflow to convert a suspected case (PUI) back into a contact.
-Library  SeleniumLibrary
+Library  SeleniumLibrary        timeout=200s
 Suite Setup    Driver Launch
 Resource    ../Contact Tracing (CT)/Forms/change to pui status form.robot
 Resource    ../Contact Tracing (CT)/Forms/contact montitoring form.robot

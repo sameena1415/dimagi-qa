@@ -9,7 +9,7 @@ Resource    ../../Base/base.robot
     
 Open Assign or Reassign Contact Form
     Sleep    2s
-    Wait Until Element Is Enabled    ${Assign or Reassign Contact Form} 
+    Wait Until Element Is Enabled    ${Assign or Reassign Contact Form}
     JS Click    ${Assign or Reassign Contact Form} 
     
 Permanently Assign to Self (CM)

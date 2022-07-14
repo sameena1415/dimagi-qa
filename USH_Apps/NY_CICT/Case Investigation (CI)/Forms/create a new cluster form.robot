@@ -98,7 +98,7 @@ Set Cluster Name
     
 Verify Specimen collection date in cluster
     [Arguments]     ${date}
-    Sleep    5s
+    Wait Until Element Is Enabled    ${specimen_date_of_first_case}\[contains(text(),'${date}')]
     Page Should Contain Element    ${specimen_date_of_first_case}\[contains(text(),'${date}')]
 
 Update Cluster - non school/college

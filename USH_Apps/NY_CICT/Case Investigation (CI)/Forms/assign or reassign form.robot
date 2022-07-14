@@ -8,7 +8,7 @@ Resource    ../../Base/base.robot
     
 Open Assign or Reassign Case Form
     Sleep    2s
-    Wait Until Element Is Enabled    ${Assign or Reassign Case Form} 
+    Wait Until Element Is Enabled    ${Assign or Reassign Case Form}
     JS Click    ${Assign or Reassign Case Form}
     
 Permanently Assign to Self

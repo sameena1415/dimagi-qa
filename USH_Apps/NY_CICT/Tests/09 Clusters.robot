@@ -1,7 +1,7 @@
 *** Settings ***
 Documentation     Testing workflow to create new clusters and assign cases/contacts to those clusters.
 Suite Setup    Driver Launch
-Library  SeleniumLibrary
+Library  SeleniumLibrary        timeout=200s
 Resource    ../Case Investigation (CI)/Menu/menu.robot
 Resource    ../Case Investigation (CI)/Forms/create a new cluster form.robot
 Resource    ../Case Investigation (CI)/Forms/view record lab results.robot

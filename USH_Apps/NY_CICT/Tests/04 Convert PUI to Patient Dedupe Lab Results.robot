@@ -1,7 +1,7 @@
 *** Settings ***
 Documentation     Testing the workflow to deduplicate a suspected case (PUI) record against a confirmed
 ...               case record with one attached lab results and one attached contact.
-Library  SeleniumLibrary
+Library  SeleniumLibrary        timeout=200s
 Suite Setup    Driver Launch
 Resource    ../Contact Tracing (CT)/Forms/change to pui status form.robot
 Resource    ../Contact Tracing (CT)/Forms/contact montitoring form.robot

@@ -12,7 +12,7 @@ jobs:
   build:
     name: NY CICT on '${{ github.event.client_payload.environment || 'manual trigger' }}'
     runs-on: ubuntu-latest
-    if: ${{ github.event.client_payload.environment == 'production' }}
+    if: ${{ github.event.client_payload.environment == 'production' || github.event.client_payload.environment == null }}
 
     steps:
     - uses: actions/checkout@v2

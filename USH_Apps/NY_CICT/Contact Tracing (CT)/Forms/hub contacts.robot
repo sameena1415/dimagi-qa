@@ -37,6 +37,7 @@ Update Cluster Hub Status Contacts
 
 Update School Hub Status Contacts
     [Arguments]     ${hub_status}
+    Wait Until Element Is Enabled    ${hub_task_force_followup}
     Scroll Element Into View    ${hub_task_force_followup}
     JS Click    ${cluster_hub_status_selection}\[.='${hub_status}']
     Submit Form and Check Success

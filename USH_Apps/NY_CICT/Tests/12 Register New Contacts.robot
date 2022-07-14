@@ -2,7 +2,7 @@
 Library    Collections
 Documentation     Testing workflow to create contacts indexed to confirmed patient cases in the system.
 Suite Setup    Driver Launch
-Library  SeleniumLibrary
+Library  SeleniumLibrary        timeout=200s
 Resource    ../Case Investigation (CI)/Menu/menu.robot
 Resource    ../Case Investigation (CI)/Forms/register a new case form.robot
 Resource    ../Case Investigation (CI)/Forms/case investigation form.robot

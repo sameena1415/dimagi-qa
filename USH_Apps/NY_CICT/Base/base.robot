@@ -1,5 +1,5 @@
 *** Settings ***
-Library  SeleniumLibrary
+Library  SeleniumLibrary        timeout=200s
 Library    String
 Library    DateTime
 Resource    ../Locators/locators.robot
@@ -12,7 +12,7 @@ Library    Collections
 *** Keywords ***
     
 Driver Launch
-    ${chromedriver_path}=   Wait Until Keyword Succeeds  2 min  5 sec   driverpath.Get Driver Path
+    ${chromedriver_path}=   Wait Until Keyword Succeeds  2 min  10 sec   driverpath.Get Driver Path
     ${chrome_options}=  Evaluate  sys.modules['selenium.webdriver'].ChromeOptions()  sys, selenium.webdriver
     Call Method    ${chrome_options}    add_argument    --disable-extensions
     Call Method    ${chrome_options}    add_argument    --headless
@@ -29,7 +29,7 @@ HQ Login
     Input Text    ${username}    ${email}
     Input Text    ${password}   ${pass}
     ${IsElementVisible}=  Run Keyword And Return Status    Element Should Be Visible   ${confirm_cookie}
-    Run Keyword And Ignore Error    wait until page contains element    ${confirm_cookie}   30
+    Run Keyword And Ignore Error    wait until page contains element    ${confirm_cookie}
     ${IsElementVisible}=  Run Keyword And Return Status    Element Should Be Visible   ${confirm_cookie}
     Run Keyword If     ${IsElementVisible}    Click Element  ${confirm_cookie}
     Click Button  ${submit_button}
@@ -66,7 +66,7 @@ Sync App
     Open WebApp Home
     Click Element    ${sync}
     Sleep    5s
-    Wait Until Element Is Visible    ${sync success}    
+    Wait Until Element Is Visible    ${sync success}
 
 Go Back Home and Sync App
     Click Element    ${home_btn}
@@ -78,6 +78,7 @@ Go Back Home and Sync App
 
 
 Log in as ci_user
+   ${default_selenium_timeout}     Get Selenium Timeout
    Sync App
    Click Element    ${login_as}
    Click Element    ${ci_user}
@@ -131,8 +132,7 @@ Log in as cisup_user
 
 JS Click
     [Arguments]    ${element}
-    Wait Until Element Is Enabled    ${element}    
-#    Execute JavaScript  document.evaluate("${element}", document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null).snapshotItem(0).click();
+    Wait Until Element Is Enabled    ${element}
     Execute JavaScript    document.evaluate("${element}",document.body,null,9,null).singleNodeValue.click();
 
 Generate Mobile Number
@@ -164,9 +164,6 @@ Select Dropdown
    [Arguments]    ${question}    ${answer}
    Wait Until Element Is Enabled   ${question}
    Wait Until Element Is Visible    ${question}
-#   Click Element   ${question}
-#   Wait Until Element Is Visible    ${answer}
-#   Click Element  ${answer}
    Select From List By Index    ${answer}   ${1}
    
 Answer Dropdown
@@ -183,7 +180,7 @@ Answer Input Text
    Scroll Element Into View    ${question} 
    Clear Element Text   ${question} 
    Input Text    ${question}     ${answer}
-   Wait Until Element Is Visible    ${success}    60s
+   Wait Until Element Is Visible    ${success}
    
 Search in the case list   
     [Arguments]    ${case_or_contact_created}
@@ -199,7 +196,7 @@ Select Created Case
     Sleep    2s
     Wait Until Element Is Enabled    ${continue}
     Sleep    2s 
-    Wait Until Keyword Succeeds  2 min  5 sec   Scroll Element Into View    ${continue}
+    Wait Until Keyword Succeeds  5 min  1 min   Scroll Element Into View    ${continue}
     Wait Until Keyword Succeeds  2 min  5 sec   Click Element    ${continue}
 
 Select Cluster
@@ -227,7 +224,6 @@ Select Created Case with lab result
     JS Click    (//tr[.//td[text()='${case_or_contact_created}']]/self::tr//td[6][not(normalize-space())])
     Wait Until Element Is Enabled    ${continue}
     Sleep    2s
-#    Scroll Element Into View    ${continue}
     Click Element    ${continue}
 
 Select Case with Open Status
@@ -237,7 +233,6 @@ Select Case with Open Status
     JS Click    (//tr[.//td[text()='${case_or_contact_created}']]/self::tr//td[9][normalize-space()='Open']
     Wait Until Element Is Enabled    ${continue}
     Sleep    2s
-#    Scroll Element Into View    ${continue}
     Click Element    ${continue}
 
 Case Search Search All
@@ -257,26 +252,23 @@ Case Search
     Wait Until Element Is Enabled    ${case search submit}
     Wait Until Keyword Succeeds  3x  500ms  JS Click    ${case search submit}
 
-
-
-
 Submit Form and Check Success
     Element Should Be Enabled    ${submit_form}
     JS Click   ${submit_form}
-    Wait Until Element Is Visible    ${success_message}    200s
+    Wait Until Element Is Visible    ${success_message}
     Element Should Be Visible    ${success_message}
 
 Click Element
     [Arguments]     ${element}
-    Wait Until Element Is Visible    ${element}     40s
+    Wait Until Element Is Visible    ${element}
     SeleniumLibrary.Click Element    ${element}
 
 Click Button
     [Arguments]     ${element}
-    Wait Until Element Is Visible    ${element}     40s
+    Wait Until Element Is Visible    ${element}
     SeleniumLibrary.Click Button    ${element}
 
 Input Text
     [Arguments]    ${element}     ${text}
-    Wait Until Element Is Visible    ${element}     60s
+    Wait Until Element Is Visible    ${element}
     SeleniumLibrary.Input Text    ${element}     ${text}
