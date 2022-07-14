@@ -60,7 +60,7 @@ jobs:
           echo "matrix environment: ${{ matrix.environment }}"
           echo "NOW=$(date +'%m-%d %H:%M')" >> $GITHUB_ENV
           echo ${{env.NOW}}
-          pytest -v -k test_01_ --rootdir= HQSmokeTests/testCases --html=report_${{ matrix.environment }}.html
+          pytest -v --rootdir= HQSmokeTests/testCases -n 4 --dist=loadfile --reruns 1 --html=report_${{ matrix.environment }}.html
 
       - name: Send Pass Email On Deploy Event
         uses: dawidd6/action-send-mail@v3
@@ -108,7 +108,7 @@ jobs:
           server_port: 465
           username: ${{secrets.DIMAGIQA_MAIL_USERNAME}}
           password: ${{secrets.DIMAGIQA_MAIL_PASSWORD}}
-          subject: FAIL - Smoke Tests[#${{github.run_number}}] on branch "${{ github.head_ref }}", ${{env.NOW}}
+          subject: FAIL - Smoke Tests[#${{github.run_number}}] for ${{ matrix.environment }} on branch "${{ github.head_ref }}", ${{env.NOW}}
           to: qa-automation@dimagi.com
           from: <${{secrets.DIMAGIQA_MAIL_USERNAME}}>
           html_body: file:////home/runner/work/dimagi-qa/dimagi-qa/HQSmokeTests/email_fail.html
@@ -123,7 +123,7 @@ jobs:
           server_port: 465
           username: ${{secrets.DIMAGIQA_MAIL_USERNAME}}
           password: ${{secrets.DIMAGIQA_MAIL_PASSWORD}}
-          subject: PASS - Smoke Tests[#${{github.run_number}}] on branch "${{ github.head_ref }}", ${{env.NOW}}
+          subject: PASS - Smoke Tests[#${{github.run_number}}] for ${{ matrix.environment }} on branch "${{ github.head_ref }}", ${{env.NOW}}
           to: qa-automation@dimagi.com
           from: <${{secrets.DIMAGIQA_MAIL_USERNAME}}>
           html_body: file:////home/runner/work/dimagi-qa/dimagi-qa/HQSmokeTests/email_pass.html
