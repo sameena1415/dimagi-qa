@@ -121,7 +121,7 @@ jobs:
           username: ${{secrets.DIMAGIQA_MAIL_USERNAME}}
           password: ${{secrets.DIMAGIQA_MAIL_PASSWORD}}
           subject: ${{ fromJSON(steps.configure_email.outputs.result).subject }}
-          to: qa@dimagi.com, sameena.shaik@fissionlabs.com
+          to: qa@dimagi.com, sameena.shaik@fissionlabs.com, skelly@dimagi.com
           from: <${{secrets.DIMAGIQA_MAIL_USERNAME}}>
           html_body: ${{ fromJSON(steps.configure_email.outputs.result).body }}
           convert_markdown: true
