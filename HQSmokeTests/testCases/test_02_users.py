@@ -13,7 +13,7 @@ from HQSmokeTests.testPages.users.web_user_page import WebUsersPage
 """"Contains test cases related to the User's Mobile Worker module"""
 
 
-@pytest.mark.order(0)
+@pytest.mark.run(order=0)
 def test_case_02_create_mobile_worker(driver):
     worker = MobileWorkerPage(driver)
     worker.mobile_worker_menu()
@@ -61,7 +61,6 @@ def test_case_04_deactivate_user(driver):
     user.deactivate_user()
     user.verify_deactivation_via_login()
 
-@pytest.mark.depends(on=['test_case_04_deactivate_user'])
 def test_case_04_reactivate_user(driver):
     user = MobileWorkerPage(driver)
     user.mobile_worker_menu()
