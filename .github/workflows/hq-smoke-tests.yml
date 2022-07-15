@@ -134,6 +134,6 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v2
         with:
-          name: test-result-reports
-          path: /home/runner/work/dimagi-qa/dimagi-qa/report*.html
+          name: test-result-reports-${{ matrix.environment }}
+          path: /home/runner/work/dimagi-qa/dimagi-qa/report_${{ matrix.environment }}.html
           retention-days: 2
