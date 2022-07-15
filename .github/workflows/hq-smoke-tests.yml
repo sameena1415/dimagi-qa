@@ -78,6 +78,7 @@ jobs:
           pytest -v --rootdir= HQSmokeTests/testCases -n 4 --dist=loadfile --reruns 1 --html=report_${{ matrix.environment }}.html
 
       - name: Set email vars
+        if: always()
         id: configure_email
         uses: actions/github-script@v6
         env:
@@ -112,6 +113,7 @@ jobs:
             }
 
       - name: Send Result Email
+        if: always()
         uses: dawidd6/action-send-mail@v3
         with:
           server_address: smtp.gmail.com
