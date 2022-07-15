@@ -13,7 +13,7 @@ from HQSmokeTests.testPages.users.web_user_page import WebUsersPage
 """"Contains test cases related to the User's Mobile Worker module"""
 
 
-@pytest.mark.run(order=0)
+@pytest.mark.order(0)
 def test_case_02_create_mobile_worker(driver):
     worker = MobileWorkerPage(driver)
     worker.mobile_worker_menu()
@@ -47,7 +47,6 @@ def test_case_10_download_and_upload_users(driver):
     user.check_for_group_in_downloaded_file(newest_file, group_id_value)
     user.upload_mobile_worker()
 
-
 def test_case_05_edit_user_groups(driver):
     menu = HomePage(driver)
     menu.users_menu()
@@ -56,21 +55,20 @@ def test_case_05_edit_user_groups(driver):
     edit.edit_existing_group()
     edit.remove_user_from_group()
 
-
+@pytest.mark.order(1)
 def test_case_04_deactivate_user(driver):
     user = MobileWorkerPage(driver)
     user.mobile_worker_menu()
     user.deactivate_user()
     user.verify_deactivation_via_login()
 
-
-
+@pytest.mark.order(2)
+@pytest.mark.depends(on=['test_case_04_deactivate_user'])
 def test_case_04_reactivate_user(driver):
     user = MobileWorkerPage(driver)
     user.mobile_worker_menu()
     user.reactivate_user()
     user.verify_reactivation_via_login()
-
 
 def test_cleanup_items_in_users_menu(driver):
     clean = MobileWorkerPage(driver)

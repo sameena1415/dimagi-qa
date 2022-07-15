@@ -48,7 +48,9 @@ class MobileWorkerPage(BasePage):
         self.confirm_reactivate_xpath_list = (By.XPATH,
                                               "((//div[@class='modal-footer'])/button[@data-bind='click: function(user) { user.is_active(true); }'])")
         self.reactivate_buttons_list = (By.XPATH,
-                                        "//td[./a/strong[text()='" + self.username + "']]/following-sibling::td/div[@data-bind='visible: !is_active()']/button")
+                                        "//td[./a/strong[text()='" + self.username + "']]/following-sibling::td/div[contains(@data-bind,'visible: !is_active()')]/button[contains(.,'Reactivate')]")
+        self.deactivate_button = (By.XPATH,
+                                        "//td[./a/strong[text()='" + self.username + "']]/following-sibling::td/div[contains(@data-bind,'visible: is_active()')]/button[contains(.,'Deactivate')]")
         self.confirm_deactivate_xpath_list = (
         By.XPATH, "((//div[@class='modal-footer'])/button[@class='btn btn-danger'])")
         self.deactivate_buttons_list = (
@@ -268,6 +270,7 @@ class MobileWorkerPage(BasePage):
             self.wait_to_click(self.deactivate_buttons_list)
             self.wait_to_click(self.confirm_deactivate_xpath_list)
             time.sleep(5)
+            assert self.is_present_and_displayed(self.reactivate_buttons_list)
         except (TimeoutException, NoSuchElementException):
             print("TIMEOUT ERROR: Deactivation Unsuccessful.")
 
@@ -287,6 +290,7 @@ class MobileWorkerPage(BasePage):
             self.wait_to_click(self.reactivate_buttons_list)
             self.wait_to_click(self.confirm_reactivate_xpath_list)
             time.sleep(5)
+            assert self.is_present_and_displayed(self.deactivate_button)
         except (TimeoutException, NoSuchElementException):
             print("TIMEOUT ERROR: Reactivation unsuccessful.")
 
