@@ -39,6 +39,7 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: 3.9
+
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
@@ -63,72 +64,44 @@ jobs:
           echo ${{env.NOW}}
           pytest -v --rootdir= HQSmokeTests/testCases -n 4 --dist=loadfile --reruns 1 --html=report_${{ matrix.environment }}.html
 
-      - name: Send Pass Email On Deploy Event
-        uses: dawidd6/action-send-mail@v3
-        if: ${{ success() && github.event_name == 'repository_dispatch' }}
+      - name: Set email vars
+        id: configure_email
+        uses: actions/github-script@v6
+        env:
+            JOB_STATUS: ${{ job.status }}
+            CC_ENV: ${{ matrix.environment }}
         with:
-            # Required mail server address:
+          script: |
+            const {JOB_STATUS, NOW, CC_ENV, GITHUB_HEAD_REF} = process.env
+            const prefix = `[${CC_ENV}] Smoke Tests - ${JOB_STATUS.toUpperCase()} - Run #${context.runNumber}`
+            const suffix = `at ${NOW}`
+
+            let subject = `${prefix} on "deploy_sucess" ${suffix}`
+            if (context.eventName !== "repository_dispatch") {
+              subject = `${prefix} on branch "${GITHUB_HEAD_REF}" ${suffix}`
+            }
+
+            let bodyFile = 'HQSmokeTests/email_pass.html'
+            if (JOB_STATUS !== 'success') {
+              bodyFile = 'HQSmokeTests/email_fail.html'
+            }
+
+            return {
+              "subject": subject,
+              "body": bodyFile
+            }
+
+      - name: Send Result Email
+        uses: dawidd6/action-send-mail@v3
+        with:
           server_address: smtp.gmail.com
-            # Required mail server port:
           server_port: 465
-            # Optional (recommended): mail server username:
           username: ${{secrets.DIMAGIQA_MAIL_USERNAME}}
-            # Optional (recommended) mail server password:
           password: ${{secrets.DIMAGIQA_MAIL_PASSWORD}}
-           # Required mail subject:
-          subject: ${{ github.event.client_payload.environment }}  PASS - Smoke Tests[#${{github.run_number}}], ${{env.NOW}}
-            # Required recipients' addresses:
+          subject: ${{ steps.configure_email.outputs.result.subject }}
           to: qa@dimagi.com, sameena.shaik@fissionlabs.com
-            # Required sender full name (address can be skipped):
           from: <${{secrets.DIMAGIQA_MAIL_USERNAME}}>
-            # Optional HTML body read from file:
-          html_body: file:///${{ github.workspace }}/HQSmokeTests/email_pass.html
-            # Optional priority: 'high', 'normal' (default) or 'low'
-          priority: normal
-
-      - name: Send Failure Email on Deploy Event
-        uses: dawidd6/action-send-mail@v3
-        if: ${{ failure() && github.event_name == 'repository_dispatch' }}
-        with:
-          server_address: smtp.gmail.com
-          server_port: 465
-          username: ${{secrets.DIMAGIQA_MAIL_USERNAME}}
-          password: ${{secrets.DIMAGIQA_MAIL_PASSWORD}}
-          subject: ${{ github.event.client_payload.environment }} FAIL - Smoke Tests[#${{github.run_number}}], ${{env.NOW}}
-          to: qa@dimagi.com, sameena.shaik@fissionlabs.com
-          from: <${{secrets.DIMAGIQA_MAIL_USERNAME}}>
-          html_body: file:///${{ github.workspace }}/HQSmokeTests/email_fail.html
-          attachments: ${{ github.workspace }}/report_${{ matrix.environment }}.html
-          priority: normal
-
-      - name: Send Failure Email on Push or Pull
-        uses: dawidd6/action-send-mail@v3
-        if: ${{ failure() && github.event_name != 'repository_dispatch' }}
-        with:
-          server_address: smtp.gmail.com
-          server_port: 465
-          username: ${{secrets.DIMAGIQA_MAIL_USERNAME}}
-          password: ${{secrets.DIMAGIQA_MAIL_PASSWORD}}
-          subject: FAIL - Smoke Tests[#${{github.run_number}}] for ${{ matrix.environment }} on branch "${{ github.head_ref }}", ${{env.NOW}}
-          to: qa-automation@dimagi.com
-          from: <${{secrets.DIMAGIQA_MAIL_USERNAME}}>
-          html_body: file:///${{ github.workspace }}/HQSmokeTests/email_fail.html
-          attachments: ${{ github.workspace }}/report_${{ matrix.environment }}.html
-          priority: normal
-
-      - name: Send Pass Email on Push or Pull
-        uses: dawidd6/action-send-mail@v3
-        if: ${{ success() && github.event_name != 'repository_dispatch' }}
-        with:
-          server_address: smtp.gmail.com
-          server_port: 465
-          username: ${{secrets.DIMAGIQA_MAIL_USERNAME}}
-          password: ${{secrets.DIMAGIQA_MAIL_PASSWORD}}
-          subject: PASS - Smoke Tests[#${{github.run_number}}] for ${{ matrix.environment }} on branch "${{ github.head_ref }}", ${{env.NOW}}
-          to: qa-automation@dimagi.com
-          from: <${{secrets.DIMAGIQA_MAIL_USERNAME}}>
-          html_body: file:///${{ github.workspace }}/HQSmokeTests/email_pass.html
-          priority: normal
+          html_body:  file:///${{ github.workspace }}/${{ steps.configure_email.outputs.result.body }}
 
       - name: Archive test results
         if: always()
