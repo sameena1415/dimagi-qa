@@ -97,11 +97,9 @@ jobs:
               subject = `${prefix} on branch "${GITHUB_HEAD_REF}" ${suffix}`
             }
 
-            let bodyFile = './HQSmokeTests/email_pass.md',
-              attachment = `report_${CC_ENV}.html`
+            let bodyFile = './HQSmokeTests/email_pass.md'
             if (JOB_STATUS !== 'success') {
               bodyFile = './HQSmokeTests/email_fail.md'
-              attachment = ''
             }
 
             let actionRunLink = context.payload.repository.html_url + `/actions/runs/${context.runId}`
@@ -111,8 +109,7 @@ jobs:
 
             return {
               "subject": subject,
-              "body": bodyContent,
-              "attachment": attachment
+              "body": bodyContent
             }
 
       - name: Send Result Email
@@ -128,7 +125,7 @@ jobs:
           from: <${{secrets.DIMAGIQA_MAIL_USERNAME}}>
           html_body: ${{ fromJSON(steps.configure_email.outputs.result).body }}
           convert_markdown: true
-          attachments: ${{ fromJSON(steps.configure_email.outputs.result).attachment }}
+          attachments: ${{ github.workspace }}/report_${{ matrix.environment }}.html
 
       - name: Archive test results
         if: always()
