@@ -55,14 +55,13 @@ def test_case_05_edit_user_groups(driver):
     edit.edit_existing_group()
     edit.remove_user_from_group()
 
-@pytest.mark.order(1)
 def test_case_04_deactivate_user(driver):
     user = MobileWorkerPage(driver)
     user.mobile_worker_menu()
     user.deactivate_user()
     user.verify_deactivation_via_login()
 
-@pytest.mark.order(2)
+@pytest.mark.depends(on=['test_case_04_deactivate_user'])
 def test_case_04_reactivate_user(driver):
     user = MobileWorkerPage(driver)
     user.mobile_worker_menu()
