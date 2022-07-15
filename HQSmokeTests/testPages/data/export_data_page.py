@@ -80,6 +80,11 @@ class ExportDataPage(BasePage):
 
         # Power BI / Tableau Integration, Form
         self.powerBI_tab_int = (By.LINK_TEXT, 'PowerBi/Tableau Integration')
+        self.copy_odata_link_btn_form = (By.XPATH,"//div[./span[text()='" + UserData.odata_feed_form + "']]/following::div[@class='input-group']//a")
+        self.copy_odata_link_form = (By.XPATH,"//div[./span[text()='" + UserData.odata_feed_form + "']]/following::div[@class='input-group']/input")
+        self.copy_odata_link_btn_case = (By.XPATH, "//div[./span[text()='" + UserData.odata_feed_case + "']]/following::div[@class='input-group']//a")
+        self.copy_odata_link_case = (By.XPATH, "//div[./span[text()='" + UserData.odata_feed_case + "']]/following::div[@class='input-group']/input")
+
         self.edit_button_case = (By.XPATH,
                                  "(//span[contains(text(), 'Copy & Edit Feed')])")
         self.edit_button_form = (By.XPATH,
@@ -103,18 +108,11 @@ class ExportDataPage(BasePage):
         self.case = (By.ID, "id_case_type")
         self.model = (By.ID, "id_model_type")
 
-    def generate_odata_feed_link(self, item):
-        # self.wait_and_sleep_to_click(self.copy_odatafeed_link) # Alternative:Copy and Paste
-        time.sleep(5)
-        get_url = self.driver.current_url
-        ID = get_url.split("/")[10]
-        odata_feed_link_case = "https://" + self.get_environment() + "/a/" + self.get_domain() + "/api/v0.5/odata/" + item + "/" + ID + "/feed/"
-        self.driver.back()
-        # self.switch_to_new_tab()
-        return odata_feed_link_case
-
     def get_url_paste_browser(self, username, password, item):
-        odata_feed_link = self.generate_odata_feed_link(item)
+        if (item == 'cases'):
+            odata_feed_link = self.wait_to_get_value(self.copy_odata_link_case)
+        elif (item == 'forms'):
+            odata_feed_link = self.wait_to_get_value(self.copy_odata_link_form)
         final_URL_case = f"https://{username}:{password}@{odata_feed_link[8:]}"
         self.driver.get(final_URL_case)
 
@@ -323,6 +321,7 @@ class ExportDataPage(BasePage):
             self.wait_and_sleep_to_click(self.powerBI_tab_int)
         except ElementClickInterceptedException:
             self.js_click(self.powerBI_tab_int)
+        self.delete_bulk_exports()
         self.wait_and_sleep_to_click(self.add_export_button)
         time.sleep(30)
         self.is_visible_and_displayed(self.model)
@@ -338,7 +337,7 @@ class ExportDataPage(BasePage):
         self.click(self.export_settings_create)
         print("Odata Form Feed created!!")
         self.driver.refresh()
-        self.wait_and_sleep_to_click(self.edit_button_form)
+        self.wait_and_sleep_to_click(self.copy_odata_link_btn_form)
         self.get_url_paste_browser(username, password, "forms")
         self.assert_odata_feed_data()
 
@@ -346,8 +345,9 @@ class ExportDataPage(BasePage):
     def power_bi_tableau_integration_case(self, username, password):
         self.driver.refresh()
         self.wait_to_click(self.powerBI_tab_int)
-        self.wait_to_click(self.add_export_button)
-        time.sleep(10)
+        self.delete_bulk_exports()
+        self.wait_and_sleep_to_click(self.add_export_button)
+        time.sleep(30)
         self.is_visible_and_displayed(self.model)
         self.select_by_value(self.model, UserData.model_type_case)
         self.select_by_text(self.application, UserData.village_application)
@@ -364,7 +364,7 @@ class ExportDataPage(BasePage):
         self.click(self.export_settings_create)
         print("Odata Case Feed created!!")
         self.driver.refresh()
-        self.wait_and_sleep_to_click(self.edit_button_case)
+        self.wait_and_sleep_to_click(self.copy_odata_link_btn_case)
         self.get_url_paste_browser(username, password, "cases")
         self.assert_odata_feed_data()
 
