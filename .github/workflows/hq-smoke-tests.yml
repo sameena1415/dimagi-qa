@@ -29,6 +29,7 @@ jobs:
   build:
     needs: set_matrix
     strategy:
+      fail-fast: false
       matrix: ${{ fromJSON(needs.set_matrix.outputs.matrix) }}
     name: Smoke on '${{ matrix.environment }}'
     runs-on: ubuntu-latest
