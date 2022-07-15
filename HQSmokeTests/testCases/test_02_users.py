@@ -63,7 +63,6 @@ def test_case_04_deactivate_user(driver):
     user.verify_deactivation_via_login()
 
 @pytest.mark.order(2)
-@pytest.mark.depends(on=['test_case_04_deactivate_user'])
 def test_case_04_reactivate_user(driver):
     user = MobileWorkerPage(driver)
     user.mobile_worker_menu()
