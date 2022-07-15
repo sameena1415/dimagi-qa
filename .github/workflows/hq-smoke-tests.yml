@@ -120,10 +120,10 @@ jobs:
           server_port: 465
           username: ${{secrets.DIMAGIQA_MAIL_USERNAME}}
           password: ${{secrets.DIMAGIQA_MAIL_PASSWORD}}
-          subject: ${{ steps.configure_email.outputs.result.subject }}
+          subject: ${{ fromJSON(steps.configure_email.outputs.result).subject }}
           to: qa@dimagi.com, sameena.shaik@fissionlabs.com
           from: <${{secrets.DIMAGIQA_MAIL_USERNAME}}>
-          html_body:  ${{ steps.configure_email.outputs.result.body }}
+          html_body:  ${{ fromJSON(steps.configure_email.outputs.result).body }}
           convert_markdown: true
 
       - name: Archive test results
