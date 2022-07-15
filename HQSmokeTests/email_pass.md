@@ -1,6 +1,6 @@
 Hello!
 
-All the CommCare HQ Smoke Tests PASSED successfully.
+All the CommCare HQ Smoke Tests PASSED successfully on "{{environment}}".
 
 [View test run #{{runNumber}}]({{actionRunLink}})
 

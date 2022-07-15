@@ -106,6 +106,7 @@ jobs:
             let bodyContent = await fs.readFile(bodyFile, 'utf8')
             bodyContent = bodyContent.replace(/{{actionRunLink}}/g, actionRunLink)
                 .replace(/{{runNumber}}/g, context.runNumber)
+                .replace(/{{environment}}/g, CC_ENV)
 
             return {
               "subject": subject,
