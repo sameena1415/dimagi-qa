@@ -85,6 +85,8 @@ jobs:
             CC_ENV: ${{ matrix.environment }}
         with:
           script: |
+            const { promises: fs } = require('fs')
+
             const {JOB_STATUS, NOW, CC_ENV, GITHUB_HEAD_REF} = process.env
             const prefix = `[${CC_ENV}] Smoke Tests - ${JOB_STATUS.toUpperCase()} - Run #${context.runNumber}`
             const suffix = `at ${NOW}`
@@ -94,14 +96,19 @@ jobs:
               subject = `${prefix} on branch "${GITHUB_HEAD_REF}" ${suffix}`
             }
 
-            let bodyFile = 'HQSmokeTests/email_pass.html'
+            let bodyFile = './HQSmokeTests/email_pass.html'
             if (JOB_STATUS !== 'success') {
-              bodyFile = 'HQSmokeTests/email_fail.html'
+              bodyFile = './HQSmokeTests/email_fail.html'
             }
+
+            let actionRunLink = context.payload.repository.html_url + `/actions/runs/${context.runId}`
+            let bodyContent = await fs.readFile(bodyFile, 'utf8')
+            bodyContent = bodyContent.replace(/{{actionRunLink}}/g, actionRunLink)
+                .replace(/{{runNumber}}/g, context.runNumber)
 
             return {
               "subject": subject,
-              "body": bodyFile
+              "body": bodyContent
             }
 
       - name: Send Result Email
@@ -114,7 +121,7 @@ jobs:
           subject: ${{ steps.configure_email.outputs.result.subject }}
           to: qa@dimagi.com, sameena.shaik@fissionlabs.com
           from: <${{secrets.DIMAGIQA_MAIL_USERNAME}}>
-          html_body:  file:///${{ github.workspace }}/${{ steps.configure_email.outputs.result.body }}
+          html_body:  ${{ steps.configure_email.outputs.result.body }}
 
       - name: Archive test results
         if: always()
