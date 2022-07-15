@@ -82,7 +82,7 @@ jobs:
             # Required sender full name (address can be skipped):
           from: <${{secrets.DIMAGIQA_MAIL_USERNAME}}>
             # Optional HTML body read from file:
-          html_body: file:////home/runner/work/dimagi-qa/dimagi-qa/HQSmokeTests/email_pass.html
+          html_body: file:///${{ github.workspace }}/HQSmokeTests/email_pass.html
             # Optional priority: 'high', 'normal' (default) or 'low'
           priority: normal
 
@@ -97,8 +97,8 @@ jobs:
           subject: ${{ github.event.client_payload.environment }} FAIL - Smoke Tests[#${{github.run_number}}], ${{env.NOW}}
           to: qa@dimagi.com, sameena.shaik@fissionlabs.com
           from: <${{secrets.DIMAGIQA_MAIL_USERNAME}}>
-          html_body: file:////home/runner/work/dimagi-qa/dimagi-qa/HQSmokeTests/email_fail.html
-          attachments: /home/runner/work/dimagi-qa/dimagi-qa/report_${{ matrix.environment }}.html
+          html_body: file:///${{ github.workspace }}/HQSmokeTests/email_fail.html
+          attachments: ${{ github.workspace }}/report_${{ matrix.environment }}.html
           priority: normal
 
       - name: Send Failure Email on Push or Pull
@@ -112,8 +112,8 @@ jobs:
           subject: FAIL - Smoke Tests[#${{github.run_number}}] for ${{ matrix.environment }} on branch "${{ github.head_ref }}", ${{env.NOW}}
           to: qa-automation@dimagi.com
           from: <${{secrets.DIMAGIQA_MAIL_USERNAME}}>
-          html_body: file:////home/runner/work/dimagi-qa/dimagi-qa/HQSmokeTests/email_fail.html
-          attachments: /home/runner/work/dimagi-qa/dimagi-qa/report_${{ matrix.environment }}.html
+          html_body: file:///${{ github.workspace }}/HQSmokeTests/email_fail.html
+          attachments: ${{ github.workspace }}/report_${{ matrix.environment }}.html
           priority: normal
 
       - name: Send Pass Email on Push or Pull
@@ -127,7 +127,7 @@ jobs:
           subject: PASS - Smoke Tests[#${{github.run_number}}] for ${{ matrix.environment }} on branch "${{ github.head_ref }}", ${{env.NOW}}
           to: qa-automation@dimagi.com
           from: <${{secrets.DIMAGIQA_MAIL_USERNAME}}>
-          html_body: file:////home/runner/work/dimagi-qa/dimagi-qa/HQSmokeTests/email_pass.html
+          html_body: file:///${{ github.workspace }}/HQSmokeTests/email_pass.html
           priority: normal
 
       - name: Archive test results
@@ -135,5 +135,5 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: test-result-reports-${{ matrix.environment }}
-          path: /home/runner/work/dimagi-qa/dimagi-qa/report_${{ matrix.environment }}.html
+          path: ${{ github.workspace }}/report_${{ matrix.environment }}.html
           retention-days: 2
