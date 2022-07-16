@@ -1,3 +1,5 @@
+import pytest
+
 from HQSmokeTests.testPages.home.home_page import HomePage
 from HQSmokeTests.testPages.users.roles_permissions_page import RolesPermissionPage
 from HQSmokeTests.testPages.users.webapps_permission_page import WebAppPermissionPage
@@ -15,7 +17,6 @@ def test_case_06_add_role(driver):
     role = RolesPermissionPage(driver)
     role.add_role()
     print("New Role Added")
-
 
 def test_case_06_edit_role(driver):
 
@@ -44,5 +45,5 @@ def test_cleanup_items_in_role_menu(driver):
     menu.users_menu()
     clean3 = RolesPermissionPage(driver)
     clean3.roles_menu_click()
-    clean3.cleanup_role()
+    clean3.delete_test_roles()
     print("Deleted the role")
