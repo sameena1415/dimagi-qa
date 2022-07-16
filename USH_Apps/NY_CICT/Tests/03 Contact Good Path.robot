@@ -1,7 +1,7 @@
 *** Settings ***
 Documentation     Workflow to test Patient and Contact Good Path
 Suite Setup    Driver Launch
-Library  SeleniumLibrary        timeout=200s
+Library  SeleniumLibrary        timeout=300s
 
 Resource    ../Contact Tracing (CT)/Menu/menu.robot
 Resource    ../Contact Tracing (CT)/Forms/register a new contact form.robot
@@ -14,7 +14,7 @@ Suite Teardown  Close Browser
 
 Contact_Good_1
     [Documentation]    All Contacts: Incomplete Contact Information
-    Sleep   20s
+    Sleep   40s
     HQ Login
     Log in as ci_user
     Register New Case

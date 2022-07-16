@@ -1,7 +1,7 @@
 *** Settings ***
 Documentation     Workflow to test Patient and Contact Good Path
 Suite Setup    Driver Launch
-Library  SeleniumLibrary    timeout=200s
+Library  SeleniumLibrary    timeout=300s
 Resource    ../Case Investigation (CI)/Menu/menu.robot
 Resource    ../Case Investigation (CI)/Forms/register a new case form.robot
 Resource    ../Case Investigation (CI)/Forms/case investigation form.robot

@@ -1,7 +1,7 @@
 *** Settings ***
 Documentation     Testing the workflow to reopen a patient record that was
 ...               previously closed to resume interview/monitoring activities.
-Library  SeleniumLibrary        timeout=200s
+Library  SeleniumLibrary        timeout=300s
 Suite Setup    Driver Launch
 Resource    ../Case Investigation (CI)/Menu/menu.robot
 Resource    ../Case Investigation (CI)/Forms/register a new case form.robot

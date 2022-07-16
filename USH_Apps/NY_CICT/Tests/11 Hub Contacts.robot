@@ -1,7 +1,7 @@
 *** Settings ***
 Documentation     Workflow to test Patient Good Path
 Suite Setup    Driver Launch
-Library  SeleniumLibrary        timeout=200s
+Library  SeleniumLibrary        timeout=300s
 Resource    ../Contact Tracing (CT)/Menu/menu.robot
 Resource    ../Contact Tracing (CT)/Forms/register a new contact form.robot
 Resource    ../Contact Tracing (CT)/Forms/contact montitoring form.robot

@@ -2,7 +2,7 @@
 Library    Collections
 Documentation     Testing workflow to create contacts that have no confirmed exposures or index patient cases in the system.
 Suite Setup    Driver Launch
-Library  SeleniumLibrary        timeout=200s
+Library  SeleniumLibrary        timeout=300s
 Resource    ../Case Investigation (CI)/Menu/menu.robot
 Resource    ../Case Investigation (CI)/Forms/register a new case form.robot
 Resource    ../Case Investigation (CI)/Forms/case investigation form.robot

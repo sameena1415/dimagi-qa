@@ -184,10 +184,8 @@ Answer Input Text
    
 Search in the case list   
     [Arguments]    ${case_or_contact_created}
-    Sleep    120s
     Input Text    ${search_case}    ${case_or_contact_created}
     Click Element    ${search_button}
-    
 
 Select Created Case
     [Arguments]    ${case_or_contact_created}
@@ -196,7 +194,7 @@ Select Created Case
     Sleep    2s
     Wait Until Element Is Enabled    ${continue}
     Sleep    2s 
-    Wait Until Keyword Succeeds  5 min  1 min   Scroll Element Into View    ${continue}
+    Wait Until Keyword Succeeds  3 min  1 min   Scroll Element Into View    ${continue}
     Wait Until Keyword Succeeds  2 min  5 sec   Click Element    ${continue}
 
 Select Cluster
@@ -204,8 +202,6 @@ Select Cluster
     Wait Until Element Is Enabled    //tr[.//td[text()='${case_or_contact_created}']]
     Sleep    2s
     JS Click    //tr[.//td[text()='${case_or_contact_created}']]
-
-
 
 Select Created Case with no lab result
     [Arguments]    ${case_or_contact_created}
