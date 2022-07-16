@@ -8,7 +8,7 @@ Resource    ../../Base/base.robot
 *** Keywords ***
 
 Generate Random Patient Name
-    ${hex} =    Generate Random String	6	[NUMBERS]abcdef
+    ${hex} =    Generate Random String	8	[NUMBERS]abcdef
     ${date}     Get Current Date    result_format=%m/%d/%Y
     ${name_random} =     Catenate	SEPARATOR=-	Patient	${hex} ${date}
     Set Suite Variable  ${name_random}
@@ -40,7 +40,6 @@ Get Case Name
 
 Set Case Name
     ${name_random}  Get Case Name
-#    ${case_created}   Set Variable    //tr[.//td[text()='${name_random}' and @class='module-case-list-column']]
     ${case_created}   Set Variable    //tr[.//td[text()='${name_random}']]
     Log    ${case_created}
     Set Suite Variable    ${case_created}

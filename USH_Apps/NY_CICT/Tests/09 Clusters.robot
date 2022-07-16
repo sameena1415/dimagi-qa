@@ -1,7 +1,7 @@
 *** Settings ***
 Documentation     Testing workflow to create new clusters and assign cases/contacts to those clusters.
 Suite Setup    Driver Launch
-Library  SeleniumLibrary        timeout=300s
+Library  SeleniumLibrary        timeout=200s
 Resource    ../Case Investigation (CI)/Menu/menu.robot
 Resource    ../Case Investigation (CI)/Forms/create a new cluster form.robot
 Resource    ../Case Investigation (CI)/Forms/view record lab results.robot
@@ -16,7 +16,7 @@ Resource    ../Case Investigation (CI)/Forms/create a new cluster form.robot
 
 Clusters_1
     [Documentation]    Create cluster - non school/college
-    Sleep   280s
+    Sleep   320s
     HQ Login
     Log in as ci_user
     Open Clusters PUIs, Cases, Contacts
@@ -49,24 +49,24 @@ Clusters_3
     Open All Cases
     Search in the case list    ${case_name}
     Select Created Case    ${case_created}
-    Open View Record Lab Results Form
+    Open Form   ${View Record Lab results}
     Record specimen date        44
     Open All Cases
     Search in the case list    ${case_name}
     Select Created Case    ${case_created}
-    Open Case Investigation Form
+    Open Form    ${Case Investigation Form}
     ${date_specimen}=    Get specimen collection date
     Log To Console    ${date_specimen}
     Set Global Variable    ${date_specimen}
     Run Keyword And Ignore Error    Add Case Disposition
     Add Cluster Information To Case     ${cluster_non_name}   ${cluster_non_id_created}   ${cluster_name}   ${cluster_id_created}
     Open Clusters PUIs, Cases, Contacts
-    Open View Update Cluster Info Form
+    Open Form    ${View Update Cluster Info Form}
     Search in the case list    ${cluster_non_name}
     Select Cluster    ${cluster_non_name}
     Verify Specimen collection date in cluster      ${date_specimen}
     Open Clusters PUIs, Cases, Contacts
-    Open View Update Cluster Info Form
+    Open Form    ${View Update Cluster Info Form}
     Search in the case list    ${cluster_name}
     Select Cluster    ${cluster_name}
     Verify Specimen collection date in cluster      ${date_specimen}
@@ -81,7 +81,7 @@ Clusters_4
     Open All Contacts
     Search in the case list    ${contact_name}
     Select Created Case    ${contact_created}
-    Open Contact Monitoring Form
+    Open Form    ${contact_monitoring_form}
     Add Contact Monitoring Details
     Add Cluster Information To Contact     ${cluster_non_name}   ${cluster_non_id_created}
 
@@ -89,7 +89,7 @@ Clusters_5
     [Documentation]    Update site info - non school/college
     Log in as ci_user
     Open Clusters PUIs, Cases, Contacts
-    Open View Update Cluster Info Form
+    Open Form    ${View Update Cluster Info Form}
     Search in the case list    ${cluster_non_name}
     Select Cluster    ${cluster_non_name}
     ${updated_cluster_non_name}     Update Cluster - non school/college     ${date_specimen}    ${cluster_non_name}
@@ -101,12 +101,12 @@ Clusters_6
     [Documentation]    Update site info - school/college
     Log in as ci_user
     Open Clusters PUIs, Cases, Contacts
-    Open View Update Cluster Info Form
+    Open Form    ${View Update Cluster Info Form}
     Search in the case list    ${cluster_name}
     Select Cluster    ${cluster_name}
     ${updated_cluster_name}     Update Cluster - school/college     ${cluster_name}
     Open Clusters PUIs, Cases, Contacts
-    Open View Update Cluster Info Form
+    Open Form    ${View Update Cluster Info Form}
     Search in the case list    ${updated_cluster_name}
     Select Cluster    ${updated_cluster_name}
     Verify non school cluster update    ${updated_cluster_name}     ${cluster_id_created}
@@ -117,12 +117,12 @@ Clusters_7
     [Documentation]    Close a cluster (outbreak ended)
     Log in as ci_user
     Open Clusters PUIs, Cases, Contacts
-    Open View Update Cluster Info Form
+    Open Form    ${View Update Cluster Info Form}
     Search in the case list    ${updated_cluster_non_name}
     Select Cluster    ${updated_cluster_non_name}
     Close Cluster
     Open Clusters PUIs, Cases, Contacts
-    Open View Update Cluster Info Form
+    Open Form    ${View Update Cluster Info Form}
     Search in the case list    ${updated_cluster_non_name}
     Verify cluster closed       ${updated_cluster_non_name}
 
@@ -130,12 +130,12 @@ Clusters_8
     [Documentation]    Reopen a cluster
     Log in as ci_user
     Open Clusters PUIs, Cases, Contacts
-    Open View Update Cluster Info Form
+    Open Form    ${View Update Cluster Info Form}
     Search in the case list    ${updated_cluster_non_name}
     Select Cluster    ${updated_cluster_non_name}
     Reopen Cluster
     Open Clusters PUIs, Cases, Contacts
-    Open View Update Cluster Info Form
+    Open Form    ${View Update Cluster Info Form}
     Search in the case list    ${updated_cluster_non_name}
     Verify cluster open     ${updated_cluster_non_name}
 
@@ -143,12 +143,12 @@ Clusters_9
     [Documentation]    close a cluster (registered in error)
     Log in as ci_user
     Open Clusters PUIs, Cases, Contacts
-    Open View Update Cluster Info Form
+    Open Form    ${View Update Cluster Info Form}
     Search in the case list    ${updated_cluster_non_name}
     Select Cluster    ${updated_cluster_non_name}
     Close Cluster error registered
     Open Clusters PUIs, Cases, Contacts
-    Open View Update Cluster Info Form
+    Open Form    ${View Update Cluster Info Form}
     Search in the case list    ${updated_cluster_non_name}
     Verify cluster not present      ${updated_cluster_non_name}
 

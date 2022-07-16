@@ -1,7 +1,7 @@
 *** Settings ***
 Documentation     Testing the workflow to reopen a patient record that was
 ...               previously closed to resume interview/monitoring activities.
-Library  SeleniumLibrary        timeout=300s
+Library  SeleniumLibrary        timeout=200s
 Suite Setup    Driver Launch
 Resource    ../Case Investigation (CI)/Menu/menu.robot
 Resource    ../Case Investigation (CI)/Forms/register a new case form.robot
@@ -15,7 +15,7 @@ Suite Teardown  Close Browser
 
 Reopen_Case_and_Contact_1
     [Documentation]    Closed case does not reopen, then reopens (closed patient record form)
-    Sleep   160s
+    Sleep   200s
     HQ Login
     Log in as ci_user
     Register New Case
@@ -52,7 +52,7 @@ Reopen_Case_and_Contact_2
     Search in the case list     ${case_name}
     Verify Close Status      ${case_name}
     Select Created Case    ${case_created}
-    Open Case Investigation Form
+    Open Form    ${Case Investigation Form}
     Activity for case complete - No
     Open All Cases
     Search in the case list     ${case_name}

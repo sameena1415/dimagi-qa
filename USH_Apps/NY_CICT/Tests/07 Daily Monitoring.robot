@@ -1,7 +1,8 @@
 *** Settings ***
 Documentation     Testing the workflow to conduct daily monitoring of eligible cases and contacts.
 Suite Setup    Driver Launch
-Library  SeleniumLibrary        timeout=300s
+Library  SeleniumLibrary        timeout=200s
+Library  DependencyLibrary
 Resource    ../Case Investigation (CI)/Menu/menu.robot
 Resource    ../Case Investigation (CI)/Forms/register a new case form.robot
 Resource    ../Case Investigation (CI)/Forms/case investigation form.robot
@@ -13,7 +14,7 @@ Suite Teardown  Close Browser
 
 Daily_Monitoring_1
     [Documentation]    Daily monitoring not selected, then selected
-    Sleep   200s
+    Sleep   240s
     HQ Login
     Log in as ci_user
     Register New Case
@@ -27,17 +28,18 @@ Daily_Monitoring_1
     Search in the case list     ${case_name}
     Element Should Be Visible    ${case_created}
     Select Created Case    ${case_created}
-    Open Case Investigation Form
+    Open Form    ${Case Investigation Form}
     Daily Monitoring - Yes
     Open All Open Cases
     Search in the case list     ${case_name}
     Verify Daily Monitoring Status    ${case_name}      yes
     Select Created Case    ${case_created}
-    Open Case Investigation Form
+    Open Form    ${Case Investigation Form}
     Verify Daily Monitoring Section
 
 Daily_Monitoring_2
     [Documentation]    Daily monitoring notes
+    Depends on test     Daily_Monitoring_1
     Open App Home Screen
     Log in as ci_user
     ${case_name}    Get Case Name
@@ -48,7 +50,7 @@ Daily_Monitoring_2
         Open All Cases
         Search in the case list     ${case_name}
         Select Created Case    ${case_created}
-        Open Case Investigation Form
+        Open Form    ${Case Investigation Form}
         ${note}=    Set Variable    test note ${j}
         ${created_note}=       Daily Monitorying notes     ${note}      @{notes_list}
         Collections.Append To List    ${notes_list}     ${created_note}
@@ -56,11 +58,11 @@ Daily_Monitoring_2
     Open All Cases
     Search in the case list     ${case_name}
     Select Created Case    ${case_created}
-    Open Case Investigation Form
+    Open Form    ${Case Investigation Form}
     Verify Monitoring logs      @{notes_list}
 
 Daily_Monitoring_3
-    [Documentation]    Daily follow up monitoring log/notes
+    [Documentation]    Daily follow up monitoring log/note
     Open App Home Screen
     Log in as ci_user
     Register New Case
@@ -76,7 +78,7 @@ Daily_Monitoring_3
         Open All Cases
         Search in the case list     ${case_name}
         Select Created Case    ${case_created}
-        Open Case Investigation Form
+        Open Form    ${Case Investigation Form}
         ${followup}=    Set Variable    follow up attempt ${j}
         ${created_log}=       Follow up attempt notes     ${followup}      @{follow_list}
         Collections.Append To List    ${follow_list}     ${created_log}
@@ -84,12 +86,11 @@ Daily_Monitoring_3
     Open All Cases
     Search in the case list     ${case_name}
     Select Created Case    ${case_created}
-    Open Case Investigation Form
+    Open Form    ${Case Investigation Form}
     Verify Follow Up logs       @{follow_list}
 
 Daily_Monitoring_4
     [Documentation]    Interview not complete and needs monitoring, then interview complete
-#    Open App Home Screen
     Log in as ci_user
     Register New Case
     ${case_interview}=  Set variable    No
@@ -102,39 +103,39 @@ Daily_Monitoring_4
     Search in the case list     ${case_name}
     Element Should Be Visible    ${case_created}
     Select Created Case    ${case_created}
-    Open Case Investigation Form
+    Open Form    ${Case Investigation Form}
     Verify Interview Not Complete
     Interview Complete
     Open All Cases
     Search in the case list     ${case_name}
     Select Created Case    ${case_created}
-    Open Case Investigation Form
+    Open Form    ${Case Investigation Form}
     Verify Interview Complete
 
 Daily_Monitoring_5
     [Documentation]    Successful follow-up attempt and unsuccessful follow-up attempt
-#    Open App Home Screen
+    Depends on test     Daily_Monitoring_4
     Log in as ci_user
     ${case_name}    Get Case Name
     ${case_created}   Set Case Name
     Open All Cases
     Search in the case list     ${case_name}
     Select Created Case    ${case_created}
-    Open Case Investigation Form
+    Open Form    ${Case Investigation Form}
     Verify Interview Complete
     Add new follow up log       success
     Enter Response for Follow Up - No
     Open All Cases
     Search in the case list     ${case_name}
     Select Created Case    ${case_created}
-    Open Case Investigation Form
+    Open Form    ${Case Investigation Form}
     Verify fever, symptoms, help all no logs
     Add new follow up log       success
     Enter Response for Follow Up - Yes
     Open All Cases
     Search in the case list     ${case_name}
     Select Created Case    ${case_created}
-    Open Case Investigation Form
+    Open Form    ${Case Investigation Form}
     Verify fever, symptoms, help all logs
     Add new follow up log       unsuccess
     ${log}=     Add follow up unsuccess notes
@@ -142,7 +143,7 @@ Daily_Monitoring_5
     Open All Cases
     Search in the case list     ${case_name}
     Select Created Case    ${case_created}
-    Open Case Investigation Form
+    Open Form    ${Case Investigation Form}
     Verify unsuccessful logs        ${log}
 
 
@@ -161,11 +162,11 @@ Daily_Monitoring_6
     Open All Cases
     Search in the case list     ${case_name}
     Select Created Case    ${case_created}
-    Open Case Investigation Form
+    Open Form    ${Case Investigation Form}
     Verify Interview Complete
     Enter Provider Info
     Open All Cases
     Search in the case list     ${case_name}
     Select Created Case    ${case_created}
-    Open Case Investigation Form
+    Open Form    ${Case Investigation Form}
     Validate Provider Info

@@ -7,19 +7,14 @@ Resource    ../../Base/base.robot
 
 *** Keywords ***
 
-
 Generate Random Patient Name
     ${hex} =    Generate Random String	4	[NUMBERS]abcdef
     ${name_random} =     Catenate	SEPARATOR=-	Patient	${hex}
     Set Suite Variable  ${name_random}
 
-Open Search for Duplicate Patients
-    Wait Until Element Is Enabled    ${Search for Duplicate Patients}
-    JS Click    ${Search for Duplicate Patients}
-
 Search Duplicate Patient
     [Arguments]     ${contact_name}
-    Open Search for Duplicate Patients
+    Open Form   ${Search for Duplicate Patients}
     Wait Until Keyword Succeeds  3x  500ms     JS Click    ${search-submit}
     Wait Until Element Is Visible    //tr[.//td[text()='${contact_name}']]
     JS Click    //tr[.//td[text()='${contact_name}']]

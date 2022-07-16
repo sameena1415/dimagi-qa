@@ -4,12 +4,6 @@ Resource    ../../Base/base.robot
 
 
 *** Keywords ***
-     
-Open Convert Contact to a Suspected Case (PUI) Form
-    Sleep    2s
-    Wait Until Element Is Enabled    ${Convert Contact to a Suspected Case PUI Form}
-    JS Click    ${Convert Contact to a Suspected Case PUI Form}
-
 
 PUI form submission
     Wait Until Element Is Enabled    ${confirm_yes_convert_pui}

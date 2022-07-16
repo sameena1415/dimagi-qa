@@ -2,7 +2,7 @@
 Library    Collections
 Documentation     Testing workflow to create contacts that have no confirmed exposures or index patient cases in the system.
 Suite Setup    Driver Launch
-Library  SeleniumLibrary        timeout=300s
+Library  SeleniumLibrary        timeout=200s
 Resource    ../Case Investigation (CI)/Menu/menu.robot
 Resource    ../Case Investigation (CI)/Forms/register a new case form.robot
 Resource    ../Case Investigation (CI)/Forms/case investigation form.robot
@@ -15,7 +15,7 @@ Suite Teardown  Close Browser
 
 Register New Contact No Index 1
     [Documentation]   register a single contact with a phone number
-    Sleep   440s
+    Sleep   480s
     HQ Login
     Log in as ci_user
     ${contact_names}     Generate Contact New Names     1

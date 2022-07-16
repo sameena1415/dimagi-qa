@@ -12,21 +12,8 @@ Generate Random Cluster Name
     ${name_random} =     Catenate	SEPARATOR=-	Cluster	${hex}
     Set Suite Variable  ${name_random}
 
-
-Open View Update Cluster Info Form
-    Sleep    2s
-    Wait Until Element Is Enabled    ${View Update Cluster Info Form}
-    JS Click    ${View Update Cluster Info Form}
-
-Open Create New Cluster Form
-    Sleep    2s
-    Wait Until Element Is Enabled    ${Create New Cluster Form}
-    JS Click    ${Create New Cluster Form}
-
-
-
 Create New Cluster - non school/college
-    Open Create New Cluster Form
+    Open Form    ${Create New Cluster Form}
     ${date}    Get Current Date    result_format=%#m/%#d/%Y
     Generate Random Cluster Name
     ${name_random}    Get Variable Value    ${name_random}
@@ -54,7 +41,7 @@ Create New Cluster - non school/college
 
 
 Create New Cluster - school/college
-    Open Create New Cluster Form
+    Open Form    ${Create New Cluster Form}
     ${date}    Get Current Date    result_format=%#m/%#d/%Y
     Generate Random Cluster Name
     ${name_random}    Get Variable Value    ${name_random}
@@ -87,15 +74,11 @@ Get Cluster Name
 
 Set Cluster Name
     ${name_random}  Get Cluster Name
-#    ${case_created}   Set Variable    //tr[.//td[text()='${name_random}' and @class='module-case-list-column']]
     ${case_created}   Set Variable    //tr[.//td[text()='${name_random}']]
     Log    ${case_created}
     Set Suite Variable    ${case_created}
     [Return]    ${case_created}
 
-
-
-    
 Verify Specimen collection date in cluster
     [Arguments]     ${date}
     Wait Until Element Is Enabled    ${specimen_date_of_first_case}\[contains(text(),'${date}')]

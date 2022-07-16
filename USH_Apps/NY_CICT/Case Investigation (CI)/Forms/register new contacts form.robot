@@ -9,18 +9,12 @@ Resource    ../../Contact Tracing (CT)/Forms/contact montitoring form.robot
 
 *** Keywords ***
 
-Open Register New Contact(s) Form
-    Sleep    5s
-    Wait Until Element Is Visible   ${register_new_contacts_form}
-    JS Click    ${register_new_contacts_form}
-
 Register New Contacts to Case
     [Arguments]     ${n}    ${name}     ${phone}
-    Open Register New Contact(s) Form
+    Open Form     ${register_new_contacts_form}
     Wait Until Element Is Visible    ${type_of_contact_household}
     JS Click    ${type_of_contact_household}
     Input Text    ${how_many_new_contacts}  ${n}
-    Press Keys   ${how_many_new_contacts}   TAB
     FOR    ${i}    IN RANGE   0  ${n}
        ${j}=    Evaluate    ${i} + 1
        ${contact_first_name_loop}=   Catenate    SEPARATOR=     ${contact_first_name}   [    ${j}    ]
@@ -69,11 +63,10 @@ Register New Contacts for Case having address and phone number
      Set Global Variable    ${Yesterday's date}
      Set Global Variable    ${Today's date}
 
-    Run Keyword And Ignore Error    Open Register New Contact(s) Form
+    Run Keyword And Ignore Error    Open Form     ${register_new_contacts_form}
     Run Keyword If    "${without_index}"=="yes"     Open Register New Contact without index
 
     Input Text    ${how_many_new_contacts}  ${n}
-    Press Keys   ${how_many_new_contacts}    TAB
     Contact type selection as per user input       ${contact_type}
 
     FOR    ${i}    IN RANGE   0  ${n}
@@ -117,7 +110,7 @@ Check Count of Element
 
 Check Already Registered Contacts
     [Arguments]     ${loop_count}   ${master_list}
-    Open Register New Contact(s) Form
+    Open Form     ${register_new_contacts_form}
     Sleep    5s
     FOR    ${i}    IN RANGE   0  ${loop_count}
         ${loop_count}=    Evaluate    ${i} + 1
@@ -146,7 +139,7 @@ Check Already Registered Contacts
 
 Check Registered Contact Details on Contact Monitoring
     [Arguments]       ${master_list}=${EMPTY}    ${check}=${EMPTY}
-    Open Contact Monitoring Form
+    Open Form    ${contact_monitoring_form}
     Sleep    5s
     Log      ${master_list}
 

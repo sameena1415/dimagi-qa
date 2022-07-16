@@ -6,12 +6,8 @@ Resource    ../../Base/base.robot
 
 *** Keywords ***
 
-Open View Record Lab Results Form
-    Wait Until Element Is Enabled    ${View Record Lab results}
-    JS Click    ${View Record Lab results}
-
 Add New Lab Result
-    Open View Record Lab Results Form
+    Open Form   ${View Record Lab results}
     Wait Until Element Is Enabled    ${Record New Result}
     Click Button    ${Record New Result}
     Wait Until Element Is Visible    ${specimen_collection_date}

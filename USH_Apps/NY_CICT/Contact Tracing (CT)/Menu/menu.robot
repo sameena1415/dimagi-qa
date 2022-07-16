@@ -29,83 +29,46 @@ ${Hub: School Contacts}    (//div[@aria-label='Hub: School (Contacts)']/div)[1]
 *** Keywords ***
 
 Open Register New Contacts Menu
-    Open App Home Screen
-    Sleep    2s 
-    JS Click    ${Register New Contact(s)}
+    Open Menu   ${Register New Contact(s)}
      
 Open All Closed Contacts menu
-    Open App Home Screen
-    Sleep    2s
-    JS Click    ${All Closed Contacts}
+    Open Menu   ${All Closed Contacts}
      
 Open All Open Contacts menu
-    Open App Home Screen
-    Reload Page
-    Sleep    2s 
-    JS Click    ${All Open Contacts} 
+    Open Menu   ${All Open Contacts}
     
 Open All Contacts
-   Open App Home Screen
-   Sleep    2s  
-   JS Click    ${All Contacts}
+   Open Menu    ${All Contacts}
     
 Open All Contacts: Incomplete Contact Information
-   Open App Home Screen
-   Sleep    2s    
-   JS Click    ${All Contacts: Incomplete Contact Information}
+   Open Menu    ${All Contacts: Incomplete Contact Information}
    
 Open All Contacts: Assigned & Open
-   Open App Home Screen
-   Sleep    2s   
-   JS Click    ${All Contacts: Assigned & Open}
+   Open Menu    ${All Contacts: Assigned & Open}
    
 Open My Contacts: Require Follow-Up
-   Open App Home Screen
-   Sleep    2s  
-   JS Click    ${My Contacts: Require Follow-up}
+   Open Menu    ${My Contacts: Require Follow-up}
    
 Open All Contacts: Require Follow-Up
-   Open App Home Screen
-   Sleep    2s
-   JS Click    ${All Contacts: Require Follow-up}
+   Open Menu     ${All Contacts: Require Follow-up}
    
 Open All Contacts: Unable to Reach
-   Open App Home Screen
-   Sleep    2s
-   JS Click    ${All Contacts: Unable to Reach}
+   Open Menu     ${All Contacts: Unable to Reach}
       
-Open All Contacts Unassigned & Open menu 
-    Sleep    10s
-    Open App Home Screen
-    Sleep    2s
-    JS Click    ${All Contacts: Unassigned & Open}     
+Open All Contacts Unassigned & Open menu
+    Open Menu   ${All Contacts: Unassigned & Open}
    
 Open All Suspected Cases (PUIs) menu
-    Open App Home Screen
-    Sleep    2s
-    JS Click    ${All Suspected Cases (PUIs)}
+    Open Menu    ${All Suspected Cases (PUIs)}
 
 Open Hub Healthcare Contacts
-    Open App Home Screen
-    Sleep    2s
-    Wait Until Element Is Enabled    ${Hub: Healthcare Contacts}
-    JS Click    ${Hub: Healthcare Contacts}
+    Open Menu   ${Hub: Healthcare Contacts}
 
 Open Hub Congregate Settings Contacts
-    Open App Home Screen
-    Sleep    2s
-    Wait Until Element Is Enabled    ${Hub: Congregate Contacts}
-    JS Click    ${Hub: Congregate Contacts}
+    Open Menu   ${Hub: Congregate Contacts}
 
 Open Hub Clusters Contacts
-    Open App Home Screen
-    Sleep    2s
-    Wait Until Element Is Enabled    ${Hub: Clusters Contacts}
-    JS Click    ${Hub: Clusters Contacts}
+    Open Menu    ${Hub: Clusters Contacts}
 
 Open Hub School Contacts
-    Open App Home Screen
-    Sleep    2s
-    Wait Until Element Is Enabled    ${Hub: School Contacts}
-    JS Click    ${Hub: School Contacts}
-
+    Open Menu   ${Hub: School Contacts}

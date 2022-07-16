@@ -1,8 +1,8 @@
 *** Settings ***
 Documentation     Workflow to test Patient and Contact Good Path
 Suite Setup    Driver Launch
-Library  SeleniumLibrary        timeout=300s
-
+Library  SeleniumLibrary        timeout=200s
+Library  DependencyLibrary
 Resource    ../Contact Tracing (CT)/Menu/menu.robot
 Resource    ../Contact Tracing (CT)/Forms/register a new contact form.robot
 Resource    ../Contact Tracing (CT)/Forms/contact montitoring form.robot
@@ -27,63 +27,66 @@ Contact_Good_1
     ${contact_created}   Set Contact Name
     Open All Contacts Unassigned & Open menu
     Search in the case list     ${contact_name}
-    Element Should Not Be Visible    ${contact_created}
+    Wait Until Keyword Succeeds  2 min  20 sec      Element Should Not Be Visible    ${contact_created}
 
     Open All Contacts: Incomplete Contact Information
     Search in the case list     ${contact_name}
-    Element Should Be Visible    ${contact_created}
+    Wait Until Keyword Succeeds  2 min  20 sec      Element Should Be Visible    ${contact_created}
 
 Contact_Good_2
     [Documentation]    All Contacts: Unable to Reach
+    Depends on test     Contact_Good_1
 
     Open All Contacts: Incomplete Contact Information
     ${contact_name}    Get Contact Name
     ${contact_created}   Set Contact Name
     Case Search    ${contact_name}
     Search in the case list      ${contact_name}
-    Element Should Be Visible    ${contact_created}
+    Wait Until Keyword Succeeds  2 min  20 sec      Element Should Be Visible    ${contact_created}
     Select Created Case    ${contact_created}
-    Open Contact Monitoring Form
+    Open Form    ${contact_monitoring_form}
     Unable to reach (CM)
 
     Open All Contacts: Incomplete Contact Information
     Search in the case list     ${contact_name}
-    Element Should Not Be Visible    ${contact_created}
+    Wait Until Keyword Succeeds  2 min  20 sec      Element Should Not Be Visible    ${contact_created}
 
     Open All Contacts Unassigned & Open menu
     Search in the case list     ${contact_name}
-    Element Should Be Visible    ${contact_created}
+    Wait Until Keyword Succeeds  2 min  20 sec      Element Should Be Visible    ${contact_created}
 
     Open All Contacts: Unable to Reach
     Search in the case list     ${contact_name}
-    Element Should Be Visible    ${contact_created}
+    Wait Until Keyword Succeeds  2 min  20 sec      Element Should Be Visible    ${contact_created}
 
 
 Contact_Good_3
     [Documentation]    All Contacts: Unassigned & Open
+    Depends on test     Contact_Good_2
 
     Open All Contacts: Unable to Reach
     ${contact_name}    Get Contact Name
     ${contact_created}   Set Contact Name
     Search in the case list      ${contact_name}
     Select Created Case    ${contact_created}
-    Open Contact Monitoring Form
+    Open Form    ${contact_monitoring_form}
     Reached and Agreed to Call (CM)
 
     Open All Contacts: Unable to Reach
     Search in the case list     ${contact_name}
-    Element Should Not Be Visible    ${contact_created}
+    Wait Until Keyword Succeeds  2 min  20 sec      Element Should Not Be Visible    ${contact_created}
 
     Open All Contacts Unassigned & Open menu
     Search in the case list     ${contact_name}
-    Element Should Be Visible    ${contact_created}
+    Wait Until Keyword Succeeds  2 min  20 sec      Element Should Be Visible    ${contact_created}
 
     Open All Open Contacts menu
     Search in the case list     ${contact_name}
-    Element Should Be Visible    ${contact_created}
+    Wait Until Keyword Succeeds  2 min  20 sec      Element Should Be Visible    ${contact_created}
 
 Contact_Good_4
     [Documentation]    All Contacts: Assigned & Open
+    Depends on test     Contact_Good_3
 
     Open All Contacts Unassigned & Open menu
     ${contact_name}    Get Contact Name
@@ -94,83 +97,87 @@ Contact_Good_4
 
     ## Lands on Unassigned and open
     Search in the case list     ${contact_name}
-    Element Should Not Be Visible    ${contact_created}
+    Wait Until Keyword Succeeds  2 min  20 sec      Element Should Not Be Visible    ${contact_created}
 
     Open My Contacts: Require Follow-Up
     Search in the case list     ${contact_name}
-    Element Should Be Visible    ${contact_created}
+    Wait Until Keyword Succeeds  2 min  20 sec      Element Should Be Visible    ${contact_created}
 
     Open All Contacts: Assigned & Open
     Search in the case list     ${contact_name}
-    Element Should Be Visible    ${contact_created}
+    Wait Until Keyword Succeeds  2 min  20 sec      Element Should Be Visible    ${contact_created}
 
     Open All Open Contacts menu
     Search in the case list     ${contact_name}
-    Element Should Be Visible    ${contact_created}
+    Wait Until Keyword Succeeds  2 min  20 sec      Element Should Be Visible    ${contact_created}
 
 Contact_Good_5
     [Documentation]    All Contacts: Require Follow-up
+    Depends on test     Contact_Good_4
 
     Open All Contacts: Assigned & Open
     ${contact_name}    Get Contact Name
     ${contact_created}   Set Contact Name
     Search in the case list      ${contact_name}
     Select Created Case    ${contact_created}
-    Open Contact Monitoring Form
+    Open Form    ${contact_monitoring_form}
     Requires Follow-up (CM)
 
     Open All Contacts: Require Follow-Up
     Search in the case list     ${contact_name}
-    Element Should Be Visible    ${contact_created}
+    Wait Until Keyword Succeeds  2 min  20 sec      Element Should Be Visible    ${contact_created}
 
     Open All Contacts
     Search in the case list     ${contact_name}
-    Element Should Be Visible    ${contact_created}
+    Wait Until Keyword Succeeds  2 min  20 sec      Element Should Be Visible    ${contact_created}
 
 
 Contact_Good_6
     [Documentation]    All Contacts: SMS
+    Depends on test     Contact_Good_5
 
     Open All Contacts: Require Follow-Up
     ${contact_name}    Get Contact Name
     ${contact_created}   Set Contact Name
     Search in the case list      ${contact_name}
     Select Created Case    ${contact_created}
-    Open Contact Monitoring Form
+    Open Form    ${contact_monitoring_form}
     Receive SMS (CM)
 
     Open All Contacts: Require Follow-Up
     Search in the case list     ${contact_name}
-    Element Should Not Be Visible    ${contact_created}
+    Wait Until Keyword Succeeds  2 min  20 sec      Element Should Not Be Visible    ${contact_created}
 
     Open All Contacts
     Search in the case list     ${contact_name}
-    Element Should Be Visible    ${contact_created}
+    Wait Until Keyword Succeeds  2 min  20 sec      Element Should Be Visible    ${contact_created}
 
 
 
 Contact_Good_7
     [Documentation]    All Contacts
+    Depends on test     Contact_Good_6
 
     Open All Contacts
     ${contact_name}    Get Contact Name
     ${contact_created}   Set Contact Name
     Search in the case list      ${contact_name}
     Select Created Case    ${contact_created}
-    Open Contact Monitoring Form
+    Open Form    ${contact_monitoring_form}
     Partial Interview Complete (CM)
 
     ## PAUSE UNTIL THE NEXT DAY!! [Check if required and if so how?]
     Open All Contacts: Require Follow-Up
     Search in the case list     ${contact_name}
-    Element Should Be Visible    ${contact_created}
+    Wait Until Keyword Succeeds  2 min  20 sec      Element Should Be Visible    ${contact_created}
 
     Open My Contacts: Require Follow-Up
     Search in the case list     ${contact_name}
-    Element Should Be Visible    ${contact_created}
+    Wait Until Keyword Succeeds  2 min  20 sec      Element Should Be Visible    ${contact_created}
 
 Contact_Good_8
     [Documentation]    My Contacts: Require Follow-Up
+    Depends on test     Contact_Good_7
 
     Open My Contacts: Require Follow-Up
     ${contact_name}    Get Contact Name
@@ -181,27 +188,28 @@ Contact_Good_8
 
     Open My Contacts: Require Follow-Up
     Search in the case list     ${contact_name}
-    Element Should Not Be Visible    ${contact_created}
+    Wait Until Keyword Succeeds  2 min  20 sec      Element Should Not Be Visible    ${contact_created}
 
     Open All Contacts: Require Follow-Up
     Search in the case list     ${contact_name}
-    Element Should Be Visible    ${contact_created}
+    Wait Until Keyword Succeeds  2 min  20 sec      Element Should Be Visible    ${contact_created}
 
 Contact_Good_9
     [Documentation]   All Closed Contacts
+    Depends on test     Contact_Good_8
 
     Open All Contacts
     ${contact_name}    Get Contact Name
     ${contact_created}   Set Contact Name
     Search in the case list      ${contact_name}
     Select Created Case    ${contact_created}
-    Open Contact Monitoring Form
+    Open Form       ${contact_monitoring_form}
     Interview Complete (CM)
 
     Open All Open Contacts menu
     Search in the case list     ${contact_name}
-    Element Should Not Be Visible    ${contact_created}
+    Wait Until Keyword Succeeds  2 min  20 sec      Element Should Not Be Visible    ${contact_created}
 
     Open All Closed Contacts menu
     Search in the case list     ${contact_name}
-    Element Should Be Visible    ${contact_created}
+    Wait Until Keyword Succeeds  2 min  20 sec      Element Should Be Visible    ${contact_created}

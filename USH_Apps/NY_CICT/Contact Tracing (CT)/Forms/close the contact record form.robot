@@ -6,19 +6,14 @@ Resource    ../../Base/base.robot
 
 *** Keywords ***
 
-
-Open Close the Contact Record Form
-    Wait Until Element Is Enabled    ${Close the Contact Record}
-    JS Click    ${Close the Contact Record}
-
 Close Contact record - No
-    Open Close the Contact Record Form
+    Open Form   ${Close the Contact Record}
     Wait Until Element Is Enabled    ${Q: Close the Contact}
     JS Click    ${A: No, do not close contact}
     Submit Form and Check Success
 
 Close Contact record - Yes
-    Open Close the Contact Record Form
+    Open Form   ${Close the Contact Record}
     Wait Until Element Is Enabled    ${Q: Close the Contact}
     JS Click    ${A: Yes, close contact}
     Wait Until Element Is Visible    ${follow_up_complete_disposition}
@@ -27,13 +22,13 @@ Close Contact record - Yes
     Submit Form and Check Success
 
 Reopen Contact record - No
-    Open Close the Contact Record Form
+    Open Form   ${Close the Contact Record}
     Wait Until Element Is Enabled    ${Q: Reopen the Contact}
     JS Click    ${A: No, do not reopen contact}
     Submit Form and Check Success
 
 Reopen Contact record - Yes
-    Open Close the Contact Record Form
+    Open Form   ${Close the Contact Record}
     Wait Until Element Is Enabled    ${Q: Reopen the Contact}
     JS Click    ${A: Yes, reopen contact}
     Element Should Be Visible    ${Message: contact will be reopen}
