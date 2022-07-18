@@ -107,10 +107,8 @@ class ApplicationPage(BasePage):
         self.send_keys(self.question_display_text, self.question_display_text_name)
         self.wait_to_click(self.save_button)
         assert self.is_present_and_displayed(self.app_created)
-        self.click(self.applications_menu_id)
-
         print("New App created successfully!")
-        return self.driver.current_url
+
 
     def form_builder_exploration(self):
         time.sleep(2)
@@ -130,10 +128,6 @@ class ApplicationPage(BasePage):
         self.wait_to_click(self.delete_app)
         self.wait_to_click(self.delete_confirm)
         print("Deleted the application")
-
-    def open_newly_created_app(self, app_url):
-        self.wait_to_click(self.applications_menu_id)
-        self.driver.get(app_url)
 
     def form_xml_download_upload(self):
         try:
