@@ -48,8 +48,8 @@ class GroupPage(BasePage):
         self.send_keys(self.users_drop_down, username)
         self.wait_to_click(self.select_user)
         self.wait_to_click(self.update_button)
-        group_id_value = self.driver.current_url.split("/")[-1]
-        print(group_id_value)
+        print(self.driver.current_url)
+        group_id_value = self.driver.current_url.split("/")[-2]
         time.sleep(2)
         self.click_group_menu()
         assert self.is_visible_and_displayed(self.created_group_path), "User could not be assigned to the group"
