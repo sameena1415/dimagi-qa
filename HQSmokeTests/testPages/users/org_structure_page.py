@@ -1,3 +1,4 @@
+import glob
 import os
 import time
 from datetime import date
@@ -15,11 +16,12 @@ def latest_download_file(type=".xlsx"):
     cwd = os.getcwd()
     try:
         os.chdir(UserData.DOWNLOAD_PATH)
-        files = sorted(os.listdir(os.getcwd()), key=os.path.getctime)
+        all_specific_files = filter(lambda x: x.endswith(type), os.listdir(os.getcwd()))
+        files = sorted(all_specific_files, key=os.path.getctime)
         print(files)
         if files[-1].endswith(".log"):
             newest = sorted(files, key=os.path.getctime)[-2]
-        elif files[-1].endswith(str(type)):
+        elif files[-1].endswith(".xlsx"):
             newest = sorted(files, key=os.path.getctime)[-1]
         else:
             newest = max(files, key=os.path.getctime)
