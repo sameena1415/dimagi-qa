@@ -48,8 +48,8 @@ class BasePage:
         try:
             clickable = ec.element_to_be_clickable(locator)
             element = WebDriverWait(self.driver, timeout).until(clickable,
-                                                                        message="Couldn't find locator: "
-                                                                                + str(locator))
+                                                                message="Couldn't find locator: "
+                                                                        + str(locator))
             element.click()
         except ElementClickInterceptedException:
             if self.cookie_alert():
@@ -80,19 +80,24 @@ class BasePage:
         element_text = WebDriverWait(self.driver, timeout).until(clickable).text
         return element_text
 
+    def wait_to_get_value(self, locator, timeout=20):
+        clickable = ec.visibility_of_element_located(locator)
+        element_text = WebDriverWait(self.driver, timeout).until(clickable).get_attribute("value")
+        return element_text
+
     def wait_for_element(self, locator, timeout=20):
         clickable = ec.element_to_be_clickable(locator)
         WebDriverWait(self.driver, timeout).until(clickable,
                                                   message="Couldn't find locator: " + str(locator))
 
-    def wait_and_sleep_to_click(self, locator, timeout=20):
+    def wait_and_sleep_to_click(self, locator, timeout=60):
         element = None
         try:
-            time.sleep(3)
+            time.sleep(10)
             clickable = ec.element_to_be_clickable(locator)
             element = WebDriverWait(self.driver, timeout).until(clickable,
-                                                                        message="Couldn't find locator: "
-                                                                                + str(locator))
+                                                                message="Couldn't find locator: "
+                                                                        + str(locator))
             element.click()
         except ElementClickInterceptedException:
             if self.cookie_alert():
@@ -185,10 +190,19 @@ class BasePage:
             is_displayed = False
         return bool(is_displayed)
 
+    def is_present(self, locator):
+        try:
+            element = self.driver.find_element(*locator)
+            is_displayed = True
+        except NoSuchElementException:
+            is_displayed = False
+        return bool(is_displayed)
+
     def is_visible_and_displayed(self, locator, timeout=50):
         try:
             visible = ec.visibility_of_element_located(locator)
-            element = WebDriverWait(self.driver, timeout).until(visible, message="Element" + str(locator) + "not displayed")
+            element = WebDriverWait(self.driver, timeout).until(visible,
+                                                                message="Element" + str(locator) + "not displayed")
             is_displayed = element.is_displayed()
         except TimeoutException:
             is_displayed = False
@@ -197,7 +211,8 @@ class BasePage:
     def is_present_and_displayed(self, locator, timeout=100):
         try:
             visible = ec.presence_of_element_located(locator)
-            element = WebDriverWait(self.driver, timeout).until(visible, message="Element" + str(locator) + "not displayed")
+            element = WebDriverWait(self.driver, timeout).until(visible,
+                                                                message="Element" + str(locator) + "not displayed")
             is_displayed = element.is_displayed()
         except TimeoutException:
             is_displayed = False

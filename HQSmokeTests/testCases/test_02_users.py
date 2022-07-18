@@ -26,12 +26,7 @@ def test_case_02_create_mobile_worker(driver):
 def test_case_03_create_and_assign_user_field(driver):
     create = MobileWorkerPage(driver)
     create.mobile_worker_menu()
-    create.edit_user_field()
-    create.add_field()
-    create.add_user_property("user_field_" + fetch_random_string())
-    create.add_label("user_field_" + fetch_random_string())
-    create.add_choice("user_field_" + fetch_random_string())
-    create.save_field()
+    create.create_new_user_fields("user_field_" + fetch_random_string())
     create.select_mobile_worker_created()
     create.enter_value_for_created_user_field()
     create.update_information()
@@ -52,7 +47,6 @@ def test_case_10_download_and_upload_users(driver):
     user.check_for_group_in_downloaded_file(newest_file, group_id_value)
     user.upload_mobile_worker()
 
-
 def test_case_05_edit_user_groups(driver):
     menu = HomePage(driver)
     menu.users_menu()
@@ -61,20 +55,17 @@ def test_case_05_edit_user_groups(driver):
     edit.edit_existing_group()
     edit.remove_user_from_group()
 
-
 def test_case_04_deactivate_user(driver):
     user = MobileWorkerPage(driver)
     user.mobile_worker_menu()
     user.deactivate_user()
     user.verify_deactivation_via_login()
 
-
 def test_case_04_reactivate_user(driver):
     user = MobileWorkerPage(driver)
     user.mobile_worker_menu()
     user.reactivate_user()
     user.verify_reactivation_via_login()
-
 
 def test_cleanup_items_in_users_menu(driver):
     clean = MobileWorkerPage(driver)
@@ -87,13 +78,18 @@ def test_cleanup_items_in_users_menu(driver):
 
     clean.mobile_worker_menu()
     clean.edit_user_field()
-    clean.cleanup_user_field()
-    clean.save_field()
+    clean.click_profile()
+    clean.delete_profile()
+    print("Removed all test profiles")
+
+    clean.mobile_worker_menu()
+    clean.edit_user_field()
+    clean.delete_test_user_field()
     print("Deleted the user field")
 
     clean.mobile_worker_menu()
     clean2.click_group_menu()
-    clean2.cleanup_group()
+    clean2.delete_test_groups()
     print("Deleted the group")
 
 

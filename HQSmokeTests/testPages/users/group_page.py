@@ -82,3 +82,19 @@ class GroupPage(BasePage):
         self.wait_to_click(self.confirm_delete)
         assert self.is_visible_and_displayed(self.delete_success_message), "Group deletion not successful"
         print("Clean up added group")
+
+    def delete_test_groups(self):
+        list_profile = self.driver.find_elements(By.XPATH,"//td//a[contains(text(),'group_')]")
+        print(list_profile)
+        if len(list_profile) > 0:
+            for i in range(len(list_profile))[::-1]:
+                text = list_profile[i].text
+                print(text)
+                list_profile[i].click()
+                self.wait_to_click(self.delete_group)
+                self.wait_to_click(self.confirm_delete)
+                assert self.is_visible_and_displayed(self.delete_success_message), "Group deletion not successful"
+                time.sleep(2)
+                list_profile = self.driver.find_elements(By.XPATH,"//td//a[contains(text(),'group_')]")
+        else:
+             print("There are no test groups")

@@ -64,15 +64,29 @@ class ExportDataPage(BasePage):
 
         # Daily Saved Export variables, form, case
         self.daily_saved_export_link = (By.LINK_TEXT, 'Daily Saved Exports')
-        self.edit_form_case_export = (By.XPATH, "(//a[@data-bind='attr: {href: editUrl}'])[1]")
+        self.edit_form_case_export = (By.XPATH, "(//a[contains(@data-bind,'edit')])[1]")
         self.create_DSE_checkbox = (By.XPATH, '//*[@id="daily-saved-export-checkbox"]')
         self.download_dse = (By.XPATH, "(//a[@class='btn btn-info btn-xs'])[1]")
+        self.download_dse_form = (By.XPATH, "//h4[.//span[.='"+UserData.form_export_name_dse+"']]/following-sibling::div//*[./i[@class='fa fa-cloud-download']]")
+        self.download_dse_case = (By.XPATH,
+                                  "//h4[.//span[.='" + UserData.case_export_name_dse + "']]/following-sibling::div//*[./i[@class='fa fa-cloud-download']]")
+
         self.data_upload_msg = (By.XPATH, "//*[contains(text(),'Data update complete')]")
+        self.data_upload_msg_form = (By.XPATH, "//h4[.//span[.='"+UserData.form_export_name_dse+"']]/following-sibling::div//*[contains(text(),'Data update complete')]")
+        self.data_upload_msg_case = (By.XPATH, "//h4[.//span[.='"+UserData.case_export_name_dse+"']]/following-sibling::div//*[contains(text(),'Data update complete')]")
 
         # Excel Dashboard Integrations, form, case
         self.export_excel_dash_int = (By.LINK_TEXT, 'Excel Dashboard Integration')
         self.update_data = (By.XPATH, "//button[@data-toggle='modal'][1]")
         self.update_data_conf = (By.XPATH, "//button[@data-bind='click: emailedExport.updateData']")
+
+        self.update_data_form = (By.XPATH, "//h4[.//span[.='"+UserData.form_export_name_dse+"']]/following-sibling::div//button[@data-toggle='modal'][1]")
+        self.update_data_conf_form = (By.XPATH, "//h4[.//span[.='"+UserData.form_export_name_dse+"']]/following-sibling::div//button[@data-bind='click: emailedExport.updateData']")
+        self.update_data_case = (By.XPATH,
+                                 "//h4[.//span[.='" + UserData.case_export_name_dse + "']]/following-sibling::div//button[@data-toggle='modal'][1]")
+        self.update_data_conf_case = (By.XPATH,
+                                      "//h4[.//span[.='" + UserData.case_export_name_dse + "']]/following-sibling::div//button[@data-bind='click: emailedExport.updateData']")
+
         self.copy_dashfeed_link = (By.XPATH, "(//span[contains(@data-bind, 'copyLinkRequested')])[1]")
         self.dashboard_feed_link = (
             By.XPATH, "//span[@class='input-group-btn']//preceding::a[@class='btn btn-info btn-xs']")
@@ -80,6 +94,11 @@ class ExportDataPage(BasePage):
 
         # Power BI / Tableau Integration, Form
         self.powerBI_tab_int = (By.LINK_TEXT, 'PowerBi/Tableau Integration')
+        self.copy_odata_link_btn_form = (By.XPATH,"//div[./span[text()='" + UserData.odata_feed_form + "']]/following::div[@class='input-group']//a")
+        self.copy_odata_link_form = (By.XPATH,"//div[./span[text()='" + UserData.odata_feed_form + "']]/following::div[@class='input-group']/input")
+        self.copy_odata_link_btn_case = (By.XPATH, "//div[./span[text()='" + UserData.odata_feed_case + "']]/following::div[@class='input-group']//a")
+        self.copy_odata_link_case = (By.XPATH, "//div[./span[text()='" + UserData.odata_feed_case + "']]/following::div[@class='input-group']/input")
+
         self.edit_button_case = (By.XPATH,
                                  "(//span[contains(text(), 'Copy & Edit Feed')])")
         self.edit_button_form = (By.XPATH,
@@ -90,6 +109,7 @@ class ExportDataPage(BasePage):
         self.failed_to_export = (By.XPATH, "//div[@class='alert alert-danger']")
 
         # bulk export delete
+        self.empty_export_block=(By.XPATH,"(//div[@data-bind='visible: showEmpty'])[1]")
         self.select_all_btn = (By.XPATH, '//button[@data-bind="click: selectAll"]')
         self.delete_selected_exports = (By.XPATH, '//a[@href= "#bulk-delete-export-modal"]')
         self.bulk_delete_confirmation_btn = (By.XPATH, '//button[@data-bind="click: BulkExportDelete"]')
@@ -103,18 +123,11 @@ class ExportDataPage(BasePage):
         self.case = (By.ID, "id_case_type")
         self.model = (By.ID, "id_model_type")
 
-    def generate_odata_feed_link(self, item):
-        # self.wait_and_sleep_to_click(self.copy_odatafeed_link) # Alternative:Copy and Paste
-        time.sleep(5)
-        get_url = self.driver.current_url
-        ID = get_url.split("/")[10]
-        odata_feed_link_case = "https://" + self.get_environment() + "/a/" + self.get_domain() + "/api/v0.5/odata/" + item + "/" + ID + "/feed/"
-        self.driver.back()
-        # self.switch_to_new_tab()
-        return odata_feed_link_case
-
     def get_url_paste_browser(self, username, password, item):
-        odata_feed_link = self.generate_odata_feed_link(item)
+        if (item == 'cases'):
+            odata_feed_link = self.wait_to_get_value(self.copy_odata_link_case)
+        elif (item == 'forms'):
+            odata_feed_link = self.wait_to_get_value(self.copy_odata_link_form)
         final_URL_case = f"https://{username}:{password}@{odata_feed_link[8:]}"
         self.driver.get(final_URL_case)
 
@@ -214,47 +227,67 @@ class ExportDataPage(BasePage):
         self.assert_downloaded_file(newest_file, "Messages")
         print("SMS Export successful")
 
-    def create_dse_and_download(self, exported_file):
+    def create_dse_and_download(self, exported_file, type):
         self.wait_and_sleep_to_click(self.create_DSE_checkbox)
         self.wait_and_sleep_to_click(self.export_settings_create)
-        self.wait_and_sleep_to_click(self.update_data)
-        self.wait_and_sleep_to_click(self.update_data_conf)
-        assert self.is_visible_and_displayed(self.data_upload_msg), "Export not completed!"
-        self.driver.refresh()
-        self.wait_and_sleep_to_click(self.download_dse)
+        if type == "form":
+            self.wait_and_sleep_to_click(self.update_data_form)
+            self.wait_and_sleep_to_click(self.update_data_conf_form)
+            try:
+                assert self.is_present_and_displayed(self.data_upload_msg_form), "Form Export not completed!"
+                self.driver.refresh()
+                self.wait_to_click(self.download_dse_form)
+            except:
+                self.driver.refresh()
+                self.wait_and_sleep_to_click(self.download_dse_form)
+        elif type == "case":
+            self.wait_and_sleep_to_click(self.update_data_case)
+            self.wait_and_sleep_to_click(self.update_data_conf_case)
+            try:
+                assert self.is_present_and_displayed(self.data_upload_msg_case), "Case Export not completed!"
+                self.driver.refresh()
+                self.wait_to_click(self.download_dse_case)
+            except:
+                self.driver.refresh()
+                self.wait_and_sleep_to_click(self.download_dse_case)
         time.sleep(5)
         newest_file = latest_download_file()
         print("Newest:", newest_file)
+        print("Exported:", exported_file)
         self.assert_downloaded_file(newest_file, exported_file)
+
 
     def cleanup_existing_dse(self):
         # Cleanup existing exports
         self.wait_and_sleep_to_click(self.daily_saved_export_link)
+        time.sleep(5)
         self.delete_bulk_exports()
 
     # Test Case 23_a - Daily saved export, form
     def daily_saved_exports_form(self):
-        self.wait_and_sleep_to_click(self.export_form_data_link)
+        self.click(self.export_form_data_link)
         try:
             self.click(self.edit_form_case_export)
         except (NoSuchElementException, StaleElementReferenceException):
             self.add_form_exports()
             self.wait_and_sleep_to_click(self.edit_form_case_export)
         self.wait_to_clear_and_send_keys(self.export_name, UserData.form_export_name_dse)
-        self.create_dse_and_download(UserData.form_export_name_dse)
+        self.create_dse_and_download(UserData.form_export_name_dse,"form")
         print("DSE Form Export successful")
+
 
     # Test Case 23_b - Daily saved export, case
     def daily_saved_exports_case(self):
-        self.wait_and_sleep_to_click(self.export_case_data_link)
+        self.click(self.export_case_data_link)
         try:
             self.click(self.edit_form_case_export)
         except NoSuchElementException:
             self.add_case_exports()
             self.wait_and_sleep_to_click(self.edit_form_case_export)
         self.wait_to_clear_and_send_keys(self.export_name, UserData.case_export_name_dse)
-        self.create_dse_and_download(UserData.case_export_name_dse)
+        self.create_dse_and_download(UserData.case_export_name_dse, "case")
         print("DSE Case Export successful")
+
 
     # Test Case - 24 - Excel Dashboard Integration, form
     def excel_dashboard_integration_form(self):
@@ -323,6 +356,7 @@ class ExportDataPage(BasePage):
             self.wait_and_sleep_to_click(self.powerBI_tab_int)
         except ElementClickInterceptedException:
             self.js_click(self.powerBI_tab_int)
+        self.delete_bulk_exports()
         self.wait_and_sleep_to_click(self.add_export_button)
         time.sleep(30)
         self.is_visible_and_displayed(self.model)
@@ -338,7 +372,7 @@ class ExportDataPage(BasePage):
         self.click(self.export_settings_create)
         print("Odata Form Feed created!!")
         self.driver.refresh()
-        self.wait_and_sleep_to_click(self.edit_button_form)
+        self.wait_and_sleep_to_click(self.copy_odata_link_btn_form)
         self.get_url_paste_browser(username, password, "forms")
         self.assert_odata_feed_data()
 
@@ -346,8 +380,9 @@ class ExportDataPage(BasePage):
     def power_bi_tableau_integration_case(self, username, password):
         self.driver.refresh()
         self.wait_to_click(self.powerBI_tab_int)
-        self.wait_to_click(self.add_export_button)
-        time.sleep(10)
+        self.delete_bulk_exports()
+        self.wait_and_sleep_to_click(self.add_export_button)
+        time.sleep(30)
         self.is_visible_and_displayed(self.model)
         self.select_by_value(self.model, UserData.model_type_case)
         self.select_by_text(self.application, UserData.village_application)
@@ -364,7 +399,7 @@ class ExportDataPage(BasePage):
         self.click(self.export_settings_create)
         print("Odata Case Feed created!!")
         self.driver.refresh()
-        self.wait_and_sleep_to_click(self.edit_button_case)
+        self.wait_and_sleep_to_click(self.copy_odata_link_btn_case)
         self.get_url_paste_browser(username, password, "cases")
         self.assert_odata_feed_data()
 
