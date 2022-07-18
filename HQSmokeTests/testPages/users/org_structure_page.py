@@ -11,7 +11,7 @@ from selenium.webdriver.common.by import By
 """"Contains test page elements and functions related to the User's Organization structure module"""
 
 
-def latest_download_file():
+def latest_download_file(type=".xlsx"):
     cwd = os.getcwd()
     try:
         os.chdir(UserData.DOWNLOAD_PATH)
@@ -19,7 +19,7 @@ def latest_download_file():
         print(files)
         if files[-1].endswith(".log"):
             newest = sorted(files, key=os.path.getctime)[-2]
-        elif files[-1].endswith(".xlsx"):
+        elif files[-1].endswith(str(type)):
             newest = sorted(files, key=os.path.getctime)[-1]
         else:
             newest = max(files, key=os.path.getctime)
