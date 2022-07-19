@@ -191,24 +191,55 @@ class OrganisationStructurePage(BasePage):
         self.wait_to_click(self.delete_org_level)
         self.wait_to_click(self.save_btn_id)
         print("Location field deleted successfully")
+        self.delete_test_location()
+        self.delete_test_org_level()
+
+    def delete_test_org_level(self):
+        # # Delete Org Level
+        self.js_click(self.org_level_menu_link_text)
+        time.sleep(3)
+        list_org_level = self.driver.find_elements(By.XPATH,"//input[@class='loctype_name form-control']")
+        print(len(list_org_level))
+        if (len(list_org_level)>0):
+            for i in range(len(list_org_level))[::-1]:
+                text = list_org_level[i].get_attribute("value")
+                print(text)
+                if ("loc_level_" in text):
+                    self.driver.find_element(By.XPATH,"(//td[.//input[@class='loctype_name form-control']]/following-sibling::td//button[@class='btn btn-danger'])["+str(i+1)+"]").click()
+                    self.wait_to_click(self.save_btn_delete)
+                    self.driver.refresh()
+                    time.sleep(3)
+                    list_org_level = self.driver.find_elements(By.XPATH, "//input[@class='loctype_name form-control']")
+                else:
+                    print("Not a text location")
+        else:
+            print("No location present")
+        print("Org level deleted successfully")
+
+    def delete_test_location(self):
         # Delete Location
         self.wait_to_click(self.org_menu_link_text)
         time.sleep(2)
-        try:
-            self.wait_to_click(self.delete_location_created)
-        except (StaleElementReferenceException, TimeoutException):
-            self.driver.refresh()
-            self.wait_to_click(self.delete_location_created)
-        time.sleep(1)
-        self.send_keys(self.delete_confirm, "1")
-        self.click(self.delete_confirm_button)
-        assert self.is_present_and_displayed(self.delete_success), "Location Not Deleted!"
-        print("Location deleted successfully")
-        # Delete Org Level
-        self.js_click(self.org_level_menu_link_text)
-        self.click(self.delete_org_level)
-        self.wait_to_click(self.save_btn_delete)
-        print("Org level deleted successfully")
+        list_location = self.driver.find_elements(By.XPATH,"//span[@class='loc_name' and contains(.,'location_')]")
+        print(list_location)
+        print(len(list_location))
+        if(len(list_location) > 0):
+            for i in range(len(list_location))[::-1]:
+                text = list_location[i].text
+                print(text)
+                time.sleep(2)
+                self.driver.find_element(By.XPATH,"(//div[./span[@class='loc_name' and contains(.,'location_')]]//preceding-sibling::div/button[@class='btn btn-danger'])["+ str(i + 1) +"]").click()
+                self.wait_to_clear_and_send_keys(self.delete_confirm, "1")
+                self.click(self.delete_confirm_button)
+                assert self.is_present_and_displayed(self.delete_success), "Location Not Deleted!"
+                print("Location deleted successfully")
+                self.driver.refresh()
+                time.sleep(3)
+                list_location = self.driver.find_elements(By.XPATH,
+                                                          "//span[@class='loc_name' and contains(.,'location_')]")
+        else:
+            print("No test locations present")
+
 
     def archive_location(self):
         self.wait_to_click(self.org_menu_link_text)
