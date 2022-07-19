@@ -25,6 +25,7 @@ class ApplicationPage(BasePage):
         # Create New Application
         self.applications_menu_id = (By.ID, "ApplicationsTab")
         self.new_application = (By.LINK_TEXT, "New Application")
+        self.new_app_created = (By.LINK_TEXT, self.app_name)
         self.edit_app_name = (By.XPATH, '//span[@class="inline-edit-icon h3 app-title"]')
         self.app_name_textbox = (By.XPATH, "(//input[@type='text'])[1]")
         self.confirm_change = (By.XPATH, "(//button[@data-bind=\"click: save, hasFocus: saveHasFocus, visible: !isSaving()\"])[1]")
@@ -108,6 +109,7 @@ class ApplicationPage(BasePage):
         assert self.is_present_and_displayed(self.app_created)
         print("New App created successfully!")
 
+
     def form_builder_exploration(self):
         time.sleep(2)
         self.click(self.menu_settings)
@@ -142,7 +144,7 @@ class ApplicationPage(BasePage):
         self.wait_and_sleep_to_click(self.new_form_settings)
         self.wait_and_sleep_to_click(self.actions_tab)
         self.wait_and_sleep_to_click(self.upload_xml)
-        newest_file = latest_download_file()
+        newest_file = latest_download_file(".xml")
         file_that_was_downloaded = UserData.DOWNLOAD_PATH / newest_file
         self.send_keys(self.choose_file, str(file_that_was_downloaded))
         time.sleep(1)

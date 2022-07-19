@@ -263,9 +263,9 @@ class ExportDataPage(BasePage):
         time.sleep(5)
         self.delete_bulk_exports()
 
-    # Test Case 23_a - Daily saved export, form
+    # Test Case 24_a - Daily saved export, form
     def daily_saved_exports_form(self):
-        self.click(self.export_form_data_link)
+        self.wait_to_click(self.export_form_data_link)
         try:
             self.click(self.edit_form_case_export)
         except (NoSuchElementException, StaleElementReferenceException):
@@ -276,9 +276,9 @@ class ExportDataPage(BasePage):
         print("DSE Form Export successful")
 
 
-    # Test Case 23_b - Daily saved export, case
+    # Test Case 24_b - Daily saved export, case
     def daily_saved_exports_case(self):
-        self.click(self.export_case_data_link)
+        self.wait_to_click(self.export_case_data_link)
         try:
             self.click(self.edit_form_case_export)
         except NoSuchElementException:
@@ -289,7 +289,7 @@ class ExportDataPage(BasePage):
         print("DSE Case Export successful")
 
 
-    # Test Case - 24 - Excel Dashboard Integration, form
+    # Test Case - 25 - Excel Dashboard Integration, form
     def excel_dashboard_integration_form(self):
         self.wait_and_sleep_to_click(self.export_excel_dash_int)
         self.wait_and_sleep_to_click(self.add_export_button)
@@ -311,7 +311,7 @@ class ExportDataPage(BasePage):
         self.driver.refresh()
         self.check_feed_link()
 
-    # Test Case - 25 - Excel Dashboard Integration, case
+    # Test Case - 26 - Excel Dashboard Integration, case
 
     def excel_dashboard_integration_case(self):
         self.wait_and_sleep_to_click(self.export_excel_dash_int)
