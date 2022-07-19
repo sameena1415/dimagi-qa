@@ -2,6 +2,7 @@ import time
 
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
 from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
 
 from HQSmokeTests.userInputs.generate_random_string import fetch_random_string
 from HQSmokeTests.testPages.base.base_page import BasePage
@@ -25,12 +26,15 @@ class DeduplicateCasePage(BasePage):
         self.add_rule_name = (By.XPATH, "//input[@type='text']")
         self.case_type = (By.XPATH, "//span[@class='selection']")
         self.case_type_option_value = (By.XPATH, "//option[@value = 'pregnancy']")
-        self.case_property = (By.XPATH, "//input[@class='textinput form-control']")
+        self.case_property = (By.XPATH, "//input[@class='textinput form-control' and contains(@data-bind, 'caseProperty.name')]")
         self.save_rule_button = (By.XPATH, "//button[@type = 'submit']")
         self.success_message = (By.XPATH, "//a[@data-dismiss='alert']")
         self.delete_rule = (By.XPATH, "//button[@class = 'btn btn-danger']")
         self.delete_confirm = (By.XPATH, "//button[@class = 'btn btn-danger delete-item-confirm']")
         self.rule_created_path = (By.XPATH, self.rule_created)
+        self.case_property_drop_down = (By.XPATH, "//select[contains(@data-bind, 'casePropertyNames')]")
+        self.case_property_input = (By.XPATH, "//input[@class = 'select2-search__field']")
+        self.case_type_drop_down = (By.XPATH, "//select[@name='case_type']")
 
     def open_deduplicate_case_page(self):
         self.wait_to_click(self.deduplicate_case_link)
@@ -38,12 +42,13 @@ class DeduplicateCasePage(BasePage):
     def add_new_rule(self):
         self.wait_to_click(self.add_rule_button)
         self.send_keys(self.add_rule_name, self.rule_name)
-        self.wait_to_click(self.case_type)
-        self.wait_to_click(self.case_type_option_value)
-        self.send_keys(self.case_property, UserData.case_property)
-        self.js_click(self.save_rule_button)
+        self.select_by_value(self.case_type_drop_down, UserData.case_pregnancy)
+        if self.is_present(self.case_property):
+            self.send_keys(self.case_property, UserData.case_property)
+        else:
+            self.select_by_value(self.case_property_drop_down, UserData.case_property)
+        self.wait_to_click(self.save_rule_button)
         time.sleep(10)
-        # self.wait_to_click(self.deduplicate_case_link)
         assert self.is_present_and_displayed(self.success_message)
         print("New Rule to find Deduplicate Cases created successfully!")
 
@@ -52,16 +57,14 @@ class DeduplicateCasePage(BasePage):
         self.wait_to_click(self.delete_rule)
         self.wait_to_click(self.delete_confirm)
         self.driver.refresh()
+        time.sleep(5)
         try:
-            isPresent = self.is_visible_and_displayed(self.rule_created_path)
+            isPresent = self.is_present(self.rule_created_path)
+            time.sleep(2)
         except (TimeoutException, NoSuchElementException):
             isPresent = False
-        assert not isPresent
+            time.sleep(2)
+        assert isPresent == False
         print("Rule removed successfully!")
 
-
-        # isPresent = self.is_visible_and_displayed(self.rule_created_path)
-        # print(isPresent)
-        # assert isPresent == True, "Rule not removed"
-        # print("Rule removed successfully!")
 
