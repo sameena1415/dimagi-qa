@@ -110,7 +110,8 @@ jobs:
 
             return {
               "subject": subject,
-              "body": bodyContent
+              "body": bodyContent,
+              "reference": Math.random().toString(36).substr(2)  // used to prevent threading of similar emails
             }
 
       - name: Send Result Email
@@ -127,6 +128,7 @@ jobs:
           html_body: ${{ fromJSON(steps.configure_email.outputs.result).body }}
           convert_markdown: true
           attachments: ${{ github.workspace }}/report_${{ matrix.environment }}.html
+          in_reply_to: ${{ fromJSON(steps.configure_email.outputs.result).reference }}
 
       - name: Archive test results
         if: ${{ success() || failure() }}
