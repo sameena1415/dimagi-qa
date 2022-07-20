@@ -197,6 +197,7 @@ class MobileWorkerPage(BasePage):
 
     def click_create(self):
         self.wait_to_click(self.create_button_xpath)
+        time.sleep(5)
         self.is_present_and_displayed(self.NEW)
         new_user_created = self.get_text(self.new_user_created_xpath)
         print("Username is : " + new_user_created)

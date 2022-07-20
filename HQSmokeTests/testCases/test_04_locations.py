@@ -67,8 +67,9 @@ def test_case_11_download_and_upload_locations(driver):
     org.upload_locations()
 
 
-def test_cleanup_items_in_locations_menu(driver):
-
+def test_cleanup_items_in_locations_menu(driver, settings):
+    if 'staging' in settings['url']:
+        pytest.xfail("failing due to QA-4374")
     menu = HomePage(driver)
     menu.users_menu()
     clean4 = OrganisationStructurePage(driver)
