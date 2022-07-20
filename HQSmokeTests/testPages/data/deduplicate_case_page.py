@@ -2,7 +2,6 @@ import time
 
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
 from selenium.webdriver.common.by import By
-from selenium.webdriver.common.keys import Keys
 
 from HQSmokeTests.userInputs.generate_random_string import fetch_random_string
 from HQSmokeTests.testPages.base.base_page import BasePage
