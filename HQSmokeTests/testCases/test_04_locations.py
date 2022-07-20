@@ -1,3 +1,5 @@
+import pytest
+
 from HQSmokeTests.testPages.home.home_page import HomePage
 from HQSmokeTests.testPages.users.org_structure_page import OrganisationStructurePage
 
@@ -47,8 +49,9 @@ def test_case_08_edit_location_fields(driver):
     print("Selected location field created, for the location")
 
 
-def test_case_09_creation_organization_level(driver):
-
+def test_case_09_creation_organization_level(driver, settings):
+    if 'staging' in settings['url']:
+        pytest.xfail("failing due to QA-4374")
     menu = HomePage(driver)
     menu.users_menu()
     org = OrganisationStructurePage(driver)
