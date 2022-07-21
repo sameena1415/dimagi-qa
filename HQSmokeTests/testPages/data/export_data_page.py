@@ -26,8 +26,9 @@ class ExportDataPage(BasePage):
     def __init__(self, driver):
         super().__init__(driver)
 
-        self.date_having_submissions = "2022-01-18 to 2022-06-19"
+
         self.presentday = datetime.now()  # or presentday = datetime.today()
+        self.date_having_submissions = "2022-01-18" + " to " + datetime.now().strftime('%Y-%m-%d')
         # Get Yesterday
         self.yesterday = self.presentday - timedelta(1)
         self.current_date_range = self.yesterday.strftime('%Y-%m-%d') + " to " + datetime.now().strftime('%Y-%m-%d')
@@ -133,6 +134,7 @@ class ExportDataPage(BasePage):
 
     def date_filter(self):
         self.wait_and_sleep_to_click(self.date_range)
+        print(self.date_having_submissions)
         self.wait_to_clear_and_send_keys(self.date_range, self.date_having_submissions)
         self.wait_and_sleep_to_click(self.apply)
 
