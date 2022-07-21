@@ -197,6 +197,7 @@ class MobileWorkerPage(BasePage):
 
     def click_create(self):
         self.wait_to_click(self.create_button_xpath)
+        time.sleep(5)
         self.is_present_and_displayed(self.NEW)
         new_user_created = self.get_text(self.new_user_created_xpath)
         print("Username is : " + new_user_created)
@@ -443,6 +444,7 @@ class MobileWorkerPage(BasePage):
         self.mobile_worker_enter_username("user_" + str(fetch_random_string()))
         self.mobile_worker_enter_password(fetch_random_string())
         self.wait_to_click(self.create_button_xpath)
+        time.sleep(4)
         self.is_present_and_displayed(self.NEW)
         new_user_created = self.get_text(self.new_user_created_xpath)
         print("Username is : " + new_user_created)
