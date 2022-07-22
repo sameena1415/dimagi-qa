@@ -262,7 +262,7 @@ class OrganisationStructurePage(BasePage):
         check_archived_loc = self.is_present_and_displayed(self.test_location, 10)
         assert not check_archived_loc, "Location is still Active"
         self.wait_to_click(self.show_arhcived_locations_button)
-        self.is_present_and_displayed(self.test_location, 10)
+        self.is_present_and_displayed(self.test_location)
         archived_loc = self.get_text(self.test_location)
         assert archived_loc == active_loc, "Location is not Archived"
 
