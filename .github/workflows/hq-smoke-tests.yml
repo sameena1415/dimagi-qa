@@ -110,7 +110,7 @@ jobs:
                 .replace(/{{environment}}/g, CC_ENV)
 
             let receivers = qa-automation@dimagi.com
-            if (EVENT_NAME == 'workflow_dispatch') {
+            if (EVENT_NAME == "workflow_dispatch") {
               receivers = qa@dimagi.com, sameena.shaik@fissionlabs.com
             }
 

@@ -56,8 +56,6 @@ def test_case_08_edit_location_fields(driver):
 @pytest.mark.smoke
 @pytest.mark.location
 def test_case_09_creation_organization_level(driver, settings):
-    if 'staging' in settings['url']:
-        pytest.xfail("failing due to QA-4374")
     menu = HomePage(driver)
     menu.users_menu()
     org = OrganisationStructurePage(driver)
@@ -76,8 +74,6 @@ def test_case_11_download_and_upload_locations(driver):
 @pytest.mark.smoke
 @pytest.mark.location
 def test_cleanup_items_in_locations_menu(driver, settings):
-    if 'staging' in settings['url']:
-        pytest.xfail("failing due to QA-4374")
     menu = HomePage(driver)
     menu.users_menu()
     clean4 = OrganisationStructurePage(driver)
