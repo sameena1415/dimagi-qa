@@ -84,11 +84,12 @@ jobs:
         env:
             JOB_STATUS: ${{ job.status }}
             CC_ENV: ${{ matrix.environment }}
+            EVENT_NAME: ${{ github.event_name }}
         with:
           script: |
             const { promises: fs } = require('fs')
 
-            const {JOB_STATUS, NOW, CC_ENV, GITHUB_HEAD_REF} = process.env
+            const {JOB_STATUS, NOW, CC_ENV, GITHUB_HEAD_REF, EVENT_NAME} = process.env
             const prefix = `[${CC_ENV}] Smoke Tests - ${JOB_STATUS.toUpperCase()} - Run #${context.runNumber}`
             const suffix = `at ${NOW}`
 
@@ -108,10 +109,16 @@ jobs:
                 .replace(/{{runNumber}}/g, context.runNumber)
                 .replace(/{{environment}}/g, CC_ENV)
 
+            let receivers = qa-automation@dimagi.com
+            if (EVENT_NAME == 'workflow_dispatch') {
+              receivers = qa@dimagi.com, sameena.shaik@fissionlabs.com
+            }
+
             return {
               "subject": subject,
               "body": bodyContent,
               "reference": Math.random().toString(36).substr(2)  // used to prevent threading of similar emails
+              "receivers": receivers
             }
 
       - name: Send Result Email
@@ -123,7 +130,7 @@ jobs:
           username: ${{secrets.DIMAGIQA_MAIL_USERNAME}}
           password: ${{secrets.DIMAGIQA_MAIL_PASSWORD}}
           subject: ${{ fromJSON(steps.configure_email.outputs.result).subject }}
-          to: qa@dimagi.com, sameena.shaik@fissionlabs.com
+          to: ${{ fromJSON(steps.configure_email.outputs.result).receivers }}
           from: <${{secrets.DIMAGIQA_MAIL_USERNAME}}>
           html_body: ${{ fromJSON(steps.configure_email.outputs.result).body }}
           convert_markdown: true

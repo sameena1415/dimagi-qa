@@ -1,3 +1,5 @@
+import pytest
+
 from HQSmokeTests.testPages.data.data_dictionary_page import DataDictionaryPage
 from HQSmokeTests.testPages.data.deduplicate_case_page import DeduplicateCasePage
 from HQSmokeTests.testPages.data.export_data_page import ExportDataPage
@@ -10,6 +12,8 @@ from HQSmokeTests.testPages.data.lookup_table_page import LookUpTablePage
 """"Contains test cases related to the Data module"""
 
 
+@pytest.mark.smoke
+@pytest.mark.data
 def test_case_29_import_cases(driver):
 
     export = ExportDataPage(driver)
@@ -17,7 +21,8 @@ def test_case_29_import_cases(driver):
     export.data_tab()
     imp.replace_property_and_upload()
 
-
+@pytest.mark.smoke
+@pytest.mark.data
 def test_case_30_reassign_cases(driver, settings):
 
     export = ExportDataPage(driver)
@@ -26,7 +31,8 @@ def test_case_30_reassign_cases(driver, settings):
     reassign.get_cases()
     reassign.reassign_case()
 
-
+@pytest.mark.smoke
+@pytest.mark.data
 def test_case_31_manage_forms(driver):
 
     export = ExportDataPage(driver)
@@ -39,7 +45,8 @@ def test_case_31_manage_forms(driver):
     manage.view_archived_forms()
     manage.restore_forms()
 
-
+@pytest.mark.smoke
+@pytest.mark.data
 def test_case_32_auto_case_update(driver):
 
     export = ExportDataPage(driver)
@@ -49,7 +56,8 @@ def test_case_32_auto_case_update(driver):
     data.add_new_rule()
     data.remove_rule()
 
-
+@pytest.mark.smoke
+@pytest.mark.data
 def test_case_33_create_lookup_table(driver):
 
     data = LookUpTablePage(driver)
@@ -57,7 +65,8 @@ def test_case_33_create_lookup_table(driver):
     export.data_tab()
     data.create_lookup_table()
 
-
+@pytest.mark.smoke
+@pytest.mark.data
 def test_case_34_view_lookup_table(driver):
 
     data = LookUpTablePage(driver)
@@ -66,7 +75,8 @@ def test_case_34_view_lookup_table(driver):
     data.view_lookup_table()
     data.delete_lookup_table()
 
-
+@pytest.mark.smoke
+@pytest.mark.data
 def test_case_58_deduplicate_cases(driver):
 
     export = ExportDataPage(driver)
@@ -76,7 +86,8 @@ def test_case_58_deduplicate_cases(driver):
     data.add_new_rule()
     data.remove_rule()
 
-
+@pytest.mark.smoke
+@pytest.mark.data
 def test_case_59_data_dictionary(driver):
 
     export = ExportDataPage(driver)
