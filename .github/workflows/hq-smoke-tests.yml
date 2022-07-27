@@ -84,12 +84,11 @@ jobs:
         env:
             JOB_STATUS: ${{ job.status }}
             CC_ENV: ${{ matrix.environment }}
-            EVENT_NAME: ${{ github.event_name }}
         with:
           script: |
             const { promises: fs } = require('fs')
 
-            const {JOB_STATUS, NOW, CC_ENV, GITHUB_HEAD_REF, EVENT_NAME} = process.env
+            const {JOB_STATUS, NOW, CC_ENV, GITHUB_HEAD_REF} = process.env
             const prefix = `[${CC_ENV}] Smoke Tests - ${JOB_STATUS.toUpperCase()} - Run #${context.runNumber}`
             const suffix = `at ${NOW}`
 
@@ -109,9 +108,9 @@ jobs:
                 .replace(/{{runNumber}}/g, context.runNumber)
                 .replace(/{{environment}}/g, CC_ENV)
 
-            let receivers = qa@dimagi.com, sameena.shaik@fissionlabs.com
-            if (EVENT_NAME !== "pull_request") {
-              receivers = qa-automation@dimagi.com
+            let receivers = 'qa-automation@dimagi.com'
+            if (context.eventName !== "pull_request") {
+              receivers = 'qa@dimagi.com, sameena.shaik@fissionlabs.com'
             }
 
             return {
