@@ -109,7 +109,7 @@ jobs:
                 .replace(/{{environment}}/g, CC_ENV)
 
             let receivers = 'qa-automation@dimagi.com'
-            if (context.eventName !== "pull_request") {
+            if (context.eventName !== "pull_request" || context.eventName !== "push") {
               receivers = 'qa@dimagi.com, sameena.shaik@fissionlabs.com'
             }
 
