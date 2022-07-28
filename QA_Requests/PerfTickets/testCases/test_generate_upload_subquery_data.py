@@ -8,8 +8,7 @@ def generate_upload_data():
     child_col_list = ['number', 'caseid', 'name', 'location', 'multi_data_1', 'receive_geopoint_1',
                       'parent_external_id', 'parent_type',
                       'hundred', 'two_hundred', 'three_hundred', 'four_hundred', 'five_hundred']
-    global load, subcase
-    load = 1
+    load = 1000
     subcase = 1
     generate_path(TestData.output_path)
     data_generation(subcase, load, TestData.output_csv, col_list, TestData.child_output_csv, col_list)

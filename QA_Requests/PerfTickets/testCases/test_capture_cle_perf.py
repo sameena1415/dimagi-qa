@@ -3,7 +3,6 @@ from QA_Requests.PerfTickets.testPages.cle_perf.cle import CLEPage
 
 def test_case_cle(driver):
     cle = CLEPage(driver)
-    global parent_case_type, child_case_type,  load
     load = "10k"
     parent_case_type = "song_perf_1_1_500000"
     child_case_type = "show_perf_1_1_50000"
