@@ -25,5 +25,5 @@ pip install -r requires.txt
 ```sh
 command to execute the scripts
 pytest -v /path/to/test_capture_cle.py
-pytest -v /path/to/test_generate_upload_subquery_data.py
+python  /path/to/test_generate_upload_subquery_data.py
 ```
