@@ -1,51 +1,40 @@
-import time
-
-from selenium.webdriver.common.by import By
-from QA_Requests.PerfTickets.testPages.base.base_page import BasePage
-from QA_Requests.PerfTickets.userInputs.test_data import TestData
+import configparser
+import requests
 
 
-class DataGenerationPage(BasePage):
+def post_api(URL, input_payload, login_user, login_pass, header, type="json"):
+    if type == "json":
+        response = requests.post(URL, json=input_payload, headers=header)
+    else:
+        response = requests.post(URL, data=input_payload, headers=header)
+    assert response.status_code == 200
+    return response
 
-    def __init__(self, driver):
-        super().__init__(driver)
 
-        self.data_dropdown = (By.LINK_TEXT, 'Data')
-        self.view_all_link = (By.LINK_TEXT, 'View All')
-        self.close_notification = (By.XPATH, "//div[@class='frame-close']/button[1]")
-        self.iframe = (By.XPATH, "//iframe[contains(@src,'/embed/frame')]")
-        self.view_latest_updates = (By.XPATH, "//*[.='View latest updates']")
-        self.import_cases_from_excel_link = (By.LINK_TEXT, "Import Cases from Excel")
-        self.choose_file = (By.XPATH, "//input[@name='file']")
-        self.next_step = (By.XPATH, "//i[@class='fa fa-forward']")
-        self.case_type = (By.XPATH, "//select[@id='case_type']")
-        self.excel_column = (By.XPATH, "//select[@id='search_column']")
-        self.case_id = (By.XPATH, "//button[text()='Case ID']")
-        self.external_id = (By.XPATH, "//button[text()='External ID']")
-        self.handle_cases_checkbox = (By.XPATH, "//input[@id='create_new_cases']")
+def post_api_file_upload(URL, data, login_user, login_pass, file, header):
+    response = requests.request("POST", URL, data=data, files=file, headers=header)
+    print(response.status_code)
+    print(response.headers)
+    return response
 
-    def excel_upload(self, filepath, case_type, column):
 
-        self.wait_to_click(self.data_dropdown)
-        self.wait_to_click(self.view_all_link)
-        self.wait_to_click(self.import_cases_from_excel_link)
-        self.send_keys(self.choose_file, str(filepath))
-        time.sleep(20)
-        self.wait_to_click(self.next_step)
-        time.sleep(10)
-        self.success_status = (By.XPATH,
-                               "(//td[contains(text(), '" + case_type + "')]/preceding-sibling::td/span[@class='label label-success'])[1]")
-        self.case_id_download = (By.XPATH,
-                                 "(// td[contains(text(), '" + case_type + "')]/following-sibling::td//a[.//text() = '" + TestData.file_name + "'])[1]")
+def post_import_cases_from_excel(file_path, case):
+    config = configparser.ConfigParser()
+    config.read('../settings.cfg')
+    login_user = config.get('default', 'login_username')
+    login_pass = config.get('default', 'login_password')
+    api_key = config.get('default', 'api_key')
+    uri = config.get('default', 'url')
 
-        self.select_by_text(self.case_type, case_type)
-        self.select_by_text(self.excel_column, column)
-        if column == 'caseid':
-            self.wait_to_click(self.case_id)
-        else:
-            self.wait_to_click(self.external_id)
-        self.wait_to_click(self.handle_cases_checkbox)
-        self.wait_to_click(self.next_step)
-        self.wait_to_click(self.next_step)
-        assert self.is_visible_and_displayed(self.success_status), "Cases upload not completed!"
-        print("Cases uploaded successfully!")
+    URL = uri + "importer/excel/bulk_upload_api/"
+    data = {'case_type': case,
+            'search_field': 'case_id',
+            'search_column': 'caseid',
+            'create_new_cases': 'on'}
+    file = [
+        ('file', (file_path, open(file_path, 'rb'),
+                  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'))]
+
+    headers = {'Authorization': 'ApiKey ' + login_user + ':' + api_key}
+    result = post_api_file_upload(URL, data, login_user, login_pass, file, headers)
+    assert result.status_code == 200
