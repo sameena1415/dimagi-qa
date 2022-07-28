@@ -1,4 +1,3 @@
-import os
 from configparser import ConfigParser
 from pathlib import Path
 
@@ -12,45 +11,7 @@ global driver
 
 
 @pytest.fixture(scope="session")
-def environment_settings():
-    """Load settings from os.environ
-
-            Names of environment variables:
-                DIMAGIQA_URL
-                DIMAGIQA_LOGIN_USERNAME
-                DIMAGIQA_LOGIN_PASSWORD
-                DIMAGIQA_MAIL_USERNAME
-                DIMAGIQA_MAIL_PASSWORD
-
-            See https://docs.github.com/en/actions/reference/encrypted-secrets
-            for instructions on how to set them.
-            """
-    settings = {}
-    for name in ["url", "login_username", "login_password", "auth_key"]:
-        var = f"DIMAGIQA_{name.upper()}"
-        if var in os.environ:
-            settings[name] = os.environ[var]
-    if "url" not in settings:
-        env = os.environ.get("DIMAGIQA_ENV") or "staging"
-        subdomain = "www" if env == "production" else env
-        settings["url"] = f"https://{subdomain}.commcarehq.org/"
-    return settings
-
-
-@pytest.fixture(scope="session")
-def settings(environment_settings):
-    if os.environ.get("CI") == "true":
-        settings = environment_settings
-        settings["CI"] = "true"
-        if any(x not in settings for x in ["url", "login_username", "login_password", "auth_key"]):
-            lines = environment_settings.__doc__.splitlines()
-            vars_ = "\n  ".join(line.strip() for line in lines if "DIMAGIQA_" in line)
-            raise RuntimeError(
-                f"Environment variables not set:\n  {vars_}\n\n"
-                "See https://docs.github.com/en/actions/reference/encrypted-secrets "
-                "for instructions on how to set them."
-            )
-        return settings
+def load_settings():
     path = Path(__file__).parent.parent / "settings.cfg"
     if not path.exists():
         raise RuntimeError(
@@ -64,35 +25,18 @@ def settings(environment_settings):
 
 
 @pytest.fixture(scope="module")
-def driver(settings):
+def driver(load_settings):
     chrome_options = webdriver.ChromeOptions()
-    if settings.get("CI") == "true":
-        chrome_options.add_argument('--no-sandbox')
-        chrome_options.add_argument('disable-extensions')
-        chrome_options.add_argument('--safebrowsing-disable-download-protection')
-        chrome_options.add_argument('--safebrowsing-disable-extension-blacklist')
-        chrome_options.add_argument('window-size=1920,1080')
-        chrome_options.add_argument("--disable-setuid-sandbox")
-        chrome_options.add_argument('--start-maximized')
-        chrome_options.add_argument('--disable-dev-shm-usage')
-        chrome_options.add_argument('--headless')
-        chrome_options.add_argument("--disable-notifications")
-        chrome_options.add_experimental_option("prefs", {
-            "download.default_directory": str(UserData.DOWNLOAD_PATH),
-            "download.prompt_for_download": False,
-            "download.directory_upgrade": True,
-            "safebrowsing.enabled": True})
-    else:
-        chrome_options.add_argument('--safebrowsing-disable-download-protection')
-        chrome_options.add_argument('--safebrowsing-disable-extension-blacklist')
-        chrome_options.add_experimental_option("prefs", {
-            "download.default_directory": str(UserData.DOWNLOAD_PATH),
-            "download.prompt_for_download": False,
-            "safebrowsing.enabled": True})
+    chrome_options.add_argument('--safebrowsing-disable-download-protection')
+    chrome_options.add_argument('--safebrowsing-disable-extension-blacklist')
+    chrome_options.add_experimental_option("prefs", {
+        "download.default_directory": str(UserData.DOWNLOAD_PATH),
+        "download.prompt_for_download": False,
+        "safebrowsing.enabled": True})
     driver = webdriver.Chrome(executable_path=ChromeDriverManager().install(), options=chrome_options)
     print("Chrome version:", driver.capabilities['browserVersion'])
-    login = LoginPage(driver, settings["url"])
-    login.login(settings["login_username"], settings["login_password"])
+    login = LoginPage(driver, load_settings["url"])
+    login.login(load_settings["login_username"], load_settings["login_password"])
     yield driver
     driver.quit()
 
