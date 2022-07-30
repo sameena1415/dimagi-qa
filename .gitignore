@@ -193,3 +193,6 @@ PerformanceTests/NY_CICT_App_Sprint/CaptureReadings/final_reading.xlsx
 PerformanceTests/NY_CICT_App_Sprint/report.html
 PerformanceTests/NY_CICT_App_Sprint/settings.cfg
 
+#Ignoring compliled files of Perf Testing
+QA_Requests/MultiSelectPerf/settings.cfg
+QA_Requests/MultiSelectPerf/OutputFiles/*
