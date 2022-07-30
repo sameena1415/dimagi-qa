@@ -3,6 +3,8 @@ import os
 import names
 import pandas as pd
 
+from QA_Requests.MultiSelectPerf.import_data_using_api import post_import_cases_from_excel
+
 
 def generate_path(output_path):
     if not os.path.isdir(output_path):
@@ -28,6 +30,7 @@ def generate_import_file(case_load_per_case_type, case_type_name, num_prop):
         GFG = pd.ExcelWriter(file)
         df_new.to_excel(GFG, index=False)
         GFG.save()
+        return file
 
 
 def multi():
@@ -40,8 +43,9 @@ def multi():
         print("Create app with case list " + str(key))  ##TODO
         # print("Generate data of load " + str(round(case_load_per_case_type)) + " for " + str(key))  ##DONE
         # print("Add " + str(value) + " properties")  ##DONE
-        generate_import_file(case_load_per_case_type, key, value)
-        print("Import Data Using API")  ##TODO
+        file = generate_import_file(case_load_per_case_type, key, value)
+        #print("Import Data Using API")  ##DONE
+        post_import_cases_from_excel(file, key)
         for case_property_passed in case_properities_passed_into_form:
             print("Pass " + str(case_property_passed) + " properties to case list of " + str(key))  ##TODO
             print("Capture Readings for " + str(case_property_passed), str(key) + " workflow1")  ##TODO
