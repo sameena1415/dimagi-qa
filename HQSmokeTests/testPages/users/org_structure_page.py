@@ -254,6 +254,7 @@ class OrganisationStructurePage(BasePage):
     def assert_archived_location(self):
         self.wait_to_click(self.org_menu_link_text)
         self.is_present_and_displayed(self.test_location, 10)
+        time.sleep(5)
         active_loc = self.get_text(self.test_location)
         self.wait_to_click(self.archive_buttton)
         self.wait_to_click(self.archive_button_popup)
@@ -281,6 +282,7 @@ class OrganisationStructurePage(BasePage):
     def assert_unarchived_location(self):
         self.wait_to_click(self.org_menu_link_text)
         self.wait_to_click(self.show_arhcived_locations_button)
+        time.sleep(5)
         archived_loc = self.get_text(self.test_location)
         self.wait_to_click(self.unarchive_button)
         self.driver.refresh()
