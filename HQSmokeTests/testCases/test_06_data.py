@@ -14,6 +14,7 @@ from HQSmokeTests.testPages.data.lookup_table_page import LookUpTablePage
 
 @pytest.mark.smoke
 @pytest.mark.data
+@pytest.mark.importCases
 def test_case_29_import_cases(driver):
 
     export = ExportDataPage(driver)
@@ -23,6 +24,7 @@ def test_case_29_import_cases(driver):
 
 @pytest.mark.smoke
 @pytest.mark.data
+@pytest.mark.reassignCases
 def test_case_30_reassign_cases(driver, settings):
 
     export = ExportDataPage(driver)
@@ -33,6 +35,9 @@ def test_case_30_reassign_cases(driver, settings):
 
 @pytest.mark.smoke
 @pytest.mark.data
+@pytest.mark.manageForms
+@pytest.mark.archiveForms
+@pytest.mark.restoreForms
 def test_case_31_manage_forms(driver):
 
     export = ExportDataPage(driver)
@@ -47,6 +52,7 @@ def test_case_31_manage_forms(driver):
 
 @pytest.mark.smoke
 @pytest.mark.data
+@pytest.mark.automaticallyUpdateCase
 def test_case_32_auto_case_update(driver):
 
     export = ExportDataPage(driver)
@@ -58,6 +64,8 @@ def test_case_32_auto_case_update(driver):
 
 @pytest.mark.smoke
 @pytest.mark.data
+@pytest.mark.lookupTable
+@pytest.mark.manageTables
 def test_case_33_create_lookup_table(driver):
 
     data = LookUpTablePage(driver)
@@ -67,6 +75,8 @@ def test_case_33_create_lookup_table(driver):
 
 @pytest.mark.smoke
 @pytest.mark.data
+@pytest.mark.lookupTable
+@pytest.mark.viewTables
 def test_case_34_view_lookup_table(driver):
 
     data = LookUpTablePage(driver)
@@ -77,6 +87,7 @@ def test_case_34_view_lookup_table(driver):
 
 @pytest.mark.smoke
 @pytest.mark.data
+@pytest.mark.deduplicateCases
 def test_case_58_deduplicate_cases(driver):
 
     export = ExportDataPage(driver)
@@ -88,6 +99,9 @@ def test_case_58_deduplicate_cases(driver):
 
 @pytest.mark.smoke
 @pytest.mark.data
+@pytest.mark.dataDictionary
+@pytest.mark.downloadDataDictionary
+@pytest.mark.uploadDataDictionary
 def test_case_59_data_dictionary(driver):
 
     export = ExportDataPage(driver)

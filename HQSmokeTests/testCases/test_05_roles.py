@@ -7,7 +7,9 @@ from HQSmokeTests.testPages.users.webapps_permission_page import WebAppPermissio
 """"Contains test cases related to the User's Roles and Permissions module"""
 
 @pytest.mark.smoke
-@pytest.mark.role
+@pytest.mark.user
+@pytest.mark.groups
+@pytest.mark.rolesPermission
 def test_case_06_add_role(driver):
 
     menu = HomePage(driver)
@@ -20,7 +22,9 @@ def test_case_06_add_role(driver):
     print("New Role Added")
 
 @pytest.mark.smoke
-@pytest.mark.role
+@pytest.mark.user
+@pytest.mark.groups
+@pytest.mark.rolesPermission
 def test_case_06_edit_role(driver):
 
     menu = HomePage(driver)
@@ -32,7 +36,9 @@ def test_case_06_edit_role(driver):
     print("Role Edited Successfully")
 
 @pytest.mark.smoke
-@pytest.mark.role
+@pytest.mark.user
+@pytest.mark.webUsers
+@pytest.mark.rolesPermission
 def test_case_12_toggle_option_webapp_permission(driver):
 
     menu = HomePage(driver)
@@ -43,6 +49,7 @@ def test_case_12_toggle_option_webapp_permission(driver):
     web.webapp_permission_option_toggle()
 
 @pytest.mark.smoke
+@pytest.mark.user
 @pytest.mark.role
 def test_cleanup_items_in_role_menu(driver):
 
