@@ -128,6 +128,7 @@ class BasePage:
     def click(self, locator):
         element = self.driver.find_element(*locator)
         element.click()
+        time.sleep(3)
 
     def select_by_text(self, source_locator, value):
         select_source = Select(self.driver.find_element(*source_locator))
@@ -140,7 +141,7 @@ class BasePage:
     def js_click(self, locator):
         element = self.driver.find_element(*locator)
         self.driver.execute_script("arguments[0].click();", element)
-        time.sleep(1)
+        time.sleep(3)
 
     def move_to_element_and_click(self, locator):
         element = self.driver.find_element(*locator)
