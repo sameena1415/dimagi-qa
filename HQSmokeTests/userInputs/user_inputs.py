@@ -65,5 +65,5 @@ class UserData:
     yahoo_user_name = 'automation_user_commcare@yahoo.com'
 
     """Deduplicate Case Module """
-    case_property = 'name'
+    case_property = 'village_name'
 
