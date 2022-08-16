@@ -14,7 +14,8 @@ from HQSmokeTests.testPages.users.web_user_page import WebUsersPage
 
 group_id = dict()
 
-
+@pytest.mark.smoke
+@pytest.mark.users
 @pytest.mark.run(order=0)
 def test_case_02_create_mobile_worker(driver):
     worker = MobileWorkerPage(driver)
@@ -24,7 +25,8 @@ def test_case_02_create_mobile_worker(driver):
     worker.mobile_worker_enter_password(fetch_random_string())
     worker.click_create()
 
-
+@pytest.mark.smoke
+@pytest.mark.users
 def test_case_03_create_and_assign_user_field(driver):
     create = MobileWorkerPage(driver)
     create.mobile_worker_menu()
@@ -33,7 +35,8 @@ def test_case_03_create_and_assign_user_field(driver):
     create.enter_value_for_created_user_field()
     create.update_information()
 
-
+@pytest.mark.smoke
+@pytest.mark.users
 def test_case_05_create_group_and_assign_user(driver):
     menu = HomePage(driver)
     menu.users_menu()
@@ -44,7 +47,8 @@ def test_case_05_create_group_and_assign_user(driver):
     group_id["value"] = id_value
     return group_id
 
-
+@pytest.mark.smoke
+@pytest.mark.users
 def test_case_10_download_and_upload_users(driver):
     user = MobileWorkerPage(driver)
     newest_file = user.download_mobile_worker()
@@ -52,7 +56,8 @@ def test_case_10_download_and_upload_users(driver):
     user.check_for_group_in_downloaded_file(newest_file, group_id["value"])
     user.upload_mobile_worker()
 
-
+@pytest.mark.smoke
+@pytest.mark.users
 def test_case_05_edit_user_groups(driver):
     menu = HomePage(driver)
     menu.users_menu()
@@ -61,21 +66,24 @@ def test_case_05_edit_user_groups(driver):
     edit.edit_existing_group()
     edit.remove_user_from_group()
 
-
+@pytest.mark.smoke
+@pytest.mark.users
 def test_case_04_deactivate_user(driver):
     user = MobileWorkerPage(driver)
     user.mobile_worker_menu()
     user.deactivate_user()
     user.verify_deactivation_via_login()
 
-
+@pytest.mark.smoke
+@pytest.mark.users
 def test_case_04_reactivate_user(driver):
     user = MobileWorkerPage(driver)
     user.mobile_worker_menu()
     user.reactivate_user()
     user.verify_reactivation_via_login()
 
-
+@pytest.mark.smoke
+@pytest.mark.users
 def test_cleanup_items_in_users_menu(driver):
     clean = MobileWorkerPage(driver)
     clean2 = GroupPage(driver)
@@ -101,7 +109,8 @@ def test_cleanup_items_in_users_menu(driver):
     clean2.delete_test_groups()
     print("Deleted the group")
 
-
+@pytest.mark.smoke
+@pytest.mark.users
 def test_case_54_add_custom_user_data_profile_to_mobile_worker(driver):
     create = MobileWorkerPage(driver)
     create.mobile_worker_menu()
@@ -126,7 +135,8 @@ def test_case_54_add_custom_user_data_profile_to_mobile_worker(driver):
     create.remove_user_field()
     create.save_field()
 
-
+@pytest.mark.smoke
+@pytest.mark.users
 def test_case_13_new_webuser_invitation(driver, settings):
     webuser = WebUsersPage(driver)
     webuser.invite_new_web_user('admin')
@@ -138,7 +148,8 @@ def test_case_13_new_webuser_invitation(driver, settings):
     # login.login(settings["login_username"], settings["login_password"])
     webuser.delete_invite()
 
-
+@pytest.mark.smoke
+@pytest.mark.users
 def test_case_57_download_and_upload_web_users(driver):
     user = WebUsersPage(driver)
     user.download_web_users()

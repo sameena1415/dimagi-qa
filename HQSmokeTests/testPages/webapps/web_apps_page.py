@@ -36,7 +36,7 @@ class WebAppsPage(BasePage):
         self.enter_value_area = (By.XPATH, "//label[./div[./span[contains(text(),'Enter a random value')]]]/following-sibling::div[@data-bind='css: controlWidth']//div/textarea")
         self.update_value_area = (By.XPATH, "//label[./div[./span[contains(text(),'Update')]]]/following-sibling::div[@data-bind='css: controlWidth']//div/textarea")
         self.form_link = (By.XPATH, "//*[text()='" + UserData.form_name + "']")
-        self.form_case_name_input = (By.XPATH, "//textarea[@class='textfield form-control']")
+        self.form_case_name_input = (By.XPATH, "//textarea[contains(@class,'textfield form-control')]")
         self.form_submit_button = (By.XPATH, "//button[@class='submit btn btn-primary']")
         self.success_message = (By.XPATH, "//p[text()='Form successfully saved!']")
         self.show_full_menu_link = (By.LINK_TEXT, "Show Full Menu")
