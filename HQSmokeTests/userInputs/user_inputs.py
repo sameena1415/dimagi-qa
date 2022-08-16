@@ -2,7 +2,6 @@
 
 
 class UserData:
-
     """User Test Data"""
 
     # Pre-setup application and case names
@@ -19,7 +18,6 @@ class UserData:
 
     # Phone Number
     area_code = "91"
-
 
     #  web app
     app_type = "Applications"
@@ -55,4 +53,3 @@ class UserData:
 
     """Deduplicate Case Module """
     case_property = 'village_name'
-

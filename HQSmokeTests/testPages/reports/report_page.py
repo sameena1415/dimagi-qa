@@ -81,7 +81,8 @@ class ReportPage(BasePage):
         self.save_confirm = (By.XPATH, '//div[@class = "btn btn-primary"]')
         self.saved_reports_menu_link = (By.LINK_TEXT, 'My Saved Reports')
         self.saved_report_created = (By.XPATH, "//a[text()='" + self.report_name_saved + "']")
-        self.delete_saved = (By.XPATH, "(//a[text()='" + self.report_name_saved + "']//following::button[@class='btn btn-danger add-spinner-on-click'])[1]")
+        self.delete_saved = (By.XPATH,
+                             "(//a[text()='" + self.report_name_saved + "']//following::button[@class='btn btn-danger add-spinner-on-click'])[1]")
 
         # Scheduled Reports
         self.scheduled_reports_menu_xpath = (By.XPATH, "//a[@href='#scheduled-reports']")
@@ -90,7 +91,7 @@ class ReportPage(BasePage):
         self.submit_id = (By.ID, "submit-id-submit_btn")
         self.success_alert = (By.XPATH, "//div[@class='alert alert-margin-top fade in alert-success']")
         self.select_all = (By.XPATH, "(//button[@data-bind='click: selectAll'])[1]")
-        self.delete_selected = (By.XPATH,  "//a[@class='btn btn-danger']")
+        self.delete_selected = (By.XPATH, "//a[@class='btn btn-danger']")
         self.delete_scheduled_confirm = (By.XPATH, "(//button[@data-bind='click: bulkDelete'])[1]")
         self.delete_success_scheduled = (By.XPATH, "//div[@class='alert alert-margin-top fade in alert-success']")
 
@@ -264,7 +265,7 @@ class ReportPage(BasePage):
         # Get Tomorrow
         # tomorrow = presentday + timedelta(1)
 
-        return presentday.strftime('%Y-%m-%d')+" to "+presentday.strftime('%Y-%m-%d')
+        return presentday.strftime('%Y-%m-%d') + " to " + presentday.strftime('%Y-%m-%d')
 
     def verify_table_not_empty(self, locator):
         clickable = ec.presence_of_all_elements_located(locator)
@@ -289,7 +290,7 @@ class ReportPage(BasePage):
         self.select_by_text(self.form_select, UserData.form_name)
         date_range = self.get_yesterday_tomorrow_dates()
         self.clear(self.date_input)
-        self.send_keys(self.date_input, date_range+Keys.TAB)
+        self.send_keys(self.date_input, date_range + Keys.TAB)
         self.wait_to_click(self.apply_id)
         time.sleep(15)
         self.scroll_to_bottom()
@@ -325,7 +326,6 @@ class ReportPage(BasePage):
         # self.switch_back_to_prev_tab()
         self.driver.back()
 
-
     def verify_app_data_submit_history(self, case_name):
 
         print("Sleeping for sometime for the case to get registered.")
@@ -338,7 +338,7 @@ class ReportPage(BasePage):
         self.select_by_text(self.form_select, UserData.new_form_name)
         date_range = self.get_yesterday_tomorrow_dates()
         self.clear(self.date_input)
-        self.send_keys(self.date_input, date_range+Keys.TAB)
+        self.send_keys(self.date_input, date_range + Keys.TAB)
         self.wait_to_click(self.apply_id)
         time.sleep(15)
         self.scroll_to_bottom()
@@ -357,7 +357,8 @@ class ReportPage(BasePage):
         self.wait_and_sleep_to_click((By.LINK_TEXT, str(case_name)))
         time.sleep(3)
         self.page_source_contains(case_name)
-        assert self.is_present_and_displayed((By.XPATH,"//div[@id='properties']//td[contains(text(),'"+value+"')]")), "Case property not updated."
+        assert self.is_present_and_displayed(
+            (By.XPATH, "//div[@id='properties']//td[contains(text(),'" + value + "')]")), "Case property not updated."
         print("Case is updated successfully")
         case_id = self.get_text(self.case_id_block)
         return case_id

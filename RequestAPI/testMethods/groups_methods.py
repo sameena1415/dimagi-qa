@@ -8,12 +8,12 @@ from common_utilities.path_settings import PathSettings
 
 class GroupsMethods(Base):
     def __init__(self, settings):
-        self.filepath = PathSettings.ROOT+"/RequestAPI/Payloads/"
+        self.filepath = PathSettings.ROOT + "/RequestAPI/Payloads/"
         self.password = settings["password"]
-        self.headers={'Content-Type':'application/json',
-                      'Authorization': 'ApiKey '+settings['login_user']+':'+settings['api_key']}
+        self.headers = {'Content-Type': 'application/json',
+                        'Authorization': 'ApiKey ' + settings['login_user'] + ':' + settings['api_key']}
 
-    def get_group_list(self, uri,  login_user, login_pass):
+    def get_group_list(self, uri, login_user, login_pass):
         URL = uri + 'group/'
         response = self.get_api(URL, login_user, login_pass, self.headers)
         print(response.status_code)
@@ -24,35 +24,33 @@ class GroupsMethods(Base):
         print(response.status_code)
 
     def bulk_api_create_group(self, uri, input_file, login_user, login_pass):
-        URL = uri+'group/'
-        file = open(self.filepath+input_file, "r")
+        URL = uri + 'group/'
+        file = open(self.filepath + input_file, "r")
         request_input = json.loads(file.read())
         request_input["case_sharing"] = fetch_random_boolean()
-        request_input["name"] = "Group_"+fetch_random_string()
+        request_input["name"] = "Group_" + fetch_random_string()
         request_input["reporting"] = fetch_random_boolean()
 
         print(request_input, URL)
         result = self.post_api(URL, request_input, login_user, login_pass, self.headers)
         json_response = json.loads(result.text)
         # print(json_response)
-        print((jsonpath.jsonpath(json_response,"id"))[0])
-        return (jsonpath.jsonpath(json_response,"id"))[0]
-
+        print((jsonpath.jsonpath(json_response, "id"))[0])
+        return (jsonpath.jsonpath(json_response, "id"))[0]
 
     def bulk_api_create_multiple_group(self, uri, input_file, login_user, login_pass):
-        URL = uri+'group/'
-        file = open(self.filepath+input_file, "r")
+        URL = uri + 'group/'
+        file = open(self.filepath + input_file, "r")
         request_input = json.loads(file.read())
         print(request_input, URL)
         self.patch_api(URL, request_input, login_user, login_pass, self.headers)
 
-
-    def individual_api_edit_group(self, uri,mobile_id, input_file, login_user, login_pass):
-        URL = uri+'group/'+mobile_id+'/'
-        file = open(self.filepath+input_file, "r")
+    def individual_api_edit_group(self, uri, mobile_id, input_file, login_user, login_pass):
+        URL = uri + 'group/' + mobile_id + '/'
+        file = open(self.filepath + input_file, "r")
         request_input = json.loads(file.read())
         request_input["case_sharing"] = fetch_random_boolean()
-        request_input["name"] = "Updated_Group_"+fetch_random_string()
+        request_input["name"] = "Updated_Group_" + fetch_random_string()
         request_input["reporting"] = fetch_random_boolean()
         print(request_input, URL)
         self.put_api(URL, request_input, login_user, login_pass, self.headers)

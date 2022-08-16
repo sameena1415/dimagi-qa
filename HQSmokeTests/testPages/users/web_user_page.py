@@ -32,9 +32,10 @@ class WebUsersPage(BasePage):
         self.delete_confirm_webuser = (By.XPATH,
                                        "(//td[.//text()[contains(.,'" + UserData.yahoo_user_name + "')]]/following-sibling::td//i[@class='fa fa-trash'])[last()]")
         self.delete_success = (By.XPATH, "//div[@class='alert alert-margin-top fade in html alert-success']")
-        self.verify_user = (By.XPATH,"//td[.//text()[contains(.,'" + UserData.yahoo_user_name  + "')]]/following-sibling::td[.//text()[contains(.,'Delivered')]]")
+        self.verify_user = (By.XPATH,
+                            "//td[.//text()[contains(.,'" + UserData.yahoo_user_name + "')]]/following-sibling::td[.//text()[contains(.,'Delivered')]]")
         self.remove_user_invite = (By.XPATH,
-                                   "//td[.//text()[contains(.,'" + UserData.yahoo_user_name  + "')]]/following-sibling::td//i[@class='fa fa-trash']")
+                                   "//td[.//text()[contains(.,'" + UserData.yahoo_user_name + "')]]/following-sibling::td//i[@class='fa fa-trash']")
         self.login_username = (By.ID, "login-username")
         self.next_button = (By.ID, "login-signin")
         self.login_password = (By.NAME, "password")
@@ -111,7 +112,6 @@ class WebUsersPage(BasePage):
         print(time_difference)
         assert time_difference in range(0, 200), "Unable to find invite"
 
-
     def accept_webuser_invite(self, mail_usename, mail_password):
         self.wait_to_click(self.accept_invitation)
         self.switch_to_next_tab()
@@ -172,4 +172,3 @@ class WebUsersPage(BasePage):
             print("TIMEOUT ERROR: Could not upload file")
         assert self.is_present_and_displayed(self.import_complete), "Upload Not Completed! Taking Longer to process.."
         print("File uploaded successfully")
-

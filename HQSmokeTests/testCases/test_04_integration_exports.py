@@ -9,11 +9,11 @@ import pytest
 
 test_case_update_case = dict()
 
+
 @pytest.mark.smoke
 @pytest.mark.integration_exports
 @pytest.mark.run(order=0)
 def test_case_55_update_case(driver):
-
     case = HomePage(driver)
     case.web_apps_menu()
     webapps = WebAppsPage(driver)
@@ -21,11 +21,12 @@ def test_case_55_update_case(driver):
     value = webapps.submit_case_update_form(case_name)
     webapps.click_case_link()
     load = ReportPage(driver)
-    case_id = load.verify_updated_data_in_case_list(case_name,value)
+    case_id = load.verify_updated_data_in_case_list(case_name, value)
     test_case_update_case["case_id"] = case_id
     test_case_update_case["case_name"] = case_name
     test_case_update_case["value"] = value
     return test_case_update_case
+
 
 @pytest.mark.smoke
 @pytest.mark.integration_exports
@@ -34,12 +35,14 @@ def test_case_25_excel_dashboard_integration_form(driver):
     export.data_tab()
     export.excel_dashboard_integration_form()
 
+
 @pytest.mark.smoke
 @pytest.mark.integration_exports
 def test_case_26_excel_dashboard_integration_case(driver):
     export = ExportDataPage(driver)
     export.data_tab()
     export.excel_dashboard_integration_case()
+
 
 @pytest.mark.smoke
 @pytest.mark.integration_exports
@@ -50,6 +53,7 @@ def test_case_27_powerbi_tableau_integration_case(driver, settings):
     export.data_tab()
     export.power_bi_tableau_integration_case(username, password)
 
+
 @pytest.mark.smoke
 @pytest.mark.integration_exports
 def test_case_28_powerbi_tableau_integration_form(driver, settings):
@@ -59,6 +63,7 @@ def test_case_28_powerbi_tableau_integration_form(driver, settings):
     export.data_tab()
     export.power_bi_tableau_integration_form(username, password)
 
+
 @pytest.mark.smoke
 @pytest.mark.integration_exports
 def test_exports_cleanup(driver):
@@ -66,11 +71,11 @@ def test_exports_cleanup(driver):
     export.data_tab()
     export.delete_all_bulk_integration_exports()
 
+
 @pytest.mark.smoke
 @pytest.mark.integration_exports
 @pytest.mark.run(order=-1)
 def test_case_55_verify_change_in_export_data(driver):
-
     export = ExportDataPage(driver)
     export.data_tab()
     export.add_updated_case_exports()

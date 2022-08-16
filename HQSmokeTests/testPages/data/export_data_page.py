@@ -126,9 +126,9 @@ class ExportDataPage(BasePage):
         self.model = (By.ID, "id_model_type")
 
     def get_url_paste_browser(self, username, password, item):
-        if (item == 'cases'):
+        if item == 'cases':
             odata_feed_link = self.wait_to_get_value(self.copy_odata_link_case)
-        elif (item == 'forms'):
+        elif item == 'forms':
             odata_feed_link = self.wait_to_get_value(self.copy_odata_link_form)
         final_URL_case = f"https://{username}:{password}@{odata_feed_link[8:]}"
         self.driver.get(final_URL_case)

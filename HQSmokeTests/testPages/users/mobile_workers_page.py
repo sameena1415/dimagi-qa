@@ -40,7 +40,7 @@ class MobileWorkerPage(BasePage):
         self.show_full_menu_id = (By.ID, "commcare-menu-toggle")
         self.search_mw = (By.XPATH, "//div[@class='ko-search-box']//input[@type='text']")
         self.search_button_mw = (
-        By.XPATH, "//div[@class='ko-search-box']//button[@data-bind='click: clickAction, visible: !immediate']")
+            By.XPATH, "//div[@class='ko-search-box']//button[@data-bind='click: clickAction, visible: !immediate']")
         self.webapp_working_as = (By.XPATH, "//div[@class='restore-as-banner module-banner']/b")
         self.webapp_login_confirmation = (By.ID, 'js-confirmation-confirm')
         # self.webapp_login_with_username = (By.XPATH, self.login_as_usernames)
@@ -50,13 +50,14 @@ class MobileWorkerPage(BasePage):
         self.reactivate_buttons_list = (By.XPATH,
                                         "//td[./a/strong[text()='" + self.username + "']]/following-sibling::td/div[contains(@data-bind,'visible: !is_active()')]/button[contains(.,'Reactivate')]")
         self.deactivate_button = (By.XPATH,
-                                        "//td[./a/strong[text()='" + self.username + "']]/following-sibling::td/div[contains(@data-bind,'visible: is_active()')]/button[contains(.,'Deactivate')]")
+                                  "//td[./a/strong[text()='" + self.username + "']]/following-sibling::td/div[contains(@data-bind,'visible: is_active()')]/button[contains(.,'Deactivate')]")
         self.confirm_deactivate_xpath_list = (
-        By.XPATH, "((//div[@class='modal-footer'])/button[@class='btn btn-danger'])")
+            By.XPATH, "((//div[@class='modal-footer'])/button[@class='btn btn-danger'])")
         self.deactivate_buttons_list = (
-        By.XPATH, "(//td/div[@data-bind='visible: is_active()']/button[@class='btn btn-default'])")
+            By.XPATH, "(//td/div[@data-bind='visible: is_active()']/button[@class='btn btn-default'])")
         self.show_deactivated_users_btn = (
-        By.XPATH, '//button[@data-bind="visible: !deactivatedOnly(), click: function() { deactivatedOnly(true); }"]')
+            By.XPATH,
+            '//button[@data-bind="visible: !deactivatedOnly(), click: function() { deactivatedOnly(true); }"]')
         self.usernames_xpath = (By.XPATH, "//td/a/strong[@data-bind='text: username']")
         self.page_xpath = (By.XPATH,
                            "(//span[@data-bind='text: $data, visible: !$parent.showSpinner() || $data != $parent.currentPage()'])")
@@ -68,7 +69,7 @@ class MobileWorkerPage(BasePage):
         self.mobile_worker_password_id = (By.ID, "id_new_password")
         self.create_button_xpath = (By.XPATH, '//button[@type="submit"]')
         self.error_message = (
-        By.XPATH, "//span[@data-bind ='visible: $root.usernameAvailabilityStatus() !== $root.STATUS.NONE']")
+            By.XPATH, "//span[@data-bind ='visible: $root.usernameAvailabilityStatus() !== $root.STATUS.NONE']")
         self.cancel_button = (By.XPATH, "//button[text()='Cancel']")
         self.new_user_created_xpath = (By.XPATH,
                                        "//*[@class='success']//a[contains(@data-bind,'attr: {href: edit_url}, visible: user_id')]//following-sibling::strong")
@@ -86,23 +87,23 @@ class MobileWorkerPage(BasePage):
         self.mobile_worker_on_left_panel = (By.XPATH, "//a[@data-title='Mobile Workers']")
         self.next_page_button_xpath = (By.XPATH, "//a[contains(@data-bind,'click: nextPage')]")
         self.additional_info_dropdown = (
-        By.ID, "select2-id_data-field-user_field_" + fetch_random_string() + "-container")
+            By.ID, "select2-id_data-field-user_field_" + fetch_random_string() + "-container")
         self.select_value_dropdown = (By.XPATH,
                                       "//select[@name = 'data-field-user_field_" + fetch_random_string() + "']/option[text()='user_field_" + fetch_random_string() + "']")
         self.additional_info_select = (
-        By.XPATH, "//select[@name = 'data-field-user_field_" + fetch_random_string() + "']")
+            By.XPATH, "//select[@name = 'data-field-user_field_" + fetch_random_string() + "']")
         self.additional_info_select2 = (By.XPATH, "//select[@name = 'data-field-field_" + fetch_random_string() + "']")
 
         self.additional_info_dropdown2 = (
-        By.ID, "select2-id_data-field-" + "field_" + fetch_random_string() + "-container")
+            By.ID, "select2-id_data-field-" + "field_" + fetch_random_string() + "-container")
         self.select_value_dropdown2 = (By.XPATH,
                                        "//select[@name = 'data-field-field_" + fetch_random_string() + "']/option[text()='field_" + fetch_random_string() + "']")
 
         self.update_info_button = (By.XPATH, "//button[text()='Update Information']")
         self.user_file_additional_info = (
-        By.XPATH, "//label[@for='id_data-field-user_field_" + fetch_random_string() + "']")
+            By.XPATH, "//label[@for='id_data-field-user_field_" + fetch_random_string() + "']")
         self.user_file_additional_info2 = (
-        By.XPATH, "//label[@for='id_data-field-field_" + fetch_random_string() + "']")
+            By.XPATH, "//label[@for='id_data-field-field_" + fetch_random_string() + "']")
         self.deactivate_btn_xpath = (By.XPATH,
                                      "//td/a/strong[text()='" + self.username + "']/following::td[5]/div[@data-bind='visible: is_active()']/button")
         self.confirm_deactivate = (By.XPATH, "(//button[@class='btn btn-danger'])[1]")
@@ -117,20 +118,20 @@ class MobileWorkerPage(BasePage):
         self.profile_name = (By.XPATH, "//tr[last()]//input[@data-bind='value: name']")
         self.profile_edit_button = (By.XPATH, "//tr[last()]//a[@class='btn btn-default enum-edit']")
         self.profile_delete_button = (
-        By.XPATH, "//tbody[@data-bind='foreach: profiles']//tr[last()]//td[last()]//i[@class='fa fa-times']")
+            By.XPATH, "//tbody[@data-bind='foreach: profiles']//tr[last()]//td[last()]//i[@class='fa fa-times']")
         self.add_profile_item = (
-        By.XPATH, "//div[@class='modal fade hq-enum-modal in']//a[@data-enum-action='add']/i[@class='fa fa-plus']")
+            By.XPATH, "//div[@class='modal fade hq-enum-modal in']//a[@data-enum-action='add']/i[@class='fa fa-plus']")
         self.delete_profile_item = (By.XPATH, "//div[@class='modal fade hq-enum-modal in']//i[@class='fa fa-remove']")
         self.profile_key = (
-        By.XPATH, "//div[@class='modal fade hq-enum-modal in']//input[@class='form-control enum-key']")
+            By.XPATH, "//div[@class='modal fade hq-enum-modal in']//input[@class='form-control enum-key']")
         self.profile_value = (
-        By.XPATH, "//div[@class='modal fade hq-enum-modal in']//input[@class='form-control enum-value']")
+            By.XPATH, "//div[@class='modal fade hq-enum-modal in']//input[@class='form-control enum-value']")
         self.done_button = (By.XPATH, "//div[@class='modal fade hq-enum-modal in']//button[@class='btn btn-primary']")
 
         self.field_delete = (
-        By.XPATH, "//tbody[@data-bind='sortable: data_fields']//tr[last()]//td[last()]//i[@class='fa fa-times']")
+            By.XPATH, "//tbody[@data-bind='sortable: data_fields']//tr[last()]//td[last()]//i[@class='fa fa-times']")
         self.profile_combobox = (
-        By.XPATH, "//span[@aria-labelledby='select2-id_data-field-commcare_profile-container']")
+            By.XPATH, "//span[@aria-labelledby='select2-id_data-field-commcare_profile-container']")
         self.profile_selection = (By.XPATH, "//li[contains(text(),'" + self.profile_name_text + "')]")
         self.phone_number_field = (By.XPATH, "//input[@name='phone_number']")
         self.add_number_button = (By.XPATH, "//button[.='Add Number']")
@@ -233,7 +234,7 @@ class MobileWorkerPage(BasePage):
         self.send_keys(self.choice_xpath, choice)
 
     def save_field(self):
-        if (self.is_enabled(self.save_field_id)):
+        if self.is_enabled(self.save_field_id):
             self.wait_to_click(self.save_field_id)
             time.sleep(5)
             assert self.is_present(self.user_field_success_msg) or self.is_present(
@@ -248,7 +249,7 @@ class MobileWorkerPage(BasePage):
         time.sleep(2)
         self.search_user()
         time.sleep(3)
-        if (self.is_present(self.username_link) == False):
+        if not self.is_present(self.username_link):
             self.click(self.show_deactivated_users_btn)
         self.click(self.username_link)
 
