@@ -7,7 +7,8 @@ from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.select import Select
 
-from HQSmokeTests.testPages.base.base_page import BasePage
+from common_utilities.selenium.base_page import BasePage
+from common_utilities.path_settings import PathSettings
 from HQSmokeTests.userInputs.user_inputs import UserData
 from HQSmokeTests.testPages.users.org_structure_page import latest_download_file
 from selenium.common.exceptions import NoSuchElementException
@@ -163,7 +164,7 @@ class WebUsersPage(BasePage):
         try:
             self.click(self.bulk_upload_btn)
             newest_file = latest_download_file()
-            file_that_was_downloaded = UserData.DOWNLOAD_PATH / newest_file
+            file_that_was_downloaded = PathSettings.DOWNLOAD_PATH / newest_file
             time.sleep(5)
             self.send_keys(self.choose_file, str(file_that_was_downloaded))
             self.wait_and_sleep_to_click(self.upload)

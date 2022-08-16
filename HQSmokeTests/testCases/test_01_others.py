@@ -1,7 +1,7 @@
 import pytest
 
 from HQSmokeTests.testPages.home.home_page import HomePage
-from HQSmokeTests.testPages.base.login_page import LoginPage
+from common_utilities.hq_login.login_page import LoginPage
 from HQSmokeTests.userInputs.user_inputs import UserData
 
 """"Contains all test cases that aren't specifically related any menu modules"""

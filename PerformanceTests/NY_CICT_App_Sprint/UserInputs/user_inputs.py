@@ -1,12 +1,6 @@
-import os
-
 
 class UserData:
     """Contains user input test data that are used while running the tests. These can be updated as required."""
-
-    """Path Settings"""
-    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-    ROOT = os.path.abspath(os.path.join(BASE_DIR, os.pardir, os.pardir))
 
     repeat_count = 3
     env = "www"  # by default, it's set as prod. Add "staging" if pointed towards staging.

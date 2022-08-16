@@ -4,9 +4,9 @@ import time
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.by import By
 
-from PerformanceTests.NY_CICT_App_Sprint.WorkflowActions.base.base_page import BasePage
+from common_utilities.selenium.base_page import BasePage
 from PerformanceTests.NY_CICT_App_Sprint.UserInputs.user_inputs import UserData
-from PerformanceTests.NY_CICT_App_Sprint.WorkflowActions.base.decorators import timer
+from common_utilities.decorators import timer
 
 """"Contains test page elements and functions related to workflows in test"""
 
@@ -67,7 +67,7 @@ class HomePage(BasePage):
         if self.is_displayed(self.lock_exists):
             time.sleep(180)
         self.wait_to_click(self.clear_user_data)
-        assert self.is_visible_and_displayed(self.clear_user_data_success)
+        assert self.is_visible_and_displayed(self.clear_user_data_success, timeout=240)
         self.wait_to_click(self.done)
         self.wait_to_click(self.webapps_home)
 
@@ -78,45 +78,45 @@ class HomePage(BasePage):
         time.sleep(3)
         self.js_click(self.ci_ct_user)
         self.wait_to_click(self.confirm_user_login)
-        assert self.is_visible_and_displayed(self.ci_ct_user)
+        assert self.is_visible_and_displayed(self.ci_ct_user, timeout=240)
 
     @timer
     def sync_application(self, username, application_name):
         self.wait_to_click(self.sync_app)
-        assert self.sync_successful_is_visible_and_displayed(self.sync_success)
+        assert self.is_visible_and_displayed(self.sync_success, timeout=900)
 
     @timer
     def open_application(self, application_name, username):
         self.pre_application = (By.XPATH, '//div[contains(@aria-label,"' + application_name + '")]')
         self.app_name_in_breadcrumb = (By.XPATH, "//ol//li[contains(.,'" + application_name + "')]")
         self.wait_to_click(self.pre_application)
-        assert self.is_visible_and_displayed(self.app_name_in_breadcrumb)
+        assert self.is_visible_and_displayed(self.app_name_in_breadcrumb, timeout=240)
 
     @timer
     def all_cases_menu_load(self, application_name, username):
         self.wait_to_click(self.all_cases_menu)
-        assert self.is_visible_and_displayed(self.case_list_table)
+        assert self.is_visible_and_displayed(self.case_list_table, timeout=240)
 
     def search_case_in_test(self, application_name, username):
         self.wait_to_clear_and_send_keys(self.search_case_list, UserData.pre_configured_case)
         self.wait_to_click(self.search_button)
         time.sleep(20)
-        assert self.is_visible_and_displayed(self.preconfig_case)
+        assert self.is_visible_and_displayed(self.preconfig_case, timeout=240)
 
     @timer
     def open_case_detail(self, application_name, username):
         self.js_click(self.preconfig_case)
-        assert self.is_visible_and_displayed(self.case_detail_modal)
+        assert self.is_visible_and_displayed(self.case_detail_modal, timeout=240)
 
     @timer
     def case_menu_display(self, application_name, username):
         self.wait_to_click(self.continue_button)
-        assert self.is_visible_and_displayed(self.menu_list)
+        assert self.is_visible_and_displayed(self.menu_list, timeout=240)
 
     @timer
     def open_case_investigation_form(self, application_name, username):
         self.wait_to_click(self.ci_form)
-        assert self.is_visible_and_displayed(self.form_content)
+        assert self.is_visible_and_displayed(self.form_content, timeout=240)
 
     @timer
     def ci_form_answer_question(self, application_name, username):
@@ -124,12 +124,12 @@ class HomePage(BasePage):
         self.driver.execute_script("window.scrollBy(0,-80)")
         self.wait_to_click(self.name_of_school_dropdown)
         self.wait_to_click(self.name_of_school_answer)
-        assert self.is_visible_and_displayed(self.school_selected_displayed)
+        assert self.is_visible_and_displayed(self.school_selected_displayed, timeout=240)
 
     @timer
     def ci_form_submission(self, application_name, username):
         self.js_click(self.submit_form)
-        assert self.is_visible_and_displayed(self.form_submission_success)
+        assert self.is_visible_and_displayed(self.form_submission_success, timeout=240)
 
     def app_home_screen(self, app_in_test):
         self.app_home = (By.XPATH, "//ol//li[contains(.,'" + app_in_test + "')]")
@@ -138,28 +138,28 @@ class HomePage(BasePage):
     @timer
     def all_contacts_menu_load(self, application_name, username):
         self.js_click(self.all_contacts_menu)
-        assert self.is_visible_and_displayed(self.case_list_table)
+        assert self.is_visible_and_displayed(self.case_list_table, timeout=240)
 
     def search_contact_in_test(self, application_name, username):
         self.wait_to_clear_and_send_keys(self.search_case_list, UserData.pre_configured_contact)
         self.wait_to_click(self.search_button)
         time.sleep(20)
-        assert self.is_visible_and_displayed(self.preconfig_contact)
+        assert self.is_visible_and_displayed(self.preconfig_contact, timeout=240)
 
     @timer
     def open_contact_detail(self, application_name, username):
         self.wait_to_click(self.preconfig_contact)
-        assert self.is_visible_and_displayed(self.case_detail_modal)
+        assert self.is_visible_and_displayed(self.case_detail_modal, timeout=240)
 
     @timer
     def contact_menu_display(self, application_name, username):
         self.wait_to_click(self.continue_button)
-        assert self.is_visible_and_displayed(self.menu_list)
+        assert self.is_visible_and_displayed(self.menu_list, timeout=240)
 
     @timer
     def open_contact_monitoring_form(self, application_name, username):
         self.wait_to_click(self.cm_form)
-        assert self.is_visible_and_displayed(self.form_content)
+        assert self.is_visible_and_displayed(self.form_content, timeout=240)
 
     @timer
     def cm_form_answer_question(self, application_name, username):
@@ -167,12 +167,12 @@ class HomePage(BasePage):
         self.driver.execute_script("window.scrollBy(0,-80)")
         self.wait_to_click(self.name_of_school_dropdown)
         self.wait_to_click(self.name_of_school_answer)
-        assert self.is_visible_and_displayed(self.school_selected_displayed)
+        assert self.is_visible_and_displayed(self.school_selected_displayed, timeout=240)
 
     @timer
     def cm_form_submission(self, application_name, username):
         self.js_click(self.submit_form)
-        assert self.is_visible_and_displayed(self.form_submission_success)
+        assert self.is_visible_and_displayed(self.form_submission_success, timeout=240)
 
     def back_to_webapps_home(self):
         self.wait_to_click(self.webapps_home)

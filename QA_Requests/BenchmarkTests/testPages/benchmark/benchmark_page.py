@@ -4,14 +4,14 @@ from selenium.webdriver.common.by import By
 import time
 import pandas as pd
 
-from QA_Requests.BenchmarkTests.testPages.base.base_page import BasePage
+from common_utilities.selenium.base_page import BasePage
 from QA_Requests.BenchmarkTests.userInputs.test_data import TestData
-from QA_Requests.BenchmarkTests.userInputs.user_inputs import UserData
+from common_utilities.path_settings import PathSettings
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.common.exceptions import TimeoutException
 
 def latest_download_file():
-    os.chdir(UserData.DOWNLOAD_PATH)
+    os.chdir(PathSettings.DOWNLOAD_PATH)
     files = sorted(os.listdir(os.getcwd()), key=os.path.getmtime)
     newest = max(files, key=os.path.getctime)
     print("File downloaded: " + newest)

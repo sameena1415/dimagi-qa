@@ -1,8 +1,8 @@
 import time
 
-from HQSmokeTests.testPages.base.base_page import BasePage
-from HQSmokeTests.userInputs.generate_random_string import fetch_random_string
-from HQSmokeTests.userInputs.user_inputs import UserData
+from common_utilities.selenium.base_page import BasePage
+from common_utilities.path_settings import PathSettings
+from common_utilities.generate_random_string import fetch_random_string
 from HQSmokeTests.testPages.users.org_structure_page import latest_download_file
 
 from selenium.common.exceptions import NoSuchElementException, StaleElementReferenceException, TimeoutException, \
@@ -188,7 +188,7 @@ class MessagingPage(BasePage):
 
     def cond_alert_upload(self):
         newest_file = latest_download_file()
-        file_that_was_downloaded = UserData.DOWNLOAD_PATH / newest_file
+        file_that_was_downloaded = PathSettings.DOWNLOAD_PATH / newest_file
         self.send_keys(self.choose_file, str(file_that_was_downloaded))
         self.wait_to_click(self.upload)
         assert self.is_visible_and_displayed(self.upload_success_message), "Conditional Alert upload not completed!"
@@ -344,7 +344,7 @@ class MessagingPage(BasePage):
 
     def msg_trans_upload(self):
         newest_file = latest_download_file()
-        file_that_was_downloaded = UserData.DOWNLOAD_PATH / newest_file
+        file_that_was_downloaded = PathSettings.DOWNLOAD_PATH / newest_file
         self.send_keys(self.choose_file, str(file_that_was_downloaded))
         self.js_click(self.upload)
         assert self.is_visible_and_displayed(self.upload_success_message), "Msg Trans not uploaded successfully"

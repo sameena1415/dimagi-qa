@@ -3,13 +3,13 @@ import time
 
 import pandas as pd
 
-from HQSmokeTests.testPages.base.base_page import BasePage
-from HQSmokeTests.userInputs.generate_random_string import fetch_random_string, fetch_phone_number
+from common_utilities.selenium.base_page import BasePage
+from common_utilities.path_settings import PathSettings
+from common_utilities.generate_random_string import fetch_random_string, fetch_phone_number
 from HQSmokeTests.userInputs.user_inputs import UserData
 from HQSmokeTests.testPages.users.org_structure_page import latest_download_file
 from selenium.common.exceptions import TimeoutException, NoSuchElementException, StaleElementReferenceException
 from selenium.webdriver.common.by import By
-from HQSmokeTests.testPages.users.group_page import GroupPage
 
 """"Contains test page elements and functions related to the User's Mobile Workers module"""
 
@@ -205,7 +205,7 @@ class MobileWorkerPage(BasePage):
         print("Mobile Worker Created")
 
     def check_for_group_in_downloaded_file(self, newest_file, group_id_value):
-        path = os.path.join(UserData.DOWNLOAD_PATH, newest_file)
+        path = os.path.join(PathSettings.DOWNLOAD_PATH, newest_file)
         print(path)
         time.sleep(5)
         data = pd.read_excel(path, sheet_name='groups')
@@ -363,7 +363,7 @@ class MobileWorkerPage(BasePage):
         try:
             self.click(self.bulk_upload_btn)
             newest_file = latest_download_file()
-            file_that_was_downloaded = UserData.DOWNLOAD_PATH / newest_file
+            file_that_was_downloaded = PathSettings.DOWNLOAD_PATH / newest_file
             time.sleep(5)
             self.send_keys(self.choose_file, str(file_that_was_downloaded))
             self.wait_and_sleep_to_click(self.upload)

@@ -3,7 +3,7 @@ import time
 import pytest
 
 from PerformanceTests.NY_CICT_App_Sprint.WorkflowActions.workflows.excel_actions import write_to_excel
-from PerformanceTests.NY_CICT_App_Sprint.WorkflowActions.base.decorators import first_dump_filename
+from common_utilities.decorators import first_dump_filename
 from PerformanceTests.NY_CICT_App_Sprint.WorkflowActions.workflows.hq_actions import HomePage
 from PerformanceTests.NY_CICT_App_Sprint.UserInputs.user_inputs import UserData
 

@@ -1,4 +1,4 @@
-from QA_Requests.BenchmarkTests.testPages.home.home_page import HomePage
+from HQSmokeTests.testPages.home.home_page import HomePage
 from QA_Requests.BenchmarkTests.testPages.benchmark.benchmark_page import BenchmarkPage
 from QA_Requests.BenchmarkTests.userInputs.test_data import TestData
 

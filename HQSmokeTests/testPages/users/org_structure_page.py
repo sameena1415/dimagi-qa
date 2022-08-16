@@ -1,11 +1,10 @@
-import glob
 import os
 import time
 from datetime import date
 
-from HQSmokeTests.testPages.base.base_page import BasePage
-from HQSmokeTests.userInputs.generate_random_string import fetch_random_string
-from HQSmokeTests.userInputs.user_inputs import UserData
+from common_utilities.selenium.base_page import BasePage
+from common_utilities.path_settings import PathSettings
+from common_utilities.generate_random_string import fetch_random_string
 from selenium.common.exceptions import TimeoutException, StaleElementReferenceException
 from selenium.webdriver.common.by import By
 
@@ -15,7 +14,7 @@ from selenium.webdriver.common.by import By
 def latest_download_file(type=".xlsx"):
     cwd = os.getcwd()
     try:
-        os.chdir(UserData.DOWNLOAD_PATH)
+        os.chdir(PathSettings.DOWNLOAD_PATH)
         all_specific_files = filter(lambda x: x.endswith(type), os.listdir(os.getcwd()))
         files = sorted(all_specific_files, key=os.path.getctime)
         print(files)
@@ -176,7 +175,7 @@ class OrganisationStructurePage(BasePage):
         self.click(self.org_menu_link_text)
         self.click(self.upload_loc_btn)
         newest_file = latest_download_file()
-        file_that_was_downloaded = UserData.DOWNLOAD_PATH / newest_file
+        file_that_was_downloaded = PathSettings.DOWNLOAD_PATH / newest_file
         self.send_keys(self.bulk_upload_id, str(file_that_was_downloaded))
         time.sleep(2)
         self.wait_to_click(self.upload)

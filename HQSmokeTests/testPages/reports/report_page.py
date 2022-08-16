@@ -1,8 +1,8 @@
 import time
 from datetime import datetime
 
-from HQSmokeTests.testPages.base.base_page import BasePage
-from HQSmokeTests.userInputs.generate_random_string import fetch_random_string
+from common_utilities.selenium.base_page import BasePage
+from common_utilities.generate_random_string import fetch_random_string
 from HQSmokeTests.userInputs.user_inputs import UserData
 
 from selenium.common.exceptions import NoSuchElementException, TimeoutException

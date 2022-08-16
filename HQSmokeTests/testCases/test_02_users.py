@@ -1,13 +1,10 @@
 import pytest
 
-from HQSmokeTests.userInputs.generate_random_string import fetch_random_string
-# from HQSmokeTests.testPages.base.login_page import LoginPage
+from common_utilities.generate_random_string import fetch_random_string
 from HQSmokeTests.testPages.home.home_page import HomePage
 from HQSmokeTests.testPages.users.mobile_workers_page import MobileWorkerPage
 from HQSmokeTests.testPages.users.group_page import GroupPage
 from HQSmokeTests.testPages.users.web_user_page import WebUsersPage
-
-# from HQSmokeTests.userInputs.user_inputs import UserData
 
 
 """"Contains test cases related to the User's Mobile Worker module"""

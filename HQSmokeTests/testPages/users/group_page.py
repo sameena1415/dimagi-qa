@@ -1,7 +1,7 @@
 import time
 
-from HQSmokeTests.testPages.base.base_page import BasePage
-from HQSmokeTests.userInputs.generate_random_string import fetch_random_string
+from common_utilities.selenium.base_page import BasePage
+from common_utilities.generate_random_string import fetch_random_string
 
 from selenium.webdriver.common.by import By
 

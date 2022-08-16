@@ -1,10 +1,10 @@
 from RequestAPI.testMethods.base import Base
-from RequestAPI.userInputs.user_inputs import UserData
+from common_utilities.path_settings import PathSettings
 
 
 class FixturesMethods(Base):
     def __init__(self, settings):
-        self.filepath = UserData.ROOT+"/RequestAPI/Payloads/"
+        self.filepath = PathSettings.ROOT+"/RequestAPI/Payloads/"
         self.password = settings["password"]
         self.headers={'Content-Type':'application/json',
                       'Authorization': 'ApiKey '+settings['login_user']+':'+settings['api_key']}

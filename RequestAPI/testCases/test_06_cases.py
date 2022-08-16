@@ -1,5 +1,3 @@
-import pytest
-
 from RequestAPI.testMethods.cases_methods import CasesMethods
 from RequestAPI.userInputs.user_inputs import UserData
 

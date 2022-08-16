@@ -3,7 +3,7 @@ import time
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.by import By
 
-from HQSmokeTests.testPages.base.base_page import BasePage
+from common_utilities.selenium.base_page import BasePage
 
 """"Contains test page elements and functions related to the app preview"""
 
