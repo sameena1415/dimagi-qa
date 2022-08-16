@@ -5,7 +5,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 
 from HQSmokeTests.testPages.base.base_page import BasePage
-from utilities.decorators import timer
+from common_utilities.decorators.decorators import timer
 
 
 class AppCreationPage(BasePage):
