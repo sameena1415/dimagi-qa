@@ -6,8 +6,8 @@ from HQSmokeTests.testPages.messaging.messaging_page import MessagingPage
 """"Contains test cases related to the Messaging module"""
 
 
-@pytest.mark.smoke
 @pytest.mark.messaging
+@pytest.mark.messagingDashboard
 def test_case_41_dashboard(driver):
     menu = HomePage(driver)
     msg = MessagingPage(driver)
@@ -15,8 +15,8 @@ def test_case_41_dashboard(driver):
     msg.open_dashboard_page()
 
 
-@pytest.mark.smoke
 @pytest.mark.messaging
+@pytest.mark.composeSMS
 def test_case_42_compose_sms(driver):
     menu = HomePage(driver)
     msg = MessagingPage(driver)
@@ -24,8 +24,8 @@ def test_case_42_compose_sms(driver):
     msg.compose_sms()
 
 
-@pytest.mark.smoke
 @pytest.mark.messaging
+@pytest.mark.broadcasts
 def test_case_43_broadcast(driver):
     menu = HomePage(driver)
     msg = MessagingPage(driver)
@@ -33,8 +33,9 @@ def test_case_43_broadcast(driver):
     msg.send_broadcast_message()
 
 
-@pytest.mark.smoke
+
 @pytest.mark.messaging
+@pytest.mark.conditionalAlerts
 def test_case_44_create_cond_alert(driver):
     menu = HomePage(driver)
     msg = MessagingPage(driver)
@@ -43,8 +44,10 @@ def test_case_44_create_cond_alert(driver):
     msg.remove_cond_alert()
 
 
-@pytest.mark.smoke
+
 @pytest.mark.messaging
+@pytest.mark.conditionalAlerts
+@pytest.mark.bulkUploadSMS
 def test_case_45_cond_alert_bulk_upload(driver):
     menu = HomePage(driver)
     msg = MessagingPage(driver)
@@ -53,8 +56,9 @@ def test_case_45_cond_alert_bulk_upload(driver):
     msg.cond_alert_upload()
 
 
-@pytest.mark.smoke
+
 @pytest.mark.messaging
+@pytest.mark.keywords
 def test_case_46_keyword_creation(driver):
     menu = HomePage(driver)
     msg = MessagingPage(driver)
@@ -65,8 +69,8 @@ def test_case_46_keyword_creation(driver):
     msg.remove_structured_keyword()
 
 
-@pytest.mark.smoke
 @pytest.mark.messaging
+@pytest.mark.chat
 def test_case_47_chats(driver):
     menu = HomePage(driver)
     msg = MessagingPage(driver)
@@ -74,8 +78,9 @@ def test_case_47_chats(driver):
     msg.chat_page()
 
 
-@pytest.mark.smoke
+
 @pytest.mark.messaging
+@pytest.mark.messagingGeneralSettings
 def test_case_49_general_settings(driver):
     menu = HomePage(driver)
     msg = MessagingPage(driver)
@@ -83,8 +88,9 @@ def test_case_49_general_settings(driver):
     msg.general_settings_page()
 
 
-@pytest.mark.smoke
+
 @pytest.mark.messaging
+@pytest.mark.messagingLanguages
 def test_case_50_languages(driver):
     menu = HomePage(driver)
     msg = MessagingPage(driver)
@@ -92,8 +98,9 @@ def test_case_50_languages(driver):
     msg.languages_page()
 
 
-@pytest.mark.smoke
 @pytest.mark.messaging
+@pytest.mark.messagingLanguages
+@pytest.mark.messagingTranslations
 def test_case_51_translations(driver):
     menu = HomePage(driver)
     msg = MessagingPage(driver)
@@ -102,8 +109,8 @@ def test_case_51_translations(driver):
     msg.msg_trans_upload()
 
 
-@pytest.mark.smoke
-@pytest.mark.messaging
+@pytest.mark.projectSettings
+@pytest.mark.currentSubscription
 def test_case_52_settings_pages(driver):
     msg = MessagingPage(driver)
     msg.project_settings_page()

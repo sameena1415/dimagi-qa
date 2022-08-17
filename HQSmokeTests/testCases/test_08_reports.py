@@ -7,8 +7,11 @@ from HQSmokeTests.testPages.webapps.web_apps_page import WebAppsPage
 """"Contains test cases related to the Data module"""
 
 
-@pytest.mark.smoke
-@pytest.mark.reports
+@pytest.mark.report
+@pytest.mark.reportMonitorWorkers
+@pytest.mark.reportInspectData
+@pytest.mark.reportManageDeployments
+@pytest.mark.reportMessaging
 def test_case_14_report_loading(driver):
     report = HomePage(driver)
     report.reports_menu()
@@ -30,8 +33,12 @@ def test_case_14_report_loading(driver):
     load.scheduled_messaging_report()
 
 
-@pytest.mark.smoke
-@pytest.mark.reports
+@pytest.mark.webApps
+@pytest.mark.report
+@pytest.mark.reportSubmitHistory
+@pytest.mark.reportFormData
+@pytest.mark.reportCaseList
+@pytest.mark.reportCaseData
 def test_case_15_16_submit_form_verify_formdata_casedata(driver):
     home = HomePage(driver)
     driver.refresh()
@@ -45,8 +52,10 @@ def test_case_15_16_submit_form_verify_formdata_casedata(driver):
     load.verify_form_data_case_list(case_name)
 
 
-@pytest.mark.smoke
-@pytest.mark.reports
+
+@pytest.mark.report
+@pytest.mark.reportBuilderForm
+@pytest.mark.reportBuilderCase
 def test_case_17_create_form_report(driver):
     report = HomePage(driver)
     driver.refresh()
@@ -55,8 +64,9 @@ def test_case_17_create_form_report(driver):
     load.create_report_builder_form_report()
 
 
-@pytest.mark.smoke
-@pytest.mark.reports
+
+@pytest.mark.report
+@pytest.mark.reportBuilder
 def test_case_18_create_case_report(driver):
     report = HomePage(driver)
     report.reports_menu()
@@ -64,8 +74,9 @@ def test_case_18_create_case_report(driver):
     load.create_report_builder_case_report()
 
 
-@pytest.mark.smoke
-@pytest.mark.reports
+
+@pytest.mark.report
+@pytest.mark.savedReport
 def test_case_19_saved_report(driver):
     report = HomePage(driver)
     report.reports_menu()
@@ -73,8 +84,9 @@ def test_case_19_saved_report(driver):
     load.saved_report()
 
 
-@pytest.mark.smoke
-@pytest.mark.reports
+
+@pytest.mark.report
+@pytest.mark.scheduledReport
 def test_case_20_scheduled_report(driver):
     report = HomePage(driver)
     report.reports_menu()

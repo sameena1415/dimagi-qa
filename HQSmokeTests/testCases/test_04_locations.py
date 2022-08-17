@@ -6,8 +6,8 @@ from HQSmokeTests.testPages.users.org_structure_page import OrganisationStructur
 """"Contains test cases related to the User's Locations module"""
 
 
-@pytest.mark.smoke
-@pytest.mark.location
+@pytest.mark.user
+@pytest.mark.organisationStructure
 def test_case_07_create_location(driver):
     menu = HomePage(driver)
     menu.users_menu()
@@ -18,8 +18,9 @@ def test_case_07_create_location(driver):
     print("Location created")
 
 
-@pytest.mark.smoke
-@pytest.mark.location
+
+@pytest.mark.user
+@pytest.mark.organisationStructure
 def test_case_07_edit_existing_location(driver):
     menu = HomePage(driver)
     menu.users_menu()
@@ -28,8 +29,8 @@ def test_case_07_edit_existing_location(driver):
     print("Location edited")
 
 
-@pytest.mark.smoke
-@pytest.mark.location
+@pytest.mark.user
+@pytest.mark.organisationStructure
 def test_case_56_archive_unarchive_location(driver):
     menu = HomePage(driver)
     menu.users_menu()
@@ -40,8 +41,9 @@ def test_case_56_archive_unarchive_location(driver):
     print("Location successfully Unarchived")
 
 
-@pytest.mark.smoke
-@pytest.mark.location
+
+@pytest.mark.user
+@pytest.mark.organisationStructure
 def test_case_08_edit_location_fields(driver):
     menu = HomePage(driver)
     menu.users_menu()
@@ -52,8 +54,8 @@ def test_case_08_edit_location_fields(driver):
     print("Selected location field created, for the location")
 
 
-@pytest.mark.smoke
-@pytest.mark.location
+@pytest.mark.user
+@pytest.mark.organisationLevel
 def test_case_09_creation_organization_level(driver, settings):
     menu = HomePage(driver)
     menu.users_menu()
@@ -61,8 +63,10 @@ def test_case_09_creation_organization_level(driver, settings):
     org.create_org_level()
 
 
-@pytest.mark.smoke
-@pytest.mark.location
+@pytest.mark.user
+@pytest.mark.organisationLevel
+@pytest.mark.organisationImport
+@pytest.mark.organisationExport
 def test_case_11_download_and_upload_locations(driver):
     menu = HomePage(driver)
     menu.users_menu()
@@ -71,8 +75,8 @@ def test_case_11_download_and_upload_locations(driver):
     org.upload_locations()
 
 
-@pytest.mark.smoke
-@pytest.mark.location
+@pytest.mark.user
+@pytest.mark.organisationStructure
 def test_cleanup_items_in_locations_menu(driver, settings):
     menu = HomePage(driver)
     menu.users_menu()
