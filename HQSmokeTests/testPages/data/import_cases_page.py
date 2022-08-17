@@ -5,7 +5,6 @@ from selenium.webdriver.common.by import By
 
 from common_utilities.selenium.base_page import BasePage
 from common_utilities.generate_random_string import fetch_random_string
-from common_utilities.path_settings import PathSettings
 from HQSmokeTests.userInputs.user_inputs import UserData
 
 """"Contains test page elements and functions related to the Import Cases from Excel module"""
@@ -25,8 +24,8 @@ class ImportCasesPage(BasePage):
         self.file_new_name = "reassign_cases_" + str(fetch_random_string()) + ".xlsx"
 
         self.village_name_cell = "C2"
-        self.to_be_edited_file = os.path.abspath(os.path.join(PathSettings.BASE_DIR, "test_data/reassign_cases.xlsx"))
-        self.renamed_file = os.path.abspath(os.path.join(PathSettings.BASE_DIR, "test_data/" + self.file_new_name))
+        self.to_be_edited_file = os.path.abspath(os.path.join(UserData.USER_INPUT_BASE_DIR, "test_data/reassign_cases.xlsx"))
+        self.renamed_file = os.path.abspath(os.path.join(UserData.USER_INPUT_BASE_DIR, "test_data/" + self.file_new_name))
 
         self.import_cases_menu = (By.LINK_TEXT, "Import Cases from Excel")
         self.download_file = (By.XPATH, "(//span[@data-bind='text: upload_file_name'])[1]")

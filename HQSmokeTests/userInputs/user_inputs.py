@@ -1,8 +1,10 @@
 """"Contains test data that are used as user inputs across various areasn in CCHQ"""
+import os
 
 
 class UserData:
     """User Test Data"""
+    USER_INPUT_BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
     # Pre-setup application and case names
     village_application = "Village Health"
