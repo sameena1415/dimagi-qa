@@ -11,7 +11,6 @@ from HQSmokeTests.testPages.users.webapps_permission_page import WebAppPermissio
 @pytest.mark.groups
 @pytest.mark.rolesPermission
 def test_case_06_add_role(driver):
-
     menu = HomePage(driver)
     menu.users_menu()
     role = RolesPermissionPage(driver)
@@ -26,7 +25,6 @@ def test_case_06_add_role(driver):
 @pytest.mark.groups
 @pytest.mark.rolesPermission
 def test_case_06_edit_role(driver):
-
     menu = HomePage(driver)
     menu.users_menu()
     role = RolesPermissionPage(driver)
@@ -40,7 +38,6 @@ def test_case_06_edit_role(driver):
 @pytest.mark.webUsers
 @pytest.mark.rolesPermission
 def test_case_12_toggle_option_webapp_permission(driver):
-
     menu = HomePage(driver)
     menu.users_menu()
     role = RolesPermissionPage(driver)
@@ -52,7 +49,6 @@ def test_case_12_toggle_option_webapp_permission(driver):
 @pytest.mark.user
 @pytest.mark.role
 def test_cleanup_items_in_role_menu(driver):
-
     menu = HomePage(driver)
     menu.users_menu()
     clean3 = RolesPermissionPage(driver)

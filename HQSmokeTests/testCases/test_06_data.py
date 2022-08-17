@@ -16,7 +16,6 @@ from HQSmokeTests.testPages.data.lookup_table_page import LookUpTablePage
 @pytest.mark.data
 @pytest.mark.importCases
 def test_case_29_import_cases(driver):
-
     export = ExportDataPage(driver)
     imp = ImportCasesPage(driver)
     export.data_tab()
@@ -26,7 +25,6 @@ def test_case_29_import_cases(driver):
 @pytest.mark.data
 @pytest.mark.reassignCases
 def test_case_30_reassign_cases(driver, settings):
-
     export = ExportDataPage(driver)
     reassign = ReassignCasesPage(driver, settings)
     export.data_tab()
@@ -34,12 +32,12 @@ def test_case_30_reassign_cases(driver, settings):
     reassign.reassign_case()
 
 
+
 @pytest.mark.data
 @pytest.mark.manageForms
 @pytest.mark.archiveForms
 @pytest.mark.restoreForms
 def test_case_31_manage_forms(driver):
-
     export = ExportDataPage(driver)
     manage = ManageFormsPage(driver)
     export.data_tab()
@@ -51,10 +49,10 @@ def test_case_31_manage_forms(driver):
     manage.restore_forms()
 
 
+
 @pytest.mark.data
 @pytest.mark.automaticallyUpdateCase
 def test_case_32_auto_case_update(driver):
-
     export = ExportDataPage(driver)
     export.data_tab()
     data = AutoCaseUpdatePage(driver)
@@ -67,7 +65,6 @@ def test_case_32_auto_case_update(driver):
 @pytest.mark.lookupTable
 @pytest.mark.manageTables
 def test_case_33_create_lookup_table(driver):
-
     data = LookUpTablePage(driver)
     export = ExportDataPage(driver)
     export.data_tab()
@@ -78,7 +75,6 @@ def test_case_33_create_lookup_table(driver):
 @pytest.mark.lookupTable
 @pytest.mark.viewTables
 def test_case_34_view_lookup_table(driver):
-
     data = LookUpTablePage(driver)
     export = ExportDataPage(driver)
     export.data_tab()
@@ -89,7 +85,6 @@ def test_case_34_view_lookup_table(driver):
 @pytest.mark.data
 @pytest.mark.deduplicateCases
 def test_case_58_deduplicate_cases(driver):
-
     export = ExportDataPage(driver)
     export.data_tab()
     data = DeduplicateCasePage(driver)
@@ -98,12 +93,12 @@ def test_case_58_deduplicate_cases(driver):
     data.remove_rule()
 
 
+
 @pytest.mark.data
 @pytest.mark.dataDictionary
 @pytest.mark.downloadDataDictionary
 @pytest.mark.uploadDataDictionary
 def test_case_59_data_dictionary(driver):
-
     export = ExportDataPage(driver)
     export.data_tab()
     data = DataDictionaryPage(driver)

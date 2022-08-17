@@ -8,8 +8,8 @@ from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
 from webdriver_manager.firefox import GeckoDriverManager
 
-from HQSmokeTests.userInputs.user_inputs import UserData
-from HQSmokeTests.testPages.base.login_page import LoginPage
+from common_utilities.path_settings import PathSettings
+from common_utilities.hq_login.login_page import LoginPage
 
 """"This file provides fixture functions for driver initialization"""
 
@@ -97,7 +97,7 @@ def driver(settings, browser):
             chrome_options.add_argument('--headless')
             chrome_options.add_argument("--disable-notifications")
             chrome_options.add_experimental_option("prefs", {
-                "download.default_directory": str(UserData.DOWNLOAD_PATH),
+                "download.default_directory": str(PathSettings.DOWNLOAD_PATH),
                 "download.prompt_for_download": False,
                 "download.directory_upgrade": True,
                 "safebrowsing.enabled": True})
@@ -113,7 +113,7 @@ def driver(settings, browser):
             firefox_options.add_argument('--disable-dev-shm-usage')
             firefox_options.add_argument('--headless')
             firefox_options.add_argument("--disable-notifications")
-            firefox_options.set_preference("browser.download.dir", str(UserData.DOWNLOAD_PATH))
+            firefox_options.set_preference("browser.download.dir", str(PathSettings.DOWNLOAD_PATH))
     if browser == "chrome":
         web_driver = webdriver.Chrome(executable_path=ChromeDriverManager().install(), options=chrome_options)
         print("Chrome version:", web_driver.capabilities['browserVersion'])

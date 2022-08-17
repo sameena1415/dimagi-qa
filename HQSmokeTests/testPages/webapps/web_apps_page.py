@@ -5,8 +5,8 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.common.by import By
 
-from HQSmokeTests.testPages.base.base_page import BasePage
-from HQSmokeTests.userInputs.generate_random_string import fetch_random_string, fetch_random_digit
+from common_utilities.selenium.base_page import BasePage
+from common_utilities.generate_random_string import fetch_random_string, fetch_random_digit
 from HQSmokeTests.userInputs.user_inputs import UserData
 
 

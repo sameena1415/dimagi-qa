@@ -9,7 +9,6 @@ from HQSmokeTests.testPages.users.org_structure_page import OrganisationStructur
 @pytest.mark.user
 @pytest.mark.organisationStructure
 def test_case_07_create_location(driver):
-
     menu = HomePage(driver)
     menu.users_menu()
     create = OrganisationStructurePage(driver)
@@ -23,7 +22,6 @@ def test_case_07_create_location(driver):
 @pytest.mark.user
 @pytest.mark.organisationStructure
 def test_case_07_edit_existing_location(driver):
-
     menu = HomePage(driver)
     menu.users_menu()
     edit = OrganisationStructurePage(driver)
@@ -34,7 +32,6 @@ def test_case_07_edit_existing_location(driver):
 @pytest.mark.user
 @pytest.mark.organisationStructure
 def test_case_56_archive_unarchive_location(driver):
-
     menu = HomePage(driver)
     menu.users_menu()
     location = OrganisationStructurePage(driver)
@@ -48,7 +45,6 @@ def test_case_56_archive_unarchive_location(driver):
 @pytest.mark.user
 @pytest.mark.organisationStructure
 def test_case_08_edit_location_fields(driver):
-
     menu = HomePage(driver)
     menu.users_menu()
     edit = OrganisationStructurePage(driver)
@@ -72,7 +68,6 @@ def test_case_09_creation_organization_level(driver, settings):
 @pytest.mark.organisationImport
 @pytest.mark.organisationExport
 def test_case_11_download_and_upload_locations(driver):
-
     menu = HomePage(driver)
     menu.users_menu()
     org = OrganisationStructurePage(driver)

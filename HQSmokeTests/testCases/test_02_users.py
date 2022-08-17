@@ -1,18 +1,15 @@
 import pytest
 
-from HQSmokeTests.userInputs.generate_random_string import fetch_random_string
-# from HQSmokeTests.testPages.base.login_page import LoginPage
+from common_utilities.generate_random_string import fetch_random_string
 from HQSmokeTests.testPages.home.home_page import HomePage
 from HQSmokeTests.testPages.users.mobile_workers_page import MobileWorkerPage
 from HQSmokeTests.testPages.users.group_page import GroupPage
 from HQSmokeTests.testPages.users.web_user_page import WebUsersPage
 
-# from HQSmokeTests.userInputs.user_inputs import UserData
-
-
 """"Contains test cases related to the User's Mobile Worker module"""
 
 group_id = dict()
+
 
 
 @pytest.mark.user
@@ -38,6 +35,7 @@ def test_case_03_create_and_assign_user_field(driver):
     create.update_information()
 
 
+
 @pytest.mark.user
 @pytest.mark.groups
 def test_case_05_create_group_and_assign_user(driver):
@@ -49,6 +47,7 @@ def test_case_05_create_group_and_assign_user(driver):
     print(id_value)
     group_id["value"] = id_value
     return group_id
+
 
 
 @pytest.mark.user
@@ -93,7 +92,7 @@ def test_case_04_reactivate_user(driver):
     user.verify_reactivation_via_login()
 
 
-@pytest.mark.users
+@pytest.mark.user
 @pytest.mark.groups
 @pytest.mark.user_profiles
 @pytest.mark.user_fields
@@ -154,7 +153,7 @@ def test_case_54_add_custom_user_data_profile_to_mobile_worker(driver):
     create.save_field()
 
 
-@pytest.mark.users
+@pytest.mark.user
 @pytest.mark.webUser
 @pytest.mark.userInvitation
 def test_case_13_new_webuser_invitation(driver, settings):
@@ -169,7 +168,7 @@ def test_case_13_new_webuser_invitation(driver, settings):
     webuser.delete_invite()
 
 
-@pytest.mark.users
+@pytest.mark.user
 @pytest.mark.webUsers
 @pytest.mark.downloadUsers
 @pytest.mark.uploadUsers

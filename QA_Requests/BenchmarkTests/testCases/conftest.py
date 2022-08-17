@@ -3,11 +3,10 @@ from configparser import ConfigParser
 from pathlib import Path
 
 import pytest
-from QA_Requests.BenchmarkTests.userInputs.user_inputs import UserData
-from QA_Requests.BenchmarkTests.testPages.base.login_page import LoginPage
+from common_utilities.path_settings import PathSettings
+from common_utilities.hq_login.login_page import LoginPage
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
-# from HQSmokeTests.utilities.email_pytest_report import Email_Pytest_Report
 
 
 global driver
@@ -80,7 +79,7 @@ def driver(settings):
         chrome_options.add_argument('--headless')
         chrome_options.add_argument("--disable-notifications")
         chrome_options.add_experimental_option("prefs", {
-            "download.default_directory": str(UserData.DOWNLOAD_PATH),
+            "download.default_directory": str(PathSettings.DOWNLOAD_PATH),
             "download.prompt_for_download": False,
             "download.directory_upgrade": True,
             "safebrowsing.enabled": True})
@@ -95,7 +94,7 @@ def driver(settings):
         # chrome_options.add_argument('--headless')
         # chrome_options.set_capability("browserVersion", "94.0.4606")
         chrome_options.add_experimental_option("prefs", {
-            "download.default_directory": str(UserData.DOWNLOAD_PATH),
+            "download.default_directory": str(PathSettings.DOWNLOAD_PATH),
             "download.prompt_for_download": False,
             "safebrowsing.enabled": True})
 

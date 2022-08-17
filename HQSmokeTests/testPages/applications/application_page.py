@@ -3,9 +3,10 @@ import time
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.by import By
 
-from HQSmokeTests.testPages.base.base_page import BasePage
-from HQSmokeTests.userInputs.generate_random_string import fetch_random_string
+from common_utilities.selenium.base_page import BasePage
+from common_utilities.generate_random_string import fetch_random_string
 from HQSmokeTests.userInputs.user_inputs import UserData
+from common_utilities.path_settings import PathSettings
 from HQSmokeTests.testPages.users.org_structure_page import latest_download_file
 
 """"Contains test page elements and functions related to the applications on Commcare"""
@@ -145,7 +146,7 @@ class ApplicationPage(BasePage):
         self.wait_and_sleep_to_click(self.actions_tab)
         self.wait_and_sleep_to_click(self.upload_xml)
         newest_file = latest_download_file(".xml")
-        file_that_was_downloaded = UserData.DOWNLOAD_PATH / newest_file
+        file_that_was_downloaded = PathSettings.DOWNLOAD_PATH / newest_file
         self.send_keys(self.choose_file, str(file_that_was_downloaded))
         time.sleep(1)
         self.click(self.upload)

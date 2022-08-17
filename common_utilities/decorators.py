@@ -3,17 +3,16 @@ import functools
 import os
 import time
 
-from PerformanceTests.NY_CICT_App_Sprint.UserInputs.user_inputs import UserData
+from common_utilities.path_settings import PathSettings
 
 header_workflow = 'workflow'
 header_load_time = 'load_time'
 header_username = 'username'
 header_app = 'application'
-first_dump_filename = os.path.abspath(os.path.join(UserData.BASE_DIR, "NY_reading.csv"))
+first_dump_filename = os.path.abspath(os.path.join(PathSettings.BASE_DIR, "NY_reading.csv"))
 
 
 def timer(func):
-
     """This function captures the execution time of the function object passed and writes the readings to a csv"""
 
     @functools.wraps(func)
@@ -36,8 +35,11 @@ def timer(func):
             writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
             if not file_exists:
                 writer.writeheader()
-            writer.writerow({header_workflow: func.__name__, header_load_time: run_time,
-                             header_username: kwargs["username"],  header_app: kwargs["application_name"]})
+            try:
+                writer.writerow({header_workflow: func.__name__, header_load_time: run_time,
+                                 header_username: kwargs["username"], header_app: kwargs["application_name"]})
+            except:
+                writer.writerow({header_workflow: func.__name__, header_load_time: run_time})
 
         return result
 

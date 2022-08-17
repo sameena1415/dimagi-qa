@@ -1,9 +1,8 @@
 import time
 
-from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.by import By
 
-from HQSmokeTests.testPages.base.base_page import BasePage
+from common_utilities.selenium.base_page import BasePage
 from HQSmokeTests.userInputs.user_inputs import UserData
 
 """"Contains test page elements and functions related to the Manage Forms module"""
@@ -51,7 +50,6 @@ class ManageFormsPage(BasePage):
     def assert_normal_form_view(self):
         self.wait_and_sleep_to_click(self.view_form_link)
         self.switch_to_next_tab()
-        normal_form_data = self.driver.page_source
         verify_data = self.find_elements(self.check_data)
         assert len(verify_data) > 0, "normal_form has no data"
         print("normal_form has data")
@@ -60,7 +58,7 @@ class ManageFormsPage(BasePage):
 
     def view_normal_form(self):
         result = self.is_present_and_displayed(self.view_form_link)
-        if result == False:
+        if not result:
             self.select_by_value(self.select_archive_restore, "restore")
             self.wait_to_click(self.apply_button)
             self.restore_all_forms()
