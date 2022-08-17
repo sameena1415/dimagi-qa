@@ -9,7 +9,7 @@ import pytest
 
 test_case_update_case = dict()
 
-@pytest.mark.smoke
+
 @pytest.mark.webApps
 @pytest.mark.reports
 @pytest.mark.data
@@ -31,7 +31,7 @@ def test_case_55_update_case(driver):
     test_case_update_case["value"] = value
     return test_case_update_case
 
-@pytest.mark.smoke
+
 @pytest.mark.data
 @pytest.mark.excelDashboardIntegrationForm
 def test_case_25_excel_dashboard_integration_form(driver):
@@ -39,7 +39,7 @@ def test_case_25_excel_dashboard_integration_form(driver):
     export.data_tab()
     export.excel_dashboard_integration_form()
 
-@pytest.mark.smoke
+
 @pytest.mark.data
 @pytest.mark.excelDashboardIntegrationCase
 def test_case_26_excel_dashboard_integration_case(driver):
@@ -47,7 +47,7 @@ def test_case_26_excel_dashboard_integration_case(driver):
     export.data_tab()
     export.excel_dashboard_integration_case()
 
-@pytest.mark.smoke
+
 @pytest.mark.data
 @pytest.mark.powerBiTableauIntegrationCase
 def test_case_27_powerbi_tableau_integration_case(driver, settings):
@@ -57,7 +57,7 @@ def test_case_27_powerbi_tableau_integration_case(driver, settings):
     export.data_tab()
     export.power_bi_tableau_integration_case(username, password)
 
-@pytest.mark.smoke
+
 @pytest.mark.data
 @pytest.mark.powerBiTableauIntegrationForm
 def test_case_28_powerbi_tableau_integration_form(driver, settings):
@@ -67,7 +67,7 @@ def test_case_28_powerbi_tableau_integration_form(driver, settings):
     export.data_tab()
     export.power_bi_tableau_integration_form(username, password)
 
-@pytest.mark.smoke
+
 @pytest.mark.data
 @pytest.mark.deleteBulkExports
 def test_exports_cleanup(driver):
@@ -75,7 +75,7 @@ def test_exports_cleanup(driver):
     export.data_tab()
     export.delete_all_bulk_integration_exports()
 
-@pytest.mark.smoke
+
 @pytest.mark.webApps
 @pytest.mark.reports
 @pytest.mark.data

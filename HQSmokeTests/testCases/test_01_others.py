@@ -6,7 +6,6 @@ from HQSmokeTests.userInputs.user_inputs import UserData
 
 """"Contains all test cases that aren't specifically related any menu modules"""
 
-@pytest.mark.smoke
 @pytest.mark.login
 @pytest.mark.dashboard
 @pytest.mark.reports
@@ -15,7 +14,6 @@ from HQSmokeTests.userInputs.user_inputs import UserData
 @pytest.mark.applications
 @pytest.mark.webApps
 @pytest.mark.messaging
-@pytest.mark.admin
 def test_case_01_menu_visibility(driver):
 
     visible = HomePage(driver)
@@ -27,14 +25,13 @@ def test_case_01_menu_visibility(driver):
     visible.messaging_menu()
     visible.web_apps_menu()
 
-@pytest.mark.smoke
 @pytest.mark.misc
 def test_case_53_rage_clicks(driver):
 
     visible = HomePage(driver)
     visible.rage_clicks()
 
-@pytest.mark.smoke
+
 @pytest.mark.twoFactorAuth
 def test_case_two_factor_auth(driver, settings):
 

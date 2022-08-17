@@ -8,7 +8,7 @@ from HQSmokeTests.testPages.reports.report_page import ReportPage
 
 """"Contains test cases related to the Application module"""
 
-@pytest.mark.smoke
+
 @pytest.mark.application
 @pytest.mark.appBuilder
 def test_case_35_create_new_app(driver):
@@ -16,7 +16,7 @@ def test_case_35_create_new_app(driver):
     load = ApplicationPage(driver)
     load.create_new_application()
 
-@pytest.mark.smoke
+
 @pytest.mark.application
 @pytest.mark.appBuilder
 @pytest.mark.appSettings
@@ -25,7 +25,7 @@ def test_case_36_form_builder_explore(driver):
     load = ApplicationPage(driver)
     load.form_builder_exploration()
 
-@pytest.mark.smoke
+
 @pytest.mark.application
 @pytest.mark.appBuilder
 @pytest.mark.appSettings
@@ -37,7 +37,7 @@ def test_case_37_form_xml_download_upload(driver):
     load = ApplicationPage(driver)
     load.form_xml_download_upload()
 
-@pytest.mark.smoke
+
 @pytest.mark.application
 @pytest.mark.appBuilder
 @pytest.mark.appSettings
@@ -47,7 +47,7 @@ def test_case_39_settings_exploration(driver):
     load.app_settings_exploration()
     load.delete_application()
 
-@pytest.mark.smoke
+
 @pytest.mark.application
 @pytest.mark.appPreview
 def test_case_40_app_preview(driver):
@@ -58,7 +58,7 @@ def test_case_40_app_preview(driver):
     load.check_access_to_app_preview()
     load.submit_form_on_app_preview()
 
-@pytest.mark.smoke
+
 @pytest.mark.application
 @pytest.mark.appBuilder
 @pytest.mark.androidTest

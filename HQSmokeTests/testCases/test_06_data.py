@@ -12,7 +12,7 @@ from HQSmokeTests.testPages.data.lookup_table_page import LookUpTablePage
 """"Contains test cases related to the Data module"""
 
 
-@pytest.mark.smoke
+
 @pytest.mark.data
 @pytest.mark.importCases
 def test_case_29_import_cases(driver):
@@ -22,7 +22,7 @@ def test_case_29_import_cases(driver):
     export.data_tab()
     imp.replace_property_and_upload()
 
-@pytest.mark.smoke
+
 @pytest.mark.data
 @pytest.mark.reassignCases
 def test_case_30_reassign_cases(driver, settings):
@@ -33,7 +33,7 @@ def test_case_30_reassign_cases(driver, settings):
     reassign.get_cases()
     reassign.reassign_case()
 
-@pytest.mark.smoke
+
 @pytest.mark.data
 @pytest.mark.manageForms
 @pytest.mark.archiveForms
@@ -50,7 +50,7 @@ def test_case_31_manage_forms(driver):
     manage.view_archived_forms()
     manage.restore_forms()
 
-@pytest.mark.smoke
+
 @pytest.mark.data
 @pytest.mark.automaticallyUpdateCase
 def test_case_32_auto_case_update(driver):
@@ -62,7 +62,7 @@ def test_case_32_auto_case_update(driver):
     data.add_new_rule()
     data.remove_rule()
 
-@pytest.mark.smoke
+
 @pytest.mark.data
 @pytest.mark.lookupTable
 @pytest.mark.manageTables
@@ -73,7 +73,7 @@ def test_case_33_create_lookup_table(driver):
     export.data_tab()
     data.create_lookup_table()
 
-@pytest.mark.smoke
+
 @pytest.mark.data
 @pytest.mark.lookupTable
 @pytest.mark.viewTables
@@ -85,7 +85,7 @@ def test_case_34_view_lookup_table(driver):
     data.view_lookup_table()
     data.delete_lookup_table()
 
-@pytest.mark.smoke
+
 @pytest.mark.data
 @pytest.mark.deduplicateCases
 def test_case_58_deduplicate_cases(driver):
@@ -97,7 +97,7 @@ def test_case_58_deduplicate_cases(driver):
     data.add_new_rule()
     data.remove_rule()
 
-@pytest.mark.smoke
+
 @pytest.mark.data
 @pytest.mark.dataDictionary
 @pytest.mark.downloadDataDictionary
