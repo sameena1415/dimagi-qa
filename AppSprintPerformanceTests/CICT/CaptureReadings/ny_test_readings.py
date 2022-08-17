@@ -2,10 +2,11 @@ import os
 import time
 import pytest
 
-from PerformanceTests.NY_CICT_App_Sprint.WorkflowActions.workflows.excel_actions import write_to_excel
+from AppSprintPerformanceTests.CICT.WorkflowActions.workflows.excel_actions import write_to_excel
+from AppSprintPerformanceTests.CICT.WorkflowActions.workflows.ny_hq_actions import HomePage
 from common_utilities.decorators import first_dump_filename
-from PerformanceTests.NY_CICT_App_Sprint.WorkflowActions.workflows.hq_actions import HomePage
-from PerformanceTests.NY_CICT_App_Sprint.UserInputs.user_inputs import UserData
+
+from AppSprintPerformanceTests.CICT.UserInputs.ny_cict_user_inputs import UserData
 
 """Runs all workflows and captures the readings for the app versions before and after releases for two preconfigured users"""
 

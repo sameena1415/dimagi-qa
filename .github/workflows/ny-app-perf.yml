@@ -57,7 +57,7 @@ jobs:
         subject: FAIL - NY Perf Tests [#${{github.run_number}}] on branch "${{ github.head_ref }}", ${{env.NOW}}
         to: ktripathy@dimagi.com
         from: <qa-no-reply@dimagi.com>
-        html_body: file:////home/runner/work/dimagi-qa/dimagi-qa/NY_CICT_App_Sprint/UserInputs/email_fail.html
+        html_body: file:////home/runner/work/dimagi-qa/dimagi-qa/CICT/UserInputs/email_fail.html
         attachments: /home/runner/work/dimagi-qa/dimagi-qa/NY_final_reading.xlsx, /home/runner/work/dimagi-qa/dimagi-qa/report.html
         priority: normal
 
@@ -72,7 +72,7 @@ jobs:
         subject: PASS - NY Perf Tests [#${{github.run_number}}] on branch "${{ github.head_ref }}", ${{env.NOW}}
         to: ktripathy@dimagi.com
         from: <qa-no-reply@dimagi.com>
-        html_body: file:////home/runner/work/dimagi-qa/dimagi-qa/NY_CICT_App_Sprint/UserInputs/email_pass.html
+        html_body: file:////home/runner/work/dimagi-qa/dimagi-qa/CICT/UserInputs/email_pass.html
         attachments: /home/runner/work/dimagi-qa/dimagi-qa/NY_final_reading.xlsx, /home/runner/work/dimagi-qa/dimagi-qa/report.html
         priority: normal
 
