@@ -18,8 +18,10 @@ def fetch_phone_number():
     max_value = pow(10, N) - 1
     return str(random.randint(min_value, max_value))
 
+
 def fetch_random_digit():
     return str(random_number)
+
 
 def fetch_random_boolean():
     return random.choice([True, False])

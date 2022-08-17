@@ -18,9 +18,9 @@ def post_api_file_upload(URL, data, login_user, login_pass, file, header):
     return response
 
 
-def post_import_cases_from_excel(file_path, case):
+def post_import_cases_from_excel(file_path, case, settings_path):
     config = configparser.ConfigParser()
-    config.read('../settings.cfg')
+    config.read(settings_path)
     login_user = config.get('default', 'login_username')
     login_pass = config.get('default', 'login_password')
     api_key = config.get('default', 'api_key')

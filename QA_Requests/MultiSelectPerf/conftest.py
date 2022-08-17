@@ -2,10 +2,10 @@ from configparser import ConfigParser
 from pathlib import Path
 
 import pytest
-from HQSmokeTests.userInputs.user_inputs import UserData
-from HQSmokeTests.testPages.base.login_page import LoginPage
+from common_utilities.hq_login.login_page import LoginPage
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
+from common_utilities.path_settings import PathSettings
 
 global driver
 
@@ -30,7 +30,7 @@ def driver(load_settings):
     chrome_options.add_argument('--safebrowsing-disable-download-protection')
     chrome_options.add_argument('--safebrowsing-disable-extension-blacklist')
     chrome_options.add_experimental_option("prefs", {
-        "download.default_directory": str(UserData.DOWNLOAD_PATH),
+        "download.default_directory": str(PathSettings.DOWNLOAD_PATH),
         "download.prompt_for_download": False,
         "safebrowsing.enabled": True})
     driver = webdriver.Chrome(executable_path=ChromeDriverManager().install(), options=chrome_options)

@@ -4,7 +4,7 @@ import names
 import pytest
 
 from QA_Requests.MultiSelectPerf.hq_workflows import AppCreationPage
-from QA_Requests.MultiSelectPerf.import_data_using_api import post_import_cases_from_excel
+from common_utilities.import_data_using_api import post_import_cases_from_excel
 
 
 def generate_path(output_path):
@@ -39,7 +39,7 @@ def multi():
     for case_type, prop_count in case_types_and_properties.items():
         file = generate_import_file(case_load_per_case_type, case_type, prop_count)
         print(case_type, prop_count, "generated")
-        post_import_cases_from_excel(file, case_type)
+        post_import_cases_from_excel(file, case_type, './settings.cfg')
         print(file, case_type, "uploaded")
 
 

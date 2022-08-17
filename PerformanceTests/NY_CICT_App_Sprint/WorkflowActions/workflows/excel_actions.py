@@ -4,6 +4,7 @@ from openpyxl import load_workbook
 
 from PerformanceTests.NY_CICT_App_Sprint.WorkflowActions.workflows.dataframe_actions import write_readings_for
 from PerformanceTests.NY_CICT_App_Sprint.UserInputs.user_inputs import UserData
+from common_utilities.path_settings import PathSettings
 
 """Create dataframe and write to excel"""
 
@@ -33,7 +34,7 @@ def write_to_excel(username,  application_name):
     for workflow in workflows:
         temporary_df = pd.DataFrame([write_readings_for(workflow, application_name, username)], columns=columns)
         df = pd.concat([df, temporary_df])
-        file = os.path.abspath(os.path.join(UserData.ROOT, 'NY_final_reading.xlsx'))
+        file = os.path.abspath(os.path.join(PathSettings.NY_ROOT, 'NY_final_reading.xlsx'))
         file_exists = os.path.isfile(file)
         if UserData.application_before_release in application_name:
             prefix = 'before'

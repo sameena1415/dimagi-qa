@@ -15,26 +15,25 @@ from HQSmokeTests.testPages.data.lookup_table_page import LookUpTablePage
 @pytest.mark.smoke
 @pytest.mark.data
 def test_case_29_import_cases(driver):
-
     export = ExportDataPage(driver)
     imp = ImportCasesPage(driver)
     export.data_tab()
     imp.replace_property_and_upload()
 
+
 @pytest.mark.smoke
 @pytest.mark.data
 def test_case_30_reassign_cases(driver, settings):
-
     export = ExportDataPage(driver)
     reassign = ReassignCasesPage(driver, settings)
     export.data_tab()
     reassign.get_cases()
     reassign.reassign_case()
 
+
 @pytest.mark.smoke
 @pytest.mark.data
 def test_case_31_manage_forms(driver):
-
     export = ExportDataPage(driver)
     manage = ManageFormsPage(driver)
     export.data_tab()
@@ -45,10 +44,10 @@ def test_case_31_manage_forms(driver):
     manage.view_archived_forms()
     manage.restore_forms()
 
+
 @pytest.mark.smoke
 @pytest.mark.data
 def test_case_32_auto_case_update(driver):
-
     export = ExportDataPage(driver)
     export.data_tab()
     data = AutoCaseUpdatePage(driver)
@@ -56,29 +55,29 @@ def test_case_32_auto_case_update(driver):
     data.add_new_rule()
     data.remove_rule()
 
+
 @pytest.mark.smoke
 @pytest.mark.data
 def test_case_33_create_lookup_table(driver):
-
     data = LookUpTablePage(driver)
     export = ExportDataPage(driver)
     export.data_tab()
     data.create_lookup_table()
 
+
 @pytest.mark.smoke
 @pytest.mark.data
 def test_case_34_view_lookup_table(driver):
-
     data = LookUpTablePage(driver)
     export = ExportDataPage(driver)
     export.data_tab()
     data.view_lookup_table()
     data.delete_lookup_table()
 
+
 @pytest.mark.smoke
 @pytest.mark.data
 def test_case_58_deduplicate_cases(driver):
-
     export = ExportDataPage(driver)
     export.data_tab()
     data = DeduplicateCasePage(driver)
@@ -86,10 +85,10 @@ def test_case_58_deduplicate_cases(driver):
     data.add_new_rule()
     data.remove_rule()
 
+
 @pytest.mark.smoke
 @pytest.mark.data
 def test_case_59_data_dictionary(driver):
-
     export = ExportDataPage(driver)
     export.data_tab()
     data = DataDictionaryPage(driver)

@@ -3,7 +3,8 @@ import time
 import pandas as pd
 from datetime import datetime, timedelta
 
-from HQSmokeTests.testPages.base.base_page import BasePage
+from common_utilities.selenium.base_page import BasePage
+from common_utilities.path_settings import PathSettings
 from HQSmokeTests.userInputs.user_inputs import UserData
 from selenium.common.exceptions import StaleElementReferenceException, TimeoutException, \
     ElementClickInterceptedException, NoSuchElementException
@@ -14,7 +15,7 @@ from selenium.webdriver.common.keys import Keys
 
 
 def latest_download_file():
-    os.chdir(UserData.DOWNLOAD_PATH)
+    os.chdir(PathSettings.DOWNLOAD_PATH)
     files = sorted(os.listdir(os.getcwd()), key=os.path.getmtime)
     newest = max(files, key=os.path.getctime)
     print("File downloaded: " + newest)
@@ -125,9 +126,9 @@ class ExportDataPage(BasePage):
         self.model = (By.ID, "id_model_type")
 
     def get_url_paste_browser(self, username, password, item):
-        if (item == 'cases'):
+        if item == 'cases':
             odata_feed_link = self.wait_to_get_value(self.copy_odata_link_case)
-        elif (item == 'forms'):
+        elif item == 'forms':
             odata_feed_link = self.wait_to_get_value(self.copy_odata_link_form)
         final_URL_case = f"https://{username}:{password}@{odata_feed_link[8:]}"
         self.driver.get(final_URL_case)

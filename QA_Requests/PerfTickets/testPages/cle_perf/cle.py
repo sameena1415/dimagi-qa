@@ -1,7 +1,7 @@
 import time
 
 from selenium.webdriver.common.by import By
-from QA_Requests.PerfTickets.testPages.base.base_page import BasePage
+from common_utilities.selenium.base_page import BasePage
 
 
 class CLEPage(BasePage):

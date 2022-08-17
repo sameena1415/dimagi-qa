@@ -3,7 +3,7 @@ import os
 import random
 import pandas as pd
 
-from QA_Requests.PerfTickets.testPages.subcase_query.import_generated_data import post_import_cases_from_excel
+from common_utilities.import_data_using_api import post_import_cases_from_excel
 
 
 def location_assign():
@@ -49,7 +49,7 @@ def subcase_data_generation(sub_cases, data_load, child_output_csv, child_col_li
         counter = counter + 1
         case_type = 'show_perf_' + str(counter) + '_' + str(sub_cases) + '_' + str(data_load)
         print(counter, case_type)
-        post_import_cases_from_excel(file, case_type)
+        post_import_cases_from_excel(file, case_type, '../settings.cfg')
 
 
 def read_write_excel(child_output_csv, file_name):
@@ -91,4 +91,4 @@ def data_generation(sub_cases, data_load, output_csv, col_list, child_output_csv
                                  })
         file = read_write_excel(output_csv, f'Parent_records_{col_start}_{col_end}.xlsx')
         case_type = 'song_perf_' + str(sub_cases) + '_' + str(data_load)
-        post_import_cases_from_excel(file, case_type)
+        post_import_cases_from_excel(file, case_type, '../settings.cfg')
