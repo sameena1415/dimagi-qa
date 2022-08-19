@@ -6,13 +6,13 @@ from AppSprintPerformanceTests.CICT.WorkflowActions.workflows.excel_actions impo
 from AppSprintPerformanceTests.CICT.WorkflowActions.workflows.hq_actions import HomePage
 from common_utilities.decorators import first_dump_filename
 
-from AppSprintPerformanceTests.CICT.UserInputs.ny_cict_user_inputs import UserData
+from AppSprintPerformanceTests.CICT.UserInputs.co_cict_user_inputs import UserData
 
 """Runs all workflows and captures the readings for the app versions before and after releases for two preconfigured users"""
 
 
 @pytest.mark.parametrize("user", [UserData.ci_ct_user1, UserData.ci_ct_user2])
-@pytest.mark.parametrize("application", [UserData.application_before_release, UserData.application_after_release])
+@pytest.mark.parametrize("application", [UserData.application])
 @pytest.mark.repeat(UserData.repeat_count)
 def test_app_workflows(driver, user, application, settings):
     """Repeat Count"""
@@ -22,7 +22,7 @@ def test_app_workflows(driver, user, application, settings):
     """General workflows"""
 
     visible = HomePage(driver)
-    visible.login_as_ci_ct_user(user, settings["ny_url"])
+    visible.login_as_ci_ct_user(user, settings["co_url"])
     time.sleep(5)
     visible.break_locks_and_clear_user_data()
     time.sleep(5)
@@ -57,7 +57,7 @@ def test_app_workflows(driver, user, application, settings):
 
     """Write to excel"""
 
-    write_to_excel(username=user, application_name=application , site="NY")
+    write_to_excel(username=user, application_name=application, site="CO")
     if os.path.isfile(first_dump_filename) and test_app_workflows.counter == UserData.repeat_count:
         os.remove(first_dump_filename)
         test_app_workflows.counter = 0
