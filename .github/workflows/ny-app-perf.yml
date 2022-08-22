@@ -5,7 +5,7 @@ name: NY Sprint Performance
 
 on:
   push:
-    branches: [ kt/ny_sprint_perf ]
+    branches: [ master ]
   workflow_dispatch:
 
 
@@ -24,7 +24,7 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install -r NYperformance/requires.txt
+        pip install -r AppSprintPerformanceTests/CICT/requires.txt
 
     - name: Lint with flake8
       run: |
@@ -44,7 +44,7 @@ jobs:
         echo "client_payload: ${{ toJson(github.event.client_payload) }}"
         echo "NOW=$(date +'%m-%d %H:%M')" >> $GITHUB_ENV
         echo ${{env.NOW}}
-        pytest -v --rootdir= PerformanceTests/NY_CICT_App_Sprint/CaptureReadings --repeat-scope=function
+        pytest -v --rootdir= AppSprintPerformanceTests/CICT/CaptureReadings/ny_test_readings.py --repeat-scope=function --appsite=NY
 
     - name: Send Failure Email
       uses: dawidd6/action-send-mail@v3
@@ -58,7 +58,7 @@ jobs:
         to: ktripathy@dimagi.com
         from: <qa-no-reply@dimagi.com>
         html_body: file:////home/runner/work/dimagi-qa/dimagi-qa/CICT/UserInputs/email_fail.html
-        attachments: /home/runner/work/dimagi-qa/dimagi-qa/NY_final_reading.xlsx, /home/runner/work/dimagi-qa/dimagi-qa/report.html
+        attachments: ${{ github.workspace }}/NY_final_reading.xlsx, ${{ github.workspace }}/report.html
         priority: normal
 
     - name: Send Pass Email
@@ -73,7 +73,7 @@ jobs:
         to: ktripathy@dimagi.com
         from: <qa-no-reply@dimagi.com>
         html_body: file:////home/runner/work/dimagi-qa/dimagi-qa/CICT/UserInputs/email_pass.html
-        attachments: /home/runner/work/dimagi-qa/dimagi-qa/NY_final_reading.xlsx, /home/runner/work/dimagi-qa/dimagi-qa/report.html
+        attachments: ${{ github.workspace }}/NY_final_reading.xlsx, ${{ github.workspace }}/report.html
         priority: normal
 
     - name: Archive report
@@ -81,7 +81,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: report_and_reading
-        path: /home/runner/work/dimagi-qa/dimagi-qa/report.html
+        path: ${{ github.workspace }}/report.html
         retention-days: 2
 
     - name: Archive readings
@@ -89,5 +89,5 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: report_and_reading
-        path: /home/runner/work/dimagi-qa/dimagi-qa/NY_final_reading.xlsx
+        path: ${{ github.workspace }}/NY_final_reading.xlsx
         retention-days: 2
