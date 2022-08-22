@@ -2,6 +2,7 @@ import os
 import time
 import pytest
 
+from AppSprintPerformanceTests.CICT.CaptureReadings.conftest import appsite
 from AppSprintPerformanceTests.CICT.WorkflowActions.workflows.excel_actions import write_to_excel
 from AppSprintPerformanceTests.CICT.WorkflowActions.workflows.hq_actions import HomePage
 from common_utilities.decorators import first_dump_filename
@@ -57,7 +58,7 @@ def test_app_workflows(driver, user, application, settings):
 
     """Write to excel"""
 
-    write_to_excel(username=user, application_name=application, site="NY")
+    write_to_excel(username=user, application_name=application, site=str(appsite))
     if os.path.isfile(first_dump_filename) and test_app_workflows.counter == NYUserData.repeat_count:
         os.remove(first_dump_filename)
         test_app_workflows.counter = 0
