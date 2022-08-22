@@ -2,6 +2,7 @@ import pytest
 
 from HQSmokeTests.testPages.home.home_page import HomePage
 from HQSmokeTests.testPages.messaging.messaging_page import MessagingPage
+from HQSmokeTests.testPages.reports.report_page import ReportPage
 
 """"Contains test cases related to the Messaging module"""
 
@@ -40,7 +41,11 @@ def test_case_44_create_cond_alert(driver):
     menu = HomePage(driver)
     msg = MessagingPage(driver)
     menu.messaging_menu()
-    msg.create_cond_alert()
+    cond_alert = msg.create_cond_alert()
+    menu.reports_menu()
+    history = ReportPage(driver)
+    history.validate_messaging_history_for_cond_alert(cond_alert)
+    menu.messaging_menu()
     msg.remove_cond_alert()
 
 

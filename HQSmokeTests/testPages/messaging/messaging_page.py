@@ -2,6 +2,7 @@ import time
 
 from common_utilities.selenium.base_page import BasePage
 from common_utilities.path_settings import PathSettings
+from HQSmokeTests.userInputs.user_inputs import UserData
 from common_utilities.generate_random_string import fetch_random_string
 from HQSmokeTests.testPages.users.org_structure_page import latest_download_file
 
@@ -41,6 +42,7 @@ class MessagingPage(BasePage):
         self.user_recipient = (By.XPATH, "(//span[@class='select2-selection select2-selection--multiple'])[2]")
         self.select_value_dropdown = (By.XPATH, "(//ul[@class='select2-results__options']/li)[1]")
         self.broadcast_message = (By.XPATH, "(//textarea[@data-bind='value: nonTranslatedMessage'])[2]")
+        self.email_subject = (By.XPATH, "(//textarea[@data-bind='value: nonTranslatedMessage'])[1]")
         self.send_broadcast = (By.XPATH,  "//button[@data-bind='text: saveBroadcastText()']")
         self.broadcast_select = (By.XPATH,  "//div[@id='immediate-broadcasts']//select[@class='form-control']")
         self.broadcast_created = (By.XPATH, "//a[text()='" + self.broadcast_input + "']")
@@ -51,10 +53,18 @@ class MessagingPage(BasePage):
         self.cond_alert_name = (By.XPATH, "//input[@name='conditional-alert-name']")
         self.continue_button_basic_tab = (By.XPATH, "//button[@data-bind='click: handleBasicNavContinue, enable: basicTabValid']")
         self.case_type = (By.XPATH,  "//select[@data-bind='value: caseType']")
-        self.case_type_option_value = (By.XPATH, "//option[@value='pregnancy']")
+        self.case_type_option_value = (By.XPATH, "//option[@value='reassign']")
+        self.select_filter = (By.XPATH, "//button[@class='btn btn-default dropdown-toggle']")
+        self.case_property_filter = (By.XPATH, "//ul//a[.='Case property']")
+        self.case_property_textbox = (By.XPATH, "//case-property-input//span[@class='select2-selection select2-selection--single'][@role='combobox']")
+        self.select_case_property = (By.XPATH, "//select[@data-bind='value: valueObservable, autocompleteSelect2: casePropertyNames']")
+        self.case_property_value = (By.XPATH, "//input[contains(@data-bind,'value: property_value')]")
+        self.case_property_input = (By.XPATH, "//input[@class='select2-search__field']")
         self.continue_button_rule_tab = (By.XPATH, "//button[@data-bind='click: handleRuleNavContinue, enable: ruleTabValid']")
         self.cond_alert_created = (By.XPATH, "//a[text()='" + str(self.cond_alert_name_input) + "']")
-        self.select_recipient_type = (By.XPATH, "(//ul[@id='select2-id_schedule-recipient_types-results']/li)[1]")
+        self.select_recipient_type = (By.XPATH, "//ul[@id='select2-id_schedule-recipient_types-results']/li[.='Users']")
+        self.alert_type = (By.XPATH, "//select[@name='schedule-content']")
+        self.user_recipients_results = (By.XPATH, "//ul[@id='select2-id_schedule-user_recipients-results']/li[.='"+ UserData.app_login +"']")
         self.save_button_xpath = (By.XPATH, "//button[@type='submit'and text()='Save']")
         self.delete_cond_alert = (By.XPATH, "//a[text()='" + str(self.cond_alert_name_input) + "']//preceding::button[@class='btn btn-danger'][1]")
         self.search_box = (By.XPATH, "//form[@class='input-group']/input[@class='form-control']")
@@ -168,16 +178,31 @@ class MessagingPage(BasePage):
         self.wait_to_click(self.add_cond_alert)
         self.send_keys(self.cond_alert_name, self.cond_alert_name_input)
         self.wait_to_click(self.continue_button_basic_tab)
+        time.sleep(2)
         self.wait_to_click(self.case_type)
         self.wait_to_click(self.case_type_option_value)
+        self.wait_to_click(self.select_filter)
+        self.wait_to_click(self.case_property_filter)
+        time.sleep(2)
+        self.wait_to_click(self.case_property_textbox)
+        self.send_keys(self.case_property_input,UserData.alert_case_property)
+        self.select_by_text(self.select_case_property,UserData.alert_case_property)
+        self.send_keys(self.case_property_value,UserData.alert_case_property_value)
         self.wait_to_click(self.continue_button_rule_tab)
         self.wait_to_click(self.recipients)
         self.wait_to_click(self.select_recipient_type)
+        self.wait_to_click(self.user_recipient)
+        self.wait_to_click(self.user_recipients_results)
+        self.select_by_text(self.alert_type, "Email")
+        self.send_keys(self.email_subject, "Test Alert:" + self.cond_alert_name_input)
         self.send_keys(self.broadcast_message, "Test Alert:" + self.cond_alert_name_input)
         self.wait_to_click(self.save_button_xpath)
+        print("Sleeping till the alert processing completes")
+        time.sleep(20)
         self.wait_to_click(self.search_box)
         assert self.is_displayed(self.cond_alert_created), "Conditional Alert not created successfully!"
         print("Conditional Alert created successfully!")
+        return self.cond_alert_name_input
 
     def cond_alert_download(self):
         self.wait_to_click(self.cond_alerts)
