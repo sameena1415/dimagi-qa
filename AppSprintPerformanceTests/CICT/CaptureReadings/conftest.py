@@ -7,7 +7,8 @@ from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
 from webdriver_manager.firefox import GeckoDriverManager
 
-from AppSprintPerformanceTests.CICT.UserInputs.ny_cict_user_inputs import UserData
+from AppSprintPerformanceTests.CICT.UserInputs.ny_cict_user_inputs import NYUserData
+from AppSprintPerformanceTests.CICT.UserInputs.co_cict_user_inputs import COUserData
 from common_utilities.hq_login.login_page import LoginPage
 
 """"This file provides fixture functions for driver initialization"""
@@ -17,7 +18,7 @@ global driver
 
 
 @pytest.fixture(scope="session")
-def environment_settings():
+def environment_settings(appsite):
     """Load settings from os.environ
 
             Names of environment variables:
@@ -34,8 +35,12 @@ def environment_settings():
         if var in os.environ:
             settings[name] = os.environ[var]
     if "url" not in settings:
-        subdomain = "staging" if UserData.env == "staging" else UserData.env
-        settings["url"] = f"https://{subdomain}.commcarehq.org/a/{UserData.project_space}/cloudcare/apps/v2/"
+        if appsite == "CO":
+            subdomain = "staging" if COUserData.env == "staging" else COUserData.env
+            settings["url"] = f"https://{subdomain}.commcarehq.org/a/{COUserData.project_space}/cloudcare/apps/v2/"
+        elif appsite == "CNY":
+            subdomain = "staging" if NYUserData.env == "staging" else NYUserData.env
+            settings["url"] = f"https://{subdomain}.commcarehq.org/a/{NYUserData.project_space}/cloudcare/apps/v2/"
     return settings
 
 
@@ -122,6 +127,12 @@ def pytest_addoption(parser):
 def browser(request):
     """Pytest fixture for browser"""
     return request.config.getoption("--browser")
+
+
+@pytest.fixture(scope="module")
+def appsite(request):
+    """Pytest fixture for browser"""
+    return request.config.getoption("--appsite")
 
 
 @pytest.hookimpl(hookwrapper=True)

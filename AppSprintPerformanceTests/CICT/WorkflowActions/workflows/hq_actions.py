@@ -5,7 +5,7 @@ from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.by import By
 
 from common_utilities.selenium.base_page import BasePage
-from AppSprintPerformanceTests.CICT.UserInputs.ny_cict_user_inputs import UserData
+from AppSprintPerformanceTests.CICT.UserInputs.ny_cict_user_inputs import NYUserData
 from common_utilities.decorators import timer
 
 """"Contains test page elements and functions related to workflows in test"""
@@ -30,10 +30,6 @@ class HomePage(BasePage):
         self.confirm_user_login = (By.XPATH, "//button[@id = 'js-confirmation-confirm']")
         self.all_cases_menu = (By.XPATH, "(//div[@aria-label='All Cases']/div)[1]")
         self.case_list_table = (By.XPATH, "//table[@class='table module-table module-table-case-list']")
-        self.preconfig_case = (By.XPATH, "//tr[.//td[text()='" + UserData.pre_configured_case +
-                               "' and @class='module-case-list-column']]")
-        self.preconfig_contact = (By.XPATH, "//tr[.//td[text()='" + UserData.pre_configured_contact +
-                                  "' and @class='module-case-list-column']]")
         self.case_detail_modal = (By.XPATH, "//div[@id='case-detail-modal']//div[@class='modal-content']")
         self.continue_button = (By.ID, "select-case")
         self.menu_list = (By.XPATH, "//div[@class='module-menu-container']")
@@ -42,22 +38,21 @@ class HomePage(BasePage):
         self.name_of_school_dropdown = (By.XPATH, "(//*[contains(text(),'Name of university')])[1]"
                                                   "/following::span[@class='select2-selection__rendered'][1]")
         self.search_dropdown = (By.XPATH, "//span[@class='select2-search select2-search--dropdown']")
-        self.school_search = random.choice(UserData.school_list)
+        self.school_search = random.choice(NYUserData.school_list)
         self.name_of_school_answer = (
-        By.XPATH, "//span[@class='select2-results']//ul//li[contains(text(),'" + self.school_search + "')][1]")
+            By.XPATH, "//span[@class='select2-results']//ul//li[contains(text(),'" + self.school_search + "')][1]")
         self.school_selected_displayed = (By.XPATH, "//span[contains(text(), '" + self.school_search + "')]")
         self.submit_form = (By.XPATH, "//button[@type='submit' and @class='submit btn btn-primary']")
         self.form_submission_success = (By.XPATH, "//p[text()='Form successfully saved!']")
         self.all_contacts_menu = (By.XPATH, "(//div[@aria-label='All Contacts']/div)[1]")
-        self.preconfig_contact = (By.XPATH, "//tr[.//td[text()='" + UserData.pre_configured_contact +
-                                  "' and @class='module-case-list-column']]")
         self.cm_form = (By.XPATH, "//tr[@aria-label='Contact Monitoring']")
         self.search_case_list = (By.ID, "searchText")
         self.search_button = (By.ID, "case-list-search-button")
-        self.webapps_home = (By.XPATH, "//a[@href='/a/" + UserData.project_space + "/cloudcare/apps/v2/' and @class='navbar-brand']")
         self.use_web_user = (By.XPATH, "//a[@class='js-clear-user']")
 
-    def break_locks_and_clear_user_data(self):
+    def break_locks_and_clear_user_data(self, project_space):
+        self.webapps_home = (
+            By.XPATH, "//a[@href='/a/" + project_space + "/cloudcare/apps/v2/' and @class='navbar-brand']")
         try:
             self.wait_to_click(self.app_settings)
         except TimeoutException:
@@ -97,14 +92,16 @@ class HomePage(BasePage):
         self.wait_to_click(self.all_cases_menu)
         assert self.is_visible_and_displayed(self.case_list_table, timeout=240)
 
-    def search_case_in_test(self, application_name, username):
-        self.wait_to_clear_and_send_keys(self.search_case_list, UserData.pre_configured_case)
+    def search_case_in_test(self, application_name, username, preconfigured_case):
+        self.wait_to_clear_and_send_keys(self.search_case_list, preconfigured_case)
         self.wait_to_click(self.search_button)
         time.sleep(20)
         assert self.is_visible_and_displayed(self.preconfig_case, timeout=240)
 
     @timer
-    def open_case_detail(self, application_name, username):
+    def open_case_detail(self, application_name, username, pre_configured_case):
+        self.preconfig_case = (By.XPATH, "//tr[.//td[text()='" + pre_configured_case +
+                               "' and @class='module-case-list-column']]")
         self.js_click(self.preconfig_case)
         assert self.is_visible_and_displayed(self.case_detail_modal, timeout=240)
 
@@ -140,8 +137,10 @@ class HomePage(BasePage):
         self.js_click(self.all_contacts_menu)
         assert self.is_visible_and_displayed(self.case_list_table, timeout=240)
 
-    def search_contact_in_test(self, application_name, username):
-        self.wait_to_clear_and_send_keys(self.search_case_list, UserData.pre_configured_contact)
+    def search_contact_in_test(self, application_name, username, pre_configured_contact):
+        self.preconfig_contact = (By.XPATH, "//tr[.//td[text()='" + pre_configured_contact +
+                                  "' and @class='module-case-list-column']]")
+        self.wait_to_clear_and_send_keys(self.search_case_list, pre_configured_contact)
         self.wait_to_click(self.search_button)
         time.sleep(20)
         assert self.is_visible_and_displayed(self.preconfig_contact, timeout=240)

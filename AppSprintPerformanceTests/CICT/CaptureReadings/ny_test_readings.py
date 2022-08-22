@@ -6,14 +6,14 @@ from AppSprintPerformanceTests.CICT.WorkflowActions.workflows.excel_actions impo
 from AppSprintPerformanceTests.CICT.WorkflowActions.workflows.hq_actions import HomePage
 from common_utilities.decorators import first_dump_filename
 
-from AppSprintPerformanceTests.CICT.UserInputs.ny_cict_user_inputs import UserData
+from AppSprintPerformanceTests.CICT.UserInputs.ny_cict_user_inputs import NYUserData
 
 """Runs all workflows and captures the readings for the app versions before and after releases for two preconfigured users"""
 
 
-@pytest.mark.parametrize("user", [UserData.ci_ct_user1, UserData.ci_ct_user2])
-@pytest.mark.parametrize("application", [UserData.application_before_release, UserData.application_after_release])
-@pytest.mark.repeat(UserData.repeat_count)
+@pytest.mark.parametrize("user", [NYUserData.ci_ct_user1, NYUserData.ci_ct_user2])
+@pytest.mark.parametrize("application", [NYUserData.application_before_release, NYUserData.application_after_release])
+@pytest.mark.repeat(NYUserData.repeat_count)
 def test_app_workflows(driver, user, application, settings):
     """Repeat Count"""
 
@@ -24,7 +24,7 @@ def test_app_workflows(driver, user, application, settings):
     visible = HomePage(driver)
     visible.login_as_ci_ct_user(user, settings["ny_url"])
     time.sleep(5)
-    visible.break_locks_and_clear_user_data()
+    visible.break_locks_and_clear_user_data(project_space=NYUserData.project_space)
     time.sleep(5)
     visible.sync_application(username=user, application_name=application)
     time.sleep(10)
@@ -33,8 +33,8 @@ def test_app_workflows(driver, user, application, settings):
     """CI workflows"""
 
     visible.all_cases_menu_load(username=user, application_name=application)
-    visible.search_case_in_test(username=user, application_name=application)
-    visible.open_case_detail(username=user, application_name=application)
+    visible.search_case_in_test(username=user, application_name=application, preconfigured_case=NYUserData.pre_configured_case)
+    visible.open_case_detail(username=user, application_name=application, preconfigured_case=NYUserData.pre_configured_case)
     visible.case_menu_display(username=user, application_name=application)
     visible.open_case_investigation_form(username=user, application_name=application)
     visible.ci_form_answer_question(username=user, application_name=application)
@@ -44,7 +44,7 @@ def test_app_workflows(driver, user, application, settings):
 
     visible.app_home_screen(application)
     visible.all_contacts_menu_load(username=user, application_name=application)
-    visible.search_contact_in_test(username=user, application_name=application)
+    visible.search_contact_in_test(username=user, application_name=application, pre_configured_contact=NYUserData.pre_configured_contact)
     visible.open_contact_detail(username=user, application_name=application)
     visible.contact_menu_display(username=user, application_name=application)
     visible.open_contact_monitoring_form(username=user, application_name=application)
@@ -57,8 +57,8 @@ def test_app_workflows(driver, user, application, settings):
 
     """Write to excel"""
 
-    write_to_excel(username=user, application_name=application , site="NY")
-    if os.path.isfile(first_dump_filename) and test_app_workflows.counter == UserData.repeat_count:
+    write_to_excel(username=user, application_name=application, site="NY")
+    if os.path.isfile(first_dump_filename) and test_app_workflows.counter == NYUserData.repeat_count:
         os.remove(first_dump_filename)
         test_app_workflows.counter = 0
 

@@ -3,7 +3,7 @@ import pandas as pd
 from openpyxl import load_workbook
 
 from AppSprintPerformanceTests.CICT.WorkflowActions.workflows.dataframe_actions import write_readings_for
-from AppSprintPerformanceTests.CICT.UserInputs.ny_cict_user_inputs import UserData
+from AppSprintPerformanceTests.CICT.UserInputs.ny_cict_user_inputs import NYUserData
 from common_utilities.path_settings import PathSettings
 
 """Create dataframe and write to excel"""
@@ -38,7 +38,7 @@ def write_to_excel(username, application_name, generated_file_name=None, site=No
         file = os.path.abspath(os.path.join(PathSettings.NY_ROOT, site+'_readings.xslx'))
         file_exists = os.path.isfile(file)
         if site == "NY":
-            if UserData.application_before_release in application_name:
+            if NYUserData.application_before_release in application_name:
                 prefix = 'before'
             else:
                 prefix = 'after'

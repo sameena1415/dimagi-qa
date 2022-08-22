@@ -1,5 +1,5 @@
 
-class UserData:
+class NYUserData:
     """Contains user input test data that are used while running the tests. These can be updated as required."""
 
     repeat_count = 3
