@@ -37,6 +37,8 @@ def test_case_43_broadcast(driver):
 
 @pytest.mark.messaging
 @pytest.mark.conditionalAlerts
+@pytest.mark.report
+@pytest.mark.reportMessaging
 def test_case_44_create_cond_alert(driver):
     menu = HomePage(driver)
     msg = MessagingPage(driver)
