@@ -1,6 +1,8 @@
 import time
 from datetime import datetime
 
+from selenium.webdriver.support.select import Select
+
 from common_utilities.selenium.base_page import BasePage
 from common_utilities.generate_random_string import fetch_random_string
 from HQSmokeTests.userInputs.user_inputs import UserData
@@ -112,9 +114,13 @@ class ReportPage(BasePage):
         self.case_list_table = (By.XPATH, "//table[@id='report_table_case_list']/tbody/tr")
         self.case_id_block = (By.XPATH, "//th[@title='_id']/following-sibling::td")
 
+        # Messaging History
+        self.communication_type_select = (By.XPATH, "//label[.='Communication Type']/following-sibling::div/select")
+
     def check_if_report_loaded(self):
         try:
             self.wait_to_click(self.apply_id)
+            time.sleep(10)
         except (TimeoutException, NoSuchElementException):
             print("Button Disabled")
         try:
@@ -362,3 +368,28 @@ class ReportPage(BasePage):
         print("Case is updated successfully")
         case_id = self.get_text(self.case_id_block)
         return case_id
+
+    def validate_messaging_history_for_cond_alert(self, cond_alert):
+        self.wait_to_click(self.messaging_history_rep)
+        date_range = self.get_yesterday_tomorrow_dates()
+        self.clear(self.date_input)
+        self.send_keys(self.date_input, date_range + Keys.TAB)
+        time.sleep(2)
+        self.deselect_all(self.communication_type_select)
+        time.sleep(2)
+        self.select_by_text(self.communication_type_select, UserData.communication_type)
+        self.check_if_report_loaded()
+        self.scroll_to_bottom()
+        print(cond_alert)
+        list_alerts = self.driver.find_elements(By.XPATH, "//td[.='"+cond_alert+"']/following-sibling::td[3]")
+        print(len(list_alerts))
+        if len(list_alerts) > 0:
+            for i in range(len(list_alerts)):
+                text = list_alerts[i].text
+                print(text)
+                if "Completed" in text:
+                    assert True
+                elif "Internal Server Error" in text:
+                    assert False
+                else:
+                    print("Alert status is not Completed but has no Internal Server Error")

@@ -55,3 +55,10 @@ class UserData:
 
     """Deduplicate Case Module """
     case_property = 'village_name'
+
+    """Messaging History"""
+    communication_type = "Conditional Alert"
+
+    """Conditional Alert"""
+    alert_case_property = "name"
+    alert_case_property_value = "conditional alert"
