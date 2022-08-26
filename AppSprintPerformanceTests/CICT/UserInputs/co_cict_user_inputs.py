@@ -1,7 +1,7 @@
 class COUserData:
     """Contains user input test data that are used while running the tests. These can be updated as required."""
 
-    repeat_count = 1
+    repeat_count = 3
     project_space = "co-performance"
     application = "Justina"
     ci_ct_user1 = "ci/ct_sup_1"
