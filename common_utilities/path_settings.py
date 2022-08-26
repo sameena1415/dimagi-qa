@@ -14,7 +14,7 @@ class PathSettings:
     else:
         DOWNLOAD_PATH = Path('~/Downloads').expanduser()
 
-    NY_ROOT = os.path.abspath(os.path.join(BASE_DIR, os.pardir, os.pardir))
+    #NY_ROOT = os.path.abspath(os.path.join(BASE_DIR, os.pardir, os.pardir))
 
     if os.environ.get("CI") == "true":
         ROOT = os.path.abspath(os.pardir) + "/dimagi-qa"

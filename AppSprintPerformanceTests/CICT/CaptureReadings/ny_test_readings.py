@@ -34,11 +34,11 @@ def test_app_workflows(driver, user, application, settings):
     """CI workflows"""
 
     visible.all_cases_menu_load(username=user, application_name=application)
-    visible.search_case_in_test(username=user, application_name=application, preconfigured_case=NYUserData.pre_configured_case)
-    visible.open_case_detail(username=user, application_name=application, preconfigured_case=NYUserData.pre_configured_case)
+    visible.search_case_in_test(username=user, application_name=application, pre_configured_case=NYUserData.pre_configured_case)
+    visible.open_case_detail(username=user, application_name=application, pre_configured_case=NYUserData.pre_configured_case)
     visible.case_menu_display(username=user, application_name=application)
     visible.open_case_investigation_form(username=user, application_name=application)
-    visible.ci_form_answer_question(username=user, application_name=application)
+    visible.ci_form_answer_question(username=user, application_name=application, site=appsite)
     visible.ci_form_submission(username=user, application_name=application)
 
     """CM workflows"""
@@ -49,8 +49,8 @@ def test_app_workflows(driver, user, application, settings):
     visible.open_contact_detail(username=user, application_name=application)
     visible.contact_menu_display(username=user, application_name=application)
     visible.open_contact_monitoring_form(username=user, application_name=application)
-    visible.cm_form_answer_question(username=user, application_name=application)
-    visible.cm_form_submission(username=user, application_name=application)
+    visible.cn_cm_form_answer_question(username=user, application_name=application, site=appsite)
+    visible.cn_cm_form_submission(username=user, application_name=application)
 
     """Back to webapps workflows"""
 
@@ -58,7 +58,7 @@ def test_app_workflows(driver, user, application, settings):
 
     """Write to excel"""
 
-    write_to_excel(username=user, application_name=application, site=str(appsite))
+    write_to_excel(username=user, application_name=application, site="NY")
     if os.path.isfile(first_dump_filename) and test_app_workflows.counter == NYUserData.repeat_count:
         os.remove(first_dump_filename)
         test_app_workflows.counter = 0

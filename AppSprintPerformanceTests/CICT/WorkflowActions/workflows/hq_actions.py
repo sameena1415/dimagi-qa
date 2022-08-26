@@ -4,6 +4,7 @@ import time
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.by import By
 
+from AppSprintPerformanceTests.CICT.UserInputs.co_cict_user_inputs import COUserData
 from common_utilities.selenium.base_page import BasePage
 from AppSprintPerformanceTests.CICT.UserInputs.ny_cict_user_inputs import NYUserData
 from common_utilities.decorators import timer
@@ -35,6 +36,13 @@ class HomePage(BasePage):
         self.menu_list = (By.XPATH, "//div[@class='module-menu-container']")
         self.ci_form = (By.XPATH, "//tr[@aria-label='Case Investigation']")
         self.form_content = (By.ID, "webforms")
+        #CO
+        self.lang_dropdown = (By.XPATH, "(//span[contains(text(),'What language')])/following::span[@class='select2-selection__rendered'][1]")
+        self.lang_search = random.choice(COUserData.language_list)
+        self.lang_answer = (
+            By.XPATH, "//span[@class='select2-results']//ul//li[contains(text(),'" + self.lang_search + "')][1]")
+        self.lang_selected_displayed = (By.XPATH, "//span[contains(text(), '" + self.lang_search + "')]")
+        #NY
         self.name_of_school_dropdown = (By.XPATH, "(//*[contains(text(),'Name of university')])[1]"
                                                   "/following::span[@class='select2-selection__rendered'][1]")
         self.search_dropdown = (By.XPATH, "//span[@class='select2-search select2-search--dropdown']")
@@ -42,10 +50,13 @@ class HomePage(BasePage):
         self.name_of_school_answer = (
             By.XPATH, "//span[@class='select2-results']//ul//li[contains(text(),'" + self.school_search + "')][1]")
         self.school_selected_displayed = (By.XPATH, "//span[contains(text(), '" + self.school_search + "')]")
+
+
         self.submit_form = (By.XPATH, "//button[@type='submit' and @class='submit btn btn-primary']")
         self.form_submission_success = (By.XPATH, "//p[text()='Form successfully saved!']")
         self.all_contacts_menu = (By.XPATH, "(//div[@aria-label='All Contacts']/div)[1]")
         self.cm_form = (By.XPATH, "//tr[@aria-label='Contact Monitoring']")
+        self.cn_form = (By.XPATH, "//tr[@aria-label='Contact Notification']")
         self.search_case_list = (By.ID, "searchText")
         self.search_button = (By.ID, "case-list-search-button")
         self.use_web_user = (By.XPATH, "//a[@class='js-clear-user']")
@@ -68,11 +79,27 @@ class HomePage(BasePage):
 
     def login_as_ci_ct_user(self, username, url):
         self.ci_ct_user = (By.XPATH, "//b[contains(text(),'" + username + "')]")
-        user_restore = url + "#restore_as/1/" + username
-        self.driver.get(user_restore)
-        time.sleep(3)
-        self.js_click(self.ci_ct_user)
-        self.wait_to_click(self.confirm_user_login)
+        try:
+            self.wait_to_click(self.login_as)
+            self.wait_to_clear_and_send_keys(self.search_user, username)
+            self.wait_to_click(self.search_confirm)
+        except TimeoutException:
+            try:
+                self.wait_to_clear_and_send_keys(self.search_user, username)
+                self.wait_to_click(self.search_confirm)
+            except TimeoutException:
+                self.wait_to_click(self.webapps_home)
+                self.wait_to_click(self.login_as)
+                self.wait_to_clear_and_send_keys(self.search_user, username)
+                self.wait_to_click(self.search_confirm)
+        try:
+            self.wait_to_click(self.ci_ct_user)
+        except TimeoutException:
+            self.js_click(self.ci_ct_user)
+        try:
+            self.wait_to_click(self.confirm_user_login)
+        except TimeoutException:
+            self.js_click(self.confirm_user_login)
         assert self.is_visible_and_displayed(self.ci_ct_user, timeout=240)
 
     @timer
@@ -92,16 +119,18 @@ class HomePage(BasePage):
         self.wait_to_click(self.all_cases_menu)
         assert self.is_visible_and_displayed(self.case_list_table, timeout=240)
 
-    def search_case_in_test(self, application_name, username, preconfigured_case):
-        self.wait_to_clear_and_send_keys(self.search_case_list, preconfigured_case)
+    def search_case_in_test(self, application_name, username, pre_configured_case):
+        self.preconfig_case = (By.XPATH, "(//tr[.//td[text()='" + pre_configured_case +
+                               "' and @class='module-case-list-column']])[1]")
+        self.wait_to_clear_and_send_keys(self.search_case_list, pre_configured_case)
         self.wait_to_click(self.search_button)
         time.sleep(20)
         assert self.is_visible_and_displayed(self.preconfig_case, timeout=240)
 
     @timer
     def open_case_detail(self, application_name, username, pre_configured_case):
-        self.preconfig_case = (By.XPATH, "//tr[.//td[text()='" + pre_configured_case +
-                               "' and @class='module-case-list-column']]")
+        self.preconfig_case = (By.XPATH, "(//tr[.//td[text()='" + pre_configured_case +
+                               "' and @class='module-case-list-column']])[1]")
         self.js_click(self.preconfig_case)
         assert self.is_visible_and_displayed(self.case_detail_modal, timeout=240)
 
@@ -116,12 +145,20 @@ class HomePage(BasePage):
         assert self.is_visible_and_displayed(self.form_content, timeout=240)
 
     @timer
-    def ci_form_answer_question(self, application_name, username):
-        self.scroll_to_element(self.name_of_school_dropdown)
-        self.driver.execute_script("window.scrollBy(0,-80)")
-        self.wait_to_click(self.name_of_school_dropdown)
-        self.wait_to_click(self.name_of_school_answer)
-        assert self.is_visible_and_displayed(self.school_selected_displayed, timeout=240)
+    def ci_form_answer_question(self, application_name, username, site):
+        if site == "NY":
+            self.scroll_to_element(self.name_of_school_dropdown)
+            self.driver.execute_script("window.scrollBy(0,-80)")
+            self.wait_to_click(self.name_of_school_dropdown)
+            self.wait_to_click(self.name_of_school_answer)
+            assert self.is_visible_and_displayed(self.school_selected_displayed, timeout=240)
+        elif site == "CO":
+            self.scroll_to_element(self.lang_dropdown)
+            self.driver.execute_script("window.scrollBy(0,-80)")
+            self.wait_to_click(self.lang_dropdown)
+            self.wait_to_click(self.lang_answer)
+            assert self.is_visible_and_displayed(self.lang_selected_displayed, timeout=240)
+
 
     @timer
     def ci_form_submission(self, application_name, username):
@@ -138,8 +175,8 @@ class HomePage(BasePage):
         assert self.is_visible_and_displayed(self.case_list_table, timeout=240)
 
     def search_contact_in_test(self, application_name, username, pre_configured_contact):
-        self.preconfig_contact = (By.XPATH, "//tr[.//td[text()='" + pre_configured_contact +
-                                  "' and @class='module-case-list-column']]")
+        self.preconfig_contact = (By.XPATH, "(//tr[.//td[text()='" + pre_configured_contact +
+                                  "' and @class='module-case-list-column']])[1]")
         self.wait_to_clear_and_send_keys(self.search_case_list, pre_configured_contact)
         self.wait_to_click(self.search_button)
         time.sleep(20)
@@ -161,15 +198,27 @@ class HomePage(BasePage):
         assert self.is_visible_and_displayed(self.form_content, timeout=240)
 
     @timer
-    def cm_form_answer_question(self, application_name, username):
-        self.scroll_to_element(self.name_of_school_dropdown)
-        self.driver.execute_script("window.scrollBy(0,-80)")
-        self.wait_to_click(self.name_of_school_dropdown)
-        self.wait_to_click(self.name_of_school_answer)
-        assert self.is_visible_and_displayed(self.school_selected_displayed, timeout=240)
+    def open_contact_notification_form(self, application_name, username):
+        self.wait_to_click(self.cn_form)
+        assert self.is_visible_and_displayed(self.form_content, timeout=240)
 
     @timer
-    def cm_form_submission(self, application_name, username):
+    def cn_cm_form_answer_question(self, application_name, username, site):
+        if site=="NY":
+            self.scroll_to_element(self.name_of_school_dropdown)
+            self.driver.execute_script("window.scrollBy(0,-80)")
+            self.wait_to_click(self.name_of_school_dropdown)
+            self.wait_to_click(self.name_of_school_answer)
+            assert self.is_visible_and_displayed(self.school_selected_displayed, timeout=240)
+        if site == "CO":
+            self.scroll_to_element(self.lang_dropdown)
+            self.driver.execute_script("window.scrollBy(0,-80)")
+            self.wait_to_click(self.lang_dropdown)
+            self.wait_to_click(self.lang_answer)
+            assert self.is_visible_and_displayed(self.lang_selected_displayed, timeout=240)
+
+    @timer
+    def cn_cm_form_submission(self, application_name, username):
         self.js_click(self.submit_form)
         assert self.is_visible_and_displayed(self.form_submission_success, timeout=240)
 

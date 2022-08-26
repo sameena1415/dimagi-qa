@@ -187,12 +187,11 @@ USH_Apps/NY_CICT/Tests/output.xml
 
 
 #Ignoring compliled files of NY Performance
-PerformanceTests/NY_CICT_App_Sprint/CaptureReadings/report.html
-PerformanceTests/NY_CICT_App_Sprint/NYperformance/CaptureReadings/NY_reading.csv
-PerformanceTests/NY_CICT_App_Sprint/CaptureReadings/final_reading.xlsx
-PerformanceTests/NY_CICT_App_Sprint/report.html
-PerformanceTests/NY_CICT_App_Sprint/settings.cfg
-
+AppSprintPerformanceTests/CICT/CaptureReadings/report.html
+AppSprintPerformanceTests/CICT/CaptureReadings/NY_reading.csv
+AppSprintPerformanceTests/CICT/CaptureReadings/final_reading.xlsx
+AppSprintPerformanceTests/CICT/report.html
+AppSprintPerformanceTests/CICT/settings.cfg
 
 #Ignoring compliled files of QA_Requests
 QA_Requests/PerfTickets/settings.cfg

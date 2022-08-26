@@ -28,6 +28,7 @@ def test_case_53_rage_clicks(driver):
 @pytest.mark.smoke
 def test_case_two_factor_auth(driver, settings):
     login = LoginPage(driver, settings["url"])
+    login.logout()
     if "staging" in settings["url"]:
         login.two_factor_auth(UserData.two_fa_user, settings["login_password"], settings["staging_auth_key"])
     else:
