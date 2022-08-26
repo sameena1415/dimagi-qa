@@ -92,7 +92,7 @@ jobs:
             const prefix = `[${CC_ENV}] Smoke Tests - ${JOB_STATUS.toUpperCase()} - Run #${context.runNumber}`
             const suffix = `at ${NOW}`
 
-            let subject = `${prefix} on "deploy_sucess" ${suffix}`
+            let subject = `${prefix} on "deploy_success" ${suffix}`
             if (context.eventName !== "repository_dispatch") {
               subject = `${prefix} on branch "${GITHUB_HEAD_REF}" ${suffix}`
             }
