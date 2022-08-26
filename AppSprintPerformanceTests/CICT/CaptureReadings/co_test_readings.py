@@ -48,9 +48,9 @@ def test_app_workflows(driver, user, application, settings):
     visible.search_contact_in_test(username=user, application_name=application, pre_configured_contact=COUserData.pre_configured_contact)
     visible.open_contact_detail(username=user, application_name=application)
     visible.contact_menu_display(username=user, application_name=application)
-    visible.open_contact_notification_form(username=user, application_name=application)
-    visible.cn_cm_form_answer_question(username=user, application_name=application, site=appsite)
-    visible.cn_cm_form_submission(username=user, application_name=application)
+    visible.open_contact_monitoring_form(username=user, application_name=application, site=appsite)
+    visible.cm_form_answer_question(username=user, application_name=application, site=appsite)
+    visible.cm_form_submission(username=user, application_name=application)
 
     """Back to webapps workflows"""
 
