@@ -58,7 +58,7 @@ jobs:
         to: ktripathy@dimagi.com
         from: <qa-no-reply@dimagi.com>
         html_body: file:////home/runner/work/dimagi-qa/dimagi-qa/CICT/UserInputs/email_fail.html
-        attachments: ${{ github.workspace }}/NY_final_reading.xlsx, ${{ github.workspace }}/report.html
+        attachments: ${{ github.workspace }}/NY_reading.xlsx, ${{ github.workspace }}/report.html
         priority: normal
 
     - name: Send Pass Email
@@ -73,7 +73,7 @@ jobs:
         to: ktripathy@dimagi.com
         from: <qa-no-reply@dimagi.com>
         html_body: file:////home/runner/work/dimagi-qa/dimagi-qa/CICT/UserInputs/email_pass.html
-        attachments: ${{ github.workspace }}/NY_final_reading.xlsx, ${{ github.workspace }}/report.html
+        attachments: ${{ github.workspace }}/NY_reading.xlsx, ${{ github.workspace }}/report.html
         priority: normal
 
     - name: Archive report
@@ -89,5 +89,5 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: report_and_reading
-        path: ${{ github.workspace }}/NY_final_reading.xlsx
+        path: ${{ github.workspace }}/NY_reading.xlsx
         retention-days: 2
