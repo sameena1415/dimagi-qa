@@ -87,7 +87,7 @@ jobs:
           from: <${{secrets.DIMAGIQA_MAIL_USERNAME}}>
           html_body: ${{ fromJSON(steps.configure_email.outputs.result).body }}
           convert_markdown: true
-          attachments: ${{ github.workspace }}/report.html , ${{ github.workspace }}/${{ inputs.site }}_reading.xlsx
+          attachments: ${{ github.workspace }}/report.html , ./common_utilities/OutputFiles//${{ inputs.site }}_readings.xlsx
           in_reply_to: ${{ fromJSON(steps.configure_email.outputs.result).reference }}
 
       - name: Archive test results
@@ -103,5 +103,5 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: report_and_reading-${{ inputs.site }}
-          path: ${{ github.workspace }}/${{ inputs.site }}_reading.xlsx
+          path: ./common_utilities/OutputFiles//${{ inputs.site }}_readings.xlsx
           retention-days: 2
