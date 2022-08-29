@@ -57,7 +57,7 @@ def test_app_workflows(driver, user, application, settings1, appsite):
 
     """Write to excel"""
 
-    write_to_excel(username=user, application_name=application, site="NY")
+    write_to_excel(username=user, application_name=application, site=appsite)
     if os.path.isfile(first_dump_filename) and test_app_workflows.counter == NYUserData.repeat_count:
         os.remove(first_dump_filename)
         test_app_workflows.counter = 0
