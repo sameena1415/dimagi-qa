@@ -1,8 +1,10 @@
 """"Contains test data that are used as user inputs across various areasn in CCHQ"""
+import os
 
 
 class UserData:
     """User Test Data"""
+    USER_INPUT_BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
     # Pre-setup application and case names
     village_application = "Village Health"
@@ -53,3 +55,10 @@ class UserData:
 
     """Deduplicate Case Module """
     case_property = 'village_name'
+
+    """Messaging History"""
+    communication_type = "Conditional Alert"
+
+    """Conditional Alert"""
+    alert_case_property = "name"
+    alert_case_property_value = "conditional alert"

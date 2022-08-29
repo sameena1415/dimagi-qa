@@ -138,6 +138,10 @@ class BasePage:
         select_source = Select(self.driver.find_element(*source_locator))
         select_source.select_by_value(value)
 
+    def deselect_all(self, source_locator):
+        select_source = Select(self.driver.find_element(*source_locator))
+        select_source.deselect_all()
+
     def move_to_element_and_click(self, locator):
         element = self.driver.find_element(*locator)
         ActionChains(self.driver).move_to_element(element).click(element).perform()
