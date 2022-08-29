@@ -2,7 +2,6 @@ import os
 import time
 import pytest
 
-from AppSprintPerformanceTests.CICT.CaptureReadings.conftest import appsite
 from AppSprintPerformanceTests.CICT.WorkflowActions.workflows.excel_actions import write_to_excel
 from AppSprintPerformanceTests.CICT.WorkflowActions.workflows.hq_actions import HomePage
 from common_utilities.decorators import first_dump_filename
@@ -15,16 +14,15 @@ from AppSprintPerformanceTests.CICT.UserInputs.ny_cict_user_inputs import NYUser
 @pytest.mark.parametrize("user", [NYUserData.ci_ct_user1, NYUserData.ci_ct_user2])
 @pytest.mark.parametrize("application", [NYUserData.application_before_release, NYUserData.application_after_release])
 @pytest.mark.repeat(NYUserData.repeat_count)
-def test_app_workflows(driver, user, application, settings):
+def test_app_workflows(driver, user, application, settings1, appsite):
     """Repeat Count"""
 
     test_app_workflows.counter += 1
 
     """General workflows"""
 
-    appsite = "NY"
     visible = HomePage(driver)
-    visible.login_as_ci_ct_user(user, settings["ny_url"])
+    visible.login_as_ci_ct_user(user, settings1["url"])
     time.sleep(5)
     visible.break_locks_and_clear_user_data(project_space=NYUserData.project_space)
     time.sleep(5)

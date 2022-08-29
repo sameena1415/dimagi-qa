@@ -17,7 +17,7 @@ global driver
 
 
 @pytest.fixture(scope="session", autouse=True)
-def environment_settings(appsite):
+def environment_settings1(appsite):
     """Load settings from os.environ
 
             Names of environment variables:
@@ -29,7 +29,7 @@ def environment_settings(appsite):
             for instructions on how to set them.
             """
     settings = {}
-    for name in ["login_username", "login_password", "staging_auth_key", "prod_auth_key"]:
+    for name in ["login_username", "login_password"]:
         var = f"DIMAGIQA_{name.upper()}"
         if var in os.environ:
             settings[name] = os.environ[var]
@@ -42,13 +42,12 @@ def environment_settings(appsite):
 
 
 @pytest.fixture(scope="session", autouse=True)
-def settings(environment_settings):
+def settings1(environment_settings1, appsite):
     if os.environ.get("CI") == "true":
-        settings = environment_settings
+        settings = environment_settings1
         settings["CI"] = "true"
-        if any(x not in settings for x in ["login_username", "login_password",
-                                           "staging_auth_key", "prod_auth_key"]):
-            lines = environment_settings.__doc__.splitlines()
+        if any(x not in settings for x in ["url", "login_username", "login_password"]):
+            lines = environment_settings1.__doc__.splitlines()
             vars_ = "\n  ".join(line.strip() for line in lines if "DIMAGIQA_" in line)
             raise RuntimeError(
                 f"Environment variables not set:\n  {vars_}\n\n"
@@ -57,6 +56,7 @@ def settings(environment_settings):
             )
         return settings
     path = Path(__file__).parent.parent / "settings.cfg"
+    print(path)
     if not path.exists():
         raise RuntimeError(
             f"Not found: {path}\n\n"
@@ -65,15 +65,21 @@ def settings(environment_settings):
         )
     settings = ConfigParser()
     settings.read(path)
+
+    ## updates the url with the project domain while testing in local
+    if appsite == "CO":
+        settings["default"]["url"] = f"https://www.commcarehq.org/a/{COUserData.project_space}/cloudcare/apps/v2/"
+    elif appsite == "NY":
+        settings["default"]["url"] = f"https://www.commcarehq.org/a/{NYUserData.project_space}/cloudcare/apps/v2/"
     return settings["default"]
 
 
 @pytest.fixture(scope="module", autouse=True)
-def driver(settings, browser, appsite):
+def driver(settings1, browser, appsite):
     web_driver = None
     chrome_options = webdriver.ChromeOptions()
     firefox_options = webdriver.FirefoxOptions()
-    if settings.get("CI") == "true":
+    if settings1.get("CI") == "true":
         if browser == "chrome":
             chrome_options.add_argument('--no-sandbox')
             chrome_options.add_argument('disable-extensions')
@@ -108,12 +114,8 @@ def driver(settings, browser, appsite):
         web_driver = webdriver.Firefox(executable_path=GeckoDriverManager().install(), options=firefox_options)
     else:
         print("Provide valid browser")
-    url = lambda appsite: settings["co_url"] if (appsite == "CO") else (
-        settings["ny_url"] if (appsite == "NY") else print("URL not provided fot the site"))
-    #auth_key =  lambda appsite: settings["2fa_auth_key_for_co-performance"] if (appsite == "CO") else (
-        #settings["2fa_auth_key_for_ny-performance-cdcms"] if (appsite == "NY") else print("Key not provided fot the site"))
-    login = LoginPage(web_driver, url(appsite))
-    login.login(settings["login_username"], settings["login_password"])
+    login = LoginPage(web_driver, settings1["url"])
+    login.login(settings1["login_username"], settings1["login_password"])
     yield web_driver
     web_driver.quit()
 
