@@ -2,7 +2,6 @@ import os
 import time
 import pytest
 
-from AppSprintPerformanceTests.CICT.CaptureReadings.conftest import appsite
 from AppSprintPerformanceTests.CICT.WorkflowActions.workflows.excel_actions import write_to_excel
 from AppSprintPerformanceTests.CICT.WorkflowActions.workflows.hq_actions import HomePage
 from common_utilities.decorators import first_dump_filename
@@ -21,7 +20,7 @@ def test_app_workflows(driver, user, application, settings):
     test_app_workflows.counter += 1
 
     """General workflows"""
-
+    appsite = "CO"
     visible = HomePage(driver)
     visible.login_as_ci_ct_user(user, settings["co_url"])
     time.sleep(5)
@@ -34,8 +33,10 @@ def test_app_workflows(driver, user, application, settings):
     """CI workflows"""
 
     visible.all_cases_menu_load(username=user, application_name=application)
-    visible.search_case_in_test(username=user, application_name=application, pre_configured_case=COUserData.pre_configured_case)
-    visible.open_case_detail(username=user, application_name=application, pre_configured_case=COUserData.pre_configured_case)
+    visible.search_case_in_test(username=user, application_name=application,
+                                pre_configured_case=COUserData.pre_configured_case)
+    visible.open_case_detail(username=user, application_name=application,
+                             pre_configured_case=COUserData.pre_configured_case)
     visible.case_menu_display(username=user, application_name=application)
     visible.open_case_investigation_form(username=user, application_name=application)
     visible.ci_form_answer_question(username=user, application_name=application, site=appsite)
@@ -45,7 +46,8 @@ def test_app_workflows(driver, user, application, settings):
 
     visible.app_home_screen(application)
     visible.all_contacts_menu_load(username=user, application_name=application)
-    visible.search_contact_in_test(username=user, application_name=application, pre_configured_contact=COUserData.pre_configured_contact)
+    visible.search_contact_in_test(username=user, application_name=application,
+                                   pre_configured_contact=COUserData.pre_configured_contact)
     visible.open_contact_detail(username=user, application_name=application)
     visible.contact_menu_display(username=user, application_name=application)
     visible.open_contact_monitoring_form(username=user, application_name=application, site=appsite)
@@ -58,7 +60,7 @@ def test_app_workflows(driver, user, application, settings):
 
     """Write to excel"""
 
-    write_to_excel(username=user, application_name=application, site="CO")
+    write_to_excel(username=user, application_name=application, site=appsite)
     if os.path.isfile(first_dump_filename) and test_app_workflows.counter == COUserData.repeat_count:
         os.remove(first_dump_filename)
         test_app_workflows.counter = 0

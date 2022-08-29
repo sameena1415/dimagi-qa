@@ -36,13 +36,13 @@ class HomePage(BasePage):
         self.menu_list = (By.XPATH, "//div[@class='module-menu-container']")
         self.ci_form = (By.XPATH, "//tr[@aria-label='Case Investigation']")
         self.form_content = (By.ID, "webforms")
-        #CO
+        # CO
         self.lang_dropdown = (By.XPATH, "(//span[contains(text(),'What language')])/following::span[@class='select2-selection__rendered'][1]")
         self.lang_search = random.choice(COUserData.language_list)
         self.lang_answer = (
             By.XPATH, "//span[@class='select2-results']//ul//li[contains(text(),'" + self.lang_search + "')][1]")
-        self.lang_selected_displayed = (By.XPATH, "//span[contains(text(), '" + self.lang_search + "')]")
-        #NY
+        self.lang_selected_displayed = (By.XPATH, "(//span[contains(text(), '" + self.lang_search + "')])[1]")
+        # NY
         self.name_of_school_dropdown = (By.XPATH, "(//*[contains(text(),'Name of university')])[1]"
                                                   "/following::span[@class='select2-selection__rendered'][1]")
         self.search_dropdown = (By.XPATH, "//span[@class='select2-search select2-search--dropdown']")
@@ -50,7 +50,6 @@ class HomePage(BasePage):
         self.name_of_school_answer = (
             By.XPATH, "//span[@class='select2-results']//ul//li[contains(text(),'" + self.school_search + "')][1]")
         self.school_selected_displayed = (By.XPATH, "//span[contains(text(), '" + self.school_search + "')]")
-
 
         self.submit_form = (By.XPATH, "//button[@type='submit' and @class='submit btn btn-primary']")
         self.form_submission_success = (By.XPATH, "//p[text()='Form successfully saved!']")
@@ -83,6 +82,7 @@ class HomePage(BasePage):
             self.wait_to_click(self.login_as)
             self.wait_to_clear_and_send_keys(self.search_user, username)
             self.wait_to_click(self.search_confirm)
+            time.sleep(2)
         except TimeoutException:
             try:
                 self.wait_to_clear_and_send_keys(self.search_user, username)
@@ -150,6 +150,7 @@ class HomePage(BasePage):
             self.scroll_to_element(self.name_of_school_dropdown)
             self.driver.execute_script("window.scrollBy(0,-80)")
             self.wait_to_click(self.name_of_school_dropdown)
+            time.sleep(0.5)
             self.wait_to_click(self.name_of_school_answer)
             assert self.is_visible_and_displayed(self.school_selected_displayed, timeout=240)
         elif site == "CO":
@@ -157,8 +158,8 @@ class HomePage(BasePage):
             self.driver.execute_script("window.scrollBy(0,-80)")
             self.wait_to_click(self.lang_dropdown)
             self.wait_to_click(self.lang_answer)
+            print(self.lang_search)
             assert self.is_visible_and_displayed(self.lang_selected_displayed, timeout=240)
-
 
     @timer
     def ci_form_submission(self, application_name, username):
@@ -195,14 +196,14 @@ class HomePage(BasePage):
     @timer
     def open_contact_monitoring_form(self, application_name, username, site):
         if site == "NY":
-            self.wait_to_click(self.cm_form)
+            self.click(self.cm_form)
         elif site == "CO":
-            self.wait_to_click(self.cn_form)
+            self.click(self.cn_form)
         assert self.is_visible_and_displayed(self.form_content, timeout=240)
 
     @timer
     def cm_form_answer_question(self, application_name, username, site):
-        if site=="NY":
+        if site == "NY":
             self.scroll_to_element(self.name_of_school_dropdown)
             self.driver.execute_script("window.scrollBy(0,-80)")
             self.wait_to_click(self.name_of_school_dropdown)

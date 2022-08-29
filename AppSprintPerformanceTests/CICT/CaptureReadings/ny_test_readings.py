@@ -22,6 +22,7 @@ def test_app_workflows(driver, user, application, settings):
 
     """General workflows"""
 
+    appsite = "NY"
     visible = HomePage(driver)
     visible.login_as_ci_ct_user(user, settings["ny_url"])
     time.sleep(5)

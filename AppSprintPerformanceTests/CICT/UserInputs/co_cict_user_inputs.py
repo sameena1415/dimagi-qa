@@ -10,4 +10,4 @@ class COUserData:
     # This case and contact should be accesible to both the users in test
     pre_configured_case = "Performance"
     pre_configured_contact = "Performance"
-    language_list = ["English", "Spanish", "Arabic", "Burmese"]
+    language_list = ["English", "Arabic", "Burmese", "Chinese", "Amharic"]
