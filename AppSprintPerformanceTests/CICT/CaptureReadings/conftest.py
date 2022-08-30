@@ -56,7 +56,6 @@ def settings1(environment_settings1, appsite):
             )
         return settings
     path = Path(__file__).parent.parent / "settings.cfg"
-    print(path)
     if not path.exists():
         raise RuntimeError(
             f"Not found: {path}\n\n"
