@@ -5,6 +5,10 @@ on:
   repository_dispatch:
     types: [ deploy_success ]
 
+concurrency:
+  group: tests-on-pr-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
   build:
     name: NY CICT on '${{ github.event.client_payload.environment || 'manual trigger' }}'
