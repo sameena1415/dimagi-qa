@@ -7,13 +7,8 @@ Resource    ../../Case Investigation (CI)/Forms/hub cases.robot
 
 *** Keywords ***
     
-Open Case Investigation Form
-    Sleep    2s
-    Wait Until Element Is Enabled    ${Case Investigation Form} 
-    JS Click    ${Case Investigation Form} 
-    
 Fill up and Submit Case Investigation Form
-   Run Keyword And Ignore Error     Open Case Investigation Form
+   Run Keyword And Ignore Error     Open Form    ${Case Investigation Form}
    Wait Until Element Is Enabled    ${Q:Case Interview Disposition A:Reached person, agreed to call}    
    JS Click    ${Q: Case Interview Disposition A:Reached person, agreed to call}
    Add User Details
@@ -161,7 +156,7 @@ Verify Daily Monitoring Status
 
 Verify Daily Monitoring Section
 
-    Wait Until Element Is Visible    ${submit_form}
+    Wait Until Element Is Visible    ${submit_form}      200s
     Element Should Be Visible    ${daily_monitoring_section}
     Element Should Be Visible    ${view_update_rest_of_the_case_info}
     Element Should Not Be Visible    ${interview_info_section}
@@ -187,6 +182,7 @@ Verify Monitoring logs
     FOR    ${note}    IN    @{notes}
         Log To Console    ${note}
         IF    "${note}" != "${EMPTY}"
+            Wait Until Element Is Enabled   //p[text()='${note}']
             Page Should Contain Element    //p[text()='${note}']
         END
     END
@@ -211,7 +207,7 @@ Follow up attempt notes
 
 Add new follow up log
     [Arguments]     ${result}
-    JS Click    ${add_new_follow_up_log}
+    Wait Until Keyword Succeeds  5 min  1 min   JS Click    ${add_new_follow_up_log}
     Wait Until Keyword Succeeds  2 min  5 sec   Wait Until Element Is Visible    ${follow_up_attempt_${result}}
     JS Click    ${follow_up_attempt_${result}}
 
@@ -245,6 +241,7 @@ Verify Follow Up logs
     FOR    ${note}    IN    @{notes}
         Log To Console    ${note}
         IF    "${note}" != "${EMPTY}"
+            Wait Until Element Is Enabled   ${verify_notes}\[contains(text(),'${note}')]
             Page Should Contain Element     ${verify_notes}\[contains(text(),'${note}')]
             Page Should Contain Element     ${verify_attempt}
             Page Should Contain Element     ${verify_fever_temp}\[contains(text(),'')]
@@ -300,6 +297,7 @@ Enter Provider Info
     Submit Form and Check Success
     
 Validate Provider Info
+    Wait Until Element Is Enabled    ${view_update_rest_of_the_case_info}
     Scroll Element Into View    ${view_update_rest_of_the_case_info}
     JS Click    ${view_update_rest_of_the_case_info}
     ${name}   get element attribute    ${provider_name}     value
@@ -384,6 +382,7 @@ Enter Symptoms improving
 
 
 Verify fever, symptoms, help all no logs
+
     Scroll Element Into View    ${daily_monitoring_section}
     JS Click    ${view_follow_up_logs}
     Page Should Contain Element     ${verify_attempt}
@@ -394,8 +393,10 @@ Verify fever, symptoms, help all no logs
 
 
 Verify fever, symptoms, help all logs
+    Wait Until Element Is Enabled   ${daily_monitoring_section}
     Scroll Element Into View    ${daily_monitoring_section}
     JS Click    ${view_follow_up_logs}
+    Wait Until Element Is Enabled   ${verify_attempt}
     Page Should Contain Element     ${verify_attempt}
     Page Should Contain Element     ${verify_fever_temp}\[contains(text(),'103')]
     Page Should Contain Element     ${verify_fever}\[contains(text(),'yes')]
@@ -409,6 +410,7 @@ Verify unsuccessful logs
     [Arguments]     ${log}
     Scroll Element Into View    ${daily_monitoring_section}
     JS Click    ${view_follow_up_logs}
+    Wait Until Element Is Enabled   ${verify_unsuccess_attempt}
     Page Should Contain Element     ${verify_unsuccess_attempt}
     Page Should Contain Element     ${verify_notes}\[contains(text(),'${log}')]
 
@@ -462,6 +464,7 @@ Verify results received
     Element Should Be Visible    //tr[.//td[text()='${case_name}']]/self::tr//td[10][normalize-space()='Received Results']
 
 Get specimen collection date
+    Wait Until Element Is Enabled    ${verify_specimen_collection}
     ${string}=      Get Text    ${verify_specimen_collection}
     ${str}=       String.Split String    ${string}    :
     ${str}=     String.Strip String    ${str}[1]
@@ -698,6 +701,7 @@ Get school or college details
     [Arguments]     ${school}
     ${string}=      String.Split String    ${school}    -
     ${name}     String.Strip String    ${string}[0]
+    Wait Until Element Is Enabled   //p[.='${name}']
     Page Should Contain Element    //p[.='${name}']
     ${value}=       Get Text    //p[.='${name}']/following-sibling::ul/li[contains(text(),'Address')]
     ${address}=      String.Split String    ${value}    :
@@ -738,6 +742,7 @@ Unselect Healthcare, verify Hub Section
 Verify Hub Section
     [Arguments]     ${yes_no}
     IF    "${yes_no}" == "Yes"
+        Wait Until Element Is Enabled   ${healthcare_hub_section}
         Page Should Contain Element    ${healthcare_hub_section}
         Page Should Contain Element    ${heathcare_facility_details_section}
     ELSE
@@ -748,6 +753,7 @@ Verify Hub Section
 Verify Congregate Section
     [Arguments]     ${yes_no}
     IF    "${yes_no}" == "Yes"
+        Wait Until Element Is Enabled  ${congregate_setting_hub_section}
         Page Should Contain Element    ${congregate_setting_hub_section}
     ELSE
         Page Should Not Contain    ${congregate_setting_hub_section}
@@ -756,6 +762,7 @@ Verify Congregate Section
 Verify Cluster Hub Section
     [Arguments]     ${yes_no}
     IF    "${yes_no}" == "Yes"
+        Wait Until Element Is Enabled   ${clusters_hub_section}
         Page Should Contain Element    ${clusters_hub_section}
     ELSE
         Page Should Not Contain    ${clusters_hub_section}
@@ -764,6 +771,7 @@ Verify Cluster Hub Section
 Verify CSS Hub Section
     [Arguments]     ${yes_no}
     IF    "${yes_no}" == "Yes"
+        Wait Until Element Is Enabled   ${css_section}
         Page Should Contain Element    ${css_section}
     ELSE
         Page Should Not Contain    ${css_section}
@@ -772,6 +780,7 @@ Verify CSS Hub Section
 Verify Student Hub Section
     [Arguments]     ${yes_no}
     IF    "${yes_no}" == "Yes"
+        Wait Until Element Is Enabled   ${student_hub_section}
         Page Should Contain Element    ${student_hub_section}
         Page Should Contain Element    ${student_details_section}
     ELSE
@@ -824,6 +833,7 @@ Verify School Details present in Hub section
     ${name}     String.Strip String    ${name}
     ${address}     String.Strip String    ${address}
     ${phone}     String.Strip String    ${phone}
+    Wait Until Element Is Enabled   //li[contains(text(),'School Name: ${name}')]
     Page Should Contain Element    //li[contains(text(),'School Name: ${name}')]
     Run Keyword And Ignore Error    Page Should Contain Element    //li[contains(text(),'${address}')]
     Run Keyword And Ignore Error    Page Should Contain Element    //li[contains(text(),'School Address: ${address}')]

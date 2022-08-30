@@ -5,7 +5,7 @@ Library    DateTime
 Resource    ../../Base/base.robot
 
 
-*** Keywords *** 
+*** Keywords ***
 
 
 Verify Hub Status
@@ -21,10 +21,9 @@ Verify School Name and Date
     Should Be True    ${ispresent}
     Element Should Be Visible    //tr[.//td[text()='${case_name}']]/self::tr//td[6][normalize-space()='${date}']
 
-
-
 Update Hub Status
     [Arguments]     ${hub_status}
+    Wait Until Element Is Enabled   ${hub_task_force_followup}
     Scroll Element Into View    ${hub_task_force_followup}
     JS Click    ${hub_status_selection}\[.='${hub_status}']
     Run Keyword And Ignore Error    JS Click    ${congregate_hub_status_selection}\[.='${hub_status}']
@@ -32,12 +31,14 @@ Update Hub Status
 
 Update Cluster Hub Status
     [Arguments]     ${hub_status}
+    Wait Until Element Is Enabled   ${hub_task_force_followup}
     Scroll Element Into View    ${hub_task_force_followup}
     JS Click    ${cluster_hub_status_selection}\[.='${hub_status}']
     Submit Form and Check Success
 
 Update School Hub Status
     [Arguments]     ${hub_status}
+    Wait Until Element Is Enabled   ${hub_task_force_followup}
     Scroll Element Into View    ${hub_task_force_followup}
     JS Click    ${cluster_hub_status_selection}\[.='${hub_status}']
     Submit Form and Check Success

@@ -1,7 +1,8 @@
 *** Settings ***
 Documentation     Testing the workflow to convert a symptomatic contact into a suspected case (PUI)
 ...     and testing the workflow to convert a suspected case (PUI) back into a contact.
-Library  SeleniumLibrary
+Library  SeleniumLibrary        timeout=200s
+Library  DependencyLibrary
 Suite Setup    Driver Launch
 Resource    ../Contact Tracing (CT)/Forms/change to pui status form.robot
 Resource    ../Contact Tracing (CT)/Forms/contact montitoring form.robot
@@ -14,7 +15,7 @@ Suite Teardown  Close Browser
 
 Convert_Contact_to_PUI_1
     [Documentation]    Convert contact to PUI using "Contact Monitoring" form
-    Sleep   40s
+    Sleep   80s
     HQ Login
     Log in as ct_user
     Register contact with phone number
@@ -25,10 +26,11 @@ Convert_Contact_to_PUI_1
     PUI form submission
     Open All Contacts Unassigned & Open menu
     Search in the case list    ${contact_name}
-    Element Should Not Be Visible    ${contact_created}
+    Wait Until Keyword Succeeds  2 min  20 sec      Element Should Not Be Visible    ${contact_created}
 
 Convert_Contact_to_PUI_3
     [Documentation]    Convert PUI back to contact - close record
+    Depends on test     Convert_Contact_to_PUI_1
     Log in as ci_user
     Search Case in All Suspected Cases (PUIs) menu
     ${contact_name}    Get Contact Name
@@ -39,14 +41,14 @@ Convert_Contact_to_PUI_3
     Yes, Close the Record
     ## Redirects to All Suspected Cases (PUIs) menu
     Search in the case list    ${contact_name}
-    Element Should Not Be Visible    ${contact_created}
+    Wait Until Keyword Succeeds  2 min  20 sec      Element Should Not Be Visible    ${contact_created}
     Log in as ct_user
     Open All Closed Contacts menu
     Search in the case list    ${contact_name}
-    Element Should Be Visible    ${contact_created}
+    Wait Until Keyword Succeeds  2 min  20 sec      Element Should Be Visible    ${contact_created}
     Open All Open Contacts menu
     Search in the case list    ${contact_name}
-    Element Should Not Be Visible    ${contact_created}
+    Wait Until Keyword Succeeds  2 min  20 sec      Element Should Not Be Visible    ${contact_created}
 
 Convert_Contact_to_PUI_2
     [Documentation]    Convert contact to PUI using "Convert Contact to Suspected Case (PUI)" form
@@ -57,12 +59,11 @@ Convert_Contact_to_PUI_2
     Convert contact to PUI form
     Open All Contacts Unassigned & Open menu
     Search in the case list    ${contact_name}
-    Element Should Not Be Visible    ${contact_created}    Contact appearing in menu
+    Wait Until Keyword Succeeds  2 min  20 sec      Element Should Not Be Visible    ${contact_created}    Contact appearing in menu
 
 Convert_Contact_to_PUI_4
     [Documentation]    Convert PUI back to contact - do not close record
-    Log    Sleeping ES to update..
-    Sleep     2 minutes
+    Depends on test     Convert_Contact_to_PUI_2
     Log in as ci_user
     Search Case in All Suspected Cases (PUIs) menu
     ${contact_name}    Get Contact Name
@@ -73,37 +74,41 @@ Convert_Contact_to_PUI_4
     No , Close the Record
     ## Redirects to All Suspected Cases (PUIs) menu
     Search in the case list    ${contact_name}
-    Element Should Not Be Visible    ${contact_created}
+    Wait Until Keyword Succeeds  2 min  20 sec      Element Should Not Be Visible    ${contact_created}
     Log in as ct_user
     Open All Open Contacts menu
     Search in the case list    ${contact_name}
-    Element Should Be Visible    ${contact_created}
+    Wait Until Keyword Succeeds  2 min  20 sec      Element Should Be Visible    ${contact_created}
 
-#Convert_Contact_to_PUI_6
-#    [Documentation]    convert PUI back to contact (archived contact) - do not close record
-#    Log in as ci_user
-#    Search Archieved Case in All Suspected Cases (PUIs) menu
-#    Search and Select Archieved Case
-#    Change PUI Status form
-#    No , Close the Archieved Record
-#    IF    '${archieved_contact_lname}' == '\'
-#        Search in the case list    ${archieved_contact_name}
-#    ELSE
-#         Search in the case list    ${archieved_contact_name} ${archieved_contact_lname}
-#    END
-#    Element Should Be Visible    ${archieved_contact}
-#
-#Convert_Contact_to_PUI_5
-#    [Documentation]    convert PUI back to contact (archived contact) - close record
-#    Log in as ci_user
-#    Search Archieved Case in All Suspected Cases (PUIs) menu
-#    Search and Select Archieved Case
-#    Change PUI Status form
-#    Yes, Close the Archieved Record
-#    IF    '${archieved_contact_lname}' == '\'
-#        Search in the case list    ${archieved_contact_name}
-#    ELSE
-#         Search in the case list    ${archieved_contact_name} ${archieved_contact_lname}
-#    END
-#    Search in the case list    ${archieved_contact_name} ${archieved_contact_lname}
-#    Element Should Not Be Visible     ${archieved_contact}
+Convert_Contact_to_PUI_6
+    [Documentation]    convert PUI back to contact (archived contact) - do not close record
+    Skip    This test case is skipped since presetup archieved cases are required
+
+    Log in as ci_user
+    Search Archieved Case in All Suspected Cases (PUIs) menu
+    Search and Select Archieved Case
+    Change PUI Status form
+    No , Close the Archieved Record
+    IF    '${archieved_contact_lname}' == '\'
+        Search in the case list    ${archieved_contact_name}
+    ELSE
+         Search in the case list    ${archieved_contact_name} ${archieved_contact_lname}
+    END
+    Wait Until Keyword Succeeds  2 min  20 sec      Element Should Be Visible    ${archieved_contact}
+
+Convert_Contact_to_PUI_5
+    [Documentation]    convert PUI back to contact (archived contact) - close record
+    Skip    This test case is skipped since presetup archieved cases are required
+
+    Log in as ci_user
+    Search Archieved Case in All Suspected Cases (PUIs) menu
+    Search and Select Archieved Case
+    Change PUI Status form
+    Yes, Close the Archieved Record
+    IF    '${archieved_contact_lname}' == '\'
+        Search in the case list    ${archieved_contact_name}
+    ELSE
+         Search in the case list    ${archieved_contact_name} ${archieved_contact_lname}
+    END
+    Search in the case list    ${archieved_contact_name} ${archieved_contact_lname}
+    Wait Until Keyword Succeeds  2 min  20 sec      Element Should Not Be Visible     ${archieved_contact}

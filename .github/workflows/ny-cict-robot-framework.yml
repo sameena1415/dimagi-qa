@@ -1,7 +1,4 @@
-# This workflow will install Python dependencies, run tests and lint with a single version of Python
-# For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
-
-name: NY App Tests
+name: NY App Regression Tests
 
 on:
   workflow_dispatch:
@@ -12,7 +9,7 @@ jobs:
   build:
     name: NY CICT on '${{ github.event.client_payload.environment || 'manual trigger' }}'
     runs-on: ubuntu-latest
-    if: ${{ github.event.client_payload.environment == 'production' }}
+    if: ${{ github.event.client_payload.environment == 'production' || github.event.client_payload.environment == null }}
 
     steps:
     - uses: actions/checkout@v2
@@ -34,9 +31,8 @@ jobs:
         DIMAGIQA_RF_SECRETS:  ${{ secrets.DIMAGIQA_RF_SECRETS }}
         DIMAGIQA_RF_PASSWORD:  ${{ secrets.DIMAGIQA_RF_PASSWORD }}
       run: |
-        echo "NOW=$(date +'%m-%d %H:%M')" >> $GITHUB_ENV
-        echo ${{env.NOW}}
-        pabot --processes 6 --outputdir ./USH_Apps/NY_CICT/Reports  ./USH_Apps/NY_CICT/Tests/*.robot
+        pabot --processes 13  --ordering ./USH_Apps/NY_CICT/Tests/.pabotsuitenames-ordering --outputdir ./USH_Apps/NY_CICT/Reports  ./USH_Apps/NY_CICT/Tests/*.robot
+
 
 
     - name: Zip Reports folder
@@ -55,10 +51,10 @@ jobs:
         username: ${{secrets.DIMAGIQA_MAIL_USERNAME}}
         password: ${{secrets.DIMAGIQA_MAIL_PASSWORD}}
         subject: ${{ github.event.client_payload.environment }} - FAIL - NY App Tests (ny-staging-cdms) [#${{github.run_number}}], ${{env.NOW}}
-        to: qa@dimagi.com
+        to: ktripathy@dimagi.com
         from: <${{secrets.DIMAGIQA_MAIL_USERNAME}}>
         html_body: Please find the attached report. To access screenshots, download the test results artifacted in the respective job run.
-        attachments:  /home/runner/work/dimagi-qa/dimagi-qa/USH_Apps/NY_CICT/Reports/report.html
+        attachments:  ${{ github.workspace }}/USH_Apps/NY_CICT/Reports/report.html
         priority: normal
 
     - name: Send Success Email on Trigger
@@ -69,11 +65,11 @@ jobs:
         server_port: 465
         username: ${{secrets.DIMAGIQA_MAIL_USERNAME}}
         password: ${{secrets.DIMAGIQA_MAIL_PASSWORD}}
-        subject: ${{ github.event.client_payload.environment }} - PASS - NY App Tests (ny-staging-cdms) [#${{github.run_number}}], ${{env.NOW}}
+        subject: ${{ github.event.client_payload.environment || 'Manual Trigger'}} - PASS - NY App Tests (ny-staging-cdms) [#${{github.run_number}}], ${{env.NOW}}
         to: qa@dimagi.com
         from: <${{secrets.DIMAGIQA_MAIL_USERNAME}}>
         html_body: Please find the attached report. To access screenshots, download the test results artifacted in the respective job run.
-        attachments: /home/runner/work/dimagi-qa/dimagi-qa/USH_Apps/NY_CICT/Reports/report.html
+        attachments: ${{ github.workspace }}/USH_Apps/NY_CICT/Reports/report.html
         priority: normal
 
     - name: Archive test results
@@ -81,4 +77,4 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: test-result-reports
-        path: /home/runner/work/dimagi-qa/dimagi-qa/USH_Apps/NY_CICT/Reports.zip
+        path: ${{ github.workspace }}/USH_Apps/NY_CICT/Reports.zip

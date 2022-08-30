@@ -1,0 +1,13 @@
+--suite Tests 01-Patient Good Path.robot
+--suite Tests 02 Convert Contact to PUI and back to Contact.robot
+--suite Tests 03 Contact Good Path.robot
+--suite Tests 04 Convert PUI to Patient Dedupe Lab Results.robot
+--suite Tests 05 Close Case and Contact.robot
+--suite Tests 06 Reopen Case and Contact.robot
+--suite Tests 07 Daily Monitoring.robot
+--suite Tests 08 PUI Monitoring.robot
+--suite Tests 09 Clusters.robot
+--suite Tests 10 Hub Cases.robot
+--suite Tests 11 Hub Contacts.robot
+--suite Tests 12 Register New Contacts.robot
+--suite Tests 13 Register New Contacts without Index Case.robot

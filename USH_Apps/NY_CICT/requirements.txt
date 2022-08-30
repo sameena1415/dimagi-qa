@@ -5,3 +5,4 @@ robotframework-seleniumlibrary >= 3.3.1
 pyotp >= 2.6.0
 webdriver-manager
 robotframework-pabot >= 2.5.3
+robotframework-dependencylibrary >=3.0.1

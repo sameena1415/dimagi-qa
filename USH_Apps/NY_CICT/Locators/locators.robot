@@ -46,7 +46,8 @@ ${search all cases in the list}    //button[contains(., 'Search All')]
 ${register_new_contacts_form}    //h3[.='Register New Contact(s)']
 ${how_many_new_contacts}     //span[contains(text(),'contacts do you want to record?')]/following::div[1]/div[@class='widget']/descendant::input
 ${close_contacts_header}    //h1[text()='Close Contacts']
-
+#${contact_date_selection_success}   (//*[contains(text(),'had contact')])[1]/following::i[@class="fa fa-check text-success"][1]
+${another_process_error}    //*[contains(text(),'Another process')][1]
 # Type of Contacts
 ${type_of_contact_household}      //p[contains(text(),'Household')]
 ${type_of_contact_international_traveller}      //p[contains(text(),'International Travel')]
@@ -97,10 +98,10 @@ ${contact_info_phone_num}       (//h1[contains(text(), 'Contact Info')]/followin
 ## Case Investigation  ##
 ${Case Investigation Form}    //tr[@aria-label='Case Investigation']
 ${select_first case_in_caselist}    //tbody[@class='wrapper js-case-container']/tr[1]
-${continue}    id:select-case
+${continue}    //button[contains(text(),'Continue')]
 ${search_case}    id:searchText
 ${search_button}    id:case-list-search-button
-${contact_monitoring_form}    xpath://tr[@aria-label="Contact Monitoring"]
+${contact_monitoring_form}    //tr[@aria-label='Contact Monitoring']
 ${initial_interview_disposition}    //p[text()='Reached person, agreed to call']
 ${final_disposition2}    //p[text()='Reached, completed investigation']
 ${no_attempts_made_disposition}    //p[text()='No attempt made yet']
@@ -399,7 +400,7 @@ ${Q:Ethnicity A:Non-Hispanic/Latino}    //p[contains(text(),'-Hispanic')]
 @{living_option_health}      'Long-term Care Facility'    'Post Acute Care'     'Care Inpatient'
 @{workplace_option_health}      'Healthcare facility'    'Long-term care'     'Other care'
 @{workplace_option_student}     'Daycare'      'College'
-
+${menu container}   //*[@class='module-menu-container']
 ## Add Address ##
 
 ${Q:Search For Address}    //span[text()='Search for Address']/following::div[1]/div[@class='widget']/descendant::input

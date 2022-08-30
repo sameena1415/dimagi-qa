@@ -1,7 +1,7 @@
 *** Settings ***
 Documentation     Workflow to test Patient Good Path
 Suite Setup    Driver Launch
-Library  SeleniumLibrary
+Library  SeleniumLibrary        timeout=200s
 Resource    ../Contact Tracing (CT)/Menu/menu.robot
 Resource    ../Contact Tracing (CT)/Forms/register a new contact form.robot
 Resource    ../Contact Tracing (CT)/Forms/contact montitoring form.robot
@@ -13,7 +13,7 @@ Suite Teardown  Close Browser
 
 Hub_Contacts_1
     [Documentation]    Mark a Contact eligible for a Healthcare Hub
-    Sleep   360s
+    Sleep   400s
     HQ Login
     Log in as ct_user
     Register contact with phone number
@@ -22,19 +22,19 @@ Hub_Contacts_1
     Open All Contacts Unassigned & Open menu
     Search in the case list    ${contact_name}
     Select Created Case    ${contact_created}
-    Open Contact Monitoring Form
+    Open Form    ${contact_monitoring_form}
     Contact Fill up Healthcare section
     Open Hub Healthcare Contacts
     Search in the case list     ${contact_name}
     Verify Hub Status Contacts       ${contact_name}    Pending
     Select Created Case    ${contact_created}
-    Open Contact Monitoring Form
+    Open Form    ${contact_monitoring_form}
     Update Hub Status Contacts       In Progress
     Open Hub Healthcare Contacts
     Search in the case list     ${contact_name}
     Verify Hub Status Contacts       ${contact_name}    In Progress
     Select Created Case    ${contact_created}
-    Open Contact Monitoring Form
+    Open Form    ${contact_monitoring_form}
     Update Hub Status Contacts       Complete
     Open Hub Healthcare Contacts
     Search in the case list     ${contact_name}
@@ -49,19 +49,19 @@ Hub_Contacts_2
     Open All Contacts Unassigned & Open menu
     Search in the case list    ${contact_name}
     Select Created Case    ${contact_created}
-    Open Contact Monitoring Form
+    Open Form    ${contact_monitoring_form}
     Contacts Fill up Congregate section
     Open Hub Congregate Settings Contacts
     Search in the case list     ${contact_name}
     Verify Hub Status Contacts       ${contact_name}    Pending
     Select Created Case    ${contact_created}
-    Open Contact Monitoring Form
+    Open Form    ${contact_monitoring_form}
     Update Hub Status Contacts       In Progress
     Open Hub Congregate Settings Contacts
     Search in the case list     ${contact_name}
     Verify Hub Status Contacts       ${contact_name}    In Progress
     Select Created Case    ${contact_created}
-    Open Contact Monitoring Form
+    Open Form    ${contact_monitoring_form}
     Update Hub Status Contacts       Complete
     Open Hub Congregate Settings Contacts
     Search in the case list     ${contact_name}
@@ -76,19 +76,19 @@ Hub_Contacts_3
     Open All Contacts Unassigned & Open menu
     Search in the case list    ${contact_name}
     Select Created Case    ${contact_created}
-    Open Contact Monitoring Form
+    Open Form    ${contact_monitoring_form}
     Contacts Fill up Cluster section
     Open Hub Clusters Contacts
     Search in the case list     ${contact_name}
     Verify Hub Status Contacts       ${contact_name}    Pending
     Select Created Case    ${contact_created}
-    Open Contact Monitoring Form
+    Open Form    ${contact_monitoring_form}
     Update Hub Status Contacts       In Progress
     Open Hub Clusters Contacts
     Search in the case list     ${contact_name}
     Verify Hub Status Contacts       ${contact_name}    In Progress
     Select Created Case    ${contact_created}
-    Open Contact Monitoring Form
+    Open Form    ${contact_monitoring_form}
     Update Hub Status Contacts       Complete
     Open Hub Clusters Contacts
     Search in the case list     ${contact_name}
@@ -103,13 +103,13 @@ Hub_Contacts_5
     Open All Contacts Unassigned & Open menu
     Search in the case list    ${contact_name}
     Select Created Case    ${contact_created}
-    Open Contact Monitoring Form
+    Open Form    ${contact_monitoring_form}
     ${school}       ${date}      ${end_date}=    Contacts Fill up School section
     Open Hub School Contacts
     Search in the case list     ${contact_name}
     Verify School Name and Date Contacts     ${contact_name}    ${school}    ${end_date}
     Select Created Case    ${contact_created}
-    Open Contact Monitoring Form
+    Open Form    ${contact_monitoring_form}
     Update School Hub Status Contacts       Complete
     Open Hub School Contacts
     Search in the case list     ${contact_name}
@@ -124,7 +124,7 @@ Hub_Contacts_6
     Open All Contacts Unassigned & Open menu
     Search in the case list    ${contact_name}
     Select Created Case    ${contact_created}
-    Open Contact Monitoring Form
+    Open Form    ${contact_monitoring_form}
     Enter Information in School College Details section Contacts
     Open Hub School Contacts
     Search in the case list     ${contact_name}

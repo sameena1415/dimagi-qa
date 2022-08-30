@@ -27,98 +27,47 @@ ${Hub: Community Support Specialist Cases}     (//div[@aria-label='Hub: Communit
 *** Keywords ***
     
 Open All Cases
-    Open App Home Screen
-    Sleep    3s
-    Wait Until Element Is Enabled    ${All Cases} 
-    JS Click    ${All Cases}
+    Open Menu   ${All Cases}
+    Sleep    120s
 
 Open All Open Cases
-    Open App Home Screen
-    Sleep    2s
-    Wait Until Element Is Enabled    ${All Open Cases}
-    JS Click    ${All Open Cases}
+    Open Menu  ${All Open Cases}
     
 Open All Closed Cases
-    Open App Home Screen
-    Sleep    2s
-    Wait Until Element Is Enabled    ${All Closed Cases}
-    JS Click    ${All Closed Cases}
+    Open Menu   ${All Closed Cases}
     
 All Cases: Unable to Reach
-    Open App Home Screen
-    Sleep    2s
-    Wait Until Element Is Enabled    ${All Cases: Unable to Reach}
-    JS Click    ${All Cases: Unable to Reach}
+    Open Menu   ${All Cases: Unable to Reach}
 
 Open All Cases: Incomplete Demographic Information Menu
-    Open App Home Screen
-    Sleep    2s
-    Wait Until Element Is Enabled    ${All Cases: Incomplete Demographic Information}
-    JS Click    ${All Cases: Incomplete Demographic Information}
+    Open Menu   ${All Cases: Incomplete Demographic Information}
 
 Open All Cases: Unassigned & Open
-    Open App Home Screen
-    Sleep    2s
-    TRY
-        Wait Until Element Is Enabled    ${All Cases: Unassigned & Open}
-        JS Click    ${All Cases: Unassigned & Open}
-    EXCEPT
-        Click Element    ${app_home}
-        Sleep    5s
-        JS Click    ${All Cases: Unassigned & Open}
-    END
+    Open Menu   ${All Cases: Unassigned & Open}
 
 Open All Cases: Assigned & Open
-    Open App Home Screen
-    Sleep    2s
-    Wait Until Element Is Enabled    ${All Cases: Assigned & Open}
-    JS Click    ${All Cases: Assigned & Open} 
-    
+    Open Menu   ${All Cases: Assigned & Open}
 
 Open My Cases
-    Open App Home Screen
-    Sleep    2s
-    Wait Until Element Is Enabled    ${My Cases}
-    JS Click    ${My Cases}
+    Open Menu   ${My Cases}
 
 Open Register New Contact without index
-    Open App Home Screen
-    Sleep    2s
-    Wait Until Element Is Enabled    ${Register New Contact without index}
-    JS Click    ${Register New Contact without index}
+    Open Menu   ${Register New Contact without index}
 
 Open Clusters PUIs, Cases, Contacts
-    Open App Home Screen
-    Sleep    2s
-    Wait Until Element Is Enabled    ${Clusters PUIs, Cases, Contacts}
-    JS Click    ${Clusters PUIs, Cases, Contacts}
+    Open Menu   ${Clusters PUIs, Cases, Contacts}
 
 Open Hub Healthcare Cases
-    Open App Home Screen
-    Sleep    2s
-    Wait Until Element Is Enabled    ${Hub: Healthcare Cases}
-    JS Click    ${Hub: Healthcare Cases}
+    Open Menu   ${Hub: Healthcare Cases}
 
 Open Hub Congregate Settings Cases
-    Open App Home Screen
-    Sleep    2s
-    Wait Until Element Is Enabled    ${Hub: Congregate Cases}
-    JS Click    ${Hub: Congregate Cases}
+    Open Menu    ${Hub: Congregate Cases}
 
 Open Hub Clusters Cases
-    Open App Home Screen
-    Sleep    2s
-    Wait Until Element Is Enabled    ${Hub: Clusters Cases}
-    JS Click    ${Hub: Clusters Cases}
+    Open Menu    ${Hub: Clusters Cases}
 
 Open Hub School Cases
-    Open App Home Screen
-    Sleep    2s
-    Wait Until Element Is Enabled    ${Hub: School Cases}
-    JS Click    ${Hub: School Cases}
+    Open Menu    ${Hub: School Cases}
 
 Open Hub Community Support Specialist Cases
-    Open App Home Screen
-    Sleep    2s
-    Wait Until Element Is Enabled    ${Hub: Community Support Specialist Cases}
-    JS Click    ${Hub: Community Support Specialist Cases}
+    Open Menu    ${Hub: Community Support Specialist Cases}

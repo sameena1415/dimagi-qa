@@ -2,7 +2,7 @@
 Library    Collections
 Documentation     Testing workflow to create contacts indexed to confirmed patient cases in the system.
 Suite Setup    Driver Launch
-Library  SeleniumLibrary
+Library  SeleniumLibrary        timeout=200s
 Resource    ../Case Investigation (CI)/Menu/menu.robot
 Resource    ../Case Investigation (CI)/Forms/register a new case form.robot
 Resource    ../Case Investigation (CI)/Forms/case investigation form.robot
@@ -15,7 +15,7 @@ Suite Teardown  Close Browser
 
 Register New Contact 1
     [Documentation]    register a single contact with a phone number and the case's address
-    Sleep   400s
+    Sleep   440s
     HQ Login
     Log in as ci_user
     Register New Case
@@ -40,7 +40,7 @@ Register New Contact 1
     Element Should Be Visible    ${contact_created}
     Open All Contacts: Require Follow-Up
     Search in the case list     ${contact_name}
-    Element Should Be Visible    ${contact_created}
+    Wait Until Keyword Succeeds  3 min  1 min      Element Should Be Visible    ${contact_created}
 
 Register New Contact 2
     [Documentation]    contact number incrementer (no MPI ID on index case)
@@ -118,7 +118,7 @@ Register New Contact 5
     #Open All Contacts Unassigned & Open menu
     Open All Contacts
     Search and Select the contact created      ${contact_names}
-    Open Contact Monitoring Form
+    Open Form    ${contact_monitoring_form}
     Verify Address  address=present
 
 
@@ -137,7 +137,7 @@ Register New Contact 6
     #Open All Contacts Unassigned & Open menu
     Open All Contacts
     Search and Select the contact created      ${contact_names}
-    Open Contact Monitoring Form
+    Open Form    ${contact_monitoring_form}
     Verify Address
 
 Register New Contact 7
@@ -153,6 +153,6 @@ Register New Contact 7
     ${contact_details_5}   Register New Contacts for Case having address and phone number   1  generated_names=${contact_names}   phone=${EMPTY}    existing_count=5    symptomatic=yes     mpi_id=${mpi_random}
 
     Open All Contacts: Require Follow-Up
-    ${contact_created}  Search and Select the contact created      ${contact_names}
+    ${contact_created}  Search the contact created     ${contact_names}
     Element Should Be Visible    ${contact_created}
 

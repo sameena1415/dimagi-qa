@@ -6,15 +6,11 @@ Resource    ../../Base/base.robot
 
 *** Keywords ***
 
-Open View Record Lab Results Form
-    Wait Until Element Is Enabled    ${View Record Lab results}
-    JS Click    ${View Record Lab results}
-
 Add New Lab Result
-    Open View Record Lab Results Form
+    Open Form   ${View Record Lab results}
     Wait Until Element Is Enabled    ${Record New Result}
     Click Button    ${Record New Result}
-    Wait Until Element Is Visible    ${specimen_collection_date}    60s
+    Wait Until Element Is Visible    ${specimen_collection_date}
     Scroll Element Into View    ${lab_result_positive}
     JS Click    ${lab_result_positive}
     ${num} =    Generate Random String	6	[NUMBERS]
@@ -27,7 +23,7 @@ Record specimen date
     [Arguments]     ${days}
     Wait Until Element Is Enabled    ${Record New Result}
     JS Click    ${Record New Result}
-    Wait Until Element Is Visible    ${specimen_collection_date}    80s
+    Wait Until Element Is Visible    ${specimen_collection_date}
     ${Past date}    Past Date Generator     ${days}
     Input Text    ${specimen_collection_date}   ${Past date}
     Submit Form and Check Success

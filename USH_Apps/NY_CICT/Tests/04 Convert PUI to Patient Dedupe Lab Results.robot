@@ -1,7 +1,8 @@
 *** Settings ***
 Documentation     Testing the workflow to deduplicate a suspected case (PUI) record against a confirmed
 ...               case record with one attached lab results and one attached contact.
-Library  SeleniumLibrary
+Library  SeleniumLibrary        timeout=200s
+Library  DependencyLibrary
 Suite Setup    Driver Launch
 Resource    ../Contact Tracing (CT)/Forms/change to pui status form.robot
 Resource    ../Contact Tracing (CT)/Forms/contact montitoring form.robot
@@ -21,7 +22,7 @@ Suite Teardown  Close Browser
 
 Convert_PUI_to_Patient_1
     [Documentation]    Convert Contact to PUI using Convert Contact to Suspected Case (PUI) form
-    Sleep   80s
+    Sleep   120s
     HQ Login
     Log in as ct_user
     ${created_name}  ${phone}   Register contact with phone number
@@ -41,6 +42,8 @@ Convert_PUI_to_Patient_1
 
 Convert_PUI_to_Patient_2
     [Documentation]    Convert Contact to PUI using Convert Contact to Suspected Case (PUI) form
+    Depends on test     Convert_PUI_to_Patient_1
+
     Open App Home Screen
     Log in as ci_user
 
@@ -63,6 +66,8 @@ Convert_PUI_to_Patient_2
 
 Convert_PUI_to_Patient_3
     [Documentation]    Convert PUI to Patient
+    Depends on test     Convert_PUI_to_Patient_2
+
     Open App Home Screen
     Log in as ci_user
     Open All Suspected Cases (PUIs) menu
@@ -74,6 +79,8 @@ Convert_PUI_to_Patient_3
 
 Convert_PUI_to_Patient_4
     [Documentation]    Convert PUI to Patient
+    Depends on test     Convert_PUI_to_Patient_3
+
     Open App Home Screen
     Log in as ci_user
     Open All Cases

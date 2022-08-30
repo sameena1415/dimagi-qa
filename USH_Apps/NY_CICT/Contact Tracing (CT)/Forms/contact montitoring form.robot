@@ -4,11 +4,7 @@ Resource    ../../Base/base.robot
 Resource    ../../Contact Tracing (CT)/Forms/hub contacts.robot
 Resource   ../../Case Investigation (CI)/Forms/case investigation form.robot
 
-*** Keywords *** 
-
-Open Contact Monitoring Form
-    Click Element    ${contact_monitoring_form}
-    
+*** Keywords ***
 
 Convert contact to PUI using CM form
         Open All Contacts Unassigned & Open menu
@@ -16,7 +12,7 @@ Convert contact to PUI using CM form
         ${contact_created}   Set Contact Name
         Search in the case list    ${contact_name}
         Select Created Case    ${contact_created}
-        Click Element    ${contact_monitoring_form}
+        Open Form       ${contact_monitoring_form}
         JS Click    ${initial_interview_disposition}
         JS Click    ${race}
         JS Click    ${ethnicity}
@@ -24,11 +20,12 @@ Convert contact to PUI using CM form
         JS Click    ${symptom_congestion}
         JS Click    ${symptom_fatigue}
         JS Click    ${symptom_fever}
-        JS Click    ${symptom_runny_nose} 
-#        JS Click    ${date_of_symptomp_onset}
+        JS Click    ${symptom_runny_nose}
         ${Yesterday's date}    Yesterday's Date
         Input Text    ${date_of_symptomp_onset}   ${Yesterday's date}
         JS Click    ${date_of_symptomp_onset}
+        #Wait Until Element Is Visible   ${contact_date_selection_success}
+        Sleep   120s
         JS Click    ${Q:Convert Contact A:Yes}
         Submit Form and Check Success
 
@@ -53,6 +50,7 @@ Change Address
 
 Verify Address
     [Arguments]     ${address}=${EMPTY}
+    Wait Until Element Is Enabled    ${permanent_address}
     ${permanent_address}    Get Text    ${permanent_address}
     IF  "${address}"!="${EMPTY}"
         Should Contain  ${permanent_address}  ${Street_input}
@@ -167,6 +165,7 @@ Validate Contact Living Situation Healthcare Hub
 Verify Hub Section Contacts
     [Arguments]     ${yes_no}
     IF    "${yes_no}" == "Yes"
+        Wait Until Element Is Enabled   ${healthcare_hub_section}
         Page Should Contain Element    ${healthcare_hub_section}
         Page Should Contain Element    ${heathcare_facility_details_section}
     ELSE
@@ -206,6 +205,7 @@ Validate Contact Living Situation Congregate
 Verify Congregate Section Contacts
     [Arguments]     ${yes_no}
     IF    "${yes_no}" == "Yes"
+        Wait Until Element Is Enabled   ${congregate_setting_hub_section}
         Page Should Contain Element    ${congregate_setting_hub_section}
     ELSE
         Page Should Not Contain    ${congregate_setting_hub_section}
@@ -224,6 +224,7 @@ Contacts Fill up Cluster section
 Verify Contacts Cluster Hub Section
     [Arguments]     ${yes_no}
     IF    "${yes_no}" == "Yes"
+        Wait Until Element Is Enabled    ${clusters_hub_section}
         Page Should Contain Element    ${clusters_hub_section}
     ELSE
         Page Should Not Contain    ${clusters_hub_section}
@@ -350,6 +351,7 @@ Get school or college details Contacts
     [Arguments]     ${school}
     ${string}=      String.Split String    ${school}    -
     ${name}     String.Strip String    ${string}[0]
+    Wait Until Element Is Enabled    //p[.='${name}']
     Page Should Contain Element    //p[.='${name}']
     ${value}=       Get Text    //p[.='${name}']/following-sibling::ul/li[contains(text(),'Address')]
     ${address}=      String.Split String    ${value}    :
@@ -389,6 +391,7 @@ Format Phone number
 Verify Contacts Student Hub Section
     [Arguments]     ${yes_no}
     IF    "${yes_no}" == "Yes"
+        Wait Until Element Is Enabled   ${student_hub_section}
         Page Should Contain Element    ${student_hub_section}
         Page Should Contain Element    ${student_details_section}
     ELSE
@@ -401,6 +404,7 @@ Verify School Details present in Contacts Hub section
     ${name}     String.Strip String    ${name}
     ${address}     String.Strip String    ${address}
     ${phone}     String.Strip String    ${phone}
+    Wait Until Element Is Enabled    //li[contains(text(),'School Name: ${name}')]
     Page Should Contain Element    //li[contains(text(),'School Name: ${name}')]
     Run Keyword And Ignore Error    Page Should Contain Element    //li[contains(text(),'${address}')]
     Run Keyword And Ignore Error    Page Should Contain Element    //li[contains(text(),'School Address: ${address}')]
