@@ -21,6 +21,10 @@ on:
           - staging
           - production
 
+concurrency:
+  group: tests-on-hq-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   set_matrix:
     runs-on: ubuntu-latest
