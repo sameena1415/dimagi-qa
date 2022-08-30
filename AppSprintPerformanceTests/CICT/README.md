@@ -1,18 +1,25 @@
-## Automated Performance Scripts for USH NY CICT
+## Automated Performance Scripts for USH CICT Apps
 
-Captures load time for various actions performed in NY CICT app. The apps, users and the number of reruns are configurable and can be configured in [**user_inputs.py**](https://github.com/dimagi/dimagi-qa/blob/kt/ny_sprint_perf/NYperformance/UserInputs/user_inputs.py).
+Captures load time for various actions performed in CICT apps.
+
+The apps, users and the number of reruns are configurable and can be configured in UserInputs file of the corresponding site
 
 
 ### The script can be run in two ways: 
 
-<img align="right" width="350" src="https://user-images.githubusercontent.com/67914792/168422283-846b01c2-b422-4995-b243-7c8af84937c7.PNG" alt="clone this repository" />
+<img align="right" width="350" src="https://user-images.githubusercontent.com/67914792/187366529-c60517a5-186f-405c-8c9c-a1d27dd4893c.png" alt="clone this repository" />
+
+
 
 #### 1. Manual Trigger on Gitaction
 
 To manually trigger the script,
-  - Go to [NY Sprint Performance action](https://github.com/dimagi/dimagi-qa/actions/workflows/ny-app-perf.yml)
+  - Go to [Sprint Performance action](https://github.com/dimagi/dimagi-qa/actions/workflows/sprint-app-perf.yml)
   - Run workflow
-  - Use workflow from ```kt/ny_sprint_perf```
+  - Use workflow from ```master```
+  - Select the site
+    - CO - Colorado
+    - NY - New York
   - Run!
 
 
@@ -34,19 +41,21 @@ python -m venv venv
 source venv/bin/activate
 
 # install requirements
-pip install -r requires.txt
+pip install -r AppSprintPerformanceTests/CICT/requires.txt
 
 ```
-
-- Copy `settings-sample.cfg` to `settings.cfg` and populate `settings.cfg` for the environment and credentails you want to test.
-
-- Make the necessary changes in [**user_inputs.py**](https://github.com/dimagi/dimagi-qa/blob/kt/ny_sprint_perf/NYperformance/UserInputs/user_inputs.py) as per your requirement.
 
 - Run tests
 
 ```sh
-# command to execute the scripts with 1 rerun
-pytest -v  
+# command to execute the scripts with 1 rerun where site name can be passed against argument --appsite. 
+
+# If want to run for NY scripts , use the following:
+ pytest -v --rootdir= AppSprintPerformanceTests/CICT/CaptureReadings/NY_test_readings.py --repeat-scope=function --appsite=NY
+ 
+ #If want to run for CO scripts , use the following:
+ pytest -v --rootdir= AppSprintPerformanceTests/CICT/CaptureReadings/CO_test_readings.py --repeat-scope=function --appsite=CO
+ 
 ```
-- A file with readings will be generated in the folder **CaptureReadings** after the scripts run sucessfully.
+- A file with readings will be generated in the folder **common_utilities/OutputFiles** after the scripts run sucessfully.
 
