@@ -1,7 +1,5 @@
 Hello!
 
-Hello!
-
 The "{{site}}" performance tests have PASSED ! Please check the attachment to see the results.
 
 
