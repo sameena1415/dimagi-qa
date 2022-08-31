@@ -66,12 +66,20 @@ def pytest_addoption(parser):
     """CLI args which can be used to run the tests with specified values."""
     parser.addoption("--browser", action="store", default='chrome', choices=['chrome', 'firefox'],
                      help='Your choice of browser to run tests.')
+    parser.addoption("--appsite", action="store", choices=['CO', 'NY'],
+                     help='Your choice of app site.')
 
 
 @pytest.fixture(scope="module")
 def browser(request):
     """Pytest fixture for browser"""
     return request.config.getoption("--browser")
+
+
+@pytest.fixture(scope="session")
+def appsite(pytestconfig):
+    """Pytest fixture for app site"""
+    return pytestconfig.getoption("--appsite")
 
 
 @pytest.mark.optionalhook
