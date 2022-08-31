@@ -9,7 +9,7 @@ header_workflow = 'workflow'
 header_load_time = 'load_time'
 header_username = 'username'
 header_app = 'application'
-first_dump_filename = os.path.abspath(os.path.join(PathSettings.BASE_DIR, "NY_reading.csv"))
+first_dump_filename = os.path.abspath(os.path.join(PathSettings.BASE_DIR, "reading.csv"))
 
 
 def timer(func):
