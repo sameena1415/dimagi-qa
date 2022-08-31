@@ -3,6 +3,7 @@ import pytest
 
 from configparser import ConfigParser
 from pathlib import Path
+from common_utilities.fixtures import *
 
 from AppSprintPerformanceTests.CICT.UserInputs.ny_cict_user_inputs import NYUserData
 from AppSprintPerformanceTests.CICT.UserInputs.co_cict_user_inputs import COUserData
