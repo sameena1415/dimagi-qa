@@ -186,7 +186,7 @@ class BasePage:
         try:
             element = self.driver.find_element(*locator)
             is_displayed = element.is_displayed()
-        except TimeoutException:
+        except (TimeoutException, NoSuchElementException):
             is_displayed = False
         return bool(is_displayed)
 

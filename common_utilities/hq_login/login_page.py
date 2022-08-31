@@ -82,7 +82,6 @@ class LoginPage(BasePage):
         self.assert_logged_in()
 
     def two_factor_auth(self, username, password, secret):
-        self.logout()
         self.enter_username(username)
         self.click_continue()
         self.enter_password(password)

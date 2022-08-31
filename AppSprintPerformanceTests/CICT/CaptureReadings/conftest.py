@@ -7,17 +7,17 @@ from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
 from webdriver_manager.firefox import GeckoDriverManager
 
-from PerformanceTests.NY_CICT_App_Sprint.UserInputs.user_inputs import UserData
+from AppSprintPerformanceTests.CICT.UserInputs.ny_cict_user_inputs import NYUserData
+from AppSprintPerformanceTests.CICT.UserInputs.co_cict_user_inputs import COUserData
 from common_utilities.hq_login.login_page import LoginPage
 
 """"This file provides fixture functions for driver initialization"""
 
-
 global driver
 
 
-@pytest.fixture(scope="session")
-def environment_settings():
+@pytest.fixture(scope="session", autouse=True)
+def environment_settings1(appsite):
     """Load settings from os.environ
 
             Names of environment variables:
@@ -29,24 +29,25 @@ def environment_settings():
             for instructions on how to set them.
             """
     settings = {}
-    for name in ["login_username", "login_password", "staging_auth_key", "prod_auth_key"]:
+    for name in ["login_username", "login_password"]:
         var = f"DIMAGIQA_{name.upper()}"
         if var in os.environ:
             settings[name] = os.environ[var]
     if "url" not in settings:
-        subdomain = "staging" if UserData.env == "staging" else UserData.env
-        settings["url"] = f"https://{subdomain}.commcarehq.org/a/{UserData.project_space}/cloudcare/apps/v2/"
+        if appsite == "CO":
+            settings["url"] = f"https://www.commcarehq.org/a/{COUserData.project_space}/cloudcare/apps/v2/"
+        elif appsite == "NY":
+            settings["url"] = f"https://www.commcarehq.org/a/{NYUserData.project_space}/cloudcare/apps/v2/"
     return settings
 
 
 @pytest.fixture(scope="session", autouse=True)
-def settings(environment_settings):
+def settings1(environment_settings1, appsite):
     if os.environ.get("CI") == "true":
-        settings = environment_settings
+        settings = environment_settings1
         settings["CI"] = "true"
-        if any(x not in settings for x in ["login_username", "login_password",
-                                           "staging_auth_key", "prod_auth_key"]):
-            lines = environment_settings.__doc__.splitlines()
+        if any(x not in settings for x in ["url", "login_username", "login_password"]):
+            lines = environment_settings1.__doc__.splitlines()
             vars_ = "\n  ".join(line.strip() for line in lines if "DIMAGIQA_" in line)
             raise RuntimeError(
                 f"Environment variables not set:\n  {vars_}\n\n"
@@ -63,15 +64,21 @@ def settings(environment_settings):
         )
     settings = ConfigParser()
     settings.read(path)
+
+    ## updates the url with the project domain while testing in local
+    if appsite == "CO":
+        settings["default"]["url"] = f"https://www.commcarehq.org/a/{COUserData.project_space}/cloudcare/apps/v2/"
+    elif appsite == "NY":
+        settings["default"]["url"] = f"https://www.commcarehq.org/a/{NYUserData.project_space}/cloudcare/apps/v2/"
     return settings["default"]
 
 
 @pytest.fixture(scope="module", autouse=True)
-def driver(settings, browser):
+def driver(settings1, browser, appsite):
     web_driver = None
     chrome_options = webdriver.ChromeOptions()
     firefox_options = webdriver.FirefoxOptions()
-    if settings.get("CI") == "true":
+    if settings1.get("CI") == "true":
         if browser == "chrome":
             chrome_options.add_argument('--no-sandbox')
             chrome_options.add_argument('disable-extensions')
@@ -88,7 +95,7 @@ def driver(settings, browser):
                 "download.directory_upgrade": True,
                 "safebrowsing.enabled": True})
         elif browser == "firefox":
-            firefox_options.headless()
+            firefox_options.add_argument("--headless")
             firefox_options.add_argument('--no-sandbox')
             firefox_options.add_argument('disable-extensions')
             firefox_options.add_argument('--safebrowsing-disable-download-protection')
@@ -106,8 +113,8 @@ def driver(settings, browser):
         web_driver = webdriver.Firefox(executable_path=GeckoDriverManager().install(), options=firefox_options)
     else:
         print("Provide valid browser")
-    login = LoginPage(web_driver, settings["url"])
-    login.login(settings["login_username"], settings["login_password"])
+    login = LoginPage(web_driver, settings1["url"])
+    login.login(settings1["login_username"], settings1["login_password"])
     yield web_driver
     web_driver.quit()
 
@@ -116,12 +123,20 @@ def pytest_addoption(parser):
     """CLI args which can be used to run the tests with specified values."""
     parser.addoption("--browser", action="store", default='chrome', choices=['chrome', 'firefox'],
                      help='Your choice of browser to run tests.')
+    parser.addoption("--appsite", action="store", choices=['CO', 'NY'],
+                     help='Your choice of app site.')
 
 
 @pytest.fixture(scope="module")
 def browser(request):
     """Pytest fixture for browser"""
     return request.config.getoption("--browser")
+
+
+@pytest.fixture(scope="session")
+def appsite(pytestconfig):
+    """Pytest fixture for app site"""
+    return pytestconfig.getoption("--appsite")
 
 
 @pytest.hookimpl(hookwrapper=True)

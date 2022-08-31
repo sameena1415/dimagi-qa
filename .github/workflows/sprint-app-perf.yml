@@ -15,22 +15,10 @@ on:
           - NY
 
 jobs:
-  set_matrix:
-    runs-on: ubuntu-latest
-    outputs:
-      matrix: steps.set-matrix-manual.outputs.matrix
-    steps:
-      - id: set-matrix-manual
-        if: ${{ github.event_name == 'workflow_dispatch' }}
-        run: |
-          echo "::set-output name=matrix::{\"site\": [\"${{ inputs.site }}\"]}"
 
   build:
-    needs: set_matrix
-    strategy:
-      fail-fast: false
-      matrix: ${{ fromJSON(needs.set_matrix.outputs.matrix) }}
-    name: Tests for '${{ matrix.site }}'
+
+    name: Tests for '${{ inputs.site }}'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -45,14 +33,15 @@ jobs:
           pip install -r AppSprintPerformanceTests/CICT/requires.txt
       - name: CICT App Sprint Performance
         env:
-          DIMAGIQA_ENV: ${{ secrets.DIMAGIQA_URL }}
           DIMAGIQA_LOGIN_USERNAME: ${{ secrets.DIMAGIQA_LOGIN_USERNAME }}
           DIMAGIQA_LOGIN_PASSWORD: ${{ secrets.DIMAGIQA_LOGIN_PASSWORD }}
 
         run: |
           echo "client_payload: ${{ toJson(github.event.client_payload) }}"
-          echo "matrix site: ${{ matrix.site }}"
-          pytest -v --rootdir= AppSprintPerformanceTests/CICT/CaptureReadings/${{ matrix.site }}_test_readings.py --repeat-scope=function --appsite=${{ matrix.site }}
+          echo "inputs site: ${{ inputs.site }}"
+          echo "NOW=$(date +'%m-%d %H:%M')" >> $GITHUB_ENV
+          echo ${{env.NOW}}
+          pytest -v --rootdir= AppSprintPerformanceTests/CICT/CaptureReadings/${{ inputs.site }}_test_readings.py --repeat-scope=function --appsite=${{ inputs.site }}
 
       - name: Set email vars
         if: ${{ success() || failure() }}
@@ -60,7 +49,7 @@ jobs:
         uses: actions/github-script@v6
         env:
             JOB_STATUS: ${{ job.status }}
-            CC_ENV: ${{ matrix.site }}
+            CC_ENV: ${{ inputs.site }}
         with:
           script: |
             const { promises: fs } = require('fs')
@@ -69,15 +58,15 @@ jobs:
             const suffix = `at ${NOW}`
             let subject = `${prefix} on branch "${GITHUB_HEAD_REF}" ${suffix}`
 
-            let bodyFile = './HQSmokeTests/email_pass.md'
+            let bodyFile = './AppSprintPerformanceTests/CICT/email_pass.md'
             if (JOB_STATUS !== 'success') {
-              bodyFile = './HQSmokeTests/email_fail.md'
+              bodyFile = './AppSprintPerformanceTests/CICT/email_fail.md'
             }
             let actionRunLink = context.payload.repository.html_url + `/actions/runs/${context.runId}`
             let bodyContent = await fs.readFile(bodyFile, 'utf8')
             bodyContent = bodyContent.replace(/{{actionRunLink}}/g, actionRunLink)
                 .replace(/{{runNumber}}/g, context.runNumber)
-                .replace(/{{environment}}/g, CC_ENV)
+                .replace(/{{site}}/g, CC_ENV)
             let receivers = 'qa-automation@dimagi.com'
             return {
               "subject": subject,
@@ -98,13 +87,21 @@ jobs:
           from: <${{secrets.DIMAGIQA_MAIL_USERNAME}}>
           html_body: ${{ fromJSON(steps.configure_email.outputs.result).body }}
           convert_markdown: true
-          attachments: ${{ github.workspace }}/report_${{ matrix.site }}.html
+          attachments: ${{ github.workspace }}/report.html , ./common_utilities/OutputFiles//${{ inputs.site }}_readings.xlsx
           in_reply_to: ${{ fromJSON(steps.configure_email.outputs.result).reference }}
 
       - name: Archive test results
         if: ${{ success() || failure() }}
         uses: actions/upload-artifact@v2
         with:
-          name: test-result-reports-${{ matrix.site }}
-          path: ${{ github.workspace }}/report_${{ matrix.site }}.html
+          name: report_and_reading-${{ inputs.site }}
+          path: ${{ github.workspace }}/report.html
+          retention-days: 2
+
+      - name: Archive readings
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: report_and_reading-${{ inputs.site }}
+          path: ./common_utilities/OutputFiles//${{ inputs.site }}_readings.xlsx
           retention-days: 2
