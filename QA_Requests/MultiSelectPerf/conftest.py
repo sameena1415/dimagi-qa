@@ -1,11 +1,6 @@
 from configparser import ConfigParser
 from pathlib import Path
-
-import pytest
-from common_utilities.hq_login.login_page import LoginPage
-from selenium import webdriver
-from webdriver_manager.chrome import ChromeDriverManager
-from common_utilities.path_settings import PathSettings
+from common_utilities.fixtures import *
 
 global driver
 
@@ -39,26 +34,3 @@ def driver(load_settings):
     login.login(load_settings["login_username"], load_settings["login_password"])
     yield driver
     driver.quit()
-
-
-@pytest.hookimpl(hookwrapper=True)
-def pytest_runtest_makereport(item):
-    pytest_html = item.config.pluginmanager.getplugin("html")
-    outcome = yield
-    report = outcome.get_result()
-    extra = getattr(report, 'extra', [])
-    if report.when == "call" or report.when == "teardown":
-        xfail = hasattr(report, 'wasxfail')
-        if (report.skipped and xfail) or (report.failed and not xfail):
-            print("reports skipped or failed")
-            file_name = report.nodeid.replace("::", "_") + ".png"
-            screen_img = _capture_screenshot(item.funcargs["driver"])
-            if file_name:
-                html = '<div><img src="data:image/png;base64,%s" alt="screenshot" style="width:600px;height:300px;" ' \
-                       'onclick="window.open(this.src)" align="right"/></div>' % screen_img
-                extra.append(pytest_html.extras.html(html))
-        report.extra = extra
-
-
-def _capture_screenshot(driver):
-    return driver.get_screenshot_as_base64()

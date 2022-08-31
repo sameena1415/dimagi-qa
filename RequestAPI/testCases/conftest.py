@@ -6,6 +6,8 @@ from pathlib import Path
 
 
 """"This file provides fixture functions for driver initialization"""
+
+
 @pytest.fixture(scope="session", autouse=True)
 def settings():
     if os.environ.get("CI") == "true":
@@ -17,7 +19,7 @@ def settings():
         if "url" not in settings:
             env = os.environ.get("DIMAGIQA_ENV") or "staging"
             subdomain = "www" if env == "production" else env
-            ## updates the url with the project domain while testing in CI
+            # updates the url with the project domain while testing in CI
             settings["url"] = f"https://{subdomain}.commcarehq.org/"
             settings['api_key'] = settings['prod_api_key'] if env == "production" else settings['staging_api_key']
 
@@ -46,8 +48,9 @@ def settings():
         else:
             settings["default"]["api_key"] = settings['default']['staging_api_key']
         settings = settings["default"]
-    ## updates the url with the project domain while testing in local
+    # updates the url with the project domain while testing in local
     yield settings
+
 
 @pytest.hookimpl(hookwrapper=True)
 def pytest_runtest_makereport(item):
@@ -59,12 +62,6 @@ def pytest_runtest_makereport(item):
         xfail = hasattr(report, 'wasxfail')
         if (report.skipped and xfail) or (report.failed and not xfail):
             print("reports skipped or failed")
-            # file_name = report.nodeid.replace("::", "_") + ".png"
-            # screen_img = _capture_screenshot(item.funcargs["settings"])
-            # if file_name:
-            #     html = '<div><img src="data:image/png;base64,%s" alt="screenshot" style="width:600px;height:300px;" ' \
-            #            'onclick="window.open(this.src)" align="right"/></div>' % screen_img
-            #     extra.append(pytest_html.extras.html(html))
         report.extra = extra
 
 

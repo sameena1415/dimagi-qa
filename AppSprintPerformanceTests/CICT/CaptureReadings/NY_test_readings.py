@@ -14,7 +14,7 @@ from AppSprintPerformanceTests.CICT.UserInputs.ny_cict_user_inputs import NYUser
 @pytest.mark.parametrize("user", [NYUserData.ci_ct_user1, NYUserData.ci_ct_user2])
 @pytest.mark.parametrize("application", [NYUserData.application_before_release, NYUserData.application_after_release])
 @pytest.mark.repeat(NYUserData.repeat_count)
-def test_app_workflows(driver, user, application, settings1, appsite):
+def test_app_workflows(driver, user, application, settings, appsite):
     """Repeat Count"""
 
     test_app_workflows.counter += 1
@@ -22,7 +22,7 @@ def test_app_workflows(driver, user, application, settings1, appsite):
     """General workflows"""
 
     visible = HomePage(driver)
-    visible.login_as_ci_ct_user(user, settings1["url"])
+    visible.login_as_ci_ct_user(user, settings["url"])
     time.sleep(5)
     visible.break_locks_and_clear_user_data(project_space=NYUserData.project_space)
     time.sleep(5)
