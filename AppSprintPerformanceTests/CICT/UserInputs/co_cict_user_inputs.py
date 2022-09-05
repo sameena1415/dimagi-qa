@@ -4,8 +4,9 @@ class COUserData:
     repeat_count = 3
     project_space = "co-performance"
     application = "Justina"
-    ci_ct_user1 = "ci/ct_sup_1"
-    ci_ct_user2 = "ci/ct_sup_2"
+    ci_user = "ci_perf_1"
+    ct_user = "ct_perf_1"
+    ci_ct_user = "ci/ct_sup_1"
 
     # This case and contact should be accesible to both the users in test
     pre_configured_case = "Performance"

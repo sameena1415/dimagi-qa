@@ -47,8 +47,8 @@ def test_app_workflows(driver, user, application, settings, appsite):
     visible.search_contact_in_test(username=user, application_name=application, pre_configured_contact=NYUserData.pre_configured_contact)
     visible.open_contact_detail(username=user, application_name=application)
     visible.contact_menu_display(username=user, application_name=application)
-    visible.open_contact_monitoring_form(username=user, application_name=application, site=appsite)
-    visible.cm_form_answer_question(username=user, application_name=application, site=appsite)
+    visible.open_contact_monitoring_form(username=user, application_name=application)
+    visible.cm_form_answer_question(username=user, application_name=application)
     visible.cm_form_submission(username=user, application_name=application)
 
     """Back to webapps workflows"""
@@ -57,7 +57,22 @@ def test_app_workflows(driver, user, application, settings, appsite):
 
     """Write to excel"""
 
-    write_to_excel(username=user, application_name=application, site=appsite)
+    workflows = ["sync_application",
+                 "open_application",
+                 "all_cases_menu_load",
+                 "open_case_detail",
+                 "case_menu_display",
+                 "open_case_investigation_form",
+                 "ci_form_answer_question",
+                 "ci_form_submission",
+                 "all_contacts_menu_load",
+                 "open_contact_detail",
+                 "contact_menu_display",
+                 "open_contact_monitoring_form",
+                 "cm_form_answer_question",
+                 "cm_form_submission"]
+
+    write_to_excel(username=user, application_name=application, site=appsite, workflows=workflows)
     if os.path.isfile(first_dump_filename) and test_app_workflows.counter == NYUserData.repeat_count:
         os.remove(first_dump_filename)
         test_app_workflows.counter = 0
