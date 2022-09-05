@@ -9,21 +9,7 @@ from common_utilities.generate_output_path import generate_output_path
 """Create dataframe and write to excel"""
 
 
-def write_to_excel(username, application_name, site):
-    workflows = ["sync_application",
-                 "open_application",
-                 "all_cases_menu_load",
-                 "open_case_detail",
-                 "case_menu_display",
-                 "open_case_investigation_form",
-                 "ci_form_answer_question",
-                 "ci_form_submission",
-                 "all_contacts_menu_load",
-                 "open_contact_detail",
-                 "contact_menu_display",
-                 "open_contact_monitoring_form",
-                 "cm_form_answer_question",
-                 "cm_form_submission"]
+def write_to_excel(username, application_name, site, workflows):
     columns = ['workflow',
                'round_one (in secs)',
                'round_two (in secs)',
