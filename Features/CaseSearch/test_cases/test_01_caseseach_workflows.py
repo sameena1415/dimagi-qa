@@ -1,7 +1,7 @@
 from Features.CaseSearch.test_pages.casesearch_page import CaseSearchWorkflows
 from common_utilities.selenium.webapps import WebApps
 
-""""Contains all test cases that aren't specifically related any menu modules"""
+""""Contains all case search workflow related test cases"""
 
 case_search_app_name = "Music App (Case Search & Claim)"
 
