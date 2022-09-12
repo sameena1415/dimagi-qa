@@ -2,7 +2,7 @@ from selenium.webdriver.common.by import By
 
 from common_utilities.selenium.base_page import BasePage
 
-""""Contains test page elements and functions related to the Homepage of Commcare"""
+""""Contains test page elements and functions related to the Case Search functionality"""
 
 
 class CaseSearchWorkflows(BasePage):
