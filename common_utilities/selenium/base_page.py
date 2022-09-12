@@ -313,3 +313,8 @@ class BasePage:
         element = (By.XPATH, xpath_format.format(insert_value))
         return element
 
+
+    def get_element(self, xpath_format, insert_value):
+        element = (By.XPATH, xpath_format.format(insert_value))
+        return element
+

@@ -10,12 +10,12 @@ class WebApps(BasePage):
     def __init__(self, driver):
         super().__init__(driver)
 
-        self.app_name_format = "//*[@aria-label='{}']/div"
-        self.app_header_format = "//h1[text()='{}']"
-        self.menu_name_format = "//*[@aria-label='{}']"
-        self.menu_name_header_format = "//*[text()='{}']"
-        self.form_name_format = "//tr[@aria-label='{}']"
-        self.case_name_format = "//tr[.//td[text()='{}']]"
+        self.app_name_format = "//*[contains(@aria-label,'{}')]/div"
+        self.app_header_format = "//h1[contains(text(),'{}')]"
+        self.menu_name_format = "//*[contains(@aria-label,'{}')]"
+        self.menu_name_header_format = "//*[contains(text(),'{}')]"
+        self.form_name_format = "//tr[contains(@aria-label,'{}')]"
+        self.case_name_format = "//tr[.//td[contains(text(),'{}')]]"
         self.app_breadcrumb_format = "//li[contains(text(), '{}')]"
 
         self.form_submit = (By.XPATH, "//button[@class='submit btn btn-primary']")
@@ -64,8 +64,6 @@ class WebApps(BasePage):
     def search_again_cases(self):
         self.scroll_to_element(self.search_again_button)
         self.click(self.search_again_button)
-        self.search_all_cases()
-        self.search_all_cases_on_case_search_page()
 
     def search_all_cases_on_case_search_page(self):
         self.js_click(self.clear_case_search_page)
