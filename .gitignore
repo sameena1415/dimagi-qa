@@ -207,6 +207,8 @@ QA_Requests/MultiSelectPerf/OutputFiles/*
 #Ignoring compliled files of CaseSearch
 Features/CaseSearch/settings.cfg
 Features/CaseSearch/report.html
+Features/CaseSearch/test_cases/report.html
+
 
 
 
