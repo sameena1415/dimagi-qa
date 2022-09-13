@@ -17,8 +17,6 @@ def environment_settings_casesearch():
                 DIMAGIQA_URL
                 DIMAGIQA_LOGIN_USERNAME
                 DIMAGIQA_LOGIN_PASSWORD
-                DIMAGIQA_MAIL_USERNAME
-                DIMAGIQA_MAIL_PASSWORD
 
             See https://docs.github.com/en/actions/reference/encrypted-secrets
             for instructions on how to set them.
