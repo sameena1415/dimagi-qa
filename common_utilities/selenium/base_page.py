@@ -121,6 +121,13 @@ class BasePage:
         elements = self.driver.find_elements(*locator)
         return elements
 
+    def find_elements_texts(self, locator):
+        elements = self.driver.find_elements(*locator)
+        value_list = []
+        for element in elements:
+            value_list.append(element.text)
+        return value_list
+
     def find_element(self, locator):
         element = self.driver.find_element(*locator)
         return element
@@ -301,3 +308,8 @@ class BasePage:
     def wait_and_find_elements(self, locator, cols, timeout=500):
         elements = WebDriverWait(self.driver, timeout).until(lambda driver: len(driver.find_elements(*locator)) >= int(cols))
         return elements
+
+    def get_element(self, xpath_format, insert_value):
+        element = (By.XPATH, xpath_format.format(insert_value))
+        return element
+
