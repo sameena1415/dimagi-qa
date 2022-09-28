@@ -68,6 +68,8 @@ class BasePage:
             elif self.page_404():
                 self.driver.back()
                 element.click()
+            else:
+                raise TimeoutException()
 
     def wait_to_clear_and_send_keys(self, locator, user_input):
         clickable = ec.visibility_of_element_located(locator)
