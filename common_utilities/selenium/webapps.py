@@ -38,6 +38,7 @@ class WebApps(BasePage):
         self.webapp_login_confirmation = (By.ID, 'js-confirmation-confirm')
         self.webapp_working_as = (By.XPATH, "//div[@class='restore-as-banner module-banner']/b")
         self.form_names = (By.XPATH, "//h3[text()]")
+        self.list_is_empty = (By.XPATH, "//div[contains(text(), 'empty')]")
 
     def open_app(self, app_name):
         self.wait_to_click(self.webapps_home)

@@ -163,10 +163,11 @@ class CaseSearchWorkflows(BasePage):
         assert self.is_visible_and_displayed(value)
 
     def check_case_claim_case_type(self, claimed_case_name, claimed_user):
-        self.select_by_text(self.combox_select_element, "commcare-case-claim")
+        self.select_by_text(self.case_type_select, "commcare-case-claim")
         self.wait_to_clear_and_send_keys(self.report_search, claimed_case_name)
         self.wait_to_click(self.report_apply_filters)
         claim_case_type = (By.XPATH, self.commcare_case_claim_case.format(claimed_case_name, claimed_user))
+        print(claim_case_type)
         assert self.is_visible_and_displayed(claim_case_type)
 
 
