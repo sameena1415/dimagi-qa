@@ -1,4 +1,5 @@
 from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
 
 from common_utilities.selenium.base_page import BasePage
 
@@ -36,6 +37,7 @@ class WebApps(BasePage):
         self.login_as_username = "//h3/b[.='{}']"
         self.webapp_login_confirmation = (By.ID, 'js-confirmation-confirm')
         self.webapp_working_as = (By.XPATH, "//div[@class='restore-as-banner module-banner']/b")
+        self.form_names = (By.XPATH, "//h3[text()]")
 
     def open_app(self, app_name):
         self.wait_to_click(self.webapps_home)
@@ -59,39 +61,56 @@ class WebApps(BasePage):
         self.wait_to_click(self.form_name)
 
     def search_all_cases(self):
+        self.scroll_to_element(self.search_all_cases_button)
         self.wait_to_click(self.search_all_cases_button)
 
     def search_again_cases(self):
         self.scroll_to_element(self.search_again_button)
         self.click(self.search_again_button)
 
-    def search_all_cases_on_case_search_page(self):
+    def clear_selections_on_case_search_page(self):
         self.js_click(self.clear_case_search_page)
-        self.js_click(self.submit_on_case_search_page)
+
+    def search_button_on_case_search_page(self, enter_key=None):
+        if enter_key == "YES":
+            self.send_keys(self.submit_on_case_search_page, Keys.ENTER)
+        else:
+            self.js_click(self.submit_on_case_search_page)
         self.is_visible_and_displayed(self.case_list)
         self.is_visible_and_displayed(self.search_again_button)
+
+    def clear_and_search_all_cases_on_case_search_page(self):
+        self.clear_selections_on_case_search_page()
+        self.search_button_on_case_search_page()
 
     def omni_search(self, case_name):
         self.wait_to_clear_and_send_keys(self.omni_search_input, case_name)
         self.js_click(self.omni_search_button)
+        self.case = self.get_element(self.case_name_format, case_name)
+        self.is_visible_and_displayed(self.case)
         return case_name
 
     def select_case(self, case_name):
         self.case = self.get_element(self.case_name_format, case_name)
         self.wait_to_click(self.case)
+
+    def select_case_and_continue(self, case_name):
+        self.select_case(case_name)
         self.js_click(self.continue_button)
+        form_names = self.find_elements_texts(self.form_names)
+        return form_names
 
     def submit_the_form(self):
         self.js_click(self.form_submit)
         self.is_visible_and_displayed(self.form_submission_successful, timeout=500)
 
     def login_as(self, username):
-        self.wait_to_click(self.webapp_login)
+        self.click(self.webapp_login)
         self.send_keys(self.search_user_webapps, username)
-        self.wait_to_click(self.search_button_webapps)
+        self.click(self.search_button_webapps)
         self.login_as_user = self.get_element(self.login_as_username, username)
-        self.wait_to_click(self.login_as_user)
-        self.wait_to_click(self.webapp_login_confirmation)
+        self.click(self.login_as_user)
+        self.click(self.webapp_login_confirmation)
         logdedin_user = self.get_text(self.webapp_working_as)
         assert logdedin_user == username
         return username

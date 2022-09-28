@@ -192,6 +192,7 @@ class MobileWorkerPage(BasePage):
 
     def mobile_worker_enter_username(self, username):
         self.send_keys(self.mobile_worker_username_id, username)
+        return username
 
     def mobile_worker_enter_password(self, password):
         self.send_keys(self.mobile_worker_password_id, password)
