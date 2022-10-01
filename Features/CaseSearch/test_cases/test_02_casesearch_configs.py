@@ -20,7 +20,7 @@ def test_case_01_default_value_expression(driver):
     casesearch.check_default_values_displayed("Mood", "3", search_format="text")
     casesearch.check_default_values_displayed("Date Opened", casesearch.date_range(60), search_format="text")
     casesearch.check_default_values_displayed("Rating", "****", search_format="combobox")
-    """Check values can be cleared and desired valie can be searched"""
+    """Check values can be cleared and desired value can be searched"""
     webapps.clear_selections_on_case_search_page()
     casesearch.search_against_property(search_property="Song Name", input_value="Bugs", property_type="TEXT_INPUT")
     webapps.search_button_on_case_search_page()

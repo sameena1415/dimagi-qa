@@ -22,6 +22,17 @@ class CaseSearchUserInput:
     """Forms"""
     play_song_form = "Play Song"
 
-    """Cases and Case Properties"""
+    """Cases Types"""
+
+
+    """Pre=Configured Cases"""
     song_case_bugs = "Bugs"
-    ratings = {'*': '1', '**': '2', '***': '3', '****': '4', '*****': '5'}
+
+    """Case Properties"""
+    # Rating
+    one_star = "*"
+    two_star = "**"
+    three_star = "***"
+    four_star = "****"
+    five_star = "*****"
+    ratings = {one_star: '1', two_star: '2', three_star: '3', four_star: '4', five_star: '5'}
