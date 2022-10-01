@@ -1,3 +1,4 @@
+from selenium.common import NoSuchElementException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 
@@ -106,7 +107,11 @@ class WebApps(BasePage):
         self.is_visible_and_displayed(self.form_submission_successful, timeout=500)
 
     def login_as(self, username):
-        self.click(self.webapp_login)
+        try:
+            self.click(self.webapp_login)
+        except NoSuchElementException:
+            self.wait_to_click(self.webapps_home)
+            self.click(self.webapp_login)
         self.send_keys(self.search_user_webapps, username)
         self.click(self.search_button_webapps)
         self.login_as_user = self.get_element(self.login_as_username, username)

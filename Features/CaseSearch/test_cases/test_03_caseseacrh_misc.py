@@ -151,3 +151,61 @@ def test_case_07_multi_case_types(driver):
     webapps.select_case_and_continue("SAMTHIRD")
     casesearch.check_eof_navigation(eof_nav="MENU", menu="Mixed Case Types")
     webapps.submit_the_form()
+
+
+def test_case_08_display_condition(driver):
+    webapps = WebApps(driver)
+    base = BasePage(driver)
+    """Check Display condition for a_user"""
+    webapps.login_as("a_user")
+    webapps.open_app(CaseSearchUserInput.case_search_app_name)
+    webapps.open_menu("Songs - Case Search Settings")
+    assert base.is_displayed(webapps.search_all_cases_button)
+    """Check Display condition for another user"""
+    webapps.login_as(CaseSearchUserInput.user_1)
+    webapps.open_app(CaseSearchUserInput.case_search_app_name)
+    webapps.open_menu("Songs - Case Search Settings")
+    assert not base.is_displayed(webapps.search_all_cases_button)
+
+
+@pytest.mark.skip(reason="This is failing app setup error but bocked due Dominic's bug")
+def test_case_09_search_filter(driver):
+    webapps = WebApps(driver)
+    casesearch = CaseSearchWorkflows(driver)
+    """Check Search Filter"""
+    webapps.login_as("a_user")
+    webapps.open_app(CaseSearchUserInput.case_search_app_name)
+    webapps.open_menu("Songs - Case Search Settings")
+    webapps.search_all_cases()
+    webapps.search_button_on_case_search_page()
+    casesearch.check_values_on_caselist(row_num="3", value="5")
+
+
+def test_case_10_claim_condition(driver):
+    webapps = WebApps(driver)
+    casesearch = CaseSearchWorkflows(driver)
+    """Check Claim Condition"""
+    webapps.login_as("a_user")
+    webapps.open_app(CaseSearchUserInput.case_search_app_name)
+    webapps.open_menu("Songs - Case Search Settings")
+    webapps.search_all_cases()
+    casesearch.search_against_property(search_property="Mood", input_value="4", property_type="TEXT_INPUT")
+    webapps.search_button_on_case_search_page()
+    case_name = webapps.omni_search("Kala Chashma")
+    form_name = webapps.select_case_and_continue(case_name)
+    assert not bool(form_name)
+
+
+def test_case_11_do_not_search_cases(driver):
+    webapps = WebApps(driver)
+    casesearch = CaseSearchWorkflows(driver)
+    base = BasePage(driver)
+    """Check don't search cases owned by the following ids"""
+    webapps.login_as("a_user")
+    webapps.open_app(CaseSearchUserInput.case_search_app_name)
+    webapps.open_menu("Songs - Case Search Settings")
+    webapps.search_all_cases()
+    casesearch.search_against_property(search_property="Mood", input_value="4", property_type="TEXT_INPUT")
+    webapps.search_button_on_case_search_page()
+    webapps.omni_search("b_users song")
+    assert base.is_displayed(webapps.list_is_empty)
