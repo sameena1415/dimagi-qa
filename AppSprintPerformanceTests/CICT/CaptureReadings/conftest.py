@@ -4,7 +4,6 @@ import pytest
 from configparser import ConfigParser
 from pathlib import Path
 from common_utilities.fixtures import *
-from selenium.webdriver.chrome.service import Service
 
 from AppSprintPerformanceTests.CICT.UserInputs.ny_cict_user_inputs import NYUserData
 from AppSprintPerformanceTests.CICT.UserInputs.co_cict_user_inputs import COUserData
@@ -53,7 +52,7 @@ def driver(settings, browser):
             firefox_options.add_argument("--disable-notifications")
             firefox_options.set_preference("browser.download.dir", str(PathSettings.DOWNLOAD_PATH))
     if browser == "chrome":
-        web_driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
+        web_driver = webdriver.Chrome(executable_path=ChromeDriverManager().install(), options=chrome_options)
         print("Chrome version:", web_driver.capabilities['browserVersion'])
     elif browser == "firefox":
         web_driver = webdriver.Firefox(executable_path=GeckoDriverManager().install(), options=firefox_options)
