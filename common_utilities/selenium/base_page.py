@@ -309,7 +309,7 @@ class BasePage:
         elements = WebDriverWait(self.driver, timeout, poll_frequency=10).until(lambda driver: len(driver.find_elements(*locator)) >= int(cols))
         return elements
 
-    def wait_till_progress_completes(self, type):
+    def wait_till_progress_completes(self, type="export"):
         if type == "export":
             if self.is_present((By.XPATH, "//div[contains(@class,'progress-bar')]")):
                 WebDriverWait(self.driver, 600, poll_frequency=10).until(
@@ -317,3 +317,13 @@ class BasePage:
         elif type == "integration":
             WebDriverWait(self.driver, 600, poll_frequency=10).until(
                 ec.invisibility_of_element_located((By.XPATH, "//div[contains(@class,'progress-bar')]")))
+
+    def is_clickable(self, locator, timeout=50):
+        try:
+            clickable = ec.element_to_be_clickable(locator)
+            element = WebDriverWait(self.driver, timeout, poll_frequency=10).until(clickable,
+                                                                message="Element" + str(locator) + "not displayed")
+            is_clickable = element.is_enabled()
+        except TimeoutException:
+            is_clickable = False
+        return bool(is_clickable)

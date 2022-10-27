@@ -185,7 +185,7 @@ class ExportDataPage(BasePage):
     def add_form_exports(self):
         self.delete_bulk_exports()
         self.wait_and_sleep_to_click(self.add_export_button)
-        self.is_visible_and_displayed(self.app_type)
+        self.is_clickable(self.app_type)
         self.select_by_text(self.app_type, UserData.app_type)
         self.select_by_text(self.application, UserData.village_application)
         self.select_by_text(self.module, UserData.case_list_name)
@@ -206,7 +206,7 @@ class ExportDataPage(BasePage):
         self.wait_to_click(self.export_case_data_link)
         self.delete_bulk_exports()
         self.wait_and_sleep_to_click(self.add_export_button)
-        self.is_visible_and_displayed(self.application)
+        self.is_clickable(self.application)
         # self.select_by_text(self.application, UserData.village_application)
         self.select_by_text(self.application, UserData.reassign_cases_application)
         # self.select_by_text(self.case, UserData.case_pregnancy)
@@ -312,7 +312,7 @@ class ExportDataPage(BasePage):
         self.click(self.export_settings_create)
         print("Dashboard Form Feed created!!")
         self.wait_and_sleep_to_click(self.update_data)
-        self.wait_till_progress_completes()
+        self.wait_till_progress_completes("integration")
         self.wait_and_sleep_to_click(self.update_data_conf)
         assert self.is_visible_and_displayed(self.data_upload_msg), "Export not completed!"
         self.driver.refresh()
@@ -334,7 +334,7 @@ class ExportDataPage(BasePage):
         self.click(self.export_settings_create)
         print("Dashboard Form Feed created!!")
         self.wait_and_sleep_to_click(self.update_data)
-        self.wait_till_progress_completes()
+        self.wait_till_progress_completes("integration")
         self.wait_and_sleep_to_click(self.update_data_conf)
         assert self.is_visible_and_displayed(self.data_upload_msg), "Export not completed!"
         self.driver.refresh()
@@ -464,14 +464,14 @@ class ExportDataPage(BasePage):
         self.wait_to_clear_and_send_keys(self.date_range, self.current_date_range + Keys.TAB)
         self.wait_and_sleep_to_click(self.prepare_export_button)
         try:
-            self.wait_till_progress_completes()
+            self.wait_till_progress_completes("exports")
             self.wait_and_sleep_to_click(self.download_button)
             time.sleep(5)
         except TimeoutException:
             if self.is_visible_and_displayed(self.failed_to_export):
                 self.driver.refresh()
                 self.wait_and_sleep_to_click(self.prepare_export_button)
-                self.wait_till_progress_completes()
+                self.wait_till_progress_completes("exports")
                 self.wait_and_sleep_to_click(self.download_button)
                 time.sleep(5)
                 print("Download form button clicked")
