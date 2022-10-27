@@ -216,6 +216,13 @@ class BasePage:
             is_displayed = element.is_displayed()
         except TimeoutException:
             is_displayed = False
+        except StaleElementReferenceException:
+            self.driver.refresh()
+            time.sleep(2)
+            visible = ec.presence_of_element_located(locator)
+            element = WebDriverWait(self.driver, timeout).until(visible,
+                                                                message="Element" + str(locator) + "not displayed")
+            is_displayed = element.is_displayed()
         return bool(is_displayed)
 
     def switch_to_next_tab(self):

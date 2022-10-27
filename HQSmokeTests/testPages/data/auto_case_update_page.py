@@ -13,7 +13,7 @@ class AutoCaseUpdatePage(BasePage):
         super().__init__(driver)
 
         self.rule_name = "rule " + str(fetch_random_string())
-        self.rule_created = "//a/strong[text()='" + self.rule_name + "']"
+        self.rule_created = "(//a/strong[text()='" + self.rule_name + "'])[1]"
 
         self.auto_case_update_link = (By.LINK_TEXT, 'Automatically Update Cases')
         self.add_rule_button = (By.ID, 'add-new')
@@ -47,6 +47,11 @@ class AutoCaseUpdatePage(BasePage):
         self.wait_to_click(self.delete_confirm)
         self.driver.refresh()
         try:
+            isPresent = self.is_visible_and_displayed(self.rule_created_path)
+            if isPresent == True: # added this block in case duplicate rules are created on testcase rerun
+                self.wait_to_click(self.delete_rule)
+                self.wait_to_click(self.delete_confirm)
+                self.driver.refresh()
             isPresent = self.is_visible_and_displayed(self.rule_created_path)
         except (TimeoutException, NoSuchElementException):
             isPresent = False
