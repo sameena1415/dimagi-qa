@@ -194,30 +194,37 @@ class HomePage(BasePage):
         assert self.is_visible_and_displayed(self.menu_list, timeout=240)
 
     @timer
-    def open_contact_monitoring_form(self, application_name, username, site):
-        if site == "NY":
-            self.click(self.cm_form)
-        elif site == "CO":
-            self.click(self.cn_form)
+    def open_contact_monitoring_form(self, application_name, username):
+        self.click(self.cm_form)
         assert self.is_visible_and_displayed(self.form_content, timeout=240)
 
     @timer
-    def cm_form_answer_question(self, application_name, username, site):
-        if site == "NY":
-            self.scroll_to_element(self.name_of_school_dropdown)
-            self.driver.execute_script("window.scrollBy(0,-80)")
-            self.wait_to_click(self.name_of_school_dropdown)
-            self.wait_to_click(self.name_of_school_answer)
-            assert self.is_visible_and_displayed(self.school_selected_displayed, timeout=240)
-        if site == "CO":
-            self.scroll_to_element(self.lang_dropdown)
-            self.driver.execute_script("window.scrollBy(0,-80)")
-            self.wait_to_click(self.lang_dropdown)
-            self.wait_to_click(self.lang_answer)
-            assert self.is_visible_and_displayed(self.lang_selected_displayed, timeout=240)
+    def open_contact_notification_form(self, application_name, username):
+        self.click(self.cn_form)
+        assert self.is_visible_and_displayed(self.form_content, timeout=240)
+
+    @timer
+    def cm_form_answer_question(self, application_name, username):
+        self.scroll_to_element(self.name_of_school_dropdown)
+        self.driver.execute_script("window.scrollBy(0,-80)")
+        self.wait_to_click(self.name_of_school_dropdown)
+        self.wait_to_click(self.name_of_school_answer)
+
+    @timer
+    def cn_form_answer_question(self, application_name, username):
+        self.scroll_to_element(self.lang_dropdown)
+        self.driver.execute_script("window.scrollBy(0,-80)")
+        self.wait_to_click(self.lang_dropdown)
+        self.wait_to_click(self.lang_answer)
+        assert self.is_visible_and_displayed(self.lang_selected_displayed, timeout=240)
 
     @timer
     def cm_form_submission(self, application_name, username):
+        self.js_click(self.submit_form)
+        assert self.is_visible_and_displayed(self.form_submission_success, timeout=240)
+
+    @timer
+    def cn_form_submission(self, application_name, username):
         self.js_click(self.submit_form)
         assert self.is_visible_and_displayed(self.form_submission_success, timeout=240)
 

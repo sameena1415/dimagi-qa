@@ -56,6 +56,7 @@ def test_case_32_auto_case_update(driver):
     export = ExportDataPage(driver)
     export.data_tab()
     data = AutoCaseUpdatePage(driver)
+    data.delete_test_rules()
     data.open_auto_case_update_page()
     data.add_new_rule()
     data.remove_rule()

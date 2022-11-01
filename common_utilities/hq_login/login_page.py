@@ -72,19 +72,13 @@ class LoginPage(BasePage):
     def assert_logged_in(self):
         assert "Log In" not in self.driver.title, "Login failed"
 
-    def login(self, username, password):
+    def login(self, username, password, user_secret=None):
         self.enter_username(username)
         self.click_continue()
         self.enter_password(password)
         self.dismiss_notification()
         self.accept_alert()
         self.click_submit()
-        self.assert_logged_in()
-
-    def two_factor_auth(self, username, password, secret):
-        self.enter_username(username)
-        self.click_continue()
-        self.enter_password(password)
-        self.click_submit()
-        self.enter_otp(generate_auth_token(secret))
+        if self.is_displayed(self.otp_token_id):
+            self.enter_otp(generate_auth_token(user_secret))
         self.assert_logged_in()

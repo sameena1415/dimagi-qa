@@ -210,21 +210,28 @@ class BasePage:
     def is_visible_and_displayed(self, locator, timeout=50):
         try:
             visible = ec.visibility_of_element_located(locator)
-            element = WebDriverWait(self.driver, timeout).until(visible,
+            element = WebDriverWait(self.driver, timeout, poll_frequency=10).until(visible,
                                                                 message="Element" + str(locator) + "not displayed")
             is_displayed = element.is_displayed()
         except TimeoutException:
             is_displayed = False
         return bool(is_displayed)
 
-    def is_present_and_displayed(self, locator, timeout=100):
+    def is_present_and_displayed(self, locator, timeout=50):
         try:
             visible = ec.presence_of_element_located(locator)
-            element = WebDriverWait(self.driver, timeout).until(visible,
+            element = WebDriverWait(self.driver, timeout, poll_frequency=10).until(visible,
                                                                 message="Element" + str(locator) + "not displayed")
             is_displayed = element.is_displayed()
         except TimeoutException:
             is_displayed = False
+        except StaleElementReferenceException:
+            self.driver.refresh()
+            time.sleep(2)
+            visible = ec.presence_of_element_located(locator)
+            element = WebDriverWait(self.driver, timeout).until(visible,
+                                                                message="Element" + str(locator) + "not displayed")
+            is_displayed = element.is_displayed()
         return bool(is_displayed)
 
     def switch_to_next_tab(self):
@@ -308,8 +315,27 @@ class BasePage:
         self.driver.execute_script("arguments[0].scrollIntoView();", element)
 
     def wait_and_find_elements(self, locator, cols, timeout=500):
-        elements = WebDriverWait(self.driver, timeout).until(lambda driver: len(driver.find_elements(*locator)) >= int(cols))
+        elements = WebDriverWait(self.driver, timeout, poll_frequency=10).until(lambda driver: len(driver.find_elements(*locator)) >= int(cols))
         return elements
+
+    def wait_till_progress_completes(self, type="export"):
+        if type == "export":
+            if self.is_present((By.XPATH, "//div[contains(@class,'progress-bar')]")):
+                WebDriverWait(self.driver, 600, poll_frequency=10).until(
+                        ec.visibility_of_element_located((By.XPATH, "//div[contains(@class,'progress-bar')][.//span[@data-bind='text: progress'][.='100']]")))
+        elif type == "integration":
+            WebDriverWait(self.driver, 600, poll_frequency=10).until(
+                ec.invisibility_of_element_located((By.XPATH, "//div[contains(@class,'progress-bar')]")))
+
+    def is_clickable(self, locator, timeout=50):
+        try:
+            clickable = ec.element_to_be_clickable(locator)
+            element = WebDriverWait(self.driver, timeout, poll_frequency=10).until(clickable,
+                                                                message="Element" + str(locator) + "not displayed")
+            is_clickable = element.is_enabled()
+        except TimeoutException:
+            is_clickable = False
+        return bool(is_clickable)
 
     def get_element(self, xpath_format, insert_value):
         element = (By.XPATH, xpath_format.format(insert_value))

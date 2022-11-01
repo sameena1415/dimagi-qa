@@ -33,8 +33,9 @@ jobs:
           pip install -r AppSprintPerformanceTests/CICT/requires.txt
       - name: CICT App Sprint Performance
         env:
-          DIMAGIQA_LOGIN_USERNAME: ${{ secrets.DIMAGIQA_LOGIN_USERNAME }}
-          DIMAGIQA_LOGIN_PASSWORD: ${{ secrets.DIMAGIQA_LOGIN_PASSWORD }}
+          DIMAGIQA_USH_LOGIN_USERNAME: ${{ secrets.DIMAGIQA_USH_LOGIN_USERNAME }}
+          DIMAGIQA_USH_LOGIN_PASSWORD: ${{ secrets.DIMAGIQA_USH_LOGIN_PASSWORD }}
+          DIMAGIQA_USH_USER_PROD_AUTH_KEY: ${{ secrets.DIMAGIQA_USH_USER_PROD_AUTH_KEY }}
 
         run: |
           echo "client_payload: ${{ toJson(github.event.client_payload) }}"
