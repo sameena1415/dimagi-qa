@@ -67,9 +67,14 @@ class AppPreviewBasics(BasePage):
         self.question_display_text = (By.XPATH, "//span[text()='Name (es)']")
         self.iframe = (By.CLASS_NAME, "preview-phone-window")
         self.home_button = (By.XPATH, "//li[./i[@class='fa fa-home']]")
+        self.full_menu = (By.LINK_TEXT, "Show Full Menu")
 
     def open_view_app_preview(self):
-        self.wait_to_click(self.application_menu_id)
+        if self.is_present(self.application_menu_id):
+            self.wait_to_click(self.application_menu_id)
+        else:
+            self.wait_to_click(self.full_menu)
+            self.wait_to_click(self.application_menu_id)
         self.wait_to_click(self.select_test_application)
         self.wait_to_click(self.view_app_preview)
         self.wait_to_click(self.refresh_button)

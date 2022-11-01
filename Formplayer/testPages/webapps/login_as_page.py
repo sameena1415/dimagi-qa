@@ -27,7 +27,7 @@ class LoginAsPage(BasePage):
         self.webapp_working_as = (By.XPATH, "//div[@class='restore-as-banner module-banner']/b")
         self.basic_tests_menu = (By.XPATH,"//h3[text()='Basic Form Tests']")
         self.basic_tests_form = (By.XPATH, "//h3[text()= 'HIN: Basic Form Update']")
-        self.basic_tests_answer_input = (By.XPATH,  "//label[.//span[text()= 'Enter a Name! [Hindi]']]//following-sibling::div//textarea")
+        self.basic_tests_answer_input = (By.XPATH,  "//label[.//span[text()= 'Enter a Name']]//following-sibling::div//textarea")
         self.submit = (By.XPATH, "(//button[@class='submit btn btn-primary'])[1]")
         self.submit_success = (By.XPATH, "//p[text()='Form successfully saved!']")
         self.login_as_webuser= (By.XPATH, "//a[@class='js-clear-user']")
