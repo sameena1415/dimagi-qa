@@ -35,44 +35,46 @@ class HomePage(BasePage):
         self.MESSAGING_TITLE = "Dashboard : Messaging :: - CommCare HQ"
         self.WEBAPPS_TITLE = "Web Apps - CommCare HQ"
 
+
+
     def dashboard_menu(self):
-        self.wait_to_click(self.dashboard_menu_id)
+        self.open_menu(self.dashboard_menu_id)
         self.wait_to_click(self.dashboard_menu_id)
         assert self.DASHBOARD_TITLE == self.driver.title, "This is not the Dashboard page."
 
     def reports_menu(self):
-        self.wait_to_click(self.reports_menu_id)
+        self.open_menu(self.reports_menu_id)
         self.wait_to_click(self.view_all)
         assert self.REPORTS_TITLE in self.driver.title, "This is not the Reports menu page."
 
     def data_menu(self):
-        self.wait_to_click(self.data_menu_id)
+        self.open_menu(self.data_menu_id)
         self.wait_to_click(self.view_all)
         assert self.DATA_TITLE in self.driver.title, "This is not the Data menu page."
 
     def applications_menu(self):
-        self.wait_to_click(self.applications_menu_id)
+        self.open_menu(self.applications_menu_id)
         self.wait_to_click(self.application_path)
         assert self.APP_TITLE in self.driver.title, "This is not the Applications page."
 
     def users_menu(self):
-        self.wait_to_click(self.users_menu_id)
+        self.open_menu(self.users_menu_id)
         self.wait_to_click(self.view_all)
         assert self.USERS_TITLE in self.driver.title, "This is not the Users menu page."
 
     def messaging_menu(self):
-        self.wait_to_click(self.messaging_menu_id)
+        self.open_menu(self.messaging_menu_id)
         self.wait_to_click(self.view_all)
         assert self.MESSAGING_TITLE in self.driver.title, "This is not the Messaging menu page."
 
     def web_apps_menu(self):
-        self.wait_to_click(self.web_apps_menu_id)
+        self.open_menu(self.web_apps_menu_id)
         self.wait_to_click(self.show_full_menu)
         assert self.WEBAPPS_TITLE in self.driver.title, "This is not the Webaspps menu page."
 
     def rage_clicks(self):
         # Rage Clicks on menus
-        self.click(self.users_menu_id)
+        self.open_menu(self.users_menu_id)
         self.click(self.users_menu_id)
         self.click(self.users_menu_id)
         # Rage Clicks on redirect links
@@ -80,3 +82,10 @@ class HomePage(BasePage):
         self.click(self.mobile_workers_menu_link_text)
         self.click(self.mobile_workers_menu_link_text)
         assert self.USERS_TITLE in self.driver.title, "Rage clicks failed!."
+
+    def open_menu(self, menu):
+        if self.is_present(menu):
+            self.wait_to_click(menu)
+        else:
+            self.wait_to_click(self.show_full_menu)
+            self.wait_to_click(menu)
