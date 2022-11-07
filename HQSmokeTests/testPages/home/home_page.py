@@ -35,8 +35,6 @@ class HomePage(BasePage):
         self.MESSAGING_TITLE = "Dashboard : Messaging :: - CommCare HQ"
         self.WEBAPPS_TITLE = "Web Apps - CommCare HQ"
 
-
-
     def dashboard_menu(self):
         self.open_menu(self.dashboard_menu_id)
         self.wait_to_click(self.dashboard_menu_id)
@@ -84,8 +82,6 @@ class HomePage(BasePage):
         assert self.USERS_TITLE in self.driver.title, "Rage clicks failed!."
 
     def open_menu(self, menu):
-        if self.is_present(menu):
-            self.wait_to_click(menu)
-        else:
+        if self.is_present(self.show_full_menu):
             self.wait_to_click(self.show_full_menu)
-            self.wait_to_click(menu)
+        self.wait_to_click(menu)
