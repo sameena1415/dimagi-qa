@@ -39,7 +39,7 @@ def test_case_14_report_loading(driver):
 @pytest.mark.reportFormData
 @pytest.mark.reportCaseList
 @pytest.mark.reportCaseData
-def test_case_15_16_submit_form_verify_formdata_casedata(driver):
+def test_case_15_16_submit_form_verify_formdata_casedata(driver, settings):
     home = HomePage(driver)
     driver.refresh()
     home.web_apps_menu()
@@ -48,7 +48,7 @@ def test_case_15_16_submit_form_verify_formdata_casedata(driver):
     case_name = webapps.submit_case_form()
     home.reports_menu()
     load = ReportPage(driver)
-    load.verify_form_data_submit_history(case_name)
+    load.verify_form_data_submit_history(case_name, settings['login_username'])
     load.verify_form_data_case_list(case_name)
 
 
