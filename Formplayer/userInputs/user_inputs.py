@@ -5,7 +5,6 @@ from pathlib import Path
 
 
 class UserData:
-
     """Path Settings"""
     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -17,20 +16,26 @@ class UserData:
     """User Test Data"""
 
     # Pre-setup application and case names
-    basic_tests_app = "Formplayer Tests"
-    basic_tests_case_list = "Basic Form Tests"
-    basic_tests_form_name= "Basic Form"
+    basic_tests = {"tests_app": "Formplayer Tests",
+                   "case_list": "Basic Form Tests",
+                   "form_name": "Basic Form"}
+
     app_preview_mobile_worker = "appiumtest"
 
-
-    #Mobile Worker name
+    # Mobile Worker name
     mw_username = "appiumtest@qa-automation.commcarehq.org"
     mw_password = "Pass@123"
     language = 'es'
+    web_user = "automation.user.commcarehq@gmail.com"
 
-    #Submit History
-    test_application = "Test Application -Formplayer Automation"
-    case_list_name = "Case List"
-    form_name = "Registration Form"
-
-    test_app = 'Test App'
+    # Submit History
+    test_application = {
+        "tests_app": "Test Application -Formplayer Automation",
+        "case_list": "Case List",
+        "form_name": "Registration Form"}
+    case_type ='case'
+    test_app = 'Test Application - One question per screen'
+    test_application2 = {
+        "tests_app": "Test Application - One question per screen",
+        "case_list": "Case List",
+        "form_name": "Registration Form"}

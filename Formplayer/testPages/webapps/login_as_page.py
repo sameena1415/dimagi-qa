@@ -3,6 +3,8 @@ import time
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 
+from Formplayer.testPages.webapps.webapps_basics import WebAppsBasics
+from common_utilities.generate_random_string import fetch_random_string
 from common_utilities.selenium.base_page import BasePage
 from Formplayer.userInputs.user_inputs import UserData
 
@@ -14,7 +16,15 @@ class LoginAsPage(BasePage):
     def __init__(self, driver):
         super().__init__(driver)
 
-        self.basic_tests_app = (By.XPATH,"//div[@aria-label='"+UserData.basic_tests_app+"']/descendant::h3[text()='"+UserData.basic_tests_app+"']")
+
+        self.form_input = "web app test"+fetch_random_string()
+        self.form_input_no_login = "web app test without login" + fetch_random_string()
+
+        self.submitted_by_on_behalf = (By.XPATH,
+                                       "//div[@class='pull-right'][contains(.,'Submitted by Web User')]/a[.='" + UserData.web_user + "']//following-sibling::text()[contains(.,'on behalf of Mobile Worker')]//following-sibling::a[.='" + UserData.app_preview_mobile_worker + "']")
+        self.submitted_by = (By.XPATH, "//div[@class='pull-right'][contains(.,'Submitted by ')]/a[.='" + UserData.web_user + "']")
+
+        self.basic_tests_app = (By.XPATH,"//div[@aria-label='"+UserData.basic_tests["tests_app"]+"']/descendant::h3[text()='"+UserData.basic_tests["tests_app"]+"']")
         self.web_apps_menu = (By.ID, "CloudcareTab")
         self.show_full_menu = (By.ID, "commcare-menu-toggle")
         self.login_as = (By.XPATH,"//h3[text()='Login as']")
@@ -36,8 +46,12 @@ class LoginAsPage(BasePage):
         print("Open App")
         self.js_click(self.basic_tests_app)
 
-    def login_as_presence(self):
+    def open_webapps_menu(self):
+        print("Opening Web Apps Menu")
         self.wait_to_click(self.web_apps_menu)
+
+    def login_as_presence(self):
+        self.open_webapps_menu()
         assert self.WEBAPPS_TITLE in self.driver.title, "This is not the Webaspps menu page."
         self.js_click(self.login_as)
 
@@ -54,18 +68,21 @@ class LoginAsPage(BasePage):
         print(logged_in_username)
         assert logged_in_username == self.username, "Logged in"
 
-    def login_as_form_submssion(self):
+    def login_as_form_submssion(self, input_text):
         self.open_basic_tests_app()
         time.sleep(2)
         self.js_click(self.basic_tests_menu)
         time.sleep(2)
         self.js_click(self.basic_tests_form)
         time.sleep(2)
-        self.wait_to_clear_and_send_keys(self.basic_tests_answer_input, "test")
+        self.wait_to_clear_and_send_keys(self.basic_tests_answer_input, input_text)
         self.wait_to_click(self.submit)
         assert self.is_visible_and_displayed(self.submit_success)
 
-
+    def submit_history_verification(self):
+        web_app = WebAppsBasics(self.driver)
+        web_app.open_submit_history_form_link(UserData.basic_tests)
+        assert self.is_displayed(self.submitted_by), "Submission verification failed"
 
 
 
