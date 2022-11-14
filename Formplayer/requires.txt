@@ -12,3 +12,4 @@ pytest-rerunfailures>=10.2
 pytest-xdist>=2.4.0
 pytest-xdist[psutil]
 pytest-order
+pyotp >=2.6.0
