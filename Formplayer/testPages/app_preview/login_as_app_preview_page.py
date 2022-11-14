@@ -39,7 +39,7 @@ class LoginAsAppPreviewPage(BasePage):
         self.login_as = (By.XPATH, "//h3[text()='Login as']")
         self.clear_user = (By.XPATH, "//a[@class='js-clear-user']")
         self.search_user_input_area = (By.XPATH, "//input[@placeholder='Filter workers']")
-        self.username_in_list = (By.XPATH, "//h3[./b[text() ='" + self.username + "']]")
+        self.username_in_list =  "//h3[./b[text() ='{}']]"
         self.search_users_button = (By.XPATH, "//*[@class='fa fa-search']")
         self.webapp_login_confirmation = (By.ID, 'js-confirmation-confirm')
         self.webapp_working_as = (By.XPATH, "//div[@class='restore-as-banner module-banner']/b")
@@ -77,7 +77,7 @@ class LoginAsAppPreviewPage(BasePage):
         self.wait_to_clear_and_send_keys(self.search_worker, self.username)
         self.js_click(self.search_users_button)
         time.sleep(2)
-        self.js_click(self.username_in_list)
+        self.js_click((By.XPATH, self.username_in_list.format(self.username)))
         time.sleep(2)
         self.js_click(self.webapp_login_confirmation)
         time.sleep(2)
@@ -104,3 +104,17 @@ class LoginAsAppPreviewPage(BasePage):
             assert self.is_displayed(self.submitted_by), "Submission verification failed"
         elif type == "login":
             assert self.is_displayed(self.submitted_by_on_behalf), "Submission verification failed"
+
+    def login_as_user(self, username):
+        self.switch_to_frame(self.iframe)
+        self.wait_to_click(self.login_as_button)
+        self.wait_to_clear_and_send_keys(self.search_worker, username)
+        self.js_click(self.search_users_button)
+        time.sleep(2)
+        self.js_click((By.XPATH, self.username_in_list.format(self.username)))
+        time.sleep(2)
+        self.js_click(self.webapp_login_confirmation)
+        time.sleep(2)
+        logged_in_username = self.get_text(self.webapp_working_as)
+        assert logged_in_username == self.username, "Logged in"
+        self.switch_to_default_content()

@@ -77,7 +77,7 @@ class WebAppsBasics(BasePage):
         # Submit History
         self.users_box = (By.XPATH, "//span[@class='select2-selection select2-selection--multiple']")
         self.selected_users = (By.XPATH, "//li[contains(@class,'select2-selection')]")
-        self.deselect_user = "//button[contains(@class,'select2-selection')][{}]"
+        self.deselect_user = "(//button[contains(@class,'select2-selection')])[{}]"
         self.search_user = (By.XPATH, "//textarea[@class='select2-search__field']")
         self.app_user_select = "(//li[contains(text(),'{}')])[1]"
         self.select_user = (By.XPATH, "//li[contains(text(),'[All Data]')]")
@@ -225,21 +225,22 @@ class WebAppsBasics(BasePage):
         else:
             self.wait_to_click(self.full_menu)
             self.wait_to_click(self.reports_menu_id)
+        self.click(self.submit_history_rep)
         print("Sleeping for some time for the form/case data to be updated in reports")
-        time.sleep(20)
-        self.wait_to_click(self.submit_history_rep)
+        time.sleep(30)
         self.wait_to_click(self.users_box)
         list = self.find_elements(self.selected_users)
         print(len(list))
         if len(list) > 0:
-            for i in range(len(list))[::-1]:
-                self.wait_to_click((By.XPATH, self.deselect_user.format(i)))
+            for i in range(len(list)):
+                self.wait_to_click((By.XPATH, self.deselect_user.format(1)))
+                list = self.find_elements(self.selected_users)
 
         self.send_keys(self.search_user, username)
         self.wait_to_click((By.XPATH, self.app_user_select.format(username)))
-        self.select_by_text(self.application_select, application["tests_app"])
-        self.select_by_text(self.module_select, application["case_list"])
-        self.select_by_text(self.form_select, application["form_name"])
+        self.select_by_text(self.application_select, application['tests_app'])
+        self.select_by_text(self.module_select, application['case_list'])
+        self.select_by_text(self.form_select, application['form_name'])
         date_range = self.get_present_date()
         self.clear(self.date_input)
         self.send_keys(self.date_input, date_range+Keys.TAB)
@@ -262,11 +263,13 @@ class WebAppsBasics(BasePage):
         list = self.find_elements(self.selected_users)
         print(len(list))
         if len(list) > 0:
-            for i in range(len(list))[::-1]:
-                self.wait_to_click((By.XPATH, self.deselect_user.format(i)))
+            for i in range(len(list)):
+                self.wait_to_click((By.XPATH, self.deselect_user.format(1)))
+                list = self.find_elements(self.selected_users)
 
         self.send_keys(self.search_user, username)
         self.wait_to_click((By.XPATH, self.app_user_select.format(username)))
+        time.sleep(2)
         self.select_by_text(self.case_type_select, UserData.case_type)
         self.send_keys(self.search_input, case_name)
         self.wait_to_click(self.apply_id)

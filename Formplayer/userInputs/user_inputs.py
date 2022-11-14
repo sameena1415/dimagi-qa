@@ -33,9 +33,22 @@ class UserData:
         "tests_app": "Test Application -Formplayer Automation",
         "case_list": "Case List",
         "form_name": "Registration Form"}
-    case_type ='case'
+    case_type = 'case'
     test_app = 'Test Application - One question per screen'
     test_application2 = {
         "tests_app": "Test Application - One question per screen",
         "case_list": "Case List",
         "form_name": "Registration Form"}
+
+    basic_tests_app = {
+        "tests_app": "Basic Tests",
+        "case_list": "Basic Form Tests",
+        "form_name": "Basic Form"}
+
+    basic_test_app_forms = {
+        "basic": "Basic Form",
+        "group": "Groups",
+        "fst": "Formplayer Specific Tests",
+
+
+    }

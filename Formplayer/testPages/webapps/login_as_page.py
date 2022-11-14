@@ -19,19 +19,19 @@ class LoginAsPage(BasePage):
 
         self.form_input = "web app test"+fetch_random_string()
         self.form_input_no_login = "web app test without login" + fetch_random_string()
+        self.username_in_list = "//h3[./b[text() ='{}']]"
 
         self.submitted_by_on_behalf = (By.XPATH,
                                        "//div[@class='pull-right'][contains(.,'Submitted by Web User')]/a[.='" + UserData.web_user + "']//following-sibling::text()[contains(.,'on behalf of Mobile Worker')]//following-sibling::a[.='" + UserData.app_preview_mobile_worker + "']")
         self.submitted_by = (By.XPATH, "//div[@class='pull-right'][contains(.,'Submitted by ')]/a[.='" + UserData.web_user + "']")
 
-        self.basic_tests_app = (By.XPATH,"//div[@aria-label='"+UserData.basic_tests["tests_app"]+"']/descendant::h3[text()='"+UserData.basic_tests["tests_app"]+"']")
+        self.basic_tests_app = "//div[@aria-label='{}']/descendant::h3[text()='{}']"
         self.web_apps_menu = (By.ID, "CloudcareTab")
         self.show_full_menu = (By.ID, "commcare-menu-toggle")
         self.login_as = (By.XPATH,"//h3[text()='Login as']")
         self.WEBAPPS_TITLE = "Web Apps - CommCare HQ"
         self.search_user_input_area = (By.XPATH, "//input[@placeholder='Filter workers']")
         self.username = UserData.app_preview_mobile_worker
-        self.username_in_list = (By.XPATH, "//b[text() ='"+self.username+"']")
         self.search_users_button = (By.XPATH, "//button[@type='submit'][./i[@class = 'fa fa-search']]")
         self.webapp_login_confirmation = (By.ID, 'js-confirmation-confirm')
         self.webapp_working_as = (By.XPATH, "//div[@class='restore-as-banner module-banner']/b")
@@ -42,9 +42,9 @@ class LoginAsPage(BasePage):
         self.submit_success = (By.XPATH, "//p[text()='Form successfully saved!']")
         self.login_as_webuser= (By.XPATH, "//a[@class='js-clear-user']")
 
-    def open_basic_tests_app(self):
+    def open_basic_tests_app(self, application=UserData.basic_tests["tests_app"]):
         print("Open App")
-        self.js_click(self.basic_tests_app)
+        self.js_click((By.XPATH, self.basic_tests_app.format(application, application)))
 
     def open_webapps_menu(self):
         print("Opening Web Apps Menu")
@@ -60,7 +60,7 @@ class LoginAsPage(BasePage):
         time.sleep(2)
         self.js_click(self.search_users_button)
         time.sleep(2)
-        self.wait_to_click(self.username_in_list)
+        self.js_click((By.XPATH, self.username_in_list.format(self.username)))
         time.sleep(2)
         self.wait_to_click(self.webapp_login_confirmation)
         time.sleep(5)
@@ -84,5 +84,14 @@ class LoginAsPage(BasePage):
         web_app.open_submit_history_form_link(UserData.basic_tests)
         assert self.is_displayed(self.submitted_by), "Submission verification failed"
 
-
-
+    def login_as_user(self, username):
+        self.wait_to_click(self.login_as)
+        self.wait_to_clear_and_send_keys(self.search_user_input_area, username)
+        self.js_click(self.search_users_button)
+        time.sleep(2)
+        self.js_click((By.XPATH, self.username_in_list.format(username)))
+        time.sleep(2)
+        self.js_click(self.webapp_login_confirmation)
+        time.sleep(2)
+        logged_in_username = self.get_text(self.webapp_working_as)
+        assert logged_in_username == self.username, "Logged in"
