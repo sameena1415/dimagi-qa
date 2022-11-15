@@ -42,7 +42,7 @@ class HomePage(BasePage):
 
     def reports_menu(self):
         self.open_menu(self.reports_menu_id)
-        self.wait_to_click(self.view_all)
+        self.js_click(self.view_all)
         assert self.REPORTS_TITLE in self.driver.title, "This is not the Reports menu page."
 
     def data_menu(self):
