@@ -10,6 +10,7 @@ class Base:
             # print(response.json())
         else:
             response = requests.post(URL, data=input_payload, headers=header)
+        print("URL", URL)
         print(response.status_code)
         # print(response.headers)
 
@@ -21,27 +22,32 @@ class Base:
         #     response = requests.get(URL, auth=HTTPBasicAuth(login_user, login_pass))
         # else:
             response = requests.get(URL, headers=header)
+            print("URL", URL)
             print(response.text)
             assert response.status_code == 200
             return response
 
     def put_api(self, URL, input_payload, login_user, login_pass, header):
         response = requests.put(URL, json=input_payload, headers=header)
+        print("URL", URL)
         print(response.status_code)
         assert response.status_code == 200
 
     def delete_api(self, URL, login_user, login_pass, header):
         response = requests.delete(URL, headers=header)
+        print("URL", URL)
         print(response.status_code)
         assert response.status_code == 204
 
     def patch_api(self, URL, input_payload, login_user, login_pass, header):
         response = requests.put(URL, json=input_payload,headers=header)
+        print("URL", URL)
         print(response.status_code)
         assert response.status_code == 201
 
     def post_api_file_upload(self, URL, data, login_user, login_pass, file, header):
         response = requests.request("POST", URL, data=data, files=file, headers=header)
+        print("URL", URL)
         print(response.status_code)
         # print(response.headers)
         return response
