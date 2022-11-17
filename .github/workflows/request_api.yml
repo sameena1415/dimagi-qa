@@ -11,7 +11,6 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
@@ -56,7 +55,7 @@ jobs:
         server_port: 465
         username: ${{secrets.DIMAGIQA_MAIL_USERNAME}}
         password: ${{secrets.DIMAGIQA_MAIL_PASSWORD}}
-        subject: [${{ github.event.client_payload.environment }}] FAIL - Request API Tests[#${{github.run_number}}] on branch "${{ github.ref_name }}", ${{env.NOW}}
+        subject: ${{ github.event.client_payload.environment }} FAIL - Request API Tests[#${{github.run_number}}] on branch "${{ github.ref_name }}", ${{env.NOW}}
         to: qa@dimagi.com, sameena.shaik@fissionlabs.com
         from: <${{secrets.DIMAGIQA_MAIL_USERNAME}}>
         html_body: file:////home/runner/work/dimagi-qa/dimagi-qa/RequestAPI/email_fail.html
@@ -71,7 +70,7 @@ jobs:
         server_port: 465
         username: ${{secrets.DIMAGIQA_MAIL_USERNAME}}
         password: ${{secrets.DIMAGIQA_MAIL_PASSWORD}}
-        subject: PASS - Request API Tests[#${{github.run_number}}] on branch "${{ github.ref_name }}", ${{env.NOW}}
+        subject: ${{ github.event.client_payload.environment }} PASS - Request API Tests[#${{github.run_number}}] on branch "${{ github.ref_name }}", ${{env.NOW}}
         to: qa@dimagi.com, sameena.shaik@fissionlabs.com
         from: <${{secrets.DIMAGIQA_MAIL_USERNAME}}>
         html_body: file:////home/runner/work/dimagi-qa/dimagi-qa/RequestAPI/email_pass.html
