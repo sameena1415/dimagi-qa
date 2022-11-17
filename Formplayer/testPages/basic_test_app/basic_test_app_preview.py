@@ -1,4 +1,5 @@
 import time
+import random
 
 from Formplayer.testPages.app_preview.login_as_app_preview_page import LoginAsAppPreviewPage
 from Formplayer.testPages.webapps.webapps_basics import WebAppsBasics
@@ -29,7 +30,7 @@ class BasicTestAppPreview(BasePage):
         self.form_list = (By.XPATH, "//tbody[@class='menus-container']")
         self.refresh_button = (By.XPATH, "//button[contains(@class,'btn-preview-refresh js-preview-refresh')]")
         self.toggle_button = (By.XPATH, "//button[contains(@class ,'js-preview-toggle-tablet-view')]")
-        self.sync_button = (By.XPATH,"//div[@class='js-sync-item appicon appicon-sync']")
+        self.sync_button = (By.XPATH, "//div[@class='js-sync-item appicon appicon-sync']")
         self.start_option = (By.XPATH, "//div[@class= 'js-start-app appicon appicon-start']")
         self.settings_option = (By.XPATH, "//div[@class = 'js-settings appicon appicon-settings']/i")
         self.login_as_option = (By.XPATH, "//div[@class='js-restore-as-item appicon appicon-restore-as']")
@@ -42,7 +43,8 @@ class BasicTestAppPreview(BasePage):
                               "//label[.//span[.='Enter a Name']]/following-sibling::div//textarea[contains(@class,'textfield form-control')]")
         self.incomplete_form_list = (By.XPATH, "//tr[@class='formplayer-request']")
         self.delete_incomplete_form = "(//tr[@class='formplayer-request']/descendant::div[@aria-label='Delete form'])[{}]"
-        self.edit_incomplete_form = (By.XPATH,"(//tr[@class='formplayer-request']/descendant::div//i[contains(@class,'fa fa-pencil')])[1]")
+        self.edit_incomplete_form = (
+        By.XPATH, "(//tr[@class='formplayer-request']/descendant::div//i[contains(@class,'fa fa-pencil')])[1]")
         self.click_today_date = (By.XPATH, "//a[@data-action='today']")
         self.close_date_picker = (By.XPATH, "//a[@data-action='close']")
         self.mobileno_question = (By.XPATH, "//label[.//span[text()='Mobile No.']]/following-sibling::div//input")
@@ -54,10 +56,10 @@ class BasicTestAppPreview(BasePage):
         self.view_form_link = (By.LINK_TEXT, "this form")
         self.export_form_link = (By.LINK_TEXT, "form")
         self.last_form = (
-        By.XPATH, "(//ul[contains(@class,'appnav-menu-nested')]//div[contains(@class,'appnav-item')])[last()]")
+            By.XPATH, "(//ul[contains(@class,'appnav-menu-nested')]//div[contains(@class,'appnav-item')])[last()]")
         self.delete_form = (By.XPATH, "(//div[contains(@class,'appnav-item')]/a[@class='appnav-delete']/i)[last()]")
         self.delete_confirm_button = (
-        By.XPATH, "(//div[contains(@id,'form_confirm_delete')]//button/i[@class='fa fa-trash'])[last()]")
+            By.XPATH, "(//div[contains(@id,'form_confirm_delete')]//button/i[@class='fa fa-trash'])[last()]")
         self.question_display_text = (By.XPATH, "//span[text()='Name (es)']")
         self.iframe = (By.CLASS_NAME, "preview-phone-window")
         self.home_button = (By.XPATH, "//li[./i[@class='fa fa-home']]")
@@ -66,6 +68,12 @@ class BasicTestAppPreview(BasePage):
         self.submitted_value = "(//tbody//td[2]/div[contains(.,'{}')])[1]"
         self.table_data = (By.XPATH, "(//tbody//td[2]/div[contains(@class,'data-raw')])[1]")
 
+        self.data_preview = (By.XPATH, "//button[@aria-label='Expand Data Preview']")
+        self.xpath_textarea = (By.XPATH, "//textarea[@placeholder='XPath Expression']")
+        self.no_queries = (By.XPATH, "//i[.='No recent queries']")
+        self.recent_query = "//tbody[@data-bind='foreach: recentXPathQueries']//td/span[.='{}']"
+        self.query_table = (By.XPATH, "//tbody[@data-bind='foreach: recentXPathQueries']")
+        self.evaluate_button = (By.XPATH, "(//input[@value='Evaluate'])[1]")
 
     def open_form(self, case_list, form_name):
         self.switch_to_frame(self.iframe)
@@ -114,7 +122,7 @@ class BasicTestAppPreview(BasePage):
         else:
             print("There are no incomplete forms")
         list_new = self.find_elements(self.incomplete_form_list)
-        assert len(list)-1 == len(list_new)
+        assert len(list) - 1 == len(list_new)
         print("deleted first incomplete form")
         self.switch_to_default_content()
         self.wait_to_click(self.back_button)
@@ -126,7 +134,7 @@ class BasicTestAppPreview(BasePage):
         print(len(list))
         if len(list) != 0:
             self.js_click(self.edit_incomplete_form)
-            text = self.get_attribute(self.name_question,"value")
+            text = self.get_attribute(self.name_question, "value")
             assert text == value
             self.wait_to_click(self.next_question)
             self.wait_to_click(self.submit_form_button)
@@ -147,7 +155,7 @@ class BasicTestAppPreview(BasePage):
         print(len(list))
         if len(list) != 0:
             self.js_click(self.edit_incomplete_form)
-            text = self.get_attribute(self.name_question,"value")
+            text = self.get_attribute(self.name_question, "value")
             assert text == value
             self.wait_to_clear_and_send_keys(self.name_question, self.changed_name_input)
             self.wait_to_click(self.next_question)
@@ -170,6 +178,18 @@ class BasicTestAppPreview(BasePage):
         print(str(text).strip())
         assert str(text).strip() == value
 
+    def random_expression(self):
+        return random.choice(UserData.expressions)
 
-
-
+    def verify_data_preview(self, expression):
+        print("Expression Function: ", expression)
+        self.switch_to_frame(self.iframe)
+        self.wait_to_click(self.start_option)
+        self.wait_to_click(self.data_preview)
+        assert self.is_present(self.no_queries)
+        self.wait_to_clear_and_send_keys(self.xpath_textarea, expression)
+        self.click(self.evaluate_button)
+        time.sleep(1)
+        assert self.is_present((By.XPATH, self.recent_query.format(expression)))
+        self.wait_to_click(self.data_preview)
+        self.switch_to_default_content()

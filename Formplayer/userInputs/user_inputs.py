@@ -52,3 +52,6 @@ class UserData:
 
 
     }
+
+    expressions = ['true()', 'false()', 'boolean-from-string(1)',
+                   'boolean-from-string(0)', 'boolean(1)', 'boolean(0)']

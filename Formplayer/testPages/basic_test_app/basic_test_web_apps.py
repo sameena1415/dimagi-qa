@@ -65,7 +65,12 @@ class BasicTestWebApps(BasePage):
         self.submitted_value = "(//tbody//td[2]/div[contains(.,'{}')])[1]"
         self.table_data = (By.XPATH, "(//tbody//td[2]/div[contains(@class,'data-raw')])[1]")
 
-
+        self.data_preview = (By.XPATH, "//button[@aria-label='Expand Data Preview']")
+        self.xpath_textarea = (By.XPATH, "//textarea[@placeholder='XPath Expression']")
+        self.no_queries = (By.XPATH, "//i[.='No recent queries']")
+        self.recent_query = "//tbody[@data-bind='foreach: recentXPathQueries']//td/span[.='{}']"
+        self.query_table = (By.XPATH, "//tbody[@data-bind='foreach: recentXPathQueries']")
+        self.evaluate_button = (By.XPATH, "(//input[@value='Evaluate'])[1]")
 
     def open_form(self, case_list, form_name):
         self.wait_to_click((By.XPATH, self.case_list_menu.format(case_list)))
@@ -154,6 +159,13 @@ class BasicTestWebApps(BasePage):
         print(str(text).strip())
         assert str(text).strip() == value
 
-
+    def verify_data_preview(self, expression):
+        self.wait_to_click(self.data_preview)
+        assert self.is_present(self.no_queries)
+        self.wait_to_clear_and_send_keys(self.xpath_textarea, expression)
+        self.click(self.evaluate_button)
+        time.sleep(1)
+        assert self.is_present((By.XPATH, self.recent_query.format(expression)))
+        self.wait_to_click(self.data_preview)
 
 

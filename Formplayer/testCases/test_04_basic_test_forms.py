@@ -50,5 +50,22 @@ def test_case_17_incomplete_form_web_apps(driver):
     basic.verify_saved_form_and_submit_changed(basic.name_input1)
     basic.verify_submit_history(basic.changed_name_input, UserData.app_preview_mobile_worker)
 
+def test_case_18_data_preview_app_preview(driver):
+    app_preview = LoginAsAppPreviewPage(driver)
+    basic = BasicTestAppPreview(driver)
+    login = LoginAsAppPreviewPage(driver)
+    app_preview.open_view_app_preview(UserData.basic_tests_app['tests_app'])
+    login.login_as_user(UserData.app_preview_mobile_worker)
+    expression = basic.random_expression()
+    basic.verify_data_preview(expression)
 
+def test_case_18_data_preview_web_apps(driver):
+    login = LoginAsPage(driver)
+    login.open_webapps_menu()
+    login.login_as_user(UserData.app_preview_mobile_worker)
+    basic = BasicTestWebApps(driver)
+    login.open_basic_tests_app(UserData.basic_tests_app['tests_app'])
+    app_preview = BasicTestAppPreview(driver)
+    expression = app_preview.random_expression()
+    basic.verify_data_preview(expression)
 
