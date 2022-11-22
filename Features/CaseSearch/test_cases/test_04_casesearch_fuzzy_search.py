@@ -1,5 +1,6 @@
 import time
 
+from Features.CaseSearch.constants import TEXT_INPUT, COMBOBOX
 from Features.CaseSearch.test_pages.casesearch_page import CaseSearchWorkflows
 from Features.CaseSearch.user_inputs.casesearch_user_inputs import CaseSearchUserInput
 from HQSmokeTests.testPages.reports.report_page import ReportPage
@@ -30,7 +31,7 @@ def test_case_01_fuzzy_search_and_case_claim(driver):
     webapps.search_all_cases()
     webapps.clear_selections_on_case_search_page()
     "Fuzzy search"
-    casesearch.search_against_property(search_property="Song Name", input_value="Bugs", property_type="TEXT_INPUT")
+    casesearch.search_against_property(search_property="Song Name", input_value="Bugs", property_type=TEXT_INPUT)
     webapps.search_button_on_case_search_page()
     casesearch.check_values_on_caselist(row_num="1", value="Bugs User2")
     "Select case to cliam"
@@ -60,12 +61,12 @@ def test_case_03_non_fuzzy_search(driver):
     webapps.open_form("View Instruments")
     webapps.search_all_cases()
     casesearch.search_against_property(search_property="Instrument Name", input_value="Guit",
-                                       property_type="TEXT_INPUT")
+                                       property_type=TEXT_INPUT)
     webapps.search_button_on_case_search_page()
     assert base.is_visible_and_displayed(webapps.list_is_empty)
     driver.back()
     casesearch.search_against_property(search_property="Instrument Name", input_value="Acoustic bass guitar",
-                                       property_type="TEXT_INPUT")
+                                       property_type=TEXT_INPUT)
     webapps.search_button_on_case_search_page()
     webapps.omni_search("Acoustic bass guitar")
 
@@ -87,7 +88,7 @@ def test_case_05_remove_special_characters(driver):
     webapps.open_menu(CaseSearchUserInput.normal_menu)
     webapps.search_all_cases()
     webapps.clear_selections_on_case_search_page()
-    casesearch.search_against_property(search_property="Song ID", input_value="1-2-3-4-5", property_type="TEXT_INPUT")
+    casesearch.search_against_property(search_property="Song ID", input_value="1-2-3-4-5", property_type=TEXT_INPUT)
     webapps.search_button_on_case_search_page()
     casesearch.check_values_on_caselist(row_num="7", value="12345")
 

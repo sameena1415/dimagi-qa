@@ -2,6 +2,7 @@ import time
 
 import pytest
 
+from Features.CaseSearch.constants import TEXT_INPUT, COMBOBOX
 from Features.CaseSearch.test_pages.casesearch_page import CaseSearchWorkflows
 from Features.CaseSearch.user_inputs.casesearch_user_inputs import CaseSearchUserInput
 from common_utilities.selenium.base_page import BasePage
@@ -18,7 +19,7 @@ def test_case_01_eof_navigations(driver):
     webapps.open_app(CaseSearchUserInput.case_search_app_name)
     webapps.open_menu(CaseSearchUserInput.search_first_menu)
     webapps.clear_selections_on_case_search_page()
-    casesearch.search_against_property(search_property="Song Name", input_value="Bugs", property_type="TEXT_INPUT")
+    casesearch.search_against_property(search_property="Song Name", input_value="Bugs", property_type=TEXT_INPUT)
     webapps.search_button_on_case_search_page()
     webapps.select_case_and_continue("Bugs")
     """EOF Nav - Prev Menu"""
@@ -31,7 +32,7 @@ def test_case_01_eof_navigations(driver):
     casesearch.check_eof_navigation(eof_nav="MENU", menu=CaseSearchUserInput.search_first_menu)
     """EOF Nav - First Menu"""
     webapps.clear_selections_on_case_search_page()
-    casesearch.search_against_property(search_property="Song Name", input_value="Bugs", property_type="TEXT_INPUT")
+    casesearch.search_against_property(search_property="Song Name", input_value="Bugs", property_type=TEXT_INPUT)
     webapps.search_button_on_case_search_page()
     search_first_form_names = webapps.select_case_and_continue("Bugs")
     webapps.open_form("Update Rating, Mood, or Energy")
@@ -51,7 +52,7 @@ def test_case_02_related_property_search(driver):
     webapps.open_app(CaseSearchUserInput.case_search_app_name)
     webapps.open_menu(CaseSearchUserInput.search_first_menu)
     webapps.clear_selections_on_case_search_page()
-    casesearch.search_against_property(search_property="Song Name", input_value="Bugs", property_type="TEXT_INPUT")
+    casesearch.search_against_property(search_property="Song Name", input_value="Bugs", property_type=TEXT_INPUT)
     webapps.search_button_on_case_search_page()
     webapps.select_case_and_continue("Bugs")
     webapps.open_form("Shows")
@@ -89,13 +90,13 @@ def test_case_05_shadow_menu(driver):
     webapps.open_app(CaseSearchUserInput.case_search_app_name)
     webapps.open_menu(CaseSearchUserInput.search_first_menu)
     webapps.clear_selections_on_case_search_page()
-    casesearch.search_against_property(search_property="Song Name", input_value="Bugs", property_type="TEXT_INPUT")
+    casesearch.search_against_property(search_property="Song Name", input_value="Bugs", property_type=TEXT_INPUT)
     webapps.search_button_on_case_search_page()
     search_first_form_names = webapps.select_case_and_continue("Bugs")
     """Check search and forms in shadow menu"""
     webapps.open_app(CaseSearchUserInput.case_search_app_name)
     webapps.open_menu("Shadow Menu")
-    casesearch.search_against_property(search_property="Rating", input_value="*****", property_type="COMBOBOX")
+    casesearch.search_against_property(search_property="Rating", input_value="*****", property_type=COMBOBOX)
     webapps.search_button_on_case_search_page()
     case_name = webapps.omni_search("Kyon")
     shadow_form_names = webapps.select_case_and_continue(case_name)
@@ -111,7 +112,7 @@ def test_case_06_performance_check(driver):
     webapps.open_form("View Instruments")
     webapps.search_all_cases()
     casesearch.search_against_property(search_property="Instrument Name", input_value="Guitar",
-                                       property_type="TEXT_INPUT")
+                                       property_type=TEXT_INPUT)
     start_time = time.perf_counter()  # Start capturing time
     webapps.search_button_on_case_search_page()
     end_time = time.perf_counter()  # Stop capturing time
@@ -119,7 +120,7 @@ def test_case_06_performance_check(driver):
     assert run_time <= 10
     webapps.search_again_cases()
     casesearch.search_against_property(search_property="Instrument Name", input_value="Guitar",
-                                       property_type="TEXT_INPUT")
+                                       property_type=TEXT_INPUT)
     start_time = time.perf_counter()
     webapps.search_button_on_case_search_page()
     end_time = time.perf_counter()
@@ -189,7 +190,7 @@ def test_case_10_claim_condition(driver):
     webapps.open_app(CaseSearchUserInput.case_search_app_name)
     webapps.open_menu("Songs - Case Search Settings")
     webapps.search_all_cases()
-    casesearch.search_against_property(search_property="Mood", input_value="4", property_type="TEXT_INPUT")
+    casesearch.search_against_property(search_property="Mood", input_value="4", property_type=TEXT_INPUT)
     webapps.search_button_on_case_search_page()
     case_name = webapps.omni_search("Kala Chashma")
     form_name = webapps.select_case_and_continue(case_name)
@@ -205,7 +206,7 @@ def test_case_11_do_not_search_cases(driver):
     webapps.open_app(CaseSearchUserInput.case_search_app_name)
     webapps.open_menu("Songs - Case Search Settings")
     webapps.search_all_cases()
-    casesearch.search_against_property(search_property="Mood", input_value="4", property_type="TEXT_INPUT")
+    casesearch.search_against_property(search_property="Mood", input_value="4", property_type=TEXT_INPUT)
     webapps.search_button_on_case_search_page()
     webapps.omni_search("b_users song")
     assert base.is_displayed(webapps.list_is_empty)
