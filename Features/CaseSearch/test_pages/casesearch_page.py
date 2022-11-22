@@ -7,6 +7,7 @@ from selenium.webdriver import Keys
 from selenium.webdriver.common.by import By
 
 from common_utilities.selenium.base_page import BasePage
+from Features.CaseSearch.constants import TEXT_INPUT, COMBOBOX, YES, NO, text, combobox, HOME, WORK
 
 """"Contains test page elements and functions related to the Case Search functionality"""
 
@@ -49,34 +50,34 @@ class CaseSearchWorkflows(BasePage):
         self.case = self.get_element(self.case_name_format, case_name)
         assert self.is_visible_and_displayed(self.case)
 
-    def check_values_on_caselist(self, row_num, value, is_multi="NO"):
+    def check_values_on_caselist(self, row_num, value, is_multi=NO):
         self.value_in_table = self.get_element(self.value_in_table_format, row_num)
         values_ = self.find_elements_texts(self.value_in_table)
         # print(value, values_) # added for debugging
-        if is_multi == "YES":
+        if is_multi == YES:
             assert all(item in values_ for item in value) or any(item in values_ for item in value)
-        elif is_multi == "NO":
+        elif is_multi == NO:
             assert value in values_
 
     def check_default_values_displayed(self, search_property, default_value, search_format):
-        if search_format == 'text':
+        if search_format == text:
             search_property = (
                 By.XPATH, self.text_search_property_name_and_value_format.format(search_property, default_value))
-        elif search_format == 'combobox':
+        elif search_format == combobox:
             search_property = (
                 By.XPATH, self.combobox_search_property_name_and_value_format.format(search_property, default_value))
         assert self.is_visible_and_displayed(search_property)
 
     def search_against_property(self, search_property, input_value, property_type, include_blanks=None):
-        if property_type == "TEXT_INPUT":
+        if property_type == TEXT_INPUT:
             self.search_property = self.get_element(self.search_against_text_property_format, search_property)
             self.wait_to_clear_and_send_keys(self.search_property, input_value)
             self.send_keys(self.search_property, Keys.TAB)
-        elif property_type == "COMBOBOX":
+        elif property_type == COMBOBOX:
             self.combox_select_element = self.get_element(self.combox_select, search_property)
             self.select_by_text(self.combox_select_element, input_value)
             time.sleep(3)
-        if include_blanks == "YES":
+        if include_blanks == YES:
             self.select_include_blanks(search_property)
 
     def date_range(self, no_of_days):
@@ -100,11 +101,11 @@ class CaseSearchWorkflows(BasePage):
         self.send_keys(address_search, Keys.TAB)
         time.sleep(10)
 
-    def check_json_function(self, city_address, type="HOME"):
-        if type == "HOME":
+    def check_json_function(self, city_address, type=HOME):
+        if type == HOME:
             city_home = self.get_element(self.city_value_home, city_address)
             assert self.is_present(city_home)
-        if type == "WORK":
+        if type == WORK:
             city_work = self.get_element(self.city_value_work, city_address)
             assert self.is_present(city_work)
 
@@ -121,20 +122,20 @@ class CaseSearchWorkflows(BasePage):
         time.sleep(2)
         self.js_click(checkbox)
 
-    def check_validations_on_property(self, search_property, property_type, message=None, required_or_validated="YES"):
+    def check_validations_on_property(self, search_property, property_type, message=None, required_or_validated=YES):
         validation_message_on_top = self.get_element(self.required_validation_on_top, search_property)
         validation_message_per_prop = None
-        if property_type == "TEXT_INPUT":
+        if property_type == TEXT_INPUT:
             validation_message_per_prop = (
                 By.XPATH, self.required_validation_per_property_text.format(search_property, message))
-        elif property_type == "COMBOBOX":
+        elif property_type == COMBOBOX:
             validation_message_per_prop = (
                 By.XPATH, self.required_validation_per_property_combox.format(search_property, message))
-        if required_or_validated == "YES":
+        if required_or_validated == YES:
             time.sleep(5)
             assert self.is_displayed(validation_message_on_top)
             assert self.is_displayed(validation_message_per_prop)
-        elif required_or_validated == "NO":
+        elif required_or_validated == NO:
             time.sleep(5)
             assert not self.is_displayed(validation_message_on_top)
             assert not self.is_displayed(validation_message_per_prop)

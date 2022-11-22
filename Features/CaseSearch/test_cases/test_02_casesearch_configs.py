@@ -2,7 +2,7 @@ import time
 
 import pytest
 
-from Features.CaseSearch.constants import TEXT_INPUT, COMBOBOX, YES, NO, text, combobox
+from Features.CaseSearch.constants import TEXT_INPUT, COMBOBOX, YES, NO, text, combobox, HOME, WORK
 from Features.CaseSearch.test_pages.casesearch_page import CaseSearchWorkflows
 from Features.CaseSearch.user_inputs.casesearch_user_inputs import CaseSearchUserInput
 from common_utilities.selenium.webapps import WebApps
@@ -335,8 +335,8 @@ def test_case_20_json_property_function(driver):
     casesearch.add_address("New Canada St., 3855 Brienz, Switzerland", search_property="Search Home Address")
     casesearch.add_address("Avenida Benito Juárez, 77560 Alfredo V. Bonfil, Quintana Roo, Mexico",
                            search_property="Search Work Address")
-    casesearch.check_json_function("Brienz", type="HOME")
-    casesearch.check_json_function("Alfredo V. Bonfil", type="WORK")
+    casesearch.check_json_function("Brienz", type=HOME)
+    casesearch.check_json_function("Alfredo V. Bonfil", type=WORK)
 
 
 @pytest.mark.skip(reason="This will fail, setting reverted!")
