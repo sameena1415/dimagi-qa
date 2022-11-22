@@ -134,7 +134,7 @@ def test_case_06_performance_check(driver):
     webapps.search_button_on_case_search_page()
     end_time = time.perf_counter()  # Stop capturing time
     run_time = end_time - start_time
-    assert run_time <= 10
+    assert run_time <= 4
     webapps.search_again_cases()
     casesearch.search_against_property(search_property=CaseSearchUserInput.instrument_name,
                                        input_value=CaseSearchUserInput.instrument_case_guitar,
@@ -143,7 +143,7 @@ def test_case_06_performance_check(driver):
     webapps.search_button_on_case_search_page()
     end_time = time.perf_counter()
     run_time = end_time - start_time
-    assert run_time <= 10
+    assert run_time <= 4
 
 
 @pytest.mark.skip(reason="This is failing app setup error but bocked due Dominic's bug")
