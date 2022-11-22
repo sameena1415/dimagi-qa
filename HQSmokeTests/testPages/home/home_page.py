@@ -84,5 +84,6 @@ class HomePage(BasePage):
     def open_menu(self, menu):
         if self.is_present(self.show_full_menu):
             self.wait_to_click(self.show_full_menu)
-        self.driver.get_url(self.dashboard_link)
+        print(self.dashboard_link)
+        self.driver.get(self.dashboard_link)
         self.wait_to_click(menu)
