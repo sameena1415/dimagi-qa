@@ -204,3 +204,7 @@ QA_Requests/PerfTickets/testCases/OutputFiles/
 QA_Requests/MultiSelectPerf/settings.cfg
 QA_Requests/MultiSelectPerf/OutputFiles/*
 
+#Ignoring compliled files of Lookuptable
+/Lookuptable/testCases/report.html
+Lookuptable/report.html
+Lookuptable/settings.cfg
