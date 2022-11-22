@@ -52,7 +52,7 @@ class CaseSearchWorkflows(BasePage):
     def check_values_on_caselist(self, row_num, value, is_multi="NO"):
         self.value_in_table = self.get_element(self.value_in_table_format, row_num)
         values_ = self.find_elements_texts(self.value_in_table)
-        print(value, values_)
+        # print(value, values_) # added for debugging
         if is_multi == "YES":
             assert all(item in values_ for item in value) or any(item in values_ for item in value)
         elif is_multi == "NO":
