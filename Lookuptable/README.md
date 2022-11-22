@@ -1,8 +1,7 @@
-## Commcare HQ Smoke Test Script
+## Commcare lookuptable Test Script
 
 Smoke tests ensure that the important features are working and there are no showstoppers in the build deployed to environments.\
-The automated tests comprises of [these smoke tests.](https://docs.google.com/spreadsheets/d/1mfnqPQoi4l5_kXL26bQRhiWxZnxVfG4roEXjX82GNqc/edit#gid=1948263112)
-
+The automated tests comprises of [these Lookuptable functionality.](https://docs.google.com/spreadsheets/d/1-Fqax67kLz8dIJE5UcM1iGeWCV9mAm5OH6lZwb290cQ/edit#gid=0)
 ## Executing Scripts
 
 ### <ins> On Local Machine </ins>
@@ -34,7 +33,7 @@ the environment you want to test.
 ```sh
 
 # To execute all the test cases 
-pytest -v --rootdir= HQSmokeTests/testCases
+pytest -v --rootdir= Lookuptable/testCases
 
 ```
 - You could also pass the following arguments
