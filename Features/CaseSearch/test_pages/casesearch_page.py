@@ -65,7 +65,6 @@ class CaseSearchWorkflows(BasePage):
         elif search_format == 'combobox':
             search_property = (
                 By.XPATH, self.combobox_search_property_name_and_value_format.format(search_property, default_value))
-        print(search_property)
         assert self.is_visible_and_displayed(search_property)
 
     def search_against_property(self, search_property, input_value, property_type, include_blanks=None):
@@ -92,7 +91,6 @@ class CaseSearchWorkflows(BasePage):
 
     def check_date_range(self, date_range):
         date = self.get_element(self.date_selected, date_range)
-        print(date)
         assert self.is_present(date)
 
     def add_address(self, address, search_property):
@@ -108,7 +106,6 @@ class CaseSearchWorkflows(BasePage):
             assert self.is_present(city_home)
         if type == "WORK":
             city_work = self.get_element(self.city_value_work, city_address)
-            print(city_work)
             assert self.is_present(city_work)
 
     def check_search_screen_title(self, title):
@@ -145,7 +142,6 @@ class CaseSearchWorkflows(BasePage):
     def check_dropdown_value(self, search_property, not_to_be_present):
         dropdown_values_ = self.get_element(self.dropdown_values, search_property)
         values = self.find_elements_texts(dropdown_values_)
-        print(values)
         assert not_to_be_present not in values
 
     def check_eof_navigation(self, eof_nav, menu=None):
@@ -167,7 +163,6 @@ class CaseSearchWorkflows(BasePage):
         self.wait_to_clear_and_send_keys(self.report_search, claimed_case_name)
         self.wait_to_click(self.report_apply_filters)
         claim_case_type = (By.XPATH, self.commcare_case_claim_case.format(claimed_case_name, claimed_user))
-        print(claim_case_type)
         assert self.is_visible_and_displayed(claim_case_type)
 
 
