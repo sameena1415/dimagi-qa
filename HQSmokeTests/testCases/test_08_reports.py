@@ -12,8 +12,8 @@ from HQSmokeTests.testPages.webapps.web_apps_page import WebAppsPage
 @pytest.mark.reportInspectData
 @pytest.mark.reportManageDeployments
 @pytest.mark.reportMessaging
-def test_case_14_report_loading(driver):
-    report = HomePage(driver)
+def test_case_14_report_loading(driver, settings):
+    report = HomePage(driver, settings)
     report.reports_menu()
     load = ReportPage(driver)
     load.worker_activity_report()
@@ -40,7 +40,7 @@ def test_case_14_report_loading(driver):
 @pytest.mark.reportCaseList
 @pytest.mark.reportCaseData
 def test_case_15_16_submit_form_verify_formdata_casedata(driver, settings):
-    home = HomePage(driver)
+    home = HomePage(driver, settings)
     driver.refresh()
     home.web_apps_menu()
     webapps = WebAppsPage(driver)
@@ -56,8 +56,8 @@ def test_case_15_16_submit_form_verify_formdata_casedata(driver, settings):
 @pytest.mark.report
 @pytest.mark.reportBuilderForm
 @pytest.mark.reportBuilderCase
-def test_case_17_create_form_report(driver):
-    report = HomePage(driver)
+def test_case_17_create_form_report(driver, settings):
+    report = HomePage(driver, settings)
     driver.refresh()
     report.reports_menu()
     load = ReportPage(driver)
@@ -67,8 +67,8 @@ def test_case_17_create_form_report(driver):
 
 @pytest.mark.report
 @pytest.mark.reportBuilder
-def test_case_18_create_case_report(driver):
-    report = HomePage(driver)
+def test_case_18_create_case_report(driver, settings):
+    report = HomePage(driver, settings)
     report.reports_menu()
     load = ReportPage(driver)
     load.create_report_builder_case_report()
@@ -77,8 +77,8 @@ def test_case_18_create_case_report(driver):
 
 @pytest.mark.report
 @pytest.mark.savedReport
-def test_case_19_saved_report(driver):
-    report = HomePage(driver)
+def test_case_19_saved_report(driver, settings):
+    report = HomePage(driver, settings)
     report.reports_menu()
     load = ReportPage(driver)
     load.saved_report()
@@ -87,8 +87,8 @@ def test_case_19_saved_report(driver):
 
 @pytest.mark.report
 @pytest.mark.scheduledReport
-def test_case_20_scheduled_report(driver):
-    report = HomePage(driver)
+def test_case_20_scheduled_report(driver, settings):
+    report = HomePage(driver, settings)
     report.reports_menu()
     load = ReportPage(driver)
     load.scheduled_report()

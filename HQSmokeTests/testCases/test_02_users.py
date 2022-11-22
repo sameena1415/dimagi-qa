@@ -38,8 +38,8 @@ def test_case_03_create_and_assign_user_field(driver):
 
 @pytest.mark.user
 @pytest.mark.groups
-def test_case_05_create_group_and_assign_user(driver):
-    menu = HomePage(driver)
+def test_case_05_create_group_and_assign_user(driver, settings):
+    menu = HomePage(driver, settings)
     menu.users_menu()
     visible = GroupPage(driver)
     visible.add_group()
@@ -65,8 +65,8 @@ def test_case_10_download_and_upload_users(driver):
 
 @pytest.mark.user
 @pytest.mark.groups
-def test_case_05_edit_user_groups(driver):
-    menu = HomePage(driver)
+def test_case_05_edit_user_groups(driver, settings):
+    menu = HomePage(driver, settings)
     menu.users_menu()
     edit = GroupPage(driver)
     edit.click_group_menu()
@@ -156,7 +156,7 @@ def test_case_54_add_custom_user_data_profile_to_mobile_worker(driver):
 @pytest.mark.user
 @pytest.mark.webUser
 @pytest.mark.userInvitation
-def test_case_13_new_webuser_invitation(driver, settings):
+def test_case_13_new_webuser_invitation(driver):
     webuser = WebUsersPage(driver)
     webuser.invite_new_web_user('admin')
     webuser.assert_invitation_sent()

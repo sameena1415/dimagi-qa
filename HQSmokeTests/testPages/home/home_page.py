@@ -8,11 +8,11 @@ from HQSmokeTests.userInputs.user_inputs import UserData
 
 class HomePage(BasePage):
 
-    def __init__(self, driver):
+    def __init__(self, driver, settings):
         super().__init__(driver)
 
         self.available_application = UserData.village_application
-
+        self.dashboard_link = settings['url']+"/dashboard/project/"
         self.dashboard_menu_id = (By.ID, "DashboardTab")
         self.reports_menu_id = (By.ID, "ProjectReportsTab")
         self.view_all = (By.LINK_TEXT, "View All")
@@ -84,4 +84,5 @@ class HomePage(BasePage):
     def open_menu(self, menu):
         if self.is_present(self.show_full_menu):
             self.wait_to_click(self.show_full_menu)
+        self.driver.get_url(self.dashboard_link)
         self.wait_to_click(menu)
