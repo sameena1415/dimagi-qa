@@ -15,8 +15,10 @@ group_id = dict()
 @pytest.mark.user
 @pytest.mark.mobileWorker
 @pytest.mark.run(order=0)
-def test_case_02_create_mobile_worker(driver):
+def test_case_02_create_mobile_worker(driver, settings):
     worker = MobileWorkerPage(driver)
+    menu = HomePage(driver, settings)
+    menu.users_menu()
     worker.mobile_worker_menu()
     worker.create_mobile_worker()
     worker.mobile_worker_enter_username("username_" + str(fetch_random_string()))
@@ -26,8 +28,10 @@ def test_case_02_create_mobile_worker(driver):
 
 @pytest.mark.user
 @pytest.mark.mobileWorker
-def test_case_03_create_and_assign_user_field(driver):
+def test_case_03_create_and_assign_user_field(driver, settings):
     create = MobileWorkerPage(driver)
+    menu = HomePage(driver, settings)
+    menu.users_menu()
     create.mobile_worker_menu()
     create.create_new_user_fields("user_field_" + fetch_random_string())
     create.select_mobile_worker_created()
@@ -76,8 +80,10 @@ def test_case_05_edit_user_groups(driver, settings):
 
 @pytest.mark.user
 @pytest.mark.mobileWorker
-def test_case_04_deactivate_user(driver):
+def test_case_04_deactivate_user(driver, settings):
     user = MobileWorkerPage(driver)
+    menu = HomePage(driver, settings)
+    menu.users_menu()
     user.mobile_worker_menu()
     user.deactivate_user()
     user.verify_deactivation_via_login()
@@ -85,8 +91,10 @@ def test_case_04_deactivate_user(driver):
 
 @pytest.mark.user
 @pytest.mark.mobileWorker
-def test_case_04_reactivate_user(driver):
+def test_case_04_reactivate_user(driver, settings):
     user = MobileWorkerPage(driver)
+    menu = HomePage(driver, settings)
+    menu.users_menu()
     user.mobile_worker_menu()
     user.reactivate_user()
     user.verify_reactivation_via_login()
@@ -97,21 +105,25 @@ def test_case_04_reactivate_user(driver):
 @pytest.mark.user_profiles
 @pytest.mark.user_fields
 @pytest.mark.mobileWorker
-def test_cleanup_items_in_users_menu(driver):
+def test_cleanup_items_in_users_menu(driver, settings):
     clean = MobileWorkerPage(driver)
     clean2 = GroupPage(driver)
 
+    menu = HomePage(driver, settings)
+    menu.users_menu()
     clean.mobile_worker_menu()
     clean.select_mobile_worker_created()
     clean.cleanup_mobile_worker()
     print("Deleted the mobile worker")
 
+    menu.users_menu()
     clean.mobile_worker_menu()
     clean.edit_user_field()
     clean.click_profile()
     clean.delete_profile()
     print("Removed all test profiles")
 
+    menu.users_menu()
     clean.mobile_worker_menu()
     clean.edit_user_field()
     clean.delete_test_user_field()
@@ -128,8 +140,10 @@ def test_cleanup_items_in_users_menu(driver):
 @pytest.mark.user_profiles
 @pytest.mark.user_fields
 @pytest.mark.user_organization
-def test_case_54_add_custom_user_data_profile_to_mobile_worker(driver):
+def test_case_54_add_custom_user_data_profile_to_mobile_worker(driver, settings):
     create = MobileWorkerPage(driver)
+    menu = HomePage(driver, settings)
+    menu.users_menu()
     create.mobile_worker_menu()
     create.create_new_mobile_worker()
     create.create_new_user_fields("field_" + fetch_random_string())
@@ -141,8 +155,10 @@ def test_case_54_add_custom_user_data_profile_to_mobile_worker(driver):
     create.select_profile()
     create.update_information()
     create.select_location()
+    menu.users_menu()
     create.mobile_worker_menu()
     create.select_and_delete_mobile_worker("user_" + str(fetch_random_string()))
+    menu.users_menu()
     create.mobile_worker_menu()
     create.edit_user_field()
     create.click_profile()
