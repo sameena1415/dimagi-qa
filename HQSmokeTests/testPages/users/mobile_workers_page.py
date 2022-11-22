@@ -165,20 +165,6 @@ class MobileWorkerPage(BasePage):
         time.sleep(5)
 
     def mobile_worker_menu(self):
-        # try:
-        #     self.wait_to_click(self.users_menu_id)
-        #     time.sleep(1)
-        # except TimeoutException:
-        #     if not self.is_displayed(self.users_menu_id):
-        #         self.click(self.show_full_menu_id)
-        #         time.sleep(2)
-        #         self.click(self.users_menu_id)
-        #     elif self.is_displayed(self.error_403):
-        #         self.driver.back()
-        #         self.click(self.users_menu_id)
-        # except StaleElementReferenceException:
-        #     self.driver.refresh()
-        #     self.click(self.users_menu_id)
         self.wait_to_click(self.mobile_workers_menu_link_text)
         assert "Mobile Workers : Users :: - CommCare HQ" in self.driver.title, "Unable find the Users Menu."
 
