@@ -1,5 +1,4 @@
 """"Contains test data that are used as user inputs across various areass used in Case Serach"""
-import os
 
 
 class CaseSearchUserInput:
@@ -7,10 +6,12 @@ class CaseSearchUserInput:
 
     """App Names"""
     case_search_app_name = "Music App (Case Search & Claim)"
+    french_app = "French app_name"
 
     """Users"""
     user_1 = 'automation-user-1'
     user_2 = 'automation-user-2'
+    a_user = "a_user"
 
     """Menus"""
     normal_menu = "Songs (Normal)"
@@ -18,21 +19,99 @@ class CaseSearchUserInput:
     see_more_menu = "Songs (See More)"
     skip_default_menu = "Songs (Skip to Default Search)"
     artist_menu = "Artist"
+    exclude_property_from_case_search_menu = "Exclude property from case search"
+    search_setting_menu = "Songs - Case Search Settings"
+    without_search_setting_menu = "Songs - Without Case Search Settings"
+    inline_search_menu = "Songs Inline Case Search"
+    display_only_forms_menu = "Play Song - Display Only Forms"
+    shadow_menu = "Shadow Menu"
+    musical_instruments_menu = "Musical Instruments (Performance)"
+    mixed_case_type_menu = "Mixed Case Types"
 
     """Forms"""
     play_song_form = "Play Song"
-
-    """Cases Types"""
-
+    shows_form = "Shows"
+    add_address_form = "Add Address"
+    update_ratings_form = "Update Rating, Mood, or Energy"
+    close_song_form = "Close Song --> redirects to Home Screen"
+    view_instruments_form = "View Instruments"
 
     """Pre=Configured Cases"""
     song_case_bugs = "Bugs"
+    song_case_kala_chasma = "Kala Chashma"
+    song_case_b_users_song = "b_users song"
+    song_case_bugs_user2 = "Bugs User2"
+    artist_case_beach_boys = "Beach Boys"
+    artist_case_arijit = "Arijit"
+    artist_case_justin = "Justin"
+    show_case_bangalore = "Bangalore"
+    show_case_jubin = "Jubin"
+    show_case_samthird = "SAMTHIRD"
+    artist_case_bugs_artist = "Bugs Artist"
+    song_case_kyon = "Kyon"
+    instrument_case_guitar = "Guitar"
 
-    """Case Properties"""
+    """Pre=Configured Values"""
+    blank = ""
+    default = "Default"
     # Rating
     one_star = "*"
     two_star = "**"
     three_star = "***"
     four_star = "****"
     five_star = "*****"
+    mood_help_text = "Mood\'s Rating"
+    date_2021_08_25 = "2021-08-25"
+    date_25_08_2021 = "25/08/2021"
+    full_home_address = "New Canada St., 3855 Brienz, Switzerland"
+    full_work_address = "Avenida Benito Juárez, 77560 Alfredo V. Bonfil, Quintana Roo, Mexico"
+    home_street_value = "New Canada St."
+    home_city_value = "Brienz"
+    work_city_value = "Alfredo V. Bonfil"
+    home_country_value = "Switzerland"
+    home_zipcode_value = "3855"
+    date_2022_08_04 = "2022-08-04"
+    home_country_belgium = "Belgium"
+    required_msg = "Required"
+    required_msg_if_rating_two = "This is only required if Rating = 2, otherwise not required."
+    value_with_space = " es"
+    validation_msg_no_spaces = "No spaces allowed!"
+    validation_msg_invalid_respons = "Sorry, this response is invalid!"
+    latin_music = "Latin music"
+    latin_jazz = "Latin jazz"
+    funk_metal = "Funk Metal"
+    default_search_title = "Case Claim"
+    search_title = "Test"
+    incomplete_word_guitar = "Guit"
+    acoustic_bass_guitar = "Acoustic bass guitar"
+    id_with_hyphen = "1-2-3-4-5"
+    id_without_hyphen = "12345"
+
+    """Case Properties/Search Fields"""
+
     ratings = {one_star: '1', two_star: '2', three_star: '3', four_star: '4', five_star: '5'}
+    song_name = "Song Name"
+    mood = "Mood"
+    energy = "Energy"
+    date_opened = "Date Opened"
+    rating = "Rating"
+    home_street = "Home Street"
+    home_country = "Home Country"
+    search_home_address = 'Search Home Address'
+    search_work_address = 'Search Work Address'
+    artist = "Artist"
+    show_date = "Show Date"
+    subgenre = "SubGenre"
+    genre = "Genre"
+    parent_artist = "Parent Artist"
+    instrument_name = "Instrument Name"
+    song_id = "Song ID"
+
+    # Case list columns
+    one = "1"
+    two = "2"
+    three = "3"
+    four = "4"
+    five = "5"
+    six = "6"
+    seven = "7"

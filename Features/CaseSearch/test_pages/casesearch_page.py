@@ -7,7 +7,7 @@ from selenium.webdriver import Keys
 from selenium.webdriver.common.by import By
 
 from common_utilities.selenium.base_page import BasePage
-from Features.CaseSearch.constants import TEXT_INPUT, COMBOBOX, YES, NO, text, combobox, HOME, WORK
+from Features.CaseSearch.constants import TEXT_INPUT, COMBOBOX, YES, NO, text, combobox, HOME, WORK, PREV_MENU, MENU, FIRST_MENU, HOME_SCREEN
 
 """"Contains test page elements and functions related to the Case Search functionality"""
 
@@ -50,14 +50,14 @@ class CaseSearchWorkflows(BasePage):
         self.case = self.get_element(self.case_name_format, case_name)
         assert self.is_visible_and_displayed(self.case)
 
-    def check_values_on_caselist(self, row_num, value, is_multi=NO):
+    def check_values_on_caselist(self, row_num, expected_value, is_multi=NO):
         self.value_in_table = self.get_element(self.value_in_table_format, row_num)
         values_ = self.find_elements_texts(self.value_in_table)
         # print(value, values_) # added for debugging
         if is_multi == YES:
-            assert all(item in values_ for item in value) or any(item in values_ for item in value)
+            assert all(item in values_ for item in expected_value) or any(item in values_ for item in expected_value)
         elif is_multi == NO:
-            assert value in values_
+            assert expected_value in values_
 
     def check_default_values_displayed(self, search_property, default_value, search_format):
         if search_format == text:
@@ -146,13 +146,13 @@ class CaseSearchWorkflows(BasePage):
         assert not_to_be_present not in values
 
     def check_eof_navigation(self, eof_nav, menu=None):
-        if eof_nav == "PREV_MENU":
+        if eof_nav == PREV_MENU:
             header = self.get_element(self.menu_header, menu)
             assert self.is_displayed(header)
-        elif eof_nav == "MENU" or "FIRST_MENU":
+        elif eof_nav == MENU or FIRST_MENU:
             header = self.get_element(self.menu_breadcrumb, menu)
             assert self.is_displayed(header)
-        elif eof_nav == "HOME_SCREEN":
+        elif eof_nav == HOME_SCREEN:
             assert self.is_displayed(self.webapps_home)
 
     def check_value_on_case_detail(self, search_property, expected_value):

@@ -9,3 +9,9 @@ combobox = "combobox"
 text = "text"
 HOME = "HOME"
 WORK = "WORK"
+
+# EOF NAV
+PREV_MENU = "PREV_MENU"
+MENU = "MENU"
+FIRST_MENU = "FIRST_MENU"
+HOME_SCREEN = "HOME_SCREEN"

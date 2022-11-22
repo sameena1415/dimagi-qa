@@ -2,7 +2,7 @@ import time
 
 import pytest
 
-from Features.CaseSearch.constants import TEXT_INPUT, COMBOBOX
+from Features.CaseSearch.constants import TEXT_INPUT, COMBOBOX, PREV_MENU, MENU, HOME_SCREEN, FIRST_MENU
 from Features.CaseSearch.test_pages.casesearch_page import CaseSearchWorkflows
 from Features.CaseSearch.user_inputs.casesearch_user_inputs import CaseSearchUserInput
 from common_utilities.selenium.base_page import BasePage
@@ -19,30 +19,37 @@ def test_case_01_eof_navigations(driver):
     webapps.open_app(CaseSearchUserInput.case_search_app_name)
     webapps.open_menu(CaseSearchUserInput.search_first_menu)
     webapps.clear_selections_on_case_search_page()
-    casesearch.search_against_property(search_property="Song Name", input_value="Bugs", property_type=TEXT_INPUT)
+    casesearch.search_against_property(search_property=CaseSearchUserInput.song_name,
+                                       input_value=CaseSearchUserInput.song_case_bugs,
+                                       property_type=TEXT_INPUT)
     webapps.search_button_on_case_search_page()
-    webapps.select_case_and_continue("Bugs")
+    webapps.select_case_and_continue(CaseSearchUserInput.song_case_bugs)
     """EOF Nav - Prev Menu"""
-    webapps.open_form("Play Song")
+    webapps.open_form(CaseSearchUserInput.play_song_form)
     webapps.submit_the_form()
-    casesearch.check_eof_navigation(eof_nav="PREV_MENU", menu=CaseSearchUserInput.search_first_menu)
+    casesearch.check_eof_navigation(eof_nav=PREV_MENU,
+                                    menu=CaseSearchUserInput.search_first_menu)
     """EOF Nav - Menu-Songs"""
     webapps.open_form("Add Show")
     webapps.submit_the_form()
-    casesearch.check_eof_navigation(eof_nav="MENU", menu=CaseSearchUserInput.search_first_menu)
+    casesearch.check_eof_navigation(eof_nav=MENU,
+                                    menu=CaseSearchUserInput.search_first_menu)
     """EOF Nav - First Menu"""
     webapps.clear_selections_on_case_search_page()
-    casesearch.search_against_property(search_property="Song Name", input_value="Bugs", property_type=TEXT_INPUT)
+    casesearch.search_against_property(search_property=CaseSearchUserInput.song_name,
+                                       input_value=CaseSearchUserInput.song_case_bugs,
+                                       property_type=TEXT_INPUT)
     webapps.search_button_on_case_search_page()
-    search_first_form_names = webapps.select_case_and_continue("Bugs")
-    webapps.open_form("Update Rating, Mood, or Energy")
+    webapps.select_case_and_continue(CaseSearchUserInput.song_case_bugs)
+    webapps.open_form(CaseSearchUserInput.update_ratings_form)
     webapps.submit_the_form()
-    casesearch.check_eof_navigation(eof_nav="FIRST_MENU", menu=CaseSearchUserInput.case_search_app_name)
+    casesearch.check_eof_navigation(eof_nav=FIRST_MENU,
+                                    menu=CaseSearchUserInput.case_search_app_name)
     """EOF Nav - Home Screen"""
     # This fails on prod currently so commenting..
-    # webapps.open_form("Close Song --> redirects to Home Screen")
+    # webapps.open_form(CaseSearchUserInput.close_song_form)
     # webapps.submit_the_form()
-    # casesearch.check_eof_navigation(eof_nav="HOME_SCREEN")
+    # casesearch.check_eof_navigation(eof_nav=HOME_SCREEN)
 
 
 def test_case_02_related_property_search(driver):
@@ -52,15 +59,19 @@ def test_case_02_related_property_search(driver):
     webapps.open_app(CaseSearchUserInput.case_search_app_name)
     webapps.open_menu(CaseSearchUserInput.search_first_menu)
     webapps.clear_selections_on_case_search_page()
-    casesearch.search_against_property(search_property="Song Name", input_value="Bugs", property_type=TEXT_INPUT)
+    casesearch.search_against_property(search_property=CaseSearchUserInput.song_name,
+                                       input_value=CaseSearchUserInput.song_case_bugs,
+                                       property_type=TEXT_INPUT)
     webapps.search_button_on_case_search_page()
-    webapps.select_case_and_continue("Bugs")
-    webapps.open_form("Shows")
-    webapps.omni_search("Justin")
-    casesearch.check_values_on_caselist(row_num="4", value="Justin")
-    case_name = webapps.omni_search("Bangalore")
-    webapps.select_case(case_name)
-    casesearch.check_value_on_case_detail(search_property="Parent Artist", expected_value="Justin")
+    webapps.select_case_and_continue(CaseSearchUserInput.song_case_bugs)
+    webapps.open_form(CaseSearchUserInput.shows_form)
+    webapps.omni_search(CaseSearchUserInput.artist_case_justin)
+    casesearch.check_values_on_caselist(row_num=CaseSearchUserInput.four,
+                                        expected_value=CaseSearchUserInput.artist_case_justin)
+    webapps.omni_search(CaseSearchUserInput.show_case_bangalore)
+    webapps.select_case(CaseSearchUserInput.show_case_bangalore)
+    casesearch.check_value_on_case_detail(search_property=CaseSearchUserInput.parent_artist,
+                                          expected_value=CaseSearchUserInput.show_case_bangalore)
 
 
 def test_case_03_auto_advance_menus(driver):
@@ -69,9 +80,10 @@ def test_case_03_auto_advance_menus(driver):
     """Check auto advance to forms"""
     webapps.open_app(CaseSearchUserInput.case_search_app_name)
     webapps.open_menu(CaseSearchUserInput.artist_menu)
-    case_name = webapps.omni_search("Bugs Artist")
+    case_name = webapps.omni_search(CaseSearchUserInput.artist_case_bugs_artist)
     webapps.select_case_and_continue(case_name)
-    casesearch.check_eof_navigation(eof_nav="MENU", menu="Bugs Artist")
+    casesearch.check_eof_navigation(eof_nav=MENU,
+                                    menu=case_name)
 
 
 def test_case_04_display_only_forms(driver):
@@ -79,7 +91,7 @@ def test_case_04_display_only_forms(driver):
     base = BasePage(driver)
     """Check display only form modes"""
     webapps.open_app(CaseSearchUserInput.case_search_app_name)
-    webapps.open_menu("Play Song - Display Only Forms")
+    webapps.open_menu(CaseSearchUserInput.display_only_forms_menu)
     assert not base.is_displayed(webapps.search_all_cases_button)
 
 
@@ -90,15 +102,19 @@ def test_case_05_shadow_menu(driver):
     webapps.open_app(CaseSearchUserInput.case_search_app_name)
     webapps.open_menu(CaseSearchUserInput.search_first_menu)
     webapps.clear_selections_on_case_search_page()
-    casesearch.search_against_property(search_property="Song Name", input_value="Bugs", property_type=TEXT_INPUT)
+    casesearch.search_against_property(search_property=CaseSearchUserInput.song_name,
+                                       input_value=CaseSearchUserInput.song_case_bugs,
+                                       property_type=TEXT_INPUT)
     webapps.search_button_on_case_search_page()
-    search_first_form_names = webapps.select_case_and_continue("Bugs")
+    search_first_form_names = webapps.select_case_and_continue(CaseSearchUserInput.song_case_bugs)
     """Check search and forms in shadow menu"""
     webapps.open_app(CaseSearchUserInput.case_search_app_name)
-    webapps.open_menu("Shadow Menu")
-    casesearch.search_against_property(search_property="Rating", input_value="*****", property_type=COMBOBOX)
+    webapps.open_menu(CaseSearchUserInput.shadow_menu)
+    casesearch.search_against_property(search_property=CaseSearchUserInput.rating,
+                                       input_value=CaseSearchUserInput.five_star,
+                                       property_type=COMBOBOX)
     webapps.search_button_on_case_search_page()
-    case_name = webapps.omni_search("Kyon")
+    case_name = webapps.omni_search(CaseSearchUserInput.song_case_kyon)
     shadow_form_names = webapps.select_case_and_continue(case_name)
     assert shadow_form_names == search_first_form_names
 
@@ -108,10 +124,11 @@ def test_case_06_performance_check(driver):
     casesearch = CaseSearchWorkflows(driver)
     """Check performance"""
     webapps.open_app(CaseSearchUserInput.case_search_app_name)
-    webapps.open_menu("Musical Instruments (Performance)")
-    webapps.open_form("View Instruments")
+    webapps.open_menu(CaseSearchUserInput.musical_instruments_menu)
+    webapps.open_form(CaseSearchUserInput.view_instruments_form)
     webapps.search_all_cases()
-    casesearch.search_against_property(search_property="Instrument Name", input_value="Guitar",
+    casesearch.search_against_property(search_property=CaseSearchUserInput.instrument_name,
+                                       input_value=CaseSearchUserInput.instrument_case_guitar,
                                        property_type=TEXT_INPUT)
     start_time = time.perf_counter()  # Start capturing time
     webapps.search_button_on_case_search_page()
@@ -119,7 +136,8 @@ def test_case_06_performance_check(driver):
     run_time = end_time - start_time
     assert run_time <= 10
     webapps.search_again_cases()
-    casesearch.search_against_property(search_property="Instrument Name", input_value="Guitar",
+    casesearch.search_against_property(search_property=CaseSearchUserInput.instrument_name,
+                                       input_value=CaseSearchUserInput.instrument_case_guitar,
                                        property_type=TEXT_INPUT)
     start_time = time.perf_counter()
     webapps.search_button_on_case_search_page()
@@ -135,22 +153,22 @@ def test_case_07_multi_case_types(driver):
     webapps.login_as(CaseSearchUserInput.user_1)
     webapps.open_app(CaseSearchUserInput.case_search_app_name)
     """Check multi case type case list"""
-    webapps.open_menu("Mixed Case Types")
+    webapps.open_menu(CaseSearchUserInput.mixed_case_type_menu)
     webapps.search_button_on_case_search_page()
     # Checks case type song
-    webapps.omni_search("Bugs")
+    webapps.omni_search(CaseSearchUserInput.song_case_bugs)
     # Checks case type show
-    webapps.omni_search("Jubin")
-    webapps.select_case_and_continue("Jubin")
-    casesearch.check_eof_navigation(eof_nav="MENU", menu="Mixed Case Types")
-    webapps.submit_the_form()  # This is failing app setup error but bocked due Dominic's bug
+    webapps.omni_search(CaseSearchUserInput.show_case_jubin)
+    webapps.select_case_and_continue(CaseSearchUserInput.show_case_jubin)
+    casesearch.check_eof_navigation(eof_nav=MENU, menu=CaseSearchUserInput.mixed_case_type_menu)
+    webapps.submit_the_form()  # This is failing app setup error but blocked due Dominic's bug
     """Check multi case type case list for DR workflow"""
     webapps.open_app(CaseSearchUserInput.case_search_app_name)
-    webapps.open_menu("Mixed Case Types")
+    webapps.open_menu(CaseSearchUserInput.mixed_case_type_menu)
     webapps.search_button_on_case_search_page()
-    webapps.omni_search("SAMTHIRD")  # Checks case type show: This may fail due to current app settings, DR not enabled
-    webapps.select_case_and_continue("SAMTHIRD")
-    casesearch.check_eof_navigation(eof_nav="MENU", menu="Mixed Case Types")
+    webapps.omni_search(CaseSearchUserInput.show_case_samthird)  # Checks case type show: This may fail due to current app settings, DR not enabled
+    webapps.select_case_and_continue(CaseSearchUserInput.show_case_samthird)
+    casesearch.check_eof_navigation(eof_nav=MENU, menu=CaseSearchUserInput.mixed_case_type_menu)
     webapps.submit_the_form()
 
 
@@ -158,14 +176,14 @@ def test_case_08_display_condition(driver):
     webapps = WebApps(driver)
     base = BasePage(driver)
     """Check Display condition for a_user"""
-    webapps.login_as("a_user")
+    webapps.login_as(CaseSearchUserInput.a_user)
     webapps.open_app(CaseSearchUserInput.case_search_app_name)
-    webapps.open_menu("Songs - Case Search Settings")
+    webapps.open_menu(CaseSearchUserInput.search_setting_menu)
     assert base.is_displayed(webapps.search_all_cases_button)
     """Check Display condition for another user"""
     webapps.login_as(CaseSearchUserInput.user_1)
     webapps.open_app(CaseSearchUserInput.case_search_app_name)
-    webapps.open_menu("Songs - Case Search Settings")
+    webapps.open_menu(CaseSearchUserInput.search_setting_menu)
     assert not base.is_displayed(webapps.search_all_cases_button)
 
 
@@ -174,25 +192,28 @@ def test_case_09_search_filter(driver):
     webapps = WebApps(driver)
     casesearch = CaseSearchWorkflows(driver)
     """Check Search Filter"""
-    webapps.login_as("a_user")
+    webapps.login_as(CaseSearchUserInput.a_user)
     webapps.open_app(CaseSearchUserInput.case_search_app_name)
-    webapps.open_menu("Songs - Case Search Settings")
+    webapps.open_menu(CaseSearchUserInput.search_setting_menu)
     webapps.search_all_cases()
     webapps.search_button_on_case_search_page()
-    casesearch.check_values_on_caselist(row_num="3", value="5")
+    casesearch.check_values_on_caselist(row_num=CaseSearchUserInput.three,
+                                        expected_value=CaseSearchUserInput.five)
 
 
 def test_case_10_claim_condition(driver):
     webapps = WebApps(driver)
     casesearch = CaseSearchWorkflows(driver)
     """Check Claim Condition"""
-    webapps.login_as("a_user")
+    webapps.login_as(CaseSearchUserInput.a_user)
     webapps.open_app(CaseSearchUserInput.case_search_app_name)
-    webapps.open_menu("Songs - Case Search Settings")
+    webapps.open_menu(CaseSearchUserInput.search_setting_menu)
     webapps.search_all_cases()
-    casesearch.search_against_property(search_property="Mood", input_value="4", property_type=TEXT_INPUT)
+    casesearch.search_against_property(search_property=CaseSearchUserInput.mood,
+                                       input_value=CaseSearchUserInput.four,
+                                       property_type=TEXT_INPUT)
     webapps.search_button_on_case_search_page()
-    case_name = webapps.omni_search("Kala Chashma")
+    case_name = webapps.omni_search(CaseSearchUserInput.song_case_kala_chasma)
     form_name = webapps.select_case_and_continue(case_name)
     assert not bool(form_name)
 
@@ -202,11 +223,13 @@ def test_case_11_do_not_search_cases(driver):
     casesearch = CaseSearchWorkflows(driver)
     base = BasePage(driver)
     """Check don't search cases owned by the following ids"""
-    webapps.login_as("a_user")
+    webapps.login_as(CaseSearchUserInput.a_user)
     webapps.open_app(CaseSearchUserInput.case_search_app_name)
-    webapps.open_menu("Songs - Case Search Settings")
+    webapps.open_menu(CaseSearchUserInput.search_setting_menu)
     webapps.search_all_cases()
-    casesearch.search_against_property(search_property="Mood", input_value="4", property_type=TEXT_INPUT)
+    casesearch.search_against_property(search_property=CaseSearchUserInput.mood,
+                                       input_value=CaseSearchUserInput.four,
+                                       property_type=TEXT_INPUT)
     webapps.search_button_on_case_search_page()
-    webapps.omni_search("b_users song")
+    webapps.omni_search(CaseSearchUserInput.song_case_b_users_song)
     assert base.is_displayed(webapps.list_is_empty)
