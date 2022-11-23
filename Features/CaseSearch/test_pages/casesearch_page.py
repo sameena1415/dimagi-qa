@@ -7,7 +7,8 @@ from selenium.webdriver import Keys
 from selenium.webdriver.common.by import By
 
 from common_utilities.selenium.base_page import BasePage
-from Features.CaseSearch.constants import TEXT_INPUT, COMBOBOX, YES, NO, text, combobox, HOME, WORK, PREV_MENU, MENU, FIRST_MENU, HOME_SCREEN
+from Features.CaseSearch.constants import TEXT_INPUT, COMBOBOX, YES, NO, text, combobox, HOME, WORK, PREV_MENU, MENU, \
+    FIRST_MENU, HOME_SCREEN
 
 """"Contains test page elements and functions related to the Case Search functionality"""
 
@@ -39,7 +40,7 @@ class CaseSearchWorkflows(BasePage):
         self.menu_breadcrumb = "//li[contains(text(),'{}')]"
         self.webapps_home = (By.XPATH, "//i[@class='fcc fcc-flower']")
         self.case_detail_value = "//th[contains(text(), '{}')]//following-sibling::td[contains(text(), '{}')]"
-
+        self.case_detail_tab = "//a[text()='{}']"
         # Reports
         self.case_type_select = (By.ID, "report_filter_case_type")
         self.report_search = (By.ID, "report_filter_search_query")
@@ -101,7 +102,7 @@ class CaseSearchWorkflows(BasePage):
         self.send_keys(address_search, Keys.TAB)
         time.sleep(10)
 
-    def check_json_function(self, city_address, type=HOME):
+    def check_value_on_form(self, city_address, type=HOME):
         if type == HOME:
             city_home = self.get_element(self.city_value_home, city_address)
             assert self.is_present(city_home)
@@ -155,7 +156,12 @@ class CaseSearchWorkflows(BasePage):
         elif eof_nav == HOME_SCREEN:
             assert self.is_displayed(self.webapps_home)
 
-    def check_value_on_case_detail(self, search_property, expected_value):
+    def select_case_detail_tab(self, tabname):
+        tab = (By.XPATH, self.case_detail_tab.format(tabname))
+        self.wait_to_click(tab)
+
+    def check_value_on_case_detail(self, search_property, expected_value, tabname=None):
+        self.select_case_detail_tab(tabname)
         value = (By.XPATH, self.case_detail_value.format(search_property, expected_value))
         assert self.is_visible_and_displayed(value)
 
@@ -165,5 +171,3 @@ class CaseSearchWorkflows(BasePage):
         self.wait_to_click(self.report_apply_filters)
         claim_case_type = (By.XPATH, self.commcare_case_claim_case.format(claimed_case_name, claimed_user))
         assert self.is_visible_and_displayed(claim_case_type)
-
-

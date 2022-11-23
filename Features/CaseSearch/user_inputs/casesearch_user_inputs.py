@@ -4,6 +4,11 @@
 class CaseSearchUserInput:
     """User Test Data"""
 
+    """Domains"""
+    casesearch = "https://staging.commcarehq.org/a/casesearch/cloudcare/apps/v2/#apps"
+    casesearch_1 = "https://staging.commcarehq.org/a/casesearch-1/cloudcare/apps/v2/#apps"
+    casesearch_2 = "https://staging.commcarehq.org/a/casesearch-2/cloudcare/apps/v2/#apps"
+
     """App Names"""
     case_search_app_name = "Music App (Case Search & Claim)"
     french_app = "French app_name"
@@ -31,10 +36,12 @@ class CaseSearchUserInput:
     """Forms"""
     play_song_form = "Play Song"
     shows_form = "Shows"
+    add_show_form = "Add Show"
     add_address_form = "Add Address"
     update_ratings_form = "Update Rating, Mood, or Energy"
     close_song_form = "Close Song --> redirects to Home Screen"
     view_instruments_form = "View Instruments"
+    update_song_form = "Update Song--> redirects to First Menu"
 
     """Pre=Configured Cases"""
     song_case_bugs = "Bugs"
@@ -50,6 +57,8 @@ class CaseSearchUserInput:
     artist_case_bugs_artist = "Bugs Artist"
     song_case_kyon = "Kyon"
     instrument_case_guitar = "Guitar"
+    song_case_bugs_on_casesearch_1 = "Bugs on casesearch-1"
+    song_case_make_you_mine = "Make You Mine"
 
     """Pre=Configured Values"""
     blank = ""
@@ -104,6 +113,7 @@ class CaseSearchUserInput:
     subgenre = "SubGenre"
     genre = "Genre"
     parent_artist = "Parent Artist"
+    rating_input = "Rating Input"
     instrument_name = "Instrument Name"
     song_id = "Song ID"
 
@@ -115,3 +125,7 @@ class CaseSearchUserInput:
     five = "5"
     six = "6"
     seven = "7"
+    rating_four_and_five = "4#,#5"
+
+
+

@@ -454,9 +454,9 @@ def test_case_20_json_property_function(driver):
                            search_property=CaseSearchUserInput.search_home_address)
     casesearch.add_address(address=CaseSearchUserInput.full_work_address,
                            search_property=CaseSearchUserInput.search_work_address)
-    casesearch.check_json_function(city_address=CaseSearchUserInput.home_city_value,
+    casesearch.check_value_on_form(city_address=CaseSearchUserInput.home_city_value,
                                    type=HOME)
-    casesearch.check_json_function(city_address=CaseSearchUserInput.work_city_value,
+    casesearch.check_value_on_form(city_address=CaseSearchUserInput.work_city_value,
                                    type=WORK)
 
 

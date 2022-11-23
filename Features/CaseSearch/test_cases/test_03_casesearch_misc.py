@@ -30,7 +30,7 @@ def test_case_01_eof_navigations(driver):
     casesearch.check_eof_navigation(eof_nav=PREV_MENU,
                                     menu=CaseSearchUserInput.search_first_menu)
     """EOF Nav - Menu-Songs"""
-    webapps.open_form("Add Show")
+    webapps.open_form(CaseSearchUserInput.add_show_form)
     webapps.submit_the_form()
     casesearch.check_eof_navigation(eof_nav=MENU,
                                     menu=CaseSearchUserInput.search_first_menu)
@@ -70,7 +70,7 @@ def test_case_02_related_property_search(driver):
                                         expected_value=CaseSearchUserInput.artist_case_justin)
     webapps.omni_search(CaseSearchUserInput.show_case_bangalore)
     webapps.select_case(CaseSearchUserInput.show_case_bangalore)
-    casesearch.check_value_on_case_detail(search_property=CaseSearchUserInput.parent_artist,
+    casesearch.check_value_on_case_detail(search_property=CaseSearchUserInput.rating_input,
                                           expected_value=CaseSearchUserInput.show_case_bangalore)
 
 
