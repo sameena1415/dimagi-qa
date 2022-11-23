@@ -70,7 +70,7 @@ def test_case_02_related_property_search(driver):
                                         expected_value=CaseSearchUserInput.artist_case_justin)
     webapps.omni_search(CaseSearchUserInput.show_case_bangalore)
     webapps.select_case(CaseSearchUserInput.show_case_bangalore)
-    casesearch.check_value_on_case_detail(search_property=CaseSearchUserInput.rating_input,
+    casesearch.check_value_on_case_detail(search_property=CaseSearchUserInput.parent_artist,
                                           expected_value=CaseSearchUserInput.show_case_bangalore)
 
 
