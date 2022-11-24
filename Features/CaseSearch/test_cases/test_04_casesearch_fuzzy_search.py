@@ -1,6 +1,6 @@
 import time
 
-from Features.CaseSearch.constants import TEXT_INPUT
+from Features.CaseSearch.constants import *
 from Features.CaseSearch.test_pages.casesearch_page import CaseSearchWorkflows
 from Features.CaseSearch.user_inputs.casesearch_user_inputs import CaseSearchUserInput
 from HQSmokeTests.testPages.reports.report_page import ReportPage

@@ -7,8 +7,7 @@ from selenium.webdriver import Keys
 from selenium.webdriver.common.by import By
 
 from common_utilities.selenium.base_page import BasePage
-from Features.CaseSearch.constants import TEXT_INPUT, COMBOBOX, YES, NO, text, combobox, HOME, WORK, PREV_MENU, MENU, \
-    FIRST_MENU, HOME_SCREEN
+from Features.CaseSearch.constants import *
 
 """"Contains test page elements and functions related to the Case Search functionality"""
 

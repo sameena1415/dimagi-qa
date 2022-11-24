@@ -1,7 +1,7 @@
 from Features.CaseSearch.test_pages.casesearch_page import CaseSearchWorkflows
 from Features.CaseSearch.user_inputs.casesearch_user_inputs import CaseSearchUserInput
 from common_utilities.selenium.webapps import WebApps
-from Features.CaseSearch.constants import YES, COMBOBOX, TEXT_INPUT, MENU
+from Features.CaseSearch.constants import *
 
 """"Contains all fuzzy search related test cases"""
 
