@@ -2,7 +2,7 @@ import time
 
 import pytest
 
-from Features.CaseSearch.constants import TEXT_INPUT, COMBOBOX, PREV_MENU, MENU, HOME_SCREEN, FIRST_MENU
+from Features.CaseSearch.constants import *
 from Features.CaseSearch.test_pages.casesearch_page import CaseSearchWorkflows
 from Features.CaseSearch.user_inputs.casesearch_user_inputs import CaseSearchUserInput
 from common_utilities.selenium.base_page import BasePage
@@ -30,7 +30,7 @@ def test_case_01_eof_navigations(driver):
     casesearch.check_eof_navigation(eof_nav=PREV_MENU,
                                     menu=CaseSearchUserInput.search_first_menu)
     """EOF Nav - Menu-Songs"""
-    webapps.open_form("Add Show")
+    webapps.open_form(CaseSearchUserInput.add_show_form)
     webapps.submit_the_form()
     casesearch.check_eof_navigation(eof_nav=MENU,
                                     menu=CaseSearchUserInput.search_first_menu)

@@ -19,7 +19,7 @@ def test_case_01_normal_workflow(driver):
     webapps.open_form(CaseSearchUserInput.play_song_form)
     webapps.submit_the_form()
     """Checks if claim successful"""
-    webapps.open_app_home(CaseSearchUserInput.case_search_app_name)
+    webapps.navigate_to_breadcrumb(CaseSearchUserInput.case_search_app_name)
     webapps.open_menu(CaseSearchUserInput.normal_menu)
     casesearch.check_element_claimed(case_name)
 

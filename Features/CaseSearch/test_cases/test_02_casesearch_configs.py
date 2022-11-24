@@ -2,7 +2,7 @@ import time
 
 import pytest
 
-from Features.CaseSearch.constants import TEXT_INPUT, COMBOBOX, YES, NO, text, combobox, HOME, WORK
+from Features.CaseSearch.constants import *
 from Features.CaseSearch.test_pages.casesearch_page import CaseSearchWorkflows
 from Features.CaseSearch.user_inputs.casesearch_user_inputs import CaseSearchUserInput
 from common_utilities.selenium.webapps import WebApps
@@ -454,9 +454,9 @@ def test_case_20_json_property_function(driver):
                            search_property=CaseSearchUserInput.search_home_address)
     casesearch.add_address(address=CaseSearchUserInput.full_work_address,
                            search_property=CaseSearchUserInput.search_work_address)
-    casesearch.check_json_function(city_address=CaseSearchUserInput.home_city_value,
+    casesearch.check_value_on_form(city_address=CaseSearchUserInput.home_city_value,
                                    type=HOME)
-    casesearch.check_json_function(city_address=CaseSearchUserInput.work_city_value,
+    casesearch.check_value_on_form(city_address=CaseSearchUserInput.work_city_value,
                                    type=WORK)
 
 

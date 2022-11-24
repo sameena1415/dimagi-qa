@@ -18,7 +18,7 @@ class WebApps(BasePage):
         self.menu_name_header_format = "//*[contains(text(),'{}')]"
         self.form_name_format = "//tr[contains(@aria-label,'{}')]"
         self.case_name_format = "//tr[.//td[contains(text(),'{}')]]"
-        self.app_breadcrumb_format = "//li[contains(text(), '{}')]"
+        self.breadcrumb_format = "//li[contains(text(), '{}')]"
 
         self.form_submit = (By.XPATH, "//button[@class='submit btn btn-primary']")
         self.form_submission_successful = (By.XPATH, "//p[contains(text(), 'Form successfully saved')]")
@@ -48,9 +48,9 @@ class WebApps(BasePage):
         self.wait_to_click(self.application)
         self.is_visible_and_displayed(self.application_header, timeout=200)
 
-    def open_app_home(self, app_name):
-        self.app_home = self.get_element(self.app_breadcrumb_format, app_name)
-        self.js_click(self.app_home)
+    def navigate_to_breadcrumb(self, breadcrumb_value):
+        self.link = self.get_element(self.breadcrumb_format, breadcrumb_value)
+        self.js_click(self.link)
 
     def open_menu(self, menu_name):
         self.caselist_menu = self.get_element(self.menu_name_format, menu_name)
@@ -96,9 +96,12 @@ class WebApps(BasePage):
         self.case = self.get_element(self.case_name_format, case_name)
         self.wait_to_click(self.case)
 
+    def continue_to_forms(self):
+        self.js_click(self.continue_button)
+
     def select_case_and_continue(self, case_name):
         self.select_case(case_name)
-        self.js_click(self.continue_button)
+        self.continue_to_forms()
         form_names = self.find_elements_texts(self.form_names)
         return form_names
 
