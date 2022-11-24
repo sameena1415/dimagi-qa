@@ -3,7 +3,7 @@ from Features.CaseSearch.user_inputs.casesearch_user_inputs import CaseSearchUse
 from common_utilities.selenium.webapps import WebApps
 from Features.CaseSearch.constants import *
 
-""""Contains all fuzzy search related test cases"""
+""""Contains all inline search related test cases"""
 
 
 def test_case_01_check_search_input_on_caselist_casedetail_form(driver):
