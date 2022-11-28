@@ -41,9 +41,9 @@ jobs:
           echo "::set-output name=matrix::{\"environment\": [\"production\", \"staging\"]}"
   build:
     needs: set_matrix
-      strategy:
-        fail-fast: false
-        matrix: ${{ fromJSON(needs.set_matrix.outputs.matrix) }}
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJSON(needs.set_matrix.outputs.matrix) }}
     name: Request API on '${{ matrix.environment }}'
     runs-on: ubuntu-latest
 
