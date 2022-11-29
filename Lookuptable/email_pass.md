@@ -1,6 +1,6 @@
 Hello!
 
-All the CommCare HQ Smoke Tests PASSED successfully on "{{environment}}".
+All the Lookup table Tests PASSED successfully on "{{environment}}".
 
 [View test run #{{runNumber}}]({{actionRunLink}})
 

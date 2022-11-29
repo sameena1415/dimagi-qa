@@ -3,11 +3,12 @@ import glob
 import os.path
 from pathlib import Path
 
-
+from pandas.io import excel
 from selenium.webdriver.common.by import By
-from HQSmokeTests.testPages.data.export_data_page import ExportDataPage
+from Lookuptable.testPages.data.export_data_page import ExportDataPage
 from common_utilities.Excel.excel_manage import ExcelManager
-from common_utilities.generate_random_string import fetch_random_string
+from common_utilities.fixtures import driver
+from common_utilities.generate_random_string import fetch_random_string, fetch_string_with_special_chars
 from common_utilities.selenium.base_page import BasePage
 from Lookuptable.userInputs.user_inputs import UserData
 
@@ -20,7 +21,7 @@ class LookUpTablePage(BasePage):
         super().__init__(driver)
 
         self.table_id_name = "lookuptable_" + str(fetch_random_string())
-        self.dummyid = "!@@#%%^^ Lookup"
+        self.dummyid = str(fetch_string_with_special_chars)
         self.table_id_fields = "(//label[.='Table ID'][@class='control-label col-sm-2']//following-sibling::div/input[@type='text' and @class = 'form-control'])"
         self.description_fields = "(//label[.='Description'][@class='control-label col-sm-2']//following-sibling::div/input[@type='text' and @class = 'form-control'])"
         self.table_created = "(//td/span[text()='" + self.table_id_name + "'])[1]"
@@ -72,20 +73,16 @@ class LookUpTablePage(BasePage):
         self.send_keys(self.table_id_description, self.table_id_name)
         self.wait_to_click(self.add_field)
         self.send_keys(self.field_name, self.table_id_name)
-        print(self.table_id_name)
         self.wait_to_click(self.save_table)
         time.sleep(2)
         assert self.is_present_and_displayed(self.table_created_path)
         print("LookUp Table created successfully!")
         return self.table_id_name
 
-    def view_lookup_table(self):
+    def view_lookup_table(self,table_id_name):
         self.wait_to_click(self.view_tables_link)
-        print(self.table_id_name)
         self.wait_to_click(self.select_table_drop_down)
         self.select_by_text(self.select_table, self.table_id_name)
-        # self.wait_to_click(self.select_table_drop_down)
-        # self.wait_to_click(self.select_table_from_dropdown)
         self.js_click(self.view_table)
         assert self.is_present_and_displayed(self.column_name)
         print("LookUp Table can be viewed successfully!")
@@ -116,18 +113,15 @@ class LookUpTablePage(BasePage):
         self.wait_to_click(self.manage_tables_link)
         self.send_keys(self.upload_table, filepath)
         self.wait_to_click(self.upload)
-        time.sleep(10)
+        time.sleep(20)
 
     def invalid_data_assert(self):
         invalid_data = self.get_text(self.erroralert_msg)
-        print(invalid_data)
         assert invalid_data == UserData.invalid_data_assert
 
     def missing_data_assert(self):
         missing_data = self.get_text(self.errorUploadmsg)
         new = missing_data.split(':')[0]
-        print("new+++",new,"***")
-        print("123",UserData.missing_data_assert,"###")
         assert  UserData.missing_data_assert in missing_data
 
     def selects_deselects(self):
@@ -170,16 +164,14 @@ class LookUpTablePage(BasePage):
     def download1(self):
         self.wait_to_click(self.manage_tables_link)
         self.wait_to_click(self.select_checkbox)
-        print(self.select_checkbox)
         self.wait_to_click(self.click_download)
         self.wait_to_click(self.download_file)
         time.sleep(3)
         self.wait_to_click(self.closedownloadpopup)
 
-    def download1SpecificTable(self):
+    def download1_specificTable(self):
         self.wait_to_click(self.manage_tables_link)
         self.wait_to_click(self.select_hypertensioncheckbox)
-        print(self.select_hypertensioncheckbox)
         self.wait_to_click(self.click_download)
         self.wait_to_click(self.download_file)
         time.sleep(3)
@@ -190,10 +182,18 @@ class LookUpTablePage(BasePage):
         file_type = r'\*xlsx'
         files = glob.glob(Location_path + file_type)
         max_file = max(files, key=os.path.getctime)
-        print(max_file)
         return max_file
 
     def create_download_lookuptable(self):
         self.create_lookup_table()
         self.download1()
         return self.table_id_name
+
+    def write_data_excel(self,table_id, path):
+        excel = ExcelManager(path)
+        for x in UserData.Col_headers:
+            for i in range(1, 2):
+                col = excel.col_size(table_id)
+                excel.write_excel_data(table_id, 1, col + i, x)
+            excel.write_data(table_id, UserData.data_list1)
+            excel.write_data(table_id, UserData.data_list2)

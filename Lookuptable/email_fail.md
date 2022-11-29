@@ -1,6 +1,6 @@
 Hello!
 
-The CommCare HQ Smoke Test run has FAILED on "{{environment}}"! Please check the attachment to see the results.
+The CommCare Lookup table Tests run has FAILED on "{{environment}}"! Please check the attachment to see the results.
 
 [View test run #{{runNumber}}]({{actionRunLink}})
 

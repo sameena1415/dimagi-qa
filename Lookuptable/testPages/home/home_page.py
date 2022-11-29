@@ -1,7 +1,7 @@
 from selenium.webdriver.common.by import By
 
 from common_utilities.selenium.base_page import BasePage
-from HQSmokeTests.userInputs.user_inputs import UserData
+from Lookuptable.userInputs.user_inputs import UserData
 
 """"Contains test page elements and functions related to the Homepage of Commcare"""
 

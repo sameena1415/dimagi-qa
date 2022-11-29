@@ -2,7 +2,7 @@ from pathlib import Path
 
 import pytest
 
-from HQSmokeTests.testPages.data.export_data_page import ExportDataPage
+from Lookuptable.testPages.data.export_data_page import ExportDataPage
 from common_utilities.Excel.excel_manage import ExcelManager
 from Lookuptable.testPages.data.lookup_table_page import LookUpTablePage
 from common_utilities.generate_random_string import fetch_random_string

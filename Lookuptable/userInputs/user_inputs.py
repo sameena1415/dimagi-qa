@@ -11,7 +11,9 @@ class UserData:
     # Pre-setup application and case names
     fieldval = 'table'+ str(fetch_random_string())
     data_list = [(1, 'N', '1', 'RWS%DTUYIG*&^%'), (2, 'N', '2', '!#@$%#$RFGH:')]
-    data_list1 = [(1, 'N', '1', 'GFYDgwu'+str(fetch_random_string()),str(fetch_random_string())+'&*^*@')]
+    data_list_delete = [(1, 'Y', '1', 'RWS%DTUYIG*&^%'), (2, 'N', '2', '!#@$%#$RFGH:')]
+    data_list1 = [(1, 'N', '1',"appiumtest"),(2, 'N', '2',"") ]
+    data_list2 = [(3, 'N', '3','',"123"),(4, 'N', '4','',"group2") ]
     type_data_list = [('N', fieldval, 'yes',fieldval)]
     typeSheet_Headers = [('UID', 'Delete(Y/N)', 'field: '+ fieldval)]
     data_upload_path = PathSettings.ROOT + "\\upload_1.xlsx"

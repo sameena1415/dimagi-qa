@@ -2,7 +2,7 @@ from pathlib import Path
 
 import pytest
 
-from HQSmokeTests.testPages.data.export_data_page import ExportDataPage
+from Lookuptable.testPages.data.export_data_page import ExportDataPage
 from common_utilities.Excel.excel_manage import ExcelManager
 from Lookuptable.testPages.data.lookup_table_page import LookUpTablePage
 from common_utilities.generate_random_string import fetch_random_string
@@ -32,7 +32,7 @@ def test_06_download_upload2(driver):
     export = ExportDataPage(driver)
     export.data_tab()
     data.upload_1(UserData.hypertension_upload_path, "1")
-    data.download1SpecificTable()
+    data.download1_specificTable()
 
 @pytest.mark.data
 @pytest.mark.managetables
@@ -60,12 +60,8 @@ def test_08_download_update_4(driver):
     values['table_id'] = data.create_download_lookuptable()
     excel = ExcelManager(driver)
     Download_path = data.error_upload1()
-    excel.__init__(Download_path)
     excel = ExcelManager(Download_path)
     print("table_id", values['table_id'])
     excel.delete_sheet("types")
     data.error_upload1()
-
-
-
 
