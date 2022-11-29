@@ -1,12 +1,9 @@
-from pathlib import Path
 
 import pytest
 
 from Lookuptable.testPages.data.export_data_page import ExportDataPage
-from common_utilities.Excel.excel_manage import ExcelManager
 from Lookuptable.testPages.data.lookup_table_page import LookUpTablePage
-from common_utilities.generate_random_string import fetch_random_string
-from Lookuptable.userInputs.user_inputs import UserData
+
 
 """"Contains test cases related to the Data module"""
 
@@ -26,8 +23,8 @@ def test_29_view_lookup_table(driver):
     data = LookUpTablePage(driver)
     export = ExportDataPage(driver)
     export.data_tab()
-    data.create_lookup_table()
-    data.view_lookup_table()
+    values['table_id'] = data.create_lookup_table()
+    data.view_lookup_table(values['table_id'])
     data.delete_lookup_table()
 
 
@@ -71,10 +68,9 @@ def test_21_Error_upload3(driver):
     export.data_tab()
     data = LookUpTablePage(driver)
     values['table_id'] = data.create_download_lookuptable()
-    Download_path = data.error_upload1()
-    print("path is " + Download_path)
-    data.write_data_excel(values['table_id'], Download_path)
-    data = LookUpTablePage(driver)
-    data.upload_1(Download_path, '1')
+    download_path = data.error_upload1()
+    print("path is " + download_path)
+    data.write_data_excel(values['table_id'], download_path)
+    data.upload_1(download_path, '1')
 
 

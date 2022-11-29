@@ -1,8 +1,6 @@
-import os
 import openpyxl
 from openpyxl.reader.excel import load_workbook
 from openpyxl.workbook import Workbook
-from common_utilities.selenium.base_page import BasePage
 
 
 class ExcelManager(object):
@@ -18,10 +16,6 @@ class ExcelManager(object):
 
     def create_sheet(self, sheet_name):
         wb = load_workbook(self.path)
-        #sheet = wb.active
-        #sheet.title = sheet_name
-        #wb.create_sheet(index=1, title=sheet_name)
-        #wb.create_sheet(title=sheet_name)
         wb.create_sheet(sheet_name)
         wb.save(self.path)
 
@@ -36,15 +30,13 @@ class ExcelManager(object):
 
     def delete_sheet(self, sheet_name):
         wb = openpyxl.load_workbook(self.path)
-        sheetDelete = wb[sheet_name]
-        wb.remove(sheetDelete)  # Sheet2 will be deleted
+        sheetdelete = wb[sheet_name]
+        wb.remove(sheetdelete)
         print(wb.sheetnames)
         wb.save(self.path)
 
     def update_sheet(self, sheet_name):
-        # Load the workbook demo.xlsx
         wb = load_workbook(self.path)
-        # Select the current active sheet
         sheet = wb.active
         sheet.title = sheet_name
         wb.save(self.path)
@@ -52,13 +44,7 @@ class ExcelManager(object):
     def write_data(self, sheet_name, list_data):
         from openpyxl import load_workbook
         wb = load_workbook(self.path)
-        # Mention the sheet where the data can be entered,
         sheet = wb[sheet_name]
-        # Assign multiple values to data
-        # data = [('Emp Id', 'Emp Name', 'Designation'),
-        #         (1, 'XYZ', 'Manager'),
-        #         (2, 'ABC', 'Consultant')]
-        # Append all rows
         for i in list_data:
             sheet.append(i)
         wb.save(self.path)

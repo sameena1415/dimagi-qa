@@ -191,9 +191,23 @@ class LookUpTablePage(BasePage):
 
     def write_data_excel(self,table_id, path):
         excel = ExcelManager(path)
-        for x in UserData.Col_headers:
+        for x in UserData.col_headers:
             for i in range(1, 2):
                 col = excel.col_size(table_id)
                 excel.write_excel_data(table_id, 1, col + i, x)
             excel.write_data(table_id, UserData.data_list1)
             excel.write_data(table_id, UserData.data_list2)
+
+    def update_excel_user_value(self,table_id,path):
+        excel = ExcelManager(path)
+        col = excel.col_size(table_id)
+        print("table_id", table_id)
+        excel.write_excel_data(table_id, 1, col + 1, "user 1")
+        excel.upload_to_path(table_id, UserData.data_list)
+
+    def update_excel_group_value(self,table_id,path):
+        excel = ExcelManager(path)
+        col = excel.col_size(table_id)
+        print("table_id", table_id)
+        excel.write_excel_data(table_id, 1, col + 1, "group 1")
+        excel.upload_to_path(table_id, UserData.data_list)
