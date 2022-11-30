@@ -1,7 +1,7 @@
 ## Commcare lookuptable Test Script
 
-Lookup table tests ensure that the important features are working and there are no showstoppers in the build deployed to environments.\
-The automated tests comprises of [these Lookuptable functionality.](https://docs.google.com/spreadsheets/d/1-Fqax67kLz8dIJE5UcM1iGeWCV9mAm5OH6lZwb290cQ/edit#gid=0)
+These tests ensure that the [lookup table ](https://confluence.dimagi.com/display/commcarepublic/Lookup+Tables)features work as expected and that there are no regressions
+The automated tests comprises of [these Lookuptable functionality.](https://docs.google.com/spreadsheets/d/1aTBv4zGeVuNTdnCyuleZbbpqOhPEGl0f78rcKAGWQHQ/edit#gid=1360466241)
 ## Executing Scripts
 
 ### <ins> On Local Machine </ins>
