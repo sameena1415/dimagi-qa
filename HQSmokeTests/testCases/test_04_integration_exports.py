@@ -16,8 +16,8 @@ test_case_update_case = dict()
 @pytest.mark.exportCaseData
 @pytest.mark.caseList
 @pytest.mark.run(order=0)
-def test_case_55_update_case(driver):
-    case = HomePage(driver)
+def test_case_55_update_case(driver, settings):
+    case = HomePage(driver, settings)
     case.web_apps_menu()
     webapps = WebAppsPage(driver)
     case_name = webapps.submit_case_change_register_form()

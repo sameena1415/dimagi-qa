@@ -15,6 +15,6 @@ def test_case_29_specific_fixture_type_api_single_fixture_item(settings):
 
 
 def test_case_30_specific_fixture_type_api_specific_fixture_table(settings):
-    uri = settings["url"] + UserData.domain + UserData.post_domain_url
+    uri = settings["url"] + UserData.domain2 + UserData.post_domain_url
     mw = FixturesMethods(settings)
     mw.get_specific_fixture_type_api_specific_fixture_table(uri, settings['login_user'], settings['login_pass'])

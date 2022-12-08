@@ -35,8 +35,7 @@ class ManageFormsPage(BasePage):
 
     def get_normal_forms(self):
         self.wait_and_sleep_to_click(self.manage_forms_link)
-        self.wait_and_sleep_to_click(self.select_app_dropdown)
-        self.wait_and_sleep_to_click(self.basic_tests_app)
+
         # Date Filter
         self.wait_and_sleep_to_click(self.date_range_manage_forms)
         self.select_by_value(self.select_archive_restore, "archive")
@@ -76,8 +75,6 @@ class ManageFormsPage(BasePage):
 
     def get_archived_forms(self):
         self.wait_and_sleep_to_click(self.manage_forms_link)
-        self.wait_and_sleep_to_click(self.select_app_dropdown)
-        self.wait_and_sleep_to_click(self.basic_tests_app)
         self.wait_and_sleep_to_click(self.archived_restored_dropdown)
         self.wait_and_sleep_to_click(self.archived_forms_option)
         self.wait_and_sleep_to_click(self.apply_button)

@@ -107,7 +107,6 @@ class MobileWorkerPage(BasePage):
         self.deactivate_btn_xpath = (By.XPATH,
                                      "//td/a/strong[text()='" + self.username + "']/following::td[5]/div[@data-bind='visible: is_active()']/button")
         self.confirm_deactivate = (By.XPATH, "(//button[@class='btn btn-danger'])[1]")
-        self.show_full_menu_id = (By.ID, "commcare-menu-toggle")
         self.view_all_link_text = (By.LINK_TEXT, "View All")
         self.search_user_web_apps = (By.XPATH, "//input[@placeholder='Filter workers']")
         self.search_button_we_apps = (By.XPATH, "//div[@class='input-group-btn']")
@@ -166,20 +165,6 @@ class MobileWorkerPage(BasePage):
         time.sleep(5)
 
     def mobile_worker_menu(self):
-        try:
-            self.wait_to_click(self.users_menu_id)
-            time.sleep(1)
-        except TimeoutException:
-            if not self.is_displayed(self.users_menu_id):
-                self.click(self.show_full_menu_id)
-                time.sleep(2)
-                self.click(self.users_menu_id)
-            elif self.is_displayed(self.error_403):
-                self.driver.back()
-                self.click(self.users_menu_id)
-        except StaleElementReferenceException:
-            self.driver.refresh()
-            self.click(self.users_menu_id)
         self.wait_to_click(self.mobile_workers_menu_link_text)
         assert "Mobile Workers : Users :: - CommCare HQ" in self.driver.title, "Unable find the Users Menu."
 
@@ -281,7 +266,7 @@ class MobileWorkerPage(BasePage):
         self.search_webapps_user()
         assert self.is_present_and_displayed(self.login_as_username,
                                              10) == False, "Deactivated mobile worker still visible"
-        self.wait_to_click(self.show_full_menu_id)
+        self.click(self.show_full_menu_id)
 
     def reactivate_user(self):
         try:

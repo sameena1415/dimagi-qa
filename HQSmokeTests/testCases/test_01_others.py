@@ -15,8 +15,8 @@ from HQSmokeTests.userInputs.user_inputs import UserData
 @pytest.mark.applications
 @pytest.mark.webApps
 @pytest.mark.messaging
-def test_case_01_menu_visibility(driver):
-    visible = HomePage(driver)
+def test_case_01_menu_visibility(driver, settings):
+    visible = HomePage(driver, settings)
     visible.reports_menu()
     visible.dashboard_menu()
     visible.data_menu()
@@ -27,8 +27,8 @@ def test_case_01_menu_visibility(driver):
 
 
 @pytest.mark.misc
-def test_case_53_rage_clicks(driver):
-    visible = HomePage(driver)
+def test_case_53_rage_clicks(driver, settings):
+    visible = HomePage(driver, settings)
     visible.rage_clicks()
 
 

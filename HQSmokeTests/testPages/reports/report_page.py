@@ -99,7 +99,9 @@ class ReportPage(BasePage):
 
         # Submit History
         self.users_box = (By.XPATH, "//span[@class='select2-selection select2-selection--multiple']")
+        self.search_user = (By.XPATH, "//textarea[@class='select2-search__field']")
         self.select_user = (By.XPATH, "//li[contains(text(),'[Web Users]')]")
+        self.app_user_select =  "(//li[contains(text(),'{}')])[1]"
         self.application_select = (By.XPATH, "//select[@id='report_filter_form_app_id']")
         self.module_select = (By.XPATH, "//select[@id='report_filter_form_module']")
         self.form_select = (By.XPATH, "//select[@id='report_filter_form_xmlns']")
@@ -285,12 +287,13 @@ class ReportPage(BasePage):
             print("No rows are present in the web table")
             return False
 
-    def verify_form_data_submit_history(self, case_name):
+    def verify_form_data_submit_history(self, case_name, username):
         print("Sleeping for sometime for the case to get registered.")
         time.sleep(20)
         self.wait_to_click(self.submit_history_rep)
         self.wait_to_click(self.users_box)
-        self.wait_to_click(self.select_user)
+        self.send_keys(self.search_user, username)
+        self.wait_to_click((By.XPATH, self.app_user_select.format(username)))
         self.select_by_text(self.application_select, UserData.reassign_cases_application)
         self.select_by_text(self.module_select, UserData.case_list_name)
         self.select_by_text(self.form_select, UserData.form_name)
@@ -337,8 +340,9 @@ class ReportPage(BasePage):
         print("Sleeping for sometime for the case to get registered.")
         time.sleep(20)
         self.wait_to_click(self.submit_history_rep)
-        # self.wait_to_click(self.users_box)
-        # self.wait_to_click(self.select_user)
+        self.wait_to_click(self.users_box)
+        self.send_keys(self.search_user, UserData.app_login)
+        self.wait_to_click((By.XPATH, self.app_user_select.format(UserData.app_login)))
         self.select_by_text(self.application_select, UserData.reassign_cases_application)
         self.select_by_text(self.module_select, UserData.case_list_name)
         self.select_by_text(self.form_select, UserData.new_form_name)
