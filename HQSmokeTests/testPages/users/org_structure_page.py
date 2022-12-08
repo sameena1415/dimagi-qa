@@ -82,7 +82,7 @@ class OrganisationStructurePage(BasePage):
         self.bulk_upload_id = (By.ID, "id_bulk_upload_file")
         self.test_location = (By.XPATH, "(//span[contains(text(),'Test Location [DO NOT DELETE!!!')])[1]")
         self.archive_buttton = (By.XPATH,
-                                '''//div[.//span[.='Test Location [DO NOT DELETE!!!]']]/preceding-sibling::div/button[normalize-space()= "Archive"]''')
+                                "//div[.//span[.='Test Location [DO NOT DELETE!!!]']]/preceding-sibling::div/button[normalize-space()= 'Archive']")
         self.archive_button_popup = (By.XPATH, "//button[@data-bind='click: archive_fn']")
         self.archive_success_message = (By.XPATH, "//span[@data-bind='html: message']")
         self.show_arhcived_locations_button = (By.XPATH, "//a[@class='btn btn-default pull-right']")
@@ -261,7 +261,6 @@ class OrganisationStructurePage(BasePage):
     def assert_archived_location(self):
         self.wait_to_click(self.org_menu_link_text)
         self.is_present_and_displayed(self.test_location, 10)
-        time.sleep(5)
         active_loc = self.get_text(self.test_location)
         self.wait_to_click(self.archive_buttton)
         self.wait_to_click(self.archive_button_popup)

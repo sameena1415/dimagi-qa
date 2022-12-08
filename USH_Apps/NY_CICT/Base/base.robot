@@ -192,8 +192,8 @@ Go Back
     Execute Javascript  history.back()
 
 Complete Page Load Jquery
-    Wait for condition  return window.document.readyState === 'complete'
-    Wait for condition  return((window.jQuery != null) && (jQuery.active === 0))
+    Wait for condition  return window.document.readyState === 'complete'        300s
+    Wait for condition  return((window.jQuery != null) && (jQuery.active === 0))        300s
 
 Search in the case list
     [Arguments]    ${case_or_contact_created}
