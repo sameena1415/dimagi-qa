@@ -1,3 +1,4 @@
+from Formplayer.testCases.test_03_app_preview_basis import test_case_08_icons_in_app_preview
 from Formplayer.testPages.app_preview.app_preview_basics import AppPreviewBasics
 from Formplayer.testPages.app_preview.login_as_app_preview_page import LoginAsAppPreviewPage
 from Formplayer.testPages.basic_test_app.basic_test_app_preview import BasicTestAppPreview
@@ -68,4 +69,43 @@ def test_case_18_data_preview_web_apps(driver):
     app_preview = BasicTestAppPreview(driver)
     expression = app_preview.random_expression()
     basic.verify_data_preview(expression)
+
+def test_case_19_group_app_preview(driver):
+    app_preview = LoginAsAppPreviewPage(driver)
+    basic = BasicTestAppPreview(driver)
+    login = LoginAsAppPreviewPage(driver)
+    app_preview.open_view_app_preview(UserData.basic_tests_app['tests_app'])
+    login.login_as_user(UserData.app_preview_mobile_worker)
+    basic.open_form(UserData.basic_tests_app['case_list'], UserData.basic_test_app_forms['group'])
+    basic.group()
+
+def test_case_19_group_web_apps(driver):
+    login = LoginAsPage(driver)
+    login.open_webapps_menu()
+    login.login_as_user(UserData.app_preview_mobile_worker)
+    basic = BasicTestWebApps(driver)
+    basic.delete_all_incomplete_forms()
+    login.open_basic_tests_app(UserData.basic_tests_app['tests_app'])
+    basic.open_form(UserData.basic_tests_app['case_list'], UserData.basic_test_app_forms['group'])
+    basic.group()
+
+
+def test_case_20_end_of_navigation_app_preview(driver):
+    app_preview = LoginAsAppPreviewPage(driver)
+    basic = BasicTestAppPreview(driver)
+    login = LoginAsAppPreviewPage(driver)
+    app_preview.open_view_app_preview(UserData.basic_tests_app['tests_app'])
+    login.login_as_user(UserData.app_preview_mobile_worker)
+    basic.open_form(UserData.basic_test_app_forms['eofn'], UserData.basic_test_app_forms['home'])
+    basic.end_of_navigation_module(UserData.basic_test_app_forms['eofn'])
+
+def test_case_20_end_of_navigation_web_apps(driver):
+    login = LoginAsPage(driver)
+    login.open_webapps_menu()
+    login.login_as_user(UserData.app_preview_mobile_worker)
+    basic = BasicTestWebApps(driver)
+    basic.delete_all_incomplete_forms()
+    login.open_basic_tests_app(UserData.basic_tests_app['tests_app'])
+    basic.open_form(UserData.basic_test_app_forms['eofn'], UserData.basic_test_app_forms['home'])
+    basic.end_of_navigation_module(UserData.basic_test_app_forms['eofn'])
 

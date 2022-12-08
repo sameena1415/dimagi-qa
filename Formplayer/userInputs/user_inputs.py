@@ -49,9 +49,21 @@ class UserData:
         "basic": "Basic Form",
         "group": "Groups",
         "fst": "Formplayer Specific Tests",
-
+        "question": "Question Types",
+        "eofn": "End of Form Navigation",
+        "home": "Home Screen",
+        "module": "Module Screen",
+        "prev": "Previous Screen",
+        "current": "Current Module",
+        "close": "Close Case",
+        "another": "Another Menu"
 
     }
+
+    form_specific_tests_app = {
+        "tests_app": "Basic Tests",
+        "case_list": "Formplayer Specific Tests",
+        "form_name": "[Formplayer] Appearance Attributes and Formatting"}
 
     expressions = ['true()', 'false()', 'boolean-from-string(1)',
                    'boolean-from-string(0)', 'boolean(1)', 'boolean(0)']
