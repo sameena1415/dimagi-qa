@@ -3,7 +3,7 @@ import time
 from dateutil.relativedelta import relativedelta
 from datetime import datetime
 
-from selenium.webdriver import Keys
+from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 
 from common_utilities.selenium.base_page import BasePage

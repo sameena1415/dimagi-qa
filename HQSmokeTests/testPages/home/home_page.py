@@ -1,4 +1,4 @@
-from selenium.common import TimeoutException
+from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.by import By
 
 from common_utilities.selenium.base_page import BasePage

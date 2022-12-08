@@ -12,8 +12,8 @@ from common_utilities.selenium.webapps import WebApps
 """"Contains all fuzzy search related test cases"""
 
 
-def test_case_01_fuzzy_search_and_case_claim(driver):
-    menu = HomePage(driver)
+def test_case_01_fuzzy_search_and_case_claim(driver, settings):
+    menu = HomePage(driver, settings)
     webapps = WebApps(driver)
     casesearch = CaseSearchWorkflows(driver)
     user = MobileWorkerPage(driver)
@@ -103,8 +103,8 @@ def test_case_05_remove_special_characters(driver):
 
 
 # Elastic search takes time to reflect the case so executing this last
-def test_case_06_claimed_cases_on_report(driver):
-    report = HomePage(driver)
+def test_case_06_claimed_cases_on_report(driver, settings):
+    report = HomePage(driver, settings)
     load = ReportPage(driver)
     user = MobileWorkerPage(driver)
     casesearch = CaseSearchWorkflows(driver)
