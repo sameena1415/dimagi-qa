@@ -68,6 +68,8 @@ class BasePage:
             elif self.page_404():
                 self.driver.back()
                 element.click()
+            else:
+                raise TimeoutException()
 
     def wait_to_clear_and_send_keys(self, locator, user_input):
         clickable = ec.visibility_of_element_located(locator)
@@ -120,6 +122,13 @@ class BasePage:
     def find_elements(self, locator):
         elements = self.driver.find_elements(*locator)
         return elements
+
+    def find_elements_texts(self, locator):
+        elements = self.driver.find_elements(*locator)
+        value_list = []
+        for element in elements:
+            value_list.append(element.text)
+        return value_list
 
     def find_element(self, locator):
         element = self.driver.find_element(*locator)
@@ -327,3 +336,8 @@ class BasePage:
         except TimeoutException:
             is_clickable = False
         return bool(is_clickable)
+
+    def get_element(self, xpath_format, insert_value):
+        element = (By.XPATH, xpath_format.format(insert_value))
+        return element
+

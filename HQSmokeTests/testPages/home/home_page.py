@@ -1,3 +1,4 @@
+from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.by import By
 
 from common_utilities.selenium.base_page import BasePage
@@ -26,6 +27,7 @@ class HomePage(BasePage):
         self.alert_button_accept = (By.ID, "hs-eu-confirmation-button")
         self.application_path = (By.LINK_TEXT, UserData.village_application)
         self.mobile_workers_menu_link_text = (By.LINK_TEXT, "Mobile Workers")
+        self.show_full_menu_id = (By.ID, "commcare-menu-toggle")
 
         self.DASHBOARD_TITLE = "CommCare HQ"
         self.REPORTS_TITLE = "My Saved Reports : Project Reports :: - CommCare HQ"
@@ -41,8 +43,15 @@ class HomePage(BasePage):
         assert self.DASHBOARD_TITLE == self.driver.title, "This is not the Dashboard page."
 
     def reports_menu(self):
-        self.open_menu(self.reports_menu_id)
-        self.js_click(self.view_all)
+        try:
+            self.wait_to_click(self.reports_menu_id)
+        except TimeoutException:
+            if self.is_displayed(self.show_full_menu_id):
+                self.click(self.show_full_menu_id)
+                self.click(self.reports_menu_id)
+            else:
+                raise TimeoutException
+        self.wait_to_click(self.view_all)
         assert self.REPORTS_TITLE in self.driver.title, "This is not the Reports menu page."
 
     def data_menu(self):
