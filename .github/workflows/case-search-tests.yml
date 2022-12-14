@@ -18,7 +18,7 @@ on:
           - production
 
 concurrency:
-  group: tests-on-hq-${{ github.ref }}
+  group: case-search-tests-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -67,7 +67,7 @@ jobs:
           echo "matrix environment: ${{ matrix.environment }}"
           echo "NOW=$(date +'%m-%d %H:%M')" >> $GITHUB_ENV
           echo ${{env.NOW}}
-          pytest -v --rootdir= Features/CaseSearch/test_cases -n 2 --dist=loadfile --reruns 1 --html=report_${{ matrix.environment }}.html
+          pytest -v --rootdir= "./Features/CaseSearch/test_cases" -n 2 --dist=loadfile --reruns 1 --html=report_${{ matrix.environment }}.html
 
       - name: Set email vars
         if: ${{ success() || failure() }}
@@ -95,12 +95,13 @@ jobs:
             }
 
             let actionRunLink = context.payload.repository.html_url + `/actions/runs/${context.runId}`
+            let testSuite = 'Case Search Regression'
             let bodyContent = await fs.readFile(bodyFile, 'utf8')
             bodyContent = bodyContent.replace(/{{actionRunLink}}/g, actionRunLink)
                 .replace(/{{runNumber}}/g, context.runNumber)
                 .replace(/{{environment}}/g, CC_ENV)
-            let testSuite = 'Case Search Tests'
-
+                .replace(/{{testSuite}}/g, testSuite)
+            
             let receivers = 'qa-automation@dimagi.com'
             if (context.eventName !== "pull_request" || context.eventName !== "push") {
               receivers = 'ktripathy@dimagi.com'
