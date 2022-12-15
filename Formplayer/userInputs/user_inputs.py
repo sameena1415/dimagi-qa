@@ -56,8 +56,14 @@ class UserData:
         "prev": "Previous Screen",
         "current": "Current Module",
         "close": "Close Case",
-        "another": "Another Menu"
-
+        "another": "Another Menu",
+        "case_test" : "Case Tests",
+        "create_case": "Create a Case",
+        "update_case": "Update a Case",
+        "close_case": "Close a Case",
+        "create_subcase": "Create a Sub Case",
+        "create_multi_subcase": "Create Multiple Sub Case",
+        "caselist": "Case list"
     }
 
     form_specific_tests_app = {
@@ -67,3 +73,4 @@ class UserData:
 
     expressions = ['true()', 'false()', 'boolean-from-string(1)',
                    'boolean-from-string(0)', 'boolean(1)', 'boolean(0)']
+    unicode = "☕️☕️☕️"

@@ -1,9 +1,10 @@
+import re
 import time
 
 from Formplayer.testPages.app_preview.login_as_app_preview_page import LoginAsAppPreviewPage
 from Formplayer.testPages.webapps.login_as_page import LoginAsPage
 from Formplayer.testPages.webapps.webapps_basics import WebAppsBasics
-from common_utilities.generate_random_string import fetch_random_string, fetch_phone_number
+from common_utilities.generate_random_string import fetch_random_string, fetch_phone_number, fetch_random_digit
 from common_utilities.selenium.base_page import BasePage
 from Formplayer.userInputs.user_inputs import UserData
 
@@ -23,7 +24,16 @@ class BasicTestWebApps(BasePage):
         self.changed_name_input = "basic test changed " + fetch_random_string()
 
         self.test_question = "Test " + fetch_random_string()
+        self.case_reg_neg = "web_negcase_" + fetch_random_string()
+        self.case_reg_pos = "web_poscase_2fs8u5"# "web_poscase_" + fetch_random_string()
 
+        self.input_dict = {
+            "phone": fetch_phone_number(),
+            "Singleselect": "A",
+            "Multiselect": ["A", "C"],
+            "Text": "text update"+ fetch_random_string(),
+            "intval": fetch_random_digit()
+        }
         self.application_menu_id = (By.LINK_TEXT, "Applications")
 
         self.back_button = (By.XPATH, "//i[@class ='fa fa-chevron-left']")
@@ -91,6 +101,7 @@ class BasicTestWebApps(BasePage):
 
         #eofn
         self.text_area_field = "//label[.//span[.='{}']]//following-sibling::div//textarea"
+        self.input_field = "//label[.//span[.='{}']]//following-sibling::div//input"
         self.breadcrumbs = "//h1[@class='page-title'][.='{}']"
         self.search_input = (By.XPATH, "//input[@id='searchText']")
         self.search_button = (By.XPATH, "//button[@id='case-list-search-button']")
@@ -98,7 +109,20 @@ class BasicTestWebApps(BasePage):
         self.continue_button = (By.XPATH, "//button[.='Continue']")
         self.module_badge_table = (By.XPATH, "//table[contains(@class, 'module-table-case-list')]")
 
+        # contraints
+        self.success_check = (By.XPATH, "//i[@class='fa fa-check text-success']")
+        self.warning = (By.XPATH, "//i[@class='fa fa-warning text-danger clickable']")
+        self.error_message = "//div[contains(@data-bind,'serverError')][.={}]"
+        self.location_alert = (By.XPATH,
+                               "//div[contains(.,'Without access to your location, computations that rely on the here() function will show up blank.')][contains(@class,'alert')]")
 
+        # casetest
+        self.case_detail_tab = "//a[.='Case Details {}']"
+        self.case_detail_table = "//th[.='{}']/following-sibling::td[.='{}']"
+        self.case_detail_table_list = (By.XPATH, "//div[@class='js-detail-content']/table/tr")
+        self.search_location_button = (By.XPATH, "//button[.='Search']")
+        self.blank_latitude = (By.XPATH, "//td[@class='lat coordinate'][contains(.,'??')]")
+        self.output = (By.XPATH, "//span[@class='caption webapp-markdown-output']")
 
     def open_form(self, case_list, form_name):
         self.scroll_to_element((By.XPATH, self.case_list_menu.format(case_list)))
@@ -344,3 +368,117 @@ class BasicTestWebApps(BasePage):
         time.sleep(2)
         self.js_click(self.home_button)
         time.sleep(2)
+
+
+
+    def submit_basic_test_form(self):
+        self.open_form(UserData.basic_tests_app['case_list'],UserData.basic_tests_app['form_name'])
+        self.wait_to_clear_and_send_keys(self.name_question,fetch_random_string())
+        self.wait_to_click(self.submit_form_button)
+        time.sleep(2)
+        self.wait_for_element(self.success_message)
+        self.js_click(self.home_button)
+        time.sleep(2)
+        self.switch_to_default_content()
+
+    def register_negative_case(self):
+        self.wait_to_clear_and_send_keys((By.XPATH, self.text_area_field.format("What is the case name? You should not be allowed to proceed if the question is empty.")),
+                                         self.case_reg_neg)
+        time.sleep(0.5)
+        self.wait_to_click((By.XPATH, self.choose_radio_button.format(
+            "Are you sure you want to create a new case?", "Cancel - Please do not create this case.")))
+        time.sleep(1)
+        self.scroll_to_element(self.submit_form_button)
+        self.wait_to_click(self.submit_form_button)
+        time.sleep(2)
+        self.wait_for_element(self.success_message)
+        self.wait_to_click(self.home_button)
+
+
+
+    def register_positive_case(self):
+        self.wait_to_clear_and_send_keys((By.XPATH, self.text_area_field.format("What is the case name? You should not be allowed to proceed if the question is empty.")),
+                                         self.case_reg_pos)
+        time.sleep(0.5)
+        self.wait_to_click((By.XPATH, self.choose_radio_button.format(
+            "Are you sure you want to create a new case?", "Confirm - Please create this case.")))
+        time.sleep(1)
+        self.scroll_to_element(self.submit_form_button)
+        self.wait_to_click(self.submit_form_button)
+        time.sleep(2)
+        self.wait_for_element(self.success_message)
+        self.wait_to_click(self.home_button)
+
+    def case_detail_verification(self):
+        self.wait_for_element(self.search_input)
+        self.wait_to_clear_and_send_keys(self.search_input, self.case_reg_pos)
+        self.wait_to_click(self.search_button)
+        time.sleep(2)
+        assert self.is_present_and_displayed((By.XPATH, self.module_search.format(self.case_reg_pos)))
+        print("case search working properly")
+        self.wait_to_click((By.XPATH, self.module_search.format(self.case_reg_pos)))
+        self.wait_to_click((By.XPATH, self.case_detail_tab.format("1")))
+        assert self.is_present_and_displayed((By.XPATH, self.case_detail_table.format("Name",self.case_reg_pos)))
+        assert self.is_present_and_displayed((By.XPATH, self.case_detail_table.format("Status", "open")))
+        self.wait_to_click((By.XPATH, self.case_detail_tab.format("2")))
+        assert not self.is_present(self.case_detail_table_list)
+        assert self.is_present(self.continue_button)
+        self.wait_to_click(self.continue_button)
+        time.sleep(2)
+        self.wait_for_element(self.home_button)
+        self.wait_to_click(self.home_button)
+        time.sleep(2)
+
+
+    def update_a_case(self):
+        self.wait_for_element(self.search_input)
+        self.wait_to_clear_and_send_keys(self.search_input, self.case_reg_pos)
+        self.wait_to_click(self.search_button)
+        time.sleep(2)
+        assert self.is_present_and_displayed((By.XPATH, self.module_search.format(self.case_reg_pos)))
+        print("case search working properly")
+        self.wait_to_click((By.XPATH, self.module_search.format(self.case_reg_pos)))
+        self.wait_to_click((By.XPATH, self.case_detail_tab.format("1")))
+        assert self.is_present(self.continue_button)
+        self.wait_to_click(self.continue_button)
+        self.wait_to_clear_and_send_keys((By.XPATH, self.text_area_field.format(
+            "This form will allow you to add and update different kinds of data to/from the case. Enter some text:")),
+                                         self.input_dict['Text'])
+
+        self.wait_to_click((By.XPATH, self.choose_radio_button.format(
+            "Select one of the following:", self.input_dict['Singleselect'])))
+        self.scroll_to_element((By.XPATH, self.choose_radio_button.format(
+            "Select one or more of the following:", self.input_dict['Multiselect'][0])))
+        self.js_click((By.XPATH, self.choose_radio_button.format(
+            "Select one or more of the following:", self.input_dict['Multiselect'][0])))
+        time.sleep(1)
+        self.js_click((By.XPATH, self.choose_radio_button.format(
+            "Select one or more of the following:", self.input_dict['Multiselect'][1])))
+        self.scroll_to_element((By.XPATH, self.input_field.format("Enter a phone number:")))
+        self.wait_to_clear_and_send_keys((By.XPATH, self.input_field.format("Enter a phone number:")), self.input_dict['phone'])
+        self.wait_to_clear_and_send_keys((By.XPATH, self.input_field.format(
+            "Enter an integer:")), self.input_dict['intval'])
+        self.wait_for_element(self.blank_latitude)
+        self.scroll_to_element((By.XPATH, self.input_field.format(
+            "Capture your location here:")))
+        self.wait_to_clear_and_send_keys((By.XPATH, self.input_field.format(
+            "Capture your location here:")), "Delhi")
+        self.wait_to_click(self.search_location_button)
+        time.sleep(2)
+        assert not self.is_present_and_displayed(self.blank_latitude, 10)
+        self.wait_to_click((By.XPATH, self.input_field.format(
+            "Enter a date:")))
+        self.wait_to_click(self.click_today_date)
+        self.wait_to_click(self.close_date_picker)
+        text = self.get_text(self.output)
+        number = text.split(".")
+        # new_data=str(re.findall(r'\b\d+\b', number[1])[0])
+        print(str(re.findall(r'\b\d+\b', number[1])[0]))
+        self.wait_to_click(self.submit_form_button)
+        time.sleep(2)
+        self.wait_for_element(self.success_message)
+        self.wait_to_click(self.home_button)
+        return str(re.findall(r'\b\d+\b', number[1])[0])
+
+
+

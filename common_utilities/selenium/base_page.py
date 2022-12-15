@@ -351,3 +351,11 @@ class BasePage:
 
     def switch_to_default_content(self):
         self.driver.switch_to.default_content()
+
+    def dismiss_popup_alert(self):
+        alert = self.driver.switch_to.alert()
+        alert.dismiss()
+
+    def accept_popup_alert(self):
+        alert = self.driver.switch_to.alert()
+        alert.accept()
