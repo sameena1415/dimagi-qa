@@ -515,7 +515,6 @@ class BasicTestAppPreview(BasePage):
         self.wait_to_click(self.next_question)
         text = self.get_text(self.output)
         number = text.split(".")
-        # new_data=str(re.findall(r'\b\d+\b', number[1])[0])
         print(str(re.findall(r'\b\d+\b', number[1])[0]))
         time.sleep(2)
         self.wait_for_element(self.success_message)
@@ -523,17 +522,17 @@ class BasicTestAppPreview(BasePage):
         return str(re.findall(r'\b\d+\b', number[1])[0])
 
 
-    def location_settings(self):
-        print("Before",self.driver.execute_script("var positionStr=\"\";" +
-                                         "window.navigator.geolocation.getCurrentPosition(function(pos){positionStr=pos.coords.latitude+\":\"+pos.coords.longitude});" +
-                                         "return positionStr;"))
-        self.driver.execute_script("window.navigator.geolocation.getCurrentPosition=function(success){" +
-                              "var position = {\"coords\" : {\"latitude\": \"555\",\"longitude\": \"999\"}};" +
-                              "success(position);}");
-
-        print("After",self.driver.execute_script("var positionStr=\"\";" +
-                                    "window.navigator.geolocation.getCurrentPosition(function(pos){positionStr=pos.coords.latitude+\":\"+pos.coords.longitude});" +
-                                    "return positionStr;"))
-
-
-
+    # def location_settings(self):
+    #     print("Before",self.driver.execute_script("var positionStr=\"\";" +
+    #                                      "window.navigator.geolocation.getCurrentPosition(function(pos){positionStr=pos.coords.latitude+\":\"+pos.coords.longitude});" +
+    #                                      "return positionStr;"))
+    #     self.driver.execute_script("window.navigator.geolocation.getCurrentPosition=function(success){" +
+    #                           "var position = {\"coords\" : {\"latitude\": \"555\",\"longitude\": \"999\"}};" +
+    #                           "success(position);}");
+    #
+    #     print("After",self.driver.execute_script("var positionStr=\"\";" +
+    #                                 "window.navigator.geolocation.getCurrentPosition(function(pos){positionStr=pos.coords.latitude+\":\"+pos.coords.longitude});" +
+    #                                 "return positionStr;"))
+    #
+    #
+    #
