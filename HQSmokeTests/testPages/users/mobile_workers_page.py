@@ -216,7 +216,9 @@ class MobileWorkerPage(BasePage):
         self.send_keys(self.label_xpath, label)
 
     def add_choice(self, choice):
-        self.wait_to_click(self.choices_button_xpath)
+        self.wait_for_element(self.add_choice_button_xpath)
+        if self.is_present(self.choices_button_xpath):
+            self.wait_to_click(self.choices_button_xpath)
         self.wait_to_click(self.add_choice_button_xpath)
         self.clear(self.choice_xpath)
         self.send_keys(self.choice_xpath, choice)
