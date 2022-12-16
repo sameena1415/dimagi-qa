@@ -438,8 +438,6 @@ class MobileWorkerPage(BasePage):
         self.mobile_worker_menu()
         self.mobile_worker_enter_username("user_" + str(fetch_random_string()))
         self.mobile_worker_enter_password(fetch_random_string())
-        if self.is_present(self.phone_number_field):
-            self.clear(self.phone_number_field)
         self.wait_to_click(self.create_button_xpath)
         time.sleep(4)
         self.is_present_and_displayed(self.NEW)
