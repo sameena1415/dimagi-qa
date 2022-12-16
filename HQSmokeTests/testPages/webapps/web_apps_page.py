@@ -69,6 +69,7 @@ class WebAppsPage(BasePage):
         self.wait_to_click(self.form_link)
         self.wait_to_clear_and_send_keys(self.form_case_name_input, self.case_name_created)
         self.js_click(self.form_submit_button)
+        self.wait_for_element(self.success_message)
         assert self.is_displayed(self.success_message), "Form not submitted"
         print("Form successfully submitted")
         self.driver.refresh()
@@ -82,6 +83,7 @@ class WebAppsPage(BasePage):
         self.wait_to_clear_and_send_keys(self.enter_value_area, self.text_value+Keys.TAB)
         self.js_click(self.form_submit_button)
         time.sleep(5)
+        self.wait_for_element(self.success_message)
         assert self.is_displayed(self.success_message), "Form not submitted"
         print("Form successfully submitted")
         return self.text_value
@@ -99,6 +101,7 @@ class WebAppsPage(BasePage):
         self.wait_to_clear_and_send_keys(self.update_value_area, self.random_value+Keys.TAB)
         self.js_click(self.form_submit_button)
         time.sleep(5)
+        self.wait_for_element(self.success_message)
         assert self.is_displayed(self.success_message), "Form not submitted"
         print("Form successfully submitted")
         # self.wait_to_click(self.show_full_menu_link)
