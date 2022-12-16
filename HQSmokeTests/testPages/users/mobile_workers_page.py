@@ -67,7 +67,7 @@ class MobileWorkerPage(BasePage):
         self.create_mobile_worker_id = (By.ID, "new-user-modal-trigger")
         self.already_taken_error = (By.XPATH, "//span[contains(.,'is already taken')]")
         self.mobile_worker_username_id = (By.ID, "id_username")
-        self.user_available_check = (By.XPATH, "//i[@class='fa fa-check']/following-sibling::text()[contains(.,'available')]")
+        self.user_available_check = (By.XPATH, "//i[@class='fa fa-check' and @style='']")
         self.mobile_worker_password_id = (By.ID, "id_new_password")
         self.create_button_xpath = (By.XPATH, '//button[@type="submit"][contains(.,"Create")]')
         self.error_message = (
