@@ -85,7 +85,9 @@ def test_case_34_view_lookup_table(driver):
 
 @pytest.mark.data
 @pytest.mark.deduplicateCases
-def test_case_58_deduplicate_cases(driver):
+def test_case_58_deduplicate_cases(driver, settings):
+    if "staging" in settings['url']:
+        pytest.xfail("failing due to QAV2-4114")
     export = ExportDataPage(driver)
     export.data_tab()
     data = DeduplicateCasePage(driver)
