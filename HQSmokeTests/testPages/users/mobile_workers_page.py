@@ -148,6 +148,7 @@ class MobileWorkerPage(BasePage):
         self.bulk_upload_btn = (By.LINK_TEXT, "Bulk Upload")
         self.choose_file = (By.XPATH, "//input[@id='id_bulk_upload_file']")
         self.upload = (By.XPATH, "//button[@class='btn btn-primary disable-on-submit']")
+        self.successfully_uploaded = (By.XPATH, "//p[contains(text(),'Successfully uploaded')]")
         self.import_complete = (By.XPATH, "//legend[text()='Bulk upload complete.']")
         self.download_filter = (By.XPATH, "//button[@data-bind='html: buttonHTML']")
         self.error_403 = (By.XPATH, "//h1[text()='403 Forbidden']")
@@ -355,6 +356,7 @@ class MobileWorkerPage(BasePage):
             time.sleep(5)
             self.send_keys(self.choose_file, str(file_that_was_downloaded))
             self.wait_and_sleep_to_click(self.upload)
+            self.wait_for_element(self.successfully_uploaded, 50)
         except (TimeoutException, NoSuchElementException):
             print("TIMEOUT ERROR: Could not upload file")
         assert self.is_present_and_displayed(self.import_complete), "Upload Not Completed! Taking Longer to process.."
