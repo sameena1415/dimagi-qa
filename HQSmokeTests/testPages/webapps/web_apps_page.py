@@ -38,7 +38,7 @@ class WebAppsPage(BasePage):
         self.form_link = (By.XPATH, "//*[text()='" + UserData.form_name + "']")
         self.form_case_name_input = (By.XPATH, "//textarea[contains(@class,'textfield form-control')]")
         self.form_submit_button = (By.XPATH, "//button[@class='submit btn btn-primary']")
-        self.success_message = (By.XPATH, "//p[text()='Form successfully saved!']")
+        self.success_message = (By.XPATH, "//p[contains(text(),'successfully saved')]")
         self.show_full_menu_link = (By.LINK_TEXT, "Show Full Menu")
         self.search_text = (By.XPATH, "//input[@id='searchText']")
         self.search_button = (By.XPATH, "//button[@id='case-list-search-button']")
