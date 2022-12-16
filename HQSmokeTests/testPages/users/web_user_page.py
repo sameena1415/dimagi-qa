@@ -64,7 +64,6 @@ class WebUsersPage(BasePage):
         self.import_complete = (By.XPATH, "//legend[text()='Bulk upload complete.']")
 
     def invite_new_web_user(self, role):
-        self.wait_to_click(self.users_menu_id)
         self.wait_to_click(self.web_users_menu)
         self.wait_to_click(self.invite_web_user_button)
         self.wait_to_clear_and_send_keys(self.email_input, UserData.yahoo_user_name)

@@ -172,8 +172,10 @@ def test_case_54_add_custom_user_data_profile_to_mobile_worker(driver, settings)
 @pytest.mark.user
 @pytest.mark.webUser
 @pytest.mark.userInvitation
-def test_case_13_new_webuser_invitation(driver):
+def test_case_13_new_webuser_invitation(driver, settings):
+    menu = HomePage(driver, settings)
     webuser = WebUsersPage(driver)
+    menu.users_menu()
     webuser.invite_new_web_user('admin')
     webuser.assert_invitation_sent()
     # yahoo_password = settings['invited_webuser_password']
