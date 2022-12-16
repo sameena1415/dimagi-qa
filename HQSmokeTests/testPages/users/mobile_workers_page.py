@@ -65,12 +65,13 @@ class MobileWorkerPage(BasePage):
         self.users_menu_id = (By.ID, "ProjectUsersTab")
         self.mobile_workers_menu_link_text = (By.LINK_TEXT, "Mobile Workers")
         self.create_mobile_worker_id = (By.ID, "new-user-modal-trigger")
+        self.already_taken_error = (By.XPATH, "//span[contains(.,'is already taken')]")
         self.mobile_worker_username_id = (By.ID, "id_username")
         self.mobile_worker_password_id = (By.ID, "id_new_password")
-        self.create_button_xpath = (By.XPATH, '//button[@type="submit"]')
+        self.create_button_xpath = (By.XPATH, '//button[@type="submit"][contains(.,"Create")]')
         self.error_message = (
             By.XPATH, "//span[@data-bind ='visible: $root.usernameAvailabilityStatus() !== $root.STATUS.NONE']")
-        self.cancel_button = (By.XPATH, "//button[text()='Cancel']")
+        self.cancel_button = (By.XPATH, "//button[@type='submit'][contains(.,'Create')]/preceding-sibling::button[text()='Cancel']")
         self.new_user_created_xpath = (By.XPATH,
                                        "//*[@class='success']//a[contains(@data-bind,'attr: {href: edit_url}, visible: user_id')]//following-sibling::strong")
         self.NEW = (By.XPATH, "//span[@class='text-success']")
