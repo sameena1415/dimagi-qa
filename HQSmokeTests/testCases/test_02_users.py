@@ -112,9 +112,14 @@ def test_cleanup_items_in_users_menu(driver, settings):
     menu = HomePage(driver, settings)
     menu.users_menu()
     clean.mobile_worker_menu()
-    clean.select_mobile_worker_created()
-    clean.cleanup_mobile_worker()
-    print("Deleted the mobile worker")
+
+    # added try-except here as during reruns if this block fails then the rest are not deleted
+    try:
+        clean.select_mobile_worker_created()
+        clean.cleanup_mobile_worker()
+        print("Deleted the mobile worker")
+    except:
+        print("No User found to delete")
 
     menu.users_menu()
     clean.mobile_worker_menu()
