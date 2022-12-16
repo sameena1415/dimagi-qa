@@ -22,7 +22,7 @@ def test_case_14_report_loading(driver, settings):
     load.form_completion_report()
     load.case_activity_report()
     load.completion_vs_submission_report()
-    load.worker_activity_times_report()
+    # load.worker_activity_times_report()
     load.project_performance_report()
     load.submit_history_report()
     load.case_list_report()

@@ -137,7 +137,8 @@ class OrganisationStructurePage(BasePage):
         self.wait_to_click(self.add_field_btn_xpath)
         self.wait_to_clear_and_send_keys(self.loc_property_xpath, self.loc_field_name)
         self.wait_to_clear_and_send_keys(self.loc_label_xpath, self.loc_field_name)
-        self.wait_to_click(self.choices_button_xpath)
+        if self.is_present(self.choices_button_xpath):
+            self.wait_to_click(self.choices_button_xpath)
         self.click(self.add_choice_btn_xpath)
         self.wait_to_clear_and_send_keys(self.choice_xpath, self.loc_field_name)
         self.click(self.save_btn_id)

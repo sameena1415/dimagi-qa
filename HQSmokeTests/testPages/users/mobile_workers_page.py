@@ -65,12 +65,14 @@ class MobileWorkerPage(BasePage):
         self.users_menu_id = (By.ID, "ProjectUsersTab")
         self.mobile_workers_menu_link_text = (By.LINK_TEXT, "Mobile Workers")
         self.create_mobile_worker_id = (By.ID, "new-user-modal-trigger")
+        self.already_taken_error = (By.XPATH, "//span[contains(.,'is already taken')]")
         self.mobile_worker_username_id = (By.ID, "id_username")
+        self.user_available_check = (By.XPATH, "//i[@class='fa fa-check' and @style='']")
         self.mobile_worker_password_id = (By.ID, "id_new_password")
-        self.create_button_xpath = (By.XPATH, '//button[@type="submit"]')
+        self.create_button_xpath = (By.XPATH, '//button[@type="submit"][contains(.,"Create")]')
         self.error_message = (
             By.XPATH, "//span[@data-bind ='visible: $root.usernameAvailabilityStatus() !== $root.STATUS.NONE']")
-        self.cancel_button = (By.XPATH, "//button[text()='Cancel']")
+        self.cancel_button = (By.XPATH, "//button[@type='submit'][contains(.,'Create')]/preceding-sibling::button[text()='Cancel']")
         self.new_user_created_xpath = (By.XPATH,
                                        "//*[@class='success']//a[contains(@data-bind,'attr: {href: edit_url}, visible: user_id')]//following-sibling::strong")
         self.NEW = (By.XPATH, "//span[@class='text-success']")
@@ -147,6 +149,7 @@ class MobileWorkerPage(BasePage):
         self.bulk_upload_btn = (By.LINK_TEXT, "Bulk Upload")
         self.choose_file = (By.XPATH, "//input[@id='id_bulk_upload_file']")
         self.upload = (By.XPATH, "//button[@class='btn btn-primary disable-on-submit']")
+        self.successfully_uploaded = (By.XPATH, "//p[contains(text(),'Successfully uploaded')]")
         self.import_complete = (By.XPATH, "//legend[text()='Bulk upload complete.']")
         self.download_filter = (By.XPATH, "//button[@data-bind='html: buttonHTML']")
         self.error_403 = (By.XPATH, "//h1[text()='403 Forbidden']")
@@ -177,6 +180,7 @@ class MobileWorkerPage(BasePage):
 
     def mobile_worker_enter_username(self, username):
         self.send_keys(self.mobile_worker_username_id, username)
+        self.wait_for_element(self.user_available_check, 40)
         return username
 
     def mobile_worker_enter_password(self, password):
@@ -214,7 +218,10 @@ class MobileWorkerPage(BasePage):
         self.send_keys(self.label_xpath, label)
 
     def add_choice(self, choice):
-        self.wait_to_click(self.choices_button_xpath)
+        if self.is_present(self.choices_button_xpath):
+            self.wait_to_click(self.choices_button_xpath)
+        self.scroll_to_element(self.add_choice_button_xpath)
+        self.wait_for_element(self.add_choice_button_xpath)
         self.wait_to_click(self.add_choice_button_xpath)
         self.clear(self.choice_xpath)
         self.send_keys(self.choice_xpath, choice)
@@ -354,6 +361,7 @@ class MobileWorkerPage(BasePage):
             time.sleep(5)
             self.send_keys(self.choose_file, str(file_that_was_downloaded))
             self.wait_and_sleep_to_click(self.upload)
+            self.wait_for_element(self.successfully_uploaded, 50)
         except (TimeoutException, NoSuchElementException):
             print("TIMEOUT ERROR: Could not upload file")
         assert self.is_present_and_displayed(self.import_complete), "Upload Not Completed! Taking Longer to process.."
