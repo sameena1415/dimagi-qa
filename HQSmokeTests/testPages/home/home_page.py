@@ -93,6 +93,6 @@ class HomePage(BasePage):
     def open_menu(self, menu):
         if self.is_present(self.show_full_menu):
             self.js_click(self.show_full_menu)
-        print(self.dashboard_link)
         self.driver.get(self.dashboard_link)
+        self.wait_for_element(menu)
         self.wait_to_click(menu)
