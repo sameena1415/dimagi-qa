@@ -2,6 +2,7 @@ import os
 import time
 from datetime import date
 
+from HQSmokeTests.testPages.home.home_page import HomePage
 from common_utilities.selenium.base_page import BasePage
 from common_utilities.path_settings import PathSettings
 from common_utilities.generate_random_string import fetch_random_string
@@ -315,6 +316,10 @@ class OrganisationStructurePage(BasePage):
         check_unarchived_loc = self.is_present_and_displayed(self.test_location, 10)
         assert not check_unarchived_loc, "Location is still Unarchived"
         self.wait_to_click(self.show_active_locations)
+        home = HomePage(self.driver)
+        home.users_menu()
+        self.wait_to_click(self.org_menu_link_text)
+        time.sleep(5)
         unarchived_loc = self.find_elements(self.test_locations)
         loc_list = []
         print(unarchived_loc)
