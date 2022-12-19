@@ -2,6 +2,7 @@ import os
 import time
 from datetime import date
 
+from HQSmokeTests.testPages.home.home_page import HomePage
 from common_utilities.selenium.base_page import BasePage
 from common_utilities.path_settings import PathSettings
 from common_utilities.generate_random_string import fetch_random_string
@@ -80,13 +81,14 @@ class OrganisationStructurePage(BasePage):
         self.import_complete = (By.XPATH, "//legend[text()='Import complete.']")
         self.download_filter = (By.XPATH, "//button[@data-bind='html: buttonHTML']")
         self.bulk_upload_id = (By.ID, "id_bulk_upload_file")
+        self.test_locations = (By.XPATH, "//span[@class='loc_name']")
         self.test_location = (By.XPATH, "(//span[contains(text(),'Test Location [DO NOT DELETE!!!')])[1]")
         self.archive_buttton = (By.XPATH,
                                 "//div[.//span[.='Test Location [DO NOT DELETE!!!]']]/preceding-sibling::div/button[normalize-space()= 'Archive']")
         self.archive_button_popup = (By.XPATH, "//button[@data-bind='click: archive_fn']")
         self.archive_success_message = (By.XPATH, "//span[@data-bind='html: message']")
-        self.show_arhcived_locations_button = (By.XPATH, "//a[@class='btn btn-default pull-right']")
-        self.show_active_locations = (By.XPATH, "//a[@class='btn btn-default pull-right']")
+        self.show_arhcived_locations_button = (By.XPATH, "//a[@class='btn btn-default pull-right'][contains(.,'Archived Locations')]")
+        self.show_active_locations = (By.XPATH, "//a[@class='btn btn-default pull-right'][contains(.,'Active Locations')]")
         self.unarchive_button = (By.XPATH,
                                  '''//div[.//span[.='Test Location [DO NOT DELETE!!!]']]/preceding-sibling::div/button[normalize-space()= "Unarchive"]''')
 
@@ -261,8 +263,19 @@ class OrganisationStructurePage(BasePage):
 
     def assert_archived_location(self):
         self.wait_to_click(self.org_menu_link_text)
-        self.is_present_and_displayed(self.test_location, 10)
-        active_loc = self.get_text(self.test_location)
+        time.sleep(5)
+        self.wait_for_element(self.test_location, 40)
+        # self.is_present_and_displayed(self.test_location, 10)
+        active_loc = self.find_elements(self.test_locations)
+        loc_list = []
+        print(active_loc)
+        if len(active_loc) > 0:
+            for i in range(len(active_loc)):
+                print(active_loc[i].text)
+                loc_list.append(active_loc[i].text)
+        print("Active: ", loc_list)
+        assert "Test Location [DO NOT DELETE!!!]" in loc_list, "Location not Unarchived successfully"
+        # active_loc = self.get_text(self.test_location)
         self.wait_to_click(self.archive_buttton)
         self.wait_to_click(self.archive_button_popup)
         self.is_present_and_displayed(self.archive_success_message, 10)
@@ -270,32 +283,50 @@ class OrganisationStructurePage(BasePage):
         check_archived_loc = self.is_present_and_displayed(self.test_location, 10)
         assert not check_archived_loc, "Location is still Active"
         self.wait_to_click(self.show_arhcived_locations_button)
-        self.is_present_and_displayed(self.test_location)
-        archived_loc = self.get_text(self.test_location)
-        assert archived_loc == active_loc, "Location is not Archived"
+        time.sleep(5)
+        archived_loc = self.find_elements(self.test_locations)
+        archive_list = []
+        print(archived_loc)
+        if len(archived_loc) > 0:
+            for i in range(len(archived_loc)):
+                print(archived_loc[i].text)
+                archive_list.append(archived_loc[i].text)
+        print("Archived: ", archive_list)
+        assert "Test Location [DO NOT DELETE!!!]" in archive_list, "Location is not Archived"
 
-    def unarchive_location(self):
-        # self.wait_to_click(self.org_menu_link_text)
-        # self.wait_to_click(self.show_arhcived_locations_button)
+    def unarchive_location(self, settings):
+        self.wait_for_element(self.test_location, 40)
         archived_loc = self.is_present_and_displayed(self.test_location, 10)
         if not archived_loc:
             self.wait_to_click(self.show_active_locations)
             self.wait_to_click(self.archive_buttton)
             self.wait_to_click(self.archive_button_popup)
-            self.assert_unarchived_location()
+            self.assert_unarchived_location(settings)
         else:
-            self.assert_unarchived_location()
+            self.assert_unarchived_location(settings)
 
-    def assert_unarchived_location(self):
-        self.wait_to_click(self.org_menu_link_text)
-        self.wait_to_click(self.show_arhcived_locations_button)
-        time.sleep(5)
+    def assert_unarchived_location(self, settings):
+        if self.is_present(self.show_arhcived_locations_button):
+            self.wait_to_click(self.show_arhcived_locations_button)
+            time.sleep(5)
         archived_loc = self.get_text(self.test_location)
         self.wait_to_click(self.unarchive_button)
         self.driver.refresh()
+        time.sleep(3)
         check_unarchived_loc = self.is_present_and_displayed(self.test_location, 10)
         assert not check_unarchived_loc, "Location is still Unarchived"
         self.wait_to_click(self.show_active_locations)
-        self.is_present_and_displayed(self.test_location, 10)
-        unarchived_loc = self.get_text(self.test_location)
-        assert unarchived_loc == archived_loc, "Location not Unarchived successfully"
+        home = HomePage(self.driver, settings)
+        home.users_menu()
+        self.wait_to_click(self.org_menu_link_text)
+        time.sleep(5)
+        unarchived_loc = self.find_elements(self.test_locations)
+        loc_list = []
+        print(unarchived_loc)
+        if len(unarchived_loc) > 0:
+            for i in range(len(unarchived_loc)):
+                print(unarchived_loc[i].text)
+                loc_list.append(unarchived_loc[i].text)
+        print("unarchived: ",loc_list)
+        assert "Test Location [DO NOT DELETE!!!]" in loc_list, "Location not Unarchived successfully"
+

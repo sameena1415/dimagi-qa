@@ -37,7 +37,7 @@ def test_case_56_archive_unarchive_location(driver, settings):
     location = OrganisationStructurePage(driver)
     location.archive_location()
     print("Location successfully Archived")
-    location.unarchive_location()
+    location.unarchive_location(settings)
     print("Location successfully Unarchived")
 
 

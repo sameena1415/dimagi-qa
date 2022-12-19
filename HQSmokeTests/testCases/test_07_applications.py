@@ -49,8 +49,6 @@ def test_case_39_settings_exploration(driver):
 @pytest.mark.application
 @pytest.mark.appPreview
 def test_case_40_app_preview(driver, settings):
-    if 'staging' in settings['url']:
-        pytest.xfail("failing due to QAV2-3598")
     menu = HomePage(driver, settings)
     menu.applications_menu()
     load = AppPreviewPage(driver)
