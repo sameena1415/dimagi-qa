@@ -294,18 +294,18 @@ class OrganisationStructurePage(BasePage):
         print("Archived: ", archive_list)
         assert "Test Location [DO NOT DELETE!!!]" in archive_list, "Location is not Archived"
 
-    def unarchive_location(self):
+    def unarchive_location(self, settings):
         self.wait_for_element(self.test_location, 40)
         archived_loc = self.is_present_and_displayed(self.test_location, 10)
         if not archived_loc:
             self.wait_to_click(self.show_active_locations)
             self.wait_to_click(self.archive_buttton)
             self.wait_to_click(self.archive_button_popup)
-            self.assert_unarchived_location()
+            self.assert_unarchived_location(settings)
         else:
-            self.assert_unarchived_location()
+            self.assert_unarchived_location(settings)
 
-    def assert_unarchived_location(self):
+    def assert_unarchived_location(self, settings):
         if self.is_present(self.show_arhcived_locations_button):
             self.wait_to_click(self.show_arhcived_locations_button)
             time.sleep(5)
@@ -316,7 +316,7 @@ class OrganisationStructurePage(BasePage):
         check_unarchived_loc = self.is_present_and_displayed(self.test_location, 10)
         assert not check_unarchived_loc, "Location is still Unarchived"
         self.wait_to_click(self.show_active_locations)
-        home = HomePage(self.driver)
+        home = HomePage(self.driver, settings)
         home.users_menu()
         self.wait_to_click(self.org_menu_link_text)
         time.sleep(5)
