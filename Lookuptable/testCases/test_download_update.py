@@ -59,7 +59,3 @@ def test_08_download_update_4(driver):
     data.err_upload(download_path)
     data.missing_data_assert()
 
-
-
-
-
