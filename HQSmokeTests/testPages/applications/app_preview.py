@@ -19,12 +19,12 @@ class AppPreviewPage(BasePage):
         self.start = (By.ID, "single-app-start-heading")
         self.case_list = (By.XPATH, "//div[@class='module-menu-container']")
         self.followup_form = (By.XPATH, "//h3[text()='Followup Form']")
-        self.first_case_on_case_list = (By.XPATH, "(//td[@class='module-caselist-column'])[1]")
+        self.first_case_on_case_list = (By.XPATH, "(//td[@class='module-case-list-column'])[1]")
         self.continue_button = (By.ID, "select-case")
         self.next_button = (By.XPATH, "(//button[@class='btn btn-formnav btn-formnav-next'])[1]")
         self.complete_button = (By.XPATH, "//button[@class='btn btn-success btn-formnav-submit']")
         self.submit = (By.XPATH, "(//button[@class='submit btn btn-primary'])[1]")
-        self.submit_success = (By.XPATH, "//p[text()='Form successfully saved!']")
+        self.submit_success = (By.XPATH, "//p[contains(text(),'successfully saved')]")
 
     def check_access_to_app_preview(self):
         if not self.is_visible_and_displayed(self.app_preview_model):

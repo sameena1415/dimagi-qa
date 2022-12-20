@@ -52,7 +52,7 @@ class MessagingPage(BasePage):
         self.add_cond_alert = (By.LINK_TEXT, "New Conditional Alert")
         self.cond_alert_name = (By.XPATH, "//input[@name='conditional-alert-name']")
         self.continue_button_basic_tab = (By.XPATH, "//button[@data-bind='click: handleBasicNavContinue, enable: basicTabValid']")
-        self.case_type = (By.XPATH,  "//select[@data-bind='value: caseType']")
+        self.case_type = (By.XPATH,  "//select[contains(@name,'case_type')]")
         self.case_type_option_value = (By.XPATH, "//option[@value='reassign']")
         self.select_filter = (By.XPATH, "//button[@class='btn btn-default dropdown-toggle']")
         self.case_property_filter = (By.XPATH, "//ul//a[.='Case property']")

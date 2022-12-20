@@ -99,10 +99,7 @@ def test_case_58_deduplicate_cases(driver):
 @pytest.mark.dataDictionary
 @pytest.mark.downloadDataDictionary
 @pytest.mark.uploadDataDictionary
-def test_case_59_data_dictionary(driver, settings):
-    if 'staging' in settings['url']:
-        pytest.xfail("failing due to FHIR Feature Flag on staging")
-
+def test_case_59_data_dictionary(driver):
     export = ExportDataPage(driver)
     export.data_tab()
     data = DataDictionaryPage(driver)
