@@ -10,8 +10,8 @@ from HQSmokeTests.testPages.users.webapps_permission_page import WebAppPermissio
 @pytest.mark.user
 @pytest.mark.groups
 @pytest.mark.rolesPermission
-def test_case_06_add_role(driver):
-    menu = HomePage(driver)
+def test_case_06_add_role(driver, settings):
+    menu = HomePage(driver, settings)
     menu.users_menu()
     role = RolesPermissionPage(driver)
     role.roles_menu_click()
@@ -24,8 +24,8 @@ def test_case_06_add_role(driver):
 @pytest.mark.user
 @pytest.mark.groups
 @pytest.mark.rolesPermission
-def test_case_06_edit_role(driver):
-    menu = HomePage(driver)
+def test_case_06_edit_role(driver, settings):
+    menu = HomePage(driver, settings)
     menu.users_menu()
     role = RolesPermissionPage(driver)
     role.roles_menu_click()
@@ -37,8 +37,8 @@ def test_case_06_edit_role(driver):
 @pytest.mark.user
 @pytest.mark.webUsers
 @pytest.mark.rolesPermission
-def test_case_12_toggle_option_webapp_permission(driver):
-    menu = HomePage(driver)
+def test_case_12_toggle_option_webapp_permission(driver, settings):
+    menu = HomePage(driver, settings)
     menu.users_menu()
     role = RolesPermissionPage(driver)
     role.roles_menu_click()
@@ -48,8 +48,8 @@ def test_case_12_toggle_option_webapp_permission(driver):
 
 @pytest.mark.user
 @pytest.mark.role
-def test_cleanup_items_in_role_menu(driver):
-    menu = HomePage(driver)
+def test_cleanup_items_in_role_menu(driver, settings):
+    menu = HomePage(driver, settings)
     menu.users_menu()
     clean3 = RolesPermissionPage(driver)
     clean3.roles_menu_click()

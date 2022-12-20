@@ -208,3 +208,12 @@ QA_Requests/MultiSelectPerf/OutputFiles/*
 /Lookuptable/testCases/report.html
 Lookuptable/report.html
 Lookuptable/settings.cfg
+
+#Ignoring compliled files of CaseSearch
+Features/CaseSearch/settings.cfg
+Features/CaseSearch/report.html
+Features/CaseSearch/test_cases/report.html
+
+
+
+
