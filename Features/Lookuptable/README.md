@@ -33,7 +33,7 @@ the environment you want to test.
 ```sh
 
 # To execute all the test cases 
-pytest -v --rootdir= Lookuptable/testCases
+pytest -v --rootdir= Features/Lookuptable/testCases
 
 ```
 - You could also pass the following arguments
