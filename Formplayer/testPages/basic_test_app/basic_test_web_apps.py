@@ -1,10 +1,13 @@
 import re
 import time
 
+from selenium.webdriver.common.keys import Keys
+
 from Formplayer.testPages.app_preview.login_as_app_preview_page import LoginAsAppPreviewPage
 from Formplayer.testPages.webapps.login_as_page import LoginAsPage
 from Formplayer.testPages.webapps.webapps_basics import WebAppsBasics
-from common_utilities.generate_random_string import fetch_random_string, fetch_phone_number, fetch_random_digit
+from common_utilities.generate_random_string import fetch_random_string, fetch_phone_number, fetch_random_digit, \
+    fetch_random_digit_with_range
 from common_utilities.selenium.base_page import BasePage
 from Formplayer.userInputs.user_inputs import UserData
 
@@ -25,14 +28,17 @@ class BasicTestWebApps(BasePage):
 
         self.test_question = "Test " + fetch_random_string()
         self.case_reg_neg = "web_negcase_" + fetch_random_string()
-        self.case_reg_pos = "web_poscase_2fs8u5"# "web_poscase_" + fetch_random_string()
+        self.case_reg_pos = "web_poscase_" + fetch_random_string()
+        self.subcase_pos = "sub_case"+fetch_random_string()
+        self.unicode_text = "Unicode_web_"+fetch_random_string()+UserData.unicode
+        self.update_unicode = fetch_random_string()+UserData.unicode_new
 
         self.input_dict = {
             "phone": fetch_phone_number(),
             "Singleselect": "A",
             "Multiselect": ["A", "C"],
             "Text": "text update"+ fetch_random_string(),
-            "intval": fetch_random_digit()
+            "intval": fetch_random_digit_with_range(1, 30)
         }
         self.application_menu_id = (By.LINK_TEXT, "Applications")
 
@@ -60,7 +66,7 @@ class BasicTestWebApps(BasePage):
         self.submit_form_button = (By.XPATH, "//button[contains(@data-bind,'SubmitButton')]")
 
         self.complete_form = (By.XPATH, "//button[@data-bind='visible: atLastIndex(), click: submitForm']")
-        self.success_message = (By.XPATH, "//p[text()='Form successfully saved!']")
+        self.success_message = (By.XPATH, "//p[contains(text(),'successfully saved')]")
         self.view_form_link = (By.LINK_TEXT, "this form")
         self.export_form_link = (By.LINK_TEXT, "form")
         self.last_form = (
@@ -123,6 +129,7 @@ class BasicTestWebApps(BasePage):
         self.search_location_button = (By.XPATH, "//button[.='Search']")
         self.blank_latitude = (By.XPATH, "//td[@class='lat coordinate'][contains(.,'??')]")
         self.output = (By.XPATH, "//span[@class='caption webapp-markdown-output']")
+        self.empty_list = (By.XPATH, "//div[@class='alert alert-info'][.='List is empty.']")
 
     def open_form(self, case_list, form_name):
         self.scroll_to_element((By.XPATH, self.case_list_menu.format(case_list)))
@@ -130,6 +137,10 @@ class BasicTestWebApps(BasePage):
         self.scroll_to_element((By.XPATH, self.registration_form.format(form_name)))
         self.js_click((By.XPATH, self.registration_form.format(form_name)))
 
+    def open_case_list(self, case_list):
+        self.scroll_to_element((By.XPATH, self.case_list_menu.format(case_list)))
+        self.js_click((By.XPATH, self.case_list_menu.format(case_list)))
+        time.sleep(2)
 
     def save_incomplete_form(self, value):
         self.send_keys(self.name_question, value)
@@ -480,5 +491,194 @@ class BasicTestWebApps(BasePage):
         self.wait_to_click(self.home_button)
         return str(re.findall(r'\b\d+\b', number[1])[0])
 
+    def updated_case_detail_verification(self, new_data):
+        self.wait_for_element(self.search_input)
+        self.wait_to_clear_and_send_keys(self.search_input, self.case_reg_pos)
+        self.wait_to_click(self.search_button)
+        time.sleep(2)
+        assert self.is_present_and_displayed((By.XPATH, self.module_search.format(self.case_reg_pos)))
+        print("case search working properly")
+        self.wait_to_click((By.XPATH, self.module_search.format(self.case_reg_pos)))
+        self.wait_to_click((By.XPATH, self.case_detail_tab.format("1")))
+        assert self.is_present_and_displayed((By.XPATH, self.case_detail_table.format("Name", self.case_reg_pos)))
+        assert self.is_present_and_displayed((By.XPATH, self.case_detail_table.format("Status", "open")))
+        assert self.is_present_and_displayed(
+            (By.XPATH, self.case_detail_table.format("Phone Number", self.input_dict['phone'])))
+        assert self.is_present_and_displayed((By.XPATH, self.case_detail_table.format("Text", self.input_dict['Text'])))
+        self.wait_to_click((By.XPATH, self.case_detail_tab.format("2")))
+        assert self.is_present_and_displayed((By.XPATH, self.case_detail_table.format("Data Node", new_data)))
+        assert self.is_present_and_displayed(
+            (By.XPATH, self.case_detail_table.format("Intval", self.input_dict["intval"])))
+        try:
+            assert self.is_present_and_displayed(
+                (By.XPATH, self.case_detail_table.format("Singleselect", self.input_dict['Singleselect'])))
+            assert self.is_present_and_displayed(
+                (By.XPATH, self.case_detail_table.format(
+                    "Multiselect",
+                    self.input_dict['Multiselect'][0].lower() + " " + self.input_dict['Multiselect'][1].lower())))
+        except:
+            print("Singleselect and Multiselect details are not present in the screen")
+        assert self.is_present(self.continue_button)
+        self.wait_to_click(self.continue_button)
+        time.sleep(2)
+        self.wait_for_element(self.home_button)
+        self.wait_to_click(self.home_button)
+        time.sleep(2)
+
+    def create_and_verify_sub_case(self):
+        self.wait_for_element(self.search_input)
+        self.wait_to_clear_and_send_keys(self.search_input, self.case_reg_pos)
+        self.wait_to_click(self.search_button)
+        time.sleep(2)
+        assert self.is_present_and_displayed((By.XPATH, self.module_search.format(self.case_reg_pos)))
+        print("case search working properly")
+        self.wait_to_click((By.XPATH, self.module_search.format(self.case_reg_pos)))
+        assert self.is_present(self.continue_button)
+        self.js_click(self.continue_button)
+        time.sleep(1)
+        self.wait_to_clear_and_send_keys((By.XPATH, self.text_area_field.format(
+            "Enter a name for your sub case:")),
+                                         self.subcase_pos+Keys.TAB)
+
+        time.sleep(1)
+        self.wait_for_element((By.XPATH, self.input_field.format(
+            "Enter a number for "+self.subcase_pos+":")))
+        self.wait_to_clear_and_send_keys((By.XPATH, self.input_field.format(
+            "Enter a number for "+self.subcase_pos+":")), fetch_random_digit_with_range(1,20)+Keys.TAB)
+
+        time.sleep(1)
+        self.wait_for_element((By.XPATH, self.choose_radio_button.format(
+            "Do you want to create the sub case?", "Confirm - Please create "+self.subcase_pos+".")))
+        self.js_click((By.XPATH, self.choose_radio_button.format(
+            "Do you want to create the sub case?", "Confirm - Please create "+self.subcase_pos+".")))
+        time.sleep(1)
+        self.js_click(self.submit_form_button)
+        time.sleep(2)
+        self.wait_for_element(self.success_message)
+        self.wait_to_click(self.home_button)
+        time.sleep(2)
+        login = LoginAsPage(self.driver)
+        login.open_basic_tests_app(UserData.basic_tests_app['tests_app'])
+        self.open_case_list(UserData.basic_test_app_forms['subcaseone'])
+        self.wait_for_element(self.search_input)
+        self.wait_to_clear_and_send_keys(self.search_input, self.subcase_pos)
+        self.wait_to_click(self.search_button)
+        time.sleep(2)
+        assert self.is_present_and_displayed((By.XPATH, self.module_search.format(self.subcase_pos)))
+        print("case search working properly")
+        self.wait_to_click((By.XPATH, self.module_search.format(self.subcase_pos)))
+        time.sleep(2)
+        assert self.is_present_and_displayed((By.XPATH, self.case_detail_table.format("Name", self.subcase_pos)))
+        assert self.is_present_and_displayed((By.XPATH, self.case_detail_table.format("Parent Case Name", self.case_reg_pos)))
+        assert self.is_present(self.continue_button)
+        self.wait_to_click(self.continue_button)
+        self.wait_to_click((By.XPATH, self.case_list_menu.format(UserData.basic_test_app_forms['close_subcase'])))
+        self.wait_to_click((By.XPATH, self.choose_radio_button.format(
+            "Do you want to close the case?", "Yes")))
+
+        self.wait_to_click(self.submit_form_button)
+        time.sleep(2)
+        self.wait_for_element(self.success_message)
+        self.wait_to_click(self.home_button)
 
 
+    def close_case(self):
+        self.wait_for_element(self.search_input)
+        self.wait_to_clear_and_send_keys(self.search_input, self.case_reg_pos)
+        self.wait_to_click(self.search_button)
+        time.sleep(2)
+        assert self.is_present_and_displayed((By.XPATH, self.module_search.format(self.case_reg_pos)))
+        print("case search working properly")
+        self.wait_to_click((By.XPATH, self.module_search.format(self.case_reg_pos)))
+        assert self.is_present(self.continue_button)
+        self.wait_to_click(self.continue_button)
+        self.wait_to_click((By.XPATH, self.choose_radio_button.format(
+            "Are you sure you want to close this case?", "Confirm - Please close this case.")))
+        self.wait_to_click(self.submit_form_button)
+        time.sleep(2)
+        self.wait_for_element(self.success_message)
+        self.wait_to_click(self.home_button)
+        login = LoginAsPage(self.driver)
+        login.open_basic_tests_app(UserData.basic_tests_app['tests_app'])
+        self.open_form(UserData.basic_test_app_forms['case_test'], UserData.basic_test_app_forms['caselist'])
+        self.wait_for_element(self.search_input)
+        self.wait_to_clear_and_send_keys(self.search_input, self.case_reg_pos)
+        self.wait_to_click(self.search_button)
+        time.sleep(2)
+        assert self.is_present_and_displayed(self.empty_list)
+        print("case search working properly")
+
+    def unicode_verification_case(self):
+        self.wait_to_clear_and_send_keys((By.XPATH, self.text_area_field.format(
+            "What is the case name? You should not be allowed to proceed if the question is empty.")),
+                                         self.unicode_text)
+        self.wait_to_click((By.XPATH, self.choose_radio_button.format(
+            "Are you sure you want to create a new case?", "Confirm - Please create this case.")))
+        self.js_click(self.submit_form_button)
+        time.sleep(2)
+        self.wait_for_element(self.success_message)
+        self.wait_to_click(self.home_button)
+        time.sleep(2)
+        login = LoginAsPage(self.driver)
+        login.open_basic_tests_app(UserData.basic_tests_app['tests_app'])
+        self.open_form(UserData.basic_test_app_forms['case_test'], UserData.basic_test_app_forms['update_case'])
+        self.wait_for_element(self.search_input)
+        self.wait_to_clear_and_send_keys(self.search_input, self.unicode_text)
+        self.wait_to_click(self.search_button)
+        time.sleep(2)
+        assert self.is_present_and_displayed((By.XPATH, self.module_search.format(self.unicode_text)))
+        print("case search working properly")
+        self.wait_to_click((By.XPATH, self.module_search.format(self.unicode_text)))
+        self.wait_to_click((By.XPATH, self.case_detail_tab.format("1")))
+        assert self.is_present(self.continue_button)
+        self.wait_to_click(self.continue_button)
+        self.wait_to_clear_and_send_keys((By.XPATH, self.text_area_field.format(
+            "This form will allow you to add and update different kinds of data to/from the case. Enter some text:")),
+                                         self.update_unicode)
+        self.wait_to_click((By.XPATH, self.choose_radio_button.format(
+            "Select one of the following:", self.input_dict['Singleselect'])))
+        self.wait_to_click((By.XPATH, self.choose_radio_button.format(
+            "Select one or more of the following:", self.input_dict['Multiselect'][0])))
+        time.sleep(1)
+        self.wait_to_clear_and_send_keys((By.XPATH, self.input_field.format(
+            "Enter a phone number:")), self.input_dict['phone'])
+        time.sleep(2)
+        self.wait_to_clear_and_send_keys((By.XPATH, self.input_field.format(
+            "Enter an integer:")), self.input_dict['intval'] + Keys.TAB)
+        time.sleep(2)
+        self.scroll_to_element((By.XPATH, self.input_field.format(
+            "Capture your location here:")))
+        self.send_keys((By.XPATH, self.input_field.format(
+            "Capture your location here:")), "Delhi" + Keys.TAB)
+        self.js_click(self.search_location_button)
+        time.sleep(2)
+        assert not self.is_present_and_displayed(self.blank_latitude, 10)
+        time.sleep(2)
+        self.wait_to_click((By.XPATH, self.input_field.format(
+            "Enter a date:")))
+        self.wait_to_click(self.click_today_date)
+        self.wait_to_click(self.close_date_picker)
+        time.sleep(2)
+        self.js_click(self.submit_form_button)
+        self.wait_for_element(self.success_message)
+        self.wait_to_click(self.home_button)
+        time.sleep(2)
+
+    def verify_updated_unicode(self):
+        self.wait_for_element(self.search_input)
+        self.wait_to_clear_and_send_keys(self.search_input, self.unicode_text)
+        self.wait_to_click(self.search_button)
+        time.sleep(2)
+        assert self.is_present_and_displayed((By.XPATH, self.module_search.format(self.unicode_text)))
+        print("case search working properly")
+        self.wait_to_click((By.XPATH, self.module_search.format(self.unicode_text)))
+        self.wait_to_click((By.XPATH, self.case_detail_tab.format("1")))
+        assert self.is_present_and_displayed((By.XPATH, self.case_detail_table.format("Name", self.unicode_text)))
+        assert self.is_present_and_displayed((By.XPATH, self.case_detail_table.format("Status", "open")))
+        assert self.is_present_and_displayed((By.XPATH, self.case_detail_table.format("Text", self.update_unicode)))
+        assert self.is_present(self.continue_button)
+        self.wait_to_click(self.continue_button)
+        time.sleep(2)
+        self.wait_for_element(self.home_button)
+        self.wait_to_click(self.home_button)
+        time.sleep(2)

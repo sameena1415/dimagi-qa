@@ -63,7 +63,9 @@ class UserData:
         "close_case": "Close a Case",
         "create_subcase": "Create a Sub Case",
         "create_multi_subcase": "Create Multiple Sub Case",
-        "caselist": "Case list"
+        "caselist": "Case list",
+        "subcaseone": "Sub Case One",
+        "close_subcase": "Close Case"
     }
 
     form_specific_tests_app = {
@@ -74,3 +76,4 @@ class UserData:
     expressions = ['true()', 'false()', 'boolean-from-string(1)',
                    'boolean-from-string(0)', 'boolean(1)', 'boolean(0)']
     unicode = "☕️☕️☕️"
+    unicode_new = "☕️☕️☕️☕️☕️☕️"
