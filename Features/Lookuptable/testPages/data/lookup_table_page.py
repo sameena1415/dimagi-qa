@@ -3,11 +3,14 @@ import glob
 import os.path
 from pathlib import Path
 
+from pandas.io import excel
 from selenium.webdriver.common.by import By
+from Lookuptable.testPages.data.export_data_page import ExportDataPage
 from common_utilities.Excel.excel_manage import ExcelManager
+from common_utilities.fixtures import driver
 from common_utilities.generate_random_string import fetch_random_string, fetch_string_with_special_chars
 from common_utilities.selenium.base_page import BasePage
-from Lookuptable.userInputs.user_inputs import UserData
+from Features.Lookuptable.userInputs.user_inputs import UserData
 
 """"Contains test page elements and functions related to the Lookup Table module"""
 
@@ -62,6 +65,8 @@ class LookUpTablePage(BasePage):
         self.download_file = (By.XPATH, "//*[@id='download-progress']/div/form/a")
         self.closedownloadpopup = (By.XPATH, "//*[@id='download-progress']/../../div/button[@class='close']")
         self.erroralert_msg=(By.XPATH,"//*[@class='alert alert-danger']/h3")
+        self.replace_table=(By.ID,"replace")
+        self.rowcount = (By.XPATH,"//*[@id='report_table_view_lookup_tables_info']")
 
     def create_lookup_table(self):
         self.wait_to_click(self.manage_tables_link)
@@ -76,12 +81,24 @@ class LookUpTablePage(BasePage):
         print("LookUp Table created successfully!")
         return self.table_id_name
 
+    def create_download_lookup_table_without_field(self):
+        self.wait_to_click(self.manage_tables_link)
+        self.wait_to_click(self.add_table)
+        self.send_keys(self.table_id, self.table_id_name)
+        self.send_keys(self.table_id_description, self.table_id_name)
+        self.wait_to_click(self.save_table)
+        time.sleep(2)
+        assert self.is_present_and_displayed(self.table_created_path)
+        print("LookUp Table created successfully!")
+        self.download1()
+        return self.table_id_name
+
     def view_lookup_table(self,table_id_name):
         self.wait_to_click(self.view_tables_link)
         self.wait_to_click(self.select_table_drop_down)
         self.select_by_text(self.select_table, self.table_id_name)
         self.js_click(self.view_table)
-        assert self.is_present_and_displayed(self.column_name)
+        #assert self.is_present_and_displayed(self.column_name)
         print("LookUp Table can be viewed successfully!")
 
     def delete_lookup_table(self):
@@ -92,6 +109,8 @@ class LookUpTablePage(BasePage):
         print("LookUp Table deleted successfully!")
 
     def upload_1(self, filepath, TableCount):
+        self.wait_to_click(self.Data)
+        self.wait_to_click(self.view_all)
         self.wait_to_click(self.manage_tables_link)
         self.send_keys(self.upload_table, filepath)
         self.scroll_to_bottom()
@@ -172,7 +191,7 @@ class LookUpTablePage(BasePage):
         time.sleep(3)
         self.wait_to_click(self.closedownloadpopup)
 
-    def latest_download_file(self):
+    def error_upload1(self):
         Location_path = str(Path.home() / "Downloads")
         file_type = r'\*xlsx'
         files = glob.glob(Location_path + file_type)
@@ -196,11 +215,113 @@ class LookUpTablePage(BasePage):
     def update_excel_user_value(self,table_id,path):
         excel = ExcelManager(path)
         col = excel.col_size(table_id)
+        print("table_id", table_id)
         excel.write_excel_data(table_id, 1, col + 1, "user 1")
         excel.upload_to_path(table_id, UserData.data_list)
 
     def update_excel_group_value(self,table_id,path):
         excel = ExcelManager(path)
         col = excel.col_size(table_id)
+        print("table_id", table_id)
         excel.write_excel_data(table_id, 1, col + 1, "group 1")
         excel.upload_to_path(table_id, UserData.data_list)
+
+    def compare_excel(self,df1,df2,compareflag):
+        if(compareflag ==0):
+            assert df1 == df2
+            print("Data is same")
+        else:
+            assert df1 != df2
+            print("Data is different in both excels")
+
+    def download_update_7(self, tableid, path):
+        excel = ExcelManager(path)
+        df1 = excel.read_excel(tableid)
+        self.err_upload(path)
+        df2 = excel.read_excel(tableid)
+        return df1, df2
+
+    def download_update_8(self,path,table_id):
+        excel = ExcelManager(path)
+        col = excel.col_size(table_id)
+        excel.write_excel_data(table_id, 1, col + 1, "user 1")
+        excel.write_excel_data(table_id, 1, col + 2, "group 1")
+        excel.write_data(table_id, UserData.data_list1)
+        self.err_upload(path)
+        d1 = excel.read_excel(table_id)
+        print("data1", d1)
+        excel.write_excel_data(table_id, 2, 4, 'kiran')
+        excel.write_excel_data(table_id, 2, 5, '123')
+        self.err_upload(path)
+        d2 = excel.read_excel(table_id)
+        print("data2", d2)
+        return d1, d2
+
+    def replace_existing_table(self, filepath):
+        self.wait_to_click(self.manage_tables_link)
+        self.send_keys(self.upload_table, filepath)
+        self.scroll_to_bottom()
+        self.wait_to_click(self.replace_table)
+        self.wait_to_click(self.upload)
+        self.wait_to_click(self.manage_tables_link)
+    def delete_row_from_table(self, downloadpath, tablename):
+        download_path = self.latest_download_file()
+        excel = ExcelManager(download_path)
+        excel.write_data(tablename, UserData.data_list1)
+        self.err_upload(download_path)
+        self.download1()
+        self.view_lookup_table(tablename)
+        row_count_before = self.rowCount_table()
+        download_path_1 = self.latest_download_file()
+        excel = ExcelManager(download_path_1)
+        excel.delete_row(tablename, 2)
+        self.replace_existing_table(download_path_1)
+        self.view_lookup_table(tablename)
+        row_count_after = self.rowCount_table()
+        assert row_count_before > row_count_after
+        print("Row got successfully Deleted")
+
+    def rowCount_table(self):
+        text = self.get_text(self.rowcount)
+        rowcount = text[18:20].strip()
+        return rowcount
+
+    def update_delete_field(self,download_path,tablename):
+        excel = ExcelManager(download_path)
+        excel.upload_to_path(tablename, UserData.data_list)
+        self.err_upload(download_path)
+        self.view_lookup_table(tablename)
+        row_count_before = self.rowCount_table()
+        download_path_1 = self.latest_download_file()
+        excel = ExcelManager(download_path_1)
+        excel.write_excel_data(tablename, 3, 3, 'Y')
+        self.replace_existing_table(download_path_1)
+        self.view_lookup_table(tablename)
+        row_count_after = self.rowCount_table()
+        assert row_count_before > row_count_after
+        print("Row got successfully Deleted")
+
+    def attribute_2(self,download_path,tablename):
+        download_path = self.latest_download_file()
+        excel = ExcelManager(download_path)
+        excel.write_excel_data("types", 1, 4, 'field 1')
+        excel.write_excel_data("types", 2, 4, 'C1')
+        excel.write_excel_data("types", 1, 5, 'field 2')
+        excel.write_excel_data("types", 2, 5, 'C2')
+        excel.write_excel_data(tablename, 1, 3, 'field:C1')
+        excel.write_excel_data(tablename, 1, 4, 'field:C2')
+        excel.write_data(tablename, UserData.new_datalist)
+        self.err_upload(download_path)
+        self.view_lookup_table(tablename)
+        UIrows = self.rowCount_table()
+        self.download1()
+        excelrows = excel.row_size(tablename)
+        assert int(UIrows) == (excelrows - 1)
+
+    def delete_field_columns(self,downloadpath,tablename):
+        downloadpath = self.latest_download_file()
+        excel = ExcelManager(downloadpath)
+        excel.delete_column('types',4)
+        excel.delete_column(tablename,3)
+        self.err_upload(downloadpath)
+        rows = excel.col_size(tablename)

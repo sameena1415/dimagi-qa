@@ -19,8 +19,7 @@ class ExcelManager(object):
         wb.create_sheet(sheet_name)
         wb.save(self.path)
 
-
-    def sheet_new(self,sheet_name):
+    def sheet_new(self, sheet_name):
         wb = Workbook()
         ws1 = wb.create_sheet("Sheet_A")
         ws1.title = "Title_A"
@@ -30,8 +29,8 @@ class ExcelManager(object):
 
     def delete_sheet(self, sheet_name):
         wb = openpyxl.load_workbook(self.path)
-        sheetdelete = wb[sheet_name]
-        wb.remove(sheetdelete)
+        sheetDelete = wb[sheet_name]
+        wb.remove(sheetDelete)
         print(wb.sheetnames)
         wb.save(self.path)
 
@@ -49,16 +48,26 @@ class ExcelManager(object):
             sheet.append(i)
         wb.save(self.path)
 
+
+    def get_cell_value(self, sheet_name, col_num, row_num):
+        wb = load_workbook(self.path)
+        sheet = wb[sheet_name]
+        data = sheet.cell(row_num,col_num).value
+        return data
+
     def read_excel(self, sheet_name):
+        global data1
         global data
+        data1 = ''
         wb = load_workbook(self.path)
         sheet = wb[sheet_name]
         row_count = sheet.max_row
         column_count = sheet.max_column
         for i in range(1, row_count + 1):
             for j in range(1, column_count + 1):
-                data = sheet.cell(row=i, column=j).value
-        return data
+               data = sheet.cell(row=i, column=j).value
+               data1 = data1+" "+str(data)
+        return data1
 
     def get_cell_data(self, sheet_name, column_name, row_num):
         global data, column_num
@@ -109,5 +118,4 @@ class ExcelManager(object):
 
     def upload_data_typesSheet(self, type_data_list):
         self.write_data('types', type_data_list)
-
 
