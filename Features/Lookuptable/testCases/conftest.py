@@ -64,5 +64,10 @@ def settings(environment_settings_lookup):
         )
     settings = ConfigParser()
     settings.read(path)
+    # updates the url with the project domain while testing in local
+    if settings["default"]["url"] == "https://www.commcarehq.org/":
+        settings["default"]["url"] = f"{settings['default']['url']}a/qa-automation-prod"
+    else:
+        settings["default"]["url"] = f"{settings['default']['url']}a/qa-automation"
     return settings["default"]
 
