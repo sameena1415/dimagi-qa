@@ -23,6 +23,7 @@ class UserData:
     data_upload_path = PathSettings.ROOT + "\\userinputs\\upload_1.xlsx"
     hypertension_upload_path = PathSettings.ROOT + "\\userinputs\\Hypertension.xlsx"
     malformed_document_upload_path = PathSettings.ROOT + "\\userinputs\\MalformedDocument.xlsx"
+    print(malformed_document_upload_path)
     invalid_data_assert = "However, we ran into the following problems:"
     missing_data_assert = "Please fix the following formatting issues in your Excel file"
     col_headers = ["user 1", "group 1"]
