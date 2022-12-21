@@ -5,9 +5,9 @@ name: Lookup table Tests
 
 on:
   push:
-    branches: [ master ]
+    branches: [ ss/lookuptable ]
   pull_request:
-    branches: [ master ]
+    branches: [ ss/lookuptable ]
   repository_dispatch:
     types: [ deploy_success ]
   workflow_dispatch:
