@@ -68,6 +68,8 @@ class BasePage:
             elif self.page_404():
                 self.driver.back()
                 element.click()
+            else:
+                raise TimeoutException()
 
     def wait_to_clear_and_send_keys(self, locator, user_input):
         clickable = ec.visibility_of_element_located(locator)
@@ -87,7 +89,7 @@ class BasePage:
 
     def wait_for_element(self, locator, timeout=20):
         clickable = ec.element_to_be_clickable(locator)
-        WebDriverWait(self.driver, timeout).until(clickable,
+        WebDriverWait(self.driver, timeout, poll_frequency=5).until(clickable,
                                                   message="Couldn't find locator: " + str(locator))
 
     def wait_and_sleep_to_click(self, locator, timeout=60):
@@ -120,6 +122,13 @@ class BasePage:
     def find_elements(self, locator):
         elements = self.driver.find_elements(*locator)
         return elements
+
+    def find_elements_texts(self, locator):
+        elements = self.driver.find_elements(*locator)
+        value_list = []
+        for element in elements:
+            value_list.append(element.text)
+        return value_list
 
     def find_element(self, locator):
         element = self.driver.find_element(*locator)
@@ -359,3 +368,7 @@ class BasePage:
     def accept_popup_alert(self):
         alert = self.driver.switch_to.alert()
         alert.accept()
+
+    def get_element(self, xpath_format, insert_value):
+        element = (By.XPATH, xpath_format.format(insert_value))
+        return element
