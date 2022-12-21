@@ -19,9 +19,9 @@ class UserData:
     new_datalist = [(1, 'N', '1','2'),(123, 'N', '456','789'),(987, 'N', '543', '345')]
     type_data_list = [('N', field_val, 'yes',field_val)]
     type_sheet_headers = [('UID', 'Delete(Y/N)', 'field: '+ field_val)]
-    data_upload_path = PathSettings.ROOT + "\\userinputs\\upload_1.xlsx"
-    hypertension_upload_path = PathSettings.ROOT + "\\userinputs\\Hypertension.xlsx"
-    malformed_document_upload_path = PathSettings.ROOT + "\\userinputs\\MalformedDocument.xlsx"
+    data_upload_path = PathSettings.ROOT + "\\upload_1.xlsx"
+    hypertension_upload_path = PathSettings.ROOT + "\\Hypertension.xlsx"
+    malformed_document_upload_path = PathSettings.ROOT + "\\MalformedDocument.xlsx"
     invalid_data_assert = "However, we ran into the following problems:"
     missing_data_assert = "Please fix the following formatting issues in your Excel file"
     col_headers = ["user 1", "group 1"]

@@ -3,11 +3,14 @@ import glob
 import os.path
 from pathlib import Path
 
+from pandas.io import excel
 from selenium.webdriver.common.by import By
+from Lookuptable.testPages.data.export_data_page import ExportDataPage
 from common_utilities.Excel.excel_manage import ExcelManager
+from common_utilities.fixtures import driver
 from common_utilities.generate_random_string import fetch_random_string, fetch_string_with_special_chars
 from common_utilities.selenium.base_page import BasePage
-from Lookuptable.userInputs.user_inputs import UserData
+from Features.Lookuptable.userInputs.user_inputs import UserData
 
 """"Contains test page elements and functions related to the Lookup Table module"""
 
@@ -106,6 +109,8 @@ class LookUpTablePage(BasePage):
         print("LookUp Table deleted successfully!")
 
     def upload_1(self, filepath, TableCount):
+        self.wait_to_click(self.Data)
+        self.wait_to_click(self.view_all)
         self.wait_to_click(self.manage_tables_link)
         self.send_keys(self.upload_table, filepath)
         self.scroll_to_bottom()
@@ -186,7 +191,7 @@ class LookUpTablePage(BasePage):
         time.sleep(3)
         self.wait_to_click(self.closedownloadpopup)
 
-    def latest_download_file(self):
+    def error_upload1(self):
         Location_path = str(Path.home() / "Downloads")
         file_type = r'\*xlsx'
         files = glob.glob(Location_path + file_type)
@@ -210,12 +215,14 @@ class LookUpTablePage(BasePage):
     def update_excel_user_value(self,table_id,path):
         excel = ExcelManager(path)
         col = excel.col_size(table_id)
+        print("table_id", table_id)
         excel.write_excel_data(table_id, 1, col + 1, "user 1")
         excel.upload_to_path(table_id, UserData.data_list)
 
     def update_excel_group_value(self,table_id,path):
         excel = ExcelManager(path)
         col = excel.col_size(table_id)
+        print("table_id", table_id)
         excel.write_excel_data(table_id, 1, col + 1, "group 1")
         excel.upload_to_path(table_id, UserData.data_list)
 

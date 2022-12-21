@@ -1,6 +1,14 @@
+
 import pytest
-from HQSmokeTests.testPages.data.export_data_page import ExportDataPage
+<<<<<<< Updated upstream:Lookuptable/testCases/test_lookuptable_creation.py
+
+from Lookuptable.testPages.data.export_data_page import ExportDataPage
 from Lookuptable.testPages.data.lookup_table_page import LookUpTablePage
+=======
+from HQSmokeTests.testPages.data.export_data_page import ExportDataPage
+from Features.Lookuptable.testPages.data.lookup_table_page import LookUpTablePage
+>>>>>>> Stashed changes:Features/Lookuptable/testCases/test_lookuptable_creation.py
+
 
 """"Contains test cases related to the Data module"""
 
@@ -65,7 +73,8 @@ def test_21_Error_upload3(driver):
     export.data_tab()
     data = LookUpTablePage(driver)
     values['table_id'] = data.create_download_lookuptable()
-    download_path = data.latest_download_file()
+    download_path = data.error_upload1()
+    print("path is " + download_path)
     data.write_data_excel(values['table_id'], download_path)
     data.upload_1(download_path, '1')
 

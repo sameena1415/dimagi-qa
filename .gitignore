@@ -205,9 +205,9 @@ QA_Requests/MultiSelectPerf/settings.cfg
 QA_Requests/MultiSelectPerf/OutputFiles/*
 
 #Ignoring compliled files of Lookuptable
-/Lookuptable/testCases/report.html
-Lookuptable/report.html
-Lookuptable/settings.cfg
+/Features/Lookuptable/testCases/report.html
+Features/Lookuptable/report.html
+Features/Lookuptable/settings.cfg
 
 #Ignoring compliled files of CaseSearch
 Features/CaseSearch/settings.cfg

@@ -1,8 +1,9 @@
 import pytest
-from HQSmokeTests.testPages.data.export_data_page import ExportDataPage
+
+from Lookuptable.testPages.data.export_data_page import ExportDataPage
 from common_utilities.Excel.excel_manage import ExcelManager
-from Lookuptable.testPages.data.lookup_table_page import LookUpTablePage
-from Lookuptable.userInputs.user_inputs import UserData
+from Features.Lookuptable.testPages.data.lookup_table_page import LookUpTablePage
+from Features.Lookuptable.userInputs.user_inputs import UserData
 
 """"Contains test cases related to the Data module"""
 
@@ -16,6 +17,7 @@ def test_05_download1(driver):
     export.data_tab()
     data = LookUpTablePage(driver)
     values['table_id'] = data.create_download_lookuptable()
+    print("Table name:", values['table_id'])
     return values['table_id']
 
 
@@ -37,8 +39,9 @@ def test_07_download_update_3(driver):
     export.data_tab()
     data = LookUpTablePage(driver)
     values['table_id'] = data.create_download_lookuptable()
-    download_path = data.latest_download_file()
+    download_path = data.error_upload1()
     excel = ExcelManager(download_path)
+    print("table_id", values['table_id'])
     excel.write_data('types',UserData.type_data_list)
     excel.create_sheet(UserData.field_val)
     excel.write_data(UserData.field_val, UserData.type_sheet_headers)
@@ -53,9 +56,10 @@ def test_08_download_update_4(driver):
     export.data_tab()
     values['table_id'] = data.create_download_lookuptable()
     excel = ExcelManager(driver)
-    download_path = data.latest_download_file()
+    download_path = data.error_upload1()
     excel = ExcelManager(download_path)
+    print("table_id", values['table_id'])
     excel.delete_sheet("types")
-    data.err_upload(download_path)
-    data.missing_data_assert()
+    data.error_upload1()
+
 
