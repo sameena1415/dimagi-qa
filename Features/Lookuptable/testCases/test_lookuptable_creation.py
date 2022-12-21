@@ -1,14 +1,8 @@
 
 import pytest
-<<<<<<< Updated upstream:Lookuptable/testCases/test_lookuptable_creation.py
 
-from Lookuptable.testPages.data.export_data_page import ExportDataPage
-from Lookuptable.testPages.data.lookup_table_page import LookUpTablePage
-=======
 from HQSmokeTests.testPages.data.export_data_page import ExportDataPage
 from Features.Lookuptable.testPages.data.lookup_table_page import LookUpTablePage
->>>>>>> Stashed changes:Features/Lookuptable/testCases/test_lookuptable_creation.py
-
 
 """"Contains test cases related to the Data module"""
 
