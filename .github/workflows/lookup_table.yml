@@ -98,16 +98,18 @@ jobs:
               subject = `${prefix} on branch "${GITHUB_HEAD_REF}" ${suffix}`
             }
 
-            let bodyFile = './Lookuptable/email_pass.md'
+            let bodyFile = './common_utilities/mail_templates/email_pass.md'
             if (JOB_STATUS !== 'success') {
-              bodyFile = './Lookuptable/email_fail.md'
+              bodyFile = './common_utilities/mail_templates/email_fail.md'
             }
-
+          
             let actionRunLink = context.payload.repository.html_url + `/actions/runs/${context.runId}`
+            let testSuite = 'Lookup Table Regression'
             let bodyContent = await fs.readFile(bodyFile, 'utf8')
             bodyContent = bodyContent.replace(/{{actionRunLink}}/g, actionRunLink)
                 .replace(/{{runNumber}}/g, context.runNumber)
                 .replace(/{{environment}}/g, CC_ENV)
+                .replace(/{{testSuite}}/g, testSuite)
 
             let receivers = 'qa-automation@dimagi.com'
             if (context.eventName !== "pull_request" || context.eventName !== "push") {
