@@ -1,7 +1,4 @@
-
-
 import pytest
-
 from HQSmokeTests.testPages.data.export_data_page import ExportDataPage
 from Features.Lookuptable.testPages.data.lookup_table_page import LookUpTablePage
 from Features.Lookuptable.userInputs.user_inputs import UserData
@@ -10,14 +7,12 @@ from Features.Lookuptable.userInputs.user_inputs import UserData
 
 values = dict()
 
-
-
 @pytest.mark.lookup
 def test_01_upload(driver):
     data = LookUpTablePage(driver)
-    print(UserData.data_upload_path)
+    export = ExportDataPage(driver)
+    export.data_tab()
     data.upload_1(UserData.data_upload_path,'1')
-
 
 @pytest.mark.lookup
 def test_02_error_upload1(driver):
@@ -25,8 +20,7 @@ def test_02_error_upload1(driver):
     export.data_tab()
     data = LookUpTablePage(driver)
     values['table_id']=data.create_download_lookuptable()
-    download_path = data.error_upload1()
-    print("path is " + download_path)
+    download_path = data.latest_download_file()
     data.update_excel_user_value(values['table_id'],download_path)
     data.err_upload(download_path)
     data.invalid_data_assert()
@@ -37,8 +31,7 @@ def test_03_error_upload2(driver):
     export.data_tab()
     data = LookUpTablePage(driver)
     values['table_id']=data.create_download_lookuptable()
-    download_path = data.error_upload1()
-    print("path is " + download_path)
+    download_path = data.latest_download_file()
     data.update_excel_group_value(values['table_id'],download_path)
     data.err_upload(download_path)
     data.invalid_data_assert()

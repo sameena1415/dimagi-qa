@@ -3,11 +3,8 @@ import glob
 import os.path
 from pathlib import Path
 
-from pandas.io import excel
 from selenium.webdriver.common.by import By
-from HQSmokeTests.testPages.data.export_data_page import ExportDataPage
 from common_utilities.Excel.excel_manage import ExcelManager
-from common_utilities.fixtures import driver
 from common_utilities.generate_random_string import fetch_random_string, fetch_string_with_special_chars
 from common_utilities.selenium.base_page import BasePage
 from Features.Lookuptable.userInputs.user_inputs import UserData
@@ -109,8 +106,6 @@ class LookUpTablePage(BasePage):
         print("LookUp Table deleted successfully!")
 
     def upload_1(self, filepath, TableCount):
-        self.wait_to_click(self.Data)
-        self.wait_to_click(self.view_all)
         self.wait_to_click(self.manage_tables_link)
         self.send_keys(self.upload_table, filepath)
         self.scroll_to_bottom()
@@ -191,7 +186,7 @@ class LookUpTablePage(BasePage):
         time.sleep(3)
         self.wait_to_click(self.closedownloadpopup)
 
-    def error_upload1(self):
+    def latest_download_file(self):
         Location_path = str(Path.home() / "Downloads")
         file_type = r'\*xlsx'
         files = glob.glob(Location_path + file_type)
@@ -215,14 +210,12 @@ class LookUpTablePage(BasePage):
     def update_excel_user_value(self,table_id,path):
         excel = ExcelManager(path)
         col = excel.col_size(table_id)
-        print("table_id", table_id)
         excel.write_excel_data(table_id, 1, col + 1, "user 1")
         excel.upload_to_path(table_id, UserData.data_list)
 
     def update_excel_group_value(self,table_id,path):
         excel = ExcelManager(path)
         col = excel.col_size(table_id)
-        print("table_id", table_id)
         excel.write_excel_data(table_id, 1, col + 1, "group 1")
         excel.upload_to_path(table_id, UserData.data_list)
 
@@ -294,7 +287,7 @@ class LookUpTablePage(BasePage):
         row_count_before = self.rowCount_table()
         download_path_1 = self.latest_download_file()
         excel = ExcelManager(download_path_1)
-        excel.write_excel_data(tablename, 3, 3, 'Y')
+        excel.write_excel_data(tablename, 3, 2, 'Y')
         self.replace_existing_table(download_path_1)
         self.view_lookup_table(tablename)
         row_count_after = self.rowCount_table()
@@ -321,7 +314,14 @@ class LookUpTablePage(BasePage):
     def delete_field_columns(self,downloadpath,tablename):
         downloadpath = self.latest_download_file()
         excel = ExcelManager(downloadpath)
+        col_TypeSheet_before = excel.col_size("types")
+        col1 = excel.col_size(tablename)
         excel.delete_column('types',4)
         excel.delete_column(tablename,3)
         self.err_upload(downloadpath)
-        rows = excel.col_size(tablename)
+        self.view_lookup_table(tablename)
+        col_TypeSheet = excel.col_size("types")
+        col2 = excel.col_size(tablename)
+        assert col_TypeSheet_before > col_TypeSheet
+        assert col1>col2
+        print("Fields got deleted")
