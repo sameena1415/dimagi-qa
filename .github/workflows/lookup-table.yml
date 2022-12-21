@@ -48,7 +48,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix: ${{ fromJSON(needs.set_matrix.outputs.matrix) }}
-    name: Smoke on '${{ matrix.environment }}'
+    name: Lookup tests on '${{ matrix.environment }}'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -63,7 +63,7 @@ jobs:
           pip install -r Features/Lookuptable/requires.txt
       - name: Lookup table tests with pytest
         env:
-          DIMAGIQA_ENV: ${{ matrix.environment }}  #${{ secrets.DIMAGIQA_URL }}
+          DIMAGIQA_ENV: ${{ matrix.environment }}
           DIMAGIQA_LOGIN_USERNAME: ${{ secrets.DIMAGIQA_LOGIN_USERNAME }}
           DIMAGIQA_LOGIN_PASSWORD: ${{ secrets.DIMAGIQA_LOGIN_PASSWORD }}
           DIMAGIQA_MAIL_USERNAME: ${{ secrets.DIMAGIQA_MAIL_USERNAME }}
@@ -87,7 +87,7 @@ jobs:
           script: |
             const { promises: fs } = require('fs')
             const {JOB_STATUS, NOW, CC_ENV, GITHUB_HEAD_REF} = process.env
-            const prefix = `[${CC_ENV}] Smoke Tests - ${JOB_STATUS.toUpperCase()} - Run #${context.runNumber}`
+            const prefix = `[${CC_ENV}] Lookuptable Tests - ${JOB_STATUS.toUpperCase()} - Run #${context.runNumber}`
             const suffix = `at ${NOW}`
             let subject = `${prefix} on "deploy_success" ${suffix}`
             if (context.eventName !== "repository_dispatch") {
@@ -140,4 +140,3 @@ jobs:
         with:
           name: test-result-reports-${{ matrix.environment }}
           path: ${{ github.workspace }}/lookup_report_${{ matrix.environment }}.html
-          retention-days: 2
