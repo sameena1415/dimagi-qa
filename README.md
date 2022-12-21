@@ -4,6 +4,8 @@
 
 What you'll find here:
 
+- **Features**
+  - Coverage for regression tests for different HQ features.
 - **HQSmokeTests**
   - This script covers all sunny day scenarios of significant workflows on HQ.
 - **PerformanceTests**

@@ -8,8 +8,8 @@ from HQSmokeTests.testPages.users.org_structure_page import OrganisationStructur
 
 @pytest.mark.user
 @pytest.mark.organisationStructure
-def test_case_07_create_location(driver):
-    menu = HomePage(driver)
+def test_case_07_create_location(driver, settings):
+    menu = HomePage(driver, settings)
     menu.users_menu()
     create = OrganisationStructurePage(driver)
     create.organisation_menu_open()
@@ -21,8 +21,8 @@ def test_case_07_create_location(driver):
 
 @pytest.mark.user
 @pytest.mark.organisationStructure
-def test_case_07_edit_existing_location(driver):
-    menu = HomePage(driver)
+def test_case_07_edit_existing_location(driver, settings):
+    menu = HomePage(driver, settings)
     menu.users_menu()
     edit = OrganisationStructurePage(driver)
     edit.edit_location()
@@ -31,21 +31,21 @@ def test_case_07_edit_existing_location(driver):
 
 @pytest.mark.user
 @pytest.mark.organisationStructure
-def test_case_56_archive_unarchive_location(driver):
-    menu = HomePage(driver)
+def test_case_56_archive_unarchive_location(driver, settings):
+    menu = HomePage(driver, settings)
     menu.users_menu()
     location = OrganisationStructurePage(driver)
     location.archive_location()
     print("Location successfully Archived")
-    location.unarchive_location()
+    location.unarchive_location(settings)
     print("Location successfully Unarchived")
 
 
 
 @pytest.mark.user
 @pytest.mark.organisationStructure
-def test_case_08_edit_location_fields(driver):
-    menu = HomePage(driver)
+def test_case_08_edit_location_fields(driver, settings):
+    menu = HomePage(driver, settings)
     menu.users_menu()
     edit = OrganisationStructurePage(driver)
     edit.edit_location_fields()
@@ -57,7 +57,7 @@ def test_case_08_edit_location_fields(driver):
 @pytest.mark.user
 @pytest.mark.organisationLevel
 def test_case_09_creation_organization_level(driver, settings):
-    menu = HomePage(driver)
+    menu = HomePage(driver, settings)
     menu.users_menu()
     org = OrganisationStructurePage(driver)
     org.create_org_level()
@@ -67,8 +67,8 @@ def test_case_09_creation_organization_level(driver, settings):
 @pytest.mark.organisationLevel
 @pytest.mark.organisationImport
 @pytest.mark.organisationExport
-def test_case_11_download_and_upload_locations(driver):
-    menu = HomePage(driver)
+def test_case_11_download_and_upload_locations(driver, settings):
+    menu = HomePage(driver, settings)
     menu.users_menu()
     org = OrganisationStructurePage(driver)
     org.download_locations()
@@ -78,7 +78,7 @@ def test_case_11_download_and_upload_locations(driver):
 @pytest.mark.user
 @pytest.mark.organisationStructure
 def test_cleanup_items_in_locations_menu(driver, settings):
-    menu = HomePage(driver)
+    menu = HomePage(driver, settings)
     menu.users_menu()
     clean4 = OrganisationStructurePage(driver)
     clean4.cleanup_location()
