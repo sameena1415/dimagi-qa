@@ -1,6 +1,6 @@
 import pytest
 
-from Lookuptable.testPages.data.export_data_page import ExportDataPage
+from Features.Lookuptable.testPages.data.export_data_page import ExportDataPage
 from common_utilities.Excel.excel_manage import ExcelManager
 from Features.Lookuptable.testPages.data.lookup_table_page import LookUpTablePage
 from Features.Lookuptable.userInputs.user_inputs import UserData

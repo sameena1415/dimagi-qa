@@ -5,7 +5,7 @@ from pathlib import Path
 
 from pandas.io import excel
 from selenium.webdriver.common.by import By
-from Lookuptable.testPages.data.export_data_page import ExportDataPage
+from HQSmokeTests.testPages.data.export_data_page import ExportDataPage
 from common_utilities.Excel.excel_manage import ExcelManager
 from common_utilities.fixtures import driver
 from common_utilities.generate_random_string import fetch_random_string, fetch_string_with_special_chars
