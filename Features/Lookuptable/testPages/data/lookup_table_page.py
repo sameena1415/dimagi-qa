@@ -2,7 +2,7 @@ import time
 import glob
 import os.path
 from pathlib import Path
-
+from common_utilities.path_settings import PathSettings
 from selenium.webdriver.common.by import By
 from common_utilities.Excel.excel_manage import ExcelManager
 from common_utilities.generate_random_string import fetch_random_string, fetch_string_with_special_chars
@@ -10,7 +10,6 @@ from common_utilities.selenium.base_page import BasePage
 from Features.Lookuptable.userInputs.user_inputs import UserData
 
 """"Contains test page elements and functions related to the Lookup Table module"""
-
 
 class LookUpTablePage(BasePage):
 
@@ -107,8 +106,8 @@ class LookUpTablePage(BasePage):
 
     def upload_1(self, filepath, TableCount):
         self.wait_to_click(self.manage_tables_link)
-        self.wait_to_clear_and_send_keys(self.upload_table, filepath)
-        self.scroll_to_bottom()
+        self.scroll_to_element(self.upload_table)
+        self.send_keys(self.upload_table, filepath)
         self.wait_to_click(self.upload)
         self.wait_for_element(self.successmsg, 10)
         success = self.get_text(self.successmsg)
@@ -187,10 +186,10 @@ class LookUpTablePage(BasePage):
         self.wait_to_click(self.closedownloadpopup)
 
     def latest_download_file(self):
-        Location_path = str(Path.home() / "Downloads")
-        file_type = r'\*xlsx'
-        files = glob.glob(Location_path + file_type)
+        os.chdir(PathSettings.DOWNLOAD_PATH)
+        files = sorted(os.listdir(os.getcwd()), key=os.path.getmtime)
         max_file = max(files, key=os.path.getctime)
+        print("File downloaded: " + max_file)
         return max_file
 
     def create_download_lookuptable(self):
