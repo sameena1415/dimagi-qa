@@ -106,7 +106,7 @@ class LookUpTablePage(BasePage):
 
     def upload_1(self, filepath, TableCount):
         self.wait_to_click(self.manage_tables_link)
-        self.scroll_to_element(self.upload_table)
+        self.scroll_to_bottom()
         self.send_keys(self.upload_table, filepath)
         self.wait_to_click(self.upload)
         self.wait_for_element(self.successmsg, 10)
@@ -251,8 +251,8 @@ class LookUpTablePage(BasePage):
 
     def replace_existing_table(self, filepath):
         self.wait_to_click(self.manage_tables_link)
-        self.send_keys(self.upload_table, filepath)
         self.scroll_to_bottom()
+        self.send_keys(self.upload_table, filepath)
         self.wait_to_click(self.replace_table)
         self.wait_to_click(self.upload)
         self.wait_to_click(self.manage_tables_link)
