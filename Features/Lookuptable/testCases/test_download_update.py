@@ -43,7 +43,8 @@ def test_07_download_update_3(driver):
     excel.write_data('types',UserData.type_data_list)
     excel.create_sheet(UserData.field_val)
     excel.write_data(UserData.field_val, UserData.type_sheet_headers)
-    data.upload_1(PathSettings.DOWNLOAD_PATH / download_path, str(excel.row_size('types')-1))
+    print(PathSettings.DOWNLOAD_PATH +"/"+ download_path)
+    data.upload_1(PathSettings.DOWNLOAD_PATH +"/"+ download_path, str(excel.row_size('types')-1))
 
 @pytest.mark.data
 @pytest.mark.managetables
@@ -57,5 +58,5 @@ def test_08_download_update_4(driver):
     download_path = data.latest_download_file()
     excel = ExcelManager(download_path)
     excel.delete_sheet("types")
-    data.err_upload(PathSettings.DOWNLOAD_PATH / download_path)
+    data.err_upload(PathSettings.DOWNLOAD_PATH +"/"+ download_path)
     data.missing_data_assert()

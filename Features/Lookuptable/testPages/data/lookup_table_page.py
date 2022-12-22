@@ -17,7 +17,7 @@ class LookUpTablePage(BasePage):
         super().__init__(driver)
 
         self.table_id_name = "lookuptable_" + str(fetch_random_string())
-        self.dummyid = str(fetch_string_with_special_chars)
+        self.dummyid = str(fetch_string_with_special_chars(4))
         self.table_id_fields = "(//label[.='Table ID'][@class='control-label col-sm-2']//following-sibling::div/input[@type='text' and @class = 'form-control'])"
         self.description_fields = "(//label[.='Description'][@class='control-label col-sm-2']//following-sibling::div/input[@type='text' and @class = 'form-control'])"
         self.table_created = "(//td/span[text()='" + self.table_id_name + "'])[1]"
@@ -148,12 +148,13 @@ class LookUpTablePage(BasePage):
     def create_dummyid(self):
         self.wait_to_click(self.manage_tables_link)
         self.wait_to_click(self.add_table)
-        self.send_keys(self.table_id, self.dummyid)
-        self.send_keys(self.table_id_description, self.dummyid)
+        self.wait_to_clear_and_send_keys(self.table_id, self.dummyid)
+        self.wait_to_clear_and_send_keys(self.table_id_description, self.dummyid)
         self.wait_to_click(self.add_field)
-        self.send_keys(self.field_name, self.dummyid)
+        self.wait_to_clear_and_send_keys(self.field_name, self.dummyid)
         self.wait_to_click(self.save_table)
         fail = self.get_text(self.errormsg)
+        print(fail)
         assert fail == "Could not update table because field names were not correctly formatted"
         print("error message displayed")
         self.wait_to_click(self.manage_tables_link)
