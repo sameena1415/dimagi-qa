@@ -167,9 +167,12 @@ class LookUpTablePage(BasePage):
     def edit_dummy_data(self):
         self.wait_to_click(self.manage_tables_link)
         self.wait_to_click(self.edit)
+        time.sleep(2)
         self.wait_to_click(self.new_field)
+        time.sleep(1)
         self.send_keys(self.new_value, '@!@$#%$^%&^*')
         self.wait_to_click(self.edit_save)
+        time.sleep(5)
         fail = self.get_text(self.errormsg)
         assert "Could not update table because field names were not correctly formatted" in fail
         print("error message displayed")
