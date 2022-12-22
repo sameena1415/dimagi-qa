@@ -28,7 +28,7 @@ class LookUpTablePage(BasePage):
         self.upload = (By.XPATH, "(//*[@id='uploadForm']/div/div/button)")
         self.successmsg = (By.XPATH, "(//*[@class='alert alert-success']/p)")
         self.errorUploadmsg = (By.XPATH, "//*[@id='hq-messages-container']/div/div/div[1]")
-        self.errormsg = (By.XPATH, "//*[@id='FailText']/p")
+        self.errormsg = (By.XPATH, "//p/span[@id='FailText']")
         self.all = (By.LINK_TEXT, "all")
         self.none = (By.LINK_TEXT, "none")
         self.edit = (By.XPATH, "(//tr[td[span[text()='upload_1']]]//button)[1]")
@@ -147,12 +147,17 @@ class LookUpTablePage(BasePage):
 
     def create_dummyid(self):
         self.wait_to_click(self.manage_tables_link)
+        time.sleep(2)
         self.wait_to_click(self.add_table)
-        self.wait_to_clear_and_send_keys(self.table_id, self.dummyid)
-        self.wait_to_clear_and_send_keys(self.table_id_description, self.dummyid)
+        time.sleep(2)
+        self.wait_for_element(self.table_id)
+        self.send_keys(self.table_id, self.dummyid)
+        self.send_keys(self.table_id_description, self.dummyid)
         self.wait_to_click(self.add_field)
         self.wait_to_clear_and_send_keys(self.field_name, self.dummyid)
         self.wait_to_click(self.save_table)
+        time.sleep(5)
+        self.wait_for_element(self.errormsg)
         fail = self.get_text(self.errormsg)
         print(fail)
         assert fail == "Could not update table because field names were not correctly formatted"
@@ -191,7 +196,9 @@ class LookUpTablePage(BasePage):
         files = sorted(os.listdir(os.getcwd()), key=os.path.getmtime)
         max_file = max(files, key=os.path.getctime)
         print("File downloaded: " + max_file)
-        return max_file
+        path = os.path.join(PathSettings.DOWNLOAD_PATH, max_file)
+        print("Full file path:", path)
+        return path
 
     def create_download_lookuptable(self):
         self.create_lookup_table()
