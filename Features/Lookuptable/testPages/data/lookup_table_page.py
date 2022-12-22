@@ -21,7 +21,7 @@ class LookUpTablePage(BasePage):
         self.table_id_fields = "(//label[.='Table ID'][@class='control-label col-sm-2']//following-sibling::div/input[@type='text' and @class = 'form-control'])"
         self.description_fields = "(//label[.='Description'][@class='control-label col-sm-2']//following-sibling::div/input[@type='text' and @class = 'form-control'])"
         self.table_created = "(//td/span[text()='" + self.table_id_name + "'])[1]"
-        self.Data = (By.XPATH, "/html/body/div[1]/div[1]/div/nav/ul/li[3]/a")
+        self.Data = (By.LINK_TEXT, "Data")
         self.view_all = (By.LINK_TEXT, "View All")
         self.manage_tables_link = (By.LINK_TEXT, "Manage Tables")
         self.upload_table = (By.ID, "bulk_upload_file")
@@ -160,7 +160,7 @@ class LookUpTablePage(BasePage):
         self.wait_for_element(self.errormsg)
         fail = self.get_text(self.errormsg)
         print(fail)
-        assert fail == "Could not update table because field names were not correctly formatted"
+        assert "Could not update table because field names were not correctly formatted" in fail
         print("error message displayed")
         self.wait_to_click(self.manage_tables_link)
 
@@ -171,7 +171,7 @@ class LookUpTablePage(BasePage):
         self.send_keys(self.new_value, '@!@$#%$^%&^*')
         self.wait_to_click(self.edit_save)
         fail = self.get_text(self.errormsg)
-        assert fail == "Could not update table because field names were not correctly formatted"
+        assert "Could not update table because field names were not correctly formatted" in fail
         print("error message displayed")
         self.wait_to_click(self.manage_tables_link)
 
