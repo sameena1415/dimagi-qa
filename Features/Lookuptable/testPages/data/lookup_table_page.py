@@ -107,7 +107,7 @@ class LookUpTablePage(BasePage):
 
     def upload_1(self, filepath, TableCount):
         self.wait_to_click(self.manage_tables_link)
-        self.send_keys(self.upload_table, filepath)
+        self.wait_to_clear_and_send_keys(self.upload_table, filepath)
         self.scroll_to_bottom()
         self.wait_to_click(self.upload)
         self.wait_for_element(self.successmsg, 10)
@@ -120,7 +120,7 @@ class LookUpTablePage(BasePage):
         self.wait_to_click(self.Data)
         self.wait_to_click(self.view_all)
         self.wait_to_click(self.manage_tables_link)
-        self.send_keys(self.upload_table, filepath)
+        self.wait_to_clear_and_send_keys(self.upload_table, filepath)
         self.wait_to_click(self.upload)
         time.sleep(20)
 
@@ -141,7 +141,7 @@ class LookUpTablePage(BasePage):
     def edit_table(self):
         self.wait_to_click(self.manage_tables_link)
         self.wait_to_click(self.edit)
-        self.send_keys(self.edit_field, 'testing')
+        self.wait_to_clear_and_send_keys(self.edit_field, 'testing')
         self.wait_to_click(self.edit_save)
         self.wait_to_click(self.edit)
         self.wait_to_click(self.edit_save)
