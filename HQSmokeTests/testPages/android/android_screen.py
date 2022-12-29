@@ -14,7 +14,7 @@ class AndroidScreen:
             "browserstack.key": settings["bs_key"],
 
             # Set URL of the application under test
-            "app": "bs://ba4bb239f7ad102317c486f682b1f8408203db71",
+            "app": "bs://7c0b129366724467f83670df3fdf72d503a84d79",
 
             # Specify device and os_version for testing
             "device": "Google Pixel 4 XL",
