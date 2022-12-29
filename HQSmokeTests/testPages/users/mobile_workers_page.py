@@ -8,7 +8,7 @@ from common_utilities.path_settings import PathSettings
 from common_utilities.generate_random_string import fetch_random_string, fetch_phone_number
 from HQSmokeTests.userInputs.user_inputs import UserData
 from HQSmokeTests.testPages.users.org_structure_page import latest_download_file
-from selenium.common.exceptions import TimeoutException, NoSuchElementException, StaleElementReferenceException
+from selenium.common.exceptions import TimeoutException, NoSuchElementException
 from selenium.webdriver.common.by import By
 
 """"Contains test page elements and functions related to the User's Mobile Workers module"""
@@ -20,13 +20,11 @@ class MobileWorkerPage(BasePage):
         super().__init__(driver)
 
         self.username = "username_" + fetch_random_string()
-        self.username2 = "user_" + fetch_random_string()
         self.login_as_username = (By.XPATH, "//h3/b[.='" + self.username + "']")
         self.profile_name_text = "test_profile_" + fetch_random_string()
         self.phone_number = UserData.area_code + fetch_phone_number()
 
         self.username_link = (By.LINK_TEXT, self.username)
-        self.username2_link = (By.LINK_TEXT, self.username2)
         self.confirm_user_field_delete = (By.XPATH, "//button[@class='btn btn-danger']")
         self.delete_user_field = (By.XPATH,
                                   "(//input[@data-bind='value: slug'])[last()]//following::a[@class='btn btn-danger' and @data-toggle='modal'][1]")
@@ -436,14 +434,14 @@ class MobileWorkerPage(BasePage):
     def create_new_mobile_worker(self):
         self.create_mobile_worker()
         self.mobile_worker_menu()
-        self.mobile_worker_enter_username("user_" + str(fetch_random_string()))
+        username_entered = self.mobile_worker_enter_username("user_" + str(fetch_random_string()))
         self.mobile_worker_enter_password(fetch_random_string())
         self.wait_to_click(self.create_button_xpath)
         time.sleep(4)
         self.is_present_and_displayed(self.NEW)
         new_user_created = self.get_text(self.new_user_created_xpath)
         print("Username is : " + new_user_created)
-        assert self.username2 == new_user_created, "Could find the new mobile worker created"
+        assert username_entered == new_user_created, "Could find the new mobile worker created"
         print("Mobile Worker Created")
 
     def create_new_user_fields(self, userfield):
@@ -462,7 +460,7 @@ class MobileWorkerPage(BasePage):
         time.sleep(2)
         self.wait_to_click(self.search_button_mw)
         time.sleep(3)
-        self.click(self.username2_link)
+        self.click((By.LINK_TEXT, user))
         self.select_by_text(self.additional_info_select2, "field_" + fetch_random_string())
         assert self.is_displayed(self.user_file_additional_info2), "Unable to assign user field to user."
 
@@ -474,11 +472,11 @@ class MobileWorkerPage(BasePage):
         time.sleep(2)
         self.wait_to_click(self.search_button_mw)
         time.sleep(3)
-        self.click(self.username2_link)
+        self.click((By.LINK_TEXT, user))
         try:
             self.wait_to_click(self.actions_tab_link_text)
             self.wait_to_click(self.delete_mobile_worker)
-            self.wait_to_clear_and_send_keys(self.enter_username, self.username2 + "@" + self.get_domain()
+            self.wait_to_clear_and_send_keys(self.enter_username, user + "@" + self.get_domain()
                                              + ".commcarehq.org")
             self.wait_to_click(self.confirm_delete_mw)
         except (TimeoutException, NoSuchElementException):
