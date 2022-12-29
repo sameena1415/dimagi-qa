@@ -19,11 +19,11 @@ def test_case_01_check_search_input_on_caselist_casedetail_form(driver):
     casesearch.check_values_on_caselist(row_num=CaseSearchUserInput.seven,
                                         expected_value=CaseSearchUserInput.five)
     case_name = webapps.omni_search(CaseSearchUserInput.song_case_bugs_user2)
-    webapps.select_case_and_continue(case_name)
+    webapps.select_case(case_name)
     casesearch.check_value_on_case_detail(tabname=CaseSearchUserInput.rating,
                                           search_property=CaseSearchUserInput.rating_input,
                                           expected_value=CaseSearchUserInput.five)
-    webapps.continue_to_forms()
+    webapps.select_case_and_continue(case_name)
     webapps.open_form(CaseSearchUserInput.update_song_form)
     casesearch.check_value_on_form(CaseSearchUserInput.five)
     webapps.submit_the_form()
@@ -42,11 +42,11 @@ def test_case_02_navigation_via_breadcrumbs(driver):
     casesearch.check_values_on_caselist(row_num=CaseSearchUserInput.seven,
                                         expected_value=CaseSearchUserInput.five)
     case_name = webapps.omni_search(CaseSearchUserInput.song_case_bugs_user2)
-    webapps.select_case_and_continue(case_name)
+    webapps.select_case(case_name)
     casesearch.check_value_on_case_detail(tabname=CaseSearchUserInput.rating,
                                           search_property=CaseSearchUserInput.rating_input,
                                           expected_value=CaseSearchUserInput.five)
-    webapps.continue_to_forms()
+    webapps.select_case_and_continue(case_name)
     webapps.open_form(CaseSearchUserInput.update_song_form)
     webapps.navigate_to_breadcrumb(CaseSearchUserInput.inline_search_menu)
 
@@ -73,7 +73,7 @@ def test_case_03_search_property_settings(driver):
     casesearch.check_values_on_caselist(row_num=CaseSearchUserInput.seven,
                                         expected_value=CaseSearchUserInput.rating_four_and_five)
     case_name = webapps.omni_search(CaseSearchUserInput.song_case_bugs_user2)
-    webapps.select_case_and_continue(case_name)
+    webapps.select_case(case_name)
     casesearch.check_value_on_case_detail(tabname=CaseSearchUserInput.rating,
                                           search_property=CaseSearchUserInput.rating_input,
                                           expected_value=CaseSearchUserInput.rating_four_and_five)
@@ -86,7 +86,7 @@ def test_case_04_load_from_external_domain(driver):
     webapps.open_menu(CaseSearchUserInput.inline_search_menu)
     webapps.clear_selections_on_case_search_page()
     casesearch.search_against_property(search_property=CaseSearchUserInput.song_name,
-                                       input_value=CaseSearchUserInput.song_case_bugs_on_casesearch_1,
+                                       input_value=CaseSearchUserInput.song_case_bugs,
                                        property_type=TEXT_INPUT)
     webapps.search_button_on_case_search_page()
     case_name = webapps.omni_search(CaseSearchUserInput.song_case_bugs_on_casesearch_1)

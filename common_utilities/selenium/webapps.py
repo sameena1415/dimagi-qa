@@ -1,4 +1,7 @@
-from selenium.common.exceptions import NoSuchElementException
+import logging
+import time
+
+from selenium.common.exceptions import NoSuchElementException, TimeoutException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 
@@ -16,12 +19,13 @@ class WebApps(BasePage):
         self.app_header_format = "//h1[contains(text(),'{}')]"
         self.menu_name_format = "//*[contains(@aria-label,'{}')]"
         self.menu_name_header_format = "//*[contains(text(),'{}')]"
-        self.form_name_format = "//tr[contains(@aria-label,'{}')]"
+        self.form_name_format = "//h3[contains(text(), '{}')]"
+        self.form_name_header_format = "//h1[contains(text(), '{}')]"
         self.case_name_format = "//tr[.//td[contains(text(),'{}')]]"
         self.breadcrumb_format = "//li[contains(text(), '{}')]"
 
         self.form_submit = (By.XPATH, "//button[@class='submit btn btn-primary']")
-        self.form_submission_successful = (By.XPATH, "//p[contains(text(), 'Form successfully saved')]")
+        self.form_submission_successful = (By.XPATH, "//p[contains(text(), 'successfully saved')]")
         self.search_all_cases_button = (By.XPATH, "//*[contains(text(),'Search All')]//parent::div[@class='case-list-action-button btn-group formplayer-request']")
         self.search_again_button = (By.XPATH, "//*[contains(text(),'Search Again')]//parent::div[@class='case-list-action-button btn-group formplayer-request']")
         self.clear_case_search_page = (By.XPATH, "//button[@id='query-clear-button']")
@@ -42,6 +46,7 @@ class WebApps(BasePage):
         self.list_is_empty = (By.XPATH, "//div[contains(text(), 'empty')]")
 
     def open_app(self, app_name):
+        time.sleep(2)
         self.wait_to_click(self.webapps_home)
         self.application = self.get_element(self.app_name_format, app_name)
         self.application_header = self.get_element(self.app_header_format, app_name)
@@ -59,8 +64,13 @@ class WebApps(BasePage):
         assert self.is_visible_and_displayed(self.caselist_header)
 
     def open_form(self, form_name):
-        self.form_name = self.get_element(self.form_name_format, form_name)
-        self.wait_to_click(self.form_name)
+        self.form_header = self.get_element(self.form_name_header_format, form_name)
+        if self.is_displayed(self.form_header):
+            logging.info("Auto advance enabled")
+        else:
+            self.form_name = self.get_element(self.form_name_format, form_name)
+            self.scroll_to_element(self.form_name)
+            self.js_click(self.form_name)
 
     def search_all_cases(self):
         self.scroll_to_element(self.search_all_cases_button)

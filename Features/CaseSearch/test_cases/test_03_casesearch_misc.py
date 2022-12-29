@@ -25,6 +25,7 @@ def test_case_01_eof_navigations(driver):
     webapps.search_button_on_case_search_page()
     webapps.select_case_and_continue(CaseSearchUserInput.song_case_bugs)
     """EOF Nav - Prev Menu"""
+    time.sleep(2)
     webapps.open_form(CaseSearchUserInput.play_song_form)
     webapps.submit_the_form()
     casesearch.check_eof_navigation(eof_nav=PREV_MENU,
@@ -71,7 +72,7 @@ def test_case_02_related_property_search(driver):
     webapps.omni_search(CaseSearchUserInput.show_case_bangalore)
     webapps.select_case(CaseSearchUserInput.show_case_bangalore)
     casesearch.check_value_on_case_detail(search_property=CaseSearchUserInput.parent_artist,
-                                          expected_value=CaseSearchUserInput.show_case_bangalore)
+                                          expected_value=CaseSearchUserInput.artist_case_justin)
 
 
 def test_case_03_auto_advance_menus(driver):
@@ -146,7 +147,6 @@ def test_case_06_performance_check(driver):
     assert run_time <= 4
 
 
-@pytest.mark.skip(reason="This is failing app setup error but bocked due Dominic's bug")
 def test_case_07_multi_case_types(driver):
     webapps = WebApps(driver)
     casesearch = CaseSearchWorkflows(driver)
@@ -154,21 +154,35 @@ def test_case_07_multi_case_types(driver):
     webapps.open_app(CaseSearchUserInput.case_search_app_name)
     """Check multi case type case list"""
     webapps.open_menu(CaseSearchUserInput.mixed_case_type_menu)
+    casesearch.search_against_property(search_property=CaseSearchUserInput.name,
+                                       input_value=CaseSearchUserInput.show_case_bangalore,
+                                       property_type=TEXT_INPUT)
     webapps.search_button_on_case_search_page()
-    # Checks case type song
-    webapps.omni_search(CaseSearchUserInput.song_case_bugs)
     # Checks case type show
-    webapps.omni_search(CaseSearchUserInput.show_case_jubin)
-    webapps.select_case_and_continue(CaseSearchUserInput.show_case_jubin)
-    casesearch.check_eof_navigation(eof_nav=MENU, menu=CaseSearchUserInput.mixed_case_type_menu)
-    webapps.submit_the_form()  # This is failing app setup error but blocked due Dominic's bug
+    webapps.omni_search(CaseSearchUserInput.show_case_bangalore)
+    driver.back()
+    driver.back()
+    webapps.clear_selections_on_case_search_page()
+    # Checks case type song
+    casesearch.search_against_property(search_property=CaseSearchUserInput.name,
+                                       input_value=CaseSearchUserInput.song_case_bugs,
+                                       property_type=TEXT_INPUT)
+    webapps.search_button_on_case_search_page()
+    webapps.omni_search(CaseSearchUserInput.song_case_bugs_user2)
+    webapps.select_case_and_continue(CaseSearchUserInput.song_case_bugs_user2)
+    webapps.submit_the_form()
+    # Tests form linking
+    casesearch.check_eof_navigation(eof_nav=MENU, menu=CaseSearchUserInput.add_show_form)
     """Check multi case type case list for DR workflow"""
     webapps.open_app(CaseSearchUserInput.case_search_app_name)
     webapps.open_menu(CaseSearchUserInput.mixed_case_type_menu)
+    webapps.clear_selections_on_case_search_page()
+    casesearch.search_against_property(search_property=CaseSearchUserInput.name,
+                                       input_value=CaseSearchUserInput.show_case_casesearch_1,
+                                       property_type=TEXT_INPUT)
     webapps.search_button_on_case_search_page()
-    webapps.omni_search(CaseSearchUserInput.show_case_samthird)  # Checks case type show: This may fail due to current app settings, DR not enabled
-    webapps.select_case_and_continue(CaseSearchUserInput.show_case_samthird)
-    casesearch.check_eof_navigation(eof_nav=MENU, menu=CaseSearchUserInput.mixed_case_type_menu)
+    webapps.omni_search(CaseSearchUserInput.show_case_casesearch_1)
+    webapps.select_case_and_continue(CaseSearchUserInput.show_case_casesearch_1)
     webapps.submit_the_form()
 
 
@@ -187,14 +201,13 @@ def test_case_08_display_condition(driver):
     assert not base.is_displayed(webapps.search_all_cases_button)
 
 
-@pytest.mark.skip(reason="This is failing app setup error but bocked due Dominic's bug")
 def test_case_09_search_filter(driver):
     webapps = WebApps(driver)
     casesearch = CaseSearchWorkflows(driver)
     """Check Search Filter"""
     webapps.login_as(CaseSearchUserInput.a_user)
     webapps.open_app(CaseSearchUserInput.case_search_app_name)
-    webapps.open_menu(CaseSearchUserInput.search_setting_menu)
+    webapps.open_menu(CaseSearchUserInput.search_filter_menu)
     webapps.search_all_cases()
     webapps.search_button_on_case_search_page()
     casesearch.check_values_on_caselist(row_num=CaseSearchUserInput.three,

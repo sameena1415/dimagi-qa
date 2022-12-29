@@ -1,7 +1,5 @@
 import time
 
-import pytest
-
 from Features.CaseSearch.constants import *
 from Features.CaseSearch.test_pages.casesearch_page import CaseSearchWorkflows
 from Features.CaseSearch.user_inputs.casesearch_user_inputs import CaseSearchUserInput
@@ -28,11 +26,11 @@ def test_case_01_default_value_expression(driver):
     """Check values can be cleared and desired value can be searched"""
     webapps.clear_selections_on_case_search_page()
     casesearch.search_against_property(search_property=CaseSearchUserInput.song_name,
-                                       input_value=CaseSearchUserInput.song_case_bugs,
+                                       input_value=CaseSearchUserInput.song_case_bugs_user2,
                                        property_type=TEXT_INPUT)
     webapps.search_button_on_case_search_page()
     casesearch.check_values_on_caselist(row_num=CaseSearchUserInput.one,
-                                        expected_value=CaseSearchUserInput.song_case_bugs)
+                                        expected_value=CaseSearchUserInput.song_case_bugs_user2)
 
 
 def test_case_02_help_text(driver):
@@ -53,11 +51,11 @@ def test_case_03_text_format(driver):
     webapps.open_menu(CaseSearchUserInput.search_first_menu)
     webapps.clear_selections_on_case_search_page()
     casesearch.search_against_property(search_property=CaseSearchUserInput.song_name,
-                                       input_value=CaseSearchUserInput.song_case_bugs,
+                                       input_value=CaseSearchUserInput.song_case_bugs_user2,
                                        property_type=TEXT_INPUT)
     webapps.search_button_on_case_search_page()
     casesearch.check_values_on_caselist(row_num=CaseSearchUserInput.one,
-                                        expected_value=CaseSearchUserInput.song_case_bugs)
+                                        expected_value=CaseSearchUserInput.song_case_bugs_user2)
 
 
 def test_case_04_barcode_format(driver):
@@ -166,16 +164,16 @@ def test_case_10_single_date_format(driver):
     webapps.open_app(CaseSearchUserInput.case_search_app_name)
     webapps.open_menu(CaseSearchUserInput.search_first_menu)
     webapps.clear_and_search_all_cases_on_case_search_page()
-    case_name = webapps.omni_search(CaseSearchUserInput.song_case_bugs)
+    case_name = webapps.omni_search(CaseSearchUserInput.song_case_bugs_user2)
     webapps.select_case_and_continue(case_name)
     webapps.open_form(CaseSearchUserInput.shows_form)
     webapps.search_again_cases()
     casesearch.search_against_property(search_property=CaseSearchUserInput.show_date,
-                                       input_value=CaseSearchUserInput.date_2022_08_04,
+                                       input_value=CaseSearchUserInput.date_2022_06_27,
                                        property_type=TEXT_INPUT)
     webapps.search_button_on_case_search_page()
     casesearch.check_values_on_caselist(row_num=CaseSearchUserInput.two,
-                                        expected_value=CaseSearchUserInput.date_2022_08_04)
+                                        expected_value=CaseSearchUserInput.date_2022_06_27)
 
 
 def test_case_11_is_multiselect_format(driver):
@@ -411,6 +409,7 @@ def test_case_19_conditionally_required_condition_property(driver):
     casesearch.search_against_property(search_property=CaseSearchUserInput.rating,
                                        input_value=CaseSearchUserInput.two_star,
                                        property_type=COMBOBOX)
+    webapps.search_button_on_case_search_page()
     casesearch.check_validations_on_property(search_property=CaseSearchUserInput.subgenre,
                                              message=CaseSearchUserInput.required_msg_if_rating_two,
                                              required_or_validated=YES,
@@ -428,10 +427,6 @@ def test_case_19_conditionally_required_condition_property(driver):
     casesearch.search_against_property(search_property=CaseSearchUserInput.rating,
                                        input_value=CaseSearchUserInput.two_star,
                                        property_type=COMBOBOX)
-    casesearch.check_validations_on_property(search_property=CaseSearchUserInput.subgenre,
-                                             message=CaseSearchUserInput.required_msg_if_rating_two,
-                                             required_or_validated=YES,
-                                             property_type=COMBOBOX)
     casesearch.search_against_property(search_property=CaseSearchUserInput.genre,
                                        input_value=CaseSearchUserInput.latin_music,
                                        property_type=COMBOBOX)
@@ -439,6 +434,9 @@ def test_case_19_conditionally_required_condition_property(driver):
                                        input_value=CaseSearchUserInput.latin_jazz,
                                        property_type=COMBOBOX)
     webapps.search_button_on_case_search_page()
+    webapps.select_case_and_continue(CaseSearchUserInput.song_case_song4)
+    webapps.open_form(CaseSearchUserInput.update_song_form)
+    webapps.submit_the_form()
 
 
 def test_case_20_json_property_function(driver):
@@ -447,7 +445,9 @@ def test_case_20_json_property_function(driver):
     """Check json property funtion"""
     webapps.open_app(CaseSearchUserInput.case_search_app_name)
     webapps.open_menu(CaseSearchUserInput.artist_menu)
-    case_name = webapps.omni_search(CaseSearchUserInput.song_case_bugs)
+    webapps.search_all_cases()
+    webapps.clear_and_search_all_cases_on_case_search_page()
+    case_name = webapps.omni_search(CaseSearchUserInput.artist_case_arijit)
     webapps.select_case_and_continue(case_name)
     webapps.open_form(CaseSearchUserInput.add_address_form)
     casesearch.add_address(address=CaseSearchUserInput.full_home_address,
@@ -460,7 +460,6 @@ def test_case_20_json_property_function(driver):
                                    type=WORK)
 
 
-@pytest.mark.skip(reason="This will fail, setting reverted!")
 def test_case_21_case_search_title(driver):
     webapps = WebApps(driver)
     casesearch = CaseSearchWorkflows(driver)
@@ -468,12 +467,15 @@ def test_case_21_case_search_title(driver):
     webapps.open_app(CaseSearchUserInput.case_search_app_name)
     webapps.open_menu(CaseSearchUserInput.search_first_menu)
     casesearch.check_search_screen_title(CaseSearchUserInput.search_title)
+    casesearch.check_search_screen_subtitle(CaseSearchUserInput.search_subtitle)
+    webapps.navigate_to_breadcrumb(CaseSearchUserInput.case_search_app_name)
     webapps.open_menu(CaseSearchUserInput.skip_default_menu)
     webapps.search_again_cases()
-    casesearch.check_search_screen_title(CaseSearchUserInput.default_search_title)
-    webapps.open_app(CaseSearchUserInput.french_app)
-    webapps.open_menu(CaseSearchUserInput.search_first_menu)
-    casesearch.check_search_screen_title(CaseSearchUserInput.search_title)
+    casesearch.check_search_screen_title(title=None)
+    # webapps.open_app(CaseSearchUserInput.french_app)
+    # webapps.open_menu(CaseSearchUserInput.search_first_menu)
+    # casesearch.check_search_screen_title(CaseSearchUserInput.french_search_title)
+    # casesearch.check_search_screen_subtitle(CaseSearchUserInput.french_search_subtitle)
 
 
 def test_case_22_dependent_dropdowns(driver):
@@ -511,7 +513,7 @@ def test_case_23_dependent_dropdowns_inline_case_search(driver):
                                     not_to_be_present=CaseSearchUserInput.funk_metal)
     """Search case and check if corresponding case is displayed"""
     webapps.search_button_on_case_search_page()
-    webapps.omni_search(CaseSearchUserInput.song_case_bugs)
+    webapps.omni_search(CaseSearchUserInput.song_case_bugs_user2)
 
 
 def test_case_24_case_search_validations(driver):
@@ -519,7 +521,7 @@ def test_case_24_case_search_validations(driver):
     casesearch = CaseSearchWorkflows(driver)
     """Case Search Validations"""
     webapps.open_app(CaseSearchUserInput.case_search_app_name)
-    webapps.open_menu("Songs Inline Case Search")
+    webapps.open_menu(CaseSearchUserInput.inline_search_menu)
     webapps.clear_selections_on_case_search_page()
     casesearch.search_against_property(search_property=CaseSearchUserInput.energy,
                                        input_value=CaseSearchUserInput.three,
@@ -529,6 +531,7 @@ def test_case_24_case_search_validations(driver):
                                        input_value=CaseSearchUserInput.value_with_space,
                                        property_type=TEXT_INPUT)
     """Check validations imposed"""
+    webapps.search_button_on_case_search_page()
     casesearch.check_validations_on_property(search_property=CaseSearchUserInput.song_name,
                                              message=CaseSearchUserInput.validation_msg_no_spaces,
                                              required_or_validated=YES,
@@ -542,17 +545,18 @@ def test_case_24_case_search_validations(driver):
     casesearch.check_validations_on_property(search_property=CaseSearchUserInput.song_name,
                                              message=CaseSearchUserInput.validation_msg_no_spaces,
                                              required_or_validated=NO,
-                                             property_type=TEXT_INPUT)
+                                                property_type=TEXT_INPUT)
     casesearch.check_validations_on_property(search_property=CaseSearchUserInput.energy,
                                              message=CaseSearchUserInput.validation_msg_invalid_respons,
                                              required_or_validated=NO,
                                              property_type=TEXT_INPUT)
     """Check song seacrch w/o spaces and ensure case is displayed"""
+    webapps.clear_selections_on_case_search_page()
     casesearch.search_against_property(search_property=CaseSearchUserInput.song_name,
                                        input_value=CaseSearchUserInput.song_case_bugs,
                                        property_type=TEXT_INPUT)
     webapps.search_button_on_case_search_page()
-    webapps.omni_search(CaseSearchUserInput.song_case_bugs)
+    webapps.omni_search(CaseSearchUserInput.song_case_bugs_user2)
     """Check including blanks"""
     driver.back()
     time.sleep(2)

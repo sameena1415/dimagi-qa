@@ -17,32 +17,35 @@ def test_case_01_fuzzy_search_and_case_claim(driver, settings):
     webapps = WebApps(driver)
     casesearch = CaseSearchWorkflows(driver)
     user = MobileWorkerPage(driver)
+
     """Create new user"""
+    menu.users_menu()
     user.mobile_worker_menu()
     user.create_mobile_worker()
     username = user.mobile_worker_enter_username(user.username)
     user.mobile_worker_enter_password(username)
     user.click_create()
     """Check fuzzy search"""
-    menu.web_apps_menu()
+    driver.get(CaseSearchUserInput.casesearch)
+    webapps.open_app(CaseSearchUserInput.case_search_app_name)
     webapps.login_as(username)
     webapps.open_app(CaseSearchUserInput.case_search_app_name)
     webapps.open_menu(CaseSearchUserInput.normal_menu)
     webapps.search_all_cases()
     webapps.clear_selections_on_case_search_page()
     "Fuzzy search"
-    casesearch.search_against_property(search_property=CaseSearchUserInput.song_name,
-                                       input_value=CaseSearchUserInput.song_case_bugs,
-                                       property_type=TEXT_INPUT)
+    song_case_bugs_user2 = casesearch.search_against_property(search_property=CaseSearchUserInput.song_name,
+                                                              input_value=CaseSearchUserInput.song_case_bugs_user2,
+                                                              property_type=TEXT_INPUT)
     webapps.search_button_on_case_search_page()
-    casename = casesearch.check_values_on_caselist(row_num=CaseSearchUserInput.one,
-                                                   expected_value=CaseSearchUserInput.song_case_bugs_user2)
+    casesearch.check_values_on_caselist(row_num=CaseSearchUserInput.one,
+                                        expected_value=song_case_bugs_user2)
     "Select case to cliam"
-    webapps.select_case_and_continue(casename)
+    webapps.select_case_and_continue(song_case_bugs_user2)
     "Check case claimed on user caselist"
     webapps.open_app(CaseSearchUserInput.case_search_app_name)
     webapps.open_menu(CaseSearchUserInput.normal_menu)
-    webapps.omni_search(casename)
+    webapps.omni_search(song_case_bugs_user2)
 
 
 def test_case_02_loose_access_to_case_search(driver):
@@ -102,7 +105,6 @@ def test_case_05_remove_special_characters(driver):
                                         expected_value=CaseSearchUserInput.id_without_hyphen)
 
 
-# Elastic search takes time to reflect the case so executing this last
 def test_case_06_claimed_cases_on_report(driver, settings):
     report = HomePage(driver, settings)
     load = ReportPage(driver)
@@ -110,9 +112,9 @@ def test_case_06_claimed_cases_on_report(driver, settings):
     casesearch = CaseSearchWorkflows(driver)
     report.reports_menu()
     load.case_list_report()
-    time.sleep(200)  # explore case list explorer
+    time.sleep(90)  # Elastic search takes time to reflect the case
     casesearch.check_case_claim_case_type(claimed_case_name=CaseSearchUserInput.song_case_bugs_user2,
                                           claimed_user=user.username + "@casesearch.commcarehq.org")
     """Delete the user"""
-    user.mobile_worker_menu()
+    driver.get("https://staging.commcarehq.org/a/casesearch/settings/users/commcare/")
     user.select_and_delete_mobile_worker(user.username)
