@@ -18,8 +18,8 @@ class WebApps(BasePage):
 
         self.app_name_format = "//*[contains(@aria-label,'{}')]/div"
         self.app_header_format = "//h1[contains(text(),'{}')]"
-        self.menu_name_format = "//*[contains(@aria-label,'{}')]"
-        self.menu_name_header_format = "//*[contains(text(),'{}')]"
+        self.menu_name_format = '//*[contains(@aria-label,"{}")]'
+        self.menu_name_header_format = '//*[contains(text(),"{}")]'
         self.form_name_format = "//h3[contains(text(), '{}')]"
         self.form_name_header_format = "//h1[contains(text(), '{}')]"
         self.case_name_format = "//tr[.//td[contains(text(),'{}')]]"
@@ -49,6 +49,9 @@ class WebApps(BasePage):
         self.webapp_working_as = (By.XPATH, "//div[@class='restore-as-banner module-banner']/b")
         self.form_names = (By.XPATH, "//h3[text()]")
         self.list_is_empty = (By.XPATH, "//div[contains(text(), 'empty')]")
+        # Pagination
+        self.last_page = (By.XPATH, "(//a[contains(@aria-label, 'Page')])[last()]")
+        self.next_page = (By.XPATH,"//a[contains(@aria-label, 'Next')]")
 
     def open_app(self, app_name):
         time.sleep(2)
@@ -105,10 +108,21 @@ class WebApps(BasePage):
         self.wait_to_clear_and_send_keys(self.omni_search_input, case_name)
         self.js_click(self.omni_search_button)
         self.case = self.get_element(self.case_name_format, case_name)
-        if displayed == YES:
-            assert self.is_visible_and_displayed(self.case)
-        elif displayed == NO:
-            assert not self.is_visible_and_displayed(self.case)
+        if self.is_displayed(self.last_page):
+            total_pages = int(self.get_attribute(self.last_page, "data-id"))-1
+            for page in range(total_pages):
+                self.js_click(self.next_page)
+                time.sleep(2)
+                if displayed == YES:
+                    assert self.is_displayed(self.case)
+                elif displayed == NO:
+                    assert not self.is_displayed(self.case)
+        else:
+            if displayed == YES:
+                assert self.is_displayed(self.case)
+            elif displayed == NO:
+                assert not self.is_displayed(self.case)
+
         return case_name
 
     def select_case(self, case_name):
