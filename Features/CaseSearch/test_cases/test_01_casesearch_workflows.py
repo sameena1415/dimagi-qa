@@ -33,7 +33,6 @@ def test_case_02_normal_workflow_search_again(driver):
     webapps.search_all_cases()
     webapps.clear_and_search_all_cases_on_case_search_page()
     webapps.search_again_cases()
-    webapps.search_all_cases()
     webapps.clear_and_search_all_cases_on_case_search_page()
     case_name = webapps.omni_search(CaseSearchUserInput.song_case_bugs)
     webapps.select_case_and_continue(case_name)
