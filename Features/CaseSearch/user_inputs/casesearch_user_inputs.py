@@ -18,6 +18,7 @@ class CaseSearchUserInput:
     user_1 = 'automation-user-1'
     user_2 = 'automation-user-2'
     a_user = "a_user"
+    kiran = "kiran"
 
     """Menus"""
     normal_menu = "Songs (Normal)"
@@ -35,6 +36,11 @@ class CaseSearchUserInput:
     shadow_menu = "Shadow Menu"
     musical_instruments_menu = "Musical Instruments (Performance)"
     mixed_case_type_menu = "Mixed Case Types"
+    load_external_search_first_menu = "DR:Load external case into form (Search First)"
+    smart_link_search_first_menu = "DR: Smart link to external domain (Search First)"
+    smart_link_skip_default_menu = "DR: Smart link to external domain (Skip Default)"
+    load_external_skip_default_menu = "DR:Load external case into form (Skip Default)"
+    unrelated_case_load_external_menu = "Unrelated case id's property: Load from external domain."
 
     """Forms"""
     play_song_form = "Play Song"
@@ -63,6 +69,14 @@ class CaseSearchUserInput:
     instrument_case_guitar = "Guitar"
     song_case_bugs_on_casesearch_1 = "Bugs on casesearch-1"
     song_case_make_you_mine = "Make You Mine"
+    song_case_on_casesearch2 = "Sept30_CS2"
+    song_case_cs2_song_11 = "CS2 Song 11"
+    song_case_cs2_song_13 = "CS2 Song 13"
+    song_case_cs2_song_14 = "CS2 Song 14"
+    song_case_cs2_song_12 = "CS2 Song 12"
+    song_8th_dec = "8th December Five"
+    case_with_unrelated_id = {"song_name": "Domain2_other7", "case_id": "fcc4c935-4f02-4a8c-86be-4e4cd833c3a0",
+                              "rating": "5"}
 
     """Pre=Configured Values"""
     blank = ""
@@ -137,6 +151,4 @@ class CaseSearchUserInput:
 
     # Questions
     add_show_question = "Add a show in this city"
-
-
 

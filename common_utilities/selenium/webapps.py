@@ -1,7 +1,8 @@
 import logging
 import time
 
-from selenium.common.exceptions import NoSuchElementException, TimeoutException
+from Features.CaseSearch.constants import *
+from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 
@@ -28,8 +29,10 @@ class WebApps(BasePage):
 
         self.form_submit = (By.XPATH, "//button[@class='submit btn btn-primary']")
         self.form_submission_successful = (By.XPATH, "//p[contains(text(), 'successfully saved')]")
-        self.search_all_cases_button = (By.XPATH, "//*[contains(text(),'Search All')]//parent::div[@class='case-list-action-button btn-group formplayer-request']")
-        self.search_again_button = (By.XPATH, "//*[contains(text(),'Search Again')]//parent::div[@class='case-list-action-button btn-group formplayer-request']")
+        self.search_all_cases_button = (By.XPATH,
+                                        "//*[contains(text(),'Search All')]//parent::div[@class='case-list-action-button btn-group formplayer-request']")
+        self.search_again_button = (By.XPATH,
+                                    "//*[contains(text(),'Search Again')]//parent::div[@class='case-list-action-button btn-group formplayer-request']")
         self.clear_case_search_page = (By.XPATH, "//button[@id='query-clear-button']")
         self.submit_on_case_search_page = (By.XPATH, "//button[@type='submit' and @id='query-submit-button']")
         self.case_list = (By.XPATH, "//table[@class='table module-table module-table-case-list']")
@@ -98,11 +101,14 @@ class WebApps(BasePage):
         self.clear_selections_on_case_search_page()
         self.search_button_on_case_search_page()
 
-    def omni_search(self, case_name):
+    def omni_search(self, case_name, displayed=YES):
         self.wait_to_clear_and_send_keys(self.omni_search_input, case_name)
         self.js_click(self.omni_search_button)
         self.case = self.get_element(self.case_name_format, case_name)
-        self.is_visible_and_displayed(self.case)
+        if displayed == YES:
+            assert self.is_visible_and_displayed(self.case)
+        elif displayed == NO:
+            assert not self.is_visible_and_displayed(self.case)
         return case_name
 
     def select_case(self, case_name):
@@ -119,8 +125,16 @@ class WebApps(BasePage):
         return form_names
 
     def submit_the_form(self):
+        self.wait_for_element(self.form_submit)
         self.js_click(self.form_submit)
         self.is_visible_and_displayed(self.form_submission_successful, timeout=500)
+
+    def select_user(self, username):
+        self.login_as_user = self.get_element(self.login_as_username, username)
+        self.click(self.login_as_user)
+        self.click(self.webapp_login_confirmation)
+        logdedin_user = self.get_text(self.webapp_working_as)
+        assert logdedin_user == username
 
     def login_as(self, username):
         try:
@@ -130,11 +144,7 @@ class WebApps(BasePage):
             self.click(self.webapp_login)
         self.send_keys(self.search_user_webapps, username)
         self.click(self.search_button_webapps)
-        self.login_as_user = self.get_element(self.login_as_username, username)
-        self.click(self.login_as_user)
-        self.click(self.webapp_login_confirmation)
-        logdedin_user = self.get_text(self.webapp_working_as)
-        assert logdedin_user == username
+        self.select_user(username)
         return username
 
     def answer_question(self, question_label, input_type, input_value):
@@ -144,6 +154,6 @@ class WebApps(BasePage):
     def answer_repeated_questions(self, question_label, input_type, input_value):
         answer_locator = (By.XPATH, self.answer_format.format(question_label, input_type))
         elements = self.driver.find_elements(*answer_locator)
-        for position in range(1, len(elements)+1):
+        for position in range(1, len(elements) + 1):
             per_answer_locator = (By.XPATH, self.per_answer_format.format(question_label, input_type, position))
             self.wait_to_clear_and_send_keys(per_answer_locator, input_value)
