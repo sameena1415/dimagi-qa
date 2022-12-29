@@ -104,7 +104,7 @@ jobs:
             
             let receivers = 'qa-automation@dimagi.com'
             if (context.eventName !== "pull_request" || context.eventName !== "push") {
-              receivers = 'ktripathy@dimagi.com'
+              receivers = 'qa@dimagi.com'
             }
 
             return {
@@ -136,4 +136,3 @@ jobs:
         with:
           name: test-result-reports-${{ matrix.environment }}
           path: ${{ github.workspace }}/report_${{ matrix.environment }}.html
-          retention-days: 2
