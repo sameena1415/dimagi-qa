@@ -60,7 +60,8 @@ class WebApps(BasePage):
     def open_menu(self, menu_name):
         self.caselist_menu = self.get_element(self.menu_name_format, menu_name)
         self.caselist_header = self.get_element(self.menu_name_header_format, menu_name)
-        self.wait_to_click(self.caselist_menu)
+        self.scroll_to_element(self.caselist_menu)
+        self.js_click(self.caselist_menu)
         assert self.is_visible_and_displayed(self.caselist_header)
 
     def open_form(self, form_name):
