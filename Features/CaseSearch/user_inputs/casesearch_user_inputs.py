@@ -30,6 +30,7 @@ class CaseSearchUserInput:
     search_setting_menu = "Songs - Case Search Settings"
     without_search_setting_menu = "Songs - Without Case Search Settings"
     inline_search_menu = "Songs Inline Case Search"
+    multi_select_menu = "Songs Multi-Case List"
     display_only_forms_menu = "Play Song - Display Only Forms"
     shadow_menu = "Shadow Menu"
     musical_instruments_menu = "Musical Instruments (Performance)"
@@ -133,6 +134,9 @@ class CaseSearchUserInput:
     six = "6"
     seven = "7"
     rating_four_and_five = "#,#4#,#5"
+
+    # Questions
+    add_show_question = "Add a show in this city"
 
 
 

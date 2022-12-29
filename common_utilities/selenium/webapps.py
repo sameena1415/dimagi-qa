@@ -23,6 +23,8 @@ class WebApps(BasePage):
         self.form_name_header_format = "//h1[contains(text(), '{}')]"
         self.case_name_format = "//tr[.//td[contains(text(),'{}')]]"
         self.breadcrumb_format = "//li[contains(text(), '{}')]"
+        self.answer_format = "(//label[.//span[text()='{}']]/following-sibling::div//{})"
+        self.per_answer_format = "(//label[.//span[text()='{}']]/following-sibling::div//{})[{}]"
 
         self.form_submit = (By.XPATH, "//button[@class='submit btn btn-primary']")
         self.form_submission_successful = (By.XPATH, "//p[contains(text(), 'successfully saved')]")
@@ -60,7 +62,8 @@ class WebApps(BasePage):
     def open_menu(self, menu_name):
         self.caselist_menu = self.get_element(self.menu_name_format, menu_name)
         self.caselist_header = self.get_element(self.menu_name_header_format, menu_name)
-        self.wait_to_click(self.caselist_menu)
+        self.scroll_to_element(self.caselist_menu)
+        self.js_click(self.caselist_menu)
         assert self.is_visible_and_displayed(self.caselist_header)
 
     def open_form(self, form_name):
@@ -133,3 +136,14 @@ class WebApps(BasePage):
         logdedin_user = self.get_text(self.webapp_working_as)
         assert logdedin_user == username
         return username
+
+    def answer_question(self, question_label, input_type, input_value):
+        self.answer_locator = (By.XPATH, self.answer_format.format(question_label, input_type))
+        self.wait_to_clear_and_send_keys(self.answer_locator, input_value)
+
+    def answer_repeated_questions(self, question_label, input_type, input_value):
+        answer_locator = (By.XPATH, self.answer_format.format(question_label, input_type))
+        elements = self.driver.find_elements(*answer_locator)
+        for position in range(1, len(elements)+1):
+            per_answer_locator = (By.XPATH, self.per_answer_format.format(question_label, input_type, position))
+            self.wait_to_clear_and_send_keys(per_answer_locator, input_value)

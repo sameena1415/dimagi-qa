@@ -48,6 +48,11 @@ class CaseSearchWorkflows(BasePage):
         self.report_search = (By.ID, "report_filter_search_query")
         self.report_apply_filters = (By.ID, "apply-filters")
         self.commcare_case_claim_case = "//a[contains(text(), '{}')]//following::*[text()='{}'][1]"
+        # Multi-select
+        self.select_all_checkbox = (By.ID, "select-all-checkbox")
+        self.case_names = (By.XPATH, "//td[contains(@class,'case-list-column')][3]")
+        self.multi_select_continue = (By.ID, "multi-select-continue-btn")
+        self.selected_case_names_on_forms = (By.XPATH, "//span[@class='caption webapp-markdown-output']")
 
     def check_element_claimed(self, case_name):
         self.case = self.get_element(self.case_name_format, case_name)
@@ -189,3 +194,14 @@ class CaseSearchWorkflows(BasePage):
         except AssertionError:
             logging.basicConfig(filename='logs.log', encoding='utf-8', level=logging.DEBUG)
             logging.warning("Elastic search is taking too long to update the case")
+
+    def select_all_cases_and_check_selected_cases_present_on_form(self):
+        self.wait_to_click(self.select_all_checkbox)
+        song_names = self.find_elements_texts(self.case_names)
+        self.js_click(self.multi_select_continue)
+        song_names_on_form = self.find_elements_texts(self.selected_case_names_on_forms)
+        stripped = list(filter(None, [s.lstrip("song: by ") for s in song_names_on_form]))
+        assert stripped == song_names, f"No, list1 {song_names} doesn't match list2{stripped}"
+
+
+
