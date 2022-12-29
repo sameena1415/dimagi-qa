@@ -8,6 +8,7 @@ class CaseSearchUserInput:
     casesearch = "https://staging.commcarehq.org/a/casesearch/cloudcare/apps/v2/#apps"
     casesearch_1 = "https://staging.commcarehq.org/a/casesearch-1/cloudcare/apps/v2/#apps"
     casesearch_2 = "https://staging.commcarehq.org/a/casesearch-2/cloudcare/apps/v2/#apps"
+    user_menu_url = "https://staging.commcarehq.org/a/casesearch/settings/users/commcare/"
 
     """App Names"""
     case_search_app_name = "Music App (Case Search & Claim)"

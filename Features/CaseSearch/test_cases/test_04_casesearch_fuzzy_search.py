@@ -116,5 +116,5 @@ def test_case_06_claimed_cases_on_report(driver, settings):
     casesearch.check_case_claim_case_type(claimed_case_name=CaseSearchUserInput.song_case_bugs_user2,
                                           claimed_user=user.username + "@casesearch.commcarehq.org")
     """Delete the user"""
-    driver.get("https://staging.commcarehq.org/a/casesearch/settings/users/commcare/")
+    driver.get(CaseSearchUserInput.user_menu_url)
     user.select_and_delete_mobile_worker(user.username)
