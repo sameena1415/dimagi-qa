@@ -2,8 +2,6 @@ import pytest
 
 from Features.CaseSearch.test_pages.casesearch_page import CaseSearchWorkflows
 from Features.CaseSearch.user_inputs.casesearch_user_inputs import CaseSearchUserInput
-from HQSmokeTests.testPages.home.home_page import HomePage
-from HQSmokeTests.testPages.reports.report_page import ReportPage
 from common_utilities.selenium.webapps import WebApps
 from Features.CaseSearch.constants import *
 
@@ -99,7 +97,7 @@ def test_case_04_load_external_case_into_caselist_search_first(driver):
     webapps.submit_the_form()
 
 
-@pytest.mark.xfail("Failing")
+@pytest.mark.skip(reason="Failing")
 def test_case_05_smart_link_skip_default(driver):
     webapps = WebApps(driver)
     casesearch = CaseSearchWorkflows(driver)
@@ -110,20 +108,21 @@ def test_case_05_smart_link_skip_default(driver):
     webapps.search_again_cases()
     webapps.clear_selections_on_case_search_page()
     casesearch.search_against_property(search_property=CaseSearchUserInput.song_name,
-                                        input_value=casename,
-                                        property_type=TEXT_INPUT)
+                                       input_value=casename,
+                                       property_type=TEXT_INPUT)
     casesearch.search_against_property(search_property=CaseSearchUserInput.song_id,
                                        input_value="3300",
                                        property_type=TEXT_INPUT)
     webapps.search_button_on_case_search_page()
     webapps.omni_search(casename)
     webapps.select_case_and_continue(casename)
-    webapps.select_user(CaseSearchUserInput.kiran) # Failing 404! Raise a ticket
+    webapps.select_user(CaseSearchUserInput.kiran)  # Failing 404! Raise a ticket
     domain_url = driver.current_url
     assert "casesearch-1" in domain_url
     webapps.submit_the_form()
 
-@pytest.mark.xfail("Failing")
+
+@pytest.mark.skip(reason="Failing")
 def test_case_06_smart_link_search_first(driver):
     webapps = WebApps(driver)
     casesearch = CaseSearchWorkflows(driver)
@@ -135,15 +134,15 @@ def test_case_06_smart_link_search_first(driver):
     webapps.search_again_cases()
     webapps.clear_selections_on_case_search_page()
     casesearch.search_against_property(search_property=CaseSearchUserInput.song_name,
-                                        input_value=casename,
-                                        property_type=TEXT_INPUT)
+                                       input_value=casename,
+                                       property_type=TEXT_INPUT)
     casesearch.search_against_property(search_property=CaseSearchUserInput.song_id,
                                        input_value="3300",
                                        property_type=TEXT_INPUT)
     webapps.search_button_on_case_search_page()
     webapps.omni_search(casename)
     webapps.select_case_and_continue(casename)
-    webapps.select_user(CaseSearchUserInput.kiran) # Failing 404! Raise a ticket
+    webapps.select_user(CaseSearchUserInput.kiran)  # Failing 404! Raise a ticket
     domain_url = driver.current_url
     assert "casesearch-1" in domain_url
     webapps.submit_the_form()
