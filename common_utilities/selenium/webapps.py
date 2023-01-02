@@ -56,7 +56,7 @@ class WebApps(BasePage):
 
     def open_app(self, app_name):
         time.sleep(2)
-        self.wait_to_click(self.webapps_home)
+        self.js_click(self.webapps_home)
         self.application = self.get_element(self.app_name_format, app_name)
         self.application_header = self.get_element(self.app_header_format, app_name)
         self.wait_to_click(self.application)
