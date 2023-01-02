@@ -54,10 +54,6 @@ class CaseSearchWorkflows(BasePage):
         self.multi_select_continue = (By.ID, "multi-select-continue-btn")
         self.selected_case_names_on_forms = (By.XPATH, "//span[@class='caption webapp-markdown-output']")
 
-    def check_element_claimed(self, case_name):
-        self.case = self.get_element(self.case_name_format, case_name)
-        assert self.is_visible_and_displayed(self.case)
-
     def check_values_on_caselist(self, row_num, expected_value, is_multi=NO):
         self.value_in_table = self.get_element(self.value_in_table_format, row_num)
         values_ = self.find_elements_texts(self.value_in_table)
