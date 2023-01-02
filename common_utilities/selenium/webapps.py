@@ -39,6 +39,7 @@ class WebApps(BasePage):
         self.omni_search_input = (By.ID, "searchText")
         self.omni_search_button = (By.ID, "case-list-search-button")
         self.continue_button = (By.ID, "select-case")
+        self.first_case_on_list = (By.XPATH,"(//*[@class='module-case-list-column'])[1]")
 
         self.webapps_home = (By.XPATH, "//i[@class='fcc fcc-flower']")
         self.webapp_login = (By.XPATH, "(//div[@class='js-restore-as-item appicon appicon-restore-as'])")
@@ -108,13 +109,13 @@ class WebApps(BasePage):
         self.wait_to_clear_and_send_keys(self.omni_search_input, case_name)
         self.js_click(self.omni_search_button)
         self.case = self.get_element(self.case_name_format, case_name)
-        if self.is_displayed(self.last_page):
+        if self.is_displayed(self.last_page) and self.is_displayed(self.case) == False:
             total_pages = int(self.get_attribute(self.last_page, "data-id"))-1
             for page in range(total_pages):
                 self.js_click(self.next_page)
-                time.sleep(2)
                 if displayed == YES:
                     assert self.is_displayed(self.case)
+                    break
                 elif displayed == NO:
                     assert not self.is_displayed(self.case)
         else:
@@ -127,7 +128,18 @@ class WebApps(BasePage):
 
     def select_case(self, case_name):
         self.case = self.get_element(self.case_name_format, case_name)
-        self.wait_to_click(self.case)
+        self.scroll_to_element(self.case)
+        self.js_click(self.case)
+
+    def select_first_case_on_list(self):
+        self.case_name_first = self.get_text(self.first_case_on_list)
+        self.js_click(self.first_case_on_list)
+        return self.case_name_first
+
+    def select_first_case_on_list_and_continue(self):
+        self.select_first_case_on_list()
+        self.continue_to_forms()
+        return self.case_name_first
 
     def continue_to_forms(self):
         self.js_click(self.continue_button)
@@ -171,3 +183,9 @@ class WebApps(BasePage):
         for position in range(1, len(elements) + 1):
             per_answer_locator = (By.XPATH, self.per_answer_format.format(question_label, input_type, position))
             self.wait_to_clear_and_send_keys(per_answer_locator, input_value)
+
+    def open_domain(self, current_url, domain_name):
+        env = "staging" if "staging" in current_url else "www"
+        self.driver.get(f"https://{env}.commcarehq.org/a/{domain_name}/cloudcare/apps/v2/#apps")
+        user_menu_url = f"https://{env}.commcarehq.org/a/casesearch/settings/users/commcare/"
+        return user_menu_url

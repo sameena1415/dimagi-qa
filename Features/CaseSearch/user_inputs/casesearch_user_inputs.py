@@ -5,10 +5,9 @@ class CaseSearchUserInput:
     """User Test Data"""
 
     """Domains"""
-    casesearch = "https://staging.commcarehq.org/a/casesearch/cloudcare/apps/v2/#apps"
-    casesearch_1 = "https://staging.commcarehq.org/a/casesearch-1/cloudcare/apps/v2/#apps"
-    casesearch_2 = "https://staging.commcarehq.org/a/casesearch-2/cloudcare/apps/v2/#apps"
-    user_menu_url = "https://staging.commcarehq.org/a/casesearch/settings/users/commcare/"
+    casesearch = "casesearch"
+    casesearch_1 = "casesearch-1"
+    casesearch_2 = "casesearch-2"
 
     """App Names"""
     case_search_app_name = "Music App (Case Search & Claim)"
@@ -52,29 +51,33 @@ class CaseSearchUserInput:
     update_song_form = "Update Song--> redirects to First Menu"
 
     """Pre=Configured Cases"""
-    song_case_bugs = "Bugs"
-    song_case_song4 = "song4$"
-    song_case_kala_chasma = "Kala Chashma"
-    song_case_b_users_song = "b_users song"
-    song_case_bugs_user2 = "Bugs User2"
-    artist_case_beach_boys = "Beach Boys"
-    artist_case_arijit = "Arijit"
-    artist_case_justin = "Justin"
-    show_case_bangalore = "Bangalore"
-    show_case_jubin = "Jubin"
-    show_case_samthird = "SAMTHIRD"
-    show_case_casesearch_1 = "on casesearch-1"
-    artist_case_bugs_artist = "Bugs Artist"
-    song_case_kyon = "Kyon"
-    instrument_case_guitar = "Guitar"
-    song_case_bugs_on_casesearch_1 = "Bugs on casesearch-1"
-    song_case_make_you_mine = "Make You Mine"
+    # Song-Cases
+
+    song_automation_song = "Automation-Song-"
+    song_automation_song_no_space = "AutomationSongNoSpace"
+    song_automation_song_1 = "Automation-Song-1"
+    song_automation_song_24 = "Automation-Song-24"
+    song_automation_song_10 = "Automation-Song-10"
+    song_automation_song_22 = "Automation-Song-22"
     song_case_on_casesearch2 = "Sept30_CS2"
     song_case_cs4_song_300 = "CS4 Song-300"
-    song_case_cs2_song_13 = "CS2 Song-13"
-    song_case_cs2_song_14 = "CS2 Song-14"
-    song_case_cs2_song_12 = "CS2 Song-12"
-    song_8th_dec = "8th December Five"
+    song_case_on_casesearch_1 = "Bugs on casesearch-1"
+    song_case_b_users_song = "b_users song"
+
+    # Artist-Cases
+    automation_artist_1 = "Automation-Artist-1"
+    automation_artist_2 = "Automation-Artist-2"
+    artist_no_space = "AutomationArtistNoSpace"
+    artist_case_beach_boys = "Beach Boys"
+    artist_case_arijit = "Arijit"
+
+    # Show-Cases
+    show_case_show1 = "Automation-Show1"
+    show_case_casesearch_1 = "on casesearch-1"
+
+    # Instruments-Cases
+    instrument_case_guitar = "Guitar"
+
     case_with_unrelated_id = {"song_name": "Domain2_other7", "case_id": "fcc4c935-4f02-4a8c-86be-4e4cd833c3a0",
                               "rating": "5"}
 
@@ -88,8 +91,8 @@ class CaseSearchUserInput:
     four_star = "****"
     five_star = "*****"
     mood_help_text = "Mood\'s Rating"
-    date_2021_08_25 = "2021-08-25"
-    date_25_08_2021 = "25/08/2021"
+    date_2022_12_30 = "2022-12-30"
+    date_30_12_2022 = "30/12/2022"
     full_home_address = "New Canada St., 3855 Brienz, Switzerland"
     full_work_address = "Avenida Benito Juárez, 77560 Alfredo V. Bonfil, Quintana Roo, Mexico"
     home_street_value = "New Canada St."
@@ -97,7 +100,6 @@ class CaseSearchUserInput:
     work_city_value = "Alfredo V. Bonfil"
     home_country_value = "Switzerland"
     home_zipcode_value = "3855"
-    date_2022_06_27 = "2022-06-27"
     home_country_belgium = "Belgium"
     required_msg = "Required"
     required_msg_if_rating_two = "This is only required if Rating = 2, otherwise not required."
@@ -151,4 +153,3 @@ class CaseSearchUserInput:
 
     # Questions
     add_show_question = "Add a show in this city"
-
