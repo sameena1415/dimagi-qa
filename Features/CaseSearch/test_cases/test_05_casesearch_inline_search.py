@@ -32,6 +32,7 @@ def test_case_01_check_search_input_on_caselist_casedetail_form(driver):
 def test_case_02_navigation_via_breadcrumbs(driver):
     webapps = WebApps(driver)
     casesearch = CaseSearchWorkflows(driver)
+    webapps.login_as(CaseSearchUserInput.user_1)
     webapps.open_app(CaseSearchUserInput.case_search_app_name)
     webapps.open_menu(CaseSearchUserInput.inline_search_menu)
     webapps.clear_selections_on_case_search_page()
@@ -41,7 +42,7 @@ def test_case_02_navigation_via_breadcrumbs(driver):
     webapps.search_button_on_case_search_page()
     casesearch.check_values_on_caselist(row_num=CaseSearchUserInput.seven,
                                         expected_value=CaseSearchUserInput.five)
-    case_name = webapps.omni_search(CaseSearchUserInput.song_automation_song_no_space)
+    case_name = webapps.select_first_case_on_list()
     webapps.select_case(case_name)
     casesearch.check_value_on_case_detail(tabname=CaseSearchUserInput.rating,
                                           search_property=CaseSearchUserInput.rating_input,
