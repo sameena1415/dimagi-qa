@@ -8,48 +8,48 @@ from Features.CaseSearch.constants import *
 """"Contains all data registry related test cases"""
 
 
-# def test_case_01_no_access_dr_caselist(driver):
-#     webapps = WebApps(driver)
-#     casesearch = CaseSearchWorkflows(driver)
-#     webapps.login_as(CaseSearchUserInput.user_1)
-#     webapps.open_app(CaseSearchUserInput.case_search_app_name)
-#     webapps.open_menu(CaseSearchUserInput.search_first_menu)
-#     webapps.clear_selections_on_case_search_page()
-#     case_name = casesearch.search_against_property(search_property=CaseSearchUserInput.song_name,
-#                                                    input_value=CaseSearchUserInput.song_case_on_casesearch2,
-#                                                    property_type=TEXT_INPUT)
-#     webapps.search_button_on_case_search_page()
-#     webapps.omni_search(case_name, displayed=NO)
-#     webapps.open_app(CaseSearchUserInput.case_search_app_name)
-#     webapps.open_menu(CaseSearchUserInput.load_external_search_first_menu)
-#     webapps.clear_selections_on_case_search_page()
-#     case_name = casesearch.search_against_property(search_property=CaseSearchUserInput.song_name,
-#                                                    input_value=CaseSearchUserInput.song_case_on_casesearch2,
-#                                                    property_type=TEXT_INPUT)
-#     webapps.search_button_on_case_search_page()
-#     webapps.omni_search(case_name, displayed=NO)
-#     webapps.open_app(CaseSearchUserInput.case_search_app_name)
-#     webapps.open_menu(CaseSearchUserInput.smart_link_skip_default_menu)
-#     webapps.search_again_cases()
-#     webapps.clear_selections_on_case_search_page()
-#     case_name = casesearch.search_against_property(search_property=CaseSearchUserInput.song_name,
-#                                                    input_value=CaseSearchUserInput.song_case_on_casesearch2,
-#                                                    property_type=TEXT_INPUT)
-#     webapps.search_button_on_case_search_page()
-#     webapps.omni_search(case_name, displayed=NO)
-#
-#
-# def test_case_02_access_to_non_dr_caselist(driver):
-#     webapps = WebApps(driver)
-#     casesearch = CaseSearchWorkflows(driver)
-#     webapps.open_app(CaseSearchUserInput.case_search_app_name)
-#     webapps.open_menu(CaseSearchUserInput.search_first_menu)
-#     webapps.clear_selections_on_case_search_page()
-#     case_name = casesearch.search_against_property(search_property=CaseSearchUserInput.song_name,
-#                                                    input_value=CaseSearchUserInput.song_case_on_casesearch_1,
-#                                                    property_type=TEXT_INPUT)
-#     webapps.search_button_on_case_search_page()
-#     webapps.omni_search(case_name, displayed=NO)
+def test_case_01_no_access_dr_caselist(driver):
+    webapps = WebApps(driver)
+    casesearch = CaseSearchWorkflows(driver)
+    webapps.login_as(CaseSearchUserInput.user_1)
+    webapps.open_app(CaseSearchUserInput.case_search_app_name)
+    webapps.open_menu(CaseSearchUserInput.search_first_menu)
+    webapps.clear_selections_on_case_search_page()
+    case_name = casesearch.search_against_property(search_property=CaseSearchUserInput.song_name,
+                                                   input_value=CaseSearchUserInput.song_case_on_casesearch2,
+                                                   property_type=TEXT_INPUT)
+    webapps.search_button_on_case_search_page()
+    webapps.omni_search(case_name, displayed=NO)
+    webapps.open_app(CaseSearchUserInput.case_search_app_name)
+    webapps.open_menu(CaseSearchUserInput.load_external_search_first_menu)
+    webapps.clear_selections_on_case_search_page()
+    case_name = casesearch.search_against_property(search_property=CaseSearchUserInput.song_name,
+                                                   input_value=CaseSearchUserInput.song_case_on_casesearch2,
+                                                   property_type=TEXT_INPUT)
+    webapps.search_button_on_case_search_page()
+    webapps.omni_search(case_name, displayed=NO)
+    webapps.open_app(CaseSearchUserInput.case_search_app_name)
+    webapps.open_menu(CaseSearchUserInput.smart_link_skip_default_menu)
+    webapps.search_again_cases()
+    webapps.clear_selections_on_case_search_page()
+    case_name = casesearch.search_against_property(search_property=CaseSearchUserInput.song_name,
+                                                   input_value=CaseSearchUserInput.song_case_on_casesearch2,
+                                                   property_type=TEXT_INPUT)
+    webapps.search_button_on_case_search_page()
+    webapps.omni_search(case_name, displayed=NO)
+
+
+def test_case_02_access_to_non_dr_caselist(driver):
+    webapps = WebApps(driver)
+    casesearch = CaseSearchWorkflows(driver)
+    webapps.open_app(CaseSearchUserInput.case_search_app_name)
+    webapps.open_menu(CaseSearchUserInput.search_first_menu)
+    webapps.clear_selections_on_case_search_page()
+    case_name = casesearch.search_against_property(search_property=CaseSearchUserInput.song_name,
+                                                   input_value=CaseSearchUserInput.song_case_on_casesearch_1,
+                                                   property_type=TEXT_INPUT)
+    webapps.search_button_on_case_search_page()
+    webapps.omni_search(case_name, displayed=NO)
 
 
 def test_case_03_load_external_case_into_caselist_skip_default(driver):
