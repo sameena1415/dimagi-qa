@@ -42,7 +42,6 @@ def test_case_02_navigation_via_breadcrumbs(driver):
     casesearch.check_values_on_caselist(row_num=CaseSearchUserInput.seven,
                                         expected_value=CaseSearchUserInput.five)
     case_name = webapps.select_first_case_on_list()
-    webapps.select_case(case_name)
     casesearch.check_value_on_case_detail(tabname=CaseSearchUserInput.rating,
                                           search_property=CaseSearchUserInput.rating_input,
                                           expected_value=CaseSearchUserInput.five)
