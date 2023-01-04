@@ -92,7 +92,9 @@ class LoginAsAppPreviewPage(BasePage):
         self.wait_to_click(self.basic_tests_form)
         self.wait_to_clear_and_send_keys(self.basic_tests_answer_input, text)
         self.wait_to_click(self.next_button)
+        time.sleep(2)
         self.wait_to_click(self.submit)
+        time.sleep(2)
         assert self.is_visible_and_displayed(self.submit_success)
         self.switch_to_default_content()
 

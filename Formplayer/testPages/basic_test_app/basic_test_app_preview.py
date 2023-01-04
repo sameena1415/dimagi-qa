@@ -331,6 +331,7 @@ class BasicTestAppPreview(BasePage):
         self.wait_to_click((By.XPATH, self.choose_radio_button.format(
             "Pick one of the following.", "One")))
         self.wait_to_click(self.next_question)
+        time.sleep(1)
         self.wait_to_click(self.submit_form_button)
         print("Group Form submitted successfully")
         time.sleep(2)
@@ -435,6 +436,7 @@ class BasicTestAppPreview(BasePage):
         self.switch_to_frame(self.iframe)
         self.wait_to_clear_and_send_keys(self.name_question, fetch_random_string())
         self.wait_to_click(self.next_question)
+        time.sleep(1)
         self.wait_to_click(self.submit_form_button)
         time.sleep(2)
         self.wait_for_element(self.success_message)
@@ -451,6 +453,7 @@ class BasicTestAppPreview(BasePage):
         self.wait_to_click((By.XPATH, self.choose_radio_button.format(
             "Are you sure you want to create a new case?", "Cancel - Please do not create this case.")))
         self.wait_to_click(self.next_question)
+        time.sleep(1)
         self.wait_to_click(self.submit_form_button)
         time.sleep(2)
         self.wait_for_element(self.success_message)
@@ -467,6 +470,7 @@ class BasicTestAppPreview(BasePage):
         self.wait_to_click((By.XPATH, self.choose_radio_button.format(
             "Are you sure you want to create a new case?", "Confirm - Please create this case.")))
         self.wait_to_click(self.next_question)
+        time.sleep(1)
         self.wait_to_click(self.submit_form_button)
         time.sleep(2)
         self.wait_for_element(self.success_message)
@@ -592,7 +596,9 @@ class BasicTestAppPreview(BasePage):
         print(str(re.findall(r'\b\d+\b', number[1])[0]))
         time.sleep(2)
         self.wait_to_click(self.next_question)
+        time.sleep(1)
         self.wait_to_click(self.submit_form_button)
+        time.sleep(1)
         self.wait_for_element(self.success_message)
         self.wait_to_click(self.home_button)
         time.sleep(2)
@@ -624,6 +630,7 @@ class BasicTestAppPreview(BasePage):
         self.wait_to_click((By.XPATH, self.choose_radio_button.format(
             "Do you want to create the sub case?", "Confirm - Please create "+self.subcase_pos+".")))
         self.wait_to_click(self.next_question)
+        time.sleep(1)
         self.wait_to_click(self.submit_form_button)
         time.sleep(2)
         self.wait_for_element(self.success_message)
@@ -648,6 +655,7 @@ class BasicTestAppPreview(BasePage):
         self.wait_to_click((By.XPATH, self.choose_radio_button.format(
             "Do you want to close the case?", "Yes")))
         self.wait_to_click(self.next_question)
+        time.sleep(1)
         self.wait_to_click(self.submit_form_button)
         time.sleep(2)
         self.wait_for_element(self.success_message)
@@ -668,6 +676,7 @@ class BasicTestAppPreview(BasePage):
         self.wait_to_click((By.XPATH, self.choose_radio_button.format(
             "Are you sure you want to close this case?", "Confirm - Please close this case.")))
         self.wait_to_click(self.next_question)
+        time.sleep(1)
         self.wait_to_click(self.submit_form_button)
         time.sleep(2)
         self.wait_for_element(self.success_message)
@@ -691,6 +700,7 @@ class BasicTestAppPreview(BasePage):
         self.wait_to_click((By.XPATH, self.choose_radio_button.format(
             "Are you sure you want to create a new case?", "Confirm - Please create this case.")))
         self.wait_to_click(self.next_question)
+        time.sleep(1)
         self.wait_to_click(self.submit_form_button)
         time.sleep(2)
         self.wait_for_element(self.success_message)
@@ -745,7 +755,9 @@ class BasicTestAppPreview(BasePage):
         self.wait_to_click(self.next_question)
         time.sleep(2)
         self.wait_to_click(self.next_question)
+        time.sleep(1)
         self.wait_to_click(self.submit_form_button)
+        time.sleep(2)
         self.wait_for_element(self.success_message)
         self.wait_to_click(self.home_button)
         time.sleep(2)
