@@ -19,7 +19,7 @@ def test_case_35_create_new_app(driver):
 @pytest.mark.application
 @pytest.mark.appBuilder
 @pytest.mark.appSettings
-def test_case_36_form_builder_explore(driver):
+def test_case_36_form_builder_explore(driver, settings):
     load = ApplicationPage(driver)
     load.form_builder_exploration()
 
@@ -48,8 +48,8 @@ def test_case_39_settings_exploration(driver):
 
 @pytest.mark.application
 @pytest.mark.appPreview
-def test_case_40_app_preview(driver):
-    menu = HomePage(driver)
+def test_case_40_app_preview(driver, settings):
+    menu = HomePage(driver, settings)
     menu.applications_menu()
     load = AppPreviewPage(driver)
     load.check_access_to_app_preview()
@@ -68,7 +68,7 @@ def test_case_38_create_new_build_deploy_to_mobile(driver, settings):
     mobile = AndroidScreen(settings)
     mobile.install_app_and_submit_form(install_code, field_text)
     mobile.close_android_driver()
-    home = HomePage(driver)
+    home = HomePage(driver, settings)
     home.reports_menu()
     report = ReportPage(driver)
     report.verify_app_data_submit_history(field_text)
