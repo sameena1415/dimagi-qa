@@ -49,7 +49,7 @@ class LoginAsAppPreviewPage(BasePage):
         By.XPATH, "//label[.//span[text()='Enter a Name']]//following-sibling::div//textarea")
         self.next_button = (By.XPATH, "//button[contains(@data-bind,'click: nextQuestion')]")
         self.submit = (By.XPATH, "//button[contains(@data-bind,'click: submitForm')]")
-        self.submit_success = (By.XPATH, "//p[text()='Form successfully saved!']")
+        self.submit_success = (By.XPATH, "//p[contains(text(),'successfully saved')]")
         self.full_menu = (By.LINK_TEXT, "Show Full Menu")
 
     def open_view_app_preview(self, test_app=UserData.basic_tests['tests_app']):
