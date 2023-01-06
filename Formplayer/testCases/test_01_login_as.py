@@ -5,7 +5,7 @@ from Formplayer.userInputs.user_inputs import UserData
 
 
 def test_case_01_login_as_web_apps(driver, settings):
-    loginPage = LoginAsPage(driver)
+    loginPage = LoginAsPage(driver, settings)
     app_preview = LoginAsAppPreviewPage(driver, settings)
     loginPage.open_webapps_menu()
     loginPage.login_as_form_submssion(loginPage.form_input_no_login)

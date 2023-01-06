@@ -86,18 +86,22 @@ class AppPreviewBasics(BasePage):
         if 'preview-tablet-mode' in mode:
             print("Preview is in Tablet View")
             self.js_click((By.XPATH, self.toggle_button.format(2)))
-            assert self.is_present(self.phone)
-            print("Preview mode changed to Phone View")
+            time.sleep(2)
+            mode = self.get_attribute(self.app_preview_view, 'class')
+            print(mode)
+            assert 'preview-tablet-mode' not in mode, "Preview mode changed to Phone View"
         else:
             print("Preview is in Phone View")
             self.js_click((By.XPATH, self.toggle_button.format(1)))
             time.sleep(2)
-            assert self.is_present(self.tablet)
-            print("Preview mode changed to Tablet View")
+            mode = self.get_attribute(self.app_preview_view, 'class')
+            print(mode)
+            assert 'preview-tablet-mode' in mode, "Preview mode changed to Tablet View"
             self.js_click((By.XPATH, self.toggle_button.format(2)))
             time.sleep(2)
-            assert self.is_present(self.phone)
-            print("Preview mode changed to Phone View")
+            mode = self.get_attribute(self.app_preview_view, 'class')
+            print(mode)
+            assert 'preview-tablet-mode' not in mode, "Preview mode changed to Phone View"
 
 
     def icons_are_present(self):
