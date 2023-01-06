@@ -83,7 +83,7 @@ class BasicTestAppPreview(BasePage):
         self.submitted_value = "(//tbody//td[2]/div[contains(.,'{}')])[1]"
         self.table_data = (By.XPATH, "(//tbody//td[2]/div[contains(@class,'data-raw')])[1]")
 
-        self.data_preview = (By.XPATH, "//button[@aria-label='Expand Data Preview']")
+        self.data_preview = (By.XPATH, "//button[contains(@aria-label,'Data Preview')]")
         self.xpath_textarea = (By.XPATH, "//textarea[@placeholder='XPath Expression']")
         self.no_queries = (By.XPATH, "//i[.='No recent queries']")
         self.recent_query = "//tbody[@data-bind='foreach: recentXPathQueries']//td/span[.='{}']"
