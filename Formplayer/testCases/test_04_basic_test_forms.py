@@ -7,9 +7,8 @@ from Formplayer.userInputs.user_inputs import UserData
 def test_case_16_incomplete_form_app_preview(driver, settings):
     app_preview = LoginAsAppPreviewPage(driver, settings)
     basic = BasicTestAppPreview(driver)
-    login = LoginAsAppPreviewPage(driver)
     app_preview.open_view_app_preview(UserData.basic_tests_app['tests_app'])
-    login.login_as_user(UserData.app_preview_mobile_worker)
+    app_preview.login_as_user(UserData.app_preview_mobile_worker)
     basic.delete_all_incomplete_forms()
     basic.open_form(UserData.basic_tests_app['case_list'], UserData.basic_tests_app['form_name'])
     basic.save_incomplete_form(basic.name_input1)
@@ -51,7 +50,6 @@ def test_case_17_incomplete_form_web_apps(driver):
 def test_case_18_data_preview_app_preview(driver, settings):
     app_preview = LoginAsAppPreviewPage(driver, settings)
     basic = BasicTestAppPreview(driver)
-    login = LoginAsAppPreviewPage(driver)
     app_preview.open_view_app_preview(UserData.basic_tests_app['tests_app'])
     app_preview.login_as_user(UserData.app_preview_mobile_worker)
     expression = basic.random_expression()

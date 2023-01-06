@@ -148,15 +148,16 @@ class BasicTestWebApps(BasePage):
         time.sleep(2)
 
     def delete_all_incomplete_forms(self):
-
         self.wait_to_click(self.incomplete_form)
         list = self.find_elements(self.incomplete_form_list)
         print(len(list))
         if len(list) != 0:
             for i in range(len(list)):
                 self.js_click_direct((By.XPATH, self.delete_incomplete_form.format(1)))
+                time.sleep(1)
                 self.wait_to_click(self.delete_confirm)
                 list = self.find_elements(self.incomplete_form_list)
+                print(len(list))
         self.driver.back()
 
     def verify_number_of_forms(self, no_of_forms):

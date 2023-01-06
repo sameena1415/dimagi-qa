@@ -47,6 +47,7 @@ class LoginAsPage(BasePage):
         self.js_click((By.XPATH, self.basic_tests_app.format(application, application)))
 
     def open_webapps_menu(self):
+
         print("Opening Web Apps Menu")
         self.wait_to_click(self.web_apps_menu)
 
