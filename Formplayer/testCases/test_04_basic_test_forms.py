@@ -53,7 +53,7 @@ def test_case_18_data_preview_app_preview(driver, settings):
     basic = BasicTestAppPreview(driver)
     login = LoginAsAppPreviewPage(driver)
     app_preview.open_view_app_preview(UserData.basic_tests_app['tests_app'])
-    login.login_as_user(UserData.app_preview_mobile_worker)
+    app_preview.login_as_user(UserData.app_preview_mobile_worker)
     expression = basic.random_expression()
     basic.verify_data_preview(expression)
 
@@ -70,9 +70,8 @@ def test_case_18_data_preview_web_apps(driver):
 def test_case_19_group_app_preview(driver, settings):
     app_preview = LoginAsAppPreviewPage(driver, settings)
     basic = BasicTestAppPreview(driver)
-    login = LoginAsAppPreviewPage(driver)
     app_preview.open_view_app_preview(UserData.basic_tests_app['tests_app'])
-    login.login_as_user(UserData.app_preview_mobile_worker)
+    app_preview.login_as_user(UserData.app_preview_mobile_worker)
     basic.open_form(UserData.basic_tests_app['case_list'], UserData.basic_test_app_forms['group'])
     basic.group()
 
@@ -90,9 +89,8 @@ def test_case_19_group_web_apps(driver):
 def test_case_20_end_of_navigation_app_preview(driver, settings):
     app_preview = LoginAsAppPreviewPage(driver, settings)
     basic = BasicTestAppPreview(driver)
-    login = LoginAsAppPreviewPage(driver)
     app_preview.open_view_app_preview(UserData.basic_tests_app['tests_app'])
-    login.login_as_user(UserData.app_preview_mobile_worker)
+    app_preview.login_as_user(UserData.app_preview_mobile_worker)
     basic.open_form(UserData.basic_test_app_forms['eofn'], UserData.basic_test_app_forms['home'])
     basic.end_of_navigation_module(UserData.basic_test_app_forms['eofn'])
 
@@ -108,9 +106,8 @@ def test_case_20_end_of_navigation_web_apps(driver):
 def test_case_21_case_register_app_preview(driver, settings):
     app_preview = LoginAsAppPreviewPage(driver, settings)
     basic = BasicTestAppPreview(driver)
-    login = LoginAsAppPreviewPage(driver)
     app_preview.open_view_app_preview(UserData.basic_tests_app['tests_app'])
-    login.login_as_user(UserData.app_preview_mobile_worker)
+    app_preview.login_as_user(UserData.app_preview_mobile_worker)
     basic.submit_basic_test_form()
     basic.open_form(UserData.basic_test_app_forms['case_test'], UserData.basic_test_app_forms['create_case'])
     basic.register_negative_case()
@@ -160,9 +157,8 @@ def test_case_21_case_register_web_app(driver):
 def test_case_22_unicode_verification_app_preview(driver, settings):
     app_preview = LoginAsAppPreviewPage(driver, settings)
     basic = BasicTestAppPreview(driver)
-    login = LoginAsAppPreviewPage(driver)
     app_preview.open_view_app_preview(UserData.basic_tests_app['tests_app'])
-    login.login_as_user(UserData.app_preview_mobile_worker)
+    app_preview.login_as_user(UserData.app_preview_mobile_worker)
     basic.submit_basic_test_form()
     basic.open_form(UserData.basic_test_app_forms['case_test'], UserData.basic_test_app_forms['create_case'])
     basic.unicode_verification_case()
