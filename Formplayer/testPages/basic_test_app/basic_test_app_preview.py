@@ -57,6 +57,7 @@ class BasicTestAppPreview(BasePage):
         self.name_question = (By.XPATH,
                               "//label[.//span[.='Enter a Name']]/following-sibling::div//textarea[contains(@class,'textfield form-control')]")
         self.incomplete_form_list = (By.XPATH, "//tr[@class='formplayer-request']")
+        self.incomplete_list_count = (By.XPATH, "//ul/li[@data-lp]")
         self.delete_incomplete_form = "(//tr[@class='formplayer-request']/descendant::div[@aria-label='Delete form'])[{}]"
         self.edit_incomplete_form = (
             By.XPATH, "(//tr[@class='formplayer-request']/descendant::div//i[contains(@class,'fa fa-pencil')])[1]")
@@ -158,22 +159,45 @@ class BasicTestAppPreview(BasePage):
         self.switch_to_frame(self.iframe)
         self.send_keys(self.name_question, value)
         self.wait_to_click(self.next_question)
-        self.wait_to_click(self.home_button)
+        time.sleep(2)
+        self.js_click(self.home_button)
         self.switch_to_default_content()
         time.sleep(2)
 
     def delete_all_incomplete_forms(self):
         self.switch_to_frame(self.iframe)
         self.wait_to_click(self.incomplete_form)
-        list = self.find_elements(self.incomplete_form_list)
-        print(len(list))
-        if len(list) != 0:
-            for i in range(len(list)):
-                self.js_click_direct((By.XPATH, self.delete_incomplete_form.format(1)))
-                time.sleep(2)
-                self.wait_to_click(self.delete_confirm)
+        if self.is_present(self.find_elements(self.incomplete_list_count)):
+            page_list = len(self.find_elements(self.incomplete_list_count)) - 4
+            print(page_list)
+            for page in range(page_list):
                 list = self.find_elements(self.incomplete_form_list)
                 print(len(list))
+                if len(list) != 0:
+                    for i in range(len(list)):
+                        self.js_click_direct((By.XPATH, self.delete_incomplete_form.format(1)))
+                        time.sleep(2)
+                        self.wait_to_click(self.delete_confirm)
+                        list = self.find_elements(self.incomplete_form_list)
+                        print(len(list))
+                else:
+                    print("No incomplete form present")
+                self.switch_to_default_content()
+                self.wait_to_click(self.back_button)
+                self.switch_to_frame(self.iframe)
+                self.wait_to_click(self.incomplete_form)
+        else:
+            list = self.find_elements(self.incomplete_form_list)
+            print(len(list))
+            if len(list) != 0:
+                for i in range(len(list)):
+                    self.js_click_direct((By.XPATH, self.delete_incomplete_form.format(1)))
+                    time.sleep(2)
+                    self.wait_to_click(self.delete_confirm)
+                    list = self.find_elements(self.incomplete_form_list)
+                    print(len(list))
+            else:
+                print("No incomplete form present")
         self.switch_to_default_content()
         self.wait_to_click(self.back_button)
 
@@ -211,13 +235,19 @@ class BasicTestAppPreview(BasePage):
             text = self.get_attribute(self.name_question, "value")
             assert text == value
             self.wait_to_click(self.next_question)
+            time.sleep(2)
             self.wait_to_click(self.submit_form_button)
+            time.sleep(2)
+            self.wait_for_element(self.success_message)
             print("Form submitted with unchanged value")
+            time.sleep(2)
+            self.wait_to_click(self.home_button)
+            time.sleep(2)
         else:
             print("There are no incomplete forms")
-        time.sleep(2)
-        self.wait_to_click(self.home_button)
-        time.sleep(2)
+            self.switch_to_default_content()
+            self.wait_to_click(self.back_button)
+            self.switch_to_frame(self.iframe)
         self.wait_to_click(self.sync_button)
         time.sleep(2)
         self.switch_to_default_content()
@@ -233,13 +263,19 @@ class BasicTestAppPreview(BasePage):
             assert text == value
             self.wait_to_clear_and_send_keys(self.name_question, self.changed_name_input)
             self.wait_to_click(self.next_question)
+            time.sleep(2)
             self.wait_to_click(self.submit_form_button)
+            time.sleep(2)
+            self.wait_for_element(self.success_message)
             print("Form submitted with changed value")
+            time.sleep(2)
+            self.wait_to_click(self.home_button)
+            time.sleep(2)
         else:
             print("There are no incomplete forms")
-        time.sleep(2)
-        self.wait_to_click(self.home_button)
-        time.sleep(2)
+            self.switch_to_default_content()
+            self.wait_to_click(self.back_button)
+            self.switch_to_frame(self.iframe)
         self.wait_to_click(self.sync_button)
         time.sleep(2)
         self.switch_to_default_content()
