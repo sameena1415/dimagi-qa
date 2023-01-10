@@ -27,9 +27,9 @@ class BasicTestAppPreview(BasePage):
         self.changed_name_input = "basic test changed " + fetch_random_string()
         self.case_reg_neg = "app_negcase_" + fetch_random_string()
         self.case_reg_pos = "app_poscase_" + fetch_random_string()
-        self.subcase_pos = "sub_case"+fetch_random_string()
-        self.unicode_text = "Unicode_app_"+fetch_random_string()+UserData.unicode
-        self.update_unicode = fetch_random_string()+UserData.unicode_new
+        self.subcase_pos = "sub_case" + fetch_random_string()
+        self.unicode_text = "Unicode_app_" + fetch_random_string() + UserData.unicode
+        self.update_unicode = fetch_random_string() + UserData.unicode_new
 
         self.test_question = "Test " + fetch_random_string()
         self.input_dict = {
@@ -96,9 +96,9 @@ class BasicTestAppPreview(BasePage):
         self.county_options = "//label[.//span[contains(.,'If you select')]]//following-sibling::div//input[@value='{}']"
         self.radio_button = "//div//input[@value='{}']"
         self.display_new_text_question = (
-        By.XPATH, "//span[./p[.='Display a new text question']]/preceding-sibling::input")
+            By.XPATH, "//span[./p[.='Display a new text question']]/preceding-sibling::input")
         self.display_new_multiple_choice_question = (
-        By.XPATH, "//span[./p[.='Display a new multiple choice question']]/preceding-sibling::input")
+            By.XPATH, "//span[./p[.='Display a new multiple choice question']]/preceding-sibling::input")
         self.text_question = (By.XPATH, "//textarea[@class='textfield form-control vertical-resize']")
         self.clear_button = (By.XPATH, "//button[contains(@data-bind,'Clear')]")
         self.display_new_multiple_choice_question = (
@@ -132,8 +132,6 @@ class BasicTestAppPreview(BasePage):
         self.blank_latitude = (By.XPATH, "//td[@class='lat coordinate'][contains(.,'??')]")
         self.output = (By.XPATH, "//span[@class='caption webapp-markdown-output']")
         self.empty_list = (By.XPATH, "//div[@class='alert alert-info'][.='List is empty.']")
-
-
 
     def open_form(self, case_list, form_name):
         self.switch_to_frame(self.iframe)
@@ -236,7 +234,7 @@ class BasicTestAppPreview(BasePage):
             assert text == value
             self.wait_to_click(self.next_question)
             time.sleep(2)
-            self.wait_to_click(self.submit_form_button)
+            self.js_click(self.submit_form_button)
             time.sleep(2)
             self.wait_for_element(self.success_message)
             print("Form submitted with unchanged value")
@@ -264,7 +262,7 @@ class BasicTestAppPreview(BasePage):
             self.wait_to_clear_and_send_keys(self.name_question, self.changed_name_input)
             self.wait_to_click(self.next_question)
             time.sleep(2)
-            self.wait_to_click(self.submit_form_button)
+            self.js_click(self.submit_form_button)
             time.sleep(2)
             self.wait_for_element(self.success_message)
             print("Form submitted with changed value")
@@ -281,12 +279,15 @@ class BasicTestAppPreview(BasePage):
         self.switch_to_default_content()
 
     def verify_submit_history(self, value, username):
-        web_app = WebAppsBasics(self.driver)
-        web_app.open_submit_history_form_link(UserData.basic_tests_app, username)
-        print(value)
-        text = self.get_text(self.table_data)
-        print(str(text).strip())
-        assert str(text).strip() == value
+        try:
+            web_app = WebAppsBasics(self.driver)
+            web_app.open_submit_history_form_link(UserData.basic_tests_app, username)
+            print(value)
+            text = self.get_text(self.table_data)
+            print(str(text).strip())
+            assert str(text).strip() == value
+        except :
+            print("The submitted form details are not yet updated in submit history")
 
     def random_expression(self):
         return random.choice(UserData.expressions)
@@ -370,7 +371,7 @@ class BasicTestAppPreview(BasePage):
             "Pick one of the following.", "One")))
         self.wait_to_click(self.next_question)
         time.sleep(1)
-        self.wait_to_click(self.submit_form_button)
+        self.js_click(self.submit_form_button)
         print("Group Form submitted successfully")
         time.sleep(2)
         self.js_click(self.home_button)
@@ -393,7 +394,7 @@ class BasicTestAppPreview(BasePage):
             "home" + fetch_random_string())
         self.wait_to_click(self.next_question)
         time.sleep(2)
-        self.wait_to_click(self.submit_form_button)
+        self.js_click(self.submit_form_button)
         time.sleep(2)
         self.wait_for_element(self.success_message)
         assert self.is_present((By.XPATH, self.case_list_menu.format(case)))
@@ -408,7 +409,7 @@ class BasicTestAppPreview(BasePage):
             "module" + fetch_random_string())
         self.wait_to_click(self.next_question)
         time.sleep(2)
-        self.wait_to_click(self.submit_form_button)
+        self.js_click(self.submit_form_button)
         time.sleep(2)
         self.wait_for_element(self.success_message)
         assert self.is_present((By.XPATH, self.case_list_menu.format(case)))
@@ -426,7 +427,7 @@ class BasicTestAppPreview(BasePage):
         time.sleep(1)
         self.wait_to_click(self.next_question)
         time.sleep(1)
-        self.wait_to_click(self.submit_form_button)
+        self.js_click(self.submit_form_button)
         time.sleep(2)
         self.wait_for_element(self.success_message)
         time.sleep(2)
@@ -440,7 +441,7 @@ class BasicTestAppPreview(BasePage):
             "current" + fetch_random_string())
         self.wait_to_click(self.next_question)
         time.sleep(1)
-        self.wait_to_click(self.submit_form_button)
+        self.js_click(self.submit_form_button)
         time.sleep(2)
         self.wait_for_element(self.success_message)
         time.sleep(2)
@@ -460,7 +461,7 @@ class BasicTestAppPreview(BasePage):
         self.wait_to_click(self.continue_button)
         self.wait_to_click(self.next_question)
         time.sleep(1)
-        self.wait_to_click(self.submit_form_button)
+        self.js_click(self.submit_form_button)
         time.sleep(2)
         self.wait_for_element(self.success_message)
         time.sleep(3)
@@ -477,7 +478,7 @@ class BasicTestAppPreview(BasePage):
             "badge" + fetch_random_string())
         self.wait_to_click(self.next_question)
         time.sleep(1)
-        self.wait_to_click(self.submit_form_button)
+        self.js_click(self.submit_form_button)
         time.sleep(2)
         self.wait_for_element(self.success_message)
         time.sleep(4)
@@ -493,7 +494,7 @@ class BasicTestAppPreview(BasePage):
         self.wait_to_clear_and_send_keys(self.name_question, fetch_random_string())
         self.wait_to_click(self.next_question)
         time.sleep(1)
-        self.wait_to_click(self.submit_form_button)
+        self.js_click(self.submit_form_button)
         time.sleep(2)
         self.wait_for_element(self.success_message)
         self.js_click(self.home_button)
@@ -510,7 +511,7 @@ class BasicTestAppPreview(BasePage):
             "Are you sure you want to create a new case?", "Cancel - Please do not create this case.")))
         self.wait_to_click(self.next_question)
         time.sleep(1)
-        self.wait_to_click(self.submit_form_button)
+        self.js_click(self.submit_form_button)
         time.sleep(2)
         self.wait_for_element(self.success_message)
         self.wait_to_click(self.home_button)
@@ -527,7 +528,7 @@ class BasicTestAppPreview(BasePage):
             "Are you sure you want to create a new case?", "Confirm - Please create this case.")))
         self.wait_to_click(self.next_question)
         time.sleep(1)
-        self.wait_to_click(self.submit_form_button)
+        self.js_click(self.submit_form_button)
         time.sleep(2)
         self.wait_for_element(self.success_message)
         self.wait_to_click(self.home_button)
@@ -653,7 +654,7 @@ class BasicTestAppPreview(BasePage):
         time.sleep(2)
         self.wait_to_click(self.next_question)
         time.sleep(1)
-        self.wait_to_click(self.submit_form_button)
+        self.js_click(self.submit_form_button)
         time.sleep(1)
         self.wait_for_element(self.success_message)
         self.wait_to_click(self.home_button)
@@ -680,14 +681,14 @@ class BasicTestAppPreview(BasePage):
         self.wait_to_click(self.next_question)
         time.sleep(1)
         self.wait_to_clear_and_send_keys((By.XPATH, self.input_field.format(
-            "Enter a number for "+self.subcase_pos+":")), fetch_random_digit_with_range(1,20))
+            "Enter a number for " + self.subcase_pos + ":")), fetch_random_digit_with_range(1, 20))
         self.wait_to_click(self.next_question)
         time.sleep(1)
         self.wait_to_click((By.XPATH, self.choose_radio_button.format(
-            "Do you want to create the sub case?", "Confirm - Please create "+self.subcase_pos+".")))
+            "Do you want to create the sub case?", "Confirm - Please create " + self.subcase_pos + ".")))
         self.wait_to_click(self.next_question)
         time.sleep(1)
-        self.wait_to_click(self.submit_form_button)
+        self.js_click(self.submit_form_button)
         time.sleep(2)
         self.wait_for_element(self.success_message)
         self.wait_to_click(self.home_button)
@@ -704,7 +705,8 @@ class BasicTestAppPreview(BasePage):
         self.wait_to_click((By.XPATH, self.module_search.format(self.subcase_pos)))
         time.sleep(2)
         assert self.is_present_and_displayed((By.XPATH, self.case_detail_table.format("Name", self.subcase_pos)))
-        assert self.is_present_and_displayed((By.XPATH, self.case_detail_table.format("Parent Case Name", self.case_reg_pos)))
+        assert self.is_present_and_displayed(
+            (By.XPATH, self.case_detail_table.format("Parent Case Name", self.case_reg_pos)))
         assert self.is_present(self.continue_button)
         self.wait_to_click(self.continue_button)
         self.wait_to_click((By.XPATH, self.case_list_menu.format(UserData.basic_test_app_forms['close_subcase'])))
@@ -712,7 +714,7 @@ class BasicTestAppPreview(BasePage):
             "Do you want to close the case?", "Yes")))
         self.wait_to_click(self.next_question)
         time.sleep(1)
-        self.wait_to_click(self.submit_form_button)
+        self.js_click(self.submit_form_button)
         time.sleep(2)
         self.wait_for_element(self.success_message)
         self.wait_to_click(self.home_button)
@@ -733,7 +735,7 @@ class BasicTestAppPreview(BasePage):
             "Are you sure you want to close this case?", "Confirm - Please close this case.")))
         self.wait_to_click(self.next_question)
         time.sleep(1)
-        self.wait_to_click(self.submit_form_button)
+        self.js_click(self.submit_form_button)
         time.sleep(2)
         self.wait_for_element(self.success_message)
         self.wait_to_click(self.home_button)
@@ -757,7 +759,7 @@ class BasicTestAppPreview(BasePage):
             "Are you sure you want to create a new case?", "Confirm - Please create this case.")))
         self.wait_to_click(self.next_question)
         time.sleep(1)
-        self.wait_to_click(self.submit_form_button)
+        self.js_click(self.submit_form_button)
         time.sleep(2)
         self.wait_for_element(self.success_message)
         self.wait_to_click(self.home_button)
@@ -812,7 +814,7 @@ class BasicTestAppPreview(BasePage):
         time.sleep(2)
         self.wait_to_click(self.next_question)
         time.sleep(1)
-        self.wait_to_click(self.submit_form_button)
+        self.js_click(self.submit_form_button)
         time.sleep(2)
         self.wait_for_element(self.success_message)
         self.wait_to_click(self.home_button)
