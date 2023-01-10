@@ -107,12 +107,13 @@ class AppPreviewBasics(BasePage):
     def icons_are_present(self):
         self.switch_to_frame(self.iframe)
         self.wait_to_click(self.start_option)
+        self.wait_for_element(self.form_list)
         self.switch_to_default_content()
         assert self.is_present_and_displayed(self.back_button)
         print("back button")
         assert self.is_present_and_displayed(self.refresh_button), "Refresh button is not present"
         print("refesh button")
-        assert self.is_present_and_displayed(self.toggle_button), "Toggle button is not present"
+        assert self.is_present_and_displayed((By.XPATH, self.toggle_button.format(1))), "Toggle button is not present"
         self.switch_to_default_content()
 
     def back_button_functionality(self):

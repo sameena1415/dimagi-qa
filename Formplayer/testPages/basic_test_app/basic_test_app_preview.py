@@ -136,7 +136,11 @@ class BasicTestAppPreview(BasePage):
     def open_form(self, case_list, form_name):
         self.switch_to_frame(self.iframe)
         self.wait_to_click(self.start_option)
+        time.sleep(2)
+        self.wait_for_element((By.XPATH, self.case_list_menu.format(case_list)))
         self.wait_to_click((By.XPATH, self.case_list_menu.format(case_list)))
+        time.sleep(2)
+        self.wait_for_element((By.XPATH, self.registration_form.format(form_name)))
         self.wait_to_click((By.XPATH, self.registration_form.format(form_name)))
         self.switch_to_default_content()
         time.sleep(2)
