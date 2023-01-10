@@ -153,16 +153,20 @@ class BasicTestWebApps(BasePage):
         self.wait_to_click(self.incomplete_form)
         self.wait_for_element(self.incomplete_form_title)
         if self.is_present(self.find_elements(self.incomplete_list_count)):
-            page_list = len(self.find_elements(self.incomplete_list_count)) - 4
+            page_list = self.find_elements(self.incomplete_list_count)
             print(page_list)
+            page_list = page_list - 4
             for page in range(page_list):
+                time.sleep(2)
                 list = self.find_elements(self.incomplete_form_list)
                 print(len(list))
                 if len(list) != 0:
                     for i in range(len(list)):
+                        time.sleep(2)
                         self.js_click_direct((By.XPATH, self.delete_incomplete_form.format(1)))
                         time.sleep(2)
                         self.wait_to_click(self.delete_confirm)
+                        time.sleep(2)
                         list = self.find_elements(self.incomplete_form_list)
                         print(len(list))
                 else:
@@ -171,6 +175,7 @@ class BasicTestWebApps(BasePage):
                 self.wait_to_click(self.incomplete_form)
                 self.wait_for_element(self.incomplete_form_title)
         else:
+            time.sleep(2)
             list = self.find_elements(self.incomplete_form_list)
             print(len(list))
             if len(list) != 0:
@@ -178,7 +183,9 @@ class BasicTestWebApps(BasePage):
                     self.js_click_direct((By.XPATH, self.delete_incomplete_form.format(1)))
                     time.sleep(2)
                     self.wait_to_click(self.delete_confirm)
+                    time.sleep(2)
                     list = self.find_elements(self.incomplete_form_list)
+                    time.sleep(2)
                     print(len(list))
             else:
                 print("No incomplete form present")
