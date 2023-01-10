@@ -51,7 +51,7 @@ class BasicTestWebApps(BasePage):
         self.settings_option = (By.XPATH, "//div[@class = 'js-settings appicon appicon-settings']/i")
         self.login_as_option = (By.XPATH, "//div[@class='js-restore-as-item appicon appicon-restore-as']")
         self.incomplete_form = (By.XPATH, "//div[@class='js-incomplete-sessions-item appicon appicon-incomplete']")
-
+        self.incomplete_form_title = (By.XPATH, "//h1[@class='page-title'][.='Incomplete Forms']")
         self.case_list_menu = "//h3[contains(text(), '{}')]"
         self.registration_form = "//h3[contains(text(), '{}')]"
         self.followup_form = (By.XPATH, "//h3[contains(text(), 'Followup Form')]")
@@ -151,6 +151,7 @@ class BasicTestWebApps(BasePage):
 
     def delete_all_incomplete_forms(self):
         self.wait_to_click(self.incomplete_form)
+        self.wait_for_element(self.incomplete_form_title)
         if self.is_present(self.find_elements(self.incomplete_list_count)):
             page_list = len(self.find_elements(self.incomplete_list_count)) - 4
             print(page_list)
@@ -168,6 +169,7 @@ class BasicTestWebApps(BasePage):
                     print("No incomplete form present")
                 self.driver.back()
                 self.wait_to_click(self.incomplete_form)
+                self.wait_for_element(self.incomplete_form_title)
         else:
             list = self.find_elements(self.incomplete_form_list)
             print(len(list))

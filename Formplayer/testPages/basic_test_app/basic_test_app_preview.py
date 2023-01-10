@@ -57,6 +57,7 @@ class BasicTestAppPreview(BasePage):
         self.name_question = (By.XPATH,
                               "//label[.//span[.='Enter a Name']]/following-sibling::div//textarea[contains(@class,'textfield form-control')]")
         self.incomplete_form_list = (By.XPATH, "//tr[@class='formplayer-request']")
+        self.incomplete_form_title = (By.XPATH, "//li[@class='breadcrumb-text'][.='Incomplete Forms']")
         self.incomplete_list_count = (By.XPATH, "//ul/li[@data-lp]")
         self.delete_incomplete_form = "(//tr[@class='formplayer-request']/descendant::div[@aria-label='Delete form'])[{}]"
         self.edit_incomplete_form = (
@@ -169,6 +170,7 @@ class BasicTestAppPreview(BasePage):
     def delete_all_incomplete_forms(self):
         self.switch_to_frame(self.iframe)
         self.wait_to_click(self.incomplete_form)
+        self.wait_for_element(self.incomplete_form_title)
         if self.is_present(self.find_elements(self.incomplete_list_count)):
             page_list = len(self.find_elements(self.incomplete_list_count)) - 4
             print(page_list)
@@ -188,6 +190,7 @@ class BasicTestAppPreview(BasePage):
                 self.wait_to_click(self.back_button)
                 self.switch_to_frame(self.iframe)
                 self.wait_to_click(self.incomplete_form)
+                self.wait_for_element(self.incomplete_form_title)
         else:
             list = self.find_elements(self.incomplete_form_list)
             print(len(list))
