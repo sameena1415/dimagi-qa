@@ -192,6 +192,7 @@ class BasicTestAppPreview(BasePage):
                 self.wait_to_click(self.incomplete_form)
                 self.wait_for_element(self.incomplete_form_title)
         else:
+            time.sleep(2)
             list = self.find_elements(self.incomplete_form_list)
             print(len(list))
             if len(list) != 0:
@@ -199,6 +200,7 @@ class BasicTestAppPreview(BasePage):
                     self.js_click_direct((By.XPATH, self.delete_incomplete_form.format(1)))
                     time.sleep(2)
                     self.wait_to_click(self.delete_confirm)
+                    time.sleep(2)
                     list = self.find_elements(self.incomplete_form_list)
                     print(len(list))
             else:
@@ -343,22 +345,21 @@ class BasicTestAppPreview(BasePage):
         self.wait_to_click(self.next_question)
         self.verify_choice_selection((By.XPATH, self.choose_radio_button.format(
             'Changing your county selection should update the available options in the City select question below.',
-            'Suffolk')),
-                                     'Selected county was: sf')
+            'Suffolk')), 'Selected county was: sf')
         assert self.is_present((By.XPATH, self.county_options.format("Boston")))
         assert self.is_present((By.XPATH, self.county_options.format("Winthrop")))
         self.wait_to_click(self.clear_button)
+        time.sleep(3)
         self.verify_choice_selection((By.XPATH, self.choose_radio_button.format(
             'Changing your county selection should update the available options in the City select question below.',
-            'Essex')),
-                                     'Selected county was: ex')
+            'Essex')), 'Selected county was: ex')
         assert self.is_present((By.XPATH, self.county_options.format("Saugus")))
         assert self.is_present((By.XPATH, self.county_options.format("Andover")))
         self.wait_to_click(self.clear_button)
+        time.sleep(3)
         self.verify_choice_selection((By.XPATH, self.choose_radio_button.format(
             'Changing your county selection should update the available options in the City select question below.',
-            'Middlesex')),
-                                     'Selected county was: mx')
+            'Middlesex')), 'Selected county was: mx')
         assert self.is_present((By.XPATH, self.county_options.format("Billerica")))
         assert self.is_present((By.XPATH, self.county_options.format("Wilmington")))
         assert self.is_present((By.XPATH, self.county_options.format("Cambridge")))

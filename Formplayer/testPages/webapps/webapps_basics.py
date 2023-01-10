@@ -88,7 +88,8 @@ class WebAppsBasics(BasePage):
         self.date_input = (By.XPATH, "//input[@id='filter_range']")
         self.view_form_link = (By.XPATH, "//tbody/tr[1]/td[1]/a[.='View Form']")
         self.submit_history_table = (By.XPATH, "//table[@id='report_table_submit_history']/tbody/tr")
-
+        self.case_name_field = "td[@title={}]"
+        self.form_data_table = (By.XPATH, "//table[contains(@class,'form-data-table')]")
         # Case List
         self.search_input = (By.XPATH, "//input[@id='report_filter_search_query']")
         self.case_list_table = (By.XPATH, "//table[@id='report_table_case_list']/tbody/tr")
@@ -219,7 +220,8 @@ class WebAppsBasics(BasePage):
     def verify_form_data_submit_history(self, case_name, application):
         self.open_submit_history_form_link(application, UserData.app_preview_mobile_worker)
         self.page_source_contains(case_name)
-        assert True, "Case name is present in Submit history"
+        self.wait_for_element()
+        assert self.is_present_and_displayed((By.XPATH,self.case_name_field.format(case_name))), "Case name "+case_name+"is not present in Submit history"
         self.driver.back()
 
     def open_submit_history_form_link(self, application, username):
