@@ -218,9 +218,10 @@ class WebAppsBasics(BasePage):
             return False
 
     def verify_form_data_submit_history(self, case_name, application):
+        print("Serching for case name: ", case_name)
         self.open_submit_history_form_link(application, UserData.app_preview_mobile_worker)
-        self.page_source_contains(case_name)
-        self.wait_for_element()
+        # self.page_source_contains(case_name)
+        self.wait_for_element((By.XPATH,self.case_name_field.format(case_name)))
         try:
             assert self.is_present_and_displayed((By.XPATH,self.case_name_field.format(case_name))), "Case name "+case_name+"is not present in Submit history"
         except:
