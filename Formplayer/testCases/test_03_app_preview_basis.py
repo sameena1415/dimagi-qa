@@ -42,6 +42,7 @@ def test_case_12_one_question_per_screen(driver, settings):
     app_preview = LoginAsAppPreviewPage(driver, settings)
     app_preview.open_view_app_preview(UserData.test_application2['tests_app'])
     question.one_question_per_screen_negative()
+    app_preview.open_view_app_preview(UserData.test_application2['tests_app'])
     question.one_question_per_screen_positive()
 
 

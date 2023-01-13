@@ -145,6 +145,7 @@ class BasicTestWebApps(BasePage):
         time.sleep(2)
 
     def save_incomplete_form(self, value):
+        self.wait_for_element(self.name_question)
         self.send_keys(self.name_question, value)
         self.wait_to_click(self.home_button)
         time.sleep(2)

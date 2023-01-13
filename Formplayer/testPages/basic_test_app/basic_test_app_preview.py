@@ -161,6 +161,7 @@ class BasicTestAppPreview(BasePage):
 
     def save_incomplete_form(self, value):
         self.switch_to_frame(self.iframe)
+        self.wait_for_element(self.name_question)
         self.send_keys(self.name_question, value)
         self.wait_to_click(self.next_question)
         time.sleep(2)

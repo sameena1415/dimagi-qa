@@ -219,9 +219,6 @@ class AppPreviewBasics(BasePage):
         self.switch_to_default_content()
 
     def one_question_per_screen_positive(self):
-        self.wait_to_click(self.application_menu_id)
-        self.wait_to_click(self.select_test_application)
-        self.wait_to_click(self.view_app_preview)
         self.switch_to_frame(self.iframe)
         self.wait_to_click(self.settings_option)
         time.sleep(2)

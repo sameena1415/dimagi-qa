@@ -238,7 +238,7 @@ class WebAppsBasics(BasePage):
             self.wait_to_click(self.reports_menu_id)
         self.click(self.submit_history_rep)
         print("Sleeping for some time for the form/case data to be updated in reports")
-        time.sleep(30)
+        time.sleep(40)
         self.wait_to_click(self.users_box)
         list = self.find_elements(self.selected_users)
         print(len(list))
@@ -266,7 +266,11 @@ class WebAppsBasics(BasePage):
         time.sleep(3)
 
     def verify_form_data_case_list(self, case_name, username):
-        self.wait_to_click(self.reports_menu_id)
+        if self.is_present(self.reports_menu_id):
+            self.wait_to_click(self.reports_menu_id)
+        else:
+            self.wait_to_click(self.full_menu)
+            self.wait_to_click(self.reports_menu_id)
         print("Sleeping for some time for the case data to be updated in reports")
         time.sleep(60)
         self.wait_to_click(self.case_list_rep)
