@@ -162,10 +162,13 @@ class BasicTestAppPreview(BasePage):
     def save_incomplete_form(self, value):
         self.switch_to_frame(self.iframe)
         self.wait_for_element(self.name_question)
+        print("typing value: ", value)
         self.send_keys(self.name_question, value)
+        time.sleep(2)
         self.wait_to_click(self.next_question)
         time.sleep(2)
         self.js_click(self.home_button)
+        time.sleep(2)
         self.switch_to_default_content()
         time.sleep(2)
 
@@ -240,6 +243,7 @@ class BasicTestAppPreview(BasePage):
         self.wait_to_click(self.back_button)
 
     def verify_saved_form_and_submit_unchanged(self, value):
+        print(value)
         self.switch_to_frame(self.iframe)
         self.wait_to_click(self.incomplete_form)
         list = self.find_elements(self.incomplete_form_list)
@@ -536,6 +540,7 @@ class BasicTestAppPreview(BasePage):
         self.js_click(self.submit_form_button)
         time.sleep(2)
         self.wait_for_element(self.success_message)
+        time.sleep(2)
         self.wait_to_click(self.home_button)
         time.sleep(2)
         self.switch_to_default_content()
@@ -553,6 +558,7 @@ class BasicTestAppPreview(BasePage):
         self.js_click(self.submit_form_button)
         time.sleep(2)
         self.wait_for_element(self.success_message)
+        time.sleep(2)
         self.wait_to_click(self.home_button)
         time.sleep(2)
         self.switch_to_default_content()
