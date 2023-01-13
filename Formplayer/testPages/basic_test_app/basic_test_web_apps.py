@@ -440,7 +440,10 @@ class BasicTestWebApps(BasePage):
         self.wait_for_element(self.success_message)
         self.js_click(self.home_button)
         time.sleep(2)
-        self.switch_to_default_content()
+        self.wait_for_element(self.sync_button)
+        self.js_click(self.sync_button)
+        time.sleep(3)
+
 
     def register_negative_case(self):
         self.wait_to_clear_and_send_keys((By.XPATH, self.text_area_field.format(

@@ -46,6 +46,7 @@ class BasicTestAppPreview(BasePage):
         self.refresh_button = (By.XPATH, "//button[contains(@class,'btn-preview-refresh js-preview-refresh')]")
         self.toggle_button = (By.XPATH, "//button[contains(@class ,'js-preview-toggle-tablet-view')]")
         self.sync_button = (By.XPATH, "//div[@class='js-sync-item appicon appicon-sync']")
+        self.sync_message = (By.XPATH, "//p[contains(text(),'successfully synced')]")
         self.start_option = (By.XPATH, "//div[@class= 'js-start-app appicon appicon-start']")
         self.settings_option = (By.XPATH, "//div[@class = 'js-settings appicon appicon-settings']/i")
         self.login_as_option = (By.XPATH, "//div[@class='js-restore-as-item appicon appicon-restore-as']")
@@ -512,6 +513,9 @@ class BasicTestAppPreview(BasePage):
         self.wait_for_element(self.success_message)
         self.js_click(self.home_button)
         time.sleep(2)
+        self.wait_for_element(self.sync_button)
+        self.js_click(self.sync_button)
+        time.sleep(3)
         self.switch_to_default_content()
 
     def register_negative_case(self):
