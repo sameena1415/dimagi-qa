@@ -246,6 +246,8 @@ class BasicTestAppPreview(BasePage):
         print(len(list))
         if len(list) != 0:
             self.js_click(self.edit_incomplete_form)
+            time.sleep(3)
+            self.wait_for_element(self.name_question)
             text = self.get_attribute(self.name_question, "value")
             assert text == value
             self.wait_to_click(self.next_question)
@@ -273,6 +275,8 @@ class BasicTestAppPreview(BasePage):
         print(len(list))
         if len(list) != 0:
             self.js_click(self.edit_incomplete_form)
+            time.sleep(3)
+            self.wait_for_element(self.name_question)
             text = self.get_attribute(self.name_question, "value")
             assert text == value
             self.wait_to_clear_and_send_keys(self.name_question, self.changed_name_input)
