@@ -159,7 +159,8 @@ jobs:
                 ]
             }
         env:
-          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL_SMOKE }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
 
     - name: Archive test results
       if: always()
