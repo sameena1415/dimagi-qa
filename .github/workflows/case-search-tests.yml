@@ -167,7 +167,7 @@ jobs:
                         "type": "section",
                         "text": {
                             "type": "mrkdwn",
-                            "text": "Here's the corresponding worklow execution :arrow_right::arrow_right:"
+                            "text": "Here's the corresponding workflow execution :arrow_right::arrow_right:"
                         },
                         "accessory": {
                             "type": "button",
