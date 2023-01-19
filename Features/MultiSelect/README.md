@@ -1,6 +1,6 @@
 ## Multi Select Test Script
 
-This feature allows users to filter and select multiple cases simultaneously and have access to all of their data in a form so that they can efficiently perform repetitive actions within a single form. This is a modification to case lists that previously only allowed the selection of one case at a time.
+This feature allows users to filter and select multiple cases simultaneously and have access to all of their data in a form so that they can efficiently perform repetitive actions within a single form. This is a new modification to case lists that previously only allowed the selection of one case at a time.
 
 This script contains conatins [it's regression tests.](https://docs.google.com/spreadsheets/d/1dCcjfufT4t0J_SPwRCkR0cEYfegg18hz6iPcgMOqpes/edit#gid=712210688)
 
