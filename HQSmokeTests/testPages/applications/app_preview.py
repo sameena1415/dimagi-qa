@@ -17,7 +17,7 @@ class AppPreviewPage(BasePage):
         self.iframe_app_preview = (By.XPATH, "//iframe[@class='preview-phone-window']")
         self.app_preview_model = (By.XPATH, "//div[@class='preview-phone-container']")
         self.start = (By.ID, "single-app-start-heading")
-        self.case_list = (By.XPATH, "//div[@class='module-menu-container']")
+        self.case_list = (By.XPATH, "//div[@class='module-menu-container']//h3[.='Case List']")
         self.followup_form = (By.XPATH, "//h3[text()='Followup Form']")
         self.first_case_on_case_list = (By.XPATH, "(//td[@class='module-case-list-column'])[1]")
         self.continue_button = (By.ID, "select-case")

@@ -143,13 +143,13 @@ class MobileWorkerPage(BasePage):
 
         # Download and Upload
         self.download_worker_btn = (By.LINK_TEXT, "Download Mobile Workers")
-        self.download_users_btn = (By.XPATH, "//button[contains(.,'Download')]")
+        self.download_users_btn = (By.LINK_TEXT, "Download Users")
         self.bulk_upload_btn = (By.LINK_TEXT, "Bulk Upload")
         self.choose_file = (By.XPATH, "//input[@id='id_bulk_upload_file']")
         self.upload = (By.XPATH, "//button[@class='btn btn-primary disable-on-submit']")
         self.successfully_uploaded = (By.XPATH, "//p[contains(text(),'Successfully uploaded')]")
         self.import_complete = (By.XPATH, "//legend[text()='Bulk upload complete.']")
-        self.download_filter = (By.XPATH, "//button[@data-bind='html: buttonHTML']")
+        self.download_filter = (By.XPATH, "//button[contains(.,'Download')]")
         self.error_403 = (By.XPATH, "//h1[text()='403 Forbidden']")
 
     def search_user(self):
