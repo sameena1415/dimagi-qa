@@ -32,7 +32,7 @@ class HomePage(BasePage):
         self.DASHBOARD_TITLE = "CommCare HQ"
         self.REPORTS_TITLE = "My Saved Reports : Project Reports :: - CommCare HQ"
         self.DATA_TITLE = "Export Form Data : Data :: - CommCare HQ"
-        self.APP_TITLE = "Releases - " + UserData.village_application + " - CommCare HQ"
+        self.APP_TITLE = "Releases - " + UserData.reassign_cases_application + " - CommCare HQ"
         self.USERS_TITLE = "Mobile Workers : Users :: - CommCare HQ"
         self.MESSAGING_TITLE = "Dashboard : Messaging :: - CommCare HQ"
         self.WEBAPPS_TITLE = "Web Apps - CommCare HQ"
