@@ -143,7 +143,7 @@ class MobileWorkerPage(BasePage):
 
         # Download and Upload
         self.download_worker_btn = (By.LINK_TEXT, "Download Mobile Workers")
-        self.download_users_btn = (By.LINK_TEXT, "Download Users")
+        self.download_users_btn = (By.XPATH, "//button[contains(.,'Download')]")
         self.bulk_upload_btn = (By.LINK_TEXT, "Bulk Upload")
         self.choose_file = (By.XPATH, "//input[@id='id_bulk_upload_file']")
         self.upload = (By.XPATH, "//button[@class='btn btn-primary disable-on-submit']")
@@ -348,6 +348,7 @@ class MobileWorkerPage(BasePage):
         newest_file = latest_download_file()
         self.assert_downloaded_file(newest_file, "_users_"), "Download Not Completed!"
         print("File download successful")
+
         return newest_file
 
     def upload_mobile_worker(self):
