@@ -149,7 +149,7 @@ class MobileWorkerPage(BasePage):
         self.upload = (By.XPATH, "//button[@class='btn btn-primary disable-on-submit']")
         self.successfully_uploaded = (By.XPATH, "//p[contains(text(),'Successfully uploaded')]")
         self.import_complete = (By.XPATH, "//legend[text()='Bulk upload complete.']")
-        self.download_filter = (By.XPATH, "//button[@data-bind='html: buttonHTML']")
+        self.download_filter = (By.XPATH, "//button[contains(.,'Download')]")
         self.error_403 = (By.XPATH, "//h1[text()='403 Forbidden']")
 
     def search_user(self):
@@ -348,6 +348,7 @@ class MobileWorkerPage(BasePage):
         newest_file = latest_download_file()
         self.assert_downloaded_file(newest_file, "_users_"), "Download Not Completed!"
         print("File download successful")
+
         return newest_file
 
     def upload_mobile_worker(self):
