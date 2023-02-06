@@ -40,12 +40,9 @@ class AppPreviewPage(BasePage):
         self.wait_to_click(self.first_case_on_case_list)
         time.sleep(2)
         self.wait_to_click(self.continue_button)
-        try:
-            self.wait_to_click(self.submit)
-        except TimeoutException:
-            if self.is_displayed(self.next_button):
-                self.click(self.next_button)
-                self.wait_to_click(self.next_button)
-                self.js_click(self.complete_button)
+        time.sleep(2)
+        if self.is_displayed(self.next_button):
+            self.wait_to_click(self.next_button)
+            self.js_click(self.complete_button)
         self.is_visible_and_displayed(self.submit_success)
         self.driver.switch_to.default_content()
