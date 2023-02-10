@@ -29,7 +29,7 @@ class LoginAsPage(BasePage):
         self.basic_tests_app = "//div[@aria-label='{}']/descendant::h3[text()='{}']"
         self.web_apps_menu = (By.ID, "CloudcareTab")
         self.show_full_menu = (By.ID, "commcare-menu-toggle")
-        self.login_as = (By.XPATH,"//h3[text()='Login as']")
+        self.login_as = (By.XPATH,"//h3[text()='Log in as']")
         self.WEBAPPS_TITLE = "Web Apps - CommCare HQ"
         self.search_user_input_area = (By.XPATH, "//input[@placeholder='Filter workers']")
         self.username = UserData.app_preview_mobile_worker

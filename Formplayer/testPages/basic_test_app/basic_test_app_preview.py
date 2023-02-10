@@ -69,6 +69,8 @@ class BasicTestAppPreview(BasePage):
         self.submit_form_button = (By.XPATH, "//button[contains(@data-bind,'submitForm')]")
 
         self.next_question = (By.XPATH, "//button[contains(@data-bind,'nextQuestion')]")
+        self.prev_question = (By.XPATH, "//button[contains(@data-bind,'prevQuestion')]")
+        self.next_question_force = (By.XPATH, "//button[contains(@data-bind,'clickedNextOnRequired')]")
         self.complete_form = (By.XPATH, "//button[@data-bind='visible: atLastIndex(), click: submitForm']")
         self.success_message = (By.XPATH, "//p[contains(text(),'successfully saved')]")
         self.view_form_link = (By.LINK_TEXT, "this form")
@@ -122,10 +124,12 @@ class BasicTestAppPreview(BasePage):
         # contraints
         self.success_check = (By.XPATH, "//i[@class='fa fa-check text-success']")
         self.warning = (By.XPATH, "//i[@class='fa fa-warning text-danger clickable']")
-        self.error_message = "//div[contains(@data-bind,'serverError')][.={}]"
+        self.error_message = "//div[contains(@data-bind,'serverError')][.='{}']"
         self.location_alert = (By.XPATH,
                                "//div[contains(.,'Without access to your location, computations that rely on the here() function will show up blank.')][contains(@class,'alert')]")
-
+        self.danger_warning = "//label[.//span[contains(.,'{}')]]//following-sibling::div//i[contains(@class,'text-danger')]"
+        self.text_success = "//label[.//span[contains(.,'{}')]]//following-sibling::div//i[contains(@class,'text-success')]"
+        self.radio_option_list = "(//label[.//span[contains(.,'{}')]]//following-sibling::div//input)[1]"
         # casetest
         self.case_detail_tab = "//a[.='Case Details {}']"
         self.case_detail_table = "//th[.='{}']/following-sibling::td[.='{}']"
@@ -866,6 +870,40 @@ class BasicTestAppPreview(BasePage):
         self.wait_to_click(self.continue_button)
         time.sleep(2)
         self.wait_for_element(self.home_button)
+        self.wait_to_click(self.home_button)
+        time.sleep(2)
+        self.switch_to_default_content()
+
+    def fixtures_form(self):
+        self.switch_to_frame(self.iframe)
+        self.wait_for_element(self.next_question)
+        self.click(self.next_question)
+        self.wait_to_click((By.XPATH, self.choose_radio_button.format('Select at least 2!', '3')))
+        self.wait_for_element(
+            (By.XPATH, self.danger_warning.format("Select at least 2!")))
+        self.wait_to_click((By.XPATH, self.choose_radio_button.format('Select at least 2!', '2')))
+        self.wait_for_element(
+            (By.XPATH, self.text_success.format("Select at least 2!")))
+        time.sleep(1)
+        self.js_click(self.next_question)
+        time.sleep(1)
+        self.wait_for_element((By.XPATH, self.radio_option_list.format('Pick a county!')))
+        self.wait_to_click(self.next_question)
+        time.sleep(1)
+        assert not self.is_present_and_displayed((By.XPATH, self.radio_option_list.format('Select a city!')), 10)
+        time.sleep(1)
+        self.wait_to_click(self.prev_question)
+        self.wait_for_element((By.XPATH, self.radio_option_list.format('Pick a county!')))
+        self.wait_to_click((By.XPATH, self.choose_radio_button.format('Pick a county!', 'Essex')))
+        time.sleep(1)
+        self.js_click(self.next_question)
+        assert self.is_present_and_displayed((By.XPATH, self.radio_option_list.format('Select a city!')),10)
+        self.wait_to_click((By.XPATH, self.choose_radio_button.format('Select a city!', 'Andover')))
+        self.wait_to_click(self.next_question)
+        time.sleep(1)
+        self.js_click(self.submit_form_button)
+        time.sleep(2)
+        self.wait_for_element(self.success_message)
         self.wait_to_click(self.home_button)
         time.sleep(2)
         self.switch_to_default_content()

@@ -92,7 +92,7 @@ class BasicTestWebApps(BasePage):
         self.evaluate_button = (By.XPATH, "(//input[@value='Evaluate'])[1]")
 
         # Groups
-        self.choose_radio_button = "//label[.//span[.=\"{}\"]]//following-sibling::div//input[@value='{}']"
+        self.choose_radio_button = "//label[.//span[.='{}']]//following-sibling::div//input[@value='{}']"
         self.county_options = "//label[.//span[contains(.,'If you select')]]//following-sibling::div//input[@value='{}']"
         self.radio_button = "//div//input[@value='{}']"
         self.display_new_text_question = (
@@ -120,6 +120,9 @@ class BasicTestWebApps(BasePage):
         # contraints
         self.success_check = (By.XPATH, "//i[@class='fa fa-check text-success']")
         self.warning = (By.XPATH, "//i[@class='fa fa-warning text-danger clickable']")
+        self.danger_warning = "//label[.//span[contains(.,'{}')]]//following-sibling::div//i[contains(@class,'text-danger')]"
+        self.text_success = "//label[.//span[contains(.,'{}')]]//following-sibling::div//i[contains(@class,'text-success')]"
+        self.radio_option_list = "(//label[.//span[contains(.,'{}')]]//following-sibling::div//input)[1]"
         self.error_message = "//div[contains(@data-bind,'serverError')][.={}]"
         self.location_alert = (By.XPATH,
                                "//div[contains(.,'Without access to your location, computations that rely on the here() function will show up blank.')][contains(@class,'alert')]")
@@ -734,5 +737,29 @@ class BasicTestWebApps(BasePage):
         self.wait_to_click(self.continue_button)
         time.sleep(2)
         self.wait_for_element(self.home_button)
+        self.wait_to_click(self.home_button)
+        time.sleep(2)
+
+
+
+    def fixtures_form(self):
+        self.wait_to_click((By.XPATH, self.choose_radio_button.format('Select at least 2!', '3')))
+        self.wait_for_element(
+            (By.XPATH, self.danger_warning.format("Select at least 2!")))
+        self.wait_to_click((By.XPATH, self.choose_radio_button.format('Select at least 2!', '2')))
+        self.wait_for_element(
+            (By.XPATH, self.text_success.format("Select at least 2!")))
+        self.scroll_to_element((By.XPATH, self.radio_option_list.format('Only vl1 and 2 should be able to see this! Select a county!')))
+        time.sleep(1)
+        assert not self.is_present_and_displayed((By.XPATH, self.radio_option_list.format('Select a city!')), 10)
+        time.sleep(1)
+        self.wait_for_element((By.XPATH, self.radio_option_list.format('Only vl1 and 2 should be able to see this! Select a county!')))
+        self.wait_to_click((By.XPATH, self.choose_radio_button.format('Only vl1 and 2 should be able to see this! Select a county!', 'Essex')))
+        time.sleep(1)
+        assert self.is_present_and_displayed((By.XPATH, self.radio_option_list.format('Select a city!')),10)
+        self.wait_to_click((By.XPATH, self.choose_radio_button.format('Select a city!', 'Andover')))
+        time.sleep(2)
+        self.js_click(self.submit_form_button)
+        self.wait_for_element(self.success_message)
         self.wait_to_click(self.home_button)
         time.sleep(2)

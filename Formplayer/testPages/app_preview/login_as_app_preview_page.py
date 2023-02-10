@@ -29,7 +29,7 @@ class LoginAsAppPreviewPage(BasePage):
         self.refresh_button = (By.XPATH, "//i[@class='fa fa-refresh']")
         self.iframe = (By.CLASS_NAME, "preview-phone-window")
         self.login_as_button = (
-        By.XPATH, "//div[@aria-labelledby='single-app-login-as-heading']/descendant::h3[.='Login as']")
+        By.XPATH, "//div[@aria-labelledby='single-app-login-as-heading']/descendant::h3[.='Log in as']")
         self.app_icon_container = (By.XPATH, "//div[@class='container container-appicons']")
         self.title_bar = (By.XPATH, "//li[.='" + UserData.basic_tests['tests_app'] + "']")
         self.searh_user_field = (By.XPATH, "//input[@class='js-user-query form-control']")

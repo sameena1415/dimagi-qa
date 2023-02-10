@@ -65,7 +65,10 @@ class UserData:
         "create_multi_subcase": "Create Multiple Sub Case",
         "caselist": "Case list",
         "subcaseone": "Sub Case One",
-        "close_subcase": "Close Case"
+        "close_subcase": "Close Case",
+        "logic_test1": "Logic Tests 1",
+        "constraints": "Constraints",
+        "fixtures": "Fixtures"
     }
 
     form_specific_tests_app = {
