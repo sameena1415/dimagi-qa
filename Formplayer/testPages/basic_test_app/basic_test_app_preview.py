@@ -1,6 +1,7 @@
 import time
 import random
 import re
+from datetime import datetime, timedelta
 
 from selenium.webdriver.common.keys import Keys
 
@@ -113,7 +114,7 @@ class BasicTestAppPreview(BasePage):
 
         # eofn
         self.text_area_field = "//label[.//span[.='{}']]//following-sibling::div//textarea"
-        self.input_field = "//label[.//span[.='{}']]//following-sibling::div//input"
+        self.input_field = "//label[.//span[contains(.,'{}')]]//following-sibling::div//input"
         self.breadcrumbs = "//h1[@class='page-title'][.='{}']"
         self.search_input = (By.XPATH, "//input[@id='searchText']")
         self.search_button = (By.XPATH, "//button[@id='case-list-search-button']")
@@ -130,6 +131,10 @@ class BasicTestAppPreview(BasePage):
         self.danger_warning = "//label[.//span[contains(.,'{}')]]//following-sibling::div//i[contains(@class,'text-danger')]"
         self.text_success = "//label[.//span[contains(.,'{}')]]//following-sibling::div//i[contains(@class,'text-success')]"
         self.radio_option_list = "(//label[.//span[contains(.,'{}')]]//following-sibling::div//input)[1]"
+
+        # functions
+        self.div_span = "//div/span[contains(.,'{}')]"
+
         # casetest
         self.case_detail_tab = "//a[.='Case Details {}']"
         self.case_detail_table = "//th[.='{}']/following-sibling::td[.='{}']"
@@ -907,3 +912,405 @@ class BasicTestAppPreview(BasePage):
         self.wait_to_click(self.home_button)
         time.sleep(2)
         self.switch_to_default_content()
+
+    def functions_form(self):
+        self.switch_to_frame(self.iframe)
+        self.wait_to_click(self.next_question)
+        self.wait_for_element((By.XPATH, self.div_span.format("between 1 and 50")))
+        text = self.get_text((By.XPATH, self.div_span.format("between 1 and 50")))
+        text = str(text).split(":")
+        text = text[1].strip()
+        print(text)
+        assert int(text) in range(1, 50), "Number is not between 1 and 50"
+        self.wait_to_click(self.next_question)
+        self.wait_for_element((By.XPATH, self.div_span.format("The number \"12\" should be here")))
+        self.validate_text("The number \"12\" should be here", 12)
+        self.wait_to_click(self.next_question)
+        self.wait_for_element((By.XPATH, self.div_span.format("The number \"1\" should be displayed here")))
+        self.validate_text("The number \"1\" should be displayed here", 1, "\n", 3)
+        self.validate_text("The number 6 should be displayed here", 6)
+        self.validate_text("The number \"0\" should be displayed here", 0)
+        self.validate_text("The number \"2\" should display here", 2)
+        self.wait_to_click(self.next_question)
+        self.wait_for_element((By.XPATH, self.input_field.format("Return to this question, enter 0")))
+        self.send_keys((By.XPATH, self.input_field.format("Return to this question, enter 0")),
+                       fetch_random_digit() + Keys.TAB)
+        time.sleep(3)
+        self.js_click(self.next_question)
+        self.wait_for_element((By.XPATH, self.div_span.format(
+            "This should only display if you entered any number other than \"0\" in the previous question."
+        )))
+        assert self.is_present_and_displayed((By.XPATH, self.div_span.format(
+            "This should only display if you entered any number other than \"0\" in the previous question."
+        )))
+        self.js_click(self.prev_question)
+        self.wait_for_element((By.XPATH, self.input_field.format("Return to this question, enter 0")))
+        self.wait_to_clear_and_send_keys((By.XPATH, self.input_field.format("Return to this question, enter 0")),
+                                         "0" + Keys.TAB)
+        time.sleep(3)
+        self.js_click(self.next_question)
+        self.wait_for_element((By.XPATH, self.div_span.format(
+            "This should display the word, \"number\": number"
+        )))
+        assert self.is_present_and_displayed((By.XPATH, self.div_span.format(
+            "This should display the word, \"number\": number"
+        )))
+        self.wait_to_click(self.next_question)
+        self.wait_for_element((By.XPATH, self.input_field.format("Enter 14")))
+        self.send_keys((By.XPATH, self.input_field.format("Enter 14")),
+                       "14" + Keys.TAB)
+        time.sleep(3)
+        self.wait_to_click(self.next_question)
+        self.wait_for_element((By.XPATH, self.div_span.format("This should display \"15\"")))
+        self.validate_text("This should display \"15\"", 15)
+        self.wait_to_click(self.next_question)
+        self.wait_for_element((By.XPATH, self.div_span.format("This should display \"14\"")))
+        self.validate_text("This should display \"14\"", 14)
+        self.wait_to_click(self.next_question)
+        self.wait_for_element((By.XPATH, self.div_span.format("displayed here: 64")))
+        self.validate_text("The answer displayed here: 64, should equal this: 64", 64,",",64)
+        self.wait_to_click(self.next_question)
+        time.sleep(2)
+        self.wait_to_click(self.next_question)
+        time.sleep(2)
+        self.js_click(self.submit_form_button)
+        time.sleep(2)
+        self.wait_for_element(self.success_message)
+        self.wait_to_click(self.home_button)
+        time.sleep(2)
+        self.switch_to_default_content()
+
+    def validate_text(self, div_text, value, split_value=None, value2=None):
+        if split_value is None:
+            num = self.get_text((By.XPATH, self.div_span.format(div_text)))
+            num = str(num).split(":")
+            num = num[1].strip()
+            print(num)
+            assert int(num) == value, 'Number is not \"' + value + '\"'
+        else:
+            text = self.get_text((By.XPATH, self.div_span.format(div_text)))
+            text = str(text).split(split_value)
+            text1 = text[0].strip()
+            text2 = text[1].strip()
+            text1 = str(text1).split(":")
+            num = text1[1].strip()
+            print(num)
+            assert int(num) == value, 'Number is not \"' + value + '\"'
+            text2 = str(text2).split(":")
+            num = text2[1].strip()
+            print(num)
+            assert int(num) == value2, 'Number is not \"' + value2 + '\"'
+
+
+    def constraint_form(self):
+        self.switch_to_frame(self.iframe)
+        self.wait_for_element(self.next_question)
+        self.click(self.next_question)
+        self.wait_for_element((By.XPATH, self.text_area_field.format(
+            "This question is required. You should not be allowed to proceed with a blank answer.")))
+        self.js_click(self.next_question_force)
+        assert self.is_present(self.warning)
+        self.send_keys((By.XPATH, self.text_area_field.format(
+            "This question is required. You should not be allowed to proceed with a blank answer.")),
+                       self.test_question)
+        self.wait_to_click(self.next_question)
+        self.send_keys((By.XPATH, self.text_area_field.format(
+            "This answer can be anything but the word, \"test\". Try a different word. An error message should display. Note this is case sensitive.")),
+                       "test" + Keys.TAB)
+        assert self.is_present_and_displayed((By.XPATH, self.error_message.format(
+            "Your answer cannot be \"test\". Please try something else and continue.")))
+        self.wait_to_clear_and_send_keys((By.XPATH, self.text_area_field.format(
+            "This answer can be anything but the word, \"test\". Try a different word. An error message should display. Note this is case sensitive.")),
+                                         "tes" + Keys.TAB)
+        self.wait_to_click(self.next_question)
+        self.send_keys((By.XPATH, self.text_area_field.format(
+            "This answer cannot be less than 3 characters, or greater than 6 characters long. Leaving the field blank should be valid.")),
+                       "aa" + Keys.TAB)
+        self.wait_for_element(
+            (By.XPATH, self.danger_warning.format("less than 3 characters, or greater than 6 characters")))
+        self.wait_to_clear_and_send_keys((By.XPATH, self.text_area_field.format(
+            "This answer cannot be less than 3 characters, or greater than 6 characters long. Leaving the field blank should be valid.")),
+                                         "aabbccdd" + Keys.TAB)
+        self.wait_for_element(
+            (By.XPATH, self.danger_warning.format("less than 3 characters, or greater than 6 characters")))
+        self.wait_to_clear_and_send_keys((By.XPATH, self.text_area_field.format(
+            "This answer cannot be less than 3 characters, or greater than 6 characters long. Leaving the field blank should be valid.")),
+                                         "aabbcc" + Keys.TAB)
+        self.wait_for_element(
+            (By.XPATH, self.text_success.format("less than 3 characters, or greater than 6 characters")))
+        self.wait_to_click(self.next_question)
+        self.wait_for_element((By.XPATH, self.input_field.format(
+            "This answer must be greater than 20 and smaller than 8000. The question is required.")))
+        self.send_keys((By.XPATH, self.input_field.format(
+            "This answer must be greater than 20 and smaller than 8000. The question is required.")),
+                       "11" + Keys.TAB)
+        self.wait_for_element((By.XPATH, self.danger_warning.format("greater than 20 and smaller than 8000")))
+        self.wait_to_clear_and_send_keys((By.XPATH, self.input_field.format(
+            "This answer must be greater than 20 and smaller than 8000. The question is required.")),
+                       "8011" + Keys.TAB)
+        self.wait_for_element(
+            (By.XPATH, self.danger_warning.format("greater than 20 and smaller than 8000")))
+        self.wait_to_clear_and_send_keys((By.XPATH, self.input_field.format(
+            "This answer must be greater than 20 and smaller than 8000. The question is required.")),
+                       "811" + Keys.TAB)
+        self.wait_for_element(
+            (By.XPATH, self.text_success.format("greater than 20 and smaller than 8000")))
+        self.wait_to_click(self.next_question)
+        self.wait_for_element(
+            (By.XPATH, self.text_success.format("greater than 20 and smaller than 8000")))
+        self.wait_to_click((By.XPATH, self.input_field.format(
+            "This date must be after today.")))
+        self.wait_to_click(self.click_today_date)
+        self.wait_to_click(self.close_date_picker)
+        time.sleep(2)
+        self.wait_for_element(
+            (By.XPATH, self.danger_warning.format("This date must be after today.")))
+        self.wait_to_clear_and_send_keys((By.XPATH, self.input_field.format(
+            "This date must be after today.")), self.input_date_add(1) + Keys.TAB)
+        self.wait_for_element(
+            (By.XPATH, self.text_success.format("This date must be after today.")))
+        self.wait_to_click(self.next_question)
+        self.wait_for_element((By.XPATH, self.input_field.format(
+            "This date has to be today or in the past.")))
+        self.send_keys((By.XPATH, self.input_field.format(
+            "This date has to be today or in the past.")), self.input_date_add(2) + Keys.TAB)
+        self.wait_for_element(
+            (By.XPATH, self.danger_warning.format("This date has to be today or in the past.")))
+        self.wait_to_click((By.XPATH, self.input_field.format(
+            "This date has to be today or in the past.")))
+        self.wait_to_click(self.click_today_date)
+        self.wait_to_click(self.close_date_picker)
+        time.sleep(2)
+        self.wait_for_element(
+            (By.XPATH, self.text_success.format("This date has to be today or in the past.")))
+        self.wait_to_clear_and_send_keys((By.XPATH, self.input_field.format(
+            "This date has to be today or in the past.")), self.input_date_subtract(1) + Keys.TAB)
+        self.wait_for_element(
+            (By.XPATH, self.text_success.format("This date has to be today or in the past.")))
+        self.wait_to_click(self.next_question)
+        self.wait_for_element((By.XPATH, self.input_field.format(
+            "The date entered must be within the last 10 months.")))
+        self.send_keys((By.XPATH, self.input_field.format(
+            "The date entered must be within the last 10 months.")), self.input_date_subtract(340) + Keys.TAB)
+        self.wait_for_element(
+            (By.XPATH, self.danger_warning.format("The date entered must be within the last 10 months.")))
+        self.wait_to_clear_and_send_keys((By.XPATH, self.input_field.format(
+            "The date entered must be within the last 10 months.")), self.input_date_subtract(100) + Keys.TAB)
+        self.wait_for_element(
+            (By.XPATH, self.text_success.format("The date entered must be within the last 10 months.")))
+        self.wait_to_click(self.next_question)
+        self.wait_for_element((By.XPATH, self.input_field.format(
+            "This question should ONLY let you submit an answer with TWO significant figures after the decimal.")))
+        self.send_keys((By.XPATH, self.input_field.format(
+            "This question should ONLY let you submit an answer with TWO significant figures after the decimal.")),
+                       "1.1" + Keys.TAB)
+        self.wait_for_element(
+            (By.XPATH, self.danger_warning.format("TWO significant figures after the decimal")))
+        self.wait_to_clear_and_send_keys((By.XPATH, self.input_field.format(
+            "This question should ONLY let you submit an answer with TWO significant figures after the decimal.")),
+                                         "1.123" + Keys.TAB)
+        self.wait_for_element(
+            (By.XPATH, self.danger_warning.format("TWO significant figures after the decimal")))
+        self.wait_to_clear_and_send_keys((By.XPATH, self.input_field.format(
+            "This question should ONLY let you submit an answer with TWO significant figures after the decimal.")),
+                                         "1.23" + Keys.TAB)
+        self.wait_for_element(
+            (By.XPATH, self.text_success.format("TWO significant figures after the decimal")))
+        self.wait_to_click(self.next_question)
+        self.wait_for_element((By.XPATH, self.input_field.format(
+            "This question should allow you to submit an answer with two OR LESS significant figures.")))
+        self.send_keys((By.XPATH, self.input_field.format(
+            "This question should allow you to submit an answer with two OR LESS significant figures.")),
+                       "100" + Keys.TAB)
+        self.wait_for_element(
+            (By.XPATH, self.text_success.format("two OR LESS significant figures")))
+        self.wait_to_click(self.next_question)
+        self.wait_for_element((By.XPATH, self.input_field.format(
+            "This question should only let you submit an answer greater than 50 but less than 80.")))
+        self.send_keys((By.XPATH, self.input_field.format(
+            "This question should only let you submit an answer greater than 50 but less than 80.")),
+                       "100" + Keys.TAB)
+        self.wait_for_element(
+            (By.XPATH, self.danger_warning.format("greater than 50 but less than 80")))
+        self.wait_to_clear_and_send_keys((By.XPATH, self.input_field.format(
+            "This question should only let you submit an answer greater than 50 but less than 80.")),
+                                         "60" + Keys.TAB)
+        self.wait_for_element(
+            (By.XPATH, self.text_success.format("greater than 50 but less than 80")))
+        self.wait_to_click(self.next_question)
+        self.wait_for_element((By.XPATH, self.text_area_field.format(
+            "Leave this question blank and navigate to the next question. Then, navigate back to this question, enter a value and proceed.")))
+        self.wait_to_click(self.next_question)
+        self.wait_for_element((By.XPATH, self.div_span.format("You should only see this question if you left the previous one blank.")))
+        self.wait_to_click(self.prev_question)
+        self.wait_to_clear_and_send_keys((By.XPATH, self.text_area_field.format(
+            "Leave this question blank and navigate to the next question. Then, navigate back to this question, enter a value and proceed.")),
+                                         self.test_question + Keys.TAB)
+        time.sleep(3)
+        self.wait_to_click(self.next_question)
+        self.wait_for_element((By.XPATH, self.text_area_field.format(
+            'This should automatically have a default answer of \"Yes\" inserted in the text field'
+        )))
+        assert self.get_attribute((By.XPATH, self.text_area_field.format(
+            'This should automatically have a default answer of \"Yes\" inserted in the text field'
+        )),"value") == "Yes", "Default value is not Yes"
+        self.wait_to_click(self.next_question)
+        self.wait_for_element((By.XPATH, self.choose_radio_button.format("Choose an answer.","Yes")))
+        self.js_click((By.XPATH, self.choose_radio_button.format("Choose an answer.", "Yes")))
+        self.wait_to_click(self.next_question)
+        self.wait_for_element((By.XPATH, self.div_span.format("This should only appear if you selected \"Yes\" to the previous question.")))
+        self.wait_to_click(self.next_question)
+        self.wait_for_element((By.XPATH, self.div_span.format("should not be the same as")))
+        text = self.get_text((By.XPATH, self.div_span.format("should not be the same as")))
+        text = str(text).split(",")
+        text1 = text[0].strip()
+        text2 = text[1].strip()
+        text1 = str(text1).split(":")
+        num1 = text1[1].strip()
+        print(num1)
+        text2 = str(text2).split(":")
+        num2 = text2[1].strip()
+        print(num2)
+        assert num1 != num2, 'Values are equal'
+        self.wait_to_click(self.next_question)
+        self.wait_for_element((By.XPATH,self.input_field.format("Enter a score of 80.")))
+        self.send_keys((By.XPATH, self.input_field.format("Enter a score of 80.")),"80"+Keys.TAB)
+        time.sleep(2)
+        self.wait_to_click(self.next_question)
+        assert self.is_present_and_displayed((By.XPATH, self.div_span.format("GOOD - This should only appear if the score was greater than 75.")))
+        self.wait_to_click(self.prev_question)
+        self.wait_to_clear_and_send_keys((By.XPATH, self.input_field.format("Enter a score of 80.")), "60"+Keys.TAB)
+        time.sleep(2)
+        self.wait_to_click(self.next_question)
+        assert self.is_present_and_displayed(
+            (By.XPATH, self.div_span.format("FAIR - This should only appear if the score is greater than 50 and less than or equal to 75.")))
+        self.wait_to_click(self.prev_question)
+        self.wait_to_clear_and_send_keys((By.XPATH, self.input_field.format("Enter a score of 80.")), "10" + Keys.TAB)
+        time.sleep(2)
+        self.wait_to_click(self.next_question)
+        assert self.is_present_and_displayed(
+            (By.XPATH, self.div_span.format(
+                "POOR - This should display if the score was less than or equal to 50.")))
+        self.wait_to_click(self.next_question)
+        self.wait_for_element((By.XPATH, self.choose_radio_button.format(
+            "Please select 1 or 2 options and proceed.","One"
+        )))
+        self.js_click((By.XPATH, self.choose_radio_button.format(
+            "Please select 1 or 2 options and proceed.", "One"
+        )))
+
+        self.js_click((By.XPATH, self.choose_radio_button.format(
+            "Please select 1 or 2 options and proceed.", "Two"
+        )))
+        time.sleep(3)
+        self.wait_to_click(self.next_question)
+        assert self.is_present_and_displayed((By.XPATH, self.div_span.format("This msg should only display if you selected one or two items.")))
+        self.wait_to_click(self.prev_question)
+        self.wait_for_element((By.XPATH, self.choose_radio_button.format(
+            "Please select 1 or 2 options and proceed.", "One"
+        )))
+        self.js_click((By.XPATH, self.choose_radio_button.format(
+            "Please select 1 or 2 options and proceed.", "Three"
+        )))
+        time.sleep(3)
+        self.wait_to_click(self.next_question)
+        assert self.is_present_and_displayed((By.XPATH, self.text_area_field.format("This should only display if you selected 3 or more options in the previous question.")))
+        self.send_keys((By.XPATH, self.text_area_field.format(
+            "This should only display if you selected 3 or more options in the previous question.")), self.test_question)
+        self.wait_to_click(self.next_question)
+        self.wait_for_element((By.XPATH, self.choose_radio_button.format(
+            "You should not be able to choose all of the options here.", "One"
+        )))
+
+        self.js_click((By.XPATH, self.choose_radio_button.format(
+            "You should not be able to choose all of the options here.", "One"
+        )))
+        self.js_click((By.XPATH, self.choose_radio_button.format(
+            "You should not be able to choose all of the options here.", "Two"
+        )))
+        self.js_click((By.XPATH, self.choose_radio_button.format(
+            "You should not be able to choose all of the options here.", "Three"
+        )))
+        self.js_click((By.XPATH, self.choose_radio_button.format(
+            "You should not be able to choose all of the options here.", "Four"
+        )))
+        self.wait_for_element((By.XPATH, self.danger_warning.format("You should not be able to choose all of the options here.")))
+        self.js_click((By.XPATH, self.choose_radio_button.format(
+            "You should not be able to choose all of the options here.", "Four"
+        )))
+
+        self.wait_for_element(
+            (By.XPATH, self.text_success.format("You should not be able to choose all of the options here.")))
+        self.wait_to_click(self.next_question)
+        self.wait_for_element((By.XPATH, self.choose_radio_button.format(
+            "You should not be able to select \"None\" and another choice.", "One"
+        )))
+
+        self.js_click((By.XPATH, self.choose_radio_button.format(
+            "You should not be able to select \"None\" and another choice.", "One"
+        )))
+        self.js_click((By.XPATH, self.choose_radio_button.format(
+            "You should not be able to select \"None\" and another choice.", "Two"
+        )))
+        self.js_click((By.XPATH, self.choose_radio_button.format(
+            "You should not be able to select \"None\" and another choice.", "None"
+        )))
+        self.wait_for_element(
+            (By.XPATH, self.danger_warning.format("You should not be able to select \"None\" and another choice.")))
+        self.js_click((By.XPATH, self.choose_radio_button.format(
+            "You should not be able to select \"None\" and another choice.", "Two"
+        )))
+        self.wait_for_element(
+            (By.XPATH, self.danger_warning.format("You should not be able to select \"None\" and another choice.")))
+        self.js_click((By.XPATH, self.choose_radio_button.format(
+            "You should not be able to select \"None\" and another choice.", "One"
+        )))
+        self.wait_for_element(
+            (By.XPATH, self.text_success.format("You should not be able to select \"None\" and another choice.")))
+        self.wait_to_click(self.next_question)
+        self.wait_for_element((By.XPATH, self.input_field.format("If you capture your location, you should not see the message.")))
+
+        self.wait_to_click(self.next_question)
+        assert self.is_present_and_displayed((By.XPATH, self.div_span.format("You should only see this message if the previous question was left empty.")))
+
+        self.wait_to_click(self.prev_question)
+        self.wait_for_element(
+            (By.XPATH, self.input_field.format("If you capture your location, you should not see the message.")))
+        self.send_keys(
+            (By.XPATH, self.input_field.format("If you capture your location, you should not see the message.")), "Delhi"+Keys.ENTER)
+        time.sleep(5)
+        self.wait_to_click(self.next_question)
+        assert not self.is_present((By.XPATH, self.div_span.format(
+            "You should only see this message if the previous question was left empty.")))
+        self.wait_for_element((By.XPATH, self.choose_radio_button.format(
+            "The form should not crash.", "Continue to complete the form."
+        )))
+        self.js_click((By.XPATH, self.choose_radio_button.format(
+            "The form should not crash.", "Continue to complete the form."
+        )))
+        self.wait_to_click(self.next_question)
+        time.sleep(1)
+        self.js_click(self.submit_form_button)
+        time.sleep(2)
+        self.wait_for_element(self.success_message)
+        self.wait_to_click(self.home_button)
+        time.sleep(2)
+        self.switch_to_default_content()
+
+    def input_date_add(self, number_of_days):
+        presentday = datetime.now()  # or presentday = datetime.today()
+        # Get new date
+        new_date = presentday + timedelta(number_of_days)
+        return new_date.strftime('%m/%d/%Y')
+
+    def input_date_subtract(self, number_of_days):
+        presentday = datetime.now()
+        # Get new date
+        new_date = presentday - timedelta(number_of_days)
+        return new_date.strftime('%m/%d/%Y')
+
+
+
+
+
+

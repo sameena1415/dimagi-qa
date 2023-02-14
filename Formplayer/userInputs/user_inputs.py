@@ -68,7 +68,8 @@ class UserData:
         "close_subcase": "Close Case",
         "logic_test1": "Logic Tests 1",
         "constraints": "Constraints",
-        "fixtures": "Fixtures"
+        "fixtures": "Fixtures",
+        "functions": "Functions"
     }
 
     form_specific_tests_app = {
