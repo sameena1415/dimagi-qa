@@ -26,7 +26,7 @@ class BasicTestWebApps(BasePage):
         self.name_input2 = "basic test2 " + fetch_random_string()
         self.name_input3 = "basic test3 " + fetch_random_string()
         self.changed_name_input = "basic test changed " + fetch_random_string()
-
+        self.special_character = "~`!@#$%^&*()<>?"
         self.test_question = "Test " + fetch_random_string()
         self.case_reg_neg = "web_negcase_" + fetch_random_string()
         self.case_reg_pos = "web_poscase_" + fetch_random_string()
@@ -94,6 +94,7 @@ class BasicTestWebApps(BasePage):
 
         # Groups
         self.choose_radio_button = "//label[.//span[contains(.,'{}')]]//following-sibling::div//input[@value='{}']"
+        self.choose_radio_button2 = "(//label[.//span[contains(.,'{}')]]//following-sibling::div//input[@value='{}'])[2]"
         self.county_options = "//label[.//span[contains(.,'If you select')]]//following-sibling::div//input[@value='{}']"
         self.radio_button = "//div//input[@value='{}']"
         self.display_new_text_question = (
@@ -109,7 +110,8 @@ class BasicTestWebApps(BasePage):
         self.pop_up_message = "//span[@class='caption webapp-markdown-output'][.='{}']"
 
         # eofn
-        self.text_area_field = "//label[.//span[.='{}']]//following-sibling::div//textarea"
+        self.text_area_field = "//label[.//span[contains(.,'{}')]]//following-sibling::div//textarea"
+        self.text_area_field2 = "(//label[.//span[contains(.,'{}')]]//following-sibling::div//textarea)[2]"
         self.input_field = "(//label[.//span[contains(.,'{}')]]//following-sibling::div//input)[1]"
         self.breadcrumbs = "//h1[@class='page-title'][.='{}']"
         self.search_input = (By.XPATH, "//input[@id='searchText']")
@@ -124,7 +126,9 @@ class BasicTestWebApps(BasePage):
         self.next_error = (By.XPATH, "//div[contains(@data-bind,'erroredQuestions')][./div[contains(@data-bind,'jumpToErrors')]]//i[@class='fa fa-fast-forward']")
         self.warning = (By.XPATH, "//i[@class='fa fa-warning text-danger clickable']")
         self.danger_warning = "//label[.//span[contains(.,'{}')]]//following-sibling::div//i[contains(@class,'text-danger')]"
+
         self.text_success = "//label[.//span[contains(.,'{}')]]//following-sibling::div//i[contains(@class,'text-success')]"
+        self.text_success2 = "(//label[.//span[contains(.,'{}')]]//following-sibling::div//i[contains(@class,'text-success')])[2]"
         self.radio_option_list = "(//label[.//span[contains(.,'{}')]]//following-sibling::div//input)[1]"
         self.error_message = "//div[contains(@data-bind,'serverError')][.='{}']"
         self.location_alert = (By.XPATH,
@@ -140,6 +144,16 @@ class BasicTestWebApps(BasePage):
         self.blank_latitude = (By.XPATH, "//td[@class='lat coordinate'][contains(.,'??')]")
         self.output = (By.XPATH, "//span[@class='caption webapp-markdown-output']")
         self.empty_list = (By.XPATH, "//div[@class='alert alert-info'][.='List is empty.']")
+        self.clear_select = "//label[.//span[contains(.,'{}')]]//following-sibling::div//button[contains(@data-bind,'click: onClear')][@style='']"
+        self.clear_select2 = "(//label[.//span[contains(.,'{}')]]//following-sibling::div//button[contains(@data-bind,'click: onClear')][@style=''])[2]"
+
+        #repeat group
+        self.delete_repeat = "//legend/span[contains(.,'{}')]//following-sibling::button"
+        self.repeat_input_field = "//div[@class='gr repetition'][.//legend/span[contains(.,'{}')]]//following-sibling::div[./fieldset[.//label[.//span[contains(.,'{}')]]]]//following-sibling::div//input"
+        self.add_new_repeat = (By.XPATH, "//button[.='Add new repeat']")
+        self.danger_warning_repeat = "//div[@class='gr repetition'][.//legend/span[contains(.,'{}')]]//following-sibling::div[./fieldset[.//label[.//span[contains(.,'{}')]]]]//following-sibling::div//i[contains(@class,'text-danger')]"
+        self.text_success_repeat = "//div[@class='gr repetition'][.//legend/span[contains(.,'{}')]]//following-sibling::div[./fieldset[.//label[.//span[contains(.,'{}')]]]]//following-sibling::div//i[contains(@class,'text-success')]"
+
 
     def open_form(self, case_list, form_name):
         self.scroll_to_element((By.XPATH, self.case_list_menu.format(case_list)))
@@ -1087,3 +1101,193 @@ class BasicTestWebApps(BasePage):
         return new_date.strftime('%m/%d/%Y')
 
 
+    def questions_form(self):
+        self.wait_for_element((By.XPATH, self.text_area_field.format("This question should let you enter any form of text or special characters.")))
+        self.send_keys((By.XPATH, self.text_area_field.format(
+            "This question should let you enter any form of text or special characters.")), self.test_question+" "+self.special_character)
+        self.scroll_to_element((By.XPATH, self.input_field.format(
+            "This question should only let you enter an integer.")))
+        self.send_keys((By.XPATH, self.input_field.format(
+            "This question should only let you enter an integer.")),"abcd"+Keys.TAB)
+        self.wait_for_element(((By.XPATH, self.danger_warning.format(
+            "This question should only let you enter an integer."))))
+        self.wait_to_clear_and_send_keys((By.XPATH, self.input_field.format(
+            "This question should only let you enter an integer.")), fetch_random_digit() + Keys.TAB)
+        self.wait_for_element(((By.XPATH, self.text_success.format(
+            "This question should only let you enter an integer."))))
+
+        self.scroll_to_element((By.XPATH, self.input_field.format(
+            "This question should only let you enter a decimal number")))
+        self.send_keys((By.XPATH, self.input_field.format(
+            "This question should only let you enter a decimal number")), "23.45" + Keys.TAB)
+        time.sleep(3)
+
+        self.scroll_to_element((By.XPATH, self.input_field.format(
+            "This question should only allow you to enter a date.")))
+        self.send_keys((By.XPATH, self.input_field.format(
+            "This question should only allow you to enter a date.")), self.input_date_add(0) + Keys.TAB)
+
+        self.scroll_to_element((By.XPATH, self.choose_radio_button.format(
+            "You should be able to choose one or more answers here.","One")))
+        self.js_click((By.XPATH, self.choose_radio_button.format(
+            "You should be able to choose one or more answers here.", "One")))
+        self.js_click((By.XPATH, self.choose_radio_button.format(
+            "You should be able to choose one or more answers here.", "Two")))
+        self.js_click((By.XPATH, self.choose_radio_button.format(
+            "You should be able to choose one or more answers here.", "Three")))
+        self.wait_for_element((By.XPATH, self.text_success.format("You should be able to choose one or more answers here.")))
+
+        self.scroll_to_element((By.XPATH, self.choose_radio_button.format(
+            "You should be able to choose only one answer here.", "One")))
+        self.js_click((By.XPATH, self.choose_radio_button.format(
+            "You should be able to choose only one answer here.", "One")))
+        time.sleep(2)
+        assert self.is_selected((By.XPATH, self.choose_radio_button.format(
+            "You should be able to choose only one answer here.", "One"))), "The option is not selected."
+        self.wait_for_element((By.XPATH, self.clear_select.format("You should be able to choose only one answer here.")))
+        self.wait_to_click(
+            (By.XPATH, self.clear_select.format("You should be able to choose only one answer here.")))
+        time.sleep(2)
+        assert not self.is_selected((By.XPATH, self.choose_radio_button.format(
+            "You should be able to choose only one answer here.", "One"))), "The option is still selected."
+        self.js_click((By.XPATH, self.choose_radio_button.format(
+            "You should be able to choose only one answer here.", "Two")))
+        time.sleep(2)
+        assert self.is_selected((By.XPATH, self.choose_radio_button.format(
+            "You should be able to choose only one answer here.", "Two"))), "The option is not selected."
+
+        self.scroll_to_element((By.XPATH, self.input_field.format(
+            "This question should only allow you to enter a time.")))
+        self.send_keys((By.XPATH, self.input_field.format(
+            "This question should only allow you to enter a time.")), datetime.now().strftime("%H:%M") + Keys.TAB)
+
+        self.scroll_to_element((By.XPATH, self.input_field.format(
+            "The value of this question should be hidden, but anything can be entered.")))
+        self.send_keys((By.XPATH, self.input_field.format(
+            "The value of this question should be hidden, but anything can be entered.")), self.test_question + Keys.TAB)
+        time.sleep(2)
+        assert self.get_attribute(
+            (By.XPATH, self.input_field.format(
+                "The value of this question should be hidden, but anything can be entered.")), "type"
+        ) == "password", "Value is not hidden"
+
+        self.scroll_to_element((By.XPATH, self.input_field.format(
+            "The value of this question should be hidden and only numbers are allowed.")))
+        self.send_keys((By.XPATH, self.input_field.format(
+            "The value of this question should be hidden and only numbers are allowed.")),
+                       self.test_question + Keys.TAB)
+        self.wait_for_element((By.XPATH, self.danger_warning.format(
+            "The value of this question should be hidden and only numbers are allowed.")))
+        time.sleep(2)
+        assert self.get_attribute(
+            (By.XPATH, self.input_field.format(
+                "The value of this question should be hidden and only numbers are allowed.")), "type"
+        ) == "password", "Value is not hidden"
+        self.wait_to_clear_and_send_keys((By.XPATH, self.input_field.format(
+            "The value of this question should be hidden and only numbers are allowed.")),
+                       fetch_random_digit() + Keys.TAB)
+        self.wait_for_element((By.XPATH, self.text_success.format(
+            "The value of this question should be hidden and only numbers are allowed.")))
+
+        self.scroll_to_element((By.XPATH, self.input_field.format(
+            "If using an Android device, this question should allow you to capture a GPS location. Try it out")))
+        self.send_keys((By.XPATH, self.input_field.format(
+            "If using an Android device, this question should allow you to capture a GPS location. Try it out")), "Delhi" + Keys.TAB)
+        self.js_click(self.search_location_button)
+        time.sleep(2)
+        assert not self.is_present_and_displayed(self.blank_latitude, 10)
+
+        self.wait_for_element((By.XPATH, self.text_area_field2.format(
+            "This question should let you enter any form of text or special characters. Try different values.")))
+        self.send_keys((By.XPATH, self.text_area_field2.format(
+            "This question should let you enter any form of text or special characters. Try different values.")),
+                       self.test_question + " " + self.special_character)
+        self.scroll_to_element((By.XPATH, self.choose_radio_button2.format(
+            "You should be able to choose one or more answers here.", "One")))
+        self.js_click((By.XPATH, self.choose_radio_button2.format(
+            "You should be able to choose one or more answers here.", "One")))
+        self.js_click((By.XPATH, self.choose_radio_button2.format(
+            "You should be able to choose one or more answers here.", "Two")))
+        self.js_click((By.XPATH, self.choose_radio_button2.format(
+            "You should be able to choose one or more answers here.", "Three")))
+        self.wait_for_element(
+            (By.XPATH, self.text_success2.format("You should be able to choose one or more answers here.")))
+        self.scroll_to_element((By.XPATH, self.choose_radio_button2.format(
+            "You should be able to choose only one answer here.", "One")))
+        self.js_click((By.XPATH, self.choose_radio_button2.format(
+            "You should be able to choose only one answer here.", "One")))
+        time.sleep(2)
+        assert self.is_selected((By.XPATH, self.choose_radio_button2.format(
+            "You should be able to choose only one answer here.", "One"))), "The option is not selected."
+        self.wait_for_element(
+            (By.XPATH, self.clear_select2.format("You should be able to choose only one answer here.")))
+        self.wait_to_click(
+            (By.XPATH, self.clear_select2.format("You should be able to choose only one answer here.")))
+        time.sleep(2)
+        assert not self.is_selected((By.XPATH, self.choose_radio_button2.format(
+            "You should be able to choose only one answer here.", "One"))), "The option is still selected."
+        self.js_click((By.XPATH, self.choose_radio_button2.format(
+            "You should be able to choose only one answer here.", "Two")))
+        time.sleep(2)
+        assert self.is_selected((By.XPATH, self.choose_radio_button2.format(
+            "You should be able to choose only one answer here.", "Two"))), "The option is not selected."
+
+        self.scroll_to_element((By.XPATH, self.choose_radio_button.format(
+            "This is a single select lookup. You should be able to choose only one answer.", "Radhe Sham")))
+        self.js_click((By.XPATH, self.choose_radio_button.format(
+            "This is a single select lookup. You should be able to choose only one answer.", "Radhe Sham")))
+        time.sleep(2)
+        assert self.is_selected((By.XPATH, self.choose_radio_button.format(
+            "This is a single select lookup. You should be able to choose only one answer.", "Radhe Sham"))), "The option is not selected."
+        self.wait_to_click((By.XPATH, self.clear_select.format(
+            "This is a single select lookup. You should be able to choose only one answer.")))
+        time.sleep(2)
+        assert not self.is_selected((By.XPATH, self.choose_radio_button.format(
+            "This is a single select lookup. You should be able to choose only one answer.", "Radhe Sham"))), "The option is still selected."
+        self.js_click((By.XPATH, self.choose_radio_button.format(
+            "This is a single select lookup. You should be able to choose only one answer.", "Art of War")))
+        time.sleep(2)
+        assert self.is_selected((By.XPATH, self.choose_radio_button.format(
+            "This is a single select lookup. You should be able to choose only one answer.", "Art of War"))), "The option is not selected."
+
+
+        self.scroll_to_element((By.XPATH, self.choose_radio_button.format(
+            "This is a checkbox lookup table and you should be able to choose more than one option.", "150")))
+
+        self.wait_to_click((By.XPATH, self.choose_radio_button.format(
+            "This is a checkbox lookup table and you should be able to choose more than one option.", "150")))
+        time.sleep(1)
+        self.wait_to_click((By.XPATH, self.choose_radio_button.format(
+            "This is a checkbox lookup table and you should be able to choose more than one option.", "200")))
+        time.sleep(2)
+        self.wait_for_element(
+            (By.XPATH,
+             self.text_success.format("This is a checkbox lookup table and you should be able to choose more than one option.")))
+
+        self.scroll_to_element(self.add_new_repeat)
+        self.js_click(self.add_new_repeat)
+        self.wait_for_element((By.XPATH, self.repeat_input_field.format("1/1","Enter a number")))
+        self.send_keys((By.XPATH, self.repeat_input_field.format("1/1", "Enter a number")), "abc"+Keys.TAB)
+        self.wait_for_element((By.XPATH, self.danger_warning_repeat.format("1/1", "Enter a number")))
+        self.wait_to_clear_and_send_keys((By.XPATH, self.repeat_input_field.format("1/1", "Enter a number")), "12"+Keys.TAB)
+        self.wait_for_element((By.XPATH, self.text_success_repeat.format("1/1", "Enter a number")))
+
+
+        self.scroll_to_element(self.add_new_repeat)
+        self.js_click(self.add_new_repeat)
+        self.wait_for_element((By.XPATH, self.repeat_input_field.format("2/2","Enter a number")))
+        self.send_keys((By.XPATH, self.repeat_input_field.format("2/2", "Enter a number")), "abc"+Keys.TAB)
+        self.wait_for_element((By.XPATH, self.danger_warning_repeat.format("2/2", "Enter a number")))
+        self.wait_to_clear_and_send_keys((By.XPATH, self.repeat_input_field.format("2/2", "Enter a number")), "45"+Keys.TAB)
+        self.wait_for_element((By.XPATH, self.text_success_repeat.format("2/2", "Enter a number")))
+
+        self.wait_to_click((By.XPATH, self.delete_repeat.format("2/2")))
+        time.sleep(3)
+        self.wait_to_click((By.XPATH, self.delete_repeat.format("1/1")))
+        time.sleep(3)
+        assert not self.is_present((By.XPATH, self.repeat_input_field.format("1/1","Enter a number")))
+        time.sleep(2)
+        self.js_click(self.submit_form_button)
+        self.wait_for_element(self.success_message)
+        self.wait_to_click(self.home_button)
+        time.sleep(2)

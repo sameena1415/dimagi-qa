@@ -315,6 +315,15 @@ class BasePage:
         self.driver.execute_script("arguments[0].click();", element)
         time.sleep(3)
 
+
+    def js_send_keys(self, locator, value, timeout=20):
+        clickable = ec.element_to_be_clickable(locator)
+        element = WebDriverWait(self.driver, timeout).until(clickable,
+                                                            message="Couldn't find locator: "
+                                                                    + str(locator))
+        self.driver.execute_script("arguments[0].setAttribute('value', '" + value +"')", element);
+        time.sleep(3)
+
     def js_click_direct(self, locator):
         self.driver.execute_script("arguments[0].click();", self.driver.find_element(*locator))
 
