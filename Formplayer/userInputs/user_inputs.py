@@ -81,3 +81,4 @@ class UserData:
                    'boolean-from-string(0)', 'boolean(1)', 'boolean(0)']
     unicode = "☕️☕️☕️"
     unicode_new = "☕️☕️☕️☕️☕️☕️"
+    page_list = ["10","25","50","100"]

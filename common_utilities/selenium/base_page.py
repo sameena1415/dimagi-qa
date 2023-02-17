@@ -381,3 +381,6 @@ class BasePage:
     def get_element(self, xpath_format, insert_value):
         element = (By.XPATH, xpath_format.format(insert_value))
         return element
+
+    def open_new_tab(self):
+        self.driver.execute_script("window.open('');")

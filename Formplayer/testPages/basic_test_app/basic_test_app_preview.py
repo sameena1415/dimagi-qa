@@ -6,6 +6,7 @@ from datetime import datetime, timedelta
 from selenium.webdriver.common.keys import Keys
 
 from Formplayer.testPages.app_preview.login_as_app_preview_page import LoginAsAppPreviewPage
+from Formplayer.testPages.project_settings.project_settings_page import ProjectSettingsPage
 from Formplayer.testPages.webapps.webapps_basics import WebAppsBasics
 from common_utilities.generate_random_string import fetch_random_string, fetch_phone_number, fetch_random_digit, \
     fetch_random_digit_with_range
@@ -41,7 +42,10 @@ class BasicTestAppPreview(BasePage):
             "intval": fetch_random_digit_with_range(1, 30)
         }
         self.application_menu_id = (By.LINK_TEXT, "Applications")
-
+        self.description_field_edit = (By.XPATH, "//inline-edit[contains(@params,'Enter app description here')]//i[@class='fa fa-pencil']")
+        self.description_field = (
+        By.XPATH, "//inline-edit[contains(@params,'Enter app description here')]//textarea")
+        self.save_description = (By.XPATH, "//inline-edit[contains(@params,'Enter app description here')]//button[contains(@data-bind,'click: save')]")
         self.back_button = (By.XPATH, "//i[@class ='fa fa-chevron-left']")
         self.form_list = (By.XPATH, "//tbody[@class='menus-container']")
         self.refresh_button = (By.XPATH, "//button[contains(@class,'btn-preview-refresh js-preview-refresh')]")
@@ -52,6 +56,10 @@ class BasicTestAppPreview(BasePage):
         self.settings_option = (By.XPATH, "//div[@class = 'js-settings appicon appicon-settings']/i")
         self.login_as_option = (By.XPATH, "//div[@class='js-restore-as-item appicon appicon-restore-as']")
         self.incomplete_form = (By.XPATH, "//div[@class='js-incomplete-sessions-item appicon appicon-incomplete']")
+        self.make_new_version_button = (By.XPATH, "//button[contains(@data-bind,'Make New Version')]")
+        self.release_button = (By.XPATH, "(//button[contains(text(),'Released')])[1]")
+        self.release_button_pressed = (
+        By.XPATH, "(//button[contains(text(),'Released')])[1][contains(@class,'active')]")
 
         self.case_list_menu = "//h3[contains(text(), '{}')]"
         self.registration_form = "//h3[contains(text(), '{}')]"
@@ -61,6 +69,16 @@ class BasicTestAppPreview(BasePage):
         self.incomplete_form_list = (By.XPATH, "//tr[@class='formplayer-request']")
         self.incomplete_form_title = (By.XPATH, "//li[@class='breadcrumb-text'][.='Incomplete Forms']")
         self.incomplete_list_count = (By.XPATH, "//ul/li[@data-lp]")
+        self.no_of_pages = (By.XPATH, "//li[contains(@class,'js-page')]")
+        self.list_drop_down = (By.XPATH, "//select[@class='form-control per-page-limit']")
+        self.page_number = "(//li[contains(@class,'js-page')])[{}]"
+        self.page_navigation = (By.XPATH, "//nav[@class='module-pagination-container']")
+        self.next_list_button = (By.XPATH, "//a[@aria-label='Next']")
+        self.prev_list_button = (By.XPATH, "//a[@aria-label='Previous']")
+        self.first_list_page = (By.XPATH, "//a[@aria-label='First Page']")
+        self.last_list_page = (By.XPATH, "//a[@aria-label='Last Page']")
+        self.go_to_page_input = (By.XPATH, "//input[@placeholder='Go to page']")
+        self.go_button = (By.XPATH, "//button[@id='pagination-go-button']")
         self.delete_incomplete_form = "(//tr[@class='formplayer-request']/descendant::div[@aria-label='Delete form'])[{}]"
         self.edit_incomplete_form = (
             By.XPATH, "(//tr[@class='formplayer-request']/descendant::div//i[contains(@class,'fa fa-pencil')])[1]")
@@ -1566,4 +1584,126 @@ class BasicTestAppPreview(BasePage):
         self.switch_to_default_content()
 
 
+    def update_description(self, settings):
+        self.wait_for_element(self.description_field_edit)
+        self.js_click(self.description_field_edit)
+        self.wait_to_clear_and_send_keys(self.description_field,
+                                         "Basic Tests Description - automation test inactivity "+datetime.now().strftime("%d-%m-%Y %H:%M")
+                                         )
+        self.js_click(self.save_description)
+        time.sleep(2)
+        project = ProjectSettingsPage(self.driver, settings)
+        project.set_inactivity_timeout()
+        app_preview = LoginAsAppPreviewPage(self.driver, settings)
+        app_preview.open_view_app_preview(UserData.basic_tests_app['tests_app'])
+        self.wait_for_element(self.make_new_version_button)
+        self.wait_to_click(self.make_new_version_button)
+        print("Sleeping for the new version to be ready to release")
+        time.sleep(40)
+        self.js_click(self.release_button)
+        time.sleep(5)
+        assert self.is_present(self.release_button_pressed), "Release button is not successfully pressed."
+        print("Sleeping for the installation code to generate")
+        time.sleep(5)
+        self.switch_back_to_prev_tab()
 
+    def verify_pagination(self):
+        self.switch_to_frame(self.iframe)
+        self.wait_to_click(self.incomplete_form)
+        self.wait_for_element(self.incomplete_form_title)
+        if self.is_present(self.page_navigation):
+            self.switch_to_default_content()
+            time.sleep(3)
+            self.verify_page_navigation()
+            time.sleep(3)
+            self.verify_goto_page_button()
+            time.sleep(3)
+            self.verify_list_per_page()
+            self.switch_to_frame(self.iframe)
+        elif self.is_present(self.page_navigation) == False and self.is_present(
+                self.find_elements(self.incomplete_list_count)):
+            self.switch_to_default_content()
+            self.verify_list_per_page()
+            self.switch_to_frame(self.iframe)
+        else:
+            print("No incomplete form present")
+        self.driver.back()
+        self.switch_to_default_content()
+
+    def verify_list_per_page(self):
+        self.switch_to_frame(self.iframe)
+        if self.is_present(self.page_navigation):
+            page_count = self.find_elements(self.no_of_pages)
+            print(len(page_count))
+            max_list_count = len(page_count) * 10
+            print(max_list_count)
+            min_list_count = (len(page_count) - 1) * 10
+            print(min_list_count)
+        else:
+            page_count = 1
+            max_list_count = page_count * 10
+            print(max_list_count)
+            min_list_count = 1
+            print(min_list_count)
+
+        for i in UserData.page_list:
+            self.select_by_value(self.list_drop_down, i)
+            time.sleep(5)
+            latest_page_count = self.find_elements(self.no_of_pages)
+            if self.is_present(self.page_navigation):
+                if len(latest_page_count) > 1:
+                    assert len(self.find_elements(self.incomplete_form_list)) == int(i), "List count not equal to 10"
+                else:
+                    assert len(self.find_elements(self.incomplete_form_list)) in range(min_list_count,
+                                                                                       max_list_count), "List count is not valid"
+            else:
+                assert len(self.find_elements(self.incomplete_form_list)) in range(min_list_count,
+                                                                                       max_list_count), "List count is not valid"
+        self.switch_to_default_content()
+
+    def verify_page_navigation(self):
+        self.switch_to_frame(self.iframe)
+        page_count = self.find_elements(self.no_of_pages)
+        n = len(page_count)
+        print(n)
+        self.wait_to_click(self.last_list_page)
+        time.sleep(3)
+        classname = self.get_attribute((By.XPATH, self.page_number.format(n)),"class")
+        print(classname)
+        assert classname == "js-page active", "Click is not successful on last page"
+
+        self.wait_to_click(self.first_list_page)
+        time.sleep(3)
+        classname = self.get_attribute((By.XPATH, self.page_number.format(1)), "class")
+        print(classname)
+        assert classname == "js-page active", "Click is not successful on first page"
+
+        print("navigating forward")
+        for i in range(len(page_count)-1)[::]:
+            self.wait_to_click(self.next_list_button)
+            time.sleep(3)
+            classname = self.get_attribute((By.XPATH, self.page_number.format(i+2)), "class")
+            print(classname)
+            assert classname == "js-page active", "Click is not successful"
+
+        print("navigating backward")
+        for i in range(len(page_count)-1)[::]:
+            self.wait_to_click(self.prev_list_button)
+            time.sleep(3)
+            classname = self.get_attribute((By.XPATH, self.page_number.format(len(page_count)-i-1)), "class")
+            print(classname)
+            assert classname == "js-page active", "Click is not successful"
+        self.switch_to_default_content()
+
+    def verify_goto_page_button(self):
+        self.switch_to_frame(self.iframe)
+        page_count = self.find_elements(self.no_of_pages)
+        n = len(page_count)
+        for i in range(len(page_count))[::-1]:
+            self.wait_to_clear_and_send_keys(self.go_to_page_input,i+1)
+            self.wait_to_click(self.go_button)
+            time.sleep(4)
+            classname = self.get_attribute((By.XPATH, self.page_number.format(i+1)), "class")
+            print(classname)
+            assert classname == "js-page active", "Click is not successful"
+        self.switch_to_default_content()

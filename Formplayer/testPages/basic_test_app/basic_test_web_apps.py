@@ -53,6 +53,16 @@ class BasicTestWebApps(BasePage):
         self.login_as_option = (By.XPATH, "//div[@class='js-restore-as-item appicon appicon-restore-as']")
         self.incomplete_form = (By.XPATH, "//div[@class='js-incomplete-sessions-item appicon appicon-incomplete']")
         self.incomplete_form_title = (By.XPATH, "//h1[@class='page-title'][.='Incomplete Forms']")
+        self.no_of_pages = (By.XPATH, "//li[contains(@class,'js-page')]")
+        self.page_number = "(//li[contains(@class,'js-page')])[{}]"
+        self.page_navigation = (By.XPATH, "//nav[@class='module-pagination-container']")
+        self.list_drop_down = (By.XPATH, "//select[@class='form-control per-page-limit']")
+        self.next_list_button = (By.XPATH, "//a[@aria-label='Next']")
+        self.prev_list_button = (By.XPATH, "//a[@aria-label='Previous']")
+        self.first_list_page = (By.XPATH, "//a[@aria-label='First Page']")
+        self.last_list_page = (By.XPATH, "//a[@aria-label='Last Page']")
+        self.go_to_page_input = (By.XPATH, "//input[@placeholder='Go to page']")
+        self.go_button = (By.XPATH, "//button[@id='pagination-go-button']")
         self.case_list_menu = "//h3[contains(text(), '{}')]"
         self.registration_form = "//h3[contains(text(), '{}')]"
         self.followup_form = (By.XPATH, "//h3[contains(text(), 'Followup Form')]")
@@ -123,7 +133,8 @@ class BasicTestWebApps(BasePage):
         # contraints
         self.success_check = (By.XPATH, "//i[@class='fa fa-check text-success']")
         self.error_banner_list = "//div[contains(@data-bind,'erroredQuestions')]//li[contains(.,'{}')]"
-        self.next_error = (By.XPATH, "//div[contains(@data-bind,'erroredQuestions')][./div[contains(@data-bind,'jumpToErrors')]]//i[@class='fa fa-fast-forward']")
+        self.next_error = (By.XPATH,
+                           "//div[contains(@data-bind,'erroredQuestions')][./div[contains(@data-bind,'jumpToErrors')]]//i[@class='fa fa-fast-forward']")
         self.warning = (By.XPATH, "//i[@class='fa fa-warning text-danger clickable']")
         self.danger_warning = "//label[.//span[contains(.,'{}')]]//following-sibling::div//i[contains(@class,'text-danger')]"
 
@@ -147,13 +158,17 @@ class BasicTestWebApps(BasePage):
         self.clear_select = "//label[.//span[contains(.,'{}')]]//following-sibling::div//button[contains(@data-bind,'click: onClear')][@style='']"
         self.clear_select2 = "(//label[.//span[contains(.,'{}')]]//following-sibling::div//button[contains(@data-bind,'click: onClear')][@style=''])[2]"
 
-        #repeat group
+        # repeat group
         self.delete_repeat = "//legend/span[contains(.,'{}')]//following-sibling::button"
         self.repeat_input_field = "//div[@class='gr repetition'][.//legend/span[contains(.,'{}')]]//following-sibling::div[./fieldset[.//label[.//span[contains(.,'{}')]]]]//following-sibling::div//input"
         self.add_new_repeat = (By.XPATH, "//button[.='Add new repeat']")
         self.danger_warning_repeat = "//div[@class='gr repetition'][.//legend/span[contains(.,'{}')]]//following-sibling::div[./fieldset[.//label[.//span[contains(.,'{}')]]]]//following-sibling::div//i[contains(@class,'text-danger')]"
         self.text_success_repeat = "//div[@class='gr repetition'][.//legend/span[contains(.,'{}')]]//following-sibling::div[./fieldset[.//label[.//span[contains(.,'{}')]]]]//following-sibling::div//i[contains(@class,'text-success')]"
 
+        self.new_update_popup = (By.XPATH, "//h4[.='A new version of this app is available']")
+        self.update_later = (By.XPATH, "//button[.='Update Later']")
+        self.get_latest_app = (By.XPATH, "//button[.='Get Latest App']")
+        self.WEBAPPS_TITLE = "Web Apps - CommCare HQ"
 
     def open_form(self, case_list, form_name):
         self.scroll_to_element((By.XPATH, self.case_list_menu.format(case_list)))
@@ -813,7 +828,7 @@ class BasicTestWebApps(BasePage):
         time.sleep(3)
         self.validate_text("This should display \"15\"", 15)
         self.validate_text("This should display \"14\"", 14)
-        self.validate_text("The answer displayed here: 64, should equal this: 64", 64,",",64)
+        self.validate_text("The answer displayed here: 64, should equal this: 64", 64, ",", 64)
         time.sleep(2)
         self.js_click(self.submit_form_button)
         self.wait_for_element(self.success_message)
@@ -846,7 +861,8 @@ class BasicTestWebApps(BasePage):
             "This question is required. You should not be allowed to proceed with a blank answer.")))
         self.js_click(self.submit_form_button)
         self.wait_for_element(self.next_error)
-        assert self.is_present((By.XPATH, self.error_banner_list.format("This question is required. You should not be allowed to proceed with a blank answer")))
+        assert self.is_present((By.XPATH, self.error_banner_list.format(
+            "This question is required. You should not be allowed to proceed with a blank answer")))
         assert self.is_present((By.XPATH, self.error_banner_list.format(
             "This answer must be greater than 20 and smaller than 8000. The question is required.")))
         self.js_click(self.next_error)
@@ -884,12 +900,12 @@ class BasicTestWebApps(BasePage):
         self.scroll_to_element((By.XPATH, self.danger_warning.format("greater than 20 and smaller than 8000")))
         self.wait_to_clear_and_send_keys((By.XPATH, self.input_field.format(
             "This answer must be greater than 20 and smaller than 8000. The question is required.")),
-                       "8011" + Keys.TAB)
+                                         "8011" + Keys.TAB)
         self.scroll_to_element(
             (By.XPATH, self.danger_warning.format("greater than 20 and smaller than 8000")))
         self.wait_to_clear_and_send_keys((By.XPATH, self.input_field.format(
             "This answer must be greater than 20 and smaller than 8000. The question is required.")),
-                       "811" + Keys.TAB)
+                                         "811" + Keys.TAB)
         self.scroll_to_element(
             (By.XPATH, self.text_success.format("greater than 20 and smaller than 8000")))
         self.wait_to_click((By.XPATH, self.input_field.format(
@@ -900,12 +916,12 @@ class BasicTestWebApps(BasePage):
         self.scroll_to_element(
             (By.XPATH, self.danger_warning.format("This date must be after today.")))
         self.wait_to_clear_and_send_keys((By.XPATH, self.input_field.format(
-            "This date must be after today.")), self.input_date_add(1)+Keys.TAB)
+            "This date must be after today.")), self.input_date_add(1) + Keys.TAB)
         self.wait_for_element(
             (By.XPATH, self.text_success.format("This date must be after today.")))
         time.sleep(10)
         self.send_keys((By.XPATH, self.input_field.format(
-            "This date has to be today or in the past.")), self.input_date_add(2)+Keys.TAB)
+            "This date has to be today or in the past.")), self.input_date_add(2) + Keys.TAB)
         self.wait_for_element(
             (By.XPATH, self.danger_warning.format("This date has to be today or in the past.")))
         self.wait_to_click((By.XPATH, self.input_field.format(
@@ -916,26 +932,27 @@ class BasicTestWebApps(BasePage):
         self.wait_for_element(
             (By.XPATH, self.text_success.format("This date has to be today or in the past.")))
         self.wait_to_clear_and_send_keys((By.XPATH, self.input_field.format(
-            "This date has to be today or in the past.")), self.input_date_subtract(1)+Keys.TAB)
+            "This date has to be today or in the past.")), self.input_date_subtract(1) + Keys.TAB)
         self.wait_for_element(
             (By.XPATH, self.text_success.format("This date has to be today or in the past.")))
         self.send_keys((By.XPATH, self.input_field.format(
-            "The date entered must be within the last 10 months.")), self.input_date_subtract(340)+Keys.TAB)
+            "The date entered must be within the last 10 months.")), self.input_date_subtract(340) + Keys.TAB)
         self.wait_for_element(
             (By.XPATH, self.danger_warning.format("The date entered must be within the last 10 months.")))
         self.wait_to_clear_and_send_keys((By.XPATH, self.input_field.format(
-            "The date entered must be within the last 10 months.")), self.input_date_subtract(100)+Keys.TAB)
+            "The date entered must be within the last 10 months.")), self.input_date_subtract(100) + Keys.TAB)
         self.wait_for_element(
             (By.XPATH, self.text_success.format("The date entered must be within the last 10 months.")))
         self.scroll_to_element((By.XPATH, self.input_field.format(
             "This question should ONLY let you submit an answer with TWO significant figures after the decimal.")))
         self.send_keys((By.XPATH, self.input_field.format(
-            "This question should ONLY let you submit an answer with TWO significant figures after the decimal.")), "1.1" + Keys.TAB)
+            "This question should ONLY let you submit an answer with TWO significant figures after the decimal.")),
+                       "1.1" + Keys.TAB)
         self.wait_for_element(
             (By.XPATH, self.danger_warning.format("TWO significant figures after the decimal")))
         self.wait_to_clear_and_send_keys((By.XPATH, self.input_field.format(
             "This question should ONLY let you submit an answer with TWO significant figures after the decimal.")),
-                       "1.123" + Keys.TAB)
+                                         "1.123" + Keys.TAB)
         self.wait_for_element(
             (By.XPATH, self.danger_warning.format("TWO significant figures after the decimal")))
         self.wait_to_clear_and_send_keys((By.XPATH, self.input_field.format(
@@ -955,17 +972,19 @@ class BasicTestWebApps(BasePage):
             "This question should only let you submit an answer greater than 50 but less than 80.")),
                        "100" + Keys.TAB)
         self.wait_for_element(
-                (By.XPATH, self.danger_warning.format("greater than 50 but less than 80")))
+            (By.XPATH, self.danger_warning.format("greater than 50 but less than 80")))
         self.scroll_to_element(self.next_error)
-        assert self.is_present((By.XPATH, self.error_banner_list.format("This question should only let you submit an answer greater than 50 but less than 80.")))
+        assert self.is_present((By.XPATH, self.error_banner_list.format(
+            "This question should only let you submit an answer greater than 50 but less than 80.")))
         self.scroll_to_element((By.XPATH, self.input_field.format(
             "This question should only let you submit an answer greater than 50 but less than 80.")))
         self.wait_to_clear_and_send_keys((By.XPATH, self.input_field.format(
             "This question should only let you submit an answer greater than 50 but less than 80.")),
-                       "60" + Keys.TAB)
+                                         "60" + Keys.TAB)
         self.wait_for_element(
             (By.XPATH, self.text_success.format("greater than 50 but less than 80")))
-        self.scroll_to_element((By.XPATH, self.div_span.format("You should only see this question if you left the previous one blank.")))
+        self.scroll_to_element(
+            (By.XPATH, self.div_span.format("You should only see this question if you left the previous one blank.")))
         self.wait_to_clear_and_send_keys((By.XPATH, self.text_area_field.format(
             "Leave this question blank and navigate to the next question. Then, navigate back to this question, enter a value and proceed.")),
                                          self.test_question + Keys.TAB)
@@ -974,10 +993,11 @@ class BasicTestWebApps(BasePage):
         )))
         assert self.get_attribute((By.XPATH, self.text_area_field.format(
             'This should automatically have a default answer of \"Yes\" inserted in the text field'
-        )),"value") == "Yes", "Default value is not Yes"
-        self.scroll_to_element((By.XPATH, self.choose_radio_button.format("Choose an answer.","Yes")))
+        )), "value") == "Yes", "Default value is not Yes"
+        self.scroll_to_element((By.XPATH, self.choose_radio_button.format("Choose an answer.", "Yes")))
         self.js_click((By.XPATH, self.choose_radio_button.format("Choose an answer.", "Yes")))
-        self.wait_for_element((By.XPATH, self.div_span.format("This should only appear if you selected \"Yes\" to the previous question.")))
+        self.wait_for_element((By.XPATH, self.div_span.format(
+            "This should only appear if you selected \"Yes\" to the previous question.")))
 
         text = self.get_text((By.XPATH, self.div_span.format("should not be the same as")))
         text = str(text).split(",")
@@ -990,21 +1010,23 @@ class BasicTestWebApps(BasePage):
         num2 = text2[1].strip()
         print(num2)
         assert num1 != num2, 'Values are equal'
-        self.scroll_to_element((By.XPATH,self.input_field.format("Enter a score of 80.")))
-        self.send_keys((By.XPATH, self.input_field.format("Enter a score of 80.")),"80"+Keys.TAB)
-        time.sleep(2)
-        assert self.is_present_and_displayed((By.XPATH, self.div_span.format("GOOD - This should only appear if the score was greater than 75.")))
-        self.wait_to_clear_and_send_keys((By.XPATH, self.input_field.format("Enter a score of 80.")), "60"+Keys.TAB)
+        self.scroll_to_element((By.XPATH, self.input_field.format("Enter a score of 80.")))
+        self.send_keys((By.XPATH, self.input_field.format("Enter a score of 80.")), "80" + Keys.TAB)
         time.sleep(2)
         assert self.is_present_and_displayed(
-            (By.XPATH, self.div_span.format("FAIR - This should only appear if the score is greater than 50 and less than or equal to 75.")))
+            (By.XPATH, self.div_span.format("GOOD - This should only appear if the score was greater than 75.")))
+        self.wait_to_clear_and_send_keys((By.XPATH, self.input_field.format("Enter a score of 80.")), "60" + Keys.TAB)
+        time.sleep(2)
+        assert self.is_present_and_displayed(
+            (By.XPATH, self.div_span.format(
+                "FAIR - This should only appear if the score is greater than 50 and less than or equal to 75.")))
         self.wait_to_clear_and_send_keys((By.XPATH, self.input_field.format("Enter a score of 80.")), "10" + Keys.TAB)
         time.sleep(2)
         assert self.is_present_and_displayed(
             (By.XPATH, self.div_span.format(
                 "POOR - This should display if the score was less than or equal to 50.")))
         self.scroll_to_element((By.XPATH, self.choose_radio_button.format(
-            "Please select 1 or 2 options and proceed.","One"
+            "Please select 1 or 2 options and proceed.", "One"
         )))
         self.js_click((By.XPATH, self.choose_radio_button.format(
             "Please select 1 or 2 options and proceed.", "One"
@@ -1014,14 +1036,17 @@ class BasicTestWebApps(BasePage):
             "Please select 1 or 2 options and proceed.", "Two"
         )))
         time.sleep(3)
-        assert self.is_present_and_displayed((By.XPATH, self.div_span.format("This msg should only display if you selected one or two items.")))
+        assert self.is_present_and_displayed(
+            (By.XPATH, self.div_span.format("This msg should only display if you selected one or two items.")))
         self.js_click((By.XPATH, self.choose_radio_button.format(
             "Please select 1 or 2 options and proceed.", "Three"
         )))
         time.sleep(3)
-        assert self.is_present_and_displayed((By.XPATH, self.text_area_field.format("This should only display if you selected 3 or more options in the previous question.")))
+        assert self.is_present_and_displayed((By.XPATH, self.text_area_field.format(
+            "This should only display if you selected 3 or more options in the previous question.")))
         self.send_keys((By.XPATH, self.text_area_field.format(
-            "This should only display if you selected 3 or more options in the previous question.")), self.test_question)
+            "This should only display if you selected 3 or more options in the previous question.")),
+                       self.test_question)
         self.scroll_to_element((By.XPATH, self.choose_radio_button.format(
             "You should not be able to choose all of the options here.", "One"
         )))
@@ -1038,7 +1063,8 @@ class BasicTestWebApps(BasePage):
         self.js_click((By.XPATH, self.choose_radio_button.format(
             "You should not be able to choose all of the options here.", "Four"
         )))
-        self.wait_for_element((By.XPATH, self.danger_warning.format("You should not be able to choose all of the options here.")))
+        self.wait_for_element(
+            (By.XPATH, self.danger_warning.format("You should not be able to choose all of the options here.")))
         self.js_click((By.XPATH, self.choose_radio_button.format(
             "You should not be able to choose all of the options here.", "Four"
         )))
@@ -1071,10 +1097,13 @@ class BasicTestWebApps(BasePage):
         self.wait_for_element(
             (By.XPATH, self.text_success.format("You should not be able to select \"None\" and another choice.")))
 
-        self.scroll_to_element((By.XPATH, self.input_field.format("If you capture your location, you should not see the message.")))
-        assert self.is_present_and_displayed((By.XPATH, self.div_span.format("You should only see this message if the previous question was left empty.")))
+        self.scroll_to_element(
+            (By.XPATH, self.input_field.format("If you capture your location, you should not see the message.")))
+        assert self.is_present_and_displayed((By.XPATH, self.div_span.format(
+            "You should only see this message if the previous question was left empty.")))
         self.send_keys(
-            (By.XPATH, self.input_field.format("If you capture your location, you should not see the message.")), "Delhi"+Keys.ENTER)
+            (By.XPATH, self.input_field.format("If you capture your location, you should not see the message.")),
+            "Delhi" + Keys.ENTER)
         time.sleep(5)
         assert not self.is_present((By.XPATH, self.div_span.format(
             "You should only see this message if the previous question was left empty.")))
@@ -1086,7 +1115,6 @@ class BasicTestWebApps(BasePage):
         self.wait_for_element(self.success_message)
         self.wait_to_click(self.home_button)
         time.sleep(2)
-
 
     def input_date_add(self, number_of_days):
         presentday = datetime.now()  # or presentday = datetime.today()
@@ -1100,21 +1128,16 @@ class BasicTestWebApps(BasePage):
         new_date = presentday - timedelta(number_of_days)
         return new_date.strftime('%m/%d/%Y')
 
-
-    def questions_form(self):
-        self.wait_for_element((By.XPATH, self.text_area_field.format("This question should let you enter any form of text or special characters.")))
+    def fill_some_questions(self):
+        self.wait_for_element((By.XPATH, self.text_area_field.format(
+            "This question should let you enter any form of text or special characters.")))
         self.send_keys((By.XPATH, self.text_area_field.format(
-            "This question should let you enter any form of text or special characters.")), self.test_question+" "+self.special_character)
+            "This question should let you enter any form of text or special characters.")),
+                       self.test_question + " " + self.special_character)
         self.scroll_to_element((By.XPATH, self.input_field.format(
             "This question should only let you enter an integer.")))
-        self.send_keys((By.XPATH, self.input_field.format(
-            "This question should only let you enter an integer.")),"abcd"+Keys.TAB)
-        self.wait_for_element(((By.XPATH, self.danger_warning.format(
-            "This question should only let you enter an integer."))))
         self.wait_to_clear_and_send_keys((By.XPATH, self.input_field.format(
             "This question should only let you enter an integer.")), fetch_random_digit() + Keys.TAB)
-        self.wait_for_element(((By.XPATH, self.text_success.format(
-            "This question should only let you enter an integer."))))
 
         self.scroll_to_element((By.XPATH, self.input_field.format(
             "This question should only let you enter a decimal number")))
@@ -1128,166 +1151,120 @@ class BasicTestWebApps(BasePage):
             "This question should only allow you to enter a date.")), self.input_date_add(0) + Keys.TAB)
 
         self.scroll_to_element((By.XPATH, self.choose_radio_button.format(
-            "You should be able to choose one or more answers here.","One")))
+            "You should be able to choose one or more answers here.", "One")))
         self.js_click((By.XPATH, self.choose_radio_button.format(
             "You should be able to choose one or more answers here.", "One")))
         self.js_click((By.XPATH, self.choose_radio_button.format(
             "You should be able to choose one or more answers here.", "Two")))
         self.js_click((By.XPATH, self.choose_radio_button.format(
             "You should be able to choose one or more answers here.", "Three")))
-        self.wait_for_element((By.XPATH, self.text_success.format("You should be able to choose one or more answers here.")))
-
-        self.scroll_to_element((By.XPATH, self.choose_radio_button.format(
-            "You should be able to choose only one answer here.", "One")))
-        self.js_click((By.XPATH, self.choose_radio_button.format(
-            "You should be able to choose only one answer here.", "One")))
-        time.sleep(2)
-        assert self.is_selected((By.XPATH, self.choose_radio_button.format(
-            "You should be able to choose only one answer here.", "One"))), "The option is not selected."
-        self.wait_for_element((By.XPATH, self.clear_select.format("You should be able to choose only one answer here.")))
-        self.wait_to_click(
-            (By.XPATH, self.clear_select.format("You should be able to choose only one answer here.")))
-        time.sleep(2)
-        assert not self.is_selected((By.XPATH, self.choose_radio_button.format(
-            "You should be able to choose only one answer here.", "One"))), "The option is still selected."
-        self.js_click((By.XPATH, self.choose_radio_button.format(
-            "You should be able to choose only one answer here.", "Two")))
-        time.sleep(2)
-        assert self.is_selected((By.XPATH, self.choose_radio_button.format(
-            "You should be able to choose only one answer here.", "Two"))), "The option is not selected."
-
-        self.scroll_to_element((By.XPATH, self.input_field.format(
-            "This question should only allow you to enter a time.")))
-        self.send_keys((By.XPATH, self.input_field.format(
-            "This question should only allow you to enter a time.")), datetime.now().strftime("%H:%M") + Keys.TAB)
-
-        self.scroll_to_element((By.XPATH, self.input_field.format(
-            "The value of this question should be hidden, but anything can be entered.")))
-        self.send_keys((By.XPATH, self.input_field.format(
-            "The value of this question should be hidden, but anything can be entered.")), self.test_question + Keys.TAB)
-        time.sleep(2)
-        assert self.get_attribute(
-            (By.XPATH, self.input_field.format(
-                "The value of this question should be hidden, but anything can be entered.")), "type"
-        ) == "password", "Value is not hidden"
-
-        self.scroll_to_element((By.XPATH, self.input_field.format(
-            "The value of this question should be hidden and only numbers are allowed.")))
-        self.send_keys((By.XPATH, self.input_field.format(
-            "The value of this question should be hidden and only numbers are allowed.")),
-                       self.test_question + Keys.TAB)
-        self.wait_for_element((By.XPATH, self.danger_warning.format(
-            "The value of this question should be hidden and only numbers are allowed.")))
-        time.sleep(2)
-        assert self.get_attribute(
-            (By.XPATH, self.input_field.format(
-                "The value of this question should be hidden and only numbers are allowed.")), "type"
-        ) == "password", "Value is not hidden"
-        self.wait_to_clear_and_send_keys((By.XPATH, self.input_field.format(
-            "The value of this question should be hidden and only numbers are allowed.")),
-                       fetch_random_digit() + Keys.TAB)
-        self.wait_for_element((By.XPATH, self.text_success.format(
-            "The value of this question should be hidden and only numbers are allowed.")))
-
-        self.scroll_to_element((By.XPATH, self.input_field.format(
-            "If using an Android device, this question should allow you to capture a GPS location. Try it out")))
-        self.send_keys((By.XPATH, self.input_field.format(
-            "If using an Android device, this question should allow you to capture a GPS location. Try it out")), "Delhi" + Keys.TAB)
-        self.js_click(self.search_location_button)
-        time.sleep(2)
-        assert not self.is_present_and_displayed(self.blank_latitude, 10)
-
-        self.wait_for_element((By.XPATH, self.text_area_field2.format(
-            "This question should let you enter any form of text or special characters. Try different values.")))
-        self.send_keys((By.XPATH, self.text_area_field2.format(
-            "This question should let you enter any form of text or special characters. Try different values.")),
-                       self.test_question + " " + self.special_character)
-        self.scroll_to_element((By.XPATH, self.choose_radio_button2.format(
-            "You should be able to choose one or more answers here.", "One")))
-        self.js_click((By.XPATH, self.choose_radio_button2.format(
-            "You should be able to choose one or more answers here.", "One")))
-        self.js_click((By.XPATH, self.choose_radio_button2.format(
-            "You should be able to choose one or more answers here.", "Two")))
-        self.js_click((By.XPATH, self.choose_radio_button2.format(
-            "You should be able to choose one or more answers here.", "Three")))
         self.wait_for_element(
-            (By.XPATH, self.text_success2.format("You should be able to choose one or more answers here.")))
-        self.scroll_to_element((By.XPATH, self.choose_radio_button2.format(
-            "You should be able to choose only one answer here.", "One")))
-        self.js_click((By.XPATH, self.choose_radio_button2.format(
-            "You should be able to choose only one answer here.", "One")))
-        time.sleep(2)
-        assert self.is_selected((By.XPATH, self.choose_radio_button2.format(
-            "You should be able to choose only one answer here.", "One"))), "The option is not selected."
-        self.wait_for_element(
-            (By.XPATH, self.clear_select2.format("You should be able to choose only one answer here.")))
-        self.wait_to_click(
-            (By.XPATH, self.clear_select2.format("You should be able to choose only one answer here.")))
-        time.sleep(2)
-        assert not self.is_selected((By.XPATH, self.choose_radio_button2.format(
-            "You should be able to choose only one answer here.", "One"))), "The option is still selected."
-        self.js_click((By.XPATH, self.choose_radio_button2.format(
-            "You should be able to choose only one answer here.", "Two")))
-        time.sleep(2)
-        assert self.is_selected((By.XPATH, self.choose_radio_button2.format(
-            "You should be able to choose only one answer here.", "Two"))), "The option is not selected."
+            (By.XPATH, self.text_success.format("You should be able to choose one or more answers here.")))
 
-        self.scroll_to_element((By.XPATH, self.choose_radio_button.format(
-            "This is a single select lookup. You should be able to choose only one answer.", "Radhe Sham")))
-        self.js_click((By.XPATH, self.choose_radio_button.format(
-            "This is a single select lookup. You should be able to choose only one answer.", "Radhe Sham")))
-        time.sleep(2)
-        assert self.is_selected((By.XPATH, self.choose_radio_button.format(
-            "This is a single select lookup. You should be able to choose only one answer.", "Radhe Sham"))), "The option is not selected."
-        self.wait_to_click((By.XPATH, self.clear_select.format(
-            "This is a single select lookup. You should be able to choose only one answer.")))
-        time.sleep(2)
-        assert not self.is_selected((By.XPATH, self.choose_radio_button.format(
-            "This is a single select lookup. You should be able to choose only one answer.", "Radhe Sham"))), "The option is still selected."
-        self.js_click((By.XPATH, self.choose_radio_button.format(
-            "This is a single select lookup. You should be able to choose only one answer.", "Art of War")))
-        time.sleep(2)
-        assert self.is_selected((By.XPATH, self.choose_radio_button.format(
-            "This is a single select lookup. You should be able to choose only one answer.", "Art of War"))), "The option is not selected."
+    def click_update_later(self):
+        print("waiting for pop up")
+        time.sleep(60)
+        self.wait_for_element(self.new_update_popup, 600)
+        assert self.is_present_and_displayed(self.update_later)
+        self.wait_to_click(self.update_later)
+        time.sleep(10)
+        self.switch_to_next_tab()
 
+    def click_get_latest_app(self):
+        print("waiting for pop up")
+        time.sleep(60)
+        self.wait_for_element(self.new_update_popup, 600)
+        assert self.is_present_and_displayed(self.update_later)
+        self.wait_to_click(self.get_latest_app)
+        time.sleep(10)
+        assert self.WEBAPPS_TITLE in self.driver.title, "This is not the Webaspps menu page."
+        self.switch_to_next_tab()
 
-        self.scroll_to_element((By.XPATH, self.choose_radio_button.format(
-            "This is a checkbox lookup table and you should be able to choose more than one option.", "150")))
+    def verify_pagination(self):
+        self.wait_to_click(self.incomplete_form)
+        self.wait_for_element(self.incomplete_form_title)
+        if self.is_present(self.page_navigation):
+            time.sleep(3)
+            self.verify_page_navigation()
+            time.sleep(3)
+            self.verify_goto_page_button()
+            time.sleep(3)
+            self.verify_list_per_page()
+        elif self.is_present(self.page_navigation) == False and self.is_present(
+                self.find_elements(self.incomplete_list_count)):
+            self.verify_list_per_page()
+        else:
+            print("No incomplete form present")
+        self.driver.back()
 
-        self.wait_to_click((By.XPATH, self.choose_radio_button.format(
-            "This is a checkbox lookup table and you should be able to choose more than one option.", "150")))
-        time.sleep(1)
-        self.wait_to_click((By.XPATH, self.choose_radio_button.format(
-            "This is a checkbox lookup table and you should be able to choose more than one option.", "200")))
-        time.sleep(2)
-        self.wait_for_element(
-            (By.XPATH,
-             self.text_success.format("This is a checkbox lookup table and you should be able to choose more than one option.")))
+    def verify_list_per_page(self):
+        if self.is_present(self.page_navigation):
+            page_count = self.find_elements(self.no_of_pages)
+            print(len(page_count))
+            max_list_count = len(page_count) * 10
+            print(max_list_count)
+            min_list_count = (len(page_count) - 1) * 10
+            print(min_list_count)
+        else:
+            page_count = 1
+            max_list_count = page_count * 10
+            print(max_list_count)
+            min_list_count = 1
+            print(min_list_count)
 
-        self.scroll_to_element(self.add_new_repeat)
-        self.js_click(self.add_new_repeat)
-        self.wait_for_element((By.XPATH, self.repeat_input_field.format("1/1","Enter a number")))
-        self.send_keys((By.XPATH, self.repeat_input_field.format("1/1", "Enter a number")), "abc"+Keys.TAB)
-        self.wait_for_element((By.XPATH, self.danger_warning_repeat.format("1/1", "Enter a number")))
-        self.wait_to_clear_and_send_keys((By.XPATH, self.repeat_input_field.format("1/1", "Enter a number")), "12"+Keys.TAB)
-        self.wait_for_element((By.XPATH, self.text_success_repeat.format("1/1", "Enter a number")))
+        for i in UserData.page_list:
+            self.select_by_value(self.list_drop_down, i)
+            time.sleep(5)
+            latest_page_count = self.find_elements(self.no_of_pages)
+            if self.is_present(self.page_navigation):
+                if len(latest_page_count) > 1:
+                    assert len(self.find_elements(self.incomplete_form_list)) == int(i), "List count not equal to 10"
+                else:
+                    assert len(self.find_elements(self.incomplete_form_list)) in range(min_list_count,
+                                                                                       max_list_count), "List count is not valid"
+            else:
+                assert len(self.find_elements(self.incomplete_form_list)) in range(min_list_count,
+                                                                                       max_list_count), "List count is not valid"
 
-
-        self.scroll_to_element(self.add_new_repeat)
-        self.js_click(self.add_new_repeat)
-        self.wait_for_element((By.XPATH, self.repeat_input_field.format("2/2","Enter a number")))
-        self.send_keys((By.XPATH, self.repeat_input_field.format("2/2", "Enter a number")), "abc"+Keys.TAB)
-        self.wait_for_element((By.XPATH, self.danger_warning_repeat.format("2/2", "Enter a number")))
-        self.wait_to_clear_and_send_keys((By.XPATH, self.repeat_input_field.format("2/2", "Enter a number")), "45"+Keys.TAB)
-        self.wait_for_element((By.XPATH, self.text_success_repeat.format("2/2", "Enter a number")))
-
-        self.wait_to_click((By.XPATH, self.delete_repeat.format("2/2")))
+    def verify_page_navigation(self):
+        page_count = self.find_elements(self.no_of_pages)
+        n = len(page_count)
+        print(n)
+        self.wait_to_click(self.last_list_page)
         time.sleep(3)
-        self.wait_to_click((By.XPATH, self.delete_repeat.format("1/1")))
+        classname = self.get_attribute((By.XPATH, self.page_number.format(n)),"class")
+        print(classname)
+        assert classname == "js-page active", "Click is not successful on last page"
+
+        self.wait_to_click(self.first_list_page)
         time.sleep(3)
-        assert not self.is_present((By.XPATH, self.repeat_input_field.format("1/1","Enter a number")))
-        time.sleep(2)
-        self.js_click(self.submit_form_button)
-        self.wait_for_element(self.success_message)
-        self.wait_to_click(self.home_button)
-        time.sleep(2)
+        classname = self.get_attribute((By.XPATH, self.page_number.format(1)), "class")
+        print(classname)
+        assert classname == "js-page active", "Click is not successful on first page"
+
+        print("navigating forward")
+        for i in range(len(page_count)-1)[::]:
+            self.wait_to_click(self.next_list_button)
+            time.sleep(3)
+            classname = self.get_attribute((By.XPATH, self.page_number.format(i+2)), "class")
+            print(classname)
+            assert classname == "js-page active", "Click is not successful"
+
+        print("navigating backward")
+        for i in range(len(page_count)-1)[::]:
+            self.wait_to_click(self.prev_list_button)
+            time.sleep(3)
+            classname = self.get_attribute((By.XPATH, self.page_number.format(len(page_count)-i-1)), "class")
+            print(classname)
+            assert classname == "js-page active", "Click is not successful"
+
+    def verify_goto_page_button(self):
+        page_count = self.find_elements(self.no_of_pages)
+        n = len(page_count)
+        for i in range(len(page_count))[::-1]:
+            self.wait_to_clear_and_send_keys(self.go_to_page_input,i+1)
+            self.wait_to_click(self.go_button)
+            time.sleep(4)
+            classname = self.get_attribute((By.XPATH, self.page_number.format(i+1)), "class")
+            print(classname)
+            assert classname == "js-page active", "Click is not successful"
