@@ -99,7 +99,7 @@ class OrganisationStructurePage(BasePage):
         self.delete_confirm_button = (
             By.XPATH, "//button[@data-bind ='click: delete_fn, css: {disabled: !(signOff() == count)}']")
         self.delete_loc_field = (By.XPATH, "(//a[@class='btn btn-danger'])[last()]")
-        self.delete_org_level = (By.XPATH, "(//button[@class='btn btn-danger'])[last()]")
+        self.delete_org_level = (By.XPATH, "(//a[.='Cancel']//following-sibling::button[@class='btn btn-danger'])[last()]")
         self.delete_success = (By.XPATH, "//div[@class='alert fade in message-alert alert-success']")
 
     def organisation_menu_open(self):
