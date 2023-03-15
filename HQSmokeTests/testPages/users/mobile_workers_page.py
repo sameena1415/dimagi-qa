@@ -25,7 +25,7 @@ class MobileWorkerPage(BasePage):
         self.phone_number = UserData.area_code + fetch_phone_number()
 
         self.username_link = (By.LINK_TEXT, self.username)
-        self.confirm_user_field_delete = (By.XPATH, "//button[@class='btn btn-danger']")
+        self.confirm_user_field_delete = (By.XPATH, "(//a[.='Cancel']//following-sibling::button[@class='btn btn-danger'])[last()]")
         self.delete_user_field = (By.XPATH,
                                   "(//input[@data-bind='value: slug'])[last()]//following::a[@class='btn btn-danger' and @data-toggle='modal'][1]")
         self.delete_success_mw = (By.XPATH, "//div[@class='alert alert-margin-top fade in alert-success']")
@@ -76,11 +76,11 @@ class MobileWorkerPage(BasePage):
         self.NEW = (By.XPATH, "//span[@class='text-success']")
         self.edit_user_field_xpath = (By.XPATH, "//*[@id='btn-edit_user_fields']")
         self.add_field_xpath = (By.XPATH, "//button[@data-bind='click: addField']")
-        self.user_property_xpath = (By.XPATH, "(//input[@data-bind='value: slug'])[last()]")
-        self.label_xpath = (By.XPATH, "(//input[@data-bind='value: label'])[last()]")
+        self.user_property_xpath = (By.XPATH, "(//input[contains(@data-bind,'value: slug')])[last()]")
+        self.label_xpath = (By.XPATH, "(//input[contains(@data-bind,'value: label')])[last()]")
         self.choices_button_xpath = (By.XPATH, "(//div[contains(text(), 'Choices')])[last()]")
-        self.add_choice_button_xpath = (By.XPATH, "(//button[@data-bind='click: addChoice'])[last()]")
-        self.choice_xpath = (By.XPATH, "(//input[@data-bind='value: value'])[last()]")
+        self.add_choice_button_xpath = (By.XPATH, "(//button[contains(@data-bind,'click: addChoice')])[last()]")
+        self.choice_xpath = (By.XPATH, "(//input[contains(@data-bind,'value: value')])[last()]")
         self.save_field_id = (By.ID, "save-custom-fields")
         self.duplicate_field_error = (By.XPATH, "//div[contains(text(), 'was duplicated, key names must be unique')]")
         self.user_field_success_msg = (By.XPATH, "//div[@class='alert alert-margin-top fade in alert-success']")
@@ -114,7 +114,7 @@ class MobileWorkerPage(BasePage):
         self.field_tab = (By.XPATH, "//a[@href='#tabs-fields']")
         self.profile_tab = (By.XPATH, "//a[@href='#tabs-profiles']")
         self.add_new_profile = (By.XPATH, "//button[@data-bind='click: addProfile']")
-        self.profile_name = (By.XPATH, "//tr[last()]//input[@data-bind='value: name']")
+        self.profile_name = (By.XPATH, "//tr[last()]//input[contains(@data-bind,'value: name')]")
         self.profile_edit_button = (By.XPATH, "//tr[last()]//a[@class='btn btn-default enum-edit']")
         self.profile_delete_button = (
             By.XPATH, "//tbody[@data-bind='foreach: profiles']//tr[last()]//td[last()]//i[@class='fa fa-times']")
@@ -149,7 +149,7 @@ class MobileWorkerPage(BasePage):
         self.upload = (By.XPATH, "//button[@class='btn btn-primary disable-on-submit']")
         self.successfully_uploaded = (By.XPATH, "//p[contains(text(),'Successfully uploaded')]")
         self.import_complete = (By.XPATH, "//legend[text()='Bulk upload complete.']")
-        self.download_filter = (By.XPATH, "//button[@data-bind='html: buttonHTML']")
+        self.download_filter = (By.XPATH, "//button[contains(.,'Download')]")
         self.error_403 = (By.XPATH, "//h1[text()='403 Forbidden']")
 
     def search_user(self):
@@ -348,6 +348,7 @@ class MobileWorkerPage(BasePage):
         newest_file = latest_download_file()
         self.assert_downloaded_file(newest_file, "_users_"), "Download Not Completed!"
         print("File download successful")
+
         return newest_file
 
     def upload_mobile_worker(self):
