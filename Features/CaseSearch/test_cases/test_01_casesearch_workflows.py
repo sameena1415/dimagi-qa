@@ -13,6 +13,7 @@ def test_case_01_normal_workflow(driver):
     webapps.login_as(CaseSearchUserInput.user_2)
     webapps.open_app(CaseSearchUserInput.case_search_app_name)
     webapps.open_menu(CaseSearchUserInput.normal_menu)
+    webapps.search_all_cases()
     webapps.clear_selections_on_case_search_page()
     case_name = casesearch.search_against_property(search_property=CaseSearchUserInput.song_name,
                                                                 input_value=CaseSearchUserInput.song_automation_song_1,                                                            property_type=TEXT_INPUT)

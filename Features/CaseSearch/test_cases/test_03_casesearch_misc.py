@@ -66,6 +66,10 @@ def test_case_02_related_property_search(driver):
     webapps.search_button_on_case_search_page()
     webapps.select_case_and_continue(CaseSearchUserInput.song_automation_song)
     webapps.open_form(CaseSearchUserInput.shows_form)
+    casesearch.search_against_property(search_property=CaseSearchUserInput.parent_artist,
+                                       input_value=CaseSearchUserInput.automation_artist_1,
+                                       property_type=TEXT_INPUT)
+    webapps.search_button_on_case_search_page()
     webapps.omni_search(CaseSearchUserInput.automation_artist_1)
     casesearch.check_values_on_caselist(row_num=CaseSearchUserInput.four,
                                         expected_value=CaseSearchUserInput.automation_artist_1)

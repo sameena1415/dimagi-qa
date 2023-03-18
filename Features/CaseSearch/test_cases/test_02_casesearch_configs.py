@@ -16,13 +16,19 @@ def test_case_01_default_value_expression(driver):
     webapps.open_app(CaseSearchUserInput.case_search_app_name)
     webapps.open_menu(CaseSearchUserInput.search_first_menu)
     casesearch.check_default_values_displayed(search_property=CaseSearchUserInput.song_name,
-                                              default_value=CaseSearchUserInput.default, search_format=text)
+                                              default_value=CaseSearchUserInput.default,
+                                              search_format=text)
     casesearch.check_default_values_displayed(search_property=CaseSearchUserInput.mood,
-                                              default_value=CaseSearchUserInput.three, search_format=text)
+                                              default_value=CaseSearchUserInput.three,
+                                              search_format=text)
     casesearch.check_default_values_displayed(search_property=CaseSearchUserInput.date_opened,
-                                              default_value=casesearch.date_range(60), search_format=text)
+                                              default_value=casesearch.parse_date_range(
+                                                  no_of_days=60,
+                                                  default=True),
+                                              search_format=text)
     casesearch.check_default_values_displayed(search_property=CaseSearchUserInput.rating,
-                                              default_value=CaseSearchUserInput.four_star, search_format=combobox)
+                                              default_value=CaseSearchUserInput.four_star,
+                                              search_format=combobox)
     """Check values can be cleared and desired value can be searched"""
     webapps.clear_selections_on_case_search_page()
     casesearch.search_against_property(search_property=CaseSearchUserInput.song_name,
@@ -95,14 +101,18 @@ def test_case_06_date_range_search(driver):
     webapps.open_app(CaseSearchUserInput.case_search_app_name)
     webapps.open_menu(CaseSearchUserInput.search_first_menu)
     webapps.clear_selections_on_case_search_page()
-    casesearch.search_against_property(search_property=CaseSearchUserInput.date_opened,
-                                       input_value=CaseSearchUserInput.date_2022_12_30,
-                                       property_type=TEXT_INPUT)
-    time.sleep(10)
-    casesearch.check_date_range(CaseSearchUserInput.date_2022_12_30 + " to " + CaseSearchUserInput.date_2022_12_30)
+    date = casesearch.search_against_property(search_property=CaseSearchUserInput.date_opened,
+                                              input_value=CaseSearchUserInput.date_12_30_2022,
+                                              property_type=TEXT_INPUT)
+    casesearch.check_date_range(casesearch.parse_date_range(input_date=date,
+                                                            input_format=CaseSearchUserInput.dates.get("MM/DD/YYYY"),
+                                                            output_format=CaseSearchUserInput.dates.get("MM/DD/YYYY")))
     webapps.search_button_on_case_search_page(enter_key=YES)
     casesearch.check_values_on_caselist(row_num=CaseSearchUserInput.six,
-                                        expected_value=CaseSearchUserInput.date_30_12_2022)
+                                        expected_value=casesearch.parse_date(
+                                            input_date=date,
+                                            input_format=CaseSearchUserInput.dates.get("MM/DD/YYYY"),
+                                            output_format=CaseSearchUserInput.dates.get("DD/MM/YYYY")))
 
 
 def test_case_07_lookup_table_format(driver):
@@ -165,20 +175,15 @@ def test_case_10_single_date_format(driver):
     webapps.open_app(CaseSearchUserInput.case_search_app_name)
     webapps.open_menu(CaseSearchUserInput.search_first_menu)
     webapps.clear_selections_on_case_search_page()
-    case_name = casesearch.search_against_property(search_property=CaseSearchUserInput.song_name,
-                                                   input_value=CaseSearchUserInput.song_automation_song_1,
-                                                   property_type=TEXT_INPUT)
+    date = casesearch.search_against_property(search_property=CaseSearchUserInput.song_release_date,
+                                              input_value=CaseSearchUserInput.date_2022_12_30,
+                                              property_type=TEXT_INPUT)
     webapps.search_button_on_case_search_page()
-    webapps.omni_search(case_name)
-    webapps.select_case_and_continue(case_name)
-    webapps.open_form(CaseSearchUserInput.shows_form)
-    webapps.search_again_cases()
-    casesearch.search_against_property(search_property=CaseSearchUserInput.show_date,
-                                       input_value=CaseSearchUserInput.date_2022_12_30,
-                                       property_type=TEXT_INPUT)
-    webapps.search_button_on_case_search_page()
-    casesearch.check_values_on_caselist(row_num=CaseSearchUserInput.two,
-                                        expected_value=CaseSearchUserInput.date_2022_12_30)
+    casesearch.check_values_on_caselist(row_num=CaseSearchUserInput.eight,
+                                        expected_value=casesearch.parse_date(
+                                            input_date=date,
+                                            input_format=CaseSearchUserInput.dates.get("YYYY-MM-DD"),
+                                            output_format=CaseSearchUserInput.dates.get("YYYY-MM-DD")))
 
 
 def test_case_11_is_multiselect_format(driver):
@@ -552,7 +557,7 @@ def test_case_24_case_search_validations(driver):
     casesearch.check_validations_on_property(search_property=CaseSearchUserInput.song_name,
                                              message=CaseSearchUserInput.validation_msg_no_spaces,
                                              required_or_validated=NO,
-                                                property_type=TEXT_INPUT)
+                                             property_type=TEXT_INPUT)
     casesearch.check_validations_on_property(search_property=CaseSearchUserInput.energy,
                                              message=CaseSearchUserInput.validation_msg_invalid_respons,
                                              required_or_validated=NO,
