@@ -35,7 +35,6 @@ class CaseSearchWorkflows(BasePage):
         self.city_value_work = "//span[@class='caption webapp-markdown-output'][contains(text()[2], '{}')]"
         self.search_screen_title = "//h2[contains(text(), '{}')]"
         self.search_screen_subtitle = "//strong[contains(text(), '{}')]"
-        #self.date_selected = "(//span[@class='drp-selected' and contains(text(),'{}')])[1]"
         self.date_selected = "(//*[contains(text(),'{}')])[1]"
         self.dropdown_values = self.combox_select + "/option"
         self.menu_header = "//h1[contains(text(),'{}')]"

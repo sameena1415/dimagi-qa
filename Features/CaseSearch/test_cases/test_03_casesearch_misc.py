@@ -238,7 +238,6 @@ def test_case_10_claim_condition(driver):
 def test_case_11_do_not_search_cases(driver):
     webapps = WebApps(driver)
     casesearch = CaseSearchWorkflows(driver)
-    base = BasePage(driver)
     """Check don't search cases owned by the following ids"""
     webapps.login_as(CaseSearchUserInput.a_user)
     webapps.open_app(CaseSearchUserInput.case_search_app_name)
