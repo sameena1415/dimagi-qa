@@ -35,7 +35,7 @@ class CaseSearchWorkflows(BasePage):
         self.city_value_work = "//span[@class='caption webapp-markdown-output'][contains(text()[2], '{}')]"
         self.search_screen_title = "//h2[contains(text(), '{}')]"
         self.search_screen_subtitle = "//strong[contains(text(), '{}')]"
-        self.date_selected = "(//span[@class='drp-selected' and contains(text(),'{}')])[1]"
+        self.date_selected = "(//*[contains(text(),'{}')])[1]"
         self.dropdown_values = self.combox_select + "/option"
         self.menu_header = "//h1[contains(text(),'{}')]"
         self.menu_breadcrumb = "//li[contains(text(),'{}')]"
@@ -56,6 +56,7 @@ class CaseSearchWorkflows(BasePage):
 
     def check_values_on_caselist(self, row_num, expected_value, is_multi=NO):
         self.value_in_table = self.get_element(self.value_in_table_format, row_num)
+        self.wait_for_element(self.value_in_table)
         values_ = self.find_elements_texts(self.value_in_table)
         print(expected_value, values_) # added for debugging
         if is_multi == YES:
@@ -70,6 +71,7 @@ class CaseSearchWorkflows(BasePage):
         elif search_format == combobox:
             search_property = (
                 By.XPATH, self.combobox_search_property_name_and_value_format.format(search_property, default_value))
+        self.wait_for_ajax()
         assert self.is_visible_and_displayed(search_property)
 
     def search_against_property(self, search_property, input_value, property_type, include_blanks=None):
@@ -77,8 +79,9 @@ class CaseSearchWorkflows(BasePage):
             self.search_property = self.get_element(self.search_against_text_property_format, search_property)
             self.wait_to_click(self.search_property)
             self.wait_to_clear_and_send_keys(self.search_property, input_value)
-            time.sleep(2)
+            time.sleep(5)
             self.send_keys(self.search_property, Keys.TAB)
+            self.wait_for_ajax()
         elif property_type == COMBOBOX:
             self.combox_select_element = self.get_element(self.combox_select, search_property)
             time.sleep(2)
@@ -88,19 +91,31 @@ class CaseSearchWorkflows(BasePage):
             self.select_include_blanks(search_property)
         return input_value
 
-    def date_range(self, no_of_days):
-        today_date = datetime.today()
-        sixty_days_ago = today_date - relativedelta(days=no_of_days)
-        date_ranges = str(sixty_days_ago.date()) + " to " + str(today_date.date())
-        return date_ranges
+    def parse_date_range(self, input_date=None, input_format=None, output_format=None, default=False, no_of_days=0):
+        if default:
+            today_date = (datetime.today()).date()
+            sixty_days_ago = today_date - relativedelta(days=no_of_days)
+            date_ranges = str(sixty_days_ago.strftime("%m/%d/%Y")) + " to " + str(today_date.strftime("%m/%d/%Y"))
+        else:
+            date_obj = datetime.strptime(input_date, input_format)
+            date_ranges = str(date_obj.strftime(output_format)) + " to " + str(date_obj.strftime(output_format))
+        print(date_ranges)
+        return str(date_ranges)
+
+    def parse_date(self, input_date=None, input_format=None, output_format=None, ):
+        date_obj = datetime.strptime(input_date, input_format)
+        parsed_date = str(date_obj.strftime(output_format))
+        print(parsed_date)
+        return parsed_date
 
     def check_help_text(self, search_property, help_text):
         help_text = (By.XPATH, self.help_text_format.format(search_property, help_text))
         assert self.is_visible_and_displayed(help_text)
 
     def check_date_range(self, date_range):
-        date = self.get_element(self.date_selected, date_range)
-        assert self.is_present(date)
+        time.sleep(10)
+        date_element = self.get_element(self.date_selected, date_range)
+        assert self.is_present(date_element)
 
     def add_address(self, address, search_property):
         address_search = self.get_element(self.search_for_address, search_property)
@@ -198,6 +213,5 @@ class CaseSearchWorkflows(BasePage):
         song_names_on_form = self.find_elements_texts(self.selected_case_names_on_forms)
         stripped = list(filter(None, [s.lstrip("song: by ") for s in song_names_on_form]))
         assert stripped == song_names, f"No, list1 {song_names} doesn't match list2{stripped}"
-
 
 

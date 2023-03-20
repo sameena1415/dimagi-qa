@@ -66,6 +66,10 @@ def test_case_02_related_property_search(driver):
     webapps.search_button_on_case_search_page()
     webapps.select_case_and_continue(CaseSearchUserInput.song_automation_song)
     webapps.open_form(CaseSearchUserInput.shows_form)
+    casesearch.search_against_property(search_property=CaseSearchUserInput.parent_artist,
+                                       input_value=CaseSearchUserInput.automation_artist_1,
+                                       property_type=TEXT_INPUT)
+    webapps.search_button_on_case_search_page()
     webapps.omni_search(CaseSearchUserInput.automation_artist_1)
     casesearch.check_values_on_caselist(row_num=CaseSearchUserInput.four,
                                         expected_value=CaseSearchUserInput.automation_artist_1)
@@ -234,7 +238,6 @@ def test_case_10_claim_condition(driver):
 def test_case_11_do_not_search_cases(driver):
     webapps = WebApps(driver)
     casesearch = CaseSearchWorkflows(driver)
-    base = BasePage(driver)
     """Check don't search cases owned by the following ids"""
     webapps.login_as(CaseSearchUserInput.a_user)
     webapps.open_app(CaseSearchUserInput.case_search_app_name)
