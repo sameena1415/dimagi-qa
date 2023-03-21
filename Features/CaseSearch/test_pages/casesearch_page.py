@@ -211,7 +211,8 @@ class CaseSearchWorkflows(BasePage):
         song_names = self.find_elements_texts(self.case_names)
         self.js_click(self.multi_select_continue)
         song_names_on_form = self.find_elements_texts(self.selected_case_names_on_forms)
-        stripped = list(filter(None, [s.lstrip("song: by ") for s in song_names_on_form]))
-        assert stripped == song_names, f"No, list1 {song_names} doesn't match list2{stripped}"
+        stripped = list(filter(None, [s.replace("song: by","") for s in song_names_on_form]))
+        stripped_final = list(filter(None, [s.lstrip() for s in stripped]))
+        assert stripped_final == song_names, f"No, list1 {stripped_final} doesn't match list2{song_names}"
 
 
