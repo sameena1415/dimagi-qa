@@ -21,6 +21,8 @@ class UserData:
                    "form_name": "Basic Form"}
 
     app_preview_mobile_worker = "appiumtest"
+    automation_user = "automation_user"
+    automation_user_group = "automation_user [group]"
 
     # Mobile Worker name
     mw_username = "appiumtest@qa-automation.commcarehq.org"
@@ -34,6 +36,7 @@ class UserData:
         "case_list": "Case List",
         "form_name": "Registration Form"}
     case_type = 'case'
+    case_type_formplayer = 'sub_case_one'
     test_app = 'Test Application - One question per screen'
     test_application2 = {
         "tests_app": "Test Application - One question per screen",
@@ -69,7 +72,11 @@ class UserData:
         "logic_test1": "Logic Tests 1",
         "constraints": "Constraints",
         "fixtures": "Fixtures",
-        "functions": "Functions"
+        "functions": "Functions",
+        "min_dup": "Minimize Duplicates",
+        "view_case_subcase": "View Case\'s Sub Case",
+        "fst_repeat": "[Formplayer] Repeats",
+        "fst_cross_iter_repeat": "[Formplayer] Cross Iteration Repeats"
     }
 
     form_specific_tests_app = {
@@ -82,3 +89,10 @@ class UserData:
     unicode = "☕️☕️☕️"
     unicode_new = "☕️☕️☕️☕️☕️☕️"
     page_list = ["10","25","50","100"]
+
+    text_now_number = "16174655292"
+    staging_number = "16173804069"
+    keyword_list = ["REGISTER", "UPDATE", "CLOSE"]
+    sms_survey_list = ["SMS Tests > Case List > Registration Form",
+                       "SMS Tests > Case List > Followup Form",
+                       "SMS Tests > Case List > Close"]

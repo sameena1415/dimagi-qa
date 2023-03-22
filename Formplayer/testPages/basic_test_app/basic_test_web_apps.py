@@ -34,6 +34,21 @@ class BasicTestWebApps(BasePage):
         self.unicode_text = "Unicode_web_" + fetch_random_string() + UserData.unicode
         self.update_unicode = fetch_random_string() + UserData.unicode_new
 
+
+        self.min_dup_case = "min_dup_case" + fetch_random_string()
+        self.min_dup_subcase = "min_dup_subcase" + fetch_random_string()
+        self.subcase_text = self.min_dup_case+"_"+self.min_dup_subcase
+        self.min_dup_input_dict = {
+            "subcase_text": self.min_dup_case+"_"+self.min_dup_subcase,
+            "phone": fetch_phone_number(),
+            "Singleselect": "B",
+            "Multiselect": ["A", "C"],
+            "intval": fetch_random_digit_with_range(100, 300),
+            "place": "Delhi"
+        }
+        self.case_node_case = "case_node_case_" + fetch_random_string()
+        self.case_node_subcase = "case_node_subcase_" + fetch_random_string()
+
         self.input_dict = {
             "phone": fetch_phone_number(),
             "Singleselect": "A",
@@ -63,7 +78,7 @@ class BasicTestWebApps(BasePage):
         self.last_list_page = (By.XPATH, "//a[@aria-label='Last Page']")
         self.go_to_page_input = (By.XPATH, "//input[@placeholder='Go to page']")
         self.go_button = (By.XPATH, "//button[@id='pagination-go-button']")
-        self.case_list_menu = "//h3[contains(text(), '{}')]"
+        self.case_list_menu = '//h3[contains(text(), "{}")]'
         self.registration_form = "//h3[contains(text(), '{}')]"
         self.followup_form = (By.XPATH, "//h3[contains(text(), 'Followup Form')]")
         self.name_question = (By.XPATH,
@@ -149,6 +164,8 @@ class BasicTestWebApps(BasePage):
         self.div_span = "//div/span[contains(.,'{}')]"
         # casetest
         self.case_detail_tab = "//a[.='Case Details {}']"
+        self.case_detail34_tab = "//a[contains(.,'Case Detail {}')]"
+        self.case_details34_table = "//td[.='{}']//following-sibling::td[.='{}']"
         self.case_detail_table = "//th[.='{}']/following-sibling::td[.='{}']"
         self.case_detail_table_list = (By.XPATH, "//div[@class='js-detail-content']/table/tr")
         self.search_location_button = (By.XPATH, "//button[.='Search']")
@@ -169,6 +186,14 @@ class BasicTestWebApps(BasePage):
         self.update_later = (By.XPATH, "//button[.='Update Later']")
         self.get_latest_app = (By.XPATH, "//button[.='Get Latest App']")
         self.WEBAPPS_TITLE = "Web Apps - CommCare HQ"
+        self.repeat_span_text = "//fieldset[.//legend[.//span[.='Repeat with Lookup']]]//following-sibling::div//label//span[@class='webapp-markdown-output'][contains(.,'{}')]"
+        self.repeat_span = (By.XPATH, "//fieldset[.//legend[.//span[.='Repeat with Lookup']]]//following-sibling::div//label//span[@class='webapp-markdown-output']")
+        #minimize duplicates
+        self.create_a_case_button = (By.XPATH, "//button[.='Create a Case']")
+        self.update_case = (By.XPATH, "//button[.='Update Case']")
+
+        #iteration repeat
+        self.show_iten_checkbox = "//label[.//span[contains(.,'{}')]]//following::fieldset[1]//div[@class='checkbox']//*[.='Show this item in the next loop']"
 
     def open_form(self, case_list, form_name):
         self.scroll_to_element((By.XPATH, self.case_list_menu.format(case_list)))
@@ -1268,3 +1293,356 @@ class BasicTestWebApps(BasePage):
             classname = self.get_attribute((By.XPATH, self.page_number.format(i+1)), "class")
             print(classname)
             assert classname == "js-page active", "Click is not successful"
+
+    def minimize_duplicate_create_case_subcase(self):
+        self.wait_for_element(self.create_a_case_button)
+        self.scroll_to_element(self.create_a_case_button)
+        self.js_click(self.create_a_case_button)
+        self.wait_for_element((By.XPATH, self.text_area_field.format(
+            "What is the case name? You should not be allowed to proceed if the question is empty.")))
+        self.wait_to_clear_and_send_keys((By.XPATH, self.text_area_field.format(
+            "What is the case name? You should not be allowed to proceed if the question is empty.")),
+                                         self.min_dup_case)
+        time.sleep(0.5)
+        self.wait_to_click((By.XPATH, self.choose_radio_button.format(
+            "Are you sure you want to create a new case?", "Confirm - Please create this case.")))
+        time.sleep(1)
+        self.scroll_to_element(self.submit_form_button)
+        self.wait_to_click(self.submit_form_button)
+        time.sleep(2)
+        self.wait_for_element(self.success_message)
+        self.open_case_list(UserData.basic_test_app_forms['create_subcase'])
+        self.wait_to_clear_and_send_keys((By.XPATH, self.text_area_field.format(
+            "Enter a name for your sub case:")),
+                                         self.min_dup_subcase + Keys.TAB)
+        time.sleep(1)
+        self.wait_for_element((By.XPATH, self.input_field.format(
+            "Enter a number for " + self.min_dup_subcase + ":")))
+        number = fetch_random_digit_with_range(1, 20)
+        self.wait_to_clear_and_send_keys((By.XPATH, self.input_field.format(
+            "Enter a number for " + self.min_dup_subcase + ":")), number + Keys.TAB)
+        time.sleep(1)
+        self.wait_for_element((By.XPATH, self.choose_radio_button.format(
+            "Do you want to create the sub case?", "Confirm - Please create " + self.min_dup_subcase + ".")))
+        self.js_click((By.XPATH, self.choose_radio_button.format(
+            "Do you want to create the sub case?", "Confirm - Please create " + self.min_dup_subcase + ".")))
+        time.sleep(1)
+        self.js_click(self.submit_form_button)
+        time.sleep(2)
+        self.wait_for_element(self.success_message)
+        self.wait_to_click(self.home_button)
+        return self.min_dup_case, self.min_dup_subcase, number
+
+    def minimize_duplicate_update_case(self, case, subcase):
+        self.wait_for_element(self.search_input)
+        self.wait_to_clear_and_send_keys(self.search_input, case)
+        self.wait_to_click(self.search_button)
+        time.sleep(2)
+        assert self.is_present_and_displayed((By.XPATH, self.module_search.format(case)))
+        print("case search working properly")
+        self.wait_to_click((By.XPATH, self.module_search.format(case)))
+        assert self.is_present(self.continue_button)
+        self.js_click(self.continue_button)
+        time.sleep(1)
+        self.open_case_list(UserData.basic_test_app_forms['view_case_subcase'])
+        self.wait_for_element(self.search_input)
+        self.wait_to_clear_and_send_keys(self.search_input, subcase)
+        self.wait_to_click(self.search_button)
+        time.sleep(2)
+        assert self.is_present_and_displayed((By.XPATH, self.module_search.format(subcase)))
+        print("case search working properly")
+        self.scroll_to_element(self.update_case)
+        self.js_click(self.update_case)
+        self.wait_for_element((By.XPATH, self.text_area_field.format(
+            "This form will allow you to add and update different kinds of data to/from the case. Enter some text:")))
+        self.wait_to_clear_and_send_keys((By.XPATH, self.text_area_field.format(
+            "This form will allow you to add and update different kinds of data to/from the case. Enter some text:")),
+                                         self.min_dup_input_dict['subcase_text'])
+
+        self.wait_to_click((By.XPATH, self.choose_radio_button.format(
+            "Select one of the following:", self.min_dup_input_dict['Singleselect'])))
+        self.scroll_to_element((By.XPATH, self.choose_radio_button.format(
+            "Select one or more of the following:", self.min_dup_input_dict['Multiselect'][0])))
+        self.js_click((By.XPATH, self.choose_radio_button.format(
+            "Select one or more of the following:", self.min_dup_input_dict['Multiselect'][0])))
+        time.sleep(1)
+        self.js_click((By.XPATH, self.choose_radio_button.format(
+            "Select one or more of the following:", self.min_dup_input_dict['Multiselect'][1])))
+        self.scroll_to_element((By.XPATH, self.input_field.format("Enter a phone number:")))
+        self.wait_to_clear_and_send_keys((By.XPATH, self.input_field.format("Enter a phone number:")),
+                                         self.min_dup_input_dict['phone'])
+        self.wait_to_clear_and_send_keys((By.XPATH, self.input_field.format(
+            "Enter an integer:")), self.min_dup_input_dict['intval'])
+        self.wait_for_element(self.blank_latitude)
+        self.scroll_to_element((By.XPATH, self.input_field.format(
+            "Capture your location here:")))
+        self.wait_to_clear_and_send_keys((By.XPATH, self.input_field.format(
+            "Capture your location here:")), self.min_dup_input_dict['place'] + Keys.TAB)
+        self.js_click(self.search_location_button)
+        time.sleep(2)
+        assert not self.is_present_and_displayed(self.blank_latitude, 20)
+        self.wait_to_click((By.XPATH, self.input_field.format(
+            "Enter a date:")))
+        self.wait_to_click(self.click_today_date)
+        self.wait_to_click(self.close_date_picker)
+        text = self.get_text(self.output)
+        number = text.split(".")
+        new_number=str(re.findall(r'\b\d+\b', number[1])[0])
+        print(str(re.findall(r'\b\d+\b', number[1])[0]))
+        date = self.get_attribute((By.XPATH, self.input_field.format(
+            "Enter a date:")), "value")
+        date = datetime.strptime(date, "%m/%d/%Y").strftime('%Y-%m-%d')
+        print(date)
+        self.wait_to_click(self.submit_form_button)
+        time.sleep(2)
+        self.wait_for_element(self.success_message)
+        self.wait_to_click(self.home_button)
+
+        return self.min_dup_input_dict['subcase_text'],\
+               self.min_dup_input_dict['phone'],\
+               self.min_dup_input_dict['Singleselect'], \
+               self.min_dup_input_dict['Multiselect'], \
+               self.min_dup_input_dict['intval'],\
+               self.min_dup_input_dict['place'], date, new_number
+
+    def case_node_create_case(self):
+        self.wait_for_element((By.XPATH, self.text_area_field.format(
+            "What is the case name? You should not be allowed to proceed if the question is empty.")))
+        self.wait_to_clear_and_send_keys((By.XPATH, self.text_area_field.format(
+            "What is the case name? You should not be allowed to proceed if the question is empty.")),
+                                         self.case_node_case)
+        time.sleep(0.5)
+        self.wait_to_click((By.XPATH, self.choose_radio_button.format(
+            "Are you sure you want to create a new case?", "Confirm - Please create this case.")))
+        time.sleep(1)
+        self.scroll_to_element(self.submit_form_button)
+        self.wait_to_click(self.submit_form_button)
+        time.sleep(2)
+        self.wait_for_element(self.success_message)
+        self.wait_to_click(self.home_button)
+        return self.case_node_case
+
+    def case_node_create_subcase(self, case, num1, num2):
+        subcase = self.case_node_subcase+"_"+num1
+        self.wait_for_element(self.search_input)
+        self.wait_to_clear_and_send_keys(self.search_input, case)
+        self.wait_to_click(self.search_button)
+        time.sleep(2)
+        assert self.is_present_and_displayed((By.XPATH, self.module_search.format(case)))
+        print("case search working properly")
+        self.wait_to_click((By.XPATH, self.module_search.format(case)))
+        assert self.is_present(self.continue_button)
+        self.js_click(self.continue_button)
+        time.sleep(1)
+        self.wait_to_clear_and_send_keys((By.XPATH, self.text_area_field.format(
+            "Enter a name for your sub case:")),
+                                         subcase + Keys.TAB)
+        time.sleep(1)
+        self.wait_for_element((By.XPATH, self.input_field.format(
+            "Enter a number for " + subcase + ":")))
+        self.wait_to_clear_and_send_keys((By.XPATH, self.input_field.format(
+            "Enter a number for " + subcase + ":")), num2 + Keys.TAB)
+        time.sleep(1)
+        self.wait_for_element((By.XPATH, self.choose_radio_button.format(
+            "Do you want to create the sub case?", "Confirm - Please create " + subcase + ".")))
+        self.js_click((By.XPATH, self.choose_radio_button.format(
+            "Do you want to create the sub case?", "Confirm - Please create " + subcase + ".")))
+        time.sleep(1)
+        self.js_click(self.submit_form_button)
+        time.sleep(2)
+        self.wait_for_element(self.success_message)
+        self.wait_to_click(self.home_button)
+        return {subcase: num2}
+
+    def search_case_open(self, case):
+        self.wait_for_element(self.search_input)
+        self.wait_to_clear_and_send_keys(self.search_input, case)
+        self.wait_to_click(self.search_button)
+        time.sleep(2)
+        assert self.is_present_and_displayed((By.XPATH, self.module_search.format(case)))
+        print("case search working properly")
+        self.wait_to_click((By.XPATH, self.module_search.format(case)))
+        assert self.is_present(self.continue_button)
+
+
+    def verify_case_details(self, tab, subcases):
+        if tab == "3":
+            self.wait_to_click((By.XPATH, self.case_detail34_tab.format(tab)))
+            for subcase, num in subcases.items():
+                if num =="1":
+                    assert self.is_present_and_displayed((By.XPATH, self.case_details34_table.format(subcase, num)))
+        elif tab == "4":
+            self.wait_to_click((By.XPATH, self.case_detail34_tab.format(tab)))
+            for subcase, num in subcases.items():
+                assert self.is_present_and_displayed((By.XPATH, self.case_details34_table.format(subcase, num)))
+        
+
+
+
+    def fst_repeat_form_validation(self):
+        self.wait_for_element((By.XPATH, self.choose_radio_button.format("De-select exactly one of the options below, and remember which options remain checked","sf")))
+
+        if self.is_selected((By.XPATH, self.choose_radio_button.format(
+            "De-select exactly one of the options below, and remember which options remain checked","sf"))):
+            assert self.is_present_and_displayed((By.XPATH, self.repeat_span_text.format("Suffolk")))
+        else:
+            print("Checkbox not selected")
+
+        if self.is_selected((By.XPATH, self.choose_radio_button.format(
+            "De-select exactly one of the options below, and remember which options remain checked","mx"))):
+            assert self.is_present_and_displayed((By.XPATH, self.repeat_span_text.format("Middlesex")))
+        else:
+            print("Checkbox not selected")
+
+        if self.is_selected((By.XPATH, self.choose_radio_button.format(
+            "De-select exactly one of the options below, and remember which options remain checked","ex"))):
+            assert self.is_present_and_displayed((By.XPATH, self.repeat_span_text.format("Essex")))
+        else:
+            print("Checkbox not selected")
+
+        self.scroll_to_element((By.XPATH, self.choose_radio_button.format(
+            "De-select exactly one of the options below, and remember which options remain checked","sf")))
+
+        self.js_click((By.XPATH, self.choose_radio_button.format(
+            "De-select exactly one of the options below, and remember which options remain checked", "sf")))
+        time.sleep(5)
+        assert not self.is_selected((By.XPATH, self.choose_radio_button.format(
+            "De-select exactly one of the options below, and remember which options remain checked","sf")))
+        assert not self.is_present_and_displayed((By.XPATH, self.repeat_span_text.format("Suffolk")),10)
+        assert self.is_present_and_displayed((By.XPATH, self.repeat_span_text.format("Middlesex")))
+        assert self.is_present_and_displayed((By.XPATH, self.repeat_span_text.format("Essex")))
+
+        self.scroll_to_element((By.XPATH, self.choose_radio_button.format(
+            "De-select exactly one of the options below, and remember which options remain checked", "mx")))
+
+        self.js_click((By.XPATH, self.choose_radio_button.format(
+            "De-select exactly one of the options below, and remember which options remain checked", "mx")))
+        time.sleep(5)
+        self.js_click((By.XPATH, self.choose_radio_button.format(
+            "De-select exactly one of the options below, and remember which options remain checked", "sf")))
+        time.sleep(5)
+        assert not self.is_selected((By.XPATH, self.choose_radio_button.format(
+            "De-select exactly one of the options below, and remember which options remain checked", "mx")))
+        assert self.is_selected((By.XPATH, self.choose_radio_button.format(
+            "De-select exactly one of the options below, and remember which options remain checked", "sf")))
+        assert not self.is_present_and_displayed((By.XPATH, self.repeat_span_text.format("Middlesex")), 10)
+        assert self.is_present_and_displayed((By.XPATH, self.repeat_span_text.format("Suffolk")))
+        assert self.is_present_and_displayed((By.XPATH, self.repeat_span_text.format("Essex")))
+
+        self.scroll_to_element((By.XPATH, self.choose_radio_button.format(
+            "De-select exactly one of the options below, and remember which options remain checked", "ex")))
+
+        self.js_click((By.XPATH, self.choose_radio_button.format(
+            "De-select exactly one of the options below, and remember which options remain checked", "ex")))
+        time.sleep(5)
+        self.js_click((By.XPATH, self.choose_radio_button.format(
+            "De-select exactly one of the options below, and remember which options remain checked", "mx")))
+        time.sleep(5)
+        assert self.is_selected((By.XPATH, self.choose_radio_button.format(
+            "De-select exactly one of the options below, and remember which options remain checked", "mx")))
+        assert not self.is_selected((By.XPATH, self.choose_radio_button.format(
+            "De-select exactly one of the options below, and remember which options remain checked", "ex")))
+        assert not self.is_present_and_displayed((By.XPATH, self.repeat_span_text.format("Essex")), 10)
+        assert self.is_present_and_displayed((By.XPATH, self.repeat_span_text.format("Middlesex")))
+        assert self.is_present_and_displayed((By.XPATH, self.repeat_span_text.format("Suffolk")))
+
+        self.scroll_to_element((By.XPATH, self.choose_radio_button.format(
+            "De-select exactly one of the options below, and remember which options remain checked", "ex")))
+
+        self.js_click((By.XPATH, self.choose_radio_button.format(
+            "De-select exactly one of the options below, and remember which options remain checked", "ex")))
+        time.sleep(5)
+        assert self.is_selected((By.XPATH, self.choose_radio_button.format(
+            "De-select exactly one of the options below, and remember which options remain checked", "ex")))
+
+        assert self.is_present_and_displayed((By.XPATH, self.repeat_span_text.format("Middlesex")))
+        assert self.is_present_and_displayed((By.XPATH, self.repeat_span_text.format("Suffolk")))
+        assert self.is_present_and_displayed((By.XPATH, self.repeat_span_text.format("Essex")))
+        time.sleep(1)
+        self.js_click(self.submit_form_button)
+        time.sleep(2)
+        self.wait_for_element(self.success_message)
+        self.wait_to_click(self.home_button)
+
+    def fst_cross_iter_repeat_form_validation(self):
+        self.wait_for_element((By.XPATH, self.choose_radio_button.format("display the repeats?","yep")))
+        self.wait_to_click((By.XPATH, self.choose_radio_button.format("display the repeats?", "yep")))
+        time.sleep(2)
+        assert self.is_present_and_displayed((By.XPATH, self.show_iten_checkbox.format("Enter a value for: Pineapple Pie")))
+        assert self.is_present_and_displayed(
+            (By.XPATH, self.show_iten_checkbox.format("Enter a value for: Saag Paneer")))
+        assert self.is_present_and_displayed(
+            (By.XPATH, self.show_iten_checkbox.format("Enter a value for: Peri-Peri Chicken")))
+        assert self.is_present_and_displayed(
+            (By.XPATH, self.show_iten_checkbox.format("Enter a value for: Salty Lassi")))
+        assert self.is_present_and_displayed((By.XPATH, self.text_area_field.format("For Pineapple Pie , your previously entered value was")))
+        assert self.is_present_and_displayed(
+            (By.XPATH, self.text_area_field.format("For Saag Paneer , your previously entered value was")))
+        assert self.is_present_and_displayed(
+            (By.XPATH, self.text_area_field.format("For Peri-Peri Chicken , your previously entered value was")))
+        assert self.is_present_and_displayed(
+            (By.XPATH, self.text_area_field.format("For Salty Lassi , your previously entered value was")))
+
+        self.wait_to_clear_and_send_keys(
+            (By.XPATH, self.text_area_field.format("Enter a value for: Pineapple Pie")), "Pie" +Keys.TAB)
+        time.sleep(1)
+        assert self.is_present_and_displayed(
+            (By.XPATH, self.text_area_field.format("For Pineapple Pie , your previously entered value was Pie")))
+        self.js_click(
+            (By.XPATH, self.show_iten_checkbox.format("Enter a value for: Pineapple Pie")))
+        time.sleep(1)
+        assert not self.is_present_and_displayed(
+            (By.XPATH, self.text_area_field.format("For Pineapple Pie , your previously entered value was Pie")), 5)
+
+        self.wait_to_clear_and_send_keys(
+            (By.XPATH, self.text_area_field.format("Enter a value for: Saag Paneer")), "Paneer" + Keys.TAB)
+        time.sleep(1)
+        assert self.is_present_and_displayed(
+            (By.XPATH, self.text_area_field.format("For Saag Paneer , your previously entered value was Paneer")))
+        self.js_click(
+            (By.XPATH, self.show_iten_checkbox.format("Enter a value for: Saag Paneer")))
+        time.sleep(1)
+        assert not self.is_present_and_displayed(
+            (By.XPATH, self.text_area_field.format("For Saag Paneer , your previously entered value was Paneer")), 5)
+
+        self.wait_to_clear_and_send_keys(
+            (By.XPATH, self.text_area_field.format("Enter a value for: Peri-Peri Chicken")), "Chicken" + Keys.TAB)
+        time.sleep(1)
+        assert self.is_present_and_displayed(
+            (By.XPATH, self.text_area_field.format("For Peri-Peri Chicken , your previously entered value was Chicken")))
+        self.js_click(
+            (By.XPATH, self.show_iten_checkbox.format("Enter a value for: Peri-Peri Chicken")))
+        time.sleep(1)
+        assert not self.is_present_and_displayed(
+            (By.XPATH, self.text_area_field.format("For Peri-Peri Chicken , your previously entered value was Chicken")), 5)
+
+        self.wait_to_clear_and_send_keys(
+            (By.XPATH, self.text_area_field.format("Enter a value for: Salty Lassi")), "Lassi" + Keys.TAB)
+        time.sleep(1)
+        assert self.is_present_and_displayed(
+            (
+            By.XPATH, self.text_area_field.format("For Salty Lassi , your previously entered value was Lassi")))
+        self.js_click(
+            (By.XPATH, self.show_iten_checkbox.format("Enter a value for: Salty Lassi")))
+        time.sleep(1)
+        assert not self.is_present_and_displayed(
+            (
+            By.XPATH, self.text_area_field.format("For Salty Lassi , your previously entered value was Lassi")),
+            5)
+
+        self.scroll_to_element((By.XPATH, self.clear_select.format("display the repeats?")))
+        self.js_click((By.XPATH, self.choose_radio_button.format("display the repeats?", "nope")))
+        time.sleep(2)
+        assert not self.is_present_and_displayed(
+            (By.XPATH, self.show_iten_checkbox.format("Enter a value for: Pineapple Pie")),5)
+        assert not self.is_present_and_displayed(
+            (By.XPATH, self.show_iten_checkbox.format("Enter a value for: Saag Paneer")),5)
+        assert not self.is_present_and_displayed(
+            (By.XPATH, self.show_iten_checkbox.format("Enter a value for: Peri-Peri Chicken")),5)
+        assert not self.is_present_and_displayed(
+            (By.XPATH, self.show_iten_checkbox.format("Enter a value for: Salty Lassi")),5)
+        time.sleep(1)
+        self.js_click(self.submit_form_button)
+        time.sleep(2)
+        self.wait_for_element(self.success_message)
+        self.wait_to_click(self.home_button)
