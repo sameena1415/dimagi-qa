@@ -75,6 +75,7 @@ class WebApps(BasePage):
         self.caselist_header = self.get_element(self.menu_name_header_format, menu_name)
         self.scroll_to_element(self.caselist_menu)
         self.js_click(self.caselist_menu)
+        self.wait_for_ajax()
         assert self.is_visible_and_displayed(self.caselist_header)
 
     def open_form(self, form_name):
@@ -83,6 +84,7 @@ class WebApps(BasePage):
             logging.info("Auto advance enabled")
         else:
             self.form_name = self.get_element(self.form_name_format, form_name)
+            self.wait_for_element(self.form_name, timeout=500)
             self.scroll_to_element(self.form_name)
             self.js_click(self.form_name)
 
@@ -95,14 +97,17 @@ class WebApps(BasePage):
         self.click(self.search_again_button)
 
     def clear_selections_on_case_search_page(self):
+        self.wait_for_element(self.clear_case_search_page, timeout=500)
         self.js_click(self.clear_case_search_page)
+        self.wait_for_ajax()
 
     def search_button_on_case_search_page(self, enter_key=None):
         if enter_key == "YES":
             self.send_keys(self.submit_on_case_search_page, Keys.ENTER)
         else:
             self.js_click(self.submit_on_case_search_page)
-        self.is_visible_and_displayed(self.case_list)
+            self.wait_for_ajax()
+        self.is_visible_and_displayed(self.case_list, timeout=500)
         self.is_visible_and_displayed(self.search_again_button)
 
     def clear_and_search_all_cases_on_case_search_page(self):
@@ -151,6 +156,7 @@ class WebApps(BasePage):
     def select_case_and_continue(self, case_name):
         self.select_case(case_name)
         self.continue_to_forms()
+        self.wait_for_ajax()
         form_names = self.find_elements_texts(self.form_names)
         return form_names
 

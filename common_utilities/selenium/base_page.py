@@ -345,3 +345,4 @@ class BasePage:
         wait = WebDriverWait(self.driver, 500)
         wait.until(lambda driver: self.driver.execute_script('return jQuery.active') == 0)
         wait.until(lambda driver: self.driver.execute_script('return document.readyState') == 'complete')
+

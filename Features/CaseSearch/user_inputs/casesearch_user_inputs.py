@@ -93,6 +93,8 @@ class CaseSearchUserInput:
     mood_help_text = "Mood\'s Rating"
     date_2022_12_30 = "2022-12-30"
     date_30_12_2022 = "30/12/2022"
+    date_12_30_2022 = "12/30/2022"
+    dates = {"MM/DD/YYYY": '%m/%d/%Y', "YYYY-MM-DD": '%Y-%m-%d', "DD/MM/YYYY": "%d/%m/%Y"}
     full_home_address = "New Canada St., 3855 Brienz, Switzerland"
     full_work_address = "Avenida Benito Juárez, 77560 Alfredo V. Bonfil, Quintana Roo, Mexico"
     home_street_value = "New Canada St."
@@ -133,6 +135,7 @@ class CaseSearchUserInput:
     search_home_address = 'Search Home Address'
     search_work_address = 'Search Work Address'
     artist = "Artist"
+    song_release_date = "Song Release Date"
     show_date = "Show Date"
     subgenre = "SubGenre"
     genre = "Genre"
@@ -149,6 +152,7 @@ class CaseSearchUserInput:
     five = "5"
     six = "6"
     seven = "7"
+    eight = "8"
     rating_four_and_five = "#,#4#,#5"
 
     # Questions
