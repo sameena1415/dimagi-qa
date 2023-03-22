@@ -90,21 +90,6 @@ jobs:
         attachments: /home/runner/work/dimagi-qa/dimagi-qa/report.html
         priority: normal
 
-    - name: Send Pass Email
-      uses: dawidd6/action-send-mail@v3
-      if: success()
-      with:
-        server_address: smtp.gmail.com
-        server_port: 465
-        username: ${{secrets.DIMAGIQA_MAIL_USERNAME}}
-        password: ${{secrets.DIMAGIQA_MAIL_PASSWORD}}
-        subject: ${{ github.event.client_payload.environment }} PASS - Request API Tests[#${{github.run_number}}] on branch "${{ github.ref_name }}", ${{env.NOW}}
-        to: qa@dimagi.com, sameena.shaik@fissionlabs.com
-        from: <${{secrets.DIMAGIQA_MAIL_USERNAME}}>
-        html_body: file:////home/runner/work/dimagi-qa/dimagi-qa/RequestAPI/email_pass.html
-        attachments: /home/runner/work/dimagi-qa/dimagi-qa/report.html
-        priority: normal
-
     - name: Post to Slack channel on Failure
       id: slack-api
       uses: slackapi/slack-github-action@v1.23.0
