@@ -3,6 +3,7 @@ import time
 from selenium.webdriver.common.by import By
 
 from common_utilities.selenium.base_page import BasePage
+from Features.CaseSearch.constants import *
 
 """"Contains test page elements and functions related to the Case Search functionality"""
 
@@ -20,10 +21,14 @@ class MultiSelectWorkflows(BasePage):
         self.selected_case_names_on_forms = (By.XPATH, "//span[@class='caption webapp-markdown-output']")
         self.select_case_button = (By.ID, "select-case")
         self.checkbox = "(//td[@class='module-case-list-column' and text() = '{}'][1]//preceding::input[1])[1]"
+        self.dropdown_menu_value = (By.XPATH, "//*[contains(@data-bind,'moduleOptions, value')]/option")
+        self.max_limit_error = (By.XPATH, "//div[contains(text(),'Too many cases')]")
+        self.open_app_builder_menu = "//span[contains(text(),'{}')]"
+        self.case_list_settings = (By.XPATH, "//a[@href='#case-detail-screen-config-tab']")
 
-    def select_cases(self, case_count):
+    def multi_select_cases(self, case_count):
         song_names = []
-        for i in range(1, case_count):
+        for i in range(1, case_count+1):
             row_checkbox = self.get_element(self.row_checkbox_xpath, str(i))
             self.js_click(row_checkbox)
             case_name_in_table = self.get_element(self.value_in_table_format, str(i))
@@ -31,14 +36,32 @@ class MultiSelectWorkflows(BasePage):
             song_names.append(selected_song_names)
         return song_names
 
-    def continue_to_forms_multiselect(self):
-        self.js_click(self.multi_select_continue)
+    def click_select_all_checkbox(self):
+        self.js_click(self.select_all_checkbox)
 
-    def check_selected_cases_present_on_form(self, items_selected_on_case_list):
-        time.sleep(5)
+    def continue_to_proceed_multiselect(self):
+        self.js_click(self.multi_select_continue)
+        self.wait_for_ajax()
+
+    def check_no_of_cases_on_form(self, expected_size):
         song_names_on_form = self.find_elements_texts(self.selected_case_names_on_forms)
-        stripped = list(filter(None, [s.partition(" by")[0] for s in song_names_on_form]))
-        stripped_final = list(filter(None, [s.replace("song: ", "") for s in stripped]))
+        size = len(song_names_on_form)
+        print(size)
+        assert size == expected_size
+
+    def check_error_message_shown_for_max_limit_exceed(self):
+        assert self.is_displayed(self.max_limit_error)
+
+    def check_selected_cases_present_on_form(self, items_selected_on_case_list, case_type):
+        time.sleep(5)
+        stripped_final = None
+        song_names_on_form = self.find_elements_texts(self.selected_case_names_on_forms)
+        if case_type == SONG:
+            stripped = list(filter(None, [s.partition(" by")[0] for s in song_names_on_form]))
+            stripped_final = list(filter(None, [s.replace("song: ", "") for s in stripped]))
+        elif case_type == SHOW:
+            stripped = list(filter(None, [s.replace("show:", "") for s in song_names_on_form]))
+            stripped_final = list(filter(None, [s.lstrip() for s in stripped]))
         assert items_selected_on_case_list == stripped_final, f"No, list1 {items_selected_on_case_list} doesn't match list2{stripped_final}"
 
     def select_case_on_case_detail(self):
@@ -52,5 +75,20 @@ class MultiSelectWorkflows(BasePage):
         for case in case_names:
             checkbox = self.get_element(self.checkbox, case)
             assert self.is_selected(checkbox)
+
+    def check_if_value_present_in_drop_down(self, menu_name_input, match=None):
+        menu_names = self.find_elements_texts(self.dropdown_menu_value)
+        if match == NO:
+            assert menu_name_input not in menu_names
+        elif match == YES:
+            assert menu_name_input in menu_names
+
+    def open_menu_settings(self, menu):
+        menu_xpath = self.get_element(self.open_app_builder_menu, menu)
+        self.js_click(menu_xpath)
+        self.js_click(self.case_list_settings)
+
+
+
 
 

@@ -16,5 +16,9 @@ MENU = "MENU"
 FIRST_MENU = "FIRST_MENU"
 HOME_SCREEN = "HOME_SCREEN"
 
-#Answer Types
-textarea="textarea"
+# Answer Types
+textarea = "textarea"
+
+# Case Types
+SONG = "SONG"
+SHOW = "SHOW"

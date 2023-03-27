@@ -55,7 +55,7 @@ class WebApps(BasePage):
         self.next_page = (By.XPATH, "//a[contains(@aria-label, 'Next')]")
         self.prev_page = (By.XPATH, "//a[contains(@aria-label, 'Previous')]")
         self.pagination_select = (By.XPATH, "//select[@class='form-control per-page-limit']")
-        self.go_to_page = (By.ID, "goText")
+        self.go_to_page_textarea = (By.ID, "goText")
         self.go_button = (By.ID, "pagination-go-button")
 
     def open_app(self, app_name):
@@ -206,9 +206,10 @@ class WebApps(BasePage):
     def switch_bw_pages(self):
         self.js_click(self.next_page)
         self.wait_for_ajax()
+        self.wait_for_element(self.prev_page)
         self.js_click(self.prev_page)
         self.wait_for_ajax()
 
     def go_to_page(self, page_number):
-        self.send_keys(self.go_to_page, page_number)
+        self.send_keys(self.go_to_page_textarea, page_number)
         self.js_click(self.go_button)
