@@ -40,6 +40,3 @@ class MultiSelectUserInput:
     update_shows_multi_form = "Update child shows you picked out"
     update_show_normal_form = "Update Show"
     does_nothing_form = "This form does nothing"
-
-    """Cases"""
-
