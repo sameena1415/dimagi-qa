@@ -45,7 +45,7 @@ pytest -v --rootdir= Features/MultiSelect/testCases
 ### <ins> Trigger Manually on Gitaction </ins>
 
 To manually trigger the script,
-  - Go to [Multiselect Tests action](https://github.com/dimagi/dimagi-qa/actions/workflows/multiselect.yml)
+  - Go to [Multiselect Tests action](https://github.com/dimagi/dimagi-qa/actions/workflows/multi-select-tests.yml)
   - Run workflow
   - Use workflow from ```master```
   - Use the environment as desired
