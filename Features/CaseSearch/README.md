@@ -35,7 +35,7 @@ the environment you want to test.
 ```sh
 
 # To execute all the test cases 
-pytest -v --rootdir= Features/CaseSearch/testCases
+pytest -v --rootdir= Features/CaseSearch/test_cases
 
 ```
 - You could also pass the following arguments
