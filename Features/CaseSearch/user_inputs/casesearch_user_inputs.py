@@ -1,4 +1,4 @@
-""""Contains test data that are used as user inputs across various areass used in Case Serach"""
+""""Contains test data that are used as user inputs across various areass used in Case Search"""
 
 
 class CaseSearchUserInput:
