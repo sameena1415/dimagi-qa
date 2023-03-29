@@ -10,7 +10,7 @@ global driver
 
 
 @pytest.fixture(scope="session")
-def environment_settings_multiselect():
+def environment_settings_casesearch():
     """Load settings from os.environ
 
             Names of environment variables:
@@ -36,12 +36,12 @@ def environment_settings_multiselect():
 
 
 @pytest.fixture(scope="session", autouse=True)
-def settings(environment_settings_multiselect):
+def settings(environment_settings_casesearch):
     if os.environ.get("CI") == "true":
-        settings = environment_settings_multiselect
+        settings = environment_settings_casesearch
         settings["CI"] = "true"
         if any(x not in settings for x in ["url", "login_username", "login_password"]):
-            lines = environment_settings_multiselect.__doc__.splitlines()
+            lines = environment_settings_casesearch.__doc__.splitlines()
             vars_ = "\n  ".join(line.strip() for line in lines if "DIMAGIQA_" in line)
             raise RuntimeError(
                 f"Environment variables not set:\n  {vars_}\n\n"
