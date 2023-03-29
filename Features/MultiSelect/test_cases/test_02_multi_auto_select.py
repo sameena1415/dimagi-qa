@@ -13,7 +13,7 @@ def test_case_01_max_selected_values_for_auto_selection(driver):
     webapps = WebApps(driver)
     webapps.login_as(CaseSearchUserInput.user_1)
     webapps.open_app(MultiSelectUserInput.multiselect_app_name)
-    webapps.open_menu(MultiSelectUserInput.Songs_auto)
+    webapps.open_menu(MultiSelectUserInput.songs_auto)
 
     multiselect.check_no_of_cases_on_form(2)
     webapps.answer_repeated_questions(question_label=CaseSearchUserInput.add_show_question,
@@ -21,7 +21,7 @@ def test_case_01_max_selected_values_for_auto_selection(driver):
                                       input_value=fetch_random_string())
     webapps.submit_the_form()
     webapps.open_app(MultiSelectUserInput.multiselect_app_name)
-    webapps.open_menu(MultiSelectUserInput.Songs_auto_max_limit)
+    webapps.open_menu(MultiSelectUserInput.songs_auto_max_limit)
     multiselect.check_error_message_shown_for_max_limit_exceed()
 
 
@@ -30,7 +30,7 @@ def test_case_02_max_selected_values_for_manual_selection(driver):
     webapps = WebApps(driver)
     webapps.login_as(CaseSearchUserInput.user_1)
     webapps.open_app(MultiSelectUserInput.multiselect_app_name)
-    webapps.open_menu(MultiSelectUserInput.Songs_manual)
+    webapps.open_menu(MultiSelectUserInput.songs_manual)
     multiselect.multi_select_cases(case_count=6)
     multiselect.continue_to_proceed_multiselect()
     multiselect.check_error_message_shown_for_max_limit_exceed()
@@ -51,7 +51,7 @@ def test_case_03_auto_select_display_only_forms(driver):
     webapps = WebApps(driver)
     webapps.login_as(CaseSearchUserInput.user_1)
     webapps.open_app(MultiSelectUserInput.multiselect_app_name)
-    webapps.open_menu(MultiSelectUserInput.Display_only_forms_auto)
+    webapps.open_menu(MultiSelectUserInput.display_only_forms_auto)
     multiselect.multi_select_cases(case_count=2)
     multiselect.continue_to_proceed_multiselect()
     multiselect.check_error_message_shown_for_max_limit_exceed()
@@ -72,7 +72,7 @@ def test_case_04_auto_select_shadow_menus(driver):
     webapps = WebApps(driver)
     webapps.login_as(CaseSearchUserInput.user_1)
     webapps.open_app(MultiSelectUserInput.multiselect_app_name)
-    webapps.open_menu(MultiSelectUserInput.Shadow_auto)
+    webapps.open_menu(MultiSelectUserInput.shadow_auto)
     multiselect.check_no_of_cases_on_form(2)
     webapps.answer_repeated_questions(question_label=CaseSearchUserInput.add_show_question,
                                       input_type=textarea,
