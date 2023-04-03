@@ -209,6 +209,11 @@ Features/CaseSearch/settings.cfg
 Features/CaseSearch/report.html
 Features/CaseSearch/test_cases/report.html
 
+#Ignoring compliled files of MultiSelect
+Features/MultiSelect/settings.cfg
+Features/MultiSelect/report.html
+Features/MultiSelect/test_cases/report.html
+
 
 
 

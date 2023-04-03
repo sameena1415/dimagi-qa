@@ -1,7 +1,7 @@
 # This workflow will install Python dependencies, run tests and lint with a single version of Python
 # For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
 
-name: Case Search Tests
+name: Multi Select Tests
 
 on:
   repository_dispatch:
@@ -18,7 +18,7 @@ on:
           - production
 
 concurrency:
-  group: case-search-tests-${{ github.ref }}
+  group: multi-select-tests-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -41,7 +41,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix: ${{ fromJSON(needs.set_matrix.outputs.matrix) }}
-    name: Case Search on '${{ matrix.environment }}'
+    name: Multi Select on '${{ matrix.environment }}'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -53,9 +53,9 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r Features/CaseSearch/requires.txt
+          pip install -r Features/MultiSelect/requires.txt
 
-      - name: Case Search Regression
+      - name: Multi Select Regression
         env:
           DIMAGIQA_ENV: ${{ matrix.environment }}  #${{ secrets.DIMAGIQA_URL }}
           DIMAGIQA_LOGIN_USERNAME: ${{ secrets.DIMAGIQA_LOGIN_USERNAME }}
@@ -67,7 +67,7 @@ jobs:
           echo "matrix environment: ${{ matrix.environment }}"
           echo "NOW=$(date +'%m-%d %H:%M')" >> $GITHUB_ENV
           echo ${{env.NOW}}
-          pytest -v "./Features/CaseSearch/test_cases" --dist=loadfile --reruns 1 --html=report_${{ matrix.environment }}.html
+          pytest -v "./Features/MultiSelect/test_cases" --dist=loadfile --reruns 1 --html=report_${{ matrix.environment }}.html
 
       - name: Set email vars
         if: ${{ success() || failure() }}
@@ -81,7 +81,7 @@ jobs:
             const { promises: fs } = require('fs')
 
             const {JOB_STATUS, NOW, CC_ENV, GITHUB_HEAD_REF} = process.env
-            const prefix = `[${CC_ENV}] Case Search - ${JOB_STATUS.toUpperCase()} - Run #${context.runNumber}`
+            const prefix = `[${CC_ENV}] Multi Select - ${JOB_STATUS.toUpperCase()} - Run #${context.runNumber}`
             const suffix = `at ${NOW}`
 
             let subject = `${prefix} on "deploy_success" ${suffix}`
@@ -95,7 +95,7 @@ jobs:
             }
 
             let actionRunLink = context.payload.repository.html_url + `/actions/runs/${context.runId}`
-            let testSuite = 'Case Search Regression'
+            let testSuite = 'Multi Select Regression'
             let bodyContent = await fs.readFile(bodyFile, 'utf8')
             bodyContent = bodyContent.replace(/{{actionRunLink}}/g, actionRunLink)
                 .replace(/{{runNumber}}/g, context.runNumber)
