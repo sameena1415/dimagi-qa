@@ -143,7 +143,7 @@ jobs:
                         "type": "section",
                         "text": {
                             "type": "mrkdwn",
-                            "text": " Salut 👋 \n*${{ github.workflow }}* were just triggered!"
+                            "text": " Ciao :woman-raising-hand::skin-tone-3::man-raising-hand::skin-tone-3: \n*${{ github.workflow }}* were just triggered!"
                         }
                     },
                     {
