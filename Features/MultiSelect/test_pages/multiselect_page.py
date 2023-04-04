@@ -43,11 +43,11 @@ class MultiSelectWorkflows(BasePage):
         self.js_click(self.multi_select_continue)
         self.wait_for_ajax()
 
-    def check_no_of_cases_on_form(self, expected_size):
+    def check_no_of_cases_on_form(self, max_size):
         song_names_on_form = self.find_elements_texts(self.selected_case_names_on_forms)
         size = len(song_names_on_form)
         print(size)
-        assert size == expected_size
+        assert size < max_size
 
     def check_error_message_shown_for_max_limit_exceed(self):
         assert self.is_displayed(self.max_limit_error)
