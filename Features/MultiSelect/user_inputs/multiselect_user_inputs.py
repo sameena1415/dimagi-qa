@@ -9,9 +9,10 @@ class MultiSelectUserInput:
 
     """Menu Names"""
     shadow_auto = "Shadow Menu (Auto-Proceed)"
-    display_only_forms_auto = "Display Only Forms plus Multi-Case Form"
+    display_only_forms_auto = "Display Only Forms plus Auto Multi-Case Form"
+    display_only_forms = "Display Only Forms plus Multi-Case Form"
     songs_manual = "Songs (multi select, normal, manual w/max limit)"
-    songs_auto_max_limit = " Songs (multi select, normal,  auto, selected cases > max limit)"
+    songs_auto_max_limit = "Songs (multi select, normal,  auto, selected cases > max limit)"
     songs_auto = "Songs (multi select, normal, auto w/max limit)"
     songs_multi_normal = "Songs (multi select, normal, non-inline search)"
     songs_multi_search_first = "Songs (multi select, search-first, inline search)"

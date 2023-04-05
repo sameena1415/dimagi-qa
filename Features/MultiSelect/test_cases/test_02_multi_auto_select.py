@@ -14,11 +14,10 @@ def test_case_01_max_selected_values_for_auto_selection(driver):
     webapps.login_as(CaseSearchUserInput.user_1)
     webapps.open_app(MultiSelectUserInput.multiselect_app_name)
     webapps.open_menu(MultiSelectUserInput.songs_auto)
-
-    multiselect.check_no_of_cases_on_form(2)
-    webapps.answer_repeated_questions(question_label=CaseSearchUserInput.add_show_question,
-                                      input_type=textarea,
-                                      input_value=fetch_random_string())
+    webapps.open_form(MultiSelectUserInput.update_song_normal_form)
+    multiselect.check_no_of_cases_on_form(100)
+    driver.back()
+    webapps.open_form(MultiSelectUserInput.does_nothing_form)
     webapps.submit_the_form()
     webapps.open_app(MultiSelectUserInput.multiselect_app_name)
     webapps.open_menu(MultiSelectUserInput.songs_auto_max_limit)
@@ -47,23 +46,10 @@ def test_case_02_max_selected_values_for_manual_selection(driver):
 
 
 def test_case_03_auto_select_display_only_forms(driver):
-    multiselect = MultiSelectWorkflows(driver)
     webapps = WebApps(driver)
     webapps.login_as(CaseSearchUserInput.user_1)
     webapps.open_app(MultiSelectUserInput.multiselect_app_name)
     webapps.open_menu(MultiSelectUserInput.display_only_forms_auto)
-    multiselect.multi_select_cases(case_count=2)
-    multiselect.continue_to_proceed_multiselect()
-    multiselect.check_error_message_shown_for_max_limit_exceed()
-    # Deselect selections
-    multiselect.click_select_all_checkbox()
-    multiselect.click_select_all_checkbox()
-    cases_selected = multiselect.multi_select_cases(case_count=1)
-    multiselect.continue_to_proceed_multiselect()
-    multiselect.check_selected_cases_present_on_form(cases_selected, case_type=SONG)
-    webapps.answer_repeated_questions(question_label=CaseSearchUserInput.add_show_question,
-                                      input_type=textarea,
-                                      input_value=fetch_random_string())
     webapps.submit_the_form()
 
 
@@ -73,10 +59,9 @@ def test_case_04_auto_select_shadow_menus(driver):
     webapps.login_as(CaseSearchUserInput.user_1)
     webapps.open_app(MultiSelectUserInput.multiselect_app_name)
     webapps.open_menu(MultiSelectUserInput.shadow_auto)
-    multiselect.check_no_of_cases_on_form(2)
-    webapps.answer_repeated_questions(question_label=CaseSearchUserInput.add_show_question,
-                                      input_type=textarea,
-                                      input_value=fetch_random_string())
+    webapps.open_form(MultiSelectUserInput.update_song_normal_form)
+    multiselect.check_no_of_cases_on_form(100)
+    driver.back()
+    webapps.open_form(MultiSelectUserInput.does_nothing_form)
     webapps.submit_the_form()
-    webapps.open_app(MultiSelectUserInput.multiselect_app_name)
 
