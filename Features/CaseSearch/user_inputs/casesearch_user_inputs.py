@@ -30,6 +30,7 @@ class CaseSearchUserInput:
     search_setting_menu = "Songs - Case Search Settings"
     without_search_setting_menu = "Songs - Without Case Search Settings"
     inline_search_menu = "Songs Inline Case Search"
+    old_inline_search_menu = "Old Search Input Instance"
     multi_select_menu = "Songs Multi-Case List"
     display_only_forms_menu = "Play Song - Display Only Forms"
     shadow_menu = "Shadow Menu"

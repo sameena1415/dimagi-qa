@@ -101,3 +101,14 @@ def test_case_04_load_from_external_domain(driver):
     webapps.select_first_case_on_list_and_continue()
     webapps.open_form(CaseSearchUserInput.add_show_form)
     webapps.submit_the_form()
+
+
+def test_case_05_old_case_search_instance(driver):
+    webapps = WebApps(driver)
+    webapps.login_as(CaseSearchUserInput.user_1)
+    webapps.open_app(CaseSearchUserInput.case_search_app_name)
+    webapps.open_menu(CaseSearchUserInput.old_inline_search_menu)
+    webapps.clear_selections_on_case_search_page()
+    webapps.search_button_on_case_search_page()
+    webapps.select_first_case_on_list_and_continue()
+    webapps.submit_the_form()
