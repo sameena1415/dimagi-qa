@@ -370,9 +370,10 @@ class MessagingPage(BasePage):
 
     def remove_all_keywords(self):
         self.wait_to_click(self.keywords)
-        if self.is_present_and_displayed(self.page_empty, 10):
+        time.sleep(3)
+        if self.is_present(self.page_empty):
             print("No keywords present")
-        else:
+        elif self.is_present(self.page_limit):
             self.select_by_value(self.page_limit, "50")
             time.sleep(3)
             list = self.find_elements(self.keywords_list)
@@ -394,8 +395,8 @@ class MessagingPage(BasePage):
                     print("All test keywords deleted")
                 else:
                     print("All test keywords not deleted")
-            else:
-                print("No test keywords present")
+        else:
+            print("No test keywords present")
 
     def remove_cond_alert(self):
         self.wait_and_sleep_to_click(self.cond_alerts)
