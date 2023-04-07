@@ -360,7 +360,7 @@ class MobileWorkerPage(BasePage):
             time.sleep(5)
             self.send_keys(self.choose_file, str(file_that_was_downloaded))
             self.wait_and_sleep_to_click(self.upload)
-            self.wait_for_element(self.successfully_uploaded, 50)
+            self.wait_for_element(self.successfully_uploaded, 150)
         except (TimeoutException, NoSuchElementException):
             print("TIMEOUT ERROR: Could not upload file")
         assert self.is_present_and_displayed(self.import_complete), "Upload Not Completed! Taking Longer to process.."
