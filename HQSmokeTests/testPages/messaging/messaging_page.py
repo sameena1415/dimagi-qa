@@ -63,6 +63,8 @@ class MessagingPage(BasePage):
         self.continue_button_rule_tab = (By.XPATH, "//button[@data-bind='click: handleRuleNavContinue, enable: ruleTabValid']")
         self.cond_alert_created = (By.XPATH, "//a[text()='" + str(self.cond_alert_name_input) + "']")
         self.restart_rule_button = (By.XPATH, "//td[./a[text()='" + str(self.cond_alert_name_input) + "']]//following-sibling::td/div/button[contains(@data-bind,'restart')]")
+        self.restart_rule_button_none = (By.XPATH, "//td[./a[text()='" + str(
+            self.cond_alert_name_input) + "']]//following-sibling::td/div[@style='display: none;']/button[contains(@data-bind,'restart')]")
         self.empty_table_alert = (By.XPATH, "//div[contains(@data-bind, 'emptyTable()')][contains(.,'There are no alerts to display')]")
         self.select_recipient_type = (By.XPATH, "//ul[@id='select2-id_schedule-recipient_types-results']/li[.='Users']")
         self.alert_type = (By.XPATH, "//select[@name='schedule-content']")
@@ -133,6 +135,7 @@ class MessagingPage(BasePage):
         self.keywords_list = (By.XPATH, "//td[.//span/a[contains(.,'KEYWORD_')]]//following-sibling::td/button")
         self.delete_confirm_button = (
         By.XPATH, "//td[.//span/a[contains(.,'KEYWORD_')]]//following::a[@class='btn btn-danger delete-item-confirm'][1]")
+        self.page_empty = (By.ID, "pagination-empty-notification")
 
 
     def open_dashboard_page(self):
@@ -208,7 +211,10 @@ class MessagingPage(BasePage):
         print("Sleeping till the alert processing completes")
         time.sleep(20)
         self.driver.refresh()
-        if self.is_present(self.restart_rule_button):
+        if self.is_present(self.restart_rule_button_none):
+            print("Restart is not required.")
+
+        else:
             self.js_click(self.restart_rule_button)
             self.accept_pop_up()
             time.sleep(5)
@@ -216,8 +222,6 @@ class MessagingPage(BasePage):
             print("Sleeping till the alert processing completes")
             time.sleep(20)
             self.driver.refresh()
-        else:
-            print("Restart is not required.")
         self.wait_for_element(self.search_box)
         self.wait_to_click(self.search_box)
         assert self.is_displayed(self.cond_alert_created), "Conditional Alert not created successfully!"
@@ -366,29 +370,32 @@ class MessagingPage(BasePage):
 
     def remove_all_keywords(self):
         self.wait_to_click(self.keywords)
-        self.select_by_value(self.page_limit, "50")
-        time.sleep(3)
-        list = self.find_elements(self.keywords_list)
-        confirm_button_list = self.find_elements(self.delete_confirm_button)
-        print("List Count: ", len(list))
-        if len(list) > 0:
-            for i in range(len(list))[::-1]:
-                list[i].click()
-                time.sleep(1)
-                confirm_button_list[i].click()
-                time.sleep(1)
-                list = self.find_elements(self.keywords_list)
-                confirm_button_list = self.find_elements(self.delete_confirm_button)
-                print("Updated List Count: ", len(list))
-            self.driver.refresh()
-            time.sleep(5)
-            list = self.find_elements(self.keywords_list)
-            if len(list) == 0:
-                print("All test keywords deleted")
-            else:
-                print("All test keywords not deleted")
+        if self.is_present_and_displayed(self.page_empty, 10):
+            print("No keywords present")
         else:
-            print("No test keywords present")
+            self.select_by_value(self.page_limit, "50")
+            time.sleep(3)
+            list = self.find_elements(self.keywords_list)
+            confirm_button_list = self.find_elements(self.delete_confirm_button)
+            print("List Count: ", len(list))
+            if len(list) > 0:
+                for i in range(len(list))[::-1]:
+                    list[i].click()
+                    time.sleep(1)
+                    confirm_button_list[i].click()
+                    time.sleep(1)
+                    list = self.find_elements(self.keywords_list)
+                    confirm_button_list = self.find_elements(self.delete_confirm_button)
+                    print("Updated List Count: ", len(list))
+                self.driver.refresh()
+                time.sleep(5)
+                list = self.find_elements(self.keywords_list)
+                if len(list) == 0:
+                    print("All test keywords deleted")
+                else:
+                    print("All test keywords not deleted")
+            else:
+                print("No test keywords present")
 
     def remove_cond_alert(self):
         self.wait_and_sleep_to_click(self.cond_alerts)
