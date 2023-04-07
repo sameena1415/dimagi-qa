@@ -10,18 +10,12 @@ from HQSmokeTests.userInputs.user_inputs import UserData
 """"Contains test page elements and functions related to the Import Cases from Excel module"""
 
 
-def edit_spreadsheet(edited_file, cell, renamed_file):
-    workbook = load_workbook(filename=edited_file)
-    sheet = workbook.active
-    sheet[cell] = fetch_random_string()
-    workbook.save(filename=renamed_file)
-
-
 class ImportCasesPage(BasePage):
 
     def __init__(self, driver):
         super().__init__(driver)
         self.file_new_name = "reassign_cases_" + str(fetch_random_string()) + ".xlsx"
+        self.sheet_name = "reassign_cases_" + str(fetch_random_string())
 
         self.village_name_cell = "C2"
         self.to_be_edited_file = os.path.abspath(os.path.join(UserData.USER_INPUT_BASE_DIR, "test_data/reassign_cases.xlsx"))
@@ -37,7 +31,7 @@ class ImportCasesPage(BasePage):
 
     def replace_property_and_upload(self):
         self.wait_to_click(self.import_cases_menu)
-        edit_spreadsheet(self.to_be_edited_file, self.village_name_cell, self.renamed_file)
+        self.edit_spreadsheet(self.to_be_edited_file, self.village_name_cell, self.renamed_file, self.sheet_name)
         self.wait_to_clear_and_send_keys(self.choose_file, self.renamed_file)
         self.wait_to_click(self.next_step)
         self.is_visible_and_displayed(self.case_type)
@@ -46,3 +40,10 @@ class ImportCasesPage(BasePage):
         self.wait_to_click(self.next_step)
         print("Imported case!")
         assert self.is_visible_and_displayed(self.success), "Waitinng to start import. Celery might have a high queue."
+
+    def edit_spreadsheet(self, edited_file, cell, renamed_file, sheet_name):
+        workbook = load_workbook(filename=edited_file)
+        sheet = workbook.active
+        sheet[cell] = fetch_random_string()
+        sheet.title = sheet_name
+        workbook.save(filename=renamed_file)
