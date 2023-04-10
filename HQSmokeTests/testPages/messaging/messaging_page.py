@@ -238,6 +238,7 @@ class MessagingPage(BasePage):
             except:
                 print("Restart not required")
         self.wait_for_element(self.search_box)
+        self.wait_to_clear_and_send_keys(self.search_box, self.cond_alert_name_input)
         self.wait_to_click(self.search_box)
         assert self.is_displayed(self.cond_alert_created), "Conditional Alert not created successfully!"
         print("Conditional Alert created successfully!")
