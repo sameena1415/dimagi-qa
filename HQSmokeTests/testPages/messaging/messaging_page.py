@@ -43,36 +43,45 @@ class MessagingPage(BasePage):
         self.select_value_dropdown = (By.XPATH, "(//ul[@class='select2-results__options']/li)[1]")
         self.broadcast_message = (By.XPATH, "(//textarea[@data-bind='value: nonTranslatedMessage'])[2]")
         self.email_subject = (By.XPATH, "(//textarea[@data-bind='value: nonTranslatedMessage'])[1]")
-        self.send_broadcast = (By.XPATH,  "//button[@data-bind='text: saveBroadcastText()']")
-        self.broadcast_select = (By.XPATH,  "//div[@id='immediate-broadcasts']//select[@class='form-control']")
+        self.send_broadcast = (By.XPATH, "//button[@data-bind='text: saveBroadcastText()']")
+        self.broadcast_select = (By.XPATH, "//div[@id='immediate-broadcasts']//select[@class='form-control']")
         self.broadcast_created = (By.XPATH, "//a[text()='" + self.broadcast_input + "']")
         self.next_btn = (By.XPATH, "//div[@id='immediate-broadcasts']//a[@data-bind='click: nextPage']")
         # Conditional Alerts
         self.cond_alerts = (By.LINK_TEXT, "Conditional Alerts")
         self.add_cond_alert = (By.LINK_TEXT, "New Conditional Alert")
         self.cond_alert_name = (By.XPATH, "//input[@name='conditional-alert-name']")
-        self.continue_button_basic_tab = (By.XPATH, "//button[@data-bind='click: handleBasicNavContinue, enable: basicTabValid']")
-        self.case_type = (By.XPATH,  "//select[contains(@name,'case_type')]")
+        self.continue_button_basic_tab = (
+        By.XPATH, "//button[@data-bind='click: handleBasicNavContinue, enable: basicTabValid']")
+        self.case_type = (By.XPATH, "//select[contains(@name,'case_type')]")
         self.case_type_option_value = (By.XPATH, "//option[@value='reassign']")
         self.select_filter = (By.XPATH, "//button[@class='btn btn-default dropdown-toggle']")
         self.case_property_filter = (By.XPATH, "//ul//a[.='Case property']")
-        self.case_property_textbox = (By.XPATH, "//case-property-input//span[@class='select2-selection select2-selection--single'][@role='combobox']")
-        self.select_case_property = (By.XPATH, "//select[@data-bind='value: valueObservable, autocompleteSelect2: casePropertyNames']")
+        self.case_property_textbox = (
+        By.XPATH, "//case-property-input//span[@class='select2-selection select2-selection--single'][@role='combobox']")
+        self.select_case_property = (
+        By.XPATH, "//select[@data-bind='value: valueObservable, autocompleteSelect2: casePropertyNames']")
         self.case_property_value = (By.XPATH, "//input[contains(@data-bind,'value: property_value')]")
         self.case_property_input = (By.XPATH, "//input[@class='select2-search__field']")
-        self.continue_button_rule_tab = (By.XPATH, "//button[@data-bind='click: handleRuleNavContinue, enable: ruleTabValid']")
+        self.continue_button_rule_tab = (
+        By.XPATH, "//button[@data-bind='click: handleRuleNavContinue, enable: ruleTabValid']")
         self.cond_alert_created = (By.XPATH, "//a[text()='" + str(self.cond_alert_name_input) + "']")
-        self.restart_rule_button = (By.XPATH, "//td[./a[text()='" + str(self.cond_alert_name_input) + "']]//following-sibling::td/div/button[contains(@data-bind,'restart')]")
+        self.restart_rule_button = (By.XPATH, "//td[./a[text()='" + str(
+            self.cond_alert_name_input) + "']]//following-sibling::td/div/button[contains(@data-bind,'restart')]")
         self.restart_rule_button_none = (By.XPATH, "//td[./a[text()='" + str(
             self.cond_alert_name_input) + "']]//following-sibling::td/div[@style='display: none;']/button[contains(@data-bind,'restart')]")
-        self.empty_table_alert = (By.XPATH, "//div[contains(@data-bind, 'emptyTable()')][contains(.,'There are no alerts to display')]")
+        self.empty_table_alert = (
+        By.XPATH, "//div[contains(@data-bind, 'emptyTable()')][contains(.,'There are no alerts to display')]")
         self.select_recipient_type = (By.XPATH, "//ul[@id='select2-id_schedule-recipient_types-results']/li[.='Users']")
         self.alert_type = (By.XPATH, "//select[@name='schedule-content']")
-        self.user_recipients_results = (By.XPATH, "//ul[@id='select2-id_schedule-user_recipients-results']/li[.='"+ UserData.app_login +"']")
+        self.user_recipients_results = (
+        By.XPATH, "//ul[@id='select2-id_schedule-user_recipients-results']/li[.='" + UserData.app_login + "']")
         self.save_button_xpath = (By.XPATH, "//button[@type='submit'and text()='Save']")
-        self.delete_cond_alert = (By.XPATH, "//a[text()='" + str(self.cond_alert_name_input) + "']//preceding::button[@class='btn btn-danger'][1]")
+        self.delete_cond_alert = (By.XPATH, "//a[text()='" + str(
+            self.cond_alert_name_input) + "']//preceding::button[@class='btn btn-danger'][1]")
         self.search_box = (By.XPATH, "//form[@class='input-group']/input[@class='form-control']")
-        self.search_btn = (By.XPATH, "//form[@class='input-group']//button[@data-bind='click: clickAction, visible: !immediate']")
+        self.search_btn = (
+        By.XPATH, "//form[@class='input-group']//button[@data-bind='click: clickAction, visible: !immediate']")
 
         # Condition Alerts : Download and Upload
         self.bulk_upload_button = (By.LINK_TEXT, "Bulk Upload SMS Alert Content")
@@ -89,12 +98,16 @@ class MessagingPage(BasePage):
         self.keyword_created = (By.XPATH, self.keyword_created_xpath)
         self.add_structured_keyword = (By.LINK_TEXT, "Add Structured Keyword")
         self.keyword_survey = (By.XPATH, "(//span[@class='select2-selection select2-selection--single'])[1]")
-        self.survey_option_select = (By.XPATH, "(//li[@class='select2-results__option select2-results__option--selectable'])[1]")
+        self.survey_option_select = (
+        By.XPATH, "(//li[@class='select2-results__option select2-results__option--selectable'])[1]")
         self.structured_keyword_created = (By.XPATH, "//a[text()='" + self.struct_keyword_name_input + "']")
         self.delete_keyword = (By.XPATH, self.keyword_created_xpath + "//following::*[@class='btn btn-danger'][1]")
-        self.delete_structured_keyword = (By.XPATH, "//a[text()='" + self.struct_keyword_name_input + "']//following::*[@class='btn btn-danger'][1]")
-        self.confirm_delete_keyword = (By.XPATH, self.keyword_created_xpath + "//following::*[@class='btn btn-danger delete-item-confirm'][1]")
-        self.confirm_delete_structured_keyword = (By.XPATH, "//a[text()='" + self.struct_keyword_name_input + "']//following::*[@class='btn btn-danger delete-item-confirm'][1]")
+        self.delete_structured_keyword = (
+        By.XPATH, "//a[text()='" + self.struct_keyword_name_input + "']//following::*[@class='btn btn-danger'][1]")
+        self.confirm_delete_keyword = (
+        By.XPATH, self.keyword_created_xpath + "//following::*[@class='btn btn-danger delete-item-confirm'][1]")
+        self.confirm_delete_structured_keyword = (By.XPATH,
+                                                  "//a[text()='" + self.struct_keyword_name_input + "']//following::*[@class='btn btn-danger delete-item-confirm'][1]")
         # Chat
         self.chat = (By.LINK_TEXT, "Chat")
         self.contact_table = (By.ID, "contact_list")
@@ -119,7 +132,7 @@ class MessagingPage(BasePage):
         self.add_lang = (By.XPATH, "//button[@data-bind='click: addLanguage, disable: addLanguageDisabled']")
         self.lang_input_textarea = (By.XPATH, "(//span[@role='combobox'])[last()]")
         self.select_first_lang = (By.XPATH, "(//li[@role='option'])[1]")
-        self.select_second_lang = (By.XPATH,  "(//li[@role='option'])[2]")
+        self.select_second_lang = (By.XPATH, "(//li[@role='option'])[2]")
         self.save_lang = (By.XPATH, "(//div[@class='btn btn-primary'])[1]")
         self.delete_lang = (By.XPATH, "(//a[@data-bind='click: $root.removeLanguage'])[last()]")
         self.lang_error = (By.XPATH, "//p[text()='Language appears twice']")
@@ -134,9 +147,9 @@ class MessagingPage(BasePage):
         self.page_limit = (By.XPATH, "//select[@id='pagination-limit']")
         self.keywords_list = (By.XPATH, "//td[.//span/a[contains(.,'KEYWORD_')]]//following-sibling::td/button")
         self.delete_confirm_button = (
-        By.XPATH, "//td[.//span/a[contains(.,'KEYWORD_')]]//following::a[@class='btn btn-danger delete-item-confirm'][1]")
+            By.XPATH,
+            "//td[.//span/a[contains(.,'KEYWORD_')]]//following::a[@class='btn btn-danger delete-item-confirm'][1]")
         self.page_empty = (By.ID, "pagination-empty-notification")
-
 
     def open_dashboard_page(self):
         assert self.is_displayed(self.dashboard_elements), "Dashboatd  didn't load successfully!"
@@ -196,9 +209,9 @@ class MessagingPage(BasePage):
         self.wait_to_click(self.case_property_filter)
         time.sleep(2)
         self.wait_to_click(self.case_property_textbox)
-        self.send_keys(self.case_property_input,UserData.alert_case_property)
-        self.select_by_text(self.select_case_property,UserData.alert_case_property)
-        self.send_keys(self.case_property_value,UserData.alert_case_property_value)
+        self.send_keys(self.case_property_input, UserData.alert_case_property)
+        self.select_by_text(self.select_case_property, UserData.alert_case_property)
+        self.send_keys(self.case_property_value, UserData.alert_case_property_value)
         self.wait_to_click(self.continue_button_rule_tab)
         self.wait_to_click(self.recipients)
         self.wait_to_click(self.select_recipient_type)
@@ -213,15 +226,17 @@ class MessagingPage(BasePage):
         self.driver.refresh()
         if self.is_present(self.restart_rule_button_none):
             print("Restart is not required.")
-
         else:
-            self.js_click(self.restart_rule_button)
-            self.accept_pop_up()
-            time.sleep(5)
-            self.accept_pop_up()
-            print("Sleeping till the alert processing completes")
-            time.sleep(20)
-            self.driver.refresh()
+            try:
+                self.js_click(self.restart_rule_button)
+                self.accept_pop_up()
+                time.sleep(5)
+                self.accept_pop_up()
+                print("Sleeping till the alert processing completes")
+                time.sleep(20)
+                self.driver.refresh()
+            except:
+                print("Restart not required")
         self.wait_for_element(self.search_box)
         self.wait_to_click(self.search_box)
         assert self.is_displayed(self.cond_alert_created), "Conditional Alert not created successfully!"
@@ -268,7 +283,8 @@ class MessagingPage(BasePage):
         time.sleep(2)
         self.select_by_value(self.page_limit, "50")
         time.sleep(3)
-        assert self.is_visible_and_displayed(self.structured_keyword_created), "Structured keyword not created successfully!"
+        assert self.is_visible_and_displayed(
+            self.structured_keyword_created), "Structured keyword not created successfully!"
         print("Structured keyword created successfully!")
 
     def chat_page(self):
@@ -353,7 +369,6 @@ class MessagingPage(BasePage):
         if not isPresent:
             assert not isPresent
             print("Keyword removed successfully!")
-
 
     def remove_structured_keyword(self):
         self.wait_to_click(self.keywords)
@@ -444,7 +459,6 @@ class MessagingPage(BasePage):
             assert not isPresent
             print("Cond Alert removed successfully!")
 
-
     def msg_trans_download(self):
         self.wait_to_click(self.languages)
         time.sleep(1)
@@ -464,11 +478,13 @@ class MessagingPage(BasePage):
     def project_settings_page(self):
         self.wait_to_click(self.settings_bar)
         self.wait_to_click(self.project_settings_menu)
-        assert self.is_visible_and_displayed(self.project_settings_elements), "Project Settings page did not load successfully"
+        assert self.is_visible_and_displayed(
+            self.project_settings_elements), "Project Settings page did not load successfully"
         print("Project Settings page loaded successfully!")
 
     def current_subscription_page(self):
         self.wait_to_click(self.settings_bar)
         self.wait_to_click(self.subscription_menu)
-        assert self.is_visible_and_displayed(self.subscription_elements_id), "Subscription Page did not load successfully"
+        assert self.is_visible_and_displayed(
+            self.subscription_elements_id), "Subscription Page did not load successfully"
         print("Current Subscription page loaded successfully!")
