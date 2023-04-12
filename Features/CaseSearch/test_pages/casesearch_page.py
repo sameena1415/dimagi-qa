@@ -53,6 +53,8 @@ class CaseSearchWorkflows(BasePage):
         self.case_names = (By.XPATH, "//td[contains(@class,'case-list-column')][3]")
         self.multi_select_continue = (By.ID, "multi-select-continue-btn")
         self.selected_case_names_on_forms = (By.XPATH, "//span[@class='caption webapp-markdown-output']")
+        self.checkbox_xpath = "//label[contains (text(),'{}')][1]//following::input[@value='{}'][1]"
+        self.search_property_checked = "//label[contains (text(),'{}')][1]//following::input[@value='{}' and @checked][1]"
 
     def check_values_on_caselist(self, row_num, expected_value, is_multi=NO):
         self.value_in_table = self.get_element(self.value_in_table_format, row_num)
@@ -214,5 +216,19 @@ class CaseSearchWorkflows(BasePage):
         stripped = list(filter(None, [s.replace("song: by","") for s in song_names_on_form]))
         stripped_final = list(filter(None, [s.lstrip() for s in stripped]))
         assert stripped_final == song_names, f"No, list1 {stripped_final} doesn't match list2{song_names}"
+
+    def check_if_checkbox_selected(self, search_property, values):
+        for value in values:
+            search_property_checked_xpath = (By.XPATH, self.search_property_checked.format(search_property, value-1))
+            self.is_present(search_property_checked_xpath)
+        list_string = map(str, values)
+        return list(list_string)
+
+    def select_checkbox(self, search_property, values):
+        for value in values:
+            checkbox_xpath = (By.XPATH, self.checkbox_xpath.format(search_property, value-1))
+            self.js_click(checkbox_xpath)
+        list_string = map(str, values)
+        return list(list_string)
 
 

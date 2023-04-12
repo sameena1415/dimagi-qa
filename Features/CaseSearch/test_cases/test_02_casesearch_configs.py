@@ -578,3 +578,60 @@ def test_case_24_case_search_validations(driver):
     webapps.search_button_on_case_search_page()
     casesearch.check_values_on_caselist(row_num=CaseSearchUserInput.four,
                                         expected_value=CaseSearchUserInput.blank)
+
+
+def test_case_25_checkbox_selection(driver):
+    webapps = WebApps(driver)
+    casesearch = CaseSearchWorkflows(driver)
+    webapps.login_as(CaseSearchUserInput.user_1)
+    webapps.open_app(CaseSearchUserInput.case_search_app_name)
+    webapps.open_menu(CaseSearchUserInput.checkbox_selection_menu)
+    """Check default selections"""
+    input_values = casesearch.check_if_checkbox_selected(CaseSearchUserInput.mood, [3, 4])
+    webapps.search_button_on_case_search_page()
+    casesearch.check_values_on_caselist(row_num=CaseSearchUserInput.three,
+                                        expected_value=input_values,
+                                        is_multi=YES)
+    """Check desired selections"""
+    webapps.search_again_cases()
+    casesearch.check_if_checkbox_selected(CaseSearchUserInput.mood, [3, 4])
+    webapps.clear_selections_on_case_search_page()
+    input_values = casesearch.select_checkbox(CaseSearchUserInput.mood, [4, 5])
+    webapps.search_button_on_case_search_page()
+    casesearch.check_values_on_caselist(row_num=CaseSearchUserInput.three,
+                                        expected_value=input_values,
+                                        is_multi=YES)
+    """Check default filter is applied"""
+    casesearch.check_values_on_caselist(row_num=CaseSearchUserInput.four,
+                                        expected_value=CaseSearchUserInput.five)
+
+
+def test_case_26_checkbox_selection_sticky_search(driver):
+    webapps = WebApps(driver)
+    casesearch = CaseSearchWorkflows(driver)
+    webapps.login_as(CaseSearchUserInput.user_1)
+    webapps.open_app(CaseSearchUserInput.case_search_app_name)
+    webapps.open_menu(CaseSearchUserInput.checkbox_selection_menu)
+    driver.refresh()
+    casesearch.check_if_checkbox_selected(CaseSearchUserInput.mood, [3, 4])
+    webapps.search_button_on_case_search_page()
+    driver.back()
+    casesearch.check_if_checkbox_selected(CaseSearchUserInput.mood, [3, 4])
+
+
+def test_case_27_checkbox_selection_dependent_dropdown(driver):
+    webapps = WebApps(driver)
+    casesearch = CaseSearchWorkflows(driver)
+    webapps.login_as(CaseSearchUserInput.user_1)
+    webapps.open_app(CaseSearchUserInput.case_search_app_name)
+    webapps.open_menu(CaseSearchUserInput.checkbox_selection_menu)
+    webapps.clear_selections_on_case_search_page()
+    """Single Checkbox"""
+    casesearch.select_checkbox(CaseSearchUserInput.genre, [1])
+    """Check related values appear in dropdown"""
+    casesearch.search_against_property(search_property=CaseSearchUserInput.subgenre,
+                                       input_value=CaseSearchUserInput.latin_jazz,
+                                       property_type=COMBOBOX)
+    """Check other values do not appear in dropdown"""
+    casesearch.check_dropdown_value(search_property=CaseSearchUserInput.subgenre,
+                                    not_to_be_present=CaseSearchUserInput.funk_metal)

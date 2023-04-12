@@ -41,6 +41,7 @@ class CaseSearchUserInput:
     smart_link_skip_default_menu = "DR: Smart link to external domain (Skip Default)"
     load_external_skip_default_menu = "DR: Load external case into form (Skip Default)"
     unrelated_case_load_external_menu = "Unrelated case id\'s property: Load from external domain."
+    checkbox_selection_menu = "Checkbox Selection"
 
     """Forms"""
     play_song_form = "Play Song"
