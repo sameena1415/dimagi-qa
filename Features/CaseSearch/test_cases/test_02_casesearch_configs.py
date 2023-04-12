@@ -1,5 +1,7 @@
 import time
 
+import pytest
+
 from Features.CaseSearch.constants import *
 from Features.CaseSearch.test_pages.casesearch_page import CaseSearchWorkflows
 from Features.CaseSearch.user_inputs.casesearch_user_inputs import CaseSearchUserInput
@@ -489,7 +491,7 @@ def test_case_21_case_search_title(driver):
     # casesearch.check_search_screen_subtitle(CaseSearchUserInput.french_search_subtitle)
 
 
-def test_case_22_dependent_dropdowns(driver):
+def test_case_22_dependent_dropdowns_multiselect_combobox(driver):
     webapps = WebApps(driver)
     casesearch = CaseSearchWorkflows(driver)
     """Check Dependent Dropdowns"""
@@ -503,16 +505,18 @@ def test_case_22_dependent_dropdowns(driver):
                                        property_type=COMBOBOX)
     """Check other values do not appear in dropdown"""
     casesearch.check_dropdown_value(search_property=CaseSearchUserInput.subgenre,
-                                    not_to_be_present=CaseSearchUserInput.funk_metal)
+                                    value=CaseSearchUserInput.funk_metal,
+                                    present=NO)
 
 
-def test_case_23_dependent_dropdowns_inline_case_search(driver):
+def test_case_23_dependent_dropdowns_single_select_combobox(driver):
     webapps = WebApps(driver)
     casesearch = CaseSearchWorkflows(driver)
     """Check Dependent Dropdowns Inline Case Search"""
     webapps.open_app(CaseSearchUserInput.case_search_app_name)
-    webapps.open_menu("Songs Inline Case Search")
+    webapps.open_menu(CaseSearchUserInput.inline_search_menu)
     webapps.clear_selections_on_case_search_page()
+    """Check values that should appear in dropdown"""
     casesearch.search_against_property(search_property=CaseSearchUserInput.genre,
                                        input_value=CaseSearchUserInput.latin_music,
                                        property_type=COMBOBOX)
@@ -521,13 +525,41 @@ def test_case_23_dependent_dropdowns_inline_case_search(driver):
                                        property_type=COMBOBOX)
     """Check other values do not appear in dropdown"""
     casesearch.check_dropdown_value(search_property=CaseSearchUserInput.subgenre,
-                                    not_to_be_present=CaseSearchUserInput.funk_metal)
+                                    value=CaseSearchUserInput.funk_metal,
+                                    present=NO)
     """Search case and check if corresponding case is displayed"""
     webapps.search_button_on_case_search_page()
     webapps.omni_search(CaseSearchUserInput.song_automation_song_24)
 
 
-def test_case_24_case_search_validations(driver):
+@pytest.mark.skip(reason="https://dimagi-dev.atlassian.net/browse/USH-2348 and https://dimagi-dev.atlassian.net/browse/USH-2289")
+def test_case_24_dependent_dropdowns_value_clear(driver):
+    webapps = WebApps(driver)
+    casesearch = CaseSearchWorkflows(driver)
+    webapps.open_app(CaseSearchUserInput.case_search_app_name)
+    webapps.open_menu(CaseSearchUserInput.inline_search_menu)
+    webapps.clear_selections_on_case_search_page()
+    """Select genre and subgenre"""
+    casesearch.search_against_property(search_property=CaseSearchUserInput.genre,
+                                       input_value=CaseSearchUserInput.latin_music,
+                                       property_type=COMBOBOX)
+    casesearch.search_against_property(search_property=CaseSearchUserInput.subgenre,
+                                       input_value=CaseSearchUserInput.latin_jazz,
+                                       property_type=COMBOBOX)
+    """Change genre and check if subgenre dropdown is reset"""
+    casesearch.search_against_property(search_property=CaseSearchUserInput.genre,
+                                       input_value=CaseSearchUserInput.hiphop,
+                                       property_type=COMBOBOX)
+    casesearch.check_clear_button_in_singleselect_combobox(expected=NO,
+                                                           search_property=CaseSearchUserInput.subgenre)
+    """Clear search page selections and check if subgenre dropdown is reset"""
+    webapps.clear_selections_on_case_search_page()
+    casesearch.check_dropdown_value(search_property=CaseSearchUserInput.subgenre,
+                                    value=CaseSearchUserInput.bounce,
+                                    present=NO)
+
+
+def test_case_25_case_search_validations(driver):
     webapps = WebApps(driver)
     casesearch = CaseSearchWorkflows(driver)
     """Case Search Validations"""
@@ -580,7 +612,7 @@ def test_case_24_case_search_validations(driver):
                                         expected_value=CaseSearchUserInput.blank)
 
 
-def test_case_25_checkbox_selection(driver):
+def test_case_26_checkbox_selection(driver):
     webapps = WebApps(driver)
     casesearch = CaseSearchWorkflows(driver)
     webapps.login_as(CaseSearchUserInput.user_1)
@@ -606,7 +638,7 @@ def test_case_25_checkbox_selection(driver):
                                         expected_value=CaseSearchUserInput.five)
 
 
-def test_case_26_checkbox_selection_sticky_search(driver):
+def test_case_27_checkbox_selection_sticky_search(driver):
     webapps = WebApps(driver)
     casesearch = CaseSearchWorkflows(driver)
     webapps.login_as(CaseSearchUserInput.user_1)
@@ -619,7 +651,7 @@ def test_case_26_checkbox_selection_sticky_search(driver):
     casesearch.check_if_checkbox_selected(CaseSearchUserInput.mood, [3, 4])
 
 
-def test_case_27_checkbox_selection_dependent_dropdown(driver):
+def test_case_28_checkbox_single_selection_dependent_dropdown(driver):
     webapps = WebApps(driver)
     casesearch = CaseSearchWorkflows(driver)
     webapps.login_as(CaseSearchUserInput.user_1)
@@ -634,4 +666,32 @@ def test_case_27_checkbox_selection_dependent_dropdown(driver):
                                        property_type=COMBOBOX)
     """Check other values do not appear in dropdown"""
     casesearch.check_dropdown_value(search_property=CaseSearchUserInput.subgenre,
-                                    not_to_be_present=CaseSearchUserInput.funk_metal)
+                                    value=CaseSearchUserInput.funk_metal,
+                                    present=NO)
+    webapps.search_button_on_case_search_page()
+    webapps.select_first_case_on_list_and_continue()
+    webapps.submit_the_form()
+
+
+@pytest.mark.skip(reason="Failing: https://dimagi-dev.atlassian.net/browse/USH-2614")
+def test_case_29_checkbox_multiple_selection_dependent_dropdown(driver):
+    webapps = WebApps(driver)
+    casesearch = CaseSearchWorkflows(driver)
+    webapps.login_as(CaseSearchUserInput.user_1)
+    webapps.open_app(CaseSearchUserInput.case_search_app_name)
+    webapps.open_menu(CaseSearchUserInput.checkbox_selection_menu)
+    webapps.clear_selections_on_case_search_page()
+    """Multiple Checkbox"""
+    casesearch.select_checkbox(CaseSearchUserInput.genre, [1, 2])
+    casesearch.check_dropdown_value(search_property=CaseSearchUserInput.subgenre,
+                                    value=CaseSearchUserInput.latin_jazz,
+                                    present=YES)
+    casesearch.check_dropdown_value(search_property=CaseSearchUserInput.subgenre,
+                                    value=CaseSearchUserInput.bounce,
+                                    present=YES)
+    casesearch.search_against_property(search_property=CaseSearchUserInput.subgenre,
+                                       input_value=CaseSearchUserInput.latin_jazz,
+                                       property_type=COMBOBOX)
+    webapps.search_button_on_case_search_page()
+    webapps.select_first_case_on_list_and_continue()
+    webapps.submit_the_form()

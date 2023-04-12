@@ -111,6 +111,8 @@ class CaseSearchUserInput:
     validation_msg_no_spaces = "No spaces allowed!"
     validation_msg_invalid_respons = "Sorry, this response is invalid!"
     latin_music = "Latin music"
+    hiphop = "Hip Hop"
+    bounce = "Bounce"
     latin_jazz = "Latin jazz"
     funk_metal = "Funk Metal"
     default_search_title = "Case Claim"

@@ -42,7 +42,8 @@ class CaseSearchWorkflows(BasePage):
         self.webapps_home = (By.XPATH, "//i[@class='fcc fcc-flower']")
         self.case_detail_value = "//th[contains(text(), '{}')]//following-sibling::td[contains(text(), '{}')]"
         self.case_detail_tab = "//a[text()='{}']"
-        self.close_case_detail_tab = (By.XPATH, "(//div[@id='case-detail-modal']//following:: button[@class='close'])[1]")
+        self.close_case_detail_tab = (
+        By.XPATH, "(//div[@id='case-detail-modal']//following:: button[@class='close'])[1]")
         # Reports
         self.case_type_select = (By.ID, "report_filter_case_type")
         self.report_search = (By.ID, "report_filter_search_query")
@@ -55,12 +56,13 @@ class CaseSearchWorkflows(BasePage):
         self.selected_case_names_on_forms = (By.XPATH, "//span[@class='caption webapp-markdown-output']")
         self.checkbox_xpath = "//label[contains (text(),'{}')][1]//following::input[@value='{}'][1]"
         self.search_property_checked = "//label[contains (text(),'{}')][1]//following::input[@value='{}' and @checked][1]"
+        self.remove_combobox_selection = "//label[contains(text(),'{}')]//following::button[@aria-label='Remove all items'][1]"
 
     def check_values_on_caselist(self, row_num, expected_value, is_multi=NO):
         self.value_in_table = self.get_element(self.value_in_table_format, row_num)
         self.wait_for_element(self.value_in_table)
         values_ = self.find_elements_texts(self.value_in_table)
-        print(expected_value, values_) # added for debugging
+        print(expected_value, values_)  # added for debugging
         if is_multi == YES:
             assert all(item in values_ for item in expected_value) or any(item in values_ for item in expected_value)
         elif is_multi == NO:
@@ -165,16 +167,21 @@ class CaseSearchWorkflows(BasePage):
                 By.XPATH, self.required_validation_per_property_combox.format(search_property, message))
         if required_or_validated == YES:
             time.sleep(4)
-            assert self.is_displayed(validation_message_per_prop), f"Required validation missing {validation_message_per_prop}"
-            assert self.is_displayed(validation_message_on_top), f"Required validation missing {validation_message_on_top}"
+            assert self.is_displayed(
+                validation_message_per_prop), f"Required validation missing {validation_message_per_prop}"
+            assert self.is_displayed(
+                validation_message_on_top), f"Required validation missing {validation_message_on_top}"
         elif required_or_validated == NO:
             time.sleep(4)
             assert not self.is_displayed(validation_message_per_prop)
 
-    def check_dropdown_value(self, search_property, not_to_be_present):
+    def check_dropdown_value(self, search_property, value, present):
         dropdown_values_ = self.get_element(self.dropdown_values, search_property)
         values = self.find_elements_texts(dropdown_values_)
-        assert not_to_be_present not in values
+        if present == NO:
+            assert value not in values
+        if present == YES:
+            assert value in values
 
     def check_eof_navigation(self, eof_nav, menu=None):
         if eof_nav == PREV_MENU:
@@ -213,22 +220,27 @@ class CaseSearchWorkflows(BasePage):
         song_names = self.find_elements_texts(self.case_names)
         self.js_click(self.multi_select_continue)
         song_names_on_form = self.find_elements_texts(self.selected_case_names_on_forms)
-        stripped = list(filter(None, [s.replace("song: by","") for s in song_names_on_form]))
+        stripped = list(filter(None, [s.replace("song: by", "") for s in song_names_on_form]))
         stripped_final = list(filter(None, [s.lstrip() for s in stripped]))
         assert stripped_final == song_names, f"No, list1 {stripped_final} doesn't match list2{song_names}"
 
     def check_if_checkbox_selected(self, search_property, values):
         for value in values:
-            search_property_checked_xpath = (By.XPATH, self.search_property_checked.format(search_property, value-1))
+            search_property_checked_xpath = (By.XPATH, self.search_property_checked.format(search_property, value - 1))
             self.is_present(search_property_checked_xpath)
         list_string = map(str, values)
         return list(list_string)
 
     def select_checkbox(self, search_property, values):
         for value in values:
-            checkbox_xpath = (By.XPATH, self.checkbox_xpath.format(search_property, value-1))
+            checkbox_xpath = (By.XPATH, self.checkbox_xpath.format(search_property, value - 1))
             self.js_click(checkbox_xpath)
         list_string = map(str, values)
         return list(list_string)
 
-
+    def check_clear_button_in_singleselect_combobox(self, expected, search_property):
+        remove_selection = self.get_element(self.remove_combobox_selection, search_property)
+        if expected == YES:
+            assert self.is_present(remove_selection)
+        if expected == NO:
+            assert not self.is_present(remove_selection)
