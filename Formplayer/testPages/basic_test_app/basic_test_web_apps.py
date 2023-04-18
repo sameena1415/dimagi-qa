@@ -1,3 +1,4 @@
+import random
 import re
 import time
 from datetime import datetime, timedelta
@@ -33,6 +34,8 @@ class BasicTestWebApps(BasePage):
         self.subcase_pos = "sub_case" + fetch_random_string()
         self.unicode_text = "Unicode_web_" + fetch_random_string() + UserData.unicode
         self.update_unicode = fetch_random_string() + UserData.unicode_new
+        self.parent_case = "Parent_"+fetch_random_string()
+        self.child_case = "Child_" + fetch_random_string()
 
 
         self.min_dup_case = "min_dup_case" + fetch_random_string()
@@ -194,6 +197,11 @@ class BasicTestWebApps(BasePage):
 
         #iteration repeat
         self.show_iten_checkbox = "//label[.//span[contains(.,'{}')]]//following::fieldset[1]//div[@class='checkbox']//*[.='Show this item in the next loop']"
+
+        #form linking
+        self.form_link_case = "//td[.='{}']//following-sibling::td[.='{}']"
+        self.form_title_name = "//h1[contains(@class,'title')][contains(.,'{}')]"
+
 
     def open_form(self, case_list, form_name):
         self.scroll_to_element((By.XPATH, self.case_list_menu.format(case_list)))
@@ -1845,5 +1853,77 @@ class BasicTestWebApps(BasePage):
         time.sleep(2)
         self.js_click(self.submit_form_button)
         self.wait_for_element(self.success_message)
+        self.wait_to_click(self.home_button)
+        time.sleep(2)
+
+    def form_linking_parent_form(self):
+        self.wait_for_element((By.XPATH, self.text_area_field.format("Name")))
+        self.wait_to_clear_and_send_keys((By.XPATH, self.text_area_field.format("Name")), self.parent_case)
+        cond = random.choice(["yes", "no"])
+        self.js_click((By.XPATH, self.choose_radio_button.format(
+            "Link Form", cond)))
+        time.sleep(2)
+        self.wait_to_clear_and_send_keys((By.XPATH, self.text_area_field.format("Child Case")), self.child_case)
+        self.js_click(self.submit_form_button)
+        self.wait_for_element(self.success_message)
+        self.js_click(self.home_button)
+        time.sleep(2)
+        return self.parent_case, cond, self.child_case
+
+    def conditional_expression_form(self, case, cond):
+        self.wait_to_clear_and_send_keys(self.search_input,case)
+        self.wait_to_click(self.search_button)
+        assert self.is_present_and_displayed((By.XPATH, self.form_link_case.format(case, cond)))
+        self.js_click((By.XPATH, self.form_link_case.format(case, cond)))
+        self.wait_to_click(self.continue_button)
+        self.wait_for_element(self.submit_form_button)
+        assert self.is_present((By.XPATH, self.div_span.format("This form submission should take you to Basic Form Tests > Basic Form only if \"link_form=yes\" for the case, otherwise it should take you to the Home Screen")))
+        self.wait_to_click(self.submit_form_button)
+        time.sleep(3)
+        if cond == "no":
+            assert self.is_present_and_displayed((By.XPATH, self.form_title_name.format(UserData.basic_tests_app['tests_app2']))), "This is not the "+UserData.basic_tests_app['tests_app2']+" page."
+        else:
+            assert self.is_present_and_displayed(
+                (By.XPATH, self.form_title_name.format(UserData.basic_test_app_forms['hin_basic_form']))), "This is not the " + \
+                                                                                                  UserData.basic_test_app_forms[
+                                                                                                      'hin_basic_form'] + " page."
+        self.wait_to_click(self.home_button)
+        time.sleep(2)
+
+    def no_conditional_expression_form(self, case, cond):
+        self.wait_to_clear_and_send_keys(self.search_input,case)
+        self.wait_to_click(self.search_button)
+        assert self.is_present_and_displayed((By.XPATH, self.form_link_case.format(case, cond)))
+        self.js_click((By.XPATH, self.form_link_case.format(case, cond)))
+        self.wait_to_click(self.continue_button)
+        self.wait_for_element(self.submit_form_button)
+        assert self.is_present((By.XPATH, self.div_span.format("This form submission should always take you to Basic Form Tests > Basic Form")))
+        self.wait_to_click(self.submit_form_button)
+        time.sleep(3)
+        assert self.is_present_and_displayed(
+                (By.XPATH, self.form_title_name.format(UserData.basic_test_app_forms['hin_basic_form']))), "This is not the " + \
+                                                                                                  UserData.basic_test_app_forms[
+                                                                                                      'hin_basic_form'] + " page."
+        self.wait_to_click(self.home_button)
+        time.sleep(2)
+
+    def form_linking_child(self, child):
+        self.wait_to_clear_and_send_keys(self.search_input, child)
+        self.wait_to_click(self.search_button)
+        assert self.is_present_and_displayed((By.XPATH, self.module_search.format(child)))
+        self.js_click((By.XPATH, self.module_search.format(child)))
+        self.wait_to_click(self.continue_button)
+        self.wait_for_element((By.XPATH, self.case_list_menu.format(UserData.basic_test_app_forms['linking_data'])))
+        self.open_case_list(UserData.basic_test_app_forms['linking_data'])
+        self.wait_for_element(self.submit_form_button)
+        assert self.is_present((By.XPATH, self.div_span.format(
+            "This form submission should take you to Form Linking Parent -> Conditional expression form.")))
+        self.wait_to_click(self.submit_form_button)
+        time.sleep(3)
+        assert self.is_present_and_displayed(
+            (By.XPATH,
+             self.form_title_name.format(UserData.basic_test_app_forms['cond_expression']))), "This is not the " + \
+                                                                                             UserData.basic_test_app_forms[
+                                                                                                 'cond_expression'] + " page."
         self.wait_to_click(self.home_button)
         time.sleep(2)

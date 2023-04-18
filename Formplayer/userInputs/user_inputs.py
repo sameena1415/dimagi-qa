@@ -45,6 +45,7 @@ class UserData:
 
     basic_tests_app = {
         "tests_app": "Basic Tests",
+        "tests_app2": "Basic Tests [Linked]",
         "case_list": "Basic Form Tests",
         "form_name": "Basic Form"}
 
@@ -76,7 +77,14 @@ class UserData:
         "min_dup": "Minimize Duplicates",
         "view_case_subcase": "View Case\'s Sub Case",
         "fst_repeat": "[Formplayer] Repeats",
-        "fst_cross_iter_repeat": "[Formplayer] Cross Iteration Repeats"
+        "fst_cross_iter_repeat": "[Formplayer] Cross Iteration Repeats",
+        "form_linking": "Form Linking Parent",
+        "fl_add_case": "Add Case",
+        "cond_expression": "Conditional expression",
+        "no_cond_expression": "No conditional expression",
+        "hin_basic_form": "HIN: Basic Form Update",
+        "form_linking_child": "Form Linking Child",
+        "linking_data": "Linking Data"
     }
 
     form_specific_tests_app = {

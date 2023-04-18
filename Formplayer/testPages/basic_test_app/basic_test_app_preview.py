@@ -34,6 +34,8 @@ class BasicTestAppPreview(BasePage):
         self.update_unicode = fetch_random_string() + UserData.unicode_new
         self.special_character = "~`!@#$%^&*()<>?"
         self.test_question = "Test " + fetch_random_string()
+        self.parent_case = "Parent_"+fetch_random_string()
+        self.child_case = "Child_" + fetch_random_string()
         self.input_dict = {
             "phone": fetch_phone_number(),
             "Singleselect": "A",
@@ -170,6 +172,9 @@ class BasicTestAppPreview(BasePage):
         self.danger_warning_repeat = "//div[@class='gr repetition'][.//legend/span[contains(.,'{}')]]//following-sibling::div[./fieldset[.//label[.//span[contains(.,'{}')]]]]//following-sibling::div//i[contains(@class,'text-danger')]"
         self.text_success_repeat = "//div[@class='gr repetition'][.//legend/span[contains(.,'{}')]]//following-sibling::div[./fieldset[.//label[.//span[contains(.,'{}')]]]]//following-sibling::div//i[contains(@class,'text-success')]"
 
+        # form linking
+        self.form_link_case = "//td[.='{}']//following-sibling::td[.='{}']"
+        self.form_title_name = "(//li[@class='breadcrumb-text'][contains(.,'{}')])[last()]"
 
     def open_form(self, case_list, form_name):
         self.switch_to_frame(self.iframe)
@@ -1706,4 +1711,98 @@ class BasicTestAppPreview(BasePage):
             classname = self.get_attribute((By.XPATH, self.page_number.format(i+1)), "class")
             print(classname)
             assert classname == "js-page active", "Click is not successful"
+        self.switch_to_default_content()
+
+
+
+    def form_linking_parent_form(self):
+        self.switch_to_frame(self.iframe)
+        self.wait_for_element((By.XPATH, self.text_area_field.format("Name")))
+        self.wait_to_clear_and_send_keys((By.XPATH, self.text_area_field.format("Name")), self.parent_case)
+        self.wait_to_click(self.next_question)
+        time.sleep(1)
+        cond = random.choice(["yes", "no"])
+        self.js_click((By.XPATH, self.choose_radio_button.format(
+            "Link Form", cond)))
+        self.wait_to_click(self.next_question)
+        time.sleep(1)
+        self.wait_to_clear_and_send_keys((By.XPATH, self.text_area_field.format("Child Case")), self.child_case)
+        self.wait_to_click(self.next_question)
+        time.sleep(1)
+        self.js_click(self.submit_form_button)
+        self.wait_for_element(self.success_message)
+        self.js_click(self.home_button)
+        time.sleep(2)
+        self.switch_to_default_content()
+        return self.parent_case, cond, self.child_case
+
+    def conditional_expression_form(self, case, cond):
+        self.switch_to_frame(self.iframe)
+        self.wait_to_clear_and_send_keys(self.search_input,case)
+        self.wait_to_click(self.search_button)
+        assert self.is_present_and_displayed((By.XPATH, self.form_link_case.format(case, cond)))
+        self.js_click((By.XPATH, self.form_link_case.format(case, cond)))
+        self.wait_to_click(self.continue_button)
+        self.wait_for_element(self.next_question)
+        assert self.is_present((By.XPATH, self.div_span.format("This form submission should take you to Basic Form Tests > Basic Form only if \"link_form=yes\" for the case, otherwise it should take you to the Home Screen")))
+        self.wait_to_click(self.next_question)
+        time.sleep(1)
+        self.js_click(self.submit_form_button)
+        time.sleep(5)
+        self.wait_for_element(self.success_message)
+        if cond == "no":
+            assert self.is_present_and_displayed((By.XPATH, self.form_title_name.format(UserData.basic_tests_app['tests_app2']))), "This is not the "+UserData.basic_tests_app['tests_app2']+" page."
+        else:
+            assert self.is_present_and_displayed(
+                (By.XPATH, self.form_title_name.format(UserData.basic_tests_app['form_name']))), "This is not the " + \
+                                                                                                  UserData.basic_tests_app[
+                                                                                                      'form_name'] + " page."
+        self.wait_to_click(self.home_button)
+        time.sleep(2)
+        self.switch_to_default_content()
+
+    def no_conditional_expression_form(self, case, cond):
+        self.switch_to_frame(self.iframe)
+        self.wait_to_clear_and_send_keys(self.search_input,case)
+        self.wait_to_click(self.search_button)
+        assert self.is_present_and_displayed((By.XPATH, self.form_link_case.format(case, cond)))
+        self.js_click((By.XPATH, self.form_link_case.format(case, cond)))
+        self.wait_to_click(self.continue_button)
+        self.wait_for_element(self.next_question)
+        assert self.is_present((By.XPATH, self.div_span.format("This form submission should always take you to Basic Form Tests > Basic Form")))
+        self.wait_to_click(self.next_question)
+        time.sleep(1)
+        self.js_click(self.submit_form_button)
+        time.sleep(5)
+        assert self.is_present_and_displayed(
+                (By.XPATH, self.form_title_name.format(UserData.basic_tests_app['form_name']))), "This is not the " + \
+                                                                                                  UserData.basic_tests_app[
+                                                                                                      'form_name'] + " page."
+        self.wait_to_click(self.home_button)
+        time.sleep(2)
+        self.switch_to_default_content()
+
+    def form_linking_child(self, case, child):
+        self.switch_to_frame(self.iframe)
+        self.wait_to_clear_and_send_keys(self.search_input, child)
+        self.wait_to_click(self.search_button)
+        assert self.is_present_and_displayed((By.XPATH, self.module_search.format(child)))
+        self.js_click((By.XPATH, self.module_search.format(child)))
+        self.wait_to_click(self.continue_button)
+        self.wait_for_element((By.XPATH, self.case_list_menu.format(UserData.basic_test_app_forms['linking_data'])))
+        self.switch_to_default_content()
+        self.open_module(UserData.basic_test_app_forms['linking_data'])
+        self.switch_to_frame(self.iframe)
+        self.wait_for_element(self.next_question)
+        assert self.is_present((By.XPATH, self.div_span.format(
+            "This form submission should take you to Form Linking Parent -> Conditional expression form.")))
+        self.wait_to_click(self.next_question)
+        time.sleep(1)
+        self.wait_to_click(self.submit_form_button)
+        time.sleep(3)
+        assert self.is_present_and_displayed(
+            (By.XPATH,
+             self.form_title_name.format(case))), "This is not the " + case + " page."
+        self.wait_to_click(self.home_button)
+        time.sleep(2)
         self.switch_to_default_content()
