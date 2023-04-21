@@ -22,7 +22,7 @@ on:
           - production
 
 concurrency:
-  group: tests-on-hq-${{ github.event.client_payload.environment == 'staging' && github.ref }} - tests-on-hq-${{ github.event.client_payload.environment == 'production' && github.ref}}
+  group: tests-on-hq-${{ github.event.client_payload.environment == 'staging' }} - tests-on-hq-${{ github.event.client_payload.environment == 'production' }}
   cancel-in-progress: true
 
 jobs:
