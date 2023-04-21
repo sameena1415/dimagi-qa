@@ -22,7 +22,7 @@ on:
           - production
 
 concurrency:
-  group: environment-${{ github.ref }}
+  group: ${{ github.event.client_payload.environment }} - ${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -43,6 +43,10 @@ jobs:
         if: ${{ !contains(github.event_name , 'dispatch') }}
         run: |
           echo "::set-output name=matrix::{\"environment\": [\"production\", \"staging\"]}"
+  concurrency:
+    group: ${{ matrix.environment }} - ${{ github.ref }}
+    cancel-in-progress: true
+
   build:
     needs: set_matrix
     strategy:
