@@ -54,9 +54,12 @@ jobs:
     strategy:
       fail-fast: false
       matrix: ${{ fromJSON(needs.set_matrix.outputs.matrix) }}
-    concurrency:
-      group: environment-${{ github.ref }}
-      cancel-in-progress: true
+    name: concurrency
+    steps:
+      concurrency:
+        group: environment-${{ github.ref }}
+        cancel-in-progress: true
+
     name: Smoke on '${{ matrix.environment }}'
     runs-on: ubuntu-latest
     steps:
