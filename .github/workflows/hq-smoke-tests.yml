@@ -21,10 +21,6 @@ on:
           - staging
           - production
 
-concurrency:
-  group: ${{ github.event.client_payload.environment }} - ${{ github.ref }}
-  cancel-in-progress: true
-
 jobs:
   set_matrix:
     runs-on: ubuntu-latest
@@ -44,10 +40,9 @@ jobs:
         run: |
           echo "::set-output name=matrix::{\"environment\": [\"production\", \"staging\"]}"
 
-  name: concurrency
-  steps:
+  terraform:
     concurrency:
-      group: environment-${{ github.ref }}
+      group: ${{ matrix.environment }}-${{ github.ref }}
       cancel-in-progress: true
 
   build:
