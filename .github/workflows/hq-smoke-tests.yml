@@ -22,7 +22,7 @@ on:
           - production
 
 concurrency:
-  group: test-on-hq-'staging' && ${{ github.ref }} || test-on-hq-'production' && ${{ github.ref }}
+  group: test-on-hq-'staging'||'production'-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
