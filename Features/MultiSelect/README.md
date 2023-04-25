@@ -1,8 +1,8 @@
-## Case Search Test Script
+## Multi Select Test Script
 
-Case Search allows mobile workers to search for cases across locations / owners as well as claim those cases. Specific search fields can be configured per application. 
+This feature allows users to filter and select multiple cases simultaneously and have access to all of their data in a form so that they can efficiently perform repetitive actions within a single form. This is a new modification to case lists that previously only allowed the selection of one case at a time.
 
-This script contains conatins [it's regression tests.](https://docs.google.com/spreadsheets/d/13vUbmbMqtFWwjvmvuST66p3X5u6sLNnBrLWQICx_iaQ/edit#gid=2133071371)
+This script contains conatins [it's regression tests.](https://docs.google.com/spreadsheets/d/1dCcjfufT4t0J_SPwRCkR0cEYfegg18hz6iPcgMOqpes/edit#gid=712210688)
 
 ## Executing Scripts
 
@@ -35,7 +35,7 @@ the environment you want to test.
 ```sh
 
 # To execute all the test cases 
-pytest -v --rootdir= Features/CaseSearch/test_cases
+pytest -v --rootdir= Features/MultiSelect/test_cases
 
 ```
 - You could also pass the following arguments
@@ -45,7 +45,7 @@ pytest -v --rootdir= Features/CaseSearch/test_cases
 ### <ins> Trigger Manually on Gitaction </ins>
 
 To manually trigger the script,
-  - Go to [HQ Smoke Tests action](https://github.com/dimagi/dimagi-qa/actions/workflows/case-search-tests.yml)
+  - Go to [Multiselect Tests action](https://github.com/dimagi/dimagi-qa/actions/workflows/multi-select-tests.yml)
   - Run workflow
   - Use workflow from ```master```
   - Use the environment as desired

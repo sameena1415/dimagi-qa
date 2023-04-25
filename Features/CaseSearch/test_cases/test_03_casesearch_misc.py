@@ -151,7 +151,6 @@ def test_case_06_performance_check(driver):
     assert run_time <= 4
 
 
-@pytest.mark.skip(reason="Failing 404")
 def test_case_07_multi_case_types(driver):
     webapps = WebApps(driver)
     casesearch = CaseSearchWorkflows(driver)

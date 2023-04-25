@@ -21,10 +21,6 @@ on:
           - staging
           - production
 
-concurrency:
-  group: tests-on-hq-${{ github.ref }}
-  cancel-in-progress: true
-
 jobs:
   set_matrix:
     runs-on: ubuntu-latest
@@ -48,6 +44,9 @@ jobs:
     strategy:
       fail-fast: false
       matrix: ${{ fromJSON(needs.set_matrix.outputs.matrix) }}
+    concurrency:
+      group: ${{ github.workflow }}-${{ matrix.environment }}
+      cancel-in-progress: true
     name: Smoke on '${{ matrix.environment }}'
     runs-on: ubuntu-latest
     steps:
@@ -82,7 +81,7 @@ jobs:
           pytest -v --rootdir= HQSmokeTests/testCases -n 4 --dist=loadfile --reruns 1 --html=report_${{ matrix.environment }}.html
 
       - name: Set email vars
-        if: ${{ success() || failure() }}
+        if: ${{ failure() }}
         id: configure_email
         uses: actions/github-script@v6
         env:
@@ -127,7 +126,7 @@ jobs:
             }
 
       - name: Send Result Email
-        if: ${{ success() || failure() }}
+        if: ${{ failure() }}
         uses: dawidd6/action-send-mail@v3
         with:
           server_address: smtp.gmail.com

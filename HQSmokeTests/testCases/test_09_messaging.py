@@ -70,6 +70,7 @@ def test_case_46_keyword_creation(driver, settings):
     menu = HomePage(driver, settings)
     msg = MessagingPage(driver)
     menu.messaging_menu()
+    msg.remove_all_keywords()
     msg.add_keyword_trigger()
     msg.remove_keyword()
     msg.add_structured_keyword_trigger()

@@ -16,7 +16,7 @@ class WebApps(BasePage):
     def __init__(self, driver):
         super().__init__(driver)
 
-        self.app_name_format = "//*[contains(@aria-label,'{}')]/div"
+        self.app_name_format = "//*[@aria-label='{}']/div"
         self.app_header_format = "//h1[contains(text(),'{}')]"
         self.menu_name_format = '//*[contains(@aria-label,"{}")]'
         self.menu_name_header_format = '//*[contains(text(),"{}")]'
@@ -39,7 +39,7 @@ class WebApps(BasePage):
         self.omni_search_input = (By.ID, "searchText")
         self.omni_search_button = (By.ID, "case-list-search-button")
         self.continue_button = (By.ID, "select-case")
-        self.first_case_on_list = (By.XPATH,"(//*[@class='module-case-list-column'])[1]")
+        self.first_case_on_list = (By.XPATH, "(//*[@class='module-case-list-column'])[1]")
 
         self.webapps_home = (By.XPATH, "//i[@class='fcc fcc-flower']")
         self.webapp_login = (By.XPATH, "(//div[@class='js-restore-as-item appicon appicon-restore-as'])")
@@ -52,7 +52,11 @@ class WebApps(BasePage):
         self.list_is_empty = (By.XPATH, "//div[contains(text(), 'empty')]")
         # Pagination
         self.last_page = (By.XPATH, "(//a[contains(@aria-label, 'Page')])[last()]")
-        self.next_page = (By.XPATH,"//a[contains(@aria-label, 'Next')]")
+        self.next_page = (By.XPATH, "//a[contains(@aria-label, 'Next')]")
+        self.prev_page = (By.XPATH, "//a[contains(@aria-label, 'Previous')]")
+        self.pagination_select = (By.XPATH, "//select[@class='form-control per-page-limit']")
+        self.go_to_page_textarea = (By.ID, "goText")
+        self.go_button = (By.ID, "pagination-go-button")
 
     def open_app(self, app_name):
         time.sleep(2)
@@ -115,7 +119,7 @@ class WebApps(BasePage):
         self.js_click(self.omni_search_button)
         self.case = self.get_element(self.case_name_format, case_name)
         if self.is_displayed(self.last_page) and self.is_displayed(self.case) == False:
-            total_pages = int(self.get_attribute(self.last_page, "data-id"))-1
+            total_pages = int(self.get_attribute(self.last_page, "data-id")) - 1
             for page in range(total_pages):
                 self.js_click(self.next_page)
                 if displayed == YES:
@@ -195,3 +199,17 @@ class WebApps(BasePage):
         self.driver.get(f"https://{env}.commcarehq.org/a/{domain_name}/cloudcare/apps/v2/#apps")
         user_menu_url = f"https://{env}.commcarehq.org/a/casesearch/settings/users/commcare/"
         return user_menu_url
+
+    def change_page_number(self, page_number):
+        self.select_by_value(self.pagination_select, page_number)
+
+    def switch_bw_pages(self):
+        self.js_click(self.next_page)
+        self.wait_for_ajax()
+        self.wait_for_element(self.prev_page)
+        self.js_click(self.prev_page)
+        self.wait_for_ajax()
+
+    def go_to_page(self, page_number):
+        self.send_keys(self.go_to_page_textarea, page_number)
+        self.js_click(self.go_button)

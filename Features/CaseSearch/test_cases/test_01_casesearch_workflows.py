@@ -16,7 +16,8 @@ def test_case_01_normal_workflow(driver):
     webapps.search_all_cases()
     webapps.clear_selections_on_case_search_page()
     case_name = casesearch.search_against_property(search_property=CaseSearchUserInput.song_name,
-                                                                input_value=CaseSearchUserInput.song_automation_song_1,                                                            property_type=TEXT_INPUT)
+                                                   input_value=CaseSearchUserInput.song_automation_song_1,
+                                                   property_type=TEXT_INPUT)
     webapps.search_button_on_case_search_page()
     webapps.omni_search(case_name)
     webapps.select_case_and_continue(case_name)

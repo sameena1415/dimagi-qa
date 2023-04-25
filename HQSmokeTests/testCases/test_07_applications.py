@@ -5,6 +5,7 @@ from HQSmokeTests.testPages.applications.application_page import ApplicationPage
 from HQSmokeTests.testPages.android.android_screen import AndroidScreen
 from HQSmokeTests.testPages.home.home_page import HomePage
 from HQSmokeTests.testPages.reports.report_page import ReportPage
+from HQSmokeTests.userInputs.user_inputs import UserData
 
 """"Contains test cases related to the Application module"""
 
@@ -50,7 +51,7 @@ def test_case_39_settings_exploration(driver):
 @pytest.mark.appPreview
 def test_case_40_app_preview(driver, settings):
     menu = HomePage(driver, settings)
-    menu.applications_menu()
+    menu.applications_menu(UserData.reassign_cases_application)
     load = AppPreviewPage(driver)
     load.check_access_to_app_preview()
     load.submit_form_on_app_preview()
