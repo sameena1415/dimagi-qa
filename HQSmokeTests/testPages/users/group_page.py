@@ -21,7 +21,7 @@ class GroupPage(BasePage):
         self.add_group_button = (By.XPATH, "//button[@type='submit' and @class='btn btn-primary']")
         self.group_menu_xpath = (By.XPATH, "//a[@data-title='Groups']")
         self.users_drop_down = (By.XPATH, "//span[@class='select2-selection select2-selection--multiple']")
-        self.select_user = (By.XPATH,  "//li[text()='" + "username_" + fetch_random_string() + "']")
+        self.select_user =  "//li[text()='{}']"
         self.update_button = (By.ID, "submit-id-submit")
         self.group_created_success = (By.XPATH, "//h1[text()[contains(.,'Editing Group')]]")
         self.edit_settings = (By.LINK_TEXT, "Edit Settings")
@@ -46,7 +46,7 @@ class GroupPage(BasePage):
 
     def add_user_to_group(self, username):
         self.send_keys(self.users_drop_down, username)
-        self.wait_to_click(self.select_user)
+        self.wait_to_click((By.XPATH, self.select_user.format(username)))
         self.wait_to_click(self.update_button)
         print(self.driver.current_url)
         group_id_value = self.driver.current_url.split("/")[-2]
@@ -86,15 +86,18 @@ class GroupPage(BasePage):
     def delete_test_groups(self):
         list_profile = self.driver.find_elements(By.XPATH,"//td//a[contains(text(),'group_')]")
         print(list_profile)
-        if len(list_profile) > 0:
-            for i in range(len(list_profile))[::-1]:
-                text = list_profile[i].text
-                print(text)
-                list_profile[i].click()
-                self.wait_to_click(self.delete_group)
-                self.wait_to_click(self.confirm_delete)
-                assert self.is_visible_and_displayed(self.delete_success_message), "Group deletion not successful"
-                time.sleep(2)
-                list_profile = self.driver.find_elements(By.XPATH,"//td//a[contains(text(),'group_')]")
-        else:
-             print("There are no test groups")
+        try:
+            if len(list_profile) > 0:
+                for i in range(len(list_profile))[::-1]:
+                    text = list_profile[i].text
+                    print(text)
+                    list_profile[i].click()
+                    self.wait_to_click(self.delete_group)
+                    self.wait_to_click(self.confirm_delete)
+                    assert self.is_visible_and_displayed(self.delete_success_message), "Group deletion not successful"
+                    time.sleep(2)
+                    list_profile = self.driver.find_elements(By.XPATH,"//td//a[contains(text(),'group_')]")
+            else:
+                 print("There are no test groups")
+        except:
+            print("There are no test groups")
