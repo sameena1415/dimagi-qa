@@ -20,7 +20,7 @@ class MobileWorkerPage(BasePage):
     def __init__(self, driver):
         super().__init__(driver)
 
-        self.username = random.choice(UserData.mobile_username_list)
+        # self.username = random.choice(UserData.mobile_username_list)
         # self.user = random.choice(UserData.mobile_user_list)
         self.login_as_username = "//h3/b[.='{}']"
         self.profile_name_text = "test_profile_" + fetch_random_string()
@@ -48,10 +48,8 @@ class MobileWorkerPage(BasePage):
         self.webapp_login = (By.XPATH, "(//div[@class='js-restore-as-item appicon appicon-restore-as'])")
         self.confirm_reactivate_xpath_list = (By.XPATH,
                                               "((//div[@class='modal-footer'])/button[@data-bind='click: function(user) { user.is_active(true); }'])")
-        self.reactivate_buttons_list = (By.XPATH,
-                                        "//td[./a/strong[text()='" + self.username + "']]/following-sibling::td/div[contains(@data-bind,'visible: !is_active()')]/button[contains(.,'Reactivate')]")
-        self.deactivate_button = (By.XPATH,
-                                  "//td[./a/strong[text()='" + self.username + "']]/following-sibling::td/div[contains(@data-bind,'visible: is_active()')]/button[contains(.,'Deactivate')]")
+        self.reactivate_buttons_list = "//td[./a/strong[text()='{}']]/following-sibling::td/div[contains(@data-bind,'visible: !is_active()')]/button[contains(.,'Reactivate')]"
+        self.deactivate_button = "//td[./a/strong[text()='{}']]/following-sibling::td/div[contains(@data-bind,'visible: is_active()')]/button[contains(.,'Deactivate')]"
         self.confirm_deactivate_xpath_list = (
             By.XPATH, "((//div[@class='modal-footer'])/button[@class='btn btn-danger'])")
         self.deactivate_buttons_list = (
@@ -108,8 +106,7 @@ class MobileWorkerPage(BasePage):
             By.XPATH, "//label[@for='id_data-field-user_field_" + fetch_random_string() + "']")
         self.user_file_additional_info2 = (
             By.XPATH, "//label[@for='id_data-field-field_" + fetch_random_string() + "']")
-        self.deactivate_btn_xpath = (By.XPATH,
-                                     "//td/a/strong[text()='" + self.username + "']/following::td[5]/div[@data-bind='visible: is_active()']/button")
+        self.deactivate_btn_xpath = "//td/a/strong[text()='{}']/following::td[5]/div[@data-bind='visible: is_active()']/button"
         self.confirm_deactivate = (By.XPATH, "(//button[@class='btn btn-danger'])[1]")
         self.view_all_link_text = (By.LINK_TEXT, "View All")
         self.search_user_web_apps = (By.XPATH, "//input[@placeholder='Filter workers']")
@@ -271,7 +268,7 @@ class MobileWorkerPage(BasePage):
             self.wait_to_click(self.deactivate_buttons_list)
             self.wait_to_click(self.confirm_deactivate_xpath_list)
             time.sleep(5)
-            assert self.is_present_and_displayed(self.reactivate_buttons_list)
+            assert self.is_present_and_displayed((By.XPATH, self.reactivate_buttons_list.format(username)))
         except (TimeoutException, NoSuchElementException):
             print("TIMEOUT ERROR: Deactivation Unsuccessful.")
 
@@ -288,10 +285,10 @@ class MobileWorkerPage(BasePage):
             self.wait_to_click(self.show_deactivated_users_btn)
             self.search_user(username)
             time.sleep(1)
-            self.wait_to_click(self.reactivate_buttons_list)
+            self.wait_to_click((By.XPATH, self.reactivate_buttons_list.format(username)))
             self.wait_to_click(self.confirm_reactivate_xpath_list)
             time.sleep(5)
-            assert self.is_present_and_displayed(self.deactivate_button)
+            assert self.is_present_and_displayed((By.XPATH, self.deactivate_button.format(username)))
         except (TimeoutException, NoSuchElementException):
             print("TIMEOUT ERROR: Reactivation unsuccessful.")
 
@@ -423,17 +420,17 @@ class MobileWorkerPage(BasePage):
         self.wait_to_click(self.confirm_user_field_delete)
 
     def delete_profile(self):
-        list_profile = self.driver.find_elements(By.XPATH, "//input[@data-bind='value: name']")
+        list_profile = self.driver.find_elements(By.XPATH, "//input[contains(@data-bind,'value: name')]")
         if len(list_profile) > 0:
             for i in range(len(list_profile))[::-1]:
                 text = list_profile[i].get_attribute("value")
                 if "test_profile" in text:
                     self.driver.find_element(By.XPATH,
-                                             "(//input[@data-bind='value: name']//following::a[@class='btn btn-danger' and @data-toggle='modal'][1])[" + str(
+                                             "(//input[contains(@data-bind,'value: name')]//following::a[@class='btn btn-danger' and @data-toggle='modal'][1])[" + str(
                                                  i + 1) + "]").click()
                     self.wait_to_click(self.confirm_user_field_delete)
                     time.sleep(2)
-                    list_profile = self.driver.find_elements(By.XPATH, "//input[@data-bind='value: name']")
+                    list_profile = self.driver.find_elements(By.XPATH, "//input[contains(@data-bind,'value: name')]")
                 else:
                     print("Its not a test profile")
             self.save_field()

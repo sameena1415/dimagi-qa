@@ -40,7 +40,7 @@ def test_case_03_create_and_assign_user_field(driver, settings):
     menu.users_menu()
     create.mobile_worker_menu()
     create.create_new_user_fields("user_field_" + fetch_random_string())
-    create.select_mobile_worker_created(group_id['user'])
+    create.select_mobile_worker_created(group_id["user"] )
     create.enter_value_for_created_user_field()
     create.update_information()
 
@@ -52,10 +52,11 @@ def test_case_05_create_group_and_assign_user(driver, settings):
     menu = HomePage(driver, settings)
     menu.users_menu()
     visible = GroupPage(driver)
-    visible.add_group()
-    id_value = visible.add_user_to_group(group_id['user'])
-    print(id_value)
+    group_name = visible.add_group()
+    id_value = visible.add_user_to_group(group_id["user"], group_name)
+    print(id_value, group_name)
     group_id["value"] = id_value
+    group_id["group_name"] = group_name
     return group_id
 
 
@@ -71,7 +72,7 @@ def test_case_10_download_and_upload_users(driver, settings):
     home.users_menu()
     newest_file = user.download_mobile_worker()
     print("Group ID:", group_id["value"])
-    user.check_for_group_in_downloaded_file(newest_file, group_id["value"])
+    user.check_for_group_in_downloaded_file(newest_file, group_id["value"] )
     home.users_menu()
     user.upload_mobile_worker()
 
@@ -83,7 +84,7 @@ def test_case_05_edit_user_groups(driver, settings):
     menu.users_menu()
     edit = GroupPage(driver)
     edit.click_group_menu()
-    edit.edit_existing_group()
+    renamed_group = edit.edit_existing_group(group_id["group_name"])
     edit.remove_user_from_group()
 
 
@@ -94,8 +95,8 @@ def test_case_04_deactivate_user(driver, settings):
     menu = HomePage(driver, settings)
     menu.users_menu()
     user.mobile_worker_menu()
-    user.deactivate_user(group_id['user'])
-    user.verify_deactivation_via_login(group_id['user'])
+    user.deactivate_user(group_id["user"] )
+    user.verify_deactivation_via_login(group_id["user"] )
 
 
 @pytest.mark.user
@@ -105,8 +106,8 @@ def test_case_04_reactivate_user(driver, settings):
     menu = HomePage(driver, settings)
     menu.users_menu()
     user.mobile_worker_menu()
-    user.reactivate_user(group_id['user'])
-    user.verify_reactivation_via_login(group_id['user'])
+    user.reactivate_user(group_id["user"] )
+    user.verify_reactivation_via_login(group_id["user"] )
 
 
 @pytest.mark.user
@@ -119,15 +120,15 @@ def test_cleanup_items_in_users_menu(driver, settings):
     clean2 = GroupPage(driver)
 
     menu = HomePage(driver, settings)
-    # menu.users_menu()
-    # clean.delete_bulk_users()
-    #
-    # menu.users_menu()
-    # clean.mobile_worker_menu()
-    # clean.edit_user_field()
-    # clean.click_profile()
-    # clean.delete_profile()
-    # print("Removed all test profiles")
+    menu.users_menu()
+    clean.delete_bulk_users()
+
+    menu.users_menu()
+    clean.mobile_worker_menu()
+    clean.edit_user_field()
+    clean.click_profile()
+    clean.delete_profile()
+    print("Removed all test profiles")
 
     menu.users_menu()
     clean.mobile_worker_menu()
@@ -135,10 +136,10 @@ def test_cleanup_items_in_users_menu(driver, settings):
     clean.delete_test_user_field()
     print("Deleted the user field")
 
-    # clean.mobile_worker_menu()
-    # clean2.click_group_menu()
-    # clean2.delete_test_groups()
-    # print("Deleted the group")
+    clean.mobile_worker_menu()
+    clean2.click_group_menu()
+    clean2.delete_test_groups()
+    print("Deleted the group")
 
 
 @pytest.mark.user
