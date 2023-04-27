@@ -496,15 +496,17 @@ class MobileWorkerPage(BasePage):
         # filter the test users
         new_data = new_data[new_data['username'].str.startswith(("user_","username_"))]
         print('Filtered Row count: ', new_data.shape)
-        new_data.drop(new_data.columns.difference(['username']), 1, inplace=True)
+        new_data.drop(new_data.columns.difference(['username']), axis=1, inplace=True)
         print(new_data)
-        writer = pd.ExcelWriter(latest, engine='openpyxl')
-        # write data to the excel sheet
-        new_data.to_excel(writer, sheet_name='users', index=False)
-        # close file
-        writer.close()
-        self.bulk_delete_mobile_worker_upload(latest)
-
+        if new_data.empty == False:
+            writer = pd.ExcelWriter(latest, engine='openpyxl')
+            # write data to the excel sheet
+            new_data.to_excel(writer, sheet_name='users', index=False)
+            # close file
+            writer.close()
+            self.bulk_delete_mobile_worker_upload(latest)
+        else:
+            print("No test users to delete")
 
     def bulk_delete_mobile_worker_upload(self, file_path):
         self.mobile_worker_menu()

@@ -13,8 +13,6 @@ from HQSmokeTests.testPages.users.web_user_page import WebUsersPage
 
 group_id = dict()
 
-
-
 @pytest.mark.user
 @pytest.mark.mobileWorker
 @pytest.mark.run(order=0)
@@ -95,8 +93,8 @@ def test_case_04_deactivate_user(driver, settings):
     menu = HomePage(driver, settings)
     menu.users_menu()
     user.mobile_worker_menu()
-    user.deactivate_user(group_id["user"] )
-    user.verify_deactivation_via_login(group_id["user"] )
+    user.deactivate_user(group_id["user"])
+    user.verify_deactivation_via_login(group_id["user"])
 
 
 @pytest.mark.user
