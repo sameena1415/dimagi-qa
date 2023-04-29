@@ -117,10 +117,10 @@ def test_case_07_parent_multi_child_multi(driver):
     """ Parent multi, child multi"""
     webapps.open_app(MultiSelectUserInput.multiselect_app_name)
     webapps.open_menu(MultiSelectUserInput.shows_MS_SPFO)
-    cases_selected = multiselect.multi_select_cases(case_count=2)
+    multiselect.multi_select_cases(case_count=2)
     multiselect.continue_to_proceed_multiselect()
     webapps.search_button_on_case_search_page()
-    multiselect.multi_select_cases(case_count=2)
+    cases_selected = multiselect.multi_select_cases(case_count=2)
     multiselect.continue_to_proceed_multiselect()
     webapps.open_form(MultiSelectUserInput.child_shows_SF_MS)
     webapps.search_button_on_case_search_page()
