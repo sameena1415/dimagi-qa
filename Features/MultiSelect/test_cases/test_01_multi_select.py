@@ -123,6 +123,7 @@ def test_case_07_parent_multi_child_multi(driver):
     multiselect.multi_select_cases(case_count=2)
     multiselect.continue_to_proceed_multiselect()
     webapps.open_form(MultiSelectUserInput.child_shows_SF_MS)
+    webapps.search_button_on_case_search_page()
     multiselect.multi_select_cases(case_count=1)
     multiselect.continue_to_proceed_multiselect()
     multiselect.check_selected_cases_present_on_form(cases_selected, case_type=SHOW)
