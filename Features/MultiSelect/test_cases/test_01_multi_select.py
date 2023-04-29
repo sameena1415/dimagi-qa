@@ -99,7 +99,6 @@ def test_case_06_parent_multi_child_nonmulti(driver):
     """"Parent multi, child non-multi"""
     webapps.open_app(MultiSelectUserInput.multiselect_app_name)
     webapps.open_menu(MultiSelectUserInput.shows_MS_SPFO)
-    webapps.search_button_on_case_search_page()
     multiselect.multi_select_cases(case_count=3)
     multiselect.continue_to_proceed_multiselect()
     webapps.search_button_on_case_search_page()
@@ -118,7 +117,6 @@ def test_case_07_parent_multi_child_multi(driver):
     """ Parent multi, child multi"""
     webapps.open_app(MultiSelectUserInput.multiselect_app_name)
     webapps.open_menu(MultiSelectUserInput.shows_MS_SPFO)
-    webapps.search_button_on_case_search_page()
     cases_selected = multiselect.multi_select_cases(case_count=2)
     multiselect.continue_to_proceed_multiselect()
     webapps.search_button_on_case_search_page()
