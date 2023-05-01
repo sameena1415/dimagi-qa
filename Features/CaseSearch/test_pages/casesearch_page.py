@@ -218,11 +218,13 @@ class CaseSearchWorkflows(BasePage):
     def select_all_cases_and_check_selected_cases_present_on_form(self):
         self.wait_to_click(self.select_all_checkbox)
         song_names = self.find_elements_texts(self.case_names)
+        song_names_on_case_list = list(filter(None, song_names))
         self.js_click(self.multi_select_continue)
         song_names_on_form = self.find_elements_texts(self.selected_case_names_on_forms)
         stripped = list(filter(None, [s.replace("song: by", "") for s in song_names_on_form]))
-        stripped_final = list(filter(None, [s.lstrip() for s in stripped]))
-        assert stripped_final == song_names, f"No, list1 {stripped_final} doesn't match list2{song_names}"
+        stripped_final = list([s.lstrip() for s in stripped])
+        assert stripped_final == song_names_on_case_list, \
+            f"No, form songs {stripped_final} doesn't match case list songs{song_names_on_case_list}"
 
     def check_if_checkbox_selected(self, search_property, values):
         for value in values:
