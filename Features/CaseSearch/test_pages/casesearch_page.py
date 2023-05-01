@@ -48,7 +48,7 @@ class CaseSearchWorkflows(BasePage):
         self.case_type_select = (By.ID, "report_filter_case_type")
         self.report_search = (By.ID, "report_filter_search_query")
         self.report_apply_filters = (By.ID, "apply-filters")
-        self.commcare_case_claim_case = "//a[contains(text(), '{}')]//following::*[text()='{}'][1]"
+        self.commcare_case_claim_case = "//td[contains(text(), '{}')]"
         # Multi-select
         self.select_all_checkbox = (By.ID, "select-all-checkbox")
         self.case_names = (By.XPATH, "//td[contains(@class,'case-list-column')][3]")
@@ -204,13 +204,14 @@ class CaseSearchWorkflows(BasePage):
         assert self.is_visible_and_displayed(value)
         self.js_click(self.close_case_detail_tab)
 
-    def check_case_claim_case_type(self, claimed_case_name, claimed_user):
+    def check_todays_case_claim_present_on_report(self):
         self.select_by_text(self.case_type_select, "commcare-case-claim")
-        self.wait_to_clear_and_send_keys(self.report_search, claimed_case_name)
         self.wait_to_click(self.report_apply_filters)
-        claim_case_type = (By.XPATH, self.commcare_case_claim_case.format(claimed_case_name, claimed_user))
+        date_on_report = str((datetime.today()).date().strftime("%b %d, %Y"))
+        recent_claim_case = (By.XPATH, self.commcare_case_claim_case.format(date_on_report))
+        print(date_on_report, recent_claim_case)
         try:
-            assert self.is_visible_and_displayed(claim_case_type)
+            assert self.is_visible_and_displayed(recent_claim_case)
         except AssertionError:
             logging.basicConfig(filename='logs.log', encoding='utf-8', level=logging.DEBUG)
             logging.warning("Elastic search is taking too long to update the case")
