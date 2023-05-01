@@ -1,11 +1,8 @@
-import time
-
 from Features.CaseSearch.constants import *
 from Features.CaseSearch.test_pages.casesearch_page import CaseSearchWorkflows
 from Features.CaseSearch.user_inputs.casesearch_user_inputs import CaseSearchUserInput
 from HQSmokeTests.testPages.reports.report_page import ReportPage
 from HQSmokeTests.testPages.home.home_page import HomePage
-from HQSmokeTests.testPages.users.mobile_workers_page import MobileWorkerPage
 from common_utilities.selenium.base_page import BasePage
 from common_utilities.selenium.webapps import WebApps
 
@@ -13,22 +10,12 @@ from common_utilities.selenium.webapps import WebApps
 
 
 def test_case_01_fuzzy_search_and_case_claim(driver, settings):
-    menu = HomePage(driver, settings)
     webapps = WebApps(driver)
     casesearch = CaseSearchWorkflows(driver)
-    user = MobileWorkerPage(driver)
 
-    """Create new user"""
-    menu.users_menu()
-    user.mobile_worker_menu()
-    user.create_mobile_worker()
-    username = user.mobile_worker_enter_username(user.username)
-    user.mobile_worker_enter_password(username)
-    user.click_create()
     """Check fuzzy search"""
-    global user_url
-    user_url = webapps.open_domain(domain_name=CaseSearchUserInput.casesearch, current_url=driver.current_url)
-    webapps.login_as(username)
+    webapps.open_domain(domain_name=CaseSearchUserInput.casesearch, current_url=driver.current_url)
+    webapps.login_as(CaseSearchUserInput.user_2)
     webapps.open_app(CaseSearchUserInput.case_search_app_name)
     webapps.open_menu(CaseSearchUserInput.normal_menu)
     webapps.search_all_cases()
@@ -108,13 +95,7 @@ def test_case_05_remove_special_characters(driver):
 def test_case_06_claimed_cases_on_report(driver, settings):
     report = HomePage(driver, settings)
     load = ReportPage(driver)
-    user = MobileWorkerPage(driver)
     casesearch = CaseSearchWorkflows(driver)
     report.reports_menu()
     load.case_list_report()
-    time.sleep(90)  # Elastic search takes time to reflect the case
-    casesearch.check_case_claim_case_type(claimed_case_name=CaseSearchUserInput.song_automation_song_1,
-                                          claimed_user=user.username + "@casesearch.commcarehq.org")
-    """Delete the user"""
-    driver.get(user_url)
-    user.select_and_delete_mobile_worker(user.username)
+    casesearch.check_todays_case_claim_present_on_report()

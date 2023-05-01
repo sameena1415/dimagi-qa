@@ -48,7 +48,7 @@ class CaseSearchWorkflows(BasePage):
         self.case_type_select = (By.ID, "report_filter_case_type")
         self.report_search = (By.ID, "report_filter_search_query")
         self.report_apply_filters = (By.ID, "apply-filters")
-        self.commcare_case_claim_case = "//a[contains(text(), '{}')]//following::*[text()='{}'][1]"
+        self.commcare_case_claim_case = "//td[contains(text(), '{}')]"
         # Multi-select
         self.select_all_checkbox = (By.ID, "select-all-checkbox")
         self.case_names = (By.XPATH, "//td[contains(@class,'case-list-column')][3]")
@@ -204,13 +204,14 @@ class CaseSearchWorkflows(BasePage):
         assert self.is_visible_and_displayed(value)
         self.js_click(self.close_case_detail_tab)
 
-    def check_case_claim_case_type(self, claimed_case_name, claimed_user):
+    def check_todays_case_claim_present_on_report(self):
         self.select_by_text(self.case_type_select, "commcare-case-claim")
-        self.wait_to_clear_and_send_keys(self.report_search, claimed_case_name)
         self.wait_to_click(self.report_apply_filters)
-        claim_case_type = (By.XPATH, self.commcare_case_claim_case.format(claimed_case_name, claimed_user))
+        date_on_report = str((datetime.today()).date().strftime("%b %d, %Y"))
+        recent_claim_case = (By.XPATH, self.commcare_case_claim_case.format(date_on_report))
+        print(date_on_report, recent_claim_case)
         try:
-            assert self.is_visible_and_displayed(claim_case_type)
+            assert self.is_visible_and_displayed(recent_claim_case)
         except AssertionError:
             logging.basicConfig(filename='logs.log', encoding='utf-8', level=logging.DEBUG)
             logging.warning("Elastic search is taking too long to update the case")
@@ -218,11 +219,13 @@ class CaseSearchWorkflows(BasePage):
     def select_all_cases_and_check_selected_cases_present_on_form(self):
         self.wait_to_click(self.select_all_checkbox)
         song_names = self.find_elements_texts(self.case_names)
+        song_names_on_case_list = list(filter(None, song_names))
         self.js_click(self.multi_select_continue)
         song_names_on_form = self.find_elements_texts(self.selected_case_names_on_forms)
         stripped = list(filter(None, [s.replace("song: by", "") for s in song_names_on_form]))
-        stripped_final = list(filter(None, [s.lstrip() for s in stripped]))
-        assert stripped_final == song_names, f"No, list1 {stripped_final} doesn't match list2{song_names}"
+        stripped_final = list([s.lstrip() for s in stripped])
+        assert stripped_final == song_names_on_case_list, \
+            f"No, form songs {stripped_final} doesn't match case list songs{song_names_on_case_list}"
 
     def check_if_checkbox_selected(self, search_property, values):
         for value in values:
