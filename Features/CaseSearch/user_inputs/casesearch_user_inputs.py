@@ -41,6 +41,7 @@ class CaseSearchUserInput:
     smart_link_skip_default_menu = "DR: Smart link to external domain (Skip Default)"
     load_external_skip_default_menu = "DR: Load external case into form (Skip Default)"
     unrelated_case_load_external_menu = "Unrelated case id\'s property: Load from external domain."
+    checkbox_selection_menu = "Checkbox Selection"
 
     """Forms"""
     play_song_form = "Play Song"
@@ -110,6 +111,8 @@ class CaseSearchUserInput:
     validation_msg_no_spaces = "No spaces allowed!"
     validation_msg_invalid_respons = "Sorry, this response is invalid!"
     latin_music = "Latin music"
+    hiphop = "Hip Hop"
+    bounce = "Bounce"
     latin_jazz = "Latin jazz"
     funk_metal = "Funk Metal"
     default_search_title = "Case Claim"
