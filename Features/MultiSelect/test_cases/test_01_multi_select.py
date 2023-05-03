@@ -270,7 +270,46 @@ def test_case_13_multiselect_with_display_only_forms(driver):
     webapps.submit_the_form()
 
 
-def test_case_14_multiselect_enabled_select_parent_first(driver, settings):
+def test_case_14_eof_nav_to_single_select_menu(driver, settings):
+    multiselect = MultiSelectWorkflows(driver)
+    webapps = WebApps(driver)
+    casesearch = CaseSearchWorkflows(driver)
+    webapps.login_as(CaseSearchUserInput.user_1)
+    webapps.open_app(MultiSelectUserInput.multiselect_app_name)
+    webapps.open_menu(MultiSelectUserInput.shows_MS_SPFP)
+    webapps.select_first_case_on_list()
+    webapps.search_button_on_case_search_page()
+    multiselect.multi_select_cases(case_count=1)
+    multiselect.continue_to_proceed_multiselect()
+    webapps.open_form(MultiSelectUserInput.update_show_to_single_select)
+    webapps.submit_the_form()
+    """Eof Navigation"""
+    casesearch.check_eof_navigation(eof_nav=MENU,
+                                    menu=MultiSelectUserInput.single_select_no_parent)
+    webapps.select_first_case_on_list_and_continue()
+    webapps.submit_the_form()
+
+
+def test_case_15_eof_nav_to_form_on_single_select_menu(driver, settings):
+    multiselect = MultiSelectWorkflows(driver)
+    webapps = WebApps(driver)
+    casesearch = CaseSearchWorkflows(driver)
+    webapps.login_as(CaseSearchUserInput.user_1)
+    webapps.open_app(MultiSelectUserInput.multiselect_app_name)
+    webapps.open_menu(MultiSelectUserInput.shows_MS_SPFP)
+    webapps.select_first_case_on_list()
+    webapps.search_button_on_case_search_page()
+    multiselect.multi_select_cases(case_count=1)
+    multiselect.continue_to_proceed_multiselect()
+    webapps.open_form(MultiSelectUserInput.update_show_to_form_on_single_select)
+    webapps.submit_the_form()
+    """Eof Navigation"""
+    casesearch.check_eof_navigation(eof_nav=FORM,
+                                    menu=MultiSelectUserInput.does_nothing_form)
+    webapps.submit_the_form()
+
+
+def test_case_16_multiselect_enabled_select_parent_first(driver, settings):
     multiselect = MultiSelectWorkflows(driver)
     menu = HomePage(driver, settings)
     menu.applications_menu(MultiSelectUserInput.multiselect_app_name)
