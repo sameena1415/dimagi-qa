@@ -184,12 +184,12 @@ class CaseSearchWorkflows(BasePage):
             assert value in values
 
     def check_eof_navigation(self, eof_nav, menu=None):
-        if eof_nav == PREV_MENU:
+        if eof_nav == PREV_MENU or eof_nav == FORM:
             header = self.get_element(self.menu_header, menu)
-            assert self.is_displayed(header)
+            assert self.is_displayed(header), f"Navigated to {header}"
         elif eof_nav == MENU or FIRST_MENU:
             header = self.get_element(self.menu_breadcrumb, menu)
-            assert self.is_displayed(header)
+            assert self.is_displayed(header), f"Navigated to {header}"
         elif eof_nav == HOME_SCREEN:
             assert self.is_displayed(self.webapps_home)
 
