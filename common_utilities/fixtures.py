@@ -1,6 +1,5 @@
-# from py.xml import html
+from py.xml import html
 import pytest
-import html.parser
 
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
