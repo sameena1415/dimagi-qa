@@ -2,8 +2,8 @@ import os
 
 from configparser import ConfigParser
 from pathlib import Path
-from common_utilities.fixtures import *
-
+# from common_utilities.fixtures import *
+import pytest
 """"This file provides fixture functions for driver initialization"""
 
 global driver
