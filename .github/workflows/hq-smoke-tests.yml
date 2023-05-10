@@ -59,6 +59,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
+          pip uninstall -r HQSmokeTests/requires.txt -y
           pip install -r HQSmokeTests/requires.txt
 
       - name: CCHQ Smoke Test with pytest
