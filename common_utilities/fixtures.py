@@ -92,7 +92,7 @@ def pytest_html_results_table_header(cells):
 
 @pytest.mark.optionalhook
 def pytest_html_results_table_row(report, cells):
-    cells.insert(1, html.td(report.tags))
+    cells.insert(1, html.td(getattr(report, 'tags', '')))
     cells.pop()
 
 
