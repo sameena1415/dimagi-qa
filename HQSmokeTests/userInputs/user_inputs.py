@@ -17,7 +17,7 @@ class UserData:
     app_login = "appiumtest"
     app_password = "Pass@123"
     two_fa_user = "2fa.commcare.user@gmail.com"
-    mobile_user_list = ['user_new_ac8un4', 'user_new_d0xgk3', 'user_new_jk12bi']
+    mobile_user_list = ['username_new_ac8un4', 'username_new_d0xgk3', 'username_new_jk12bi']
     mobile_username_list = ['username_acgun4', 'username_dyxgk3', 'username_jkknbi']
 
     # Phone Number
