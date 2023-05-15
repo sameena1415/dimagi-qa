@@ -65,6 +65,7 @@ class CaseSearchUserInput:
     song_case_cs4_song_300 = "CS4 Song-300"
     song_case_on_casesearch_1 = "Bugs on casesearch-1"
     song_case_b_users_song = "b_users song"
+    song_automation_song_update = "Automation Song Update"
 
     # Artist-Cases
     automation_artist_1 = "Automation-Artist-1"
@@ -126,7 +127,7 @@ class CaseSearchUserInput:
     id_without_hyphen = "12345"
 
     """Case Properties/Search Fields"""
-
+    rating_on_form = {"1 star": '1', "2 stars": '2', "3 stars": '3', "4 stars": '4', "5 stars": '5'}
     ratings = {one_star: '1', two_star: '2', three_star: '3', four_star: '4', five_star: '5'}
     song_name = "Song Name"
     name = "Name"

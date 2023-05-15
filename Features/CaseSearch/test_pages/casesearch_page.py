@@ -43,7 +43,7 @@ class CaseSearchWorkflows(BasePage):
         self.case_detail_value = "//th[contains(text(), '{}')]//following-sibling::td[contains(text(), '{}')]"
         self.case_detail_tab = "//a[text()='{}']"
         self.close_case_detail_tab = (
-        By.XPATH, "(//div[@id='case-detail-modal']//following:: button[@class='close'])[1]")
+            By.XPATH, "(//div[@id='case-detail-modal']//following:: button[@class='close'])[1]")
         # Reports
         self.case_type_select = (By.ID, "report_filter_case_type")
         self.report_search = (By.ID, "report_filter_search_query")
@@ -57,6 +57,7 @@ class CaseSearchWorkflows(BasePage):
         self.checkbox_xpath = "//label[contains (text(),'{}')][1]//following::input[@value='{}'][1]"
         self.search_property_checked = "//label[contains (text(),'{}')][1]//following::input[@value='{}' and @checked][1]"
         self.remove_combobox_selection = "//label[contains(text(),'{}')]//following::button[@aria-label='Remove all items'][1]"
+        self.rating_answer = "//span[text()='Rating']/following::input[@value='{}'][1]"
 
     def check_values_on_caselist(self, row_num, expected_value, is_multi=NO):
         self.value_in_table = self.get_element(self.value_in_table_format, row_num)
@@ -227,6 +228,12 @@ class CaseSearchWorkflows(BasePage):
         assert stripped_final == song_names_on_case_list, \
             f"No, form songs {stripped_final} doesn't match case list songs{song_names_on_case_list}"
 
+    def check_label_in_form(self, expected_value):
+        rating_on_form = self.find_elements_texts(self.selected_case_names_on_forms)
+        for rating_value in rating_on_form:
+            print(rating_on_form, expected_value)
+            assert expected_value in rating_value
+
     def check_if_checkbox_selected(self, search_property, values):
         for value in values:
             search_property_checked_xpath = (By.XPATH, self.search_property_checked.format(search_property, value - 1))
@@ -247,3 +254,7 @@ class CaseSearchWorkflows(BasePage):
             assert self.is_present(remove_selection)
         if expected == NO:
             assert not self.is_present(remove_selection)
+
+    def select_rating_answer_(self, rating_input):
+        rating_selection = self.get_element(self.rating_answer, rating_input)
+        self.js_click(rating_selection)
