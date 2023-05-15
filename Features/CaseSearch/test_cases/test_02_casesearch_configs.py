@@ -135,9 +135,19 @@ def test_case_07_lookup_table_format(driver):
 def test_case_08_address_geocoder_format(driver):
     webapps = WebApps(driver)
     casesearch = CaseSearchWorkflows(driver)
-    """Check geocoder format search property"""
     webapps.open_app(CaseSearchUserInput.case_search_app_name)
+    """Check receivers in form get autopoulated after bradcast value is provided"""
     webapps.open_menu(CaseSearchUserInput.artist_menu)
+    webapps.select_first_case_on_list_and_continue()
+    casesearch.add_address(address=CaseSearchUserInput.full_home_address,
+                           search_property=CaseSearchUserInput.search_home_address)
+    webapps.open_data_preview()
+    webapps.present_in_data_preview(CaseSearchUserInput.home_street_value)
+    webapps.present_in_data_preview(CaseSearchUserInput.home_city_value)
+    webapps.present_in_data_preview(CaseSearchUserInput.home_country_value)
+    webapps.present_in_data_preview(CaseSearchUserInput.home_zipcode_value)
+    """Check geocoder format search property"""
+    driver.back()
     webapps.search_all_cases()
     webapps.clear_selections_on_case_search_page()
     casesearch.assert_address_is_hidden(CaseSearchUserInput.home_street)
