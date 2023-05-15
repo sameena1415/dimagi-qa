@@ -87,6 +87,47 @@ def test_case_05_date_range_format(driver):
     """Check date range format search property"""
     webapps.open_app(CaseSearchUserInput.case_search_app_name)
     webapps.open_menu(CaseSearchUserInput.search_first_menu)
+    # MM/DD/YYYY
+    webapps.clear_selections_on_case_search_page()
+    date = casesearch.search_against_property(search_property=CaseSearchUserInput.date_opened,
+                                              input_value=CaseSearchUserInput.date_12_30_2022_slash,
+                                              property_type=TEXT_INPUT)
+    casesearch.check_date_range(date_range=casesearch.parse_date_range(input_date=date,
+                                                                       input_format=CaseSearchUserInput.dates.get(
+                                                                           "MM/DD/YYYY"),
+                                                                       output_format=CaseSearchUserInput.dates.get(
+                                                                           "MM/DD/YYYY")))
+    # MM-DD-YYYY
+    webapps.clear_selections_on_case_search_page()
+    date = casesearch.search_against_property(search_property=CaseSearchUserInput.date_opened,
+                                               input_value=CaseSearchUserInput.date_12_30_2022_hyphen,
+                                               property_type=TEXT_INPUT)
+    casesearch.check_date_range(date_range=casesearch.parse_date_range(input_date=date,
+                                                                       input_format=CaseSearchUserInput.dates.get(
+                                                                           "MM-DD-YYYY"),
+                                                                       output_format=CaseSearchUserInput.dates.get(
+                                                                           "MM/DD/YYYY")))
+    # MM/DD/YY
+    webapps.clear_selections_on_case_search_page()
+    date = casesearch.search_against_property(search_property=CaseSearchUserInput.date_opened,
+                                               input_value=CaseSearchUserInput.date_12_30_22_slash,
+                                               property_type=TEXT_INPUT)
+    casesearch.check_date_range(date_range=casesearch.parse_date_range(input_date=date,
+                                                                       input_format=CaseSearchUserInput.dates.get(
+                                                                           "MM/DD/YY"),
+                                                                       output_format=CaseSearchUserInput.dates.get(
+                                                                           "MM/DD/YYYY")))
+    # MM-DD-YY
+    webapps.clear_selections_on_case_search_page()
+    date = casesearch.search_against_property(search_property=CaseSearchUserInput.date_opened,
+                                               input_value=CaseSearchUserInput.date_12_30_22_hyphen,
+                                               property_type=TEXT_INPUT)
+    casesearch.check_date_range(date_range=casesearch.parse_date_range(input_date=date,
+                                                                       input_format=CaseSearchUserInput.dates.get(
+                                                                           "MM-DD-YY"),
+                                                                       output_format=CaseSearchUserInput.dates.get(
+                                                                           "MM/DD/YYYY")))
+    # YYYY-MM-DD - DOM doesn't load value , so searching instead of a check
     webapps.clear_selections_on_case_search_page()
     casesearch.search_against_property(search_property=CaseSearchUserInput.date_opened,
                                        input_value=CaseSearchUserInput.date_2022_12_30,
@@ -94,17 +135,11 @@ def test_case_05_date_range_format(driver):
     webapps.search_button_on_case_search_page()
     casesearch.check_values_on_caselist(row_num=CaseSearchUserInput.six,
                                         expected_value=CaseSearchUserInput.date_30_12_2022)
-
-
-def test_case_06_date_range_search(driver):
-    webapps = WebApps(driver)
-    casesearch = CaseSearchWorkflows(driver)
-    """Check date range search"""
-    webapps.open_app(CaseSearchUserInput.case_search_app_name)
-    webapps.open_menu(CaseSearchUserInput.search_first_menu)
+    # Date Range Search Again with Enter on keyboard
+    webapps.search_again_cases()
     webapps.clear_selections_on_case_search_page()
     date = casesearch.search_against_property(search_property=CaseSearchUserInput.date_opened,
-                                              input_value=CaseSearchUserInput.date_12_30_2022,
+                                              input_value=CaseSearchUserInput.date_12_30_2022_slash,
                                               property_type=TEXT_INPUT)
     casesearch.check_date_range(casesearch.parse_date_range(input_date=date,
                                                             input_format=CaseSearchUserInput.dates.get("MM/DD/YYYY"),
@@ -117,7 +152,7 @@ def test_case_06_date_range_search(driver):
                                             output_format=CaseSearchUserInput.dates.get("DD/MM/YYYY")))
 
 
-def test_case_07_lookup_table_format(driver):
+def test_case_06_lookup_table_format(driver):
     webapps = WebApps(driver)
     casesearch = CaseSearchWorkflows(driver)
     """Check lookup table format search property"""
@@ -132,7 +167,7 @@ def test_case_07_lookup_table_format(driver):
                                         expected_value=CaseSearchUserInput.ratings.get(CaseSearchUserInput.two_star))
 
 
-def test_case_08_address_geocoder_format(driver):
+def test_case_07_address_geocoder_format(driver):
     webapps = WebApps(driver)
     casesearch = CaseSearchWorkflows(driver)
     webapps.open_app(CaseSearchUserInput.case_search_app_name)
@@ -164,7 +199,7 @@ def test_case_08_address_geocoder_format(driver):
                                         expected_value=CaseSearchUserInput.home_zipcode_value)
 
 
-def test_case_09_mobile_ucr_format(driver):
+def test_case_08_mobile_ucr_format(driver):
     webapps = WebApps(driver)
     casesearch = CaseSearchWorkflows(driver)
     """Check mobile ucr format search property"""
@@ -179,7 +214,7 @@ def test_case_09_mobile_ucr_format(driver):
                                         expected_value=CaseSearchUserInput.artist_case_arijit)
 
 
-def test_case_10_single_date_format(driver):
+def test_case_09_single_date_format(driver):
     webapps = WebApps(driver)
     casesearch = CaseSearchWorkflows(driver)
     """Check single date format search property"""
@@ -198,7 +233,7 @@ def test_case_10_single_date_format(driver):
                                             output_format=CaseSearchUserInput.dates.get("YYYY-MM-DD")))
 
 
-def test_case_11_is_multiselect_format(driver):
+def test_case_10_is_multiselect_format(driver):
     webapps = WebApps(driver)
     casesearch = CaseSearchWorkflows(driver)
     """Check multiselect format search property"""
@@ -231,7 +266,7 @@ def test_case_11_is_multiselect_format(driver):
                                         is_multi=YES)
 
 
-def test_case_12_allow_blank_values_normal(driver):
+def test_case_11_allow_blank_values_normal(driver):
     webapps = WebApps(driver)
     casesearch = CaseSearchWorkflows(driver)
     """Check allow blanks normal"""
@@ -269,7 +304,7 @@ def test_case_12_allow_blank_values_normal(driver):
                                         is_multi=YES)
 
 
-def test_case_13_allow_blank_values_geocoder(driver):
+def test_case_12_allow_blank_values_geocoder(driver):
     webapps = WebApps(driver)
     casesearch = CaseSearchWorkflows(driver)
     """Check allow blanks geocoder"""
@@ -288,7 +323,7 @@ def test_case_13_allow_blank_values_geocoder(driver):
                                         is_multi=YES)
 
 
-def test_case_14_allow_blank_values_others(driver):
+def test_case_13_allow_blank_values_others(driver):
     webapps = WebApps(driver)
     casesearch = CaseSearchWorkflows(driver)
     """Check allow blanks all formats"""
@@ -317,7 +352,7 @@ def test_case_14_allow_blank_values_others(driver):
                                         is_multi=YES)
 
 
-def test_case_15_exclude_property_from_case_search(driver):
+def test_case_14_exclude_property_from_case_search(driver):
     webapps = WebApps(driver)
     casesearch = CaseSearchWorkflows(driver)
     """Check exclude property from case search"""
@@ -347,7 +382,7 @@ def test_case_15_exclude_property_from_case_search(driver):
                                         is_multi=YES)
 
 
-def test_case_16_sticky_search_without_default_value(driver):
+def test_case_15_sticky_search_without_default_value(driver):
     webapps = WebApps(driver)
     casesearch = CaseSearchWorkflows(driver)
     """Check sticky search without default value"""
@@ -375,7 +410,7 @@ def test_case_16_sticky_search_without_default_value(driver):
     # casesearch.check_default_values_displayed(search_property=CaseSearchUserInput.rating, default_value=CaseSearchUserInput.three_star, search_format=combobox)
 
 
-def test_case_17_sticky_search_with_default_value(driver):
+def test_case_16_sticky_search_with_default_value(driver):
     webapps = WebApps(driver)
     casesearch = CaseSearchWorkflows(driver)
     """Check sticky search with default value"""
@@ -399,7 +434,7 @@ def test_case_17_sticky_search_with_default_value(driver):
                                               search_format=text)
 
 
-def test_case_18_required_property(driver):
+def test_case_17_required_property(driver):
     webapps = WebApps(driver)
     casesearch = CaseSearchWorkflows(driver)
     """Check required property"""
@@ -420,7 +455,7 @@ def test_case_18_required_property(driver):
                                              property_type=TEXT_INPUT)
 
 
-def test_case_19_conditionally_required_condition_property(driver):
+def test_case_18_conditionally_required_condition_property(driver):
     webapps = WebApps(driver)
     casesearch = CaseSearchWorkflows(driver)
     """Check conditionally required condition property"""
@@ -462,7 +497,7 @@ def test_case_19_conditionally_required_condition_property(driver):
     webapps.submit_the_form()
 
 
-def test_case_20_json_property_function(driver):
+def test_case_19_json_property_function(driver):
     webapps = WebApps(driver)
     casesearch = CaseSearchWorkflows(driver)
     """Check json property funtion"""
@@ -483,7 +518,7 @@ def test_case_20_json_property_function(driver):
                                    type=WORK)
 
 
-def test_case_21_case_search_title(driver):
+def test_case_20_case_search_title(driver):
     webapps = WebApps(driver)
     casesearch = CaseSearchWorkflows(driver)
     """Check Case Search Title"""
@@ -501,7 +536,7 @@ def test_case_21_case_search_title(driver):
     # casesearch.check_search_screen_subtitle(CaseSearchUserInput.french_search_subtitle)
 
 
-def test_case_22_dependent_dropdowns_multiselect_combobox(driver):
+def test_case_21_dependent_dropdowns_multiselect_combobox(driver):
     webapps = WebApps(driver)
     casesearch = CaseSearchWorkflows(driver)
     """Check Dependent Dropdowns"""
@@ -519,7 +554,7 @@ def test_case_22_dependent_dropdowns_multiselect_combobox(driver):
                                     present=NO)
 
 
-def test_case_23_dependent_dropdowns_single_select_combobox(driver):
+def test_case_22_dependent_dropdowns_single_select_combobox(driver):
     webapps = WebApps(driver)
     casesearch = CaseSearchWorkflows(driver)
     """Check Dependent Dropdowns Inline Case Search"""
@@ -542,8 +577,9 @@ def test_case_23_dependent_dropdowns_single_select_combobox(driver):
     webapps.omni_search(CaseSearchUserInput.song_automation_song_24)
 
 
-@pytest.mark.skip(reason="https://dimagi-dev.atlassian.net/browse/USH-2348 and https://dimagi-dev.atlassian.net/browse/USH-2289")
-def test_case_24_dependent_dropdowns_value_clear(driver):
+@pytest.mark.skip(
+    reason="https://dimagi-dev.atlassian.net/browse/USH-2348 and https://dimagi-dev.atlassian.net/browse/USH-2289")
+def test_case_23_dependent_dropdowns_value_clear(driver):
     webapps = WebApps(driver)
     casesearch = CaseSearchWorkflows(driver)
     webapps.open_app(CaseSearchUserInput.case_search_app_name)
@@ -569,7 +605,7 @@ def test_case_24_dependent_dropdowns_value_clear(driver):
                                     present=NO)
 
 
-def test_case_25_case_search_validations(driver):
+def test_case_24_case_search_validations(driver):
     webapps = WebApps(driver)
     casesearch = CaseSearchWorkflows(driver)
     """Case Search Validations"""
@@ -622,7 +658,7 @@ def test_case_25_case_search_validations(driver):
                                         expected_value=CaseSearchUserInput.blank)
 
 
-def test_case_26_checkbox_selection(driver):
+def test_case_25_checkbox_selection(driver):
     webapps = WebApps(driver)
     casesearch = CaseSearchWorkflows(driver)
     webapps.login_as(CaseSearchUserInput.user_1)
@@ -648,7 +684,7 @@ def test_case_26_checkbox_selection(driver):
                                         expected_value=CaseSearchUserInput.five)
 
 
-def test_case_27_checkbox_selection_sticky_search(driver):
+def test_case_26_checkbox_selection_sticky_search(driver):
     webapps = WebApps(driver)
     casesearch = CaseSearchWorkflows(driver)
     webapps.login_as(CaseSearchUserInput.user_1)
@@ -661,7 +697,7 @@ def test_case_27_checkbox_selection_sticky_search(driver):
     casesearch.check_if_checkbox_selected(CaseSearchUserInput.mood, [3, 4])
 
 
-def test_case_28_checkbox_single_selection_dependent_dropdown(driver):
+def test_case_27_checkbox_single_selection_dependent_dropdown(driver):
     webapps = WebApps(driver)
     casesearch = CaseSearchWorkflows(driver)
     webapps.login_as(CaseSearchUserInput.user_1)
@@ -684,7 +720,7 @@ def test_case_28_checkbox_single_selection_dependent_dropdown(driver):
 
 
 @pytest.mark.skip(reason="Failing: https://dimagi-dev.atlassian.net/browse/USH-2614")
-def test_case_29_checkbox_multiple_selection_dependent_dropdown(driver):
+def test_case_28_checkbox_multiple_selection_dependent_dropdown(driver):
     webapps = WebApps(driver)
     casesearch = CaseSearchWorkflows(driver)
     webapps.login_as(CaseSearchUserInput.user_1)

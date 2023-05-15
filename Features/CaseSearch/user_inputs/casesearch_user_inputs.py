@@ -96,8 +96,13 @@ class CaseSearchUserInput:
     mood_help_text = "Mood\'s Rating"
     date_2022_12_30 = "2022-12-30"
     date_30_12_2022 = "30/12/2022"
-    date_12_30_2022 = "12/30/2022"
-    dates = {"MM/DD/YYYY": '%m/%d/%Y', "YYYY-MM-DD": '%Y-%m-%d', "DD/MM/YYYY": "%d/%m/%Y"}
+    date_12_30_2022_slash = "12/30/2022"
+    date_12_30_2022_hyphen = "12-30-2022"
+    date_12_30_22_slash = "12/30/22"
+    date_12_30_22_hyphen = "12-30-22"
+    dates = {"MM/DD/YYYY": '%m/%d/%Y', "MM-DD-YYYY": "%m-%d-%Y",
+             "MM/DD/YY": "%m/%d/%y", "MM-DD-YY": "%m-%d-%y",
+             "YYYY-MM-DD": '%Y-%m-%d', "DD/MM/YYYY": "%d/%m/%Y"}
     full_home_address = "New Canada St., 3855 Brienz, Switzerland"
     full_work_address = "Avenida Benito Juárez, 77560 Alfredo V. Bonfil, Quintana Roo, Mexico"
     home_street_value = "New Canada St."

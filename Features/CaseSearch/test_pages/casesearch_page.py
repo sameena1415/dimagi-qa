@@ -118,8 +118,9 @@ class CaseSearchWorkflows(BasePage):
         assert self.is_visible_and_displayed(help_text)
 
     def check_date_range(self, date_range):
-        time.sleep(10)
+        time.sleep(5)
         date_element = self.get_element(self.date_selected, date_range)
+        print(date_element)
         assert self.is_present(date_element)
 
     def add_address(self, address, search_property):
