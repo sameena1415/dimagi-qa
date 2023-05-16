@@ -1,4 +1,4 @@
-from py.xml import html
+from pytest_html
 import pytest
 
 from selenium import webdriver
@@ -85,13 +85,15 @@ def appsite(pytestconfig):
 @pytest.mark.optionalhook
 def pytest_html_results_table_header(cells):
     # <th class="sortable result initial-sort asc inactive" col="result"><div class="sort-icon">vvv</div>Result</th>
-    cells.insert(1, html.th('Tags', class_="sortable", col="tags"))
+    cells.insert(1, '<th class_="sortable" col="tags">Tags</th>')
+    # cells.insert(1, th('Tags', class_="sortable", col="tags"))
     cells.pop()
 
 
 @pytest.mark.optionalhook
 def pytest_html_results_table_row(report, cells):
-    cells.insert(1, html.td(report.tags))
+    tags = report.tags
+    cells.insert(1, f"<td>Tags: ${tags}</td>")
     cells.pop()
 
 
