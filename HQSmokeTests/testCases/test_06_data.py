@@ -13,8 +13,8 @@ from HQSmokeTests.testPages.data.lookup_table_page import LookUpTablePage
 
 
 
-@pytest.mark.data
-@pytest.mark.importCases
+# @pytest.mark.data
+# @pytest.mark.importCases
 def test_case_29_import_cases(driver):
     export = ExportDataPage(driver)
     imp = ImportCasesPage(driver)
@@ -22,8 +22,8 @@ def test_case_29_import_cases(driver):
     imp.replace_property_and_upload()
 
 
-@pytest.mark.data
-@pytest.mark.reassignCases
+# @pytest.mark.data
+# @pytest.mark.reassignCases
 def test_case_30_reassign_cases(driver, settings):
     export = ExportDataPage(driver)
     reassign = ReassignCasesPage(driver, settings)
@@ -33,10 +33,10 @@ def test_case_30_reassign_cases(driver, settings):
 
 
 
-@pytest.mark.data
-@pytest.mark.manageForms
-@pytest.mark.archiveForms
-@pytest.mark.restoreForms
+# @pytest.mark.data
+# @pytest.mark.manageForms
+# @pytest.mark.archiveForms
+# @pytest.mark.restoreForms
 def test_case_31_manage_forms(driver):
     export = ExportDataPage(driver)
     manage = ManageFormsPage(driver)
@@ -50,8 +50,8 @@ def test_case_31_manage_forms(driver):
 
 
 
-@pytest.mark.data
-@pytest.mark.automaticallyUpdateCase
+# @pytest.mark.data
+# @pytest.mark.automaticallyUpdateCase
 def test_case_32_auto_case_update(driver):
     export = ExportDataPage(driver)
     export.data_tab()
@@ -62,9 +62,9 @@ def test_case_32_auto_case_update(driver):
     data.remove_rule()
 
 
-@pytest.mark.data
-@pytest.mark.lookupTable
-@pytest.mark.manageTables
+# @pytest.mark.data
+# @pytest.mark.lookupTable
+# @pytest.mark.manageTables
 def test_case_33_create_lookup_table(driver):
     data = LookUpTablePage(driver)
     export = ExportDataPage(driver)
@@ -72,9 +72,9 @@ def test_case_33_create_lookup_table(driver):
     data.create_lookup_table()
 
 
-@pytest.mark.data
-@pytest.mark.lookupTable
-@pytest.mark.viewTables
+# @pytest.mark.data
+# @pytest.mark.lookupTable
+# @pytest.mark.viewTables
 def test_case_34_view_lookup_table(driver):
     data = LookUpTablePage(driver)
     export = ExportDataPage(driver)
@@ -83,8 +83,8 @@ def test_case_34_view_lookup_table(driver):
     data.delete_lookup_table()
 
 
-@pytest.mark.data
-@pytest.mark.deduplicateCases
+# @pytest.mark.data
+# @pytest.mark.deduplicateCases
 def test_case_58_deduplicate_cases(driver):
     export = ExportDataPage(driver)
     export.data_tab()
@@ -95,10 +95,10 @@ def test_case_58_deduplicate_cases(driver):
 
 
 
-@pytest.mark.data
-@pytest.mark.dataDictionary
-@pytest.mark.downloadDataDictionary
-@pytest.mark.uploadDataDictionary
+# @pytest.mark.data
+# @pytest.mark.dataDictionary
+# @pytest.mark.downloadDataDictionary
+# @pytest.mark.uploadDataDictionary
 def test_case_59_data_dictionary(driver):
     export = ExportDataPage(driver)
     export.data_tab()
