@@ -81,19 +81,19 @@ def appsite(pytestconfig):
     """Pytest fixture for app site"""
     return pytestconfig.getoption("--appsite")
 
-#
-# @pytest.mark.optionalhook
-# def pytest_html_results_table_header(cells):
-#     # <th class="sortable result initial-sort asc inactive" col="result"><div class="sort-icon">vvv</div>Result</th>
-#     # cells.insert(1, '<th class_="sortable" col="tags">Tags</th>')
-#     cells.insert(1, html.th('Tags', class_="sortable", col="tags"))
-#     cells.pop()
-#
-#
-# @pytest.mark.optionalhook
-# def pytest_html_results_table_row(report, cells):
-#     cells.insert(1, html.td(report.tags))
-#     cells.pop()
+
+@pytest.mark.optionalhook
+def pytest_html_results_table_header(cells):
+    # <th class="sortable result initial-sort asc inactive" col="result"><div class="sort-icon">vvv</div>Result</th>
+    # cells.insert(1, '<th class_="sortable" col="tags">Tags</th>')
+    cells.insert(1, html.th('Tags', class_="sortable", col="tags"))
+    cells.pop()
+
+
+@pytest.mark.optionalhook
+def pytest_html_results_table_row(report, cells):
+    cells.insert(1, html.td(report.tags))
+    cells.pop()
 
 
 @pytest.hookimpl(hookwrapper=True)
@@ -101,7 +101,7 @@ def pytest_runtest_makereport(item):
     pytest_html = item.config.pluginmanager.getplugin("html")
     outcome = yield
     report = outcome.get_result()
-    # tags = ", ".join([m.name for m in item.iter_markers() if m.name != 'run'])
+    tags = ", ".join([m.name for m in item.iter_markers() if m.name != 'run'])
     extra = getattr(report, 'extra', [])
     if report.when == "call" or report.when == "teardown":
         xfail = hasattr(report, 'wasxfail')
@@ -114,7 +114,7 @@ def pytest_runtest_makereport(item):
                        'onclick="window.open(this.src)" align="right"/></div>' % screen_img
                 extra.append(pytest_html.extras.html(html))
         report.extra = extra
-        # report.tags = tags
+        report.tags = tags
 
 
 def _capture_screenshot(web_driver):
