@@ -2,16 +2,16 @@
 
 flake8>=3.8.4
 pandas>=1.2.2
-pytest>=6.2.5
-pytest-html==4.0.0rc2
+pytest
+pytest-html
 py
-urllib3
-selenium>=3.4.0
+selenium
 webdriver-manager
-openpyxl>=3.0.6
+openpyxl
 matplotlib >= 3.3.4
-pytest-rerunfailures>=10.2
-pytest-xdist>=2.4.0
+pytest-rerunfailures
+pytest-xdist
 pytest-xdist[psutil]
 Appium-Python-Client == 0.52
 pyotp >=2.6.0
+pytest-order
