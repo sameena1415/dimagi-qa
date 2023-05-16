@@ -57,6 +57,8 @@ class WebApps(BasePage):
         self.pagination_select = (By.XPATH, "//select[@class='form-control per-page-limit']")
         self.go_to_page_textarea = (By.ID, "goText")
         self.go_button = (By.ID, "pagination-go-button")
+        self.value_in_data_preview = "//td[@title='{}']"
+        self.data_preview = (By.XPATH, "//span[@class='debugger-title']")
 
     def open_app(self, app_name):
         time.sleep(2)
@@ -213,3 +215,10 @@ class WebApps(BasePage):
     def go_to_page(self, page_number):
         self.send_keys(self.go_to_page_textarea, page_number)
         self.js_click(self.go_button)
+
+    def open_data_preview(self):
+        self.js_click(self.data_preview)
+
+    def present_in_data_preview(self, value):
+        value_in_data_preview = self.get_element(self.value_in_data_preview, value)
+        assert self.is_present(value_in_data_preview)
