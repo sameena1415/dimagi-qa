@@ -7,11 +7,11 @@ from HQSmokeTests.testPages.webapps.web_apps_page import WebAppsPage
 """"Contains test cases related to the Data module"""
 
 
-# @pytest.mark.report
-# @pytest.mark.reportMonitorWorkers
-# @pytest.mark.reportInspectData
-# @pytest.mark.reportManageDeployments
-# @pytest.mark.reportMessaging
+@pytest.mark.report
+@pytest.mark.reportMonitorWorkers
+@pytest.mark.reportInspectData
+@pytest.mark.reportManageDeployments
+@pytest.mark.reportMessaging
 def test_case_14_report_loading(driver, settings):
     report = HomePage(driver, settings)
     report.reports_menu()
@@ -33,12 +33,12 @@ def test_case_14_report_loading(driver, settings):
     load.scheduled_messaging_report()
 
 
-# @pytest.mark.webApps
-# @pytest.mark.report
-# @pytest.mark.reportSubmitHistory
-# @pytest.mark.reportFormData
-# @pytest.mark.reportCaseList
-# @pytest.mark.reportCaseData
+@pytest.mark.webApps
+@pytest.mark.report
+@pytest.mark.reportSubmitHistory
+@pytest.mark.reportFormData
+@pytest.mark.reportCaseList
+@pytest.mark.reportCaseData
 def test_case_15_16_submit_form_verify_formdata_casedata(driver, settings):
     home = HomePage(driver, settings)
     driver.refresh()
@@ -53,9 +53,9 @@ def test_case_15_16_submit_form_verify_formdata_casedata(driver, settings):
 
 
 
-# @pytest.mark.report
-# @pytest.mark.reportBuilderForm
-# @pytest.mark.reportBuilderCase
+@pytest.mark.report
+@pytest.mark.reportBuilderForm
+@pytest.mark.reportBuilderCase
 def test_case_17_create_form_report(driver, settings):
     report = HomePage(driver, settings)
     driver.refresh()
@@ -65,8 +65,8 @@ def test_case_17_create_form_report(driver, settings):
 
 
 
-# @pytest.mark.report
-# @pytest.mark.reportBuilder
+@pytest.mark.report
+@pytest.mark.reportBuilder
 def test_case_18_create_case_report(driver, settings):
     report = HomePage(driver, settings)
     report.reports_menu()
@@ -75,8 +75,8 @@ def test_case_18_create_case_report(driver, settings):
 
 
 
-# @pytest.mark.report
-# @pytest.mark.savedReport
+@pytest.mark.report
+@pytest.mark.savedReport
 def test_case_19_saved_report(driver, settings):
     report = HomePage(driver, settings)
     report.reports_menu()
@@ -85,8 +85,8 @@ def test_case_19_saved_report(driver, settings):
 
 
 
-# @pytest.mark.report
-# @pytest.mark.scheduledReport
+@pytest.mark.report
+@pytest.mark.scheduledReport
 def test_case_20_scheduled_report(driver, settings):
     report = HomePage(driver, settings)
     report.reports_menu()
