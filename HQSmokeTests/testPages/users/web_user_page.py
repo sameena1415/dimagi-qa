@@ -26,7 +26,7 @@ class WebUsersPage(BasePage):
         self.web_users_menu = (By.LINK_TEXT, "Web Users")
         self.invite_web_user_button = (By.XPATH, "//i[@class='fa fa-plus']")
         self.email_input = (By.XPATH, "//input[@class='emailinput form-control']")
-        self.select_project_role_id = "id_role"
+        self.select_project_role_id = (By.XPATH, "//select[@id='id_role']")
         self.send_invite = (By.XPATH, "//button[contains(text(),'Send Invite')]")
         self.delete_confirm_invitation = (By.XPATH, "//button[@data-bind = 'click: $root.removeInvitation']")
         self.delete_confirm_webuser = (By.XPATH,
@@ -67,8 +67,7 @@ class WebUsersPage(BasePage):
         self.wait_to_click(self.web_users_menu)
         self.wait_to_click(self.invite_web_user_button)
         self.wait_to_clear_and_send_keys(self.email_input, UserData.yahoo_user_name)
-        select_role = Select(self.driver.find_element_by_id(self.select_project_role_id))
-        select_role.select_by_value(role)
+        self.select_by_value(self.select_project_role_id, role)
         self.wait_to_click(self.send_invite)
         if self.is_visible_and_displayed(self.existing_error):
             self.delete_invite()
