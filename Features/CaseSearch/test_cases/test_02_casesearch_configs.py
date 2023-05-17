@@ -577,8 +577,7 @@ def test_case_22_dependent_dropdowns_single_select_combobox(driver):
     webapps.omni_search(CaseSearchUserInput.song_automation_song_24)
 
 
-@pytest.mark.skip(
-    reason="https://dimagi-dev.atlassian.net/browse/USH-2348 and https://dimagi-dev.atlassian.net/browse/USH-2289")
+@pytest.mark.skip(reason="https://dimagi-dev.atlassian.net/browse/USH-2348 and https://dimagi-dev.atlassian.net/browse/USH-2289")
 def test_case_23_dependent_dropdowns_value_clear(driver):
     webapps = WebApps(driver)
     casesearch = CaseSearchWorkflows(driver)
