@@ -65,6 +65,7 @@ class CaseSearchUserInput:
     song_case_cs4_song_300 = "CS4 Song-300"
     song_case_on_casesearch_1 = "Bugs on casesearch-1"
     song_case_b_users_song = "b_users song"
+    song_automation_song_update = "Automation Song Update"
 
     # Artist-Cases
     automation_artist_1 = "Automation-Artist-1"
@@ -95,8 +96,13 @@ class CaseSearchUserInput:
     mood_help_text = "Mood\'s Rating"
     date_2022_12_30 = "2022-12-30"
     date_30_12_2022 = "30/12/2022"
-    date_12_30_2022 = "12/30/2022"
-    dates = {"MM/DD/YYYY": '%m/%d/%Y', "YYYY-MM-DD": '%Y-%m-%d', "DD/MM/YYYY": "%d/%m/%Y"}
+    date_12_30_2022_slash = "12/30/2022"
+    date_12_30_2022_hyphen = "12-30-2022"
+    date_12_30_22_slash = "12/30/22"
+    date_12_30_22_hyphen = "12-30-22"
+    dates = {"MM/DD/YYYY": '%m/%d/%Y', "MM-DD-YYYY": "%m-%d-%Y",
+             "MM/DD/YY": "%m/%d/%y", "MM-DD-YY": "%m-%d-%y",
+             "YYYY-MM-DD": '%Y-%m-%d', "DD/MM/YYYY": "%d/%m/%Y"}
     full_home_address = "New Canada St., 3855 Brienz, Switzerland"
     full_work_address = "Avenida Benito Juárez, 77560 Alfredo V. Bonfil, Quintana Roo, Mexico"
     home_street_value = "New Canada St."
@@ -126,7 +132,7 @@ class CaseSearchUserInput:
     id_without_hyphen = "12345"
 
     """Case Properties/Search Fields"""
-
+    rating_on_form = {"1 star": '1', "2 stars": '2', "3 stars": '3', "4 stars": '4', "5 stars": '5'}
     ratings = {one_star: '1', two_star: '2', three_star: '3', four_star: '4', five_star: '5'}
     song_name = "Song Name"
     name = "Name"

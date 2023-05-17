@@ -85,6 +85,7 @@ def appsite(pytestconfig):
 @pytest.mark.optionalhook
 def pytest_html_results_table_header(cells):
     # <th class="sortable result initial-sort asc inactive" col="result"><div class="sort-icon">vvv</div>Result</th>
+    # cells.insert(1, '<th class_="sortable" col="tags">Tags</th>')
     cells.insert(1, html.th('Tags', class_="sortable", col="tags"))
     cells.pop()
 

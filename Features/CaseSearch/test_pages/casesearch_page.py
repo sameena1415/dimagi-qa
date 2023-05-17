@@ -43,7 +43,7 @@ class CaseSearchWorkflows(BasePage):
         self.case_detail_value = "//th[contains(text(), '{}')]//following-sibling::td[contains(text(), '{}')]"
         self.case_detail_tab = "//a[text()='{}']"
         self.close_case_detail_tab = (
-        By.XPATH, "(//div[@id='case-detail-modal']//following:: button[@class='close'])[1]")
+            By.XPATH, "(//div[@id='case-detail-modal']//following:: button[@class='close'])[1]")
         # Reports
         self.case_type_select = (By.ID, "report_filter_case_type")
         self.report_search = (By.ID, "report_filter_search_query")
@@ -57,6 +57,7 @@ class CaseSearchWorkflows(BasePage):
         self.checkbox_xpath = "//label[contains (text(),'{}')][1]//following::input[@value='{}'][1]"
         self.search_property_checked = "//label[contains (text(),'{}')][1]//following::input[@value='{}' and @checked][1]"
         self.remove_combobox_selection = "//label[contains(text(),'{}')]//following::button[@aria-label='Remove all items'][1]"
+        self.rating_answer = "//span[text()='Rating']/following::input[@value='{}'][1]"
 
     def check_values_on_caselist(self, row_num, expected_value, is_multi=NO):
         self.value_in_table = self.get_element(self.value_in_table_format, row_num)
@@ -117,8 +118,9 @@ class CaseSearchWorkflows(BasePage):
         assert self.is_visible_and_displayed(help_text)
 
     def check_date_range(self, date_range):
-        time.sleep(10)
+        time.sleep(5)
         date_element = self.get_element(self.date_selected, date_range)
+        print(date_element)
         assert self.is_present(date_element)
 
     def add_address(self, address, search_property):
@@ -184,12 +186,12 @@ class CaseSearchWorkflows(BasePage):
             assert value in values
 
     def check_eof_navigation(self, eof_nav, menu=None):
-        if eof_nav == PREV_MENU:
+        if eof_nav == PREV_MENU or eof_nav == FORM:
             header = self.get_element(self.menu_header, menu)
-            assert self.is_displayed(header)
+            assert self.is_displayed(header), f"Navigated to {header}"
         elif eof_nav == MENU or FIRST_MENU:
             header = self.get_element(self.menu_breadcrumb, menu)
-            assert self.is_displayed(header)
+            assert self.is_displayed(header), f"Navigated to {header}"
         elif eof_nav == HOME_SCREEN:
             assert self.is_displayed(self.webapps_home)
 
@@ -227,6 +229,12 @@ class CaseSearchWorkflows(BasePage):
         assert stripped_final == song_names_on_case_list, \
             f"No, form songs {stripped_final} doesn't match case list songs{song_names_on_case_list}"
 
+    def check_label_in_form(self, expected_value):
+        rating_on_form = self.find_elements_texts(self.selected_case_names_on_forms)
+        for rating_value in rating_on_form:
+            print(rating_on_form, expected_value)
+            assert expected_value in rating_value
+
     def check_if_checkbox_selected(self, search_property, values):
         for value in values:
             search_property_checked_xpath = (By.XPATH, self.search_property_checked.format(search_property, value - 1))
@@ -236,7 +244,7 @@ class CaseSearchWorkflows(BasePage):
 
     def select_checkbox(self, search_property, values):
         for value in values:
-            checkbox_xpath = (By.XPATH, self.checkbox_xpath.format(search_property, value - 1))
+            checkbox_xpath = (By.XPATH, self.checkbox_xpath.format(search_property, value))
             self.js_click(checkbox_xpath)
         list_string = map(str, values)
         return list(list_string)
@@ -247,3 +255,7 @@ class CaseSearchWorkflows(BasePage):
             assert self.is_present(remove_selection)
         if expected == NO:
             assert not self.is_present(remove_selection)
+
+    def select_rating_answer_(self, rating_input):
+        rating_selection = self.get_element(self.rating_answer, rating_input)
+        self.js_click(rating_selection)

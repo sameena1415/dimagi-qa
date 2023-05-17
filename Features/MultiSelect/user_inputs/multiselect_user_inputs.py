@@ -31,6 +31,7 @@ class MultiSelectUserInput:
     another_shows_not_MS = "Another Show (non-multi)"
     shadow_menu_multi = "Shadow Menu"
     shadow_menu_non_multi = "Shadow Menu (Non-Multi)"
+    single_select_no_parent = "Single Select, No Parent"
 
     """Form Names"""
     update_song_normal_form = "Update and add shows to the songs you picked out"
@@ -40,3 +41,6 @@ class MultiSelectUserInput:
     update_shows_multi_form = "Update child shows you picked out"
     update_show_normal_form = "Update Show"
     does_nothing_form = "This form does nothing"
+    update_show_to_form_on_single_select = "Update child shows you picked out  --> Form on Single Select Menu"
+    update_show_to_single_select = "Update child shows you picked out  --> Single Select Menu"
+
