@@ -577,8 +577,7 @@ def test_case_22_dependent_dropdowns_single_select_combobox(driver):
     webapps.omni_search(CaseSearchUserInput.song_automation_song_24)
 
 
-@pytest.mark.skip(
-    reason="https://dimagi-dev.atlassian.net/browse/USH-2348 and https://dimagi-dev.atlassian.net/browse/USH-2289")
+@pytest.mark.skip(reason="https://dimagi-dev.atlassian.net/browse/USH-2348 and https://dimagi-dev.atlassian.net/browse/USH-2289")
 def test_case_23_dependent_dropdowns_value_clear(driver):
     webapps = WebApps(driver)
     casesearch = CaseSearchWorkflows(driver)
@@ -705,7 +704,7 @@ def test_case_27_checkbox_single_selection_dependent_dropdown(driver):
     webapps.open_menu(CaseSearchUserInput.checkbox_selection_menu)
     webapps.clear_selections_on_case_search_page()
     """Single Checkbox"""
-    casesearch.select_checkbox(CaseSearchUserInput.genre, [2])
+    casesearch.select_checkbox(CaseSearchUserInput.genre, [CaseSearchUserInput.latin_music])
     """Check related values appear in dropdown"""
     casesearch.search_against_property(search_property=CaseSearchUserInput.subgenre,
                                        input_value=CaseSearchUserInput.latin_jazz,
@@ -728,7 +727,7 @@ def test_case_28_checkbox_multiple_selection_dependent_dropdown(driver):
     webapps.open_menu(CaseSearchUserInput.checkbox_selection_menu)
     webapps.clear_selections_on_case_search_page()
     """Multiple Checkbox"""
-    casesearch.select_checkbox(CaseSearchUserInput.genre, [1, 2])
+    casesearch.select_checkbox(CaseSearchUserInput.genre, [CaseSearchUserInput.latin_music, CaseSearchUserInput.hiphop])
     casesearch.check_dropdown_value(search_property=CaseSearchUserInput.subgenre,
                                     value=CaseSearchUserInput.latin_jazz,
                                     present=YES)
