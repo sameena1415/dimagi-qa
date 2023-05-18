@@ -1,5 +1,8 @@
+import random
+
 import pytest
 
+from HQSmokeTests.userInputs.user_inputs import UserData
 from common_utilities.generate_random_string import fetch_random_string
 from HQSmokeTests.testPages.home.home_page import HomePage
 from HQSmokeTests.testPages.users.mobile_workers_page import MobileWorkerPage
@@ -10,21 +13,22 @@ from HQSmokeTests.testPages.users.web_user_page import WebUsersPage
 
 group_id = dict()
 
-
-
 @pytest.mark.user
 @pytest.mark.mobileWorker
 @pytest.mark.run(order=0)
 def test_case_02_create_mobile_worker(driver, settings):
     worker = MobileWorkerPage(driver)
     menu = HomePage(driver, settings)
+    username = random.choice(UserData.mobile_username_list)
     menu.users_menu()
+    worker.delete_bulk_users()
     worker.mobile_worker_menu()
     worker.create_mobile_worker()
-    worker.mobile_worker_enter_username("username_" + str(fetch_random_string()))
+    worker.mobile_worker_enter_username(username)
     worker.mobile_worker_enter_password(fetch_random_string())
-    worker.click_create()
-
+    worker.click_create(username)
+    group_id["user"] = username
+    return group_id
 
 @pytest.mark.user
 @pytest.mark.mobileWorker
@@ -34,7 +38,7 @@ def test_case_03_create_and_assign_user_field(driver, settings):
     menu.users_menu()
     create.mobile_worker_menu()
     create.create_new_user_fields("user_field_" + fetch_random_string())
-    create.select_mobile_worker_created()
+    create.select_mobile_worker_created(group_id["user"])
     create.enter_value_for_created_user_field()
     create.update_information()
 
@@ -46,10 +50,16 @@ def test_case_05_create_group_and_assign_user(driver, settings):
     menu = HomePage(driver, settings)
     menu.users_menu()
     visible = GroupPage(driver)
-    visible.add_group()
-    id_value = visible.add_user_to_group("username_" + fetch_random_string())
-    print(id_value)
+    user = MobileWorkerPage(driver)
+    user.mobile_worker_menu()
+    visible.click_group_menu()
+    visible.delete_test_groups()
+    print("Deleted the group")
+    group_name = visible.add_group()
+    id_value = visible.add_user_to_group(group_id["user"], group_name)
+    print(id_value, group_name)
     group_id["value"] = id_value
+    group_id["group_name"] = group_name
     return group_id
 
 
@@ -65,7 +75,7 @@ def test_case_10_download_and_upload_users(driver, settings):
     home.users_menu()
     newest_file = user.download_mobile_worker()
     print("Group ID:", group_id["value"])
-    user.check_for_group_in_downloaded_file(newest_file, group_id["value"])
+    user.check_for_group_in_downloaded_file(newest_file, group_id["value"] )
     home.users_menu()
     user.upload_mobile_worker()
 
@@ -77,7 +87,7 @@ def test_case_05_edit_user_groups(driver, settings):
     menu.users_menu()
     edit = GroupPage(driver)
     edit.click_group_menu()
-    edit.edit_existing_group()
+    renamed_group = edit.edit_existing_group(group_id["group_name"])
     edit.remove_user_from_group()
 
 
@@ -88,8 +98,8 @@ def test_case_04_deactivate_user(driver, settings):
     menu = HomePage(driver, settings)
     menu.users_menu()
     user.mobile_worker_menu()
-    user.deactivate_user()
-    user.verify_deactivation_via_login()
+    user.deactivate_user(group_id["user"])
+    user.verify_deactivation_via_login(group_id["user"])
 
 
 @pytest.mark.user
@@ -99,8 +109,8 @@ def test_case_04_reactivate_user(driver, settings):
     menu = HomePage(driver, settings)
     menu.users_menu()
     user.mobile_worker_menu()
-    user.reactivate_user()
-    user.verify_reactivation_via_login()
+    user.reactivate_user(group_id["user"] )
+    user.verify_reactivation_via_login(group_id["user"] )
 
 
 @pytest.mark.user
@@ -114,15 +124,7 @@ def test_cleanup_items_in_users_menu(driver, settings):
 
     menu = HomePage(driver, settings)
     menu.users_menu()
-    clean.mobile_worker_menu()
-
-    # added try-except here as during reruns if this block fails then the rest are not deleted
-    try:
-        clean.select_mobile_worker_created()
-        clean.cleanup_mobile_worker()
-        print("Deleted the mobile worker")
-    except:
-        print("No User found to delete")
+    clean.delete_bulk_users()
 
     menu.users_menu()
     clean.mobile_worker_menu()
@@ -152,20 +154,23 @@ def test_case_54_add_custom_user_data_profile_to_mobile_worker(driver, settings)
     create = MobileWorkerPage(driver)
     menu = HomePage(driver, settings)
     menu.users_menu()
+    create.delete_bulk_users()
+    menu.users_menu()
     create.mobile_worker_menu()
-    create.create_new_mobile_worker()
+    user = random.choice(UserData.mobile_username_list)
+    create.create_new_mobile_worker(user)
     create.create_new_user_fields("field_" + fetch_random_string())
     create.click_profile()
     create.add_profile("field_" + fetch_random_string())
     create.save_field()
-    create.select_user_and_update_fields("user_" + str(fetch_random_string()))
+    create.select_user_and_update_fields(user)
     create.add_phone_number()
     create.select_profile()
     create.update_information()
     create.select_location()
     menu.users_menu()
     create.mobile_worker_menu()
-    create.select_and_delete_mobile_worker("user_" + str(fetch_random_string()))
+    create.select_and_delete_mobile_worker(user)
     menu.users_menu()
     create.mobile_worker_menu()
     create.edit_user_field()
