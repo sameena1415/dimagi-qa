@@ -13,9 +13,9 @@ from HQSmokeTests.testPages.users.web_user_page import WebUsersPage
 
 group_id = dict()
 
-@pytest.mark.user
-@pytest.mark.mobileWorker
-@pytest.mark.run(order=0)
+# @pytest.mark.user
+# @pytest.mark.mobileWorker
+# @pytest.mark.run(order=0)
 def test_case_02_create_mobile_worker(driver, settings):
     worker = MobileWorkerPage(driver)
     menu = HomePage(driver, settings)
@@ -30,8 +30,8 @@ def test_case_02_create_mobile_worker(driver, settings):
     group_id["user"] = username
     return group_id
 
-@pytest.mark.user
-@pytest.mark.mobileWorker
+# @pytest.mark.user
+# @pytest.mark.mobileWorker
 def test_case_03_create_and_assign_user_field(driver, settings):
     create = MobileWorkerPage(driver)
     menu = HomePage(driver, settings)
@@ -44,8 +44,8 @@ def test_case_03_create_and_assign_user_field(driver, settings):
 
 
 
-@pytest.mark.user
-@pytest.mark.groups
+# @pytest.mark.user
+# @pytest.mark.groups
 def test_case_05_create_group_and_assign_user(driver, settings):
     menu = HomePage(driver, settings)
     menu.users_menu()
@@ -64,11 +64,11 @@ def test_case_05_create_group_and_assign_user(driver, settings):
 
 
 
-@pytest.mark.user
-@pytest.mark.mobileWorker
-@pytest.mark.groups
-@pytest.mark.userImport
-@pytest.mark.userExport
+# @pytest.mark.user
+# @pytest.mark.mobileWorker
+# @pytest.mark.groups
+# @pytest.mark.userImport
+# @pytest.mark.userExport
 def test_case_10_download_and_upload_users(driver, settings):
     user = MobileWorkerPage(driver)
     home = HomePage(driver, settings)
@@ -80,8 +80,8 @@ def test_case_10_download_and_upload_users(driver, settings):
     user.upload_mobile_worker()
 
 
-@pytest.mark.user
-@pytest.mark.groups
+# @pytest.mark.user
+# @pytest.mark.groups
 def test_case_05_edit_user_groups(driver, settings):
     menu = HomePage(driver, settings)
     menu.users_menu()
@@ -91,8 +91,8 @@ def test_case_05_edit_user_groups(driver, settings):
     edit.remove_user_from_group()
 
 
-@pytest.mark.user
-@pytest.mark.mobileWorker
+# @pytest.mark.user
+# @pytest.mark.mobileWorker
 def test_case_04_deactivate_user(driver, settings):
     user = MobileWorkerPage(driver)
     menu = HomePage(driver, settings)
@@ -102,8 +102,8 @@ def test_case_04_deactivate_user(driver, settings):
     user.verify_deactivation_via_login(group_id["user"])
 
 
-@pytest.mark.user
-@pytest.mark.mobileWorker
+# @pytest.mark.user
+# @pytest.mark.mobileWorker
 def test_case_04_reactivate_user(driver, settings):
     user = MobileWorkerPage(driver)
     menu = HomePage(driver, settings)
@@ -113,11 +113,11 @@ def test_case_04_reactivate_user(driver, settings):
     user.verify_reactivation_via_login(group_id["user"] )
 
 
-@pytest.mark.user
-@pytest.mark.groups
-@pytest.mark.user_profiles
-@pytest.mark.user_fields
-@pytest.mark.mobileWorker
+# @pytest.mark.user
+# @pytest.mark.groups
+# @pytest.mark.user_profiles
+# @pytest.mark.user_fields
+# @pytest.mark.mobileWorker
 def test_cleanup_items_in_users_menu(driver, settings):
     clean = MobileWorkerPage(driver)
     clean2 = GroupPage(driver)
@@ -145,11 +145,11 @@ def test_cleanup_items_in_users_menu(driver, settings):
     print("Deleted the group")
 
 
-@pytest.mark.user
-@pytest.mark.mobileWorker
-@pytest.mark.user_profiles
-@pytest.mark.user_fields
-@pytest.mark.user_organization
+# @pytest.mark.user
+# @pytest.mark.mobileWorker
+# @pytest.mark.user_profiles
+# @pytest.mark.user_fields
+# @pytest.mark.user_organization
 def test_case_54_add_custom_user_data_profile_to_mobile_worker(driver, settings):
     create = MobileWorkerPage(driver)
     menu = HomePage(driver, settings)
@@ -182,9 +182,9 @@ def test_case_54_add_custom_user_data_profile_to_mobile_worker(driver, settings)
     create.save_field()
 
 
-@pytest.mark.user
-@pytest.mark.webUser
-@pytest.mark.userInvitation
+# @pytest.mark.user
+# @pytest.mark.webUser
+# @pytest.mark.userInvitation
 def test_case_13_new_webuser_invitation(driver, settings):
     menu = HomePage(driver, settings)
     webuser = WebUsersPage(driver)
@@ -199,10 +199,10 @@ def test_case_13_new_webuser_invitation(driver, settings):
     webuser.delete_invite()
 
 
-@pytest.mark.user
-@pytest.mark.webUsers
-@pytest.mark.downloadUsers
-@pytest.mark.uploadUsers
+# @pytest.mark.user
+# @pytest.mark.webUsers
+# @pytest.mark.downloadUsers
+# @pytest.mark.uploadUsers
 def test_case_57_download_and_upload_web_users(driver):
     user = WebUsersPage(driver)
     user.download_web_users()
