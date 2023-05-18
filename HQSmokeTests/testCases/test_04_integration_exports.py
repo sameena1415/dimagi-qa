@@ -10,12 +10,12 @@ import pytest
 test_case_update_case = dict()
 
 
-# @pytest.mark.webApps
-# @pytest.mark.reports
-# @pytest.mark.data
-# @pytest.mark.exportCaseData
-# @pytest.mark.caseList
-# @pytest.mark.run(order=0)
+@pytest.mark.webApps
+@pytest.mark.reports
+@pytest.mark.data
+@pytest.mark.exportCaseData
+@pytest.mark.caseList
+@pytest.mark.run(order=0)
 def test_case_55_update_case(driver, settings):
     case = HomePage(driver, settings)
     case.web_apps_menu()
@@ -31,24 +31,24 @@ def test_case_55_update_case(driver, settings):
     return test_case_update_case
 
 
-# @pytest.mark.data
-# @pytest.mark.excelDashboardIntegrationForm
+@pytest.mark.data
+@pytest.mark.excelDashboardIntegrationForm
 def test_case_25_excel_dashboard_integration_form(driver):
     export = ExportDataPage(driver)
     export.data_tab()
     export.excel_dashboard_integration_form()
 
 
-# @pytest.mark.data
-# @pytest.mark.excelDashboardIntegrationCase
+@pytest.mark.data
+@pytest.mark.excelDashboardIntegrationCase
 def test_case_26_excel_dashboard_integration_case(driver):
     export = ExportDataPage(driver)
     export.data_tab()
     export.excel_dashboard_integration_case()
 
 
-# @pytest.mark.data
-# @pytest.mark.powerBiTableauIntegrationCase
+@pytest.mark.data
+@pytest.mark.powerBiTableauIntegrationCase
 def test_case_27_powerbi_tableau_integration_case(driver, settings):
     username = settings["login_username"]
     password = settings["login_password"]
@@ -58,8 +58,8 @@ def test_case_27_powerbi_tableau_integration_case(driver, settings):
 
 
 
-# @pytest.mark.data
-# @pytest.mark.powerBiTableauIntegrationForm
+@pytest.mark.data
+@pytest.mark.powerBiTableauIntegrationForm
 def test_case_28_powerbi_tableau_integration_form(driver, settings):
     username = settings["login_username"]
     password = settings["login_password"]
@@ -68,20 +68,20 @@ def test_case_28_powerbi_tableau_integration_form(driver, settings):
     export.power_bi_tableau_integration_form(username, password)
 
 
-# @pytest.mark.data
-# @pytest.mark.deleteBulkExports
+@pytest.mark.data
+@pytest.mark.deleteBulkExports
 def test_exports_cleanup(driver):
     export = ExportDataPage(driver)
     export.data_tab()
     export.delete_all_bulk_integration_exports()
 
 
-# @pytest.mark.webApps
-# @pytest.mark.reports
-# @pytest.mark.data
-# @pytest.mark.exportCaseData
-# @pytest.mark.caseList
-# @pytest.mark.run(order=-1)
+@pytest.mark.webApps
+@pytest.mark.reports
+@pytest.mark.data
+@pytest.mark.exportCaseData
+@pytest.mark.caseList
+@pytest.mark.run(order=-1)
 def test_case_55_verify_change_in_export_data(driver):
     export = ExportDataPage(driver)
     export.data_tab()
