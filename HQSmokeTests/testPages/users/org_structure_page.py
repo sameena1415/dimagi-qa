@@ -18,7 +18,6 @@ def latest_download_file(type=".xlsx"):
         os.chdir(PathSettings.DOWNLOAD_PATH)
         all_specific_files = filter(lambda x: x.endswith(type), os.listdir(os.getcwd()))
         files = sorted(all_specific_files, key=os.path.getctime)
-        print(files)
         if files[-1].endswith(".log"):
             newest = sorted(files, key=os.path.getctime)[-2]
         elif files[-1].endswith(".xlsx"):

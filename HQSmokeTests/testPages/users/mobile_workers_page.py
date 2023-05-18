@@ -80,8 +80,8 @@ class MobileWorkerPage(BasePage):
         self.add_field_xpath = (By.XPATH, "//button[@data-bind='click: addField']")
         self.user_property_xpath = (By.XPATH, "(//input[contains(@data-bind,'value: slug')])[last()]")
         self.label_xpath = (By.XPATH, "(//input[contains(@data-bind,'value: label')])[last()]")
-        self.choices_button_xpath = (By.XPATH, "(//div[contains(text(), 'Choices')])[last()]")
-        self.add_choice_button_xpath = (By.XPATH, "(//button[contains(@data-bind,'click: addChoice')])[last()]")
+        self.add_choice_button_xpath = (By.XPATH, "(//*[contains(@data-bind,'addChoice')])[last()]")
+        self.choices_button_xpath = (By.XPATH, "(//*[contains(@data-bind,\"validationMode('choice')\")][contains(.,'Choices')])[last()]")
         self.choice_xpath = (By.XPATH, "(//input[contains(@data-bind,'value: value')])[last()]")
         self.save_field_id = (By.ID, "save-custom-fields")
         self.duplicate_field_error = (By.XPATH, "//div[contains(text(), 'was duplicated, key names must be unique')]")
@@ -154,7 +154,7 @@ class MobileWorkerPage(BasePage):
         self.error_403 = (By.XPATH, "//h1[text()='403 Forbidden']")
 
         self.bulk_user_delete_button = (By.XPATH, "//a[contains(@href,'users/commcare/delete')]")
-        self.successfully_deleted = (By.XPATH, "//text()[contains(.,'user(s) deleted')]")
+        self.successfully_deleted = (By.XPATH, "//text()[contains(.,'user&#40;s&#41; deleted')]")
         self.no_user_found = (By.XPATH, "//text()[contains(.,'No users found')]")
 
     def search_user(self, username):
@@ -491,13 +491,15 @@ class MobileWorkerPage(BasePage):
 
     def delete_bulk_users(self):
         latest = PathSettings.DOWNLOAD_PATH / self.download_mobile_worker()
+        print(latest)
         new_data = pd.read_excel(latest, sheet_name='users')
         print('Original Row count: ', new_data.shape)
         # filter the test users
         new_data = new_data[new_data['username'].str.startswith(("user_","username_"))]
         print('Filtered Row count: ', new_data.shape)
         new_data.drop(new_data.columns.difference(['username']), axis=1, inplace=True)
-        print(new_data)
+        print("New Data", new_data)
+        print("New data values", new_data.values)
         if new_data.empty == False:
             writer = pd.ExcelWriter(latest, engine='openpyxl')
             # write data to the excel sheet
@@ -515,10 +517,12 @@ class MobileWorkerPage(BasePage):
             time.sleep(5)
             self.send_keys(self.choose_file, str(file_path))
             self.wait_and_sleep_to_click(self.upload)
-            if self.is_present_and_displayed(self.successfully_deleted, 50):
-                print("User(s) deleted successfully")
-            elif self.is_present_and_displayed(self.no_user_found, 50):
-                print("No test user present")
+            time.sleep(2)
+            self.wait_for_element(self.successfully_deleted, 70)
+            # if self.is_present_and_displayed(self.successfully_deleted, 50):
+            print("User(s) deleted successfully")
+            # elif self.is_present_and_displayed(self.no_user_found, 50):
+            #     print("No test user present")
         except (TimeoutException, NoSuchElementException):
             print("TIMEOUT ERROR: Could not upload file")
 

@@ -73,8 +73,7 @@ class WebUsersPage(BasePage):
             self.delete_invite()
             self.wait_to_click(self.invite_web_user_button)
             self.wait_to_clear_and_send_keys(self.email_input, UserData.yahoo_user_name)
-            select_role = Select(self.driver.find_element_by_id(self.select_project_role_id))
-            select_role.select_by_value(role)
+            self.select_by_value(self.select_project_role_id, role)
             self.wait_to_click(self.send_invite)
 
     def assert_invitation_sent(self):
