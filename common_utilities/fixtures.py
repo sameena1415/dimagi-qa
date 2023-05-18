@@ -100,7 +100,7 @@ def pytest_runtest_makereport(item):
     pytest_html = item.config.pluginmanager.getplugin("html")
     outcome = yield
     report = outcome.get_result()
-    # tags = ", ".join([m.name for m in item.iter_markers() if m.name != 'run'])
+    tags = ", ".join([m.name for m in item.iter_markers() if m.name != 'run'])
     extra = getattr(report, 'extra', [])
     if report.when == "call" or report.when == "teardown":
         xfail = hasattr(report, 'wasxfail')
