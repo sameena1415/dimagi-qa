@@ -12,6 +12,8 @@ from HQSmokeTests.testPages.users.web_user_page import WebUsersPage
 """"Contains test cases related to the User's Mobile Worker module"""
 
 group_id = dict()
+group_id["user"] = "username_"+fetch_random_string()
+group_id["user_new"] = "username_"+fetch_random_string()+"_new"
 
 @pytest.mark.user
 @pytest.mark.mobileWorker
@@ -19,16 +21,14 @@ group_id = dict()
 def test_case_02_create_mobile_worker(driver, settings):
     worker = MobileWorkerPage(driver)
     menu = HomePage(driver, settings)
-    username = random.choice(UserData.mobile_username_list)
     menu.users_menu()
     worker.delete_bulk_users()
     worker.mobile_worker_menu()
     worker.create_mobile_worker()
-    worker.mobile_worker_enter_username(username)
+    worker.mobile_worker_enter_username(group_id["user"])
     worker.mobile_worker_enter_password(fetch_random_string())
-    worker.click_create(username)
-    group_id["user"] = username
-    return group_id
+    worker.click_create(group_id["user"])
+
 
 @pytest.mark.user
 @pytest.mark.mobileWorker
@@ -75,7 +75,7 @@ def test_case_10_download_and_upload_users(driver, settings):
     home.users_menu()
     newest_file = user.download_mobile_worker()
     print("Group ID:", group_id["value"])
-    user.check_for_group_in_downloaded_file(newest_file, group_id["value"] )
+    user.check_for_group_in_downloaded_file(newest_file, group_id["value"])
     home.users_menu()
     user.upload_mobile_worker()
 
@@ -87,7 +87,7 @@ def test_case_05_edit_user_groups(driver, settings):
     menu.users_menu()
     edit = GroupPage(driver)
     edit.click_group_menu()
-    renamed_group = edit.edit_existing_group(group_id["group_name"])
+    edit.edit_existing_group(group_id["group_name"])
     edit.remove_user_from_group()
 
 
@@ -109,8 +109,8 @@ def test_case_04_reactivate_user(driver, settings):
     menu = HomePage(driver, settings)
     menu.users_menu()
     user.mobile_worker_menu()
-    user.reactivate_user(group_id["user"] )
-    user.verify_reactivation_via_login(group_id["user"] )
+    user.reactivate_user(group_id["user"])
+    user.verify_reactivation_via_login(group_id["user"])
 
 
 @pytest.mark.user
@@ -157,20 +157,19 @@ def test_case_54_add_custom_user_data_profile_to_mobile_worker(driver, settings)
     create.delete_bulk_users()
     menu.users_menu()
     create.mobile_worker_menu()
-    user = random.choice(UserData.mobile_username_list)
-    create.create_new_mobile_worker(user)
+    create.create_new_mobile_worker(group_id["user_new"])
     create.create_new_user_fields("field_" + fetch_random_string())
     create.click_profile()
     create.add_profile("field_" + fetch_random_string())
     create.save_field()
-    create.select_user_and_update_fields(user)
+    create.select_user_and_update_fields(group_id["user_new"])
     create.add_phone_number()
     create.select_profile()
     create.update_information()
     create.select_location()
     menu.users_menu()
     create.mobile_worker_menu()
-    create.select_and_delete_mobile_worker(user)
+    create.select_and_delete_mobile_worker(group_id["user_new"])
     menu.users_menu()
     create.mobile_worker_menu()
     create.edit_user_field()
