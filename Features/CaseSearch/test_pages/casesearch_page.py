@@ -244,7 +244,7 @@ class CaseSearchWorkflows(BasePage):
 
     def select_checkbox(self, search_property, values):
         for value in values:
-            checkbox_xpath = (By.XPATH, self.checkbox_xpath.format(search_property, value))
+            checkbox_xpath = (By.XPATH, self.checkbox_xpath.format(search_property, value - 1))
             self.js_click(checkbox_xpath)
         list_string = map(str, values)
         return list(list_string)

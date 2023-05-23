@@ -704,7 +704,7 @@ def test_case_27_checkbox_single_selection_dependent_dropdown(driver):
     webapps.open_menu(CaseSearchUserInput.checkbox_selection_menu)
     webapps.clear_selections_on_case_search_page()
     """Single Checkbox"""
-    casesearch.select_checkbox(CaseSearchUserInput.genre, [CaseSearchUserInput.latin_music])
+    casesearch.select_checkbox(CaseSearchUserInput.genre, [2])
     """Check related values appear in dropdown"""
     casesearch.search_against_property(search_property=CaseSearchUserInput.subgenre,
                                        input_value=CaseSearchUserInput.latin_jazz,
@@ -727,7 +727,7 @@ def test_case_28_checkbox_multiple_selection_dependent_dropdown(driver):
     webapps.open_menu(CaseSearchUserInput.checkbox_selection_menu)
     webapps.clear_selections_on_case_search_page()
     """Multiple Checkbox"""
-    casesearch.select_checkbox(CaseSearchUserInput.genre, [CaseSearchUserInput.latin_music, CaseSearchUserInput.hiphop])
+    casesearch.select_checkbox(CaseSearchUserInput.genre, [1, 2])
     casesearch.check_dropdown_value(search_property=CaseSearchUserInput.subgenre,
                                     value=CaseSearchUserInput.latin_jazz,
                                     present=YES)
