@@ -33,17 +33,19 @@ def test_case_55_update_case(driver, settings):
 
 @pytest.mark.data
 @pytest.mark.excelDashboardIntegrationForm
-def test_case_25_excel_dashboard_integration_form(driver):
+def test_case_25_excel_dashboard_integration_form(driver, settings):
+    home = HomePage(driver, settings)
+    home.data_menu()
     export = ExportDataPage(driver)
-    export.data_tab()
     export.excel_dashboard_integration_form()
 
 
 @pytest.mark.data
 @pytest.mark.excelDashboardIntegrationCase
-def test_case_26_excel_dashboard_integration_case(driver):
+def test_case_26_excel_dashboard_integration_case(driver, settings):
+    home = HomePage(driver, settings)
+    home.data_menu()
     export = ExportDataPage(driver)
-    export.data_tab()
     export.excel_dashboard_integration_case()
 
 
@@ -52,8 +54,9 @@ def test_case_26_excel_dashboard_integration_case(driver):
 def test_case_27_powerbi_tableau_integration_case(driver, settings):
     username = settings["login_username"]
     password = settings["login_password"]
+    home = HomePage(driver, settings)
+    home.data_menu()
     export = ExportDataPage(driver)
-    export.data_tab()
     export.power_bi_tableau_integration_case(username, password)
 
 
@@ -63,16 +66,18 @@ def test_case_27_powerbi_tableau_integration_case(driver, settings):
 def test_case_28_powerbi_tableau_integration_form(driver, settings):
     username = settings["login_username"]
     password = settings["login_password"]
+    home = HomePage(driver, settings)
+    home.data_menu()
     export = ExportDataPage(driver)
-    export.data_tab()
     export.power_bi_tableau_integration_form(username, password)
 
 
 @pytest.mark.data
 @pytest.mark.deleteBulkExports
-def test_exports_cleanup(driver):
+def test_exports_cleanup(driver, settings):
+    home = HomePage(driver, settings)
+    home.data_menu()
     export = ExportDataPage(driver)
-    export.data_tab()
     export.delete_all_bulk_integration_exports()
 
 
@@ -82,12 +87,13 @@ def test_exports_cleanup(driver):
 @pytest.mark.exportCaseData
 @pytest.mark.caseList
 @pytest.mark.run(order=-1)
-def test_case_55_verify_change_in_export_data(driver):
+def test_case_55_verify_change_in_export_data(driver, settings):
+    home = HomePage(driver, settings)
+    home.data_menu()
     export = ExportDataPage(driver)
-    export.data_tab()
     export.add_updated_case_exports()
     export.verify_export_has_updated_case_data(test_case_update_case["case_id"],
                                                test_case_update_case["case_name"],
                                                test_case_update_case["value"])
-    export.data_tab()
+    home.data_menu()
     export.clean_up_case_data()

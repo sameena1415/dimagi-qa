@@ -8,6 +8,7 @@ from HQSmokeTests.testPages.data.import_cases_page import ImportCasesPage
 from HQSmokeTests.testPages.data.reassign_cases_page import ReassignCasesPage
 from HQSmokeTests.testPages.data.auto_case_update_page import AutoCaseUpdatePage
 from HQSmokeTests.testPages.data.lookup_table_page import LookUpTablePage
+from HQSmokeTests.testPages.home.home_page import HomePage
 
 """"Contains test cases related to the Data module"""
 
@@ -15,19 +16,19 @@ from HQSmokeTests.testPages.data.lookup_table_page import LookUpTablePage
 
 @pytest.mark.data
 @pytest.mark.importCases
-def test_case_29_import_cases(driver):
-    export = ExportDataPage(driver)
+def test_case_29_import_cases(driver, settings):
+    home = HomePage(driver, settings)
+    home.data_menu()
     imp = ImportCasesPage(driver)
-    export.data_tab()
     imp.replace_property_and_upload()
 
 
 @pytest.mark.data
 @pytest.mark.reassignCases
 def test_case_30_reassign_cases(driver, settings):
-    export = ExportDataPage(driver)
+    home = HomePage(driver, settings)
+    home.data_menu()
     reassign = ReassignCasesPage(driver, settings)
-    export.data_tab()
     reassign.get_cases()
     reassign.reassign_case()
 
@@ -37,10 +38,10 @@ def test_case_30_reassign_cases(driver, settings):
 @pytest.mark.manageForms
 @pytest.mark.archiveForms
 @pytest.mark.restoreForms
-def test_case_31_manage_forms(driver):
-    export = ExportDataPage(driver)
+def test_case_31_manage_forms(driver, settings):
+    home = HomePage(driver, settings)
+    home.data_menu()
     manage = ManageFormsPage(driver)
-    export.data_tab()
     manage.get_normal_forms()
     manage.view_normal_form()
     manage.archive_forms()
@@ -52,9 +53,9 @@ def test_case_31_manage_forms(driver):
 
 @pytest.mark.data
 @pytest.mark.automaticallyUpdateCase
-def test_case_32_auto_case_update(driver):
-    export = ExportDataPage(driver)
-    export.data_tab()
+def test_case_32_auto_case_update(driver, settings):
+    home = HomePage(driver, settings)
+    home.data_menu()
     data = AutoCaseUpdatePage(driver)
     data.delete_test_rules()
     data.open_auto_case_update_page()
@@ -65,29 +66,29 @@ def test_case_32_auto_case_update(driver):
 @pytest.mark.data
 @pytest.mark.lookupTable
 @pytest.mark.manageTables
-def test_case_33_create_lookup_table(driver):
+def test_case_33_create_lookup_table(driver, settings):
+    home = HomePage(driver, settings)
+    home.data_menu()
     data = LookUpTablePage(driver)
-    export = ExportDataPage(driver)
-    export.data_tab()
     data.create_lookup_table()
 
 
 @pytest.mark.data
 @pytest.mark.lookupTable
 @pytest.mark.viewTables
-def test_case_34_view_lookup_table(driver):
+def test_case_34_view_lookup_table(driver, settings):
+    home = HomePage(driver, settings)
+    home.data_menu()
     data = LookUpTablePage(driver)
-    export = ExportDataPage(driver)
-    export.data_tab()
     data.view_lookup_table()
     data.delete_lookup_table()
 
 
 @pytest.mark.data
 @pytest.mark.deduplicateCases
-def test_case_58_deduplicate_cases(driver):
-    export = ExportDataPage(driver)
-    export.data_tab()
+def test_case_58_deduplicate_cases(driver, settings):
+    home = HomePage(driver, settings)
+    home.data_menu()
     data = DeduplicateCasePage(driver)
     data.open_deduplicate_case_page()
     data.add_new_rule()
@@ -99,9 +100,9 @@ def test_case_58_deduplicate_cases(driver):
 @pytest.mark.dataDictionary
 @pytest.mark.downloadDataDictionary
 @pytest.mark.uploadDataDictionary
-def test_case_59_data_dictionary(driver):
-    export = ExportDataPage(driver)
-    export.data_tab()
+def test_case_59_data_dictionary(driver, settings):
+    home = HomePage(driver, settings)
+    home.data_menu()
     data = DataDictionaryPage(driver)
     data.open_data_dictionary_case_page()
     data.export_data_dictionary()
