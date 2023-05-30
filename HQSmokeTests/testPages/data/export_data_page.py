@@ -139,10 +139,6 @@ class ExportDataPage(BasePage):
         self.wait_to_clear_and_send_keys(self.date_range, self.date_having_submissions)
         self.wait_and_sleep_to_click(self.apply)
 
-    def data_tab(self):
-        self.driver.refresh()
-        self.wait_to_click(self.data_dropdown)
-        self.wait_to_click(self.view_all_link)
 
     def prepare_and_download_export(self):
         self.wait_and_sleep_to_click(self.export_form_case_data_button)
