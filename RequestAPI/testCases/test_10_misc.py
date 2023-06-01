@@ -24,3 +24,9 @@ def test_case_33_user_domain_list_api(settings):
     uri = settings["url"] + UserData.post_domain_url
     mw = MiscellaneousMethods(settings)
     mw.get_user_domain_list_api(uri, settings['login_user'], settings['login_pass'])
+
+@pytest.mark.xfail("QA-5164")
+def test_case_39_login_logout_tracking_api(settings):
+    uri = settings["url"] + UserData.login_logout_tracking
+    mw = MiscellaneousMethods(settings)
+    mw.get_login_logout_track(uri, settings['login_user'], settings['login_pass'])

@@ -34,3 +34,8 @@ class MiscellaneousMethods(Base):
         result = self.get_api(URL, login_user, login_pass, self.headers)
         print(result.status_code)
 
+    def get_login_logout_track(self, uri, login_user, login_pass):
+        URL = uri+'action_times'
+        result = self.get_api(URL, login_user, login_pass, self.headers)
+        print(result.status_code)
+
