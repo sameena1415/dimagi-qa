@@ -1,8 +1,6 @@
 import random
 import time
 
-import pytest
-
 from Features.CaseSearch.constants import *
 from Features.CaseSearch.test_pages.casesearch_page import CaseSearchWorkflows
 from Features.CaseSearch.user_inputs.casesearch_user_inputs import CaseSearchUserInput
@@ -253,7 +251,6 @@ def test_case_11_do_not_search_cases(driver):
     webapps.omni_search(CaseSearchUserInput.song_case_b_users_song, displayed=NO)
 
 
-@pytest.mark.skip(reason="Yet to be deployed on prod")
 def test_case_12_sync_cases_on_form_entry(driver):
     webapps = WebApps(driver)
     casesearch = CaseSearchWorkflows(driver)
