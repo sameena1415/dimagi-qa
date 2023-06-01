@@ -8,4 +8,5 @@ class UserData:
     domain2 = 'a/qateam/'
     post_domain_url = 'api/v0.5/'
     login_logout_tracking = 'a/qateam/api/v0.5/'
+    automation_username = "automation.user.commcarehq@gmail.com"
 
