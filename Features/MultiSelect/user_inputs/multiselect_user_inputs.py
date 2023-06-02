@@ -5,7 +5,7 @@ class MultiSelectUserInput:
     """User Test Data"""
 
     """App Names"""
-    multiselect_app_name = "Multi-Select"
+    multiselect_app_name = "[Master] Multi-Select"
 
     """Menu Names"""
     shadow_auto = "Shadow Menu (Auto-Proceed)"
