@@ -10,7 +10,7 @@ class CaseSearchUserInput:
     casesearch_2 = "casesearch-2"
 
     """App Names"""
-    case_search_app_name = "Music App (Case Search & Claim)"
+    case_search_app_name = "[Master] Music App (Case Search & Claim)"
     french_app = "[French] Music App"
 
     """Users"""
