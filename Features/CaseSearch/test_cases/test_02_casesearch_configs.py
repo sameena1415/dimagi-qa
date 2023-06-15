@@ -174,6 +174,7 @@ def test_case_07_address_geocoder_format(driver):
     """Check receivers in form get autopoulated after bradcast value is provided"""
     webapps.open_menu(CaseSearchUserInput.artist_menu)
     webapps.select_first_case_on_list_and_continue()
+    webapps.open_form(CaseSearchUserInput.add_address_form)
     casesearch.add_address(address=CaseSearchUserInput.full_home_address,
                            search_property=CaseSearchUserInput.search_home_address)
     webapps.open_data_preview()
@@ -182,6 +183,7 @@ def test_case_07_address_geocoder_format(driver):
     webapps.present_in_data_preview(CaseSearchUserInput.home_country_value)
     webapps.present_in_data_preview(CaseSearchUserInput.home_zipcode_value)
     """Check geocoder format search property"""
+    driver.back()
     driver.back()
     webapps.search_all_cases()
     webapps.clear_selections_on_case_search_page()
