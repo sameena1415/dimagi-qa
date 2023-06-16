@@ -80,7 +80,7 @@ jobs:
             const { promises: fs } = require('fs')
 
             const {JOB_STATUS, NOW, CC_ENV, GITHUB_HEAD_REF} = process.env
-            const prefix = `[${CC_ENV}] Case Search - ${JOB_STATUS.toUpperCase()} - Run #${context.runNumber}`
+            const prefix = `[${CC_ENV}] Case Search Split Screen - ${JOB_STATUS.toUpperCase()} - Run #${context.runNumber}`
             const suffix = `at ${NOW}`
 
             let subject = `${prefix} on "deploy_success" ${suffix}`
