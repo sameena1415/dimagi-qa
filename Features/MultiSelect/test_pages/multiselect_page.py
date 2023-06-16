@@ -25,6 +25,9 @@ class MultiSelectWorkflows(BasePage):
         self.max_limit_error = (By.XPATH, "//div[contains(text(),'Too many cases')]")
         self.open_app_builder_menu = "//span[contains(text(),'{}')]"
         self.case_list_settings = (By.XPATH, "//a[@href='#case-detail-screen-config-tab']")
+        """Case Tiles"""
+        self.case_tile_grid_one = "(//div[@class='list-grid-style-1 box'])[{}]"
+        self.select_all_tile_checkbox = (By.ID, "select-all-tile-checkbox")
 
     def multi_select_cases(self, case_count):
         song_names = []
@@ -36,8 +39,24 @@ class MultiSelectWorkflows(BasePage):
             song_names.append(selected_song_names)
         return song_names
 
+    def multi_select_case_tiles(self, case_count):
+        song_names = []
+        for i in range(1, case_count+1):
+            row_checkbox = self.get_element(self.row_checkbox_xpath, str(i))
+            self.js_click(row_checkbox)
+            case_name_in_table = self.get_element(self.case_tile_grid_one, str(i))
+            song_on_case_tiles = self.get_text(case_name_in_table)
+            stripped_song = song_on_case_tiles.split("</b>")
+            selected_song_names = stripped_song[1]
+            song_names.append(selected_song_names)
+            print(song_names)
+        return song_names
+
     def click_select_all_checkbox(self):
         self.js_click(self.select_all_checkbox)
+
+    def click_select_all_tile_checkbox(self):
+        self.js_click(self.select_all_tile_checkbox)
 
     def continue_to_proceed_multiselect(self):
         self.js_click(self.multi_select_continue)
