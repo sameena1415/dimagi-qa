@@ -214,6 +214,11 @@ Features/MultiSelect/settings.cfg
 Features/MultiSelect/report.html
 Features/MultiSelect/test_cases/report.html
 
+#Ignoring compliled files of CaseSearchOnSplitScreen
+Features/CaseSearchOnSplitScreen/settings.cfg
+Features/CaseSearchOnSplitScreen/report.html
+Features/CaseSearchOnSplitScreen/test_cases/report.html
+
 
 
 
