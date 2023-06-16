@@ -1,8 +1,8 @@
 ## Case Search Test Script
 
-Case Search allows mobile workers to search for cases across locations / owners as well as claim those cases. Specific search fields can be configured per application. 
+This feature flag adds a sidebar to the case search screen so the user does not need to navigate away to refine the case search results.
 
-This script contains conatins [it's regression tests.](https://docs.google.com/spreadsheets/d/13vUbmbMqtFWwjvmvuST66p3X5u6sLNnBrLWQICx_iaQ/edit#gid=2133071371)
+This script contains conatins [these regression tests.](https://docs.google.com/spreadsheets/d/13vUbmbMqtFWwjvmvuST66p3X5u6sLNnBrLWQICx_iaQ/edit#gid=1894003725)
 
 ## Executing Scripts
 
@@ -35,7 +35,7 @@ the environment you want to test.
 ```sh
 
 # To execute all the test cases 
-pytest -v --rootdir= Features/CaseSearch/test_cases
+pytest -v --rootdir= Features/CaseSearchOnSplitScreen/test_cases
 
 ```
 - You could also pass the following arguments
@@ -45,7 +45,7 @@ pytest -v --rootdir= Features/CaseSearch/test_cases
 ### <ins> Trigger Manually on Gitaction </ins>
 
 To manually trigger the script,
-  - Go to [HQ Smoke Tests action](https://github.com/dimagi/dimagi-qa/actions/workflows/case-search-tests.yml)
+  - Go to [Case Search Split Screen Tests action](https://github.com/dimagi/dimagi-qa/actions/workflows/case-search-split-screen-tests.yml)
   - Run workflow
   - Use workflow from ```master```
   - Use the environment as desired
