@@ -32,6 +32,7 @@ class MultiSelectUserInput:
     shadow_menu_multi = "Shadow Menu"
     shadow_menu_non_multi = "Shadow Menu (Non-Multi)"
     single_select_no_parent = "Single Select, No Parent"
+    multi_select_with_case_tiles = "Multi-Select w/case tiles"
 
     """Form Names"""
     update_song_normal_form = "Update and add shows to the songs you picked out"
