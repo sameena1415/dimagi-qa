@@ -47,7 +47,6 @@ def test_case_02_loose_access_to_case_search(driver):
 def test_case_03_non_fuzzy_search(driver):
     webapps = WebApps(driver)
     casesearch = CaseSearchWorkflows(driver)
-    base = BasePage(driver)
     """Check non fuzzy search"""
     webapps.open_app(CaseSearchUserInput.case_search_app_name)
     webapps.open_menu(CaseSearchUserInput.musical_instruments_menu)
@@ -57,7 +56,7 @@ def test_case_03_non_fuzzy_search(driver):
                                        input_value=CaseSearchUserInput.incomplete_word_guitar,
                                        property_type=TEXT_INPUT)
     webapps.search_button_on_case_search_page()
-    assert base.is_visible_and_displayed(webapps.list_is_empty)
+    webapps.check_case_list_is_empty(CaseSearchUserInput.list_is_empty)
     driver.back()
     casesearch.search_against_property(search_property=CaseSearchUserInput.instrument_name,
                                        input_value=CaseSearchUserInput.acoustic_bass_guitar,

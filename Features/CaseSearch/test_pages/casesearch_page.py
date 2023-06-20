@@ -242,12 +242,16 @@ class CaseSearchWorkflows(BasePage):
         list_string = map(str, values)
         return list(list_string)
 
-    def select_checkbox(self, search_property, values):
-        for value in values:
-            checkbox_xpath = (By.XPATH, self.checkbox_xpath.format(search_property, value - 1))
+    def select_checkbox(self, search_property, values, select_by_value):
+        if select_by_value == text:
+            checkbox_xpath = (By.XPATH, self.checkbox_xpath.format(search_property, values))
             self.js_click(checkbox_xpath)
-        list_string = map(str, values)
-        return list(list_string)
+        elif select_by_value == index:
+            for value in values:
+                checkbox_xpath = (By.XPATH, self.checkbox_xpath.format(search_property, value - 1))
+                self.js_click(checkbox_xpath)
+            list_string = map(str, values)
+            return list(list_string)
 
     def check_clear_button_in_singleselect_combobox(self, expected, search_property):
         remove_selection = self.get_element(self.remove_combobox_selection, search_property)
