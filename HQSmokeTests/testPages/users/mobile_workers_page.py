@@ -127,7 +127,7 @@ class MobileWorkerPage(BasePage):
         self.profile_value = (
             By.XPATH, "//div[@class='modal fade hq-enum-modal in']//input[@class='form-control enum-value']")
         self.done_button = (By.XPATH, "//div[@class='modal fade hq-enum-modal in']//button[@class='btn btn-primary']")
-
+        self.delete_field_choice = (By.XPATH, "//tbody[@data-bind='sortable: data_fields']//tr[last()]//td//*[contains(@data-bind,'removeChoice')]")
         self.field_delete = (
             By.XPATH, "//tbody[@data-bind='sortable: data_fields']//tr[last()]//td[last()]//i[@class='fa fa-times']")
         self.profile_combobox = (
@@ -408,6 +408,7 @@ class MobileWorkerPage(BasePage):
         self.wait_to_click(self.location_update_button)
 
     def remove_user_field(self):
+        self.wait_to_click(self.delete_field_choice)
         self.wait_to_click(self.field_delete)
         self.wait_to_click(self.confirm_user_field_delete)
 
