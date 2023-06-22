@@ -184,6 +184,7 @@ def test_case_07_address_geocoder_format(driver):
     webapps.present_in_data_preview(CaseSearchUserInput.home_zipcode_value)
     """Check geocoder format search property"""
     driver.back()
+    time.sleep(2)
     driver.back()
     webapps.search_all_cases()
     webapps.clear_selections_on_case_search_page()
