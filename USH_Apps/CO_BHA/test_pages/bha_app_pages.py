@@ -11,21 +11,22 @@ class BhaWorkflows(BasePage):
         super().__init__(driver)
 
         self.admit_new_client_on_caselist = (By.XPATH, "//button[text()='Admit New Client']")
-        self.radio_option_value = "//input[@value='{}']"
+        self.radio_option_value = "//input[contains(@value,'{}')]"
         self.case_search_properties = (By.XPATH, "//label[@class='control-label']")
         self.continue_button = "//span[@id='multi-select-btn-text' and text()='{}']"
         self.client_info = " (//h2[contains(text(), 'Client Information')]/following::strong[contains(text(),'{}')]//ancestor::li[1])[1]"
         self.combobox_select_clinic = (By.XPATH, "//select[@class='form-control select2-hidden-accessible']")
-        self.answer_option_label = (By.XPATH, "//p[text()='{}']")
+        self.answer_option_label = "//p[text()='{}']"
         self.question_label = "//span[text()='{}']"
         self.clinic_close_button = "//button[@aria-label='Remove item' and contains(@aria-describedby , '{}')]"
-        self.case_list_display_properties = "//th[contains (text(),'{}')]"
+        self.case_list_display_properties = "(//tr[.//th[contains(text(),'{}')]])[1]"
+        self.case_prop_value = "//th[@title='{}']/following::td[contains(text(),'{}')]"
 
     def click_on_admit_new_client(self):
         self.wait_to_click(self.admit_new_client_on_caselist)
 
     def replace_one_char(self, original_string):
-        index = 15
+        index = 2
         new_character = "a"
         return original_string[:index] + new_character + original_string[index + 1:]
 
@@ -73,7 +74,7 @@ class BhaWorkflows(BasePage):
             header = self.get_element(self.case_list_display_properties, prop)
             assert self.is_displayed(header)
 
-
-
-
-
+    def check_property_on_case_list_report(self, case_link, case_property, case_property_value):
+        self.driver.get(case_link)
+        self.locator = (By.XPATH, self.case_prop_value.format(case_property, case_property_value))
+        assert self.is_present(self.locator)

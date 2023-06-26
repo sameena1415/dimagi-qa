@@ -1,5 +1,4 @@
 from Features.CaseSearch.constants import *
-from USH_Apps.CO_BHA.constants import *
 from Features.CaseSearch.test_pages.casesearch_page import CaseSearchWorkflows
 from USH_Apps.CO_BHA.test_pages.bha_app_pages import BhaWorkflows
 from USH_Apps.CO_BHA.user_inputs.bha_user_inputs import BhaUserInput
@@ -16,19 +15,19 @@ def test_case_discharge_client_1(driver):
     webapps.login_as(BhaUserInput.state_level_user)
     webapps.open_app(BhaUserInput.bha_app_name)
     webapps.open_menu(BhaUserInput.search_and_admit_client)
-    first_name = casesearch.search_against_property(search_property=BhaUserInput.first_name,
-                                                    input_value=Automation + names.get_first_name(),
+    first_name = casesearch.search_against_property(search_property=BhaUserInput.first_name_required,
+                                                    input_value=names.get_first_name(),
                                                     property_type=TEXT_INPUT)
-    last_name = casesearch.search_against_property(search_property=BhaUserInput.last_name,
-                                                   input_value=Automation + names.get_last_name(),
+    last_name = casesearch.search_against_property(search_property=BhaUserInput.last_name_required,
+                                                   input_value=names.get_last_name(),
                                                    property_type=TEXT_INPUT)
-    dob = casesearch.search_against_property(search_property=BhaUserInput.dob,
+    dob = casesearch.search_against_property(search_property=BhaUserInput.dob_required,
                                              input_value=BhaUserInput.date_1950_05_01,
                                              property_type=TEXT_INPUT)
     casesearch.search_against_property(search_property=BhaUserInput.reason_for_no_ssn,
                                        input_value=BhaUserInput.does_not_have_ssn,
                                        property_type=COMBOBOX)
-    casesearch.select_checkbox(BhaUserInput.consent, [1])
+    casesearch.select_checkbox(BhaUserInput.consent, BhaUserInput.yes_small, select_by_value=text)
     webapps.search_button_on_case_search_page()
     app.click_on_admit_new_client()
     app.select_radio(BhaUserInput.yes)
@@ -38,7 +37,7 @@ def test_case_discharge_client_1(driver):
                                   search_value=last_name)
     app.check_client_info_on_form(search_property=BhaUserInput.dob_on_form,
                                   search_value=dob)
-    app.select_clinic(BhaUserInput.aurora_therapy_center)  # clinic name to be changed
+    app.select_clinic(BhaUserInput.aurora_therapy_center)
     webapps.submit_the_form()
     """Search Central Registry"""
     webapps.open_menu(BhaUserInput.search_central_registry)
@@ -56,7 +55,7 @@ def test_case_discharge_client_1(driver):
     casesearch.check_values_on_caselist(row_num=BhaUserInput.two,
                                         expected_value=first_name)
     """Search My Clients as clinic user"""
-    #sync
+    # sync
     webapps.login_as(BhaUserInput.clinic_level_user)
     webapps.open_app(BhaUserInput.bha_app_name)
     webapps.open_menu(BhaUserInput.search_my_clients)
@@ -66,7 +65,7 @@ def test_case_discharge_client_1(driver):
     casesearch.search_against_property(search_property=BhaUserInput.last_name,
                                        input_value=last_name,
                                        property_type=TEXT_INPUT)
-    casesearch.search_against_property(search_property=BhaUserInput.dob,
+    casesearch.search_against_property(search_property=BhaUserInput.date_of_birth,
                                        input_value=dob,
                                        property_type=TEXT_INPUT)
     webapps.search_button_on_case_search_page()
@@ -95,6 +94,7 @@ def test_case_discharge_client_1(driver):
     # check future discharge date
     webapps.submit_the_form()
     """Check the admission status on case list"""
+    webapps.navigate_to_breadcrumb(BhaUserInput.bha_app_name)
     webapps.open_menu(BhaUserInput.search_central_registry)
     casesearch.search_against_property(search_property=BhaUserInput.first_name,
                                        input_value=first_name,
@@ -109,4 +109,4 @@ def test_case_discharge_client_1(driver):
     webapps.omni_search(first_name)
     casesearch.check_values_on_caselist(row_num=BhaUserInput.six,
                                         expected_value=BhaUserInput.discharged)
-
+    # CHECK MESSAGE HISTORY
