@@ -10,7 +10,7 @@ class CaseSearchUserInput:
     casesearch_2 = "casesearch-2"
 
     """App Names"""
-    case_search_app_name = "Music App (Case Search & Claim)"
+    case_search_app_name = "[Master] Music App (Case Search & Claim)"
     french_app = "[French] Music App"
 
     """Users"""
@@ -42,6 +42,7 @@ class CaseSearchUserInput:
     load_external_skip_default_menu = "DR: Load external case into form (Skip Default)"
     unrelated_case_load_external_menu = "Unrelated case id\'s property: Load from external domain."
     checkbox_selection_menu = "Checkbox Selection"
+    shows_ancestor_exists_menu = "Shows(Ancestor Exists)"
 
     """Forms"""
     play_song_form = "Play Song"
@@ -118,9 +119,11 @@ class CaseSearchUserInput:
     validation_msg_invalid_respons = "Sorry, this response is invalid!"
     latin_music = "Latin music"
     hiphop = "Hip Hop"
+    metal = "Metal"
     bounce = "Bounce"
     latin_jazz = "Latin jazz"
-    funk_metal = "Funk Metal"
+    funk_metal = "Funk metal"
+    nu_metal = "Nu metal"
     default_search_title = "Case Claim"
     search_title = "Song Detail"
     french_search_title = "Song Detail (French)"
@@ -147,6 +150,7 @@ class CaseSearchUserInput:
     artist = "Artist"
     song_release_date = "Song Release Date"
     show_date = "Show Date"
+    song_subgenre = "Song Subgenre"
     subgenre = "SubGenre"
     genre = "Genre"
     parent_artist = "Parent Artist"

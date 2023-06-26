@@ -114,12 +114,14 @@ class ApplicationPage(BasePage):
 
     def form_builder_exploration(self):
         time.sleep(2)
-        self.click(self.menu_settings)
+        self.wait_to_click(self.menu_settings)
         time.sleep(2)
         self.wait_for_element(self.menu_settings_content)
         assert self.is_displayed(self.menu_settings_content)
         print("Menu Settings loaded successfully!")
-        self.wait_to_click(self.form_settings)
+        self.wait_for_element(self.form_settings)
+        self.click(self.form_settings)
+        self.accept_pop_up()
         assert self.is_present_and_displayed(self.form_settings_content)
         print("Form Settings loaded successfully!")
 

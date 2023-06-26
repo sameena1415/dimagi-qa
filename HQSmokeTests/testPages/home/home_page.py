@@ -42,11 +42,11 @@ class HomePage(BasePage):
 
     def reports_menu(self):
         try:
-            self.wait_to_click(self.reports_menu_id)
+            self.open_menu(self.reports_menu_id)
         except TimeoutException:
             if self.is_displayed(self.show_full_menu_id):
                 self.click(self.show_full_menu_id)
-                self.click(self.reports_menu_id)
+                self.open_menu(self.reports_menu_id)
             else:
                 raise TimeoutException
         self.wait_to_click(self.view_all)

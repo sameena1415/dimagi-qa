@@ -1,8 +1,6 @@
 import random
 import time
 
-import pytest
-
 from Features.CaseSearch.constants import *
 from Features.CaseSearch.test_pages.casesearch_page import CaseSearchWorkflows
 from Features.CaseSearch.user_inputs.casesearch_user_inputs import CaseSearchUserInput
@@ -253,7 +251,6 @@ def test_case_11_do_not_search_cases(driver):
     webapps.omni_search(CaseSearchUserInput.song_case_b_users_song, displayed=NO)
 
 
-@pytest.mark.skip(reason="Yet to be deployed on prod")
 def test_case_12_sync_cases_on_form_entry(driver):
     webapps = WebApps(driver)
     casesearch = CaseSearchWorkflows(driver)
@@ -284,3 +281,27 @@ def test_case_12_sync_cases_on_form_entry(driver):
     webapps.open_form(CaseSearchUserInput.play_song_form)
     casesearch.check_label_in_form(rating_value)
     webapps.submit_the_form()
+
+
+def test_case_13_ancestor_exists_query(driver):
+    webapps = WebApps(driver)
+    casesearch = CaseSearchWorkflows(driver)
+    webapps.login_as(CaseSearchUserInput.user_1)
+    webapps.open_app(CaseSearchUserInput.case_search_app_name)
+    """Check default filter with ancestor exist query"""
+    webapps.open_menu(CaseSearchUserInput.shows_ancestor_exists_menu)
+    webapps.search_button_on_case_search_page()
+    casesearch.check_values_on_caselist(row_num=CaseSearchUserInput.three,
+                                        expected_value=CaseSearchUserInput.metal)
+    webapps.search_again_cases()
+    """Check multi valued parent property search"""
+    casesearch.search_against_property(search_property=CaseSearchUserInput.song_subgenre,
+                                       input_value=CaseSearchUserInput.funk_metal,
+                                       property_type=COMBOBOX)
+    casesearch.search_against_property(search_property=CaseSearchUserInput.song_subgenre,
+                                       input_value=CaseSearchUserInput.nu_metal,
+                                       property_type=COMBOBOX)
+    webapps.search_button_on_case_search_page()
+    casesearch.check_values_on_caselist(row_num=CaseSearchUserInput.four,
+                                        expected_value=[CaseSearchUserInput.funk_metal, CaseSearchUserInput.nu_metal],
+                                        is_multi=YES)

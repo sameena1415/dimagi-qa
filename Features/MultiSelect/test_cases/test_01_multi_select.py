@@ -309,7 +309,24 @@ def test_case_15_eof_nav_to_form_on_single_select_menu(driver, settings):
     webapps.submit_the_form()
 
 
-def test_case_16_multiselect_enabled_select_parent_first(driver, settings):
+def test_case_16_multiselect_with_case_tiles(driver, settings):
+    multiselect = MultiSelectWorkflows(driver)
+    webapps = WebApps(driver)
+    webapps.login_as(CaseSearchUserInput.user_1)
+    webapps.open_app(MultiSelectUserInput.multiselect_app_name)
+    webapps.open_menu(MultiSelectUserInput.multi_select_with_case_tiles)
+    webapps.search_all_cases()
+    webapps.clear_and_search_all_cases_on_case_search_page()
+    cases_selected = multiselect.multi_select_case_tiles(case_count=1)
+    multiselect.continue_to_proceed_multiselect()
+    multiselect.check_selected_cases_present_on_form(cases_selected, case_type=SONG)
+    webapps.answer_repeated_questions(question_label=CaseSearchUserInput.add_show_question,
+                                      input_type=textarea,
+                                      input_value=fetch_random_string())
+    webapps.submit_the_form()
+
+
+def test_case_17_multiselect_enabled_select_parent_first(driver, settings):
     multiselect = MultiSelectWorkflows(driver)
     menu = HomePage(driver, settings)
     menu.applications_menu(MultiSelectUserInput.multiselect_app_name)
@@ -317,3 +334,4 @@ def test_case_16_multiselect_enabled_select_parent_first(driver, settings):
     multiselect.check_if_value_present_in_drop_down(MultiSelectUserInput.shows_MS_SPFO, match=NO)
     multiselect.open_menu_settings(MultiSelectUserInput.shows_MS_SPFO)
     multiselect.check_if_value_present_in_drop_down(MultiSelectUserInput.shows_MS_SPFP, match=YES)
+

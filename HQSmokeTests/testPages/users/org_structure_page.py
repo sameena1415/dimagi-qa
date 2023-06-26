@@ -18,7 +18,6 @@ def latest_download_file(type=".xlsx"):
         os.chdir(PathSettings.DOWNLOAD_PATH)
         all_specific_files = filter(lambda x: x.endswith(type), os.listdir(os.getcwd()))
         files = sorted(all_specific_files, key=os.path.getctime)
-        print(files)
         if files[-1].endswith(".log"):
             newest = sorted(files, key=os.path.getctime)[-2]
         elif files[-1].endswith(".xlsx"):
@@ -61,7 +60,7 @@ class OrganisationStructurePage(BasePage):
         self.loc_property_xpath = (By.XPATH, "(//input[contains(@data-bind,'value: slug')])[last()]")
         self.loc_label_xpath = (By.XPATH, "(//input[contains(@data-bind,'value: label')])[last()]")
         self.choice_selection = (By.XPATH, "(//div[contains(@data-bind, \"validationMode('choice')\")])[last()]")
-        self.choices_button_xpath = (By.XPATH, "(//div[contains(text(), 'Choices')])[last()]")
+        self.choices_button_xpath = (By.XPATH, "(//*[contains(text(), 'Choices')])[last()]")
         self.add_choice_btn_xpath = (By.XPATH, "(//button[contains(@data-bind,'click: addChoice')])[last()]")
         self.choice_xpath = (By.XPATH, "(//input[contains(@data-bind,'value: value')])[last()]")
         self.save_btn_id = (By.ID, "save-custom-fields")
