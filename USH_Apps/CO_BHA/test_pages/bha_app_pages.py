@@ -23,7 +23,7 @@ class BhaWorkflows(BasePage):
         self.case_prop_value = "//th[@title='{}']/following::td[contains(text(),'{}')]"
 
     def click_on_admit_new_client(self):
-        self.wait_to_click(self.admit_new_client_on_caselist)
+        self.js_click(self.admit_new_client_on_caselist)
 
     def replace_one_char(self, original_string):
         index = 2
