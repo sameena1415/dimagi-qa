@@ -6,11 +6,11 @@ This script contains covers the happy paths/critical workflows of Colorado's BHA
 
 ### <ins> On Local Machine </ins>
 
-#### Setting up test environment
+#### Setting up the test environment
 
 ```sh
 
-# create and activate a virtualenv using your preferred method. Example:
+# Create and activate a virtualenv using your preferred method. Example:
 python -m venv venv
 source venv/bin/activate
 
@@ -38,7 +38,7 @@ pytest -v --rootdir= USH_Apps/CO_BHA/test_cases
 ```
 - You could also pass the following arguments
   - ` -n 3 --dist=loadfile` - This will run the tests parallelly in 3 instances. The number of reruns is configurable.
-  - ` --reruns 1` - This will re-run the tests once in case of failures.The number of reruns is configurable too.
+  - ` --reruns 1` - This will re-run the tests once in case of failures. The number of reruns is configurable too.
 
 ### <ins> Trigger Manually on Gitaction </ins>
 
@@ -48,3 +48,14 @@ To manually trigger the script,
   - Use workflow from ```master```
   - Use the environment as desired
   - Run!
+
+## Script Results
+
+ -  Failures would be triggered on the Slack channel **#qa-bha-automated-test-results**
+
+<img align="center" width="900" src="https://github.com/dimagi/dimagi-qa/assets/67914792/e2b024f0-a584-468d-99b8-9adb7ec4b16b" alt="clone this repository" />
+
+
+ -  You should be able to find the zipped results in the **Artifacts** section, of the corresponding run (after a run is complete).
+
+<img align="center" width="500" src="https://user-images.githubusercontent.com/67914792/168756705-88e4b330-b05a-4df2-a60c-7d45e8a2d002.PNG" alt="clone this repository" />
