@@ -37,7 +37,7 @@ def test_case_discharge_client_1(driver):
                                   search_value=last_name)
     app.check_client_info_on_form(search_property=BhaUserInput.dob_on_form,
                                   search_value=dob)
-    app.select_clinic(BhaUserInput.aurora_therapy_center)
+    app.select_clinic(BhaUserInput.first_choice_counselling)
     webapps.submit_the_form()
     """Search Central Registry"""
     webapps.open_menu(BhaUserInput.search_central_registry)

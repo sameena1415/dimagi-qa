@@ -1,3 +1,5 @@
+import time
+
 from selenium.webdriver.common.by import By
 from common_utilities.selenium.base_page import BasePage
 from Features.CaseSearch.constants import *
@@ -49,7 +51,8 @@ class BhaWorkflows(BasePage):
         assert search_value in value_on_form
 
     def select_clinic(self, clinic_name):
-        self.select_by_text(self.combobox_select_clinic, clinic_name)
+        if self.is_displayed(self.combobox_select_clinic):
+            self.select_by_text(self.combobox_select_clinic, clinic_name)
 
     def remove_clinic(self, clinic_name):
         close_xpath = self.get_element(self.clinic_close_button, clinic_name)

@@ -1,4 +1,4 @@
-""""Contains test data that are used as user inputs across various areass used in Case Search"""
+""""Contains test data that are used as user inputs across various areass used in the project"""
 
 
 class BhaUserInput:
@@ -10,7 +10,7 @@ class BhaUserInput:
     """Users"""
     state_level_user = "state.level.user1"
     clinic_level_user = "clinic.level.user1"
-    central_registry_2 = "central.registry.user.2"
+    provider_level_user = "provider.level.user1"
 
     """Menus"""
     search_central_registry = "Search Central Registry"
@@ -25,6 +25,10 @@ class BhaUserInput:
     discharge_client = "Discharge Client"
     update_lock_status_request = "Update Lock Status Request"
 
+    """Clinics"""
+
+    first_choice_counselling = "1st Choice Counseling LLC - Colorado Ave."
+
     """Labels On Form"""
     first_name_on_form = "First Name"
     last_name_on_form = "Last Name"
@@ -37,7 +41,7 @@ class BhaUserInput:
     "Questions"
     where_admit = "(Required) Where would you like to admit this client?"
     bha_approval_needed = "BHA approval is required before the client can be locked in. Please submit this form to send the lock status request to BHA for review."
-    lock_out_confirmation = "Upon submission, the client will be locked in to care at Aurora Therapy Center LLC - 13th Ave and the requesting clinic will be notified."
+    lock_out_confirmation = "Upon submission, the client will be locked in to care at " + first_choice_counselling + " and the requesting clinic will be notified."
 
     """Search Fields"""
     first_name_required = "(Required) First Name"
@@ -52,22 +56,20 @@ class BhaUserInput:
     ssn = "Social Security Number"
     medicaid_id = "Medicaid ID"
     client_id = "Client ID"
-    # Form Listing
-    search_my_clients = "Search My Clients"
 
     """User Inputs"""
     date_1950_05_01 = "05/01/1950"
     refused_to_provide = "Refused to provide"
     does_not_have_ssn = "Does not have SSN"
-    inactive_first_name = "Ronald"
-    inactive_last_name_with_typo = "Lew"
-    inactive_dob = "03/31/1984"
+    staging_inactive_first_name = "Ronald"
+    staging_inactive_last_name_with_typo = "Lew"
+    staging_inactive_dob = "03/31/1984"
+    prod_inactive_first_name = "Brian"
+    prod_inactive_last_name_with_typo = "Wrighe"
+    prod_inactive_dob = "12/09/1986"
     yes = "Yes"
     yes_small = "yes"
     approve = "Approve"
-
-    """Clinics"""
-    aurora_therapy_center = "Aurora Therapy Center LLC - 13th Ave"
 
     """Values_on Case List"""
     zero = "0"
@@ -96,5 +98,5 @@ class BhaUserInput:
     prod_case_link = "https://www.commcarehq.org/a/co-carecoordination-test/reports/case_data/9b1a60eaf251408ca96b5fd83c96eef1/#properties"
     prod_potential_duplicate_case_id = "ff1c0e97217448af86e890d5ef14c096"
 
-    prod_duplicate_case_link = "https://staging.commcarehq.org/a/co-carecoordination-test/reports/case_data/ff1c0e97217448af86e890d5ef14c096/#properties"
+    prod_duplicate_case_link = "https://www.commcarehq.org/a/co-carecoordination-test/reports/case_data/ff1c0e97217448af86e890d5ef14c096/#properties"
     prod_potential_duplicate_index_case_id = "9b1a60eaf251408ca96b5fd83c96eef1"
