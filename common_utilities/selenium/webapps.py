@@ -49,7 +49,7 @@ class WebApps(BasePage):
         self.webapp_login_confirmation = (By.ID, 'js-confirmation-confirm')
         self.webapp_working_as = (By.XPATH, "//div[@class='restore-as-banner module-banner']/b")
         self.form_names = (By.XPATH, "//h3[text()]")
-        self.list_is_empty = (By.XPATH, "//div[contains(text(), 'empty')]")
+        self.list_is_empty = "//div[contains(text(), '{}')]"
         # Pagination
         self.last_page = (By.XPATH, "(//a[contains(@aria-label, 'Page')])[last()]")
         self.next_page = (By.XPATH, "//a[contains(@aria-label, 'Next')]")
@@ -222,3 +222,7 @@ class WebApps(BasePage):
     def present_in_data_preview(self, value):
         value_in_data_preview = self.get_element(self.value_in_data_preview, value)
         assert self.is_present(value_in_data_preview)
+
+    def check_case_list_is_empty(self, empty_message):
+        list_is_empty_message = self.get_element(self.list_is_empty, empty_message)
+        assert self.is_displayed(list_is_empty_message)

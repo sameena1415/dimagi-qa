@@ -168,6 +168,7 @@ class CaseSearchUserInput:
     seven = "7"
     eight = "8"
     rating_four_and_five = "#,#4#,#5"
+    list_is_empty = "empty"
 
     # Questions
     add_show_question = "Add a show in this city"

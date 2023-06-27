@@ -9,6 +9,7 @@ combobox = "combobox"
 text = "text"
 HOME = "HOME"
 WORK = "WORK"
+index = "index"
 
 # EOF NAV
 FORM = "FORM"
