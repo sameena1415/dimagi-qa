@@ -184,7 +184,7 @@ def test_case_07_address_geocoder_format(driver):
     webapps.present_in_data_preview(CaseSearchUserInput.home_zipcode_value)
     """Check geocoder format search property"""
     driver.back()
-    time.sleep(2)
+    time.sleep(4)
     driver.back()
     webapps.search_all_cases()
     webapps.clear_selections_on_case_search_page()
@@ -707,7 +707,7 @@ def test_case_27_checkbox_single_selection_dependent_dropdown(driver):
     webapps.open_menu(CaseSearchUserInput.checkbox_selection_menu)
     webapps.clear_selections_on_case_search_page()
     """Single Checkbox"""
-    casesearch.select_checkbox(CaseSearchUserInput.genre, [2], select_by_value=index)
+    casesearch.select_checkbox(CaseSearchUserInput.genre, [CaseSearchUserInput.latin_music], select_by_value=text)
     """Check related values appear in dropdown"""
     casesearch.search_against_property(search_property=CaseSearchUserInput.subgenre,
                                        input_value=CaseSearchUserInput.latin_jazz,
@@ -730,7 +730,7 @@ def test_case_28_checkbox_multiple_selection_dependent_dropdown(driver):
     webapps.open_menu(CaseSearchUserInput.checkbox_selection_menu)
     webapps.clear_selections_on_case_search_page()
     """Multiple Checkbox"""
-    casesearch.select_checkbox(CaseSearchUserInput.genre, [1, 2], select_by_value=index)
+    casesearch.select_checkbox(CaseSearchUserInput.genre, [CaseSearchUserInput.hiphop, CaseSearchUserInput.latin_music], select_by_value=text)
     casesearch.check_dropdown_value(search_property=CaseSearchUserInput.subgenre,
                                     value=CaseSearchUserInput.latin_jazz,
                                     present=YES)
