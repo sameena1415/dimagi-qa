@@ -99,5 +99,5 @@ def test_case_delete_saved_reports(driver, settings):
     report = HomePage(driver, settings)
     report.reports_menu()
     load = ReportPage(driver)
-    # load.delete_saved_reports()
+    load.delete_saved_reports()
     load.delete_report_case_links()
