@@ -124,6 +124,8 @@ class ReportPage(BasePage):
         #Report Case
         self.report_case_links = (By.XPATH,"//li/a[contains(.,'report case')]")
         self.report_case_link = "(//li/a[contains(.,'{}')])[1]"
+        self.report_form_links = (By.XPATH,"//li/a[contains(.,'report form')]")
+        self.report_form_link = "(//li/a[contains(.,'{}')])[1]"
 
 
     def check_if_report_loaded(self):
@@ -291,22 +293,39 @@ class ReportPage(BasePage):
             for i in range(len(list))[::-1]:
                 text = list[i].text
                 print(i, text)
-                if 'w0pimm' in text:
-                    print("w0pimm is failing the test")
-                else:
-                    self.wait_for_element((By.XPATH, self.report_case_link.format(text)))
-                    self.wait_to_click((By.XPATH, self.report_case_link.format(text)))
-                    self.wait_to_click(self.edit_report_id)
-                    self.wait_to_click(self.delete_report_xpath)
-                    print("Deleted Saved Report")
-                    time.sleep(2)
-                    self.driver.refresh()
-                    time.sleep(5)
-                    list = self.find_elements(self.report_case_links)
+                self.wait_for_element((By.XPATH, self.report_case_link.format(text)))
+                self.wait_to_click((By.XPATH, self.report_case_link.format(text)))
+                self.wait_to_click(self.edit_report_id)
+                self.wait_to_click(self.delete_report_xpath)
+                print("Deleted Saved Report")
+                time.sleep(2)
+                self.driver.refresh()
+                time.sleep(5)
+                list = self.find_elements(self.report_case_links)
 
         else:
             print("Report deleted successfully!")
 
+    def delete_report_form_links(self):
+        list = self.find_elements(self.report_form_links)
+        print(len(list))
+        print(list)
+        if len(list) > 0:
+            for i in range(len(list))[::-1]:
+                text = list[i].text
+                print(i, text)
+                self.wait_for_element((By.XPATH, self.report_form_link.format(text)))
+                self.wait_to_click((By.XPATH, self.report_form_link.format(text)))
+                self.wait_to_click(self.edit_report_id)
+                self.wait_to_click(self.delete_report_xpath)
+                print("Deleted Saved Report")
+                time.sleep(2)
+                self.driver.refresh()
+                time.sleep(5)
+                list = self.find_elements(self.report_form_links)
+
+        else:
+            print("Report deleted successfully!")
 
 
     def get_yesterday_tomorrow_dates(self):
