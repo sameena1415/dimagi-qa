@@ -122,10 +122,10 @@ class ReportPage(BasePage):
         self.communication_type_select = (By.XPATH, "//label[.='Communication Type']/following-sibling::div/select")
 
         #Report Case
-        self.report_case_links = (By.XPATH,"//li/a[contains(.,'report case')]")
-        self.report_case_link = "(//li/a[contains(.,'{}')])[1]"
-        self.report_form_links = (By.XPATH,"//li/a[contains(.,'report form')]")
-        self.report_form_link = "(//li/a[contains(.,'{}')])[1]"
+        self.report_case_links = (By.XPATH,"//li/a[contains(@title,'report case')]")
+        self.report_case_link = "(//li/a[contains(@title,'{}')])[1]"
+        self.report_form_links = (By.XPATH,"//li/a[contains(@title,'report form')]")
+        self.report_form_link = "(//li/a[contains(@title,'{}')])[1]"
 
 
     def check_if_report_loaded(self):
