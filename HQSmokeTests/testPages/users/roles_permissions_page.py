@@ -39,8 +39,10 @@ class RolesPermissionPage(BasePage):
     def add_role(self):
         self.wait_to_click(self.add_new_role)
         self.wait_to_clear_and_send_keys(self.role_name, self.role_name_created)
+        time.sleep(1)
         self.click(self.edit_web_user_checkbox)
         self.scroll_to_element(self.save_button)
+        time.sleep(0.5)
         self.click(self.save_button)
         time.sleep(2)
         assert self.is_present_and_displayed(self.role_created), "Role not added successfully!"
@@ -48,10 +50,12 @@ class RolesPermissionPage(BasePage):
     def edit_role(self):
         self.wait_to_click(self.edit_created_role)
         self.wait_to_clear_and_send_keys(self.role_name, self.role_rename_created)
-        self.scroll_to_element(self.edit_mobile_worker_checkbox)
-        self.js_click(self.edit_mobile_worker_checkbox)
+        time.sleep(1)
+        self.click(self.edit_mobile_worker_checkbox)
         self.scroll_to_element(self.save_button)
-        self.js_click(self.save_button)
+        time.sleep(0.5)
+        self.click(self.save_button)
+        time.sleep(2)
         assert self.is_present_and_displayed(self.role_renamed), "Role not edited successfully!"
         time.sleep(1)
 
