@@ -27,7 +27,7 @@ class MobileWorkerPage(BasePage):
         self.phone_number = UserData.area_code + fetch_phone_number()
 
         self.username_link = "//a[./i[@class='fa fa-user']][strong[.='{}']]"
-        self.remove_choice_button = "(//input[contains(@data-bind,'value: slug')]//following::a[@class='btn btn-danger' and @data-toggle='modal'][1])[{}]//preceding::button[contains(@data-bind,'removeChoice')][1]"
+        self.remove_choice_button = "(//input[contains(@data-bind,'value: slug')]//following::a[@class='btn btn-danger' and @data-toggle='modal'][1])[{}]//preceding::*[contains(@data-bind,'removeChoice')][1]"
         self.confirm_user_field_delete = (
         By.XPATH, "(//a[.='Cancel']//following-sibling::button[@class='btn btn-danger'])[last()]")
         self.delete_user_field = "(//input[contains(@data-bind,'value: slug')]//following::a[@class='btn btn-danger' and @data-toggle='modal'][1])[{}]"
