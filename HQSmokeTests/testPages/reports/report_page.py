@@ -312,8 +312,8 @@ class ReportPage(BasePage):
         print(list)
         if len(list) > 0:
             for i in range(len(list))[::-1]:
-                text = list[i].text
-                print(i, text)
+                text = list[i+1].text
+                print(i+1, text)
                 self.wait_for_element((By.XPATH, self.report_form_link.format(text)))
                 self.wait_to_click((By.XPATH, self.report_form_link.format(text)))
                 self.wait_to_click(self.edit_report_id)

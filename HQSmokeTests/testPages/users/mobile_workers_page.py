@@ -27,10 +27,10 @@ class MobileWorkerPage(BasePage):
         self.phone_number = UserData.area_code + fetch_phone_number()
 
         self.username_link = "//a[./i[@class='fa fa-user']][strong[.='{}']]"
+        self.remove_choice_button = "(//input[contains(@data-bind,'value: slug')]//following::a[@class='btn btn-danger' and @data-toggle='modal'][1])[{}]//preceding::button[contains(@data-bind,'removeChoice')][1]"
         self.confirm_user_field_delete = (
         By.XPATH, "(//a[.='Cancel']//following-sibling::button[@class='btn btn-danger'])[last()]")
-        self.delete_user_field = (By.XPATH,
-                                  "(//input[@data-bind='value: slug'])[last()]//following::a[@class='btn btn-danger' and @data-toggle='modal'][1]")
+        self.delete_user_field = "(//input[contains(@data-bind,'value: slug')]//following::a[@class='btn btn-danger' and @data-toggle='modal'][1])[{}]"
         self.delete_success_mw = (By.XPATH, "//div[@class='alert alert-margin-top fade in alert-success']")
         self.confirm_delete_mw = (By.ID, "delete-user-icon")
         self.enter_username = (By.XPATH, '//input[@data-bind="value: signOff, valueUpdate: \'textchange\'"]')
@@ -326,9 +326,11 @@ class MobileWorkerPage(BasePage):
             for i in range(len(list_profile))[::-1]:
                 text = list_profile[i].get_attribute("value")
                 if "field_" in text:
-                    self.driver.find_element(By.XPATH,
-                                             "(//input[contains(@data-bind,'value: slug')]//following::a[@class='btn btn-danger' and @data-toggle='modal'][1])[" + str(
-                                                 i + 1) + "]").click()
+                    self.wait_to_click((By.XPATH, self.remove_choice_button.format(str(i + 1))))
+                    self.wait_to_click((By.XPATH, self.delete_user_field.format(str(i+1))))
+                    # self.driver.find_element(By.XPATH,
+                    #                          "(//input[contains(@data-bind,'value: slug')]//following::a[@class='btn btn-danger' and @data-toggle='modal'][1])[" + str(
+                    #                              i + 1) + "]").click()
                     self.wait_to_click(self.confirm_user_field_delete)
                     time.sleep(2)
                     list_profile = self.driver.find_elements(By.XPATH, "//input[contains(@data-bind,'value: slug')]")
