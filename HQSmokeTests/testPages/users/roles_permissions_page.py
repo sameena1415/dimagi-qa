@@ -1,5 +1,7 @@
 import time
 
+from selenium.webdriver.common.actions.interaction import KEY
+
 from common_utilities.selenium.base_page import BasePage
 from common_utilities.generate_random_string import fetch_random_string
 
@@ -19,14 +21,14 @@ class RolesPermissionPage(BasePage):
         self.add_new_role = (
         By.XPATH, "//button[@data-bind='click: function () {$root.setRoleBeingEdited($root.defaultRole)}']")
         self.role_name = (By.ID, "role-name")
-        self.edit_web_user_checkbox = (By.ID, "edit-web-users-checkbox")
+        self.edit_web_user_checkbox = (By.XPATH, "//input[@id='edit-web-users-checkbox']")
         self.save_button = (By.XPATH, "//button[@class='btn btn-primary disable-on-submit']")
         self.role_created = (By.XPATH, "//span[text()='" + str(self.role_name_created) + "']")
         self.edit_created_role = (By.XPATH, "//th[.//span[.='" + str(
             self.role_name_created) + "']]/following-sibling::td//*[@class='fa fa-edit']")
         self.delete_role = (By.XPATH, "//th[.//span[.='" + str(
             self.role_name_created) + "']]/following-sibling::td//i[@class='fa fa-trash']")
-        self.edit_mobile_worker_checkbox = (By.ID, "edit-commcare-users-checkbox")
+        self.edit_mobile_worker_checkbox = (By.XPATH, "//input[@id='edit-commcare-users-checkbox']")
         self.role_renamed = (By.XPATH, "//span[text()='" + str(self.role_rename_created) + "']")
         self.confirm_role_delete = (By.XPATH, "//div[@class='btn btn-danger']")
 
@@ -37,15 +39,23 @@ class RolesPermissionPage(BasePage):
     def add_role(self):
         self.wait_to_click(self.add_new_role)
         self.wait_to_clear_and_send_keys(self.role_name, self.role_name_created)
+        time.sleep(1)
         self.click(self.edit_web_user_checkbox)
-        self.move_to_element_and_click(self.save_button)
+        self.scroll_to_element(self.save_button)
+        time.sleep(0.5)
+        self.click(self.save_button)
+        time.sleep(2)
         assert self.is_present_and_displayed(self.role_created), "Role not added successfully!"
 
     def edit_role(self):
         self.wait_to_click(self.edit_created_role)
         self.wait_to_clear_and_send_keys(self.role_name, self.role_rename_created)
-        self.move_to_element_and_click(self.edit_mobile_worker_checkbox)
-        self.move_to_element_and_click(self.save_button)
+        time.sleep(1)
+        self.click(self.edit_mobile_worker_checkbox)
+        self.scroll_to_element(self.save_button)
+        time.sleep(0.5)
+        self.click(self.save_button)
+        time.sleep(2)
         assert self.is_present_and_displayed(self.role_renamed), "Role not edited successfully!"
         time.sleep(1)
 

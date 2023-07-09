@@ -147,6 +147,10 @@ class BasePage:
         select_source = Select(self.driver.find_element(*source_locator))
         select_source.select_by_value(value)
 
+    def select_by_index(self, source_locator, value):
+        select_source = Select(self.driver.find_element(*source_locator))
+        select_source.select_by_index(value)
+
     def deselect_all(self, source_locator):
         select_source = Select(self.driver.find_element(*source_locator))
         select_source.deselect_all()
