@@ -345,6 +345,7 @@ class MobileWorkerPage(BasePage):
         self.mobile_worker_menu()
         self.wait_to_click(self.download_worker_btn)
         self.wait_to_click(self.download_filter)
+        time.sleep(5)
         try:
             self.wait_and_sleep_to_click(self.download_users_btn)
             time.sleep(5)
@@ -352,7 +353,7 @@ class MobileWorkerPage(BasePage):
             print("TIMEOUT ERROR: Still preparing for download..Celery might be down..")
             assert False
         # verify_downloaded_workers
-        newest_file = latest_download_file()
+        newest_file = latest_download_file("_users_")
         self.assert_downloaded_file(newest_file, "_users_"), "Download Not Completed!"
         print("File download successful")
 

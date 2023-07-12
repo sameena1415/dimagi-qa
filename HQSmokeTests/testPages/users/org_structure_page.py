@@ -12,20 +12,29 @@ from selenium.webdriver.common.by import By
 """"Contains test page elements and functions related to the User's Organization structure module"""
 
 
-def latest_download_file(type=".xlsx"):
+def latest_download_file(type=".xlsx", name=None):
     cwd = os.getcwd()
     try:
         os.chdir(PathSettings.DOWNLOAD_PATH)
         all_specific_files = filter(lambda x: x.endswith(type), os.listdir(os.getcwd()))
         files = sorted(all_specific_files, key=os.path.getctime)
-        if files[-1].endswith(".log"):
-            newest = sorted(files, key=os.path.getctime)[-2]
-        elif files[-1].endswith(".xlsx"):
-            newest = sorted(files, key=os.path.getctime)[-1]
+        if name == None:
+            if files[-1].endswith(".log"):
+                newest = sorted(files, key=os.path.getctime)[-2]
+            elif files[-1].endswith(".xlsx"):
+                newest = sorted(files, key=os.path.getctime)[-1]
+            else:
+                newest = max(files, key=os.path.getctime)
+            print("File downloaded: " + newest)
+            return newest
         else:
-            newest = max(files, key=os.path.getctime)
-        print("File downloaded: " + newest)
-        return newest
+            if name in files[-1]:
+                newest = sorted(files, key=os.path.getctime)[-1]
+            else:
+                newest = max(files, key=os.path.getctime)
+            print("File downloaded: " + newest)
+            return newest
+
     finally:
         print("Restoring the path...")
         os.chdir(cwd)
