@@ -108,5 +108,8 @@ class HomePage(BasePage):
         except TimeoutException:
             if self.is_present(login.username_textbox_id):
                 login.login(self.settings["login_username"], self.settings["login_password"])
+                self.driver.get(self.dashboard_link)
+                self.wait_for_element(menu)
+                self.wait_to_click(menu)
             else:
                 print(TimeoutException)
