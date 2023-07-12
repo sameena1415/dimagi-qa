@@ -12,6 +12,7 @@ class HomePage(BasePage):
 
     def __init__(self, driver, settings):
         super().__init__(driver)
+        self.settings = settings
 
         self.available_application = UserData.village_application
         self.dashboard_link = settings['url']+"/dashboard/project/"
@@ -99,11 +100,17 @@ class HomePage(BasePage):
 
     def open_menu(self, menu):
         login = LoginPage(self.driver, self.settings["url"])
-        if self.is_present(self.show_full_menu):
-           self.js_click(self.show_full_menu)
-        elif self.is_present(login.username_textbox_id):
-             login.login(self.settings["login_username"], self.settings["login_password"])
-        self.driver.get(self.dashboard_link)
-        self.wait_for_element(menu)
-        self.wait_to_click(menu)
-
+        try:
+            if self.is_present(self.show_full_menu):
+                self.js_click(self.show_full_menu)
+            self.driver.get(self.dashboard_link)
+            self.wait_for_element(menu)
+            self.wait_to_click(menu)
+        except TimeoutException:
+            if self.is_present(login.username_textbox_id):
+                login.login(self.settings["login_username"], self.settings["login_password"])
+                self.driver.get(self.dashboard_link)
+                self.wait_for_element(menu)
+                self.wait_to_click(menu)
+            else:
+                print(TimeoutException)
