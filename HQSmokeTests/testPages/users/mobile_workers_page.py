@@ -353,7 +353,7 @@ class MobileWorkerPage(BasePage):
             print("TIMEOUT ERROR: Still preparing for download..Celery might be down..")
             assert False
         # verify_downloaded_workers
-        newest_file = latest_download_file("_users_")
+        newest_file = latest_download_file()
         self.assert_downloaded_file(newest_file, "_users_"), "Download Not Completed!"
         print("File download successful")
 
