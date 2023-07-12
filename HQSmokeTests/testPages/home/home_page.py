@@ -1,6 +1,7 @@
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.by import By
 
+from common_utilities.hq_login.login_page import LoginPage
 from common_utilities.selenium.base_page import BasePage
 from HQSmokeTests.userInputs.user_inputs import UserData
 
@@ -97,8 +98,15 @@ class HomePage(BasePage):
         assert self.USERS_TITLE in self.driver.title, "Rage clicks failed!."
 
     def open_menu(self, menu):
-        if self.is_present(self.show_full_menu):
-            self.js_click(self.show_full_menu)
-        self.driver.get(self.dashboard_link)
-        self.wait_for_element(menu)
-        self.wait_to_click(menu)
+        login = LoginPage(self.driver, self.settings["url"])
+        try:
+            if self.is_present(self.show_full_menu):
+                self.js_click(self.show_full_menu)
+            self.driver.get(self.dashboard_link)
+            self.wait_for_element(menu)
+            self.wait_to_click(menu)
+        except TimeoutException:
+            if self.is_present(login.username_textbox_id):
+                login.login(self.settings["login_username"], self.settings["login_password"])
+            else:
+                print(TimeoutException)
