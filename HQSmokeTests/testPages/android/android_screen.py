@@ -17,7 +17,7 @@ class AndroidScreen:
             "deviceName": "Google Pixel 4 XL",
 
             # Set URL of the application under test
-            "app": "bs://3b16d344586182cfaf7626afa254eb65140816fb",
+            "app": "bs://eaf01d03c4c260f5a40dc5a1ee650e338706d97b",
 
             "autoGrantPermissions": "true",
 
@@ -82,7 +82,7 @@ class AndroidScreen:
         self.driver.find_element(by=AppiumBy.ID, value=self.username).send_keys(UserData.app_login)
         self.driver.find_element(by=AppiumBy.ID, value=self.password).send_keys(UserData.app_password)
         self.driver.find_element(by=AppiumBy.ID, value=self.login).click()
-        time.sleep(15)
+        time.sleep(20)
         self.driver.find_element(by=AppiumBy.XPATH, value=self.start_button).click()
         time.sleep(2)
         self.driver.find_element(by=AppiumBy.XPATH, value=self.case_list).click()

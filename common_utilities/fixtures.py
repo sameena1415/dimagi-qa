@@ -82,14 +82,14 @@ def appsite(pytestconfig):
     return pytestconfig.getoption("--appsite")
 
 
-@pytest.mark.optionalhook
+@pytest.hookimpl(optionalhook=True)
 def pytest_html_results_table_header(cells):
     # <th class="sortable result initial-sort asc inactive" col="result"><div class="sort-icon">vvv</div>Result</th>
     cells.insert(1, html.th('Tags', class_="sortable", col="tags"))
     cells.pop()
 
 
-@pytest.mark.optionalhook
+@pytest.hookimpl(optionalhook=True)
 def pytest_html_results_table_row(report, cells):
     cells.insert(1, html.td(report.tags))
     cells.pop()

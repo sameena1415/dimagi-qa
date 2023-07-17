@@ -133,6 +133,7 @@ class MessagingPage(BasePage):
         self.lang_input_textarea = (By.XPATH, "(//span[@role='combobox'])[last()]")
         self.select_first_lang = (By.XPATH, "(//li[@role='option'])[1]")
         self.select_second_lang = (By.XPATH, "(//li[@role='option'])[2]")
+        self.language_list = (By.XPATH, "//ul[@role='listbox']")
         self.save_lang = (By.XPATH, "(//div[@class='btn btn-primary'])[1]")
         self.delete_lang = (By.XPATH, "(//a[@data-bind='click: $root.removeLanguage'])[last()]")
         self.lang_error = (By.XPATH, "//p[text()='Language appears twice']")
@@ -330,6 +331,7 @@ class MessagingPage(BasePage):
         self.wait_to_click(self.add_lang)
         self.wait_to_click(self.lang_input_textarea)
         time.sleep(1)
+        self.wait_for_element(self.language_list)
         self.wait_to_click(self.select_first_lang)
         try:
             if self.is_displayed(self.lang_error):
@@ -342,6 +344,7 @@ class MessagingPage(BasePage):
                 self.wait_to_click(self.add_lang)
                 self.wait_to_click(self.lang_input_textarea)
                 time.sleep(1)
+                self.wait_for_element(self.language_list)
                 self.wait_to_click(self.select_first_lang)
         except (NoSuchElementException, TimeoutException):
             print("One lang only")
@@ -349,6 +352,7 @@ class MessagingPage(BasePage):
         time.sleep(1)
         self.wait_to_click(self.lang_input_textarea)
         time.sleep(1)
+        self.wait_for_element(self.language_list)
         self.wait_to_click(self.select_second_lang)
         self.wait_to_click(self.save_lang)
         time.sleep(1)

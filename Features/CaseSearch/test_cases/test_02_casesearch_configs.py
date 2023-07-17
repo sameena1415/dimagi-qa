@@ -184,6 +184,7 @@ def test_case_07_address_geocoder_format(driver):
     webapps.present_in_data_preview(CaseSearchUserInput.home_zipcode_value)
     """Check geocoder format search property"""
     driver.back()
+    time.sleep(4)
     driver.back()
     webapps.search_all_cases()
     webapps.clear_selections_on_case_search_page()
@@ -675,7 +676,7 @@ def test_case_25_checkbox_selection(driver):
     webapps.search_again_cases()
     casesearch.check_if_checkbox_selected(CaseSearchUserInput.mood, [3, 4])
     webapps.clear_selections_on_case_search_page()
-    input_values = casesearch.select_checkbox(CaseSearchUserInput.mood, [4, 5])
+    input_values = casesearch.select_checkbox(CaseSearchUserInput.mood, [4, 5], select_by_value=index)
     webapps.search_button_on_case_search_page()
     casesearch.check_values_on_caselist(row_num=CaseSearchUserInput.three,
                                         expected_value=input_values,
@@ -706,7 +707,7 @@ def test_case_27_checkbox_single_selection_dependent_dropdown(driver):
     webapps.open_menu(CaseSearchUserInput.checkbox_selection_menu)
     webapps.clear_selections_on_case_search_page()
     """Single Checkbox"""
-    casesearch.select_checkbox(CaseSearchUserInput.genre, [CaseSearchUserInput.latin_music])
+    casesearch.select_checkbox(CaseSearchUserInput.genre, CaseSearchUserInput.latin_music, select_by_value=text)
     """Check related values appear in dropdown"""
     casesearch.search_against_property(search_property=CaseSearchUserInput.subgenre,
                                        input_value=CaseSearchUserInput.latin_jazz,
@@ -729,7 +730,8 @@ def test_case_28_checkbox_multiple_selection_dependent_dropdown(driver):
     webapps.open_menu(CaseSearchUserInput.checkbox_selection_menu)
     webapps.clear_selections_on_case_search_page()
     """Multiple Checkbox"""
-    casesearch.select_checkbox(CaseSearchUserInput.genre, [CaseSearchUserInput.latin_music, CaseSearchUserInput.hiphop])
+    casesearch.select_checkbox(CaseSearchUserInput.genre, CaseSearchUserInput.hiphop, select_by_value=text)
+    casesearch.select_checkbox(CaseSearchUserInput.genre, CaseSearchUserInput.latin_music, select_by_value=text)
     casesearch.check_dropdown_value(search_property=CaseSearchUserInput.subgenre,
                                     value=CaseSearchUserInput.latin_jazz,
                                     present=YES)

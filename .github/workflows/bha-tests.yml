@@ -1,9 +1,11 @@
 # This workflow will install Python dependencies, run tests and lint with a single version of Python
 # For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
 
-name: Case Search Split Screen Tests
+name: CO BHA Smoke Tests
 
 on:
+  repository_dispatch:
+    types: [ deploy_success ]
   workflow_dispatch:
     inputs:
       environment:
@@ -38,7 +40,7 @@ jobs:
     concurrency:
       group: ${{ github.workflow }}-${{ matrix.environment }}
       cancel-in-progress: true
-    name: Case Search Split Screen on '${{ matrix.environment }}'
+    name: BHA Tests on '${{ matrix.environment }}'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -50,9 +52,9 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r Features/CaseSearchOnSplitScreen/requires.txt
+          pip install -r USH_Apps/CO_BHA/requires.txt
 
-      - name: Case Search Spit Screen Regression
+      - name: BHA Smoke Tests
         env:
           DIMAGIQA_ENV: ${{ matrix.environment }}  #${{ secrets.DIMAGIQA_URL }}
           DIMAGIQA_LOGIN_USERNAME: ${{ secrets.DIMAGIQA_LOGIN_USERNAME }}
@@ -64,7 +66,7 @@ jobs:
           echo "matrix environment: ${{ matrix.environment }}"
           echo "NOW=$(date +'%m-%d %H:%M')" >> $GITHUB_ENV
           echo ${{env.NOW}}
-          pytest -v "./Features/CaseSearchOnSplitScreen/test_cases" --dist=loadfile --html=report_${{ matrix.environment }}.html
+          pytest -v "./USH_Apps/CO_BHA/test_cases" --dist=loadfile --reruns 1 --html=report_${{ matrix.environment }}.html
 
       - name: Set email vars
         if: ${{ success() || failure() }}
@@ -78,7 +80,7 @@ jobs:
             const { promises: fs } = require('fs')
 
             const {JOB_STATUS, NOW, CC_ENV, GITHUB_HEAD_REF} = process.env
-            const prefix = `[${CC_ENV}] Case Search Split Screen - ${JOB_STATUS.toUpperCase()} - Run #${context.runNumber}`
+            const prefix = `[${CC_ENV}] BHA - ${JOB_STATUS.toUpperCase()} - Run #${context.runNumber}`
             const suffix = `at ${NOW}`
 
             let subject = `${prefix} on "deploy_success" ${suffix}`
@@ -92,7 +94,7 @@ jobs:
             }
 
             let actionRunLink = context.payload.repository.html_url + `/actions/runs/${context.runId}`
-            let testSuite = 'Case Search Regression'
+            let testSuite = 'BHA Smoke'
             let bodyContent = await fs.readFile(bodyFile, 'utf8')
             bodyContent = bodyContent.replace(/{{actionRunLink}}/g, actionRunLink)
                 .replace(/{{runNumber}}/g, context.runNumber)
@@ -140,7 +142,7 @@ jobs:
                         "type": "section",
                         "text": {
                             "type": "mrkdwn",
-                            "text": " Hey :hiii::hiii: \n*${{ github.workflow }}* were just triggered!"
+                            "text": " Hey :bye_boo: \n*${{ github.workflow }}* were just triggered!"
                         }
                     },
                     {
@@ -182,7 +184,7 @@ jobs:
                 ]
             }
         env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL_USH }}
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL_BHA }}
           SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
 
 

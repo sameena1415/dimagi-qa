@@ -92,7 +92,7 @@ class BasePage:
         WebDriverWait(self.driver, timeout, poll_frequency=5).until(clickable,
                                                   message="Couldn't find locator: " + str(locator))
 
-    def wait_and_sleep_to_click(self, locator, timeout=60):
+    def wait_and_sleep_to_click(self, locator, timeout=90):
         element = None
         try:
             time.sleep(10)
@@ -146,6 +146,10 @@ class BasePage:
     def select_by_value(self, source_locator, value):
         select_source = Select(self.driver.find_element(*source_locator))
         select_source.select_by_value(value)
+
+    def select_by_index(self, source_locator, value):
+        select_source = Select(self.driver.find_element(*source_locator))
+        select_source.select_by_index(value)
 
     def deselect_all(self, source_locator):
         select_source = Select(self.driver.find_element(*source_locator))
