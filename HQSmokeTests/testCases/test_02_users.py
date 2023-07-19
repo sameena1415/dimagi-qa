@@ -15,6 +15,40 @@ group_id = dict()
 group_id["user"] = "username_"+fetch_random_string()
 group_id["user_new"] = "username_"+fetch_random_string()+"_new"
 
+
+@pytest.mark.user
+@pytest.mark.groups
+@pytest.mark.user_profiles
+@pytest.mark.user_fields
+@pytest.mark.mobileWorker
+def test_initial_cleanup_items_in_users_menu(driver, settings):
+    clean = MobileWorkerPage(driver)
+    clean2 = GroupPage(driver)
+
+    menu = HomePage(driver, settings)
+    menu.users_menu()
+    clean.delete_bulk_users()
+
+    menu.users_menu()
+    clean.mobile_worker_menu()
+    clean.edit_user_field()
+    clean.click_profile()
+    clean.delete_profile()
+    print("Removed all test profiles")
+
+    menu.users_menu()
+    clean.mobile_worker_menu()
+    clean.edit_user_field()
+    clean.delete_test_user_field()
+    print("Deleted the user field")
+
+    clean.mobile_worker_menu()
+    clean2.click_group_menu()
+    clean2.delete_test_groups()
+    print("Deleted the group")
+
+
+
 @pytest.mark.user
 @pytest.mark.mobileWorker
 @pytest.mark.run(order=0)
@@ -118,7 +152,7 @@ def test_case_04_reactivate_user(driver, settings):
 @pytest.mark.user_profiles
 @pytest.mark.user_fields
 @pytest.mark.mobileWorker
-def test_cleanup_items_in_users_menu(driver, settings):
+def test_aftertest_cleanup_items_in_users_menu(driver, settings):
     clean = MobileWorkerPage(driver)
     clean2 = GroupPage(driver)
 
@@ -170,7 +204,6 @@ def test_case_54_add_custom_user_data_profile_to_mobile_worker(driver, settings)
     menu.users_menu()
     create.mobile_worker_menu()
     create.delete_bulk_users()
-    # create.select_and_delete_mobile_worker(group_id["user_new"])
     menu.users_menu()
     create.mobile_worker_menu()
     create.edit_user_field()
