@@ -19,6 +19,7 @@ class AndroidScreen:
             "platformName": "android",
             "platformVersion": "10.0",
             "deviceName": "Google Pixel 4 XL",
+            "automationName": "Appium",
 
             # Set URL of the application under test
             "app": "bs://4ba00b3041a98c264aa875c944c8748dd47df7fe",
@@ -63,44 +64,44 @@ class AndroidScreen:
         self.submit_button = "//android.widget.TextView[@text='FINISH']"
 
     def click_xpath(self, locator):
-        element = self.driver.find_element(by=AppiumBy.XPATH, value=locator)
+        element = self.driver.find_element(AppiumBy.XPATH, locator)
         element.click()
 
     def click_id(self, locator):
-        element = self.driver.find_element(by=AppiumBy.ID, value=locator)
+        element = self.driver.find_element(AppiumBy.ID, locator)
         element.click()
 
     def send_text_xpath(self, locator, user_input):
-        element = self.driver.find_element(by=AppiumBy.XPATH, value=locator)
+        element = self.driver.find_element(AppiumBy.XPATH, locator)
         element.send_keys(user_input)
 
     def send_text_id(self, locator, user_input):
-        element = self.driver.find_element(by=AppiumBy.ID, value=locator)
+        element = self.driver.find_element(AppiumBy.ID, locator)
         element.send_keys(user_input)
 
     def install_app_and_submit_form(self, code, random_text):
-        self.driver.find_element(by=AppiumBy.XPATH, value=self.enter_code).click()
-        self.driver.find_element(by=AppiumBy.ID, value=self.profile_code).send_keys(code)
-        self.driver.find_element(by=AppiumBy.ID, value=self.start_install).click()
+        self.driver.find_element(AppiumBy.XPATH, self.enter_code).click()
+        self.driver.find_element(AppiumBy.ID, self.profile_code).send_keys(code)
+        self.driver.find_element(AppiumBy.ID, self.start_install).click()
         time.sleep(3)
-        self.driver.find_element(by=AppiumBy.XPATH, value=self.install).click()
+        self.driver.find_element(AppiumBy.XPATH, self.install).click()
         time.sleep(15)
-        self.driver.find_element(by=AppiumBy.ID, value=self.username).send_keys(UserData.app_login)
-        self.driver.find_element(by=AppiumBy.ID, value=self.password).send_keys(UserData.app_password)
-        self.driver.find_element(by=AppiumBy.ID, value=self.login).click()
+        self.driver.find_element(AppiumBy.ID, self.username).send_keys(UserData.app_login)
+        self.driver.find_element(AppiumBy.ID, self.password).send_keys(UserData.app_password)
+        self.driver.find_element(AppiumBy.ID, self.login).click()
         time.sleep(50)
-        self.driver.find_element(by=AppiumBy.XPATH, value=self.start_button).click()
+        self.driver.find_element(AppiumBy.XPATH, self.start_button).click()
         time.sleep(3)
-        self.driver.find_element(by=AppiumBy.XPATH, value=self.case_list).click()
+        self.driver.find_element(AppiumBy.XPATH, self.case_list).click()
         time.sleep(3)
-        self.driver.find_element(by=AppiumBy.XPATH, value=self.form).click()
+        self.driver.find_element(AppiumBy.XPATH, self.form).click()
         time.sleep(3)
-        assert self.driver.find_element(by=AppiumBy.XPATH, value="//android.widget.TextView[@text='Add Text "+random_text+"']").is_displayed()
-        self.driver.find_element(by=AppiumBy.XPATH, value=self.text_field).send_keys(random_text)
-        self.driver.find_element(by=AppiumBy.XPATH, value=self.submit_button).click()
+        assert self.driver.find_element(AppiumBy.XPATH, "//android.widget.TextView[@text='Add Text "+random_text+"']").is_displayed()
+        self.driver.find_element(AppiumBy.XPATH, self.text_field).send_keys(random_text)
+        self.driver.find_element(AppiumBy.XPATH, self.submit_button).click()
         time.sleep(10)
-        assert self.driver.find_element(by=AppiumBy.XPATH, value="//android.widget.TextView[@text='1 form sent to server!']").is_displayed()
-        self.driver.find_element(by=AppiumBy.XPATH, value=self.sync_button).click()
+        assert self.driver.find_element(AppiumBy.XPATH, "//android.widget.TextView[@text='1 form sent to server!']").is_displayed()
+        self.driver.find_element(AppiumBy.XPATH, self.sync_button).click()
         time.sleep(3)
 
     def close_android_driver(self):
