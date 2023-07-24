@@ -7,7 +7,6 @@ pytest-html
 py
 selenium == 4.10.0
 webdriver-manager
-urllib3 == 1.26.15
 openpyxl
 matplotlib >= 3.3.4
 pytest-rerunfailures
