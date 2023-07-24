@@ -1,8 +1,8 @@
 import pytest
 
+from HQSmokeTests.testPages.data.copy_cases_page import CopyCasesPage
 from HQSmokeTests.testPages.data.data_dictionary_page import DataDictionaryPage
 from HQSmokeTests.testPages.data.deduplicate_case_page import DeduplicateCasePage
-from HQSmokeTests.testPages.data.export_data_page import ExportDataPage
 from HQSmokeTests.testPages.data.manage_forms_page import ManageFormsPage
 from HQSmokeTests.testPages.data.import_cases_page import ImportCasesPage
 from HQSmokeTests.testPages.data.reassign_cases_page import ReassignCasesPage
@@ -107,3 +107,15 @@ def test_case_59_data_dictionary(driver, settings):
     data.open_data_dictionary_case_page()
     data.export_data_dictionary()
     data.import_data_dictionary()
+
+
+@pytest.mark.data
+@pytest.mark.copyCases
+def test_case_60_copy_cases(driver, settings):
+    if 'www' in settings['url']:
+        pytest.skip("Changes not yet deployed to Prod")
+    home = HomePage(driver, settings)
+    home.data_menu()
+    copy = CopyCasesPage(driver, settings)
+    copy.get_cases()
+    copy.copy_case()
