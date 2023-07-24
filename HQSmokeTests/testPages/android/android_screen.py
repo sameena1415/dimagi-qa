@@ -5,7 +5,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 from HQSmokeTests.userInputs.user_inputs import UserData
 from appium.options.android import UiAutomator2Options
 from appium.webdriver.common.appiumby import AppiumBy
-from selenium.webdriver.support import expected_conditions as ec
+
 import time
 
 """"Contains test page elements and functions related to the app installation and form submission on mobile"""
@@ -21,7 +21,7 @@ class AndroidScreen:
             "deviceName": "Google Pixel 4 XL",
 
             # Set URL of the application under test
-            "app": "bs://eaf01d03c4c260f5a40dc5a1ee650e338706d97b",
+            "app": "bs://4ba00b3041a98c264aa875c944c8748dd47df7fe",
 
             "autoGrantPermissions": "true",
             "newCommandTimeout": 200,
