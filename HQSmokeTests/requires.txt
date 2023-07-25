@@ -5,14 +5,12 @@ pandas>=1.2.2
 pytest
 pytest-html
 py
-selenium == 4.9.0
-webdriver-manager
-urllib3 == 1.26.15
+selenium == 4.10.0
 openpyxl
 matplotlib >= 3.3.4
 pytest-rerunfailures
 pytest-xdist
 pytest-xdist[psutil]
-Appium-Python-Client >= 0.52
+Appium-Python-Client >= 2.10.0
 pyotp >=2.6.0
 pytest-order
