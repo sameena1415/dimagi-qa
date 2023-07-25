@@ -5,7 +5,10 @@ from selenium.webdriver.support.wait import WebDriverWait
 from HQSmokeTests.userInputs.user_inputs import UserData
 from appium.options.android import UiAutomator2Options
 from appium.webdriver.common.appiumby import AppiumBy
-
+from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.common.actions import interaction
+from selenium.webdriver.common.actions.action_builder import ActionBuilder
+from selenium.webdriver.common.actions.pointer_input import PointerInput
 import time
 
 """"Contains test page elements and functions related to the app installation and form submission on mobile"""
@@ -14,24 +17,29 @@ import time
 class AndroidScreen:
 
     def __init__(self, settings):
+        # This sample code uses the Appium python client v2
+        # pip install Appium-Python-Client
+        # Then you can paste this into a file and simply run with Python
+
         self.options = UiAutomator2Options().load_capabilities({
             # Specify device and os_version for testing
             "platformName": "android",
-            "platformVersion": "10.0",
-            "deviceName": "Google Pixel 4 XL",
-            "automationName": "Appium",
+            "appium:os_version": "10.0",
+            "appium:deviceName": "Google Pixel 4 XL",
+            "appium:automationName": "UIAutomator2",
 
             # Set URL of the application under test
-            "app": "bs://4ba00b3041a98c264aa875c944c8748dd47df7fe",
+            "appium:app": "bs://4ba00b3041a98c264aa875c944c8748dd47df7fe",
 
-            "autoGrantPermissions": "true",
-            "newCommandTimeout": 200,
+            "appium:autoGrantPermissions": "true",
+            "appium:newCommandTimeout": 3600,
 
             # Set other BrowserStack capabilities
             'bstack:options': {
-                "projectName": "First Python project",
-                "buildName": "Python Android",
-                "sessionName": "first_test",
+                "appium:project": "First Python project",
+                "appium:build": "Python Android",
+                "appium:name": "first_test",
+                "appiumVersion": "2.10.0",
 
                 # Set your access credentials
                 "userName": settings["bs_user"],
@@ -43,7 +51,7 @@ class AndroidScreen:
         # Initialize the remote Webdriver using BrowserStack remote URL
         # and desired capabilities defined above
         self.driver = webdriver.Remote(
-            "http://hub-cloud.browserstack.com/wd/hub",
+            "https://hub-cloud.browserstack.com:443/wd/hub",
             options=self.options
         )
         self.driver.implicitly_wait(15)
