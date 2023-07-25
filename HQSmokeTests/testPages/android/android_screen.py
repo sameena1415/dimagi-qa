@@ -36,10 +36,9 @@ class AndroidScreen:
 
             # Set other BrowserStack capabilities
             'bstack:options': {
-                "appium:projectName": "First Python project",
-                "appium:buildName": "Python Android",
-                "appium:sessionName": "first_test",
-                "appiumVersion": "2.10.0",
+                "projectName": "First Python project",
+                "buildName": "Python Android",
+                "sessionName": "first_test",
 
                 # Set your access credentials
                 "userName": settings["bs_user"],
