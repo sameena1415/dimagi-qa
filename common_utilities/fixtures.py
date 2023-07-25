@@ -2,11 +2,6 @@ import pytest
 from py.xml import html
 
 from selenium import webdriver
-# from selenium.webdriver.chrome.service import Service as ChromeService
-# from selenium.webdriver.firefox.service import Service as FirefoxService
-# from webdriver_manager.chrome import ChromeDriverManager
-# from webdriver_manager.firefox import GeckoDriverManager
-
 from common_utilities.path_settings import PathSettings
 from common_utilities.hq_login.login_page import LoginPage
 
@@ -52,14 +47,10 @@ def driver(settings, browser):
             firefox_options.add_argument("--disable-notifications")
             firefox_options.set_preference("browser.download.dir", str(PathSettings.DOWNLOAD_PATH))
     if browser == "chrome":
-        # service = ChromeService(executable_path=ChromeDriverManager(version="114.0.5735.90").install())
         web_driver = webdriver.Chrome(options=chrome_options)
-        # web_driver = webdriver.Chrome(service=service, options=chrome_options)
         print("Chrome version:", web_driver.capabilities['browserVersion'])
     elif browser == "firefox":
         web_driver = webdriver.Firefox(options=firefox_options)
-        # service = FirefoxService(executable_path=GeckoDriverManager().install())
-        # web_driver = webdriver.Firefox(service=service, options=firefox_options)
     else:
         print("Provide valid browser")
     login = LoginPage(web_driver, settings["url"])
