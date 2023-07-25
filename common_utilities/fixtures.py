@@ -52,7 +52,7 @@ def driver(settings, browser):
             firefox_options.add_argument("--disable-notifications")
             firefox_options.set_preference("browser.download.dir", str(PathSettings.DOWNLOAD_PATH))
     if browser == "chrome":
-        service = ChromeService(executable_path=ChromeDriverManager().install())
+        service = ChromeService(executable_path=ChromeDriverManager(version="117.0.5908.0.0").install())
         web_driver = webdriver.Chrome(service=service, options=chrome_options)
         print("Chrome version:", web_driver.capabilities['browserVersion'])
     elif browser == "firefox":

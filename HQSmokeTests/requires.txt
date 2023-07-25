@@ -10,6 +10,7 @@ webdriver-manager
 openpyxl
 matplotlib >= 3.3.4
 pytest-rerunfailures
+chromedriver-binary == 117.0.5908.0.0
 pytest-xdist
 pytest-xdist[psutil]
 Appium-Python-Client >= 2.10.0
