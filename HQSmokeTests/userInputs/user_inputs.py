@@ -51,7 +51,7 @@ class UserData:
 
     """New web user invitation"""
     yahoo_url = "https://login.yahoo.com/"
-    yahoo_user_name = 'automation_user_commcare@yahoo.com'
+    yahoo_user_name = 'automation_webuser@yahoo.com'
 
     """Deduplicate Case Module """
     case_property = 'village_name'

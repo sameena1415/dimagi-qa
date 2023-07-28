@@ -3,6 +3,7 @@ from datetime import datetime
 
 from selenium.webdriver.support.select import Select
 
+from HQSmokeTests.testPages.home.home_page import HomePage
 from common_utilities.selenium.base_page import BasePage
 from common_utilities.generate_random_string import fetch_random_string
 from HQSmokeTests.userInputs.user_inputs import UserData
@@ -85,7 +86,8 @@ class ReportPage(BasePage):
         self.saved_report_created = (By.XPATH, "//a[text()='" + self.report_name_saved + "']")
         self.delete_saved = (By.XPATH,
                              "(//a[text()='" + self.report_name_saved + "']//following::button[@class='btn btn-danger add-spinner-on-click'])[1]")
-
+        self.delete_saved_report_link = "(//a[text()='{}']//following::button[@class='btn btn-danger add-spinner-on-click'])[1]"
+        self.all_saved_reports = (By.XPATH, "//td[a[contains(.,'saved form')]]//following-sibling::td/button[contains(@data-bind,'delete')]")
         # Scheduled Reports
         self.scheduled_reports_menu_xpath = (By.XPATH, "//a[@href='#scheduled-reports']")
         self.create_scheduled_report = (By.XPATH, "//a[@class='btn btn-primary track-usage-link']")
@@ -118,6 +120,13 @@ class ReportPage(BasePage):
 
         # Messaging History
         self.communication_type_select = (By.XPATH, "//label[.='Communication Type']/following-sibling::div/select")
+
+        #Report Case
+        self.report_case_links = (By.XPATH,"//li/a[contains(@title,'report case')]")
+        self.report_case_link = "(//li/a[contains(@title,'{}')])[1]"
+        self.report_form_links = (By.XPATH,"//li/a[contains(@title,'report form')]")
+        self.report_form_link = "(//li/a[contains(@title,'{}')])[1]"
+
 
     def check_if_report_loaded(self):
         try:
@@ -265,6 +274,60 @@ class ReportPage(BasePage):
         except TimeoutException:
             print("No reports available")
 
+    def delete_saved_reports(self):
+        self.js_click(self.saved_reports_menu_link)
+        list = self.find_elements(self.all_saved_reports)
+        if len(list) > 0:
+            for items in list:
+                self.wait_to_click(items)
+                print("Deleted Saved Report")
+                list = self.find_elements(self.all_saved_reports)
+        else:
+            print("No saved test reports")
+
+    def delete_report_case_links(self):
+        list = self.find_elements(self.report_case_links)
+        print(len(list))
+        print(list)
+        if len(list) > 0:
+            for i in range(len(list))[::-1]:
+                text = list[i].text
+                print(i, text)
+                self.wait_for_element((By.XPATH, self.report_case_link.format(text)))
+                self.wait_to_click((By.XPATH, self.report_case_link.format(text)))
+                self.wait_to_click(self.edit_report_id)
+                self.wait_to_click(self.delete_report_xpath)
+                print("Deleted Saved Report")
+                time.sleep(2)
+                self.driver.refresh()
+                time.sleep(5)
+                list = self.find_elements(self.report_case_links)
+
+        else:
+            print("Report deleted successfully!")
+
+    def delete_report_form_links(self):
+        list = self.find_elements(self.report_form_links)
+        print(len(list))
+        print(list)
+        if len(list) > 0:
+            for i in range(len(list))[::-1]:
+                text = list[i].text
+                print(i, text)
+                self.wait_for_element((By.XPATH, self.report_form_link.format(text)))
+                self.wait_to_click((By.XPATH, self.report_form_link.format(text)))
+                self.wait_to_click(self.edit_report_id)
+                self.wait_to_click(self.delete_report_xpath)
+                print("Deleted Saved Report")
+                time.sleep(2)
+                self.driver.refresh()
+                time.sleep(5)
+                list = self.find_elements(self.report_form_links)
+
+        else:
+            print("Report deleted successfully!")
+
+
     def get_yesterday_tomorrow_dates(self):
         # Get today's date
         presentday = datetime.now()  # or presentday = datetime.today()
@@ -289,7 +352,7 @@ class ReportPage(BasePage):
 
     def verify_form_data_submit_history(self, case_name, username):
         print("Sleeping for sometime for the case to get registered.")
-        time.sleep(20)
+        time.sleep(40)
         self.wait_to_click(self.submit_history_rep)
         self.wait_to_click(self.users_box)
         self.send_keys(self.search_user, username)
@@ -338,7 +401,7 @@ class ReportPage(BasePage):
     def verify_app_data_submit_history(self, case_name):
 
         print("Sleeping for sometime for the case to get registered.")
-        time.sleep(20)
+        time.sleep(40)
         self.wait_to_click(self.submit_history_rep)
         self.wait_to_click(self.users_box)
         self.send_keys(self.search_user, UserData.app_login)

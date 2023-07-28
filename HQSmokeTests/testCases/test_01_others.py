@@ -21,7 +21,7 @@ def test_case_01_menu_visibility(driver, settings):
     visible.dashboard_menu()
     visible.data_menu()
     visible.users_menu()
-    visible.applications_menu()
+    visible.applications_menu(UserData.reassign_cases_application)
     visible.messaging_menu()
     visible.web_apps_menu()
 

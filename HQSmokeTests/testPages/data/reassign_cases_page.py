@@ -18,7 +18,7 @@ class ReassignCasesPage(BasePage):
         self.apply = (By.ID, "apply-btn")
         self.case_type = (By.ID, "report_filter_case_type")
         self.case_type_option_value = (By.XPATH, "//option[@value='reassign']")
-        self.select_first_case = (By.XPATH, "(//input[@type='checkbox'])[1]")
+        self.select_first_case = (By.XPATH, "(//input[@type='checkbox'])[2]")
         self.first_case_name = (By.XPATH, "(//a[contains(@class, 'ajax_dialog')])[1]")
         self.user_search_dropdown = (By.ID, "select2-reassign_owner_select-container")
         self.user_to_be_reassigned = (By.XPATH, "(//li[contains(.,'Active Mobile Worker')])[1]")

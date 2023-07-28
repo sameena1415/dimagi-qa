@@ -85,6 +85,7 @@ class ApplicationPage(BasePage):
         self.updates_text = (By.XPATH,"//div[@id='js-publish-status']")
         self.make_new_version_button= (By.XPATH, "//button[contains(@data-bind,'Make New Version')]")
         self.release_button = (By.XPATH, "(//button[contains(text(),'Released')])[1]")
+        self.release_button_pressed = (By.XPATH, "(//button[contains(text(),'Released')])[1][contains(@class,'active')]")
         self.publish_button = (By.XPATH,"(//*[contains(@data-bind,'click: clickDeploy')])[1]")
         self.delete_form = (By.XPATH,"//a[./span[contains(text(),'"+UserData.new_form_name+"')]]/preceding-sibling::a[./i[@class='fa fa-trash-o']]")
         self.delete_form_confirm = (By.XPATH, "//div[./p[./strong[contains(text(),'Android')]]]/following-sibling::div[button]//i[@class='fa fa-trash']")
@@ -113,12 +114,14 @@ class ApplicationPage(BasePage):
 
     def form_builder_exploration(self):
         time.sleep(2)
-        self.click(self.menu_settings)
+        self.wait_to_click(self.menu_settings)
         time.sleep(2)
         self.wait_for_element(self.menu_settings_content)
         assert self.is_displayed(self.menu_settings_content)
         print("Menu Settings loaded successfully!")
-        self.wait_to_click(self.form_settings)
+        self.wait_for_element(self.form_settings)
+        self.click(self.form_settings)
+        self.accept_pop_up()
         assert self.is_present_and_displayed(self.form_settings_content)
         print("Form Settings loaded successfully!")
 
@@ -203,7 +206,9 @@ class ApplicationPage(BasePage):
         time.sleep(2)
         self.wait_to_click(self.make_new_version_button)
         time.sleep(5)
-        self.wait_to_click(self.release_button)
+        self.driver.refresh()
+        self.wait_for_element(self.release_button)
+        self.js_click(self.release_button)
         print("Sleeping for the installation code to generate")
         time.sleep(10)
         self.wait_to_click(self.publish_button)
@@ -211,6 +216,7 @@ class ApplicationPage(BasePage):
         self.wait_to_click(self.close)
         # self.wait_to_click(self.delete_form)
         # self.wait_to_click(self.delete_form_confirm)
+        assert self.is_present(self.release_button_pressed), "Release button is not successfully pressed."
         return code_text, self.field_text
 
 

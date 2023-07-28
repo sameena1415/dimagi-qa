@@ -92,7 +92,7 @@ class BasePage:
         WebDriverWait(self.driver, timeout, poll_frequency=5).until(clickable,
                                                   message="Couldn't find locator: " + str(locator))
 
-    def wait_and_sleep_to_click(self, locator, timeout=60):
+    def wait_and_sleep_to_click(self, locator, timeout=90):
         element = None
         try:
             time.sleep(10)
@@ -146,6 +146,10 @@ class BasePage:
     def select_by_value(self, source_locator, value):
         select_source = Select(self.driver.find_element(*source_locator))
         select_source.select_by_value(value)
+
+    def select_by_index(self, source_locator, value):
+        select_source = Select(self.driver.find_element(*source_locator))
+        select_source.select_by_index(value)
 
     def deselect_all(self, source_locator):
         select_source = Select(self.driver.find_element(*source_locator))
@@ -283,7 +287,7 @@ class BasePage:
     def scroll_to_bottom(self):
         self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight)")
 
-    def hover_and_click(self, locator1, locator2):
+    def hover_and_click(self, *locator1, **locator2):
         action = ActionChains(self.driver)
         element_1 = self.driver.find_element(locator1)
         action.move_to_element(element_1).perform()
@@ -340,4 +344,9 @@ class BasePage:
     def get_element(self, xpath_format, insert_value):
         element = (By.XPATH, xpath_format.format(insert_value))
         return element
+
+    def wait_for_ajax(self):
+        wait = WebDriverWait(self.driver, 500)
+        wait.until(lambda driver: self.driver.execute_script('return jQuery.active') == 0)
+        wait.until(lambda driver: self.driver.execute_script('return document.readyState') == 'complete')
 
