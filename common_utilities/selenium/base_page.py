@@ -287,7 +287,7 @@ class BasePage:
     def scroll_to_bottom(self):
         self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight)")
 
-    def hover_and_click(self, *locator1, **locator2):
+    def hover_and_click(self, locator1, locator2):
         action = ActionChains(self.driver)
         element_1 = self.driver.find_element(locator1)
         action.move_to_element(element_1).perform()

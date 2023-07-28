@@ -44,7 +44,7 @@ def test_31_lookup_table_form_builder3(driver,settings):
     home.data_menu()
     data.delete_Specificlookup_table("state")
     data.navigation_to_application_tab()
-    data.Navigation_to_a_caselist("state")
+    data.Navigation_to_a_caselist("Lookup table was not found in the project")
     data.delete_caselist()
 
 def test_32_lookup_table_form_builder3(driver,settings):
@@ -76,7 +76,6 @@ def test_22_filtered_lookup_table(driver,settings):
     data.upload_1(UserData.Inapp, "1")
     data.specific_table_upload("Inapp")
     data.formbuilder_5()
-    #data.makenewrelease()
     AppPreview = AppPreviewPage(driver)
     AppPreview.check_access_to_app_preview()
     for i in range(len(UserData.user_ids_list)):
