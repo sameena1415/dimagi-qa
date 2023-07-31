@@ -31,7 +31,7 @@ def environment_settings_bha():
         env = os.environ.get("DIMAGIQA_ENV") or "staging"
         subdomain = "www" if env == "production" else env
         # updates the url with the project domain while testing in CI
-        settings["url"] = f"https://{subdomain}.commcarehq.org/a/co-carecoordination-test/cloudcare/apps/v2/#apps"
+        settings["url"] = f"https://{subdomain}.commcarehq.org/a/bha-auto-tests/cloudcare/apps/v2/#apps"
     return settings
 
 
