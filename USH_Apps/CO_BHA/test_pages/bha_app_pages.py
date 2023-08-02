@@ -24,6 +24,10 @@ class BhaWorkflows(BasePage):
         self.case_list_display_properties = "(//tr[.//th[contains(text(),'{}')]])[1]"
         self.case_prop_value = "//th[@title='{}']/following::td[contains(text(),'{}')]"
 
+        # Messages
+        self.view_latest_details_by_type = "(//a[contains(text(),'{}')]/following::a[text()='View Details'])[1]"
+        self.content = "//*[contains(@title,'{}')]/parent::*"
+
     def click_on_admit_new_client(self):
         self.js_click(self.admit_new_client_on_caselist)
 
@@ -81,3 +85,16 @@ class BhaWorkflows(BasePage):
         self.driver.get(case_link)
         self.locator = (By.XPATH, self.case_prop_value.format(case_property, case_property_value))
         assert self.is_present(self.locator)
+
+    def view_message_details(self, alert_type):
+        self.js_click(self.get_element(self.view_latest_details_by_type, alert_type))
+
+    def check_if_alert_triggered(self, content, date):
+        date_locator = self.get_element(self.content, date)
+        content_locator = self.get_element(self.content, content)
+        print(date_locator, " ", content_locator)
+        assert self.is_present(content_locator)
+        assert self.is_present(date_locator)
+        self.switch_back_to_prev_tab()
+
+

@@ -1,5 +1,3 @@
-import pytest
-
 from Features.CaseSearch.constants import *
 from Features.CaseSearch.test_pages.casesearch_page import CaseSearchWorkflows
 from USH_Apps.CO_BHA.test_pages.bha_app_pages import BhaWorkflows
@@ -92,7 +90,6 @@ def test_case_02_admit_case_2(driver):
                                         expected_value=BhaUserInput.pending)
     casesearch.check_values_on_caselist(row_num=BhaUserInput.two,
                                         expected_value=typo_first_name + " " + typo_last_name)
-    # CHECK MESSAGE HISTORY
 
 
 def test_case_03_lock_in_1_1(driver):
@@ -122,7 +119,6 @@ def test_case_03_lock_in_1_1(driver):
     app.check_question_label(label=BhaUserInput.bha_approval_needed, displayed=YES)
     webapps.submit_the_form()
     casesearch.check_eof_navigation(eof_nav=MENU, menu=BhaUserInput.search_my_clients)
-    # CHECK MESSAGE HISTORY
 
 
 def test_case_04_lock_in_1_2(driver):
@@ -146,10 +142,8 @@ def test_case_04_lock_in_1_2(driver):
     """Check default results appear aftrt EOF navigation"""
     casesearch.check_values_on_caselist(row_num=BhaUserInput.five,
                                         expected_value=BhaUserInput.pending_status)
-    # CHECK MESSAGE HISTORY
 
 
-@pytest.mark.skip(reason="setup pending")
 def test_case_05_admit_case_7(driver):
     """use case: match on inactive client"""
     webapps = WebApps(driver)
@@ -185,7 +179,6 @@ def test_case_05_admit_case_7(driver):
                                        property_type=COMBOBOX)
     casesearch.select_checkbox(BhaUserInput.consent, BhaUserInput.yes_small, select_by_value=text)
     webapps.search_button_on_case_search_page()
-    app.select_radio(BhaUserInput.cancel)
     webapps.submit_the_form()
     """Case List Report Check"""
     if "staging" in domain_url:

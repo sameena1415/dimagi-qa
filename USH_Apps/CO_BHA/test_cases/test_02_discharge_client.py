@@ -68,8 +68,9 @@ def test_case_discharge_client_1(driver):
                                        input_value=dob,
                                        property_type=TEXT_INPUT)
     webapps.search_button_on_case_search_page()
+    # might fail on prod due to sync delays
     casesearch.check_values_on_caselist(row_num=BhaUserInput.two,
-                                        expected_value=first_name) # failing on prod - Anthony to get back
+                                        expected_value=first_name)
     """Search Central Registry as state user"""
     webapps.login_as(BhaUserInput.state_level_user)
     webapps.open_app(BhaUserInput.bha_app_name)
@@ -105,4 +106,3 @@ def test_case_discharge_client_1(driver):
     webapps.search_button_on_case_search_page()
     casesearch.check_values_on_caselist(row_num=BhaUserInput.six,
                                         expected_value=BhaUserInput.discharged)
-    # CHECK MESSAGE HISTORY

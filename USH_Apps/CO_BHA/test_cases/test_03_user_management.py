@@ -32,3 +32,4 @@ def test_case_access_to_module_state(driver):
     webapps.select_case(case_name)
     app.remove_clinic(BhaUserInput.arts_parkside_clinic)
     webapps.submit_the_form()
+
