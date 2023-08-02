@@ -242,6 +242,8 @@ class BasePage:
         winHandles = self.driver.window_handles
         window_after = winHandles[1]
         self.driver.switch_to.window(window_after)
+        print(self.driver.title)
+        print(self.driver.current_window_handle)
 
     def switch_to_new_tab(self):
         self.driver.switch_to.new_window('tab')
@@ -250,6 +252,8 @@ class BasePage:
         winHandles = self.driver.window_handles
         window_before = winHandles[0]
         self.driver.switch_to.window(window_before)
+        print(self.driver.title)
+        print(self.driver.current_window_handle)
 
     def get_environment(self):
         get_env = self.driver.current_url
