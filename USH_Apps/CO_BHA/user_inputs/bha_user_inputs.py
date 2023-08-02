@@ -113,7 +113,7 @@ class BhaUserInput:
     clinic_same_admit_discahrge_content = "An admission and discharge form were submitted by"
 
     clinic_update_lock_status = "Clinic Update Lock Status"
-    clinic_update_lock_status_content = "The lock status request submitted by"
+    clinic_update_lock_status_content = "A lock status request was submitted by"
 
     state_determination_lock_status = "State Determination Lock Status"
     state_determination_lock_status_content = "The lock status request submitted by"

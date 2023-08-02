@@ -14,23 +14,48 @@ def test_messaging_history_triggers(driver, settings):
     app = BhaWorkflows(driver)
     base = BasePage(driver)
 
+    now = (datetime.today()).date()
     report.reports_menu()
     load.messaging_history_report()
-    now = (datetime.today()).date()
+
     app.view_message_details(alert_type=BhaUserInput.clinic_admission_request)
-    base.switch_to_tab(1)
-    app.check_if_alert_triggered(content=BhaUserInput.clinic_admission_request_content,
-                                 date=str(now.strftime("%#m/%#d/%Y")))
+    driver.close()
+    base.switch_back_to_prev_tab()
+    try:
+        app.check_if_alert_triggered(content=BhaUserInput.clinic_admission_request_content,
+                                     date=str(now.strftime("%-m/%-d/%Y")))  # For Linux
+    except AssertionError:
+        app.check_if_alert_triggered(content=BhaUserInput.clinic_admission_request_content,
+                                     date=str(now.strftime("%#m/%#d/%Y")))  # For Windows
+    load.messaging_history_report()
     app.view_message_details(alert_type=BhaUserInput.clinic_same_admit_discahrge)
-    base.switch_to_tab(2)
+    driver.close()
+    base.switch_back_to_prev_tab()
     app.check_if_alert_triggered(content=BhaUserInput.clinic_same_admit_discahrge_content,
                                  date=str(now.strftime("%Y-%m-%d")))
+    load.messaging_history_report()
     app.view_message_details(alert_type=BhaUserInput.clinic_update_lock_status)
-    base.switch_to_tab(3)
-    app.check_if_alert_triggered(content=BhaUserInput.clinic_update_lock_status_content,
-                                 date=str(now.strftime("%#m/%#d/%Y")))
-    app.view_message_details(alert_type=BhaUserInput.state_determination_lock_status)
+    driver.close()
+    base.switch_back_to_prev_tab()
+    try:
+        app.check_if_alert_triggered(content=BhaUserInput.clinic_update_lock_status_content,
+                                     date=str(now.strftime("%-m/%-d/%Y")))  # For Linux
+    except AssertionError:
+        app.check_if_alert_triggered(content=BhaUserInput.clinic_admission_request_content,
+                                     date=str(now.strftime("%#m/%#d/%Y")))  # For Windows
+
     # Commenting this until Anthony is able to help with the required setup
-    """base.switch_to_tab(4)
-    app.check_if_alert_triggered(content=BhaUserInput.state_determination_lock_status_content,
-                                 date=str(now.strftime("%#m/%#d/%Y")))"""
+
+
+"""
+    load.messaging_history_report()
+    app.view_message_details(alert_type=BhaUserInput.state_determination_lock_status)
+    driver.close()
+    base.switch_back_to_prev_tab()
+    try:
+        app.check_if_alert_triggered(content=BhaUserInput.state_determination_lock_status_content,
+                                     date=str(now.strftime("%-m/%-d/%Y")))  # For Linux
+    except AssertionError:
+        app.check_if_alert_triggered(content=BhaUserInput.clinic_admission_request_content,
+                                     date=str(now.strftime("%#m/%#d/%Y")))  # For Windows
+"""

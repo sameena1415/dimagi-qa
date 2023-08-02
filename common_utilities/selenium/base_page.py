@@ -245,13 +245,6 @@ class BasePage:
         print(self.driver.title)
         print(self.driver.current_window_handle)
 
-    def switch_to_tab(self, index):
-        winHandles = self.driver.window_handles
-        window = winHandles[index]
-        self.driver.switch_to.window(window)
-        print(self.driver.title)
-        print(self.driver.current_window_handle)
-
     def switch_to_new_tab(self):
         self.driver.switch_to.new_window('tab')
 
