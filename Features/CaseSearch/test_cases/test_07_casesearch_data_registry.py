@@ -171,8 +171,58 @@ def test_case_07_smart_link_search_first_linked_domain_case(driver):
     assert "casesearch-1" in domain_url
     webapps.submit_the_form()
 
+@pytest.mark.skip(reason="Not deployed on prod")
+def test_case_08_smart_link_search_first_shadow(driver):
+    webapps = WebApps(driver)
+    casesearch = CaseSearchWorkflows(driver)
+    webapps.open_domain(domain_name=CaseSearchUserInput.casesearch, current_url=driver.current_url)
+    webapps.login_as(CaseSearchUserInput.user_1)
+    webapps.open_app(CaseSearchUserInput.case_search_app_name)
+    """Search case in another domain"""
+    webapps.open_menu(CaseSearchUserInput.shadow_smart_link_search_first_menu)
+    webapps.clear_selections_on_case_search_page()
+    casename = casesearch.search_against_property(search_property=CaseSearchUserInput.song_name,
+                                                  input_value=CaseSearchUserInput.casesearch_1,
+                                                  property_type=TEXT_INPUT)
+    webapps.search_button_on_case_search_page()
+    webapps.omni_search(casename)
+    webapps.select_case_and_continue(casename)
+    try:
+        webapps.select_user(CaseSearchUserInput.kiran)
+    except NoSuchElementException:
+        print("Already logged in")
+        pass
+    domain_url = driver.current_url
+    assert "casesearch-1" in domain_url
+    webapps.submit_the_form()
 
-def test_case_08_smart_link_search_first_same_domain_case(driver):
+
+@pytest.mark.skip(reason="Not deployed on prod")
+def test_case_09_smart_link_skip_default_shadow(driver):
+    webapps = WebApps(driver)
+    casesearch = CaseSearchWorkflows(driver)
+    webapps.open_domain(domain_name=CaseSearchUserInput.casesearch, current_url=driver.current_url)
+    webapps.login_as(CaseSearchUserInput.user_1)
+    webapps.open_app(CaseSearchUserInput.case_search_app_name)
+    webapps.open_menu(CaseSearchUserInput.shadow_smart_link_skip_default_menu)
+    webapps.clear_selections_on_case_search_page()
+    casename = casesearch.search_against_property(search_property=CaseSearchUserInput.song_name,
+                                                  input_value=CaseSearchUserInput.casesearch_1,
+                                                  property_type=TEXT_INPUT)
+    webapps.search_button_on_case_search_page()
+    webapps.omni_search(casename)
+    webapps.select_case_and_continue(casename)
+    try:
+        webapps.select_user(CaseSearchUserInput.kiran)
+    except NoSuchElementException:
+        print("Already logged in")
+        pass
+    domain_url = driver.current_url
+    assert "casesearch-1" in domain_url
+    webapps.submit_the_form()
+
+
+def test_case_10_smart_link_search_first_same_domain_case(driver):
     webapps = WebApps(driver)
     casesearch = CaseSearchWorkflows(driver)
     webapps.open_domain(domain_name=CaseSearchUserInput.casesearch, current_url=driver.current_url)
@@ -191,7 +241,7 @@ def test_case_08_smart_link_search_first_same_domain_case(driver):
 
 
 @pytest.mark.skip(reason="Failing on prod and in USH backlog: https://dimagi-dev.atlassian.net/browse/USH-2263")
-def test_case_09_unrelated_case_property(driver):
+def test_case_11_unrelated_case_property(driver):
     webapps = WebApps(driver)
     casesearch = CaseSearchWorkflows(driver)
     webapps.open_domain(domain_name=CaseSearchUserInput.casesearch, current_url=driver.current_url)
