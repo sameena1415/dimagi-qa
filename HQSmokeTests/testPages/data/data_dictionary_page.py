@@ -21,7 +21,7 @@ class DataDictionaryPage(BasePage):
         self.dictionary_name = "Dictionary " + str(fetch_random_string())
         self.dictionary_description = "Test dictionary"
 
-        self.data_dictionary_link = (By.XPATH, "//a[text()[contains(.,'Data Dictionary')]]")
+        self.data_dictionary_link = (By.LINK_TEXT, "Data Dictionary")
         self.export_button = (By.ID, "download-dict")
         self.import_button = (By.XPATH, "//i[@class ='fa fa-cloud-upload']")
         self.choose_file = (By.XPATH, "//input[@data-bind ='value: file']")
