@@ -47,10 +47,6 @@ def test_messaging_history_triggers(driver, settings):
         app.check_if_alert_triggered(content=BhaUserInput.clinic_admission_request_content,
                                      date=str(now.strftime("%#m/%#d/%Y")))  # For Windows
 
-    # Commenting this until Anthony is able to help with the required setup
-
-
-"""
     load.messaging_history_report()
     app.view_message_details(alert_type=BhaUserInput.state_determination_lock_status)
     driver.close()
@@ -61,4 +57,3 @@ def test_messaging_history_triggers(driver, settings):
     except AssertionError:
         app.check_if_alert_triggered(content=BhaUserInput.clinic_admission_request_content,
                                      date=str(now.strftime("%#m/%#d/%Y")))  # For Windows
-"""
