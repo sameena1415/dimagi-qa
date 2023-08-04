@@ -1,3 +1,5 @@
+import time
+
 from HQSmokeTests.testPages.home.home_page import HomePage
 from HQSmokeTests.testPages.reports.report_page import ReportPage
 from USH_Apps.CO_BHA.test_pages.bha_app_pages import BhaWorkflows
@@ -16,6 +18,7 @@ def test_messaging_history_triggers(driver, settings):
 
     now = (datetime.today()).date()
     report.reports_menu()
+    time.sleep(60)
     load.messaging_history_report()
 
     app.view_message_details(alert_type=BhaUserInput.clinic_admission_request)
