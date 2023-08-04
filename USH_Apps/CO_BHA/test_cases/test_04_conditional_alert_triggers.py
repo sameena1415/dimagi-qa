@@ -27,9 +27,10 @@ def test_messaging_history_triggers(driver, settings):
     try:
         app.check_if_alert_triggered(content=BhaUserInput.clinic_admission_request_content,
                                      date=str(now.strftime("%-m/%-d/%Y")))  # For Linux
-    except AssertionError:
+    except (AssertionError, ValueError):
         app.check_if_alert_triggered(content=BhaUserInput.clinic_admission_request_content,
                                      date=str(now.strftime("%#m/%#d/%Y")))  # For Windows
+
     load.messaging_history_report()
     app.view_message_details(alert_type=BhaUserInput.clinic_same_admit_discahrge)
     driver.close()
@@ -43,8 +44,8 @@ def test_messaging_history_triggers(driver, settings):
     try:
         app.check_if_alert_triggered(content=BhaUserInput.clinic_update_lock_status_content,
                                      date=str(now.strftime("%-m/%-d/%Y")))  # For Linux
-    except AssertionError:
-        app.check_if_alert_triggered(content=BhaUserInput.clinic_admission_request_content,
+    except (AssertionError, ValueError):
+        app.check_if_alert_triggered(content=BhaUserInput.clinic_update_lock_status_content,
                                      date=str(now.strftime("%#m/%#d/%Y")))  # For Windows
 
     load.messaging_history_report()
@@ -54,6 +55,6 @@ def test_messaging_history_triggers(driver, settings):
     try:
         app.check_if_alert_triggered(content=BhaUserInput.state_determination_lock_status_content,
                                      date=str(now.strftime("%-m/%-d/%Y")))  # For Linux
-    except AssertionError:
-        app.check_if_alert_triggered(content=BhaUserInput.clinic_admission_request_content,
+    except (AssertionError, ValueError):
+        app.check_if_alert_triggered(content=BhaUserInput.state_determination_lock_status_content,
                                      date=str(now.strftime("%#m/%#d/%Y")))  # For Windows
