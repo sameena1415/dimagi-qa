@@ -8,6 +8,7 @@ from common_utilities.fixtures import *
 
 global driver
 
+
 @pytest.fixture(scope="module", autouse=True)
 def driver(settings, browser):
     web_driver = None
