@@ -1,3 +1,5 @@
+import time
+
 from HQSmokeTests.testPages.home.home_page import HomePage
 from HQSmokeTests.testPages.reports.report_page import ReportPage
 from USH_Apps.CO_BHA.test_pages.bha_app_pages import BhaWorkflows
@@ -16,6 +18,7 @@ def test_messaging_history_triggers(driver, settings):
 
     now = (datetime.today()).date()
     report.reports_menu()
+    time.sleep(60)
     load.messaging_history_report()
 
     app.view_message_details(alert_type=BhaUserInput.clinic_admission_request)
@@ -24,9 +27,10 @@ def test_messaging_history_triggers(driver, settings):
     try:
         app.check_if_alert_triggered(content=BhaUserInput.clinic_admission_request_content,
                                      date=str(now.strftime("%-m/%-d/%Y")))  # For Linux
-    except AssertionError:
+    except (AssertionError, ValueError):
         app.check_if_alert_triggered(content=BhaUserInput.clinic_admission_request_content,
                                      date=str(now.strftime("%#m/%#d/%Y")))  # For Windows
+
     load.messaging_history_report()
     app.view_message_details(alert_type=BhaUserInput.clinic_same_admit_discahrge)
     driver.close()
@@ -40,14 +44,10 @@ def test_messaging_history_triggers(driver, settings):
     try:
         app.check_if_alert_triggered(content=BhaUserInput.clinic_update_lock_status_content,
                                      date=str(now.strftime("%-m/%-d/%Y")))  # For Linux
-    except AssertionError:
-        app.check_if_alert_triggered(content=BhaUserInput.clinic_admission_request_content,
+    except (AssertionError, ValueError):
+        app.check_if_alert_triggered(content=BhaUserInput.clinic_update_lock_status_content,
                                      date=str(now.strftime("%#m/%#d/%Y")))  # For Windows
 
-    # Commenting this until Anthony is able to help with the required setup
-
-
-"""
     load.messaging_history_report()
     app.view_message_details(alert_type=BhaUserInput.state_determination_lock_status)
     driver.close()
@@ -55,7 +55,6 @@ def test_messaging_history_triggers(driver, settings):
     try:
         app.check_if_alert_triggered(content=BhaUserInput.state_determination_lock_status_content,
                                      date=str(now.strftime("%-m/%-d/%Y")))  # For Linux
-    except AssertionError:
-        app.check_if_alert_triggered(content=BhaUserInput.clinic_admission_request_content,
+    except (AssertionError, ValueError):
+        app.check_if_alert_triggered(content=BhaUserInput.state_determination_lock_status_content,
                                      date=str(now.strftime("%#m/%#d/%Y")))  # For Windows
-"""
