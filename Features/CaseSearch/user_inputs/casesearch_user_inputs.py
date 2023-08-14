@@ -67,6 +67,7 @@ class CaseSearchUserInput:
     song_case_on_casesearch_1 = "Bugs on casesearch-1"
     song_case_b_users_song = "b_users song"
     song_automation_song_update = "Automation Song Update"
+    song_auto_parent = "(Auto) Parent Song"
 
     # Artist-Cases
     automation_artist_1 = "Automation-Artist-1"
@@ -78,6 +79,7 @@ class CaseSearchUserInput:
     # Show-Cases
     show_case_show1 = "Automation-Show1"
     show_case_casesearch_1 = "on casesearch-1"
+    show_auto = "(Auto) Show"
 
     # Instruments-Cases
     instrument_case_guitar = "Guitar"
@@ -157,6 +159,7 @@ class CaseSearchUserInput:
     rating_input = "Rating Input"
     instrument_name = "Instrument Name"
     song_id = "Song ID"
+    artist_city = "City"
 
     # Case list columns
     one = "1"
