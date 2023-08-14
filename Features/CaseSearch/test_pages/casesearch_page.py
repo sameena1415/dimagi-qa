@@ -168,12 +168,14 @@ class CaseSearchWorkflows(BasePage):
             validation_message_per_prop = (
                 By.XPATH, self.required_validation_per_property_combox.format(search_property, message))
         if required_or_validated == YES:
+            self.wait_for_ajax()
             time.sleep(4)
             assert self.is_displayed(
                 validation_message_per_prop), f"Required validation missing {validation_message_per_prop}"
             assert self.is_displayed(
                 validation_message_on_top), f"Required validation missing {validation_message_on_top}"
         elif required_or_validated == NO:
+            self.wait_for_ajax()
             time.sleep(4)
             assert not self.is_displayed(validation_message_per_prop)
 
