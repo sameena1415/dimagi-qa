@@ -660,7 +660,6 @@ def test_case_24_case_search_validations(driver):
                                         expected_value=CaseSearchUserInput.blank)
 
 
-@pytest.mark.skip(reason="Not deployed on prod")
 def test_case_25_case_search_validations_dot_notations(driver):
     webapps = WebApps(driver)
     casesearch = CaseSearchWorkflows(driver)

@@ -171,7 +171,7 @@ def test_case_07_smart_link_search_first_linked_domain_case(driver):
     assert "casesearch-1" in domain_url
     webapps.submit_the_form()
 
-@pytest.mark.skip(reason="Not deployed on prod")
+
 def test_case_08_smart_link_search_first_shadow(driver):
     webapps = WebApps(driver)
     casesearch = CaseSearchWorkflows(driver)
@@ -197,7 +197,6 @@ def test_case_08_smart_link_search_first_shadow(driver):
     webapps.submit_the_form()
 
 
-@pytest.mark.skip(reason="Not deployed on prod")
 def test_case_09_smart_link_skip_default_shadow(driver):
     webapps = WebApps(driver)
     casesearch = CaseSearchWorkflows(driver)
@@ -205,6 +204,7 @@ def test_case_09_smart_link_skip_default_shadow(driver):
     webapps.login_as(CaseSearchUserInput.user_1)
     webapps.open_app(CaseSearchUserInput.case_search_app_name)
     webapps.open_menu(CaseSearchUserInput.shadow_smart_link_skip_default_menu)
+    webapps.search_again_cases()
     webapps.clear_selections_on_case_search_page()
     casename = casesearch.search_against_property(search_property=CaseSearchUserInput.song_name,
                                                   input_value=CaseSearchUserInput.casesearch_1,
