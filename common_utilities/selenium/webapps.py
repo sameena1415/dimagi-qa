@@ -117,8 +117,11 @@ class WebApps(BasePage):
         self.search_button_on_case_search_page()
 
     def omni_search(self, case_name, displayed=YES):
-        self.wait_to_clear_and_send_keys(self.omni_search_input, case_name)
-        self.js_click(self.omni_search_button)
+        if self.is_displayed(self.omni_search_input):
+            self.wait_to_clear_and_send_keys(self.omni_search_input, case_name)
+            self.js_click(self.omni_search_button)
+        else:
+            print("Split Screen Case Search enabled")
         self.case = self.get_element(self.case_name_format, case_name)
         if self.is_displayed(self.last_page) and self.is_displayed(self.case) == False:
             total_pages = int(self.get_attribute(self.last_page, "data-id")) - 1

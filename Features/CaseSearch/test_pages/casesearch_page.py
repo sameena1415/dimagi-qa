@@ -133,10 +133,10 @@ class CaseSearchWorkflows(BasePage):
     def check_value_on_form(self, city_address, type=HOME):
         if type == HOME:
             city_home = self.get_element(self.city_value_home, city_address)
-            assert self.is_present(city_home)
+            assert self.is_present_and_displayed(city_home)
         if type == WORK:
             city_work = self.get_element(self.city_value_work, city_address)
-            assert self.is_present(city_work)
+            assert self.is_present_and_displayed(city_work)
 
     def check_search_screen_title(self, title=None):
         title_on_screen = self.get_element(self.search_screen_title, title)

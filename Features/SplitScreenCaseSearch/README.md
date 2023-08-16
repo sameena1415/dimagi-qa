@@ -35,7 +35,7 @@ the environment you want to test.
 ```sh
 
 # To execute all the test cases 
-pytest -v --rootdir= Features/CaseSearchOnSplitScreen/test_cases
+pytest -v --rootdir= Features/SplitScreenCaseSearch/test_cases
 
 ```
 - You could also pass the following arguments

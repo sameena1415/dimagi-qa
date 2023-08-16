@@ -8,10 +8,12 @@ class CaseSearchUserInput:
     casesearch = "casesearch"
     casesearch_1 = "casesearch-1"
     casesearch_2 = "casesearch-2"
+    casesearch_split_screen = "casesearch-split_screen"
 
     """App Names"""
     case_search_app_name = "[Master] Music App (Case Search & Claim)"
     french_app = "[French] Music App"
+    linked_case_search_app_name = "[Linked Master] Music App (Case Search & Claim)"
 
     """Users"""
     user_1 = 'automation-user-1'

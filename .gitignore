@@ -220,10 +220,10 @@ USH_Apps/CO_BHA/report.html
 USH_Apps/CO_BHA/test_cases/report.html
 
 
-#Ignoring compliled files of CaseSearchOnSplitScreen
-Features/CaseSearchOnSplitScreen/settings.cfg
-Features/CaseSearchOnSplitScreen/report.html
-Features/CaseSearchOnSplitScreen/test_cases/report.html
+#Ignoring compliled files of SplitScreenCaseSearch
+Features/SplitScreenCaseSearch/settings.cfg
+Features/SplitScreenCaseSearch/report.html
+Features/SplitScreenCaseSearch/test_cases/report.html
 
 
 

@@ -11,7 +11,7 @@ def test_case_01_multiple_selected_cases_accessible_on_form(driver):
     webapps = WebApps(driver)
     casesearch = CaseSearchWorkflows(driver)
     webapps.login_as(CaseSearchUserInput.user_1)
-    webapps.open_app(CaseSearchUserInput.case_search_app_name)
+    webapps.open_app(CaseSearchUserInput.linked_case_search_app_name)
     webapps.open_menu(CaseSearchUserInput.multi_select_menu)
     webapps.clear_selections_on_case_search_page()
     webapps.search_button_on_case_search_page()
