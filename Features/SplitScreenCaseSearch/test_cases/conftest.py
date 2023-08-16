@@ -65,7 +65,7 @@ def environment_settings_sscs():
                 DIMAGIQA_URL
                 DIMAGIQA_SSCS_LOGIN_USERNAME
                 DIMAGIQA_SSCS_LOGIN_PASSWORD
-                DIMAGIQA_SSCS_USER_PROD_AUTH_KEY
+                DIMAGIQA_SSCS_PROD_AUTH_KEY
 
             See https://docs.github.com/en/actions/reference/encrypted-secrets
             for instructions on how to set them.

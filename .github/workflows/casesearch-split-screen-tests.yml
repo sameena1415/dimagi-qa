@@ -55,8 +55,8 @@ jobs:
       - name: Case Search Spit Screen Regression
         env:
           DIMAGIQA_ENV: ${{ matrix.environment }}  #${{ secrets.DIMAGIQA_URL }}
-          DIMAGIQA_LOGIN_USERNAME: ${{ secrets.DIMAGIQA_SSCS_LOGIN_USERNAME }}
-          DIMAGIQA_LOGIN_PASSWORD: ${{ secrets.DIMAGIQA_SSCS_LOGIN_PASSWORD }}
+          DIMAGIQA_SSCS_LOGIN_USERNAME: ${{ secrets.DIMAGIQA_SSCS_LOGIN_USERNAME }}
+          DIMAGIQA_SSCS_LOGIN_PASSWORD: ${{ secrets.DIMAGIQA_SSCS_LOGIN_PASSWORD }}
           DIMAGIQA_SSCS_PROD_AUTH_KEY: ${{ secrets.DIMAGIQA_SSCS_PROD_AUTH_KEY }}
           DIMAGIQA_MAIL_USERNAME: ${{ secrets.DIMAGIQA_MAIL_USERNAME }}
           DIMAGIQA_MAIL_PASSWORD: ${{ secrets.DIMAGIQA_MAIL_PASSWORD }}
@@ -141,7 +141,7 @@ jobs:
                         "type": "section",
                         "text": {
                             "type": "mrkdwn",
-                            "text": " Hey there! :meow_wave: \n*${{ github.workflow }}* were just triggered!"
+                            "text": " Hey there! :alien-wave::alien-wave: \n*${{ github.workflow }}* were just triggered!"
                         }
                     },
                     {
