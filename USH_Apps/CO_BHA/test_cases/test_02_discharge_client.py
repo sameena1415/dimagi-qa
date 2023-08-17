@@ -37,7 +37,7 @@ def test_case_discharge_client_1(driver):
                                   search_value=last_name)
     app.check_client_info_on_form(search_property=BhaUserInput.dob_on_form,
                                   search_value=dob)
-    app.select_clinic(BhaUserInput.first_choice_counselling)
+    app.select_clinic(BhaUserInput.aurora_therapy_center)
     webapps.submit_the_form()
     """Search Central Registry"""
     webapps.open_menu(BhaUserInput.search_central_registry)
@@ -51,7 +51,6 @@ def test_case_discharge_client_1(driver):
                                        input_value=dob,
                                        property_type=TEXT_INPUT)
     webapps.search_button_on_case_search_page()
-    webapps.omni_search(first_name)
     casesearch.check_values_on_caselist(row_num=BhaUserInput.two,
                                         expected_value=first_name)
     """Search My Clients as clinic user"""
@@ -69,7 +68,7 @@ def test_case_discharge_client_1(driver):
                                        input_value=dob,
                                        property_type=TEXT_INPUT)
     webapps.search_button_on_case_search_page()
-    webapps.omni_search(first_name)
+    # might fail on prod due to sync delays
     casesearch.check_values_on_caselist(row_num=BhaUserInput.two,
                                         expected_value=first_name)
     """Search Central Registry as state user"""
@@ -86,7 +85,6 @@ def test_case_discharge_client_1(driver):
                                        input_value=dob,
                                        property_type=TEXT_INPUT)
     webapps.search_button_on_case_search_page()
-    webapps.omni_search(first_name)
     webapps.select_case(first_name)
     webapps.open_form(BhaUserInput.discharge_client)
     app.select_radio(BhaUserInput.suboxone)
@@ -106,7 +104,5 @@ def test_case_discharge_client_1(driver):
                                        input_value=dob,
                                        property_type=TEXT_INPUT)
     webapps.search_button_on_case_search_page()
-    webapps.omni_search(first_name)
     casesearch.check_values_on_caselist(row_num=BhaUserInput.six,
                                         expected_value=BhaUserInput.discharged)
-    # CHECK MESSAGE HISTORY

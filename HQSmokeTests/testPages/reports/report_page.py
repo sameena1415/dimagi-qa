@@ -1,7 +1,7 @@
 import os
 import time
 import html
-from datetime import datetime
+from datetime import datetime, timedelta
 import re
 import pandas as pd
 import requests
@@ -14,6 +14,7 @@ from selenium.webdriver.support.select import Select
 from HQSmokeTests.testPages.data.export_data_page import latest_download_file
 from HQSmokeTests.testPages.home.home_page import HomePage
 from common_utilities.path_settings import PathSettings
+
 from common_utilities.selenium.base_page import BasePage
 from common_utilities.generate_random_string import fetch_random_string
 from HQSmokeTests.userInputs.user_inputs import UserData
@@ -188,6 +189,7 @@ class ReportPage(BasePage):
         self.app_status_results = (By.XPATH, "//table[@class='table table-striped datatable dataTable no-footer']/tbody/tr")
         self.app_status_results_cells = (By.XPATH, "//table[@class='table table-striped datatable dataTable no-footer']/tbody/tr/td")
 
+
     def check_if_report_loaded(self):
         try:
             self.wait_to_click(self.apply_id)
@@ -246,6 +248,9 @@ class ReportPage(BasePage):
 
     def messaging_history_report(self):
         self.wait_to_click(self.messaging_history_rep)
+        date_range = self.get_last_7_days_date_range()
+        self.clear(self.date_input)
+        self.send_keys(self.date_input, date_range + Keys.TAB)
         self.check_if_report_loaded()
 
     def message_log_report(self):
@@ -409,14 +414,17 @@ class ReportPage(BasePage):
         else:
             print("Report deleted successfully!")
 
-    def get_yesterday_tomorrow_dates(self):
+
+    def get_last_7_days_date_range(self):
         # Get today's date
         presentday = datetime.now()  # or presentday = datetime.today()
-        # Get Yesterday
-        # yesterday = presentday - timedelta(1)
-        # Get Tomorrow
-        # tomorrow = presentday + timedelta(1)
+        # Get Today minus 7 days date
+        week_ago = presentday - timedelta(7)
+        return week_ago.strftime('%Y-%m-%d') + " to " + presentday.strftime('%Y-%m-%d')
 
+    def get_todays_date_range(self):
+        # Get today's date
+        presentday = datetime.now()  # or presentday = datetime.today()
         return presentday.strftime('%Y-%m-%d') + " to " + presentday.strftime('%Y-%m-%d')
 
     def verify_table_not_empty(self, locator):
@@ -441,7 +449,7 @@ class ReportPage(BasePage):
         self.select_by_text(self.application_select, UserData.reassign_cases_application)
         self.select_by_text(self.module_select, UserData.case_list_name)
         self.select_by_text(self.form_select, UserData.form_name)
-        date_range = self.get_yesterday_tomorrow_dates()
+        date_range = self.get_todays_date_range()
         self.clear(self.date_input)
         self.send_keys(self.date_input, date_range + Keys.TAB)
         self.wait_to_click(self.apply_id)
@@ -490,7 +498,7 @@ class ReportPage(BasePage):
         self.select_by_text(self.application_select, UserData.reassign_cases_application)
         self.select_by_text(self.module_select, UserData.case_list_name)
         self.select_by_text(self.form_select, UserData.new_form_name)
-        date_range = self.get_yesterday_tomorrow_dates()
+        date_range = self.get_todays_date_range()
         self.clear(self.date_input)
         self.send_keys(self.date_input, date_range + Keys.TAB)
         self.wait_to_click(self.apply_id)
@@ -519,7 +527,7 @@ class ReportPage(BasePage):
 
     def validate_messaging_history_for_cond_alert(self, cond_alert):
         self.wait_to_click(self.messaging_history_rep)
-        date_range = self.get_yesterday_tomorrow_dates()
+        date_range = self.get_todays_date_range()
         self.clear(self.date_input)
         self.send_keys(self.date_input, date_range + Keys.TAB)
         time.sleep(2)
@@ -745,7 +753,7 @@ class ReportPage(BasePage):
         self.wait_to_click((By.XPATH, self.app_user_select.format(UserData.app_login)))
         self.select_by_text(self.application_select, app_name)
         self.select_by_text(self.module_select, UserData.case_list_name)
-        date_range = self.get_yesterday_tomorrow_dates()
+        date_range = self.get_todays_date_range()
         self.clear(self.date_input)
         self.send_keys(self.date_input, date_range + Keys.TAB)
         self.wait_to_click(self.apply_id)
