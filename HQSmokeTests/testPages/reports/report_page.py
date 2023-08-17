@@ -1,9 +1,6 @@
 import time
 from datetime import datetime
 
-from selenium.webdriver.support.select import Select
-
-from HQSmokeTests.testPages.home.home_page import HomePage
 from common_utilities.selenium.base_page import BasePage
 from common_utilities.generate_random_string import fetch_random_string
 from HQSmokeTests.userInputs.user_inputs import UserData
@@ -87,7 +84,8 @@ class ReportPage(BasePage):
         self.delete_saved = (By.XPATH,
                              "(//a[text()='" + self.report_name_saved + "']//following::button[@class='btn btn-danger add-spinner-on-click'])[1]")
         self.delete_saved_report_link = "(//a[text()='{}']//following::button[@class='btn btn-danger add-spinner-on-click'])[1]"
-        self.all_saved_reports = (By.XPATH, "//td[a[contains(.,'saved form')]]//following-sibling::td/button[contains(@data-bind,'delete')]")
+        self.all_saved_reports = (
+        By.XPATH, "//td[a[contains(.,'saved form')]]//following-sibling::td/button[contains(@data-bind,'delete')]")
         # Scheduled Reports
         self.scheduled_reports_menu_xpath = (By.XPATH, "//a[@href='#scheduled-reports']")
         self.create_scheduled_report = (By.XPATH, "//a[@class='btn btn-primary track-usage-link']")
@@ -103,7 +101,7 @@ class ReportPage(BasePage):
         self.users_box = (By.XPATH, "//span[@class='select2-selection select2-selection--multiple']")
         self.search_user = (By.XPATH, "//textarea[@class='select2-search__field']")
         self.select_user = (By.XPATH, "//li[contains(text(),'[Web Users]')]")
-        self.app_user_select =  "(//li[contains(text(),'{}')])[1]"
+        self.app_user_select = "(//li[contains(text(),'{}')])[1]"
         self.application_select = (By.XPATH, "//select[@id='report_filter_form_app_id']")
         self.module_select = (By.XPATH, "//select[@id='report_filter_form_module']")
         self.form_select = (By.XPATH, "//select[@id='report_filter_form_xmlns']")
@@ -121,12 +119,11 @@ class ReportPage(BasePage):
         # Messaging History
         self.communication_type_select = (By.XPATH, "//label[.='Communication Type']/following-sibling::div/select")
 
-        #Report Case
-        self.report_case_links = (By.XPATH,"//li/a[contains(@title,'report case')]")
+        # Report Case
+        self.report_case_links = (By.XPATH, "//li/a[contains(@title,'report case')]")
         self.report_case_link = "(//li/a[contains(@title,'{}')])[1]"
-        self.report_form_links = (By.XPATH,"//li/a[contains(@title,'report form')]")
+        self.report_form_links = (By.XPATH, "//li/a[contains(@title,'report form')]")
         self.report_form_link = "(//li/a[contains(@title,'{}')])[1]"
-
 
     def check_if_report_loaded(self):
         try:
@@ -186,6 +183,9 @@ class ReportPage(BasePage):
 
     def messaging_history_report(self):
         self.wait_to_click(self.messaging_history_rep)
+        date_range = self.get_yesterday_tomorrow_dates()
+        self.clear(self.date_input)
+        self.send_keys(self.date_input, date_range + Keys.TAB)
         self.check_if_report_loaded()
 
     def message_log_report(self):
@@ -327,7 +327,6 @@ class ReportPage(BasePage):
         else:
             print("Report deleted successfully!")
 
-
     def get_yesterday_tomorrow_dates(self):
         # Get today's date
         presentday = datetime.now()  # or presentday = datetime.today()
@@ -448,7 +447,7 @@ class ReportPage(BasePage):
         self.check_if_report_loaded()
         self.scroll_to_bottom()
         print(cond_alert)
-        list_alerts = self.driver.find_elements(By.XPATH, "//td[.='"+cond_alert+"']/following-sibling::td[3]")
+        list_alerts = self.driver.find_elements(By.XPATH, "//td[.='" + cond_alert + "']/following-sibling::td[3]")
         print(len(list_alerts))
         if len(list_alerts) > 0:
             for i in range(len(list_alerts)):
