@@ -90,7 +90,7 @@ def test_case_05_date_range_format(driver):
     # MM/DD/YYYY
     webapps.clear_selections_on_case_search_page()
     date = casesearch.search_against_property(search_property=CaseSearchUserInput.date_opened,
-                                              input_value=CaseSearchUserInput.date_12_30_2022_slash,
+                                              input_value=CaseSearchUserInput.date_08_16_2023_slash,
                                               property_type=TEXT_INPUT)
     casesearch.check_date_range(date_range=casesearch.parse_date_range(input_date=date,
                                                                        input_format=CaseSearchUserInput.dates.get(
@@ -100,7 +100,7 @@ def test_case_05_date_range_format(driver):
     # MM-DD-YYYY
     webapps.clear_selections_on_case_search_page()
     date = casesearch.search_against_property(search_property=CaseSearchUserInput.date_opened,
-                                              input_value=CaseSearchUserInput.date_12_30_2022_hyphen,
+                                              input_value=CaseSearchUserInput.date_08_16_2023_hyphen,
                                               property_type=TEXT_INPUT)
     casesearch.check_date_range(date_range=casesearch.parse_date_range(input_date=date,
                                                                        input_format=CaseSearchUserInput.dates.get(
@@ -110,7 +110,7 @@ def test_case_05_date_range_format(driver):
     # MM/DD/YY
     webapps.clear_selections_on_case_search_page()
     date = casesearch.search_against_property(search_property=CaseSearchUserInput.date_opened,
-                                              input_value=CaseSearchUserInput.date_12_30_22_slash,
+                                              input_value=CaseSearchUserInput.date_08_16_23_slash,
                                               property_type=TEXT_INPUT)
     casesearch.check_date_range(date_range=casesearch.parse_date_range(input_date=date,
                                                                        input_format=CaseSearchUserInput.dates.get(
@@ -120,7 +120,7 @@ def test_case_05_date_range_format(driver):
     # MM-DD-YY
     webapps.clear_selections_on_case_search_page()
     date = casesearch.search_against_property(search_property=CaseSearchUserInput.date_opened,
-                                              input_value=CaseSearchUserInput.date_12_30_22_hyphen,
+                                              input_value=CaseSearchUserInput.date_08_16_23_hyphen,
                                               property_type=TEXT_INPUT)
     casesearch.check_date_range(date_range=casesearch.parse_date_range(input_date=date,
                                                                        input_format=CaseSearchUserInput.dates.get(
@@ -130,16 +130,15 @@ def test_case_05_date_range_format(driver):
     # YYYY-MM-DD - DOM doesn't load value , so searching instead of a check
     webapps.clear_selections_on_case_search_page()
     casesearch.search_against_property(search_property=CaseSearchUserInput.date_opened,
-                                       input_value=CaseSearchUserInput.date_2022_12_30,
+                                       input_value=CaseSearchUserInput.date_2023_08_16,
                                        property_type=TEXT_INPUT)
     webapps.search_button_on_case_search_page()
     casesearch.check_values_on_caselist(row_num=CaseSearchUserInput.six,
-                                        expected_value=CaseSearchUserInput.date_30_12_2022)
+                                        expected_value=CaseSearchUserInput.date_16_08_2023)
     # Date Range Search Again with Enter on keyboard
-    webapps.search_again_cases()
     webapps.clear_selections_on_case_search_page()
     date = casesearch.search_against_property(search_property=CaseSearchUserInput.date_opened,
-                                              input_value=CaseSearchUserInput.date_12_30_2022_slash,
+                                              input_value=CaseSearchUserInput.date_08_16_2023_slash,
                                               property_type=TEXT_INPUT)
     casesearch.check_date_range(casesearch.parse_date_range(input_date=date,
                                                             input_format=CaseSearchUserInput.dates.get("MM/DD/YYYY"),
@@ -254,7 +253,6 @@ def test_case_10_is_multiselect_format(driver):
     casesearch.check_values_on_caselist(row_num=CaseSearchUserInput.four,
                                         expected_value=["2", "3"],
                                         is_multi=YES)
-    webapps.search_again_cases()
     webapps.clear_selections_on_case_search_page()
     casesearch.search_against_property(search_property=CaseSearchUserInput.artist,
                                        input_value=CaseSearchUserInput.artist_case_arijit,
@@ -286,7 +284,6 @@ def test_case_11_allow_blank_values_normal(driver):
                                         expected_value=[CaseSearchUserInput.two,
                                                         CaseSearchUserInput.blank],
                                         is_multi=YES)
-    webapps.search_again_cases()
     webapps.clear_selections_on_case_search_page()
     casesearch.search_against_property(search_property=CaseSearchUserInput.rating,
                                        input_value=CaseSearchUserInput.five_star,
@@ -334,15 +331,14 @@ def test_case_13_allow_blank_values_others(driver):
     webapps.open_menu(CaseSearchUserInput.search_first_menu)
     webapps.clear_selections_on_case_search_page()
     casesearch.search_against_property(search_property=CaseSearchUserInput.date_opened,
-                                       input_value=CaseSearchUserInput.date_2022_12_30,
+                                       input_value=CaseSearchUserInput.date_2023_08_16,
                                        property_type=TEXT_INPUT,
                                        include_blanks=YES)
     webapps.search_button_on_case_search_page()
     casesearch.check_values_on_caselist(row_num=CaseSearchUserInput.six,
-                                        expected_value=[CaseSearchUserInput.date_30_12_2022,
+                                        expected_value=[CaseSearchUserInput.date_16_08_2023,
                                                         CaseSearchUserInput.blank],
                                         is_multi=YES)
-    webapps.search_again_cases()
     webapps.clear_selections_on_case_search_page()
     casesearch.search_against_property(search_property=CaseSearchUserInput.artist,
                                        input_value=CaseSearchUserInput.artist_case_arijit,
@@ -370,7 +366,6 @@ def test_case_14_exclude_property_from_case_search(driver):
     casesearch.check_values_on_caselist(row_num=CaseSearchUserInput.two,
                                         expected_value=CaseSearchUserInput.four,
                                         is_multi=YES)
-    webapps.search_again_cases()
     webapps.clear_selections_on_case_search_page()
     casesearch.search_against_property(search_property=CaseSearchUserInput.mood,
                                        input_value=CaseSearchUserInput.four,
@@ -420,7 +415,6 @@ def test_case_16_sticky_search_with_default_value(driver):
     webapps.open_app(CaseSearchUserInput.linked_case_search_app_name)
     webapps.open_menu(CaseSearchUserInput.search_first_menu)
     webapps.search_button_on_case_search_page()
-    webapps.search_again_cases()
     casesearch.check_default_values_displayed(search_property=CaseSearchUserInput.mood,
                                               default_value=CaseSearchUserInput.three,
                                               search_format=text)
@@ -431,7 +425,6 @@ def test_case_16_sticky_search_with_default_value(driver):
     webapps.search_button_on_case_search_page()
     casesearch.check_values_on_caselist(row_num=CaseSearchUserInput.three,
                                         expected_value=CaseSearchUserInput.four)
-    webapps.search_again_cases()
     casesearch.check_default_values_displayed(search_property=CaseSearchUserInput.mood,
                                               default_value=CaseSearchUserInput.three,
                                               search_format=text)
@@ -524,18 +517,16 @@ def test_case_19_json_property_function(driver):
                                    type=WORK)
 
 
-@pytest.mark.skip(reason="Not sure about the expected behaviour at this point")
 def test_case_20_case_search_title(driver):
     webapps = WebApps(driver)
     casesearch = CaseSearchWorkflows(driver)
     """Check Case Search Title"""
     webapps.open_app(CaseSearchUserInput.linked_case_search_app_name)
     webapps.open_menu(CaseSearchUserInput.search_first_menu)
-    casesearch.check_search_screen_title(CaseSearchUserInput.search_title)
+    casesearch.check_search_screen_title_sscs(CaseSearchUserInput.search_title)
     casesearch.check_search_screen_subtitle(CaseSearchUserInput.search_subtitle)
     webapps.navigate_to_breadcrumb(CaseSearchUserInput.linked_case_search_app_name)
     webapps.open_menu(CaseSearchUserInput.skip_default_menu)
-    webapps.search_again_cases()
     casesearch.check_search_screen_title(title=None)
     # webapps.open_app(CaseSearchUserInput.french_app)
     # webapps.open_menu(CaseSearchUserInput.search_first_menu)
@@ -675,7 +666,6 @@ def test_case_25_checkbox_selection(driver):
                                         expected_value=input_values,
                                         is_multi=YES)
     """Check desired selections"""
-    webapps.search_again_cases()
     casesearch.check_if_checkbox_selected(CaseSearchUserInput.mood, [3, 4])
     webapps.clear_selections_on_case_search_page()
     input_values = casesearch.select_checkbox(CaseSearchUserInput.mood, [4, 5], select_by_value=index)

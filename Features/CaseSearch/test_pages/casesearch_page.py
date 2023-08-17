@@ -34,6 +34,7 @@ class CaseSearchWorkflows(BasePage):
         self.city_value_home = "//span[@class='caption webapp-markdown-output'][contains(text(), '{}')]"
         self.city_value_work = "//span[@class='caption webapp-markdown-output'][contains(text()[2], '{}')]"
         self.search_screen_title = "//h2[contains(text(), '{}')]"
+        self.search_screen_title_sscs = "//h1[contains(text(), '{}')]"
         self.search_screen_subtitle = "//strong[contains(text(), '{}')]"
         self.date_selected = "(//*[contains(text(),'{}')])[1]"
         self.dropdown_values = self.combox_select + "/option"
@@ -144,6 +145,13 @@ class CaseSearchWorkflows(BasePage):
             assert self.is_displayed(title_on_screen)
         else:
             assert not self.is_displayed(title_on_screen)
+
+    def check_search_screen_title_sscs(self, title=None):
+        title_on_screen_sscs = self.get_element(self.search_screen_title_sscs, title)
+        if title is not None:
+            assert self.is_displayed(title_on_screen_sscs)
+        else:
+            assert not self.is_displayed(title_on_screen_sscs)
 
     def check_search_screen_subtitle(self, subtitle):
         subtitle_on_screen = self.get_element(self.search_screen_subtitle, subtitle)
