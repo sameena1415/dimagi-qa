@@ -62,6 +62,15 @@ class WebUsersPage(BasePage):
         self.choose_file = (By.XPATH, "//input[@id='id_bulk_upload_file']")
         self.upload = (By.XPATH, "//button[@class='btn btn-primary disable-on-submit']")
         self.import_complete = (By.XPATH, "//legend[text()='Bulk upload complete.']")
+        self.search_user = (By.XPATH, "//input[contains(@placeholder,'Search Users')]")
+        self.search_user_btn = (By.XPATH, "//form[.//input[contains(@placeholder,'Search Users')]]//button/i[@class='fa fa-search']")
+        self.user_link = (By.LINK_TEXT,UserData.p1p2_user)
+        self.update_role_btn = (By.XPATH, "//button[.='Update Role']")
+        self.location_field = (By.XPATH, "//textarea[@class='select2-search__field']")
+        self.remove_location = (By.XPATH, "//button[@aria-label='Remove item']")
+        self.location_value = (By.XPATH, "//li[contains(@class,'select2-results__option')][.='Test Location [DO NOT DELETE!!!]']")
+        self.update_location_btn = (By.XPATH, "//button[.='Update Location Settings']")
+
 
     def invite_new_web_user(self, role):
         self.wait_to_click(self.web_users_menu)
@@ -169,3 +178,26 @@ class WebUsersPage(BasePage):
             print("TIMEOUT ERROR: Could not upload file")
         assert self.is_present_and_displayed(self.import_complete), "Upload Not Completed! Taking Longer to process.."
         print("File uploaded successfully")
+
+    def edit_user_permission(self, rolename):
+        self.wait_to_click(self.web_users_menu)
+        self.wait_for_element(self.search_user)
+        self.wait_to_clear_and_send_keys(self.search_user, UserData.p1p2_user)
+        self.wait_to_click(self.search_user_btn)
+        self.wait_for_element(self.user_link)
+        self.wait_to_click(self.user_link)
+        self.wait_for_element(self.select_project_role_id)
+        self.select_by_text(self.select_project_role_id, rolename)
+        self.wait_to_click(self.update_role_btn)
+        time.sleep(2)
+        self.scroll_to_element(self.location_field)
+        if self.is_present(self.remove_location):
+            self.wait_to_click(self.remove_location)
+        time.sleep(2)
+        self.wait_to_click(self.location_field)
+        self.send_keys(self.location_field, "Test Location")
+        self.wait_to_click(self.location_value)
+        self.wait_to_click(self.update_location_btn)
+        time.sleep(2)
+
+

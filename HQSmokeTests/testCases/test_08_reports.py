@@ -91,8 +91,21 @@ def test_case_20_scheduled_report(driver, settings):
     report = HomePage(driver, settings)
     report.reports_menu()
     load = ReportPage(driver)
-    load.scheduled_report()
     load.delete_scheduled_and_saved_reports()
+    time, user = load.scheduled_report()
+    load.verify_scheduled_report(time, user)
+    load.delete_scheduled_and_saved_reports()
+
+@pytest.mark.report
+@pytest.mark.editReport
+@pytest.mark.p1p2EscapeDefect
+def test_case_72_edit_report(driver, settings):
+    if 'www' in settings['url']:
+        pytest.skip("Set up is not present in prod")
+    report = HomePage(driver, settings)
+    report.reports_menu()
+    load = ReportPage(driver)
+    load.configure_add_report()
 
 
 def test_case_delete_saved_reports(driver, settings):

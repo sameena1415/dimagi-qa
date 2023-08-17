@@ -33,21 +33,26 @@ def test_case_55_update_case(driver, settings):
 
 @pytest.mark.data
 @pytest.mark.excelDashboardIntegrationForm
+@pytest.mark.p1p2EscapeDefect
 def test_case_25_excel_dashboard_integration_form(driver, settings):
     home = HomePage(driver, settings)
     home.data_menu()
     export = ExportDataPage(driver)
     export.excel_dashboard_integration_form()
+    link = export.check_feed_link()
+    export.verify_duplicate_data_in_dashboard(link, settings['login_username'], settings['login_password'])
 
 
 @pytest.mark.data
 @pytest.mark.excelDashboardIntegrationCase
+@pytest.mark.p1p2EscapeDefect
 def test_case_26_excel_dashboard_integration_case(driver, settings):
     home = HomePage(driver, settings)
     home.data_menu()
     export = ExportDataPage(driver)
     export.excel_dashboard_integration_case()
-
+    link = export.check_feed_link()
+    export.verify_duplicate_data_in_dashboard(link, settings['login_username'], settings['login_password'])
 
 @pytest.mark.data
 @pytest.mark.powerBiTableauIntegrationCase
