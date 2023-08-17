@@ -660,7 +660,60 @@ def test_case_24_case_search_validations(driver):
                                         expected_value=CaseSearchUserInput.blank)
 
 
-def test_case_25_checkbox_selection(driver):
+def test_case_25_case_search_validations_dot_notations(driver):
+    webapps = WebApps(driver)
+    casesearch = CaseSearchWorkflows(driver)
+    """Case Search Validations"""
+    webapps.login_as(CaseSearchUserInput.user_1)
+    webapps.open_app(CaseSearchUserInput.case_search_app_name)
+    webapps.open_menu(CaseSearchUserInput.dot_notations)
+    webapps.clear_selections_on_case_search_page()
+    casesearch.search_against_property(search_property=CaseSearchUserInput.energy,
+                                       input_value=CaseSearchUserInput.three,
+                                       property_type=TEXT_INPUT)
+    time.sleep(2)
+    casesearch.search_against_property(search_property=CaseSearchUserInput.song_name,
+                                       input_value=CaseSearchUserInput.value_with_space,
+                                       property_type=TEXT_INPUT)
+    """Check validations imposed"""
+    webapps.search_button_on_case_search_page()
+    casesearch.check_validations_on_property(search_property=CaseSearchUserInput.song_name,
+                                             message=CaseSearchUserInput.validation_msg_no_spaces,
+                                             required_or_validated=YES,
+                                             property_type=TEXT_INPUT)
+    casesearch.check_validations_on_property(search_property=CaseSearchUserInput.energy,
+                                             message=CaseSearchUserInput.validation_msg_invalid_respons,
+                                             required_or_validated=YES,
+                                             property_type=TEXT_INPUT)
+    """Check validations removed"""
+    webapps.clear_selections_on_case_search_page()
+    casesearch.check_validations_on_property(search_property=CaseSearchUserInput.song_name,
+                                             message=CaseSearchUserInput.validation_msg_no_spaces,
+                                             required_or_validated=NO,
+                                             property_type=TEXT_INPUT)
+    casesearch.check_validations_on_property(search_property=CaseSearchUserInput.energy,
+                                             message=CaseSearchUserInput.validation_msg_invalid_respons,
+                                             required_or_validated=NO,
+                                             property_type=TEXT_INPUT)
+    """Check song seacrch w/o spaces and ensure case is displayed"""
+    webapps.clear_selections_on_case_search_page()
+    casename = casesearch.search_against_property(search_property=CaseSearchUserInput.song_name,
+                                                  input_value=CaseSearchUserInput.song_automation_song_no_space,
+                                                  property_type=TEXT_INPUT)
+    webapps.search_button_on_case_search_page()
+    webapps.omni_search(casename)
+    """Check including blanks"""
+    driver.back()
+    time.sleep(2)
+    driver.back()
+    webapps.clear_selections_on_case_search_page()
+    casesearch.select_include_blanks(CaseSearchUserInput.rating)
+    webapps.search_button_on_case_search_page()
+    casesearch.check_values_on_caselist(row_num=CaseSearchUserInput.four,
+                                        expected_value=CaseSearchUserInput.blank)
+
+
+def test_case_26_checkbox_selection(driver):
     webapps = WebApps(driver)
     casesearch = CaseSearchWorkflows(driver)
     webapps.login_as(CaseSearchUserInput.user_1)
@@ -686,7 +739,7 @@ def test_case_25_checkbox_selection(driver):
                                         expected_value=CaseSearchUserInput.five)
 
 
-def test_case_26_checkbox_selection_sticky_search(driver):
+def test_case_27_checkbox_selection_sticky_search(driver):
     webapps = WebApps(driver)
     casesearch = CaseSearchWorkflows(driver)
     webapps.login_as(CaseSearchUserInput.user_1)
@@ -699,7 +752,7 @@ def test_case_26_checkbox_selection_sticky_search(driver):
     casesearch.check_if_checkbox_selected(CaseSearchUserInput.mood, [3, 4])
 
 
-def test_case_27_checkbox_single_selection_dependent_dropdown(driver):
+def test_case_28_checkbox_single_selection_dependent_dropdown(driver):
     webapps = WebApps(driver)
     casesearch = CaseSearchWorkflows(driver)
     webapps.login_as(CaseSearchUserInput.user_1)
@@ -722,7 +775,7 @@ def test_case_27_checkbox_single_selection_dependent_dropdown(driver):
 
 
 @pytest.mark.skip(reason="Failing: https://dimagi-dev.atlassian.net/browse/USH-2614")
-def test_case_28_checkbox_multiple_selection_dependent_dropdown(driver):
+def test_case_29_checkbox_multiple_selection_dependent_dropdown(driver):
     webapps = WebApps(driver)
     casesearch = CaseSearchWorkflows(driver)
     webapps.login_as(CaseSearchUserInput.user_1)

@@ -69,10 +69,16 @@ def test_case_03_multiselect_with_pagination(driver):
 def test_case_04_multiselect_with_select_parent_first_as_parent(driver, settings):
     webapps = WebApps(driver)
     multiselect = MultiSelectWorkflows(driver)
+    casesearch = CaseSearchWorkflows(driver)
+
     webapps.login_as(CaseSearchUserInput.user_1)
     webapps.open_app(MultiSelectUserInput.multiselect_app_name)
     webapps.open_menu(MultiSelectUserInput.shows_MS_SPFP)
-    webapps.select_first_case_on_list()
+    casename = webapps.omni_search(CaseSearchUserInput.song_auto_parent)
+    webapps.select_case(casename)
+    casesearch.search_against_property(search_property=CaseSearchUserInput.artist_city,
+                                       input_value=CaseSearchUserInput.show_auto,
+                                       property_type=TEXT_INPUT)
     webapps.search_button_on_case_search_page()
     multiselect.multi_select_cases(case_count=1)
     multiselect.continue_to_proceed_multiselect()
@@ -277,7 +283,11 @@ def test_case_14_eof_nav_to_single_select_menu(driver, settings):
     webapps.login_as(CaseSearchUserInput.user_1)
     webapps.open_app(MultiSelectUserInput.multiselect_app_name)
     webapps.open_menu(MultiSelectUserInput.shows_MS_SPFP)
-    webapps.select_first_case_on_list()
+    casename = webapps.omni_search(CaseSearchUserInput.song_auto_parent)
+    webapps.select_case(casename)
+    casesearch.search_against_property(search_property=CaseSearchUserInput.artist_city,
+                                       input_value=CaseSearchUserInput.show_auto,
+                                       property_type=TEXT_INPUT)
     webapps.search_button_on_case_search_page()
     multiselect.multi_select_cases(case_count=1)
     multiselect.continue_to_proceed_multiselect()
@@ -297,7 +307,11 @@ def test_case_15_eof_nav_to_form_on_single_select_menu(driver, settings):
     webapps.login_as(CaseSearchUserInput.user_1)
     webapps.open_app(MultiSelectUserInput.multiselect_app_name)
     webapps.open_menu(MultiSelectUserInput.shows_MS_SPFP)
-    webapps.select_first_case_on_list()
+    casename = webapps.omni_search(CaseSearchUserInput.song_auto_parent)
+    webapps.select_case(casename)
+    casesearch.search_against_property(search_property=CaseSearchUserInput.artist_city,
+                                       input_value=CaseSearchUserInput.show_auto,
+                                       property_type=TEXT_INPUT)
     webapps.search_button_on_case_search_page()
     multiselect.multi_select_cases(case_count=1)
     multiselect.continue_to_proceed_multiselect()
