@@ -1,5 +1,5 @@
 import time
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from common_utilities.selenium.base_page import BasePage
 from common_utilities.generate_random_string import fetch_random_string
@@ -183,7 +183,7 @@ class ReportPage(BasePage):
 
     def messaging_history_report(self):
         self.wait_to_click(self.messaging_history_rep)
-        date_range = self.get_yesterday_tomorrow_dates()
+        date_range = self.get_last_7_days_date_range()
         self.clear(self.date_input)
         self.send_keys(self.date_input, date_range + Keys.TAB)
         self.check_if_report_loaded()
@@ -327,14 +327,16 @@ class ReportPage(BasePage):
         else:
             print("Report deleted successfully!")
 
-    def get_yesterday_tomorrow_dates(self):
+    def get_last_7_days_date_range(self):
         # Get today's date
         presentday = datetime.now()  # or presentday = datetime.today()
-        # Get Yesterday
-        # yesterday = presentday - timedelta(1)
-        # Get Tomorrow
-        # tomorrow = presentday + timedelta(1)
+        # Get Today minus 7 days date
+        week_ago = presentday - timedelta(7)
+        return week_ago.strftime('%Y-%m-%d') + " to " + presentday.strftime('%Y-%m-%d')
 
+    def get_todays_date_range(self):
+        # Get today's date
+        presentday = datetime.now()  # or presentday = datetime.today()
         return presentday.strftime('%Y-%m-%d') + " to " + presentday.strftime('%Y-%m-%d')
 
     def verify_table_not_empty(self, locator):
@@ -359,7 +361,7 @@ class ReportPage(BasePage):
         self.select_by_text(self.application_select, UserData.reassign_cases_application)
         self.select_by_text(self.module_select, UserData.case_list_name)
         self.select_by_text(self.form_select, UserData.form_name)
-        date_range = self.get_yesterday_tomorrow_dates()
+        date_range = self.get_todays_date_range()
         self.clear(self.date_input)
         self.send_keys(self.date_input, date_range + Keys.TAB)
         self.wait_to_click(self.apply_id)
@@ -408,7 +410,7 @@ class ReportPage(BasePage):
         self.select_by_text(self.application_select, UserData.reassign_cases_application)
         self.select_by_text(self.module_select, UserData.case_list_name)
         self.select_by_text(self.form_select, UserData.new_form_name)
-        date_range = self.get_yesterday_tomorrow_dates()
+        date_range = self.get_todays_date_range()
         self.clear(self.date_input)
         self.send_keys(self.date_input, date_range + Keys.TAB)
         self.wait_to_click(self.apply_id)
@@ -437,7 +439,7 @@ class ReportPage(BasePage):
 
     def validate_messaging_history_for_cond_alert(self, cond_alert):
         self.wait_to_click(self.messaging_history_rep)
-        date_range = self.get_yesterday_tomorrow_dates()
+        date_range = self.get_todays_date_range()
         self.clear(self.date_input)
         self.send_keys(self.date_input, date_range + Keys.TAB)
         time.sleep(2)
