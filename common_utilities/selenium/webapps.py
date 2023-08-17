@@ -29,6 +29,7 @@ class WebApps(BasePage):
 
         self.form_submit = (By.XPATH, "//button[@class='submit btn btn-primary']")
         self.form_submission_successful = (By.XPATH, "//p[contains(text(), 'successfully saved')]")
+        self.form_500_error = (By.XPATH, "//*[contains(text(),'500 :')]")
         self.search_all_cases_button = (By.XPATH,
                                         "//*[contains(text(),'Search All')]//parent::div[@class='case-list-action-button btn-group formplayer-request']")
         self.search_again_button = (By.XPATH,
@@ -165,7 +166,15 @@ class WebApps(BasePage):
     def submit_the_form(self):
         self.wait_for_element(self.form_submit)
         self.js_click(self.form_submit)
-        assert self.is_visible_and_displayed(self.form_submission_successful, timeout=500)
+        try:
+            assert self.is_visible_and_displayed(self.form_submission_successful, timeout=500)
+        except AssertionError:
+            if self.is_displayed(self.form_500_error):
+                time.sleep(60)
+                self.js_click(self.form_submit)
+                assert self.is_visible_and_displayed(self.form_submission_successful, timeout=500)
+            else:
+                raise AssertionError
 
     def select_user(self, username):
         self.login_as_user = self.get_element(self.login_as_username, username)
