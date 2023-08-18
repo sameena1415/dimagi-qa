@@ -1,7 +1,6 @@
 import os
 import time
 import pandas as pd
-import html5lib
 from datetime import datetime, timedelta
 
 import requests
