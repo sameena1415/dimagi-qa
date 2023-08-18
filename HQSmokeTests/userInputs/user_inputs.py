@@ -18,6 +18,7 @@ class UserData:
     app_password = "Pass@123"
     two_fa_user = "2fa.commcare.user@gmail.com"
     appiumtest_owner_id = "appiumtest@qa-automation.commcarehq.org"
+    appiumtest_owner_id_prod = "appiumtest@qa-automation-prod.commcarehq.org"
     # Phone Number
     area_code = "91"
 

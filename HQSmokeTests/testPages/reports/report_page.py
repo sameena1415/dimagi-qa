@@ -544,7 +544,11 @@ class ReportPage(BasePage):
                 else:
                     print("Alert status is not Completed but has no Internal Server Error")
 
-    def check_for_case_list_owner(self):
+    def check_for_case_list_owner(self, url):
+        if 'www' in url:
+            owner = UserData.appiumtest_owner_id_prod
+        else:
+            owner = UserData.appiumtest_owner_id
         self.wait_to_click(self.case_list_rep)
         self.wait_for_element(self.remove_case_owner)
         self.wait_to_click(self.remove_case_owner)
@@ -561,10 +565,14 @@ class ReportPage(BasePage):
             for i in range(len(list_of_owner)):
                 text = list_of_owner[i].text
                 print(text)
-                assert text == UserData.appiumtest_owner_id, "Owner does not match"
+                assert text == owner, "Owner does not match"
                 self.check_if_html(text)
 
-    def check_for_case_list_explorer_owner(self):
+    def check_for_case_list_explorer_owner(self, url):
+        if 'www' in url:
+            owner = UserData.appiumtest_owner_id_prod
+        else:
+            owner = UserData.appiumtest_owner_id
         self.wait_to_click(self.case_list_explorer)
         time.sleep(5)
         self.wait_for_element(self.edit_column)
@@ -590,7 +598,7 @@ class ReportPage(BasePage):
             for i in range(len(list_of_owner)):
                 text = list_of_owner[i].text
                 print(text)
-                assert text == UserData.appiumtest_owner_id, "Owner does not match"
+                assert text == owner, "Owner does not match"
                 self.check_if_html(text)
 
     def check_if_html(self, text):

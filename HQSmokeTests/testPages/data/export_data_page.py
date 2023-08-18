@@ -520,7 +520,7 @@ class ExportDataPage(BasePage):
     def verify_duplicate_data_in_dashboard(self, link, username, password):
         print(link)
         resp = requests.get(link, auth=(username, password)).text
-        data = pd.read_html(resp)
+        data = pd.read_html(resp, flavor='html5lib')
         data = (pd.DataFrame(data[0])).reset_index()
         duplicate = data[data.duplicated()]
         if len(duplicate)>0:

@@ -36,7 +36,7 @@ class RolesPermissionPage(BasePage):
         self.role_non_admin = (By.XPATH, "//span[text()='" + str(self.role_non_admin_created) + "']")
         self.confirm_role_delete = (By.XPATH, "//div[@class='btn btn-danger']")
         self.full_org_access_checkbox = (By.XPATH, "//label[contains(.,'Full Organization Access')]//following-sibling::div//input")
-        self.access_all_reports_checkbox = (By.XPATH, "//label[contains(.,'Access All CommCare Reports')]//following-sibling::div//input")
+        self.access_all_reports_checkbox = (By.XPATH, "//input[@id='access-all-reports-checkbox']")
 
 
     def roles_menu_click(self):
