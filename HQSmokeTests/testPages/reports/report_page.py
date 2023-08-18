@@ -277,7 +277,7 @@ class ReportPage(BasePage):
         self.wait_to_click(self.next_button_id)
         self.wait_to_click(self.save_and_view_button_id)
         self.check_if_report_loaded()
-        self.delete_report()
+
 
     def create_report_builder_form_report(self):
         self.wait_to_click(self.create_new_rep_id)
@@ -288,7 +288,6 @@ class ReportPage(BasePage):
         self.wait_to_click(self.next_button_id)
         self.wait_to_click(self.save_and_view_button_id)
         self.check_if_report_loaded()
-        self.delete_report()
 
     def saved_report(self):
         self.wait_to_click(self.case_activity_rep)
@@ -640,7 +639,9 @@ class ReportPage(BasePage):
     def export_daily_form_activity_to_excel(self):
         self.wait_to_click(self.daily_form_activity_rep)
         try:
+            self.wait_for_element(self.user_remove_btn)
             self.wait_to_click(self.user_remove_btn)
+            time.sleep(2)
             self.wait_to_click(self.user_remove_btn)
             ActionChains(self.driver).send_keys(Keys.TAB).perform()
             # self.wait_to_click(self.users_field)
@@ -694,7 +695,9 @@ class ReportPage(BasePage):
     def export_app_status_to_excel(self):
         self.wait_to_click(self.application_status_rep)
         try:
+            self.wait_for_element(self.user_remove_btn)
             self.wait_to_click(self.user_remove_btn)
+            time.sleep(2)
             self.wait_to_click(self.user_remove_btn)
             ActionChains(self.driver).send_keys(Keys.TAB).perform()
             # self.wait_to_click(self.users_field)

@@ -56,12 +56,18 @@ def test_case_15_16_submit_form_verify_formdata_casedata(driver, settings):
 @pytest.mark.report
 @pytest.mark.reportBuilderForm
 @pytest.mark.reportBuilderCase
+@pytest.mark.editReport
+@pytest.mark.p1p2EscapeDefect
 def test_case_17_create_form_report(driver, settings):
     report = HomePage(driver, settings)
     driver.refresh()
     report.reports_menu()
     load = ReportPage(driver)
     load.create_report_builder_form_report()
+    report.reports_menu()
+    load.configure_add_report()
+    report.reports_menu()
+    load.delete_report()
 
 
 
@@ -72,6 +78,7 @@ def test_case_18_create_case_report(driver, settings):
     report.reports_menu()
     load = ReportPage(driver)
     load.create_report_builder_case_report()
+    load.delete_report()
 
 
 
@@ -95,15 +102,6 @@ def test_case_20_scheduled_report(driver, settings):
     time, user = load.scheduled_report()
     load.verify_scheduled_report(time, user)
     load.delete_scheduled_and_saved_reports()
-
-@pytest.mark.report
-@pytest.mark.editReport
-@pytest.mark.p1p2EscapeDefect
-def test_case_72_edit_report(driver, settings):
-    report = HomePage(driver, settings)
-    report.reports_menu()
-    load = ReportPage(driver)
-    load.configure_add_report()
 
 
 @pytest.mark.report
