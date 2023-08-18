@@ -97,6 +97,7 @@ def test_case_74_delete_role_column(driver, settings):
     user.verify_role_for_mobile_worker(results['role'])
     home.users_menu()
     user.delete_bulk_users()
+    time.sleep(10)
     home.users_menu()
     role = RolesPermissionPage(driver)
     role.roles_menu_click()
