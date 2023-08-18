@@ -4,15 +4,9 @@ import html
 from datetime import datetime, timedelta
 import re
 import pandas as pd
-import requests
-from urllib.request import urlopen
-import bs4
-from bs4 import BeautifulSoup
 from selenium.webdriver import ActionChains
-from selenium.webdriver.support.select import Select
 
 from HQSmokeTests.testPages.data.export_data_page import latest_download_file
-from HQSmokeTests.testPages.home.home_page import HomePage
 from common_utilities.path_settings import PathSettings
 
 from common_utilities.selenium.base_page import BasePage

@@ -101,7 +101,7 @@ def test_case_74_delete_role_column(driver, settings):
     role.roles_menu_click()
     role.delete_test_roles()
 
-
+@pytest.mark.report
 @pytest.mark.p1p2EscapeDefect
 def test_case_75_daily_form_activity(driver, settings):
     home = HomePage(driver, settings)
@@ -113,7 +113,7 @@ def test_case_75_daily_form_activity(driver, settings):
     link = email.get_hyperlink_from_latest_email(UserData.daily_form_activity)
     report.compare_web_with_email(link, web_data)
 
-
+@pytest.mark.report
 @pytest.mark.p1p2EscapeDefect
 def test_case_76_application_status(driver, settings):
     home = HomePage(driver, settings)
