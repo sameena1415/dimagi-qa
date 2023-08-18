@@ -173,6 +173,8 @@ class ReportPage(BasePage):
         self.daily_form_activity_results = (By.XPATH, "//table[@id='report_table_daily_form_stats']/tbody/tr")
         self.daily_form_activity_results_cells = (By.XPATH, "//table[@id='report_table_daily_form_stats']/tbody/tr/td")
         self.users_field = (By.XPATH, "(//textarea[@class='select2-search__field'])[1]")
+        self.remove_active_worker = (By.XPATH,"//span[.='[Active Mobile Workers]']//preceding-sibling::button[@class='select2-selection__choice__remove']")
+        self.remove_deactive_worker = (By.XPATH, "//span[.='[Deactivated Mobile Workers]']//preceding-sibling::button[@class='select2-selection__choice__remove']")
         self.user_remove_btn = (By.XPATH, "(//button[@class='select2-selection__choice__remove'])[last()]")
         self.user_from_list = "//li[contains(.,'{}')]"
         self.export_to_excel = (By.XPATH, "//a[@id='export-report-excel']")
@@ -639,10 +641,11 @@ class ReportPage(BasePage):
     def export_daily_form_activity_to_excel(self):
         self.wait_to_click(self.daily_form_activity_rep)
         try:
-            self.wait_for_element(self.user_remove_btn)
-            self.wait_to_click(self.user_remove_btn)
+            self.wait_for_element(self.remove_active_worker)
+            self.wait_to_click(self.remove_active_worker)
             time.sleep(2)
-            self.wait_to_click(self.user_remove_btn)
+            self.wait_to_click(self.remove_deactive_worker)
+            time.sleep(2)
             ActionChains(self.driver).send_keys(Keys.TAB).perform()
             # self.wait_to_click(self.users_field)
             self.send_keys(self.users_field, UserData.app_login)
@@ -676,7 +679,7 @@ class ReportPage(BasePage):
         newest_file = latest_download_file()
         path = os.path.join(PathSettings.DOWNLOAD_PATH, newest_file)
         print(path)
-        new_data = pd.read_excel(path, sheet_name="Daily Form Activity", index_col=None)
+        new_data = pd.read_excel(path, sheet_name=0, index_col=None)
         new_data = new_data[new_data["Username"].str.contains("Total") == False]
         print(new_data.values)
         list = []
@@ -695,10 +698,11 @@ class ReportPage(BasePage):
     def export_app_status_to_excel(self):
         self.wait_to_click(self.application_status_rep)
         try:
-            self.wait_for_element(self.user_remove_btn)
-            self.wait_to_click(self.user_remove_btn)
+            self.wait_for_element(self.remove_active_worker)
+            self.wait_to_click(self.remove_active_worker)
             time.sleep(2)
-            self.wait_to_click(self.user_remove_btn)
+            self.wait_to_click(self.remove_deactive_worker)
+            time.sleep(2)
             ActionChains(self.driver).send_keys(Keys.TAB).perform()
             # self.wait_to_click(self.users_field)
             self.send_keys(self.users_field, UserData.app_login)
@@ -732,7 +736,7 @@ class ReportPage(BasePage):
         newest_file = latest_download_file()
         path = os.path.join(PathSettings.DOWNLOAD_PATH, newest_file)
         print(path)
-        new_data = pd.read_excel(path, sheet_name="Application Status", index_col=None)
+        new_data = pd.read_excel(path, sheet_name=0, index_col=None)
         list = []
         list.extend(new_data.values.tolist())
         list = list[0]
