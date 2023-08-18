@@ -66,7 +66,6 @@ def test_case_17_create_form_report(driver, settings):
     load.create_report_builder_form_report()
     report.reports_menu()
     load.configure_add_report()
-    report.reports_menu()
     load.delete_report()
 
 
