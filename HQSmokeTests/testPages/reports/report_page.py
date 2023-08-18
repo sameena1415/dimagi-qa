@@ -262,13 +262,17 @@ class ReportPage(BasePage):
         self.check_if_report_loaded()
 
     def delete_report(self):
-        try:
-            self.wait_to_click(self.edit_report_id)
-        except TimeoutException:
-            self.driver.refresh()
-            self.wait_to_click(self.edit_report_id)
-        self.wait_to_click(self.delete_report_xpath)
-        print("Report deleted successfully!")
+        if self.is_present(self.delete_report_xpath):
+            self.wait_to_click(self.delete_report_xpath)
+            print("Report deleted successfully!")
+        else:
+            try:
+                self.wait_to_click(self.edit_report_id)
+            except TimeoutException:
+                self.driver.refresh()
+                self.wait_to_click(self.edit_report_id)
+            self.wait_to_click(self.delete_report_xpath)
+            print("Report deleted successfully!")
         self.wait_to_click(self.homepage)
 
     def create_report_builder_case_report(self):
