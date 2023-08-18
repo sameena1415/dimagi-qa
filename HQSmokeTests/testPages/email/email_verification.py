@@ -15,10 +15,15 @@ class EmailVerification:
         self.imap_user = settings['login_username']
         self.imap_pass = settings['imap_password']
 
-    def get_hyperlink_from_latest_email(self, subject):
+    def get_hyperlink_from_latest_email(self, subject, url):
+        if 'www' in url:
+            from_email = UserData.from_email_prod
+        else:
+            from_email = UserData.from_email
+
         with MailBox(self.imap_host).login(self.imap_user, self.imap_pass, 'INBOX') as mailbox:
             bodies = [msg.html for msg in
-                      mailbox.fetch(AND(subject=subject))]
+                      mailbox.fetch(AND(subject=subject, from_=from_email))]
         soup = BeautifulSoup(str(bodies), "html.parser")
         links = []
         for link in soup.findAll('a', attrs={'href': re.compile("^https://")}):

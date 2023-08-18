@@ -111,7 +111,7 @@ def test_case_75_daily_form_activity(driver, settings):
     report.daily_form_activity_report()
     web_data = report.export_daily_form_activity_to_excel()
     email = EmailVerification(settings)
-    link = email.get_hyperlink_from_latest_email(UserData.daily_form_activity)
+    link = email.get_hyperlink_from_latest_email(UserData.daily_form_activity, settings['url'])
     report.compare_web_with_email(link, web_data)
 
 @pytest.mark.report
@@ -122,7 +122,7 @@ def test_case_76_application_status(driver, settings):
     report = ReportPage(driver)
     web_data = report.export_app_status_to_excel()
     email = EmailVerification(settings)
-    link = email.get_hyperlink_from_latest_email(UserData.app_status)
+    link = email.get_hyperlink_from_latest_email(UserData.app_status, settings['url'])
     report.compare_app_status_web_with_email(link, web_data)
 
 
