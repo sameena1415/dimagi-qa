@@ -23,7 +23,8 @@ def test_case_70_case_owner_list(driver, settings):
     report = HomePage(driver, settings)
     report.reports_menu()
     load = ReportPage(driver)
-    load.check_for_case_list_owner()
+    load.check_for_case_list_owner(settings['url'])
+
 
 @pytest.mark.report
 @pytest.mark.reportCaseList
@@ -32,7 +33,7 @@ def test_case_71_case_owner_list_explorer(driver, settings):
     report = HomePage(driver, settings)
     report.reports_menu()
     load = ReportPage(driver)
-    load.check_for_case_list_explorer_owner()
+    load.check_for_case_list_explorer_owner(settings['url'])
 
 @pytest.mark.user
 @pytest.mark.groups
