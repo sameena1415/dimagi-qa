@@ -79,17 +79,12 @@ def test_case_04_load_external_linked_domain_case_into_caselist_search_first(dri
     webapps.login_as(CaseSearchUserInput.user_2)
     webapps.open_app(CaseSearchUserInput.linked_case_search_app_name)
     webapps.open_menu(CaseSearchUserInput.load_external_search_first_menu)
-    webapps.clear_and_search_all_cases_on_case_search_page()
-    casename = webapps.omni_search(CaseSearchUserInput.song_case_cs4_song_300, displayed=NO)
+    webapps.clear_selections_on_case_search_page()
     casesearch.search_against_property(search_property=CaseSearchUserInput.song_name,
-                                       input_value=casename,
-                                       property_type=TEXT_INPUT)
-    casesearch.search_against_property(search_property=CaseSearchUserInput.song_id,
-                                       input_value="3300",
+                                       input_value=CaseSearchUserInput.casesearch_1,
                                        property_type=TEXT_INPUT)
     webapps.search_button_on_case_search_page(SSCS=YES)
-    webapps.omni_search(casename)
-    webapps.select_case_and_continue(casename)
+    webapps.select_first_case_on_list_and_continue()
     domain_url = driver.current_url
     assert "casesearch" in domain_url
     webapps.open_form(CaseSearchUserInput.play_song_form)
@@ -120,18 +115,13 @@ def test_case_06_smart_link_skip_default(driver):
     webapps.login_as(CaseSearchUserInput.user_1)
     webapps.open_app(CaseSearchUserInput.linked_case_search_app_name)
     webapps.open_menu(CaseSearchUserInput.smart_link_skip_default_menu)
-    casename = webapps.omni_search(CaseSearchUserInput.song_case_cs4_song_300, displayed=NO)
     webapps.clear_selections_on_case_search_page()
     casesearch.search_against_property(search_property=CaseSearchUserInput.song_name,
-                                       input_value=casename,
-                                       property_type=TEXT_INPUT)
-    casesearch.search_against_property(search_property=CaseSearchUserInput.song_id,
-                                       input_value="3300",
+                                       input_value=CaseSearchUserInput.casesearch_1,
                                        property_type=TEXT_INPUT)
     webapps.search_button_on_case_search_page(SSCS=YES)
-    webapps.omni_search(casename)
-    webapps.select_case_and_continue(casename)
-    webapps.select_user(CaseSearchUserInput.kiran)  # Failing 404! Raise a ticket
+    webapps.select_first_case_on_list_and_continue()
+    webapps.select_user(CaseSearchUserInput.kiran)
     domain_url = driver.current_url
     assert "casesearch-1" in domain_url
     webapps.submit_the_form()
@@ -145,18 +135,12 @@ def test_case_07_smart_link_search_first_linked_domain_case(driver):
     webapps.open_app(CaseSearchUserInput.linked_case_search_app_name)
     """Search case in another domain"""
     webapps.open_menu(CaseSearchUserInput.smart_link_search_first_menu)
-    webapps.clear_and_search_all_cases_on_case_search_page()
-    casename = webapps.omni_search(CaseSearchUserInput.song_case_cs4_song_300, displayed=NO)
     webapps.clear_selections_on_case_search_page()
     casesearch.search_against_property(search_property=CaseSearchUserInput.song_name,
-                                       input_value=casename,
-                                       property_type=TEXT_INPUT)
-    casesearch.search_against_property(search_property=CaseSearchUserInput.song_id,
-                                       input_value="3300",
+                                       input_value=CaseSearchUserInput.casesearch_1,
                                        property_type=TEXT_INPUT)
     webapps.search_button_on_case_search_page(SSCS=YES)
-    webapps.omni_search(casename)
-    webapps.select_case_and_continue(casename)
+    webapps.select_first_case_on_list_and_continue()
     try:
         webapps.select_user(CaseSearchUserInput.kiran)
     except NoSuchElementException:

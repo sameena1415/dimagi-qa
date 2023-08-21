@@ -14,7 +14,7 @@ def test_case_01_fuzzy_search_and_case_claim(driver, settings):
     casesearch = CaseSearchWorkflows(driver)
 
     """Check fuzzy search"""
-    webapps.open_domain(domain_name=CaseSearchUserInput.casesearch, current_url=driver.current_url)
+    webapps.open_domain(domain_name=CaseSearchUserInput.casesearch_split_screen, current_url=driver.current_url)
     webapps.login_as(CaseSearchUserInput.user_2)
     webapps.open_app(CaseSearchUserInput.linked_case_search_app_name)
     webapps.open_menu(CaseSearchUserInput.normal_menu)
