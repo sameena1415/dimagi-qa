@@ -21,7 +21,7 @@ def test_case_01_eof_navigations(driver):
     casesearch.search_against_property(search_property=CaseSearchUserInput.song_name,
                                        input_value=CaseSearchUserInput.song_automation_song,
                                        property_type=TEXT_INPUT)
-    webapps.search_button_on_case_search_page()
+    webapps.search_button_on_case_search_page(SSCS=YES)
     webapps.select_case_and_continue(CaseSearchUserInput.song_automation_song)
     """EOF Nav - Prev Menu"""
     time.sleep(2)
@@ -39,7 +39,7 @@ def test_case_01_eof_navigations(driver):
     casesearch.search_against_property(search_property=CaseSearchUserInput.song_name,
                                        input_value=CaseSearchUserInput.song_automation_song,
                                        property_type=TEXT_INPUT)
-    webapps.search_button_on_case_search_page()
+    webapps.search_button_on_case_search_page(SSCS=YES)
     webapps.select_case_and_continue(CaseSearchUserInput.song_automation_song)
     webapps.open_form(CaseSearchUserInput.update_ratings_form)
     webapps.submit_the_form()
@@ -62,13 +62,13 @@ def test_case_02_related_property_search(driver):
     casesearch.search_against_property(search_property=CaseSearchUserInput.song_name,
                                        input_value=CaseSearchUserInput.song_automation_song,
                                        property_type=TEXT_INPUT)
-    webapps.search_button_on_case_search_page()
+    webapps.search_button_on_case_search_page(SSCS=YES)
     webapps.select_case_and_continue(CaseSearchUserInput.song_automation_song)
     webapps.open_form(CaseSearchUserInput.shows_form)
     casesearch.search_against_property(search_property=CaseSearchUserInput.parent_artist,
                                        input_value=CaseSearchUserInput.automation_artist_1,
                                        property_type=TEXT_INPUT)
-    webapps.search_button_on_case_search_page()
+    webapps.search_button_on_case_search_page(SSCS=YES)
     webapps.omni_search(CaseSearchUserInput.automation_artist_1)
     casesearch.check_values_on_caselist(row_num=CaseSearchUserInput.four,
                                         expected_value=CaseSearchUserInput.automation_artist_1)
@@ -109,7 +109,7 @@ def test_case_05_shadow_menu(driver):
     casesearch.search_against_property(search_property=CaseSearchUserInput.song_name,
                                        input_value=CaseSearchUserInput.song_automation_song,
                                        property_type=TEXT_INPUT)
-    webapps.search_button_on_case_search_page()
+    webapps.search_button_on_case_search_page(SSCS=YES)
     search_first_form_names = webapps.select_case_and_continue(CaseSearchUserInput.song_automation_song)
     """Check search and forms in shadow menu"""
     webapps.open_app(CaseSearchUserInput.linked_case_search_app_name)
@@ -117,7 +117,7 @@ def test_case_05_shadow_menu(driver):
     casesearch.search_against_property(search_property=CaseSearchUserInput.rating,
                                        input_value=CaseSearchUserInput.five_star,
                                        property_type=COMBOBOX)
-    webapps.search_button_on_case_search_page()
+    webapps.search_button_on_case_search_page(SSCS=YES)
     case_name = webapps.omni_search(CaseSearchUserInput.song_automation_song)
     shadow_form_names = webapps.select_case_and_continue(case_name)
     assert shadow_form_names == search_first_form_names
@@ -135,16 +135,15 @@ def test_case_06_performance_check(driver):
                                        input_value=CaseSearchUserInput.instrument_case_guitar,
                                        property_type=TEXT_INPUT)
     start_time = time.perf_counter()  # Start capturing time
-    webapps.search_button_on_case_search_page()
+    webapps.search_button_on_case_search_page(SSCS=YES)
     end_time = time.perf_counter()  # Stop capturing time
     run_time = end_time - start_time
     assert run_time <= 4
-    webapps.search_again_cases()
     casesearch.search_against_property(search_property=CaseSearchUserInput.instrument_name,
                                        input_value=CaseSearchUserInput.instrument_case_guitar,
                                        property_type=TEXT_INPUT)
     start_time = time.perf_counter()
-    webapps.search_button_on_case_search_page()
+    webapps.search_button_on_case_search_page(SSCS=YES)
     end_time = time.perf_counter()
     run_time = end_time - start_time
     assert run_time <= 4
@@ -160,7 +159,7 @@ def test_case_07_multi_case_types_and_related_cases(driver):
     casesearch.search_against_property(search_property=CaseSearchUserInput.name,
                                        input_value=CaseSearchUserInput.show_case_show1,
                                        property_type=TEXT_INPUT)
-    webapps.search_button_on_case_search_page()
+    webapps.search_button_on_case_search_page(SSCS=YES)
     # Checks case type show
     webapps.omni_search(CaseSearchUserInput.show_case_show1)
     webapps.navigate_to_breadcrumb(CaseSearchUserInput.mixed_case_type_menu)
@@ -169,7 +168,7 @@ def test_case_07_multi_case_types_and_related_cases(driver):
     casename = casesearch.search_against_property(search_property=CaseSearchUserInput.name,
                                                   input_value=CaseSearchUserInput.song_automation_song_1,
                                                   property_type=TEXT_INPUT)
-    webapps.search_button_on_case_search_page()
+    webapps.search_button_on_case_search_page(SSCS=YES)
     webapps.omni_search(casename)
     # Include related cases check
     casesearch.check_values_on_caselist(row_num=CaseSearchUserInput.four,
@@ -185,7 +184,7 @@ def test_case_07_multi_case_types_and_related_cases(driver):
     casesearch.search_against_property(search_property=CaseSearchUserInput.name,
                                        input_value=CaseSearchUserInput.show_case_casesearch_1,
                                        property_type=TEXT_INPUT)
-    webapps.search_button_on_case_search_page()
+    webapps.search_button_on_case_search_page(SSCS=YES)
     webapps.omni_search(CaseSearchUserInput.show_case_casesearch_1)
     webapps.select_case_and_continue(CaseSearchUserInput.show_case_casesearch_1)
     webapps.submit_the_form()
@@ -214,7 +213,7 @@ def test_case_09_search_filter(driver):
     webapps.open_app(CaseSearchUserInput.linked_case_search_app_name)
     webapps.open_menu(CaseSearchUserInput.search_filter_menu)
     webapps.search_all_cases()
-    webapps.search_button_on_case_search_page()
+    webapps.search_button_on_case_search_page(SSCS=YES)
     casesearch.check_values_on_caselist(row_num=CaseSearchUserInput.three,
                                         expected_value=CaseSearchUserInput.five)
 
@@ -230,7 +229,7 @@ def test_case_10_claim_condition(driver):
     casesearch.search_against_property(search_property=CaseSearchUserInput.mood,
                                        input_value=CaseSearchUserInput.four,
                                        property_type=TEXT_INPUT)
-    webapps.search_button_on_case_search_page()
+    webapps.search_button_on_case_search_page(SSCS=YES)
     case_name = webapps.omni_search(CaseSearchUserInput.song_automation_song_10)
     form_name = webapps.select_case_and_continue(case_name)
     assert not bool(form_name)
@@ -247,7 +246,7 @@ def test_case_11_do_not_search_cases(driver):
     casesearch.search_against_property(search_property=CaseSearchUserInput.mood,
                                        input_value=CaseSearchUserInput.four,
                                        property_type=TEXT_INPUT)
-    webapps.search_button_on_case_search_page()
+    webapps.search_button_on_case_search_page(SSCS=YES)
     webapps.omni_search(CaseSearchUserInput.song_case_b_users_song, displayed=NO)
 
 
@@ -262,7 +261,7 @@ def test_case_12_sync_cases_on_form_entry(driver):
     case_name = casesearch.search_against_property(search_property=CaseSearchUserInput.song_name,
                                                    input_value=CaseSearchUserInput.song_automation_song_update,
                                                    property_type=TEXT_INPUT)
-    webapps.search_button_on_case_search_page()
+    webapps.search_button_on_case_search_page(SSCS=YES)
     webapps.select_case_and_continue(case_name)
     webapps.open_form(CaseSearchUserInput.update_ratings_form)
     rating_star, rating_value = random.choice(list(CaseSearchUserInput.rating_on_form.items()))
@@ -276,7 +275,7 @@ def test_case_12_sync_cases_on_form_entry(driver):
     casesearch.search_against_property(search_property=CaseSearchUserInput.song_name,
                                        input_value=case_name,
                                        property_type=TEXT_INPUT)
-    webapps.search_button_on_case_search_page()
+    webapps.search_button_on_case_search_page(SSCS=YES)
     webapps.select_case_and_continue(case_name)
     webapps.open_form(CaseSearchUserInput.play_song_form)
     casesearch.check_label_in_form(rating_value)
@@ -290,10 +289,9 @@ def test_case_13_ancestor_exists_query(driver):
     webapps.open_app(CaseSearchUserInput.linked_case_search_app_name)
     """Check default filter with ancestor exist query"""
     webapps.open_menu(CaseSearchUserInput.shows_ancestor_exists_menu)
-    webapps.search_button_on_case_search_page()
+    webapps.search_button_on_case_search_page(SSCS=YES)
     casesearch.check_values_on_caselist(row_num=CaseSearchUserInput.three,
                                         expected_value=CaseSearchUserInput.metal)
-    webapps.search_again_cases()
     """Check multi valued parent property search"""
     casesearch.search_against_property(search_property=CaseSearchUserInput.song_subgenre,
                                        input_value=CaseSearchUserInput.funk_metal,
@@ -301,7 +299,7 @@ def test_case_13_ancestor_exists_query(driver):
     casesearch.search_against_property(search_property=CaseSearchUserInput.song_subgenre,
                                        input_value=CaseSearchUserInput.nu_metal,
                                        property_type=COMBOBOX)
-    webapps.search_button_on_case_search_page()
+    webapps.search_button_on_case_search_page(SSCS=YES)
     casesearch.check_values_on_caselist(row_num=CaseSearchUserInput.four,
                                         expected_value=[CaseSearchUserInput.funk_metal, CaseSearchUserInput.nu_metal],
                                         is_multi=YES)

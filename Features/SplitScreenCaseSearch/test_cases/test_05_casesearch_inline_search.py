@@ -16,7 +16,7 @@ def test_case_01_check_search_input_on_caselist_casedetail_form(driver):
     casesearch.search_against_property(search_property=CaseSearchUserInput.rating,
                                        input_value=CaseSearchUserInput.five_star,
                                        property_type=COMBOBOX)
-    webapps.search_button_on_case_search_page()
+    webapps.search_button_on_case_search_page(SSCS=YES)
     casesearch.check_values_on_caselist(row_num=CaseSearchUserInput.seven,
                                         expected_value=CaseSearchUserInput.five)
     case_name = webapps.select_first_case_on_list()
@@ -38,7 +38,7 @@ def test_case_02_navigation_via_breadcrumbs(driver):
     casesearch.search_against_property(search_property=CaseSearchUserInput.rating,
                                        input_value=CaseSearchUserInput.five_star,
                                        property_type=COMBOBOX)
-    webapps.search_button_on_case_search_page()
+    webapps.search_button_on_case_search_page(SSCS=YES)
     casesearch.check_values_on_caselist(row_num=CaseSearchUserInput.seven,
                                         expected_value=CaseSearchUserInput.five)
     case_name = webapps.select_first_case_on_list()
@@ -63,7 +63,7 @@ def test_case_03_search_property_settings(driver):
                                        input_value=CaseSearchUserInput.five_star,
                                        property_type=COMBOBOX,
                                        include_blanks=YES)
-    webapps.search_button_on_case_search_page()
+    webapps.search_button_on_case_search_page(SSCS=YES)
     casesearch.check_values_on_caselist(row_num=CaseSearchUserInput.four,
                                         expected_value=[CaseSearchUserInput.four,
                                                         CaseSearchUserInput.five,
@@ -87,7 +87,7 @@ def test_case_04_load_from_external_domain(driver):
     casesearch.search_against_property(search_property=CaseSearchUserInput.song_name,
                                        input_value=CaseSearchUserInput.casesearch,
                                        property_type=TEXT_INPUT)
-    webapps.search_button_on_case_search_page()
+    webapps.search_button_on_case_search_page(SSCS=YES)
     case_name = webapps.omni_search(CaseSearchUserInput.song_case_on_casesearch_1)
     webapps.select_case_and_continue(case_name)
     domain_url = driver.current_url
@@ -97,7 +97,7 @@ def test_case_04_load_from_external_domain(driver):
     casesearch.check_eof_navigation(eof_nav=MENU,
                                     menu=CaseSearchUserInput.inline_search_menu)
     webapps.clear_selections_on_case_search_page()
-    webapps.search_button_on_case_search_page()
+    webapps.search_button_on_case_search_page(SSCS=YES)
     webapps.select_first_case_on_list_and_continue()
     webapps.open_form(CaseSearchUserInput.add_show_form)
     webapps.submit_the_form()
@@ -109,6 +109,6 @@ def test_case_05_old_case_search_instance(driver):
     webapps.open_app(CaseSearchUserInput.linked_case_search_app_name)
     webapps.open_menu(CaseSearchUserInput.old_inline_search_menu)
     webapps.clear_selections_on_case_search_page()
-    webapps.search_button_on_case_search_page()
+    webapps.search_button_on_case_search_page(SSCS=YES)
     webapps.select_first_case_on_list_and_continue()
     webapps.submit_the_form()

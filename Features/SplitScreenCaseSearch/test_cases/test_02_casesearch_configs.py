@@ -36,7 +36,7 @@ def test_case_01_default_value_expression(driver):
     casesearch.search_against_property(search_property=CaseSearchUserInput.song_name,
                                        input_value=CaseSearchUserInput.song_automation_song_1,
                                        property_type=TEXT_INPUT)
-    webapps.search_button_on_case_search_page()
+    webapps.search_button_on_case_search_page(SSCS=YES)
     casesearch.check_values_on_caselist(row_num=CaseSearchUserInput.one,
                                         expected_value=CaseSearchUserInput.song_automation_song_1)
 
@@ -61,7 +61,7 @@ def test_case_03_text_format(driver):
     casesearch.search_against_property(search_property=CaseSearchUserInput.song_name,
                                        input_value=CaseSearchUserInput.song_automation_song_1,
                                        property_type=TEXT_INPUT)
-    webapps.search_button_on_case_search_page()
+    webapps.search_button_on_case_search_page(SSCS=YES)
     casesearch.check_values_on_caselist(row_num=CaseSearchUserInput.one,
                                         expected_value=CaseSearchUserInput.song_automation_song_1)
 
@@ -76,7 +76,7 @@ def test_case_04_barcode_format(driver):
     casesearch.search_against_property(search_property=CaseSearchUserInput.mood,
                                        input_value=CaseSearchUserInput.three,
                                        property_type=TEXT_INPUT)
-    webapps.search_button_on_case_search_page()
+    webapps.search_button_on_case_search_page(SSCS=YES)
     casesearch.check_values_on_caselist(row_num=CaseSearchUserInput.three,
                                         expected_value=CaseSearchUserInput.three)
 
@@ -132,7 +132,7 @@ def test_case_05_date_range_format(driver):
     casesearch.search_against_property(search_property=CaseSearchUserInput.date_opened,
                                        input_value=CaseSearchUserInput.date_2023_08_16,
                                        property_type=TEXT_INPUT)
-    webapps.search_button_on_case_search_page()
+    webapps.search_button_on_case_search_page(SSCS=YES)
     casesearch.check_values_on_caselist(row_num=CaseSearchUserInput.six,
                                         expected_value=CaseSearchUserInput.date_16_08_2023)
     # Date Range Search Again with Enter on keyboard
@@ -161,7 +161,7 @@ def test_case_06_lookup_table_format(driver):
     casesearch.search_against_property(search_property=CaseSearchUserInput.rating,
                                        input_value=CaseSearchUserInput.two_star,
                                        property_type=COMBOBOX)
-    webapps.search_button_on_case_search_page()
+    webapps.search_button_on_case_search_page(SSCS=YES)
     casesearch.check_values_on_caselist(row_num=CaseSearchUserInput.four,
                                         expected_value=CaseSearchUserInput.ratings.get(CaseSearchUserInput.two_star))
 
@@ -190,7 +190,7 @@ def test_case_07_address_geocoder_format(driver):
     casesearch.assert_address_is_hidden(CaseSearchUserInput.home_street)
     casesearch.add_address(address=CaseSearchUserInput.full_home_address,
                            search_property=CaseSearchUserInput.search_home_address)
-    webapps.search_button_on_case_search_page()
+    webapps.search_button_on_case_search_page(SSCS=YES)
     casesearch.check_values_on_caselist(row_num=CaseSearchUserInput.two,
                                         expected_value=CaseSearchUserInput.home_street_value)
     casesearch.check_values_on_caselist(row_num=CaseSearchUserInput.three,
@@ -211,7 +211,7 @@ def test_case_08_mobile_ucr_format(driver):
     casesearch.search_against_property(search_property=CaseSearchUserInput.artist,
                                        input_value=CaseSearchUserInput.artist_case_arijit,
                                        property_type=COMBOBOX)
-    webapps.search_button_on_case_search_page()
+    webapps.search_button_on_case_search_page(SSCS=YES)
     casesearch.check_values_on_caselist(row_num=CaseSearchUserInput.two,
                                         expected_value=CaseSearchUserInput.artist_case_arijit)
 
@@ -227,7 +227,7 @@ def test_case_09_single_date_format(driver):
     date = casesearch.search_against_property(search_property=CaseSearchUserInput.song_release_date,
                                               input_value=CaseSearchUserInput.date_2022_12_30,
                                               property_type=TEXT_INPUT)
-    webapps.search_button_on_case_search_page()
+    webapps.search_button_on_case_search_page(SSCS=YES)
     casesearch.check_values_on_caselist(row_num=CaseSearchUserInput.eight,
                                         expected_value=casesearch.parse_date(
                                             input_date=date,
@@ -238,6 +238,7 @@ def test_case_09_single_date_format(driver):
 def test_case_10_is_multiselect_format(driver):
     webapps = WebApps(driver)
     casesearch = CaseSearchWorkflows(driver)
+    webapps.login_as(CaseSearchUserInput.user_1)
     """Check multiselect format search property"""
     webapps.open_app(CaseSearchUserInput.linked_case_search_app_name)
     webapps.open_menu(CaseSearchUserInput.normal_menu)
@@ -249,7 +250,7 @@ def test_case_10_is_multiselect_format(driver):
     casesearch.search_against_property(search_property=CaseSearchUserInput.rating,
                                        input_value=CaseSearchUserInput.two_star,
                                        property_type=COMBOBOX)
-    webapps.search_button_on_case_search_page()
+    webapps.search_button_on_case_search_page(SSCS=YES)
     casesearch.check_values_on_caselist(row_num=CaseSearchUserInput.four,
                                         expected_value=["2", "3"],
                                         is_multi=YES)
@@ -260,7 +261,7 @@ def test_case_10_is_multiselect_format(driver):
     casesearch.search_against_property(search_property=CaseSearchUserInput.artist,
                                        input_value=CaseSearchUserInput.artist_case_beach_boys,
                                        property_type=COMBOBOX)
-    webapps.search_button_on_case_search_page()
+    webapps.search_button_on_case_search_page(SSCS=YES)
     casesearch.check_values_on_caselist(row_num=CaseSearchUserInput.two,
                                         expected_value=[CaseSearchUserInput.artist_case_arijit,
                                                         CaseSearchUserInput.artist_case_beach_boys],
@@ -279,7 +280,7 @@ def test_case_11_allow_blank_values_normal(driver):
                                        input_value=CaseSearchUserInput.two_star,
                                        property_type=COMBOBOX,
                                        include_blanks=YES)
-    webapps.search_button_on_case_search_page()
+    webapps.search_button_on_case_search_page(SSCS=YES)
     casesearch.check_values_on_caselist(row_num=CaseSearchUserInput.four,
                                         expected_value=[CaseSearchUserInput.two,
                                                         CaseSearchUserInput.blank],
@@ -293,7 +294,7 @@ def test_case_11_allow_blank_values_normal(driver):
                                        input_value=CaseSearchUserInput.five,
                                        property_type=TEXT_INPUT,
                                        include_blanks=YES)
-    webapps.search_button_on_case_search_page()
+    webapps.search_button_on_case_search_page(SSCS=YES)
     casesearch.check_values_on_caselist(row_num=CaseSearchUserInput.four,
                                         expected_value=[CaseSearchUserInput.five,
                                                         CaseSearchUserInput.blank],
@@ -316,7 +317,7 @@ def test_case_12_allow_blank_values_geocoder(driver):
                                        input_value=CaseSearchUserInput.home_country_belgium,
                                        property_type=TEXT_INPUT,
                                        include_blanks=YES)
-    webapps.search_button_on_case_search_page()
+    webapps.search_button_on_case_search_page(SSCS=YES)
     casesearch.check_values_on_caselist(row_num=CaseSearchUserInput.five,
                                         expected_value=[CaseSearchUserInput.home_country_belgium,
                                                         CaseSearchUserInput.blank],
@@ -334,7 +335,7 @@ def test_case_13_allow_blank_values_others(driver):
                                        input_value=CaseSearchUserInput.date_2023_08_16,
                                        property_type=TEXT_INPUT,
                                        include_blanks=YES)
-    webapps.search_button_on_case_search_page()
+    webapps.search_button_on_case_search_page(SSCS=YES)
     casesearch.check_values_on_caselist(row_num=CaseSearchUserInput.six,
                                         expected_value=[CaseSearchUserInput.date_16_08_2023,
                                                         CaseSearchUserInput.blank],
@@ -344,7 +345,7 @@ def test_case_13_allow_blank_values_others(driver):
                                        input_value=CaseSearchUserInput.artist_case_arijit,
                                        property_type=COMBOBOX,
                                        include_blanks=YES)
-    webapps.search_button_on_case_search_page()
+    webapps.search_button_on_case_search_page(SSCS=YES)
     casesearch.check_values_on_caselist(row_num=CaseSearchUserInput.two,
                                         expected_value=[CaseSearchUserInput.artist_case_arijit,
                                                         CaseSearchUserInput.blank],
@@ -362,7 +363,7 @@ def test_case_14_exclude_property_from_case_search(driver):
     casesearch.search_against_property(search_property=CaseSearchUserInput.rating,
                                        input_value=CaseSearchUserInput.one,
                                        property_type=TEXT_INPUT)
-    webapps.search_button_on_case_search_page()
+    webapps.search_button_on_case_search_page(SSCS=YES)
     casesearch.check_values_on_caselist(row_num=CaseSearchUserInput.two,
                                         expected_value=CaseSearchUserInput.four,
                                         is_multi=YES)
@@ -370,7 +371,7 @@ def test_case_14_exclude_property_from_case_search(driver):
     casesearch.search_against_property(search_property=CaseSearchUserInput.mood,
                                        input_value=CaseSearchUserInput.four,
                                        property_type=TEXT_INPUT)
-    webapps.search_button_on_case_search_page()
+    webapps.search_button_on_case_search_page(SSCS=YES)
     casesearch.check_values_on_caselist(row_num=CaseSearchUserInput.three,
                                         expected_value=[CaseSearchUserInput.one,
                                                         CaseSearchUserInput.two,
@@ -394,7 +395,7 @@ def test_case_15_sticky_search_without_default_value(driver):
     casesearch.search_against_property(search_property=CaseSearchUserInput.rating,
                                        input_value=CaseSearchUserInput.three_star,
                                        property_type=COMBOBOX)
-    webapps.search_button_on_case_search_page()
+    webapps.search_button_on_case_search_page(SSCS=YES)
     driver.back()
     casesearch.check_default_values_displayed(search_property=CaseSearchUserInput.mood,
                                               default_value=CaseSearchUserInput.four,
@@ -414,7 +415,7 @@ def test_case_16_sticky_search_with_default_value(driver):
     """Check sticky search with default value"""
     webapps.open_app(CaseSearchUserInput.linked_case_search_app_name)
     webapps.open_menu(CaseSearchUserInput.search_first_menu)
-    webapps.search_button_on_case_search_page()
+    webapps.search_button_on_case_search_page(SSCS=YES)
     casesearch.check_default_values_displayed(search_property=CaseSearchUserInput.mood,
                                               default_value=CaseSearchUserInput.three,
                                               search_format=text)
@@ -422,9 +423,10 @@ def test_case_16_sticky_search_with_default_value(driver):
     casesearch.search_against_property(search_property=CaseSearchUserInput.mood,
                                        input_value=CaseSearchUserInput.four,
                                        property_type=TEXT_INPUT)
-    webapps.search_button_on_case_search_page()
+    webapps.search_button_on_case_search_page(SSCS=YES)
     casesearch.check_values_on_caselist(row_num=CaseSearchUserInput.three,
                                         expected_value=CaseSearchUserInput.four)
+    webapps.navigate_to_breadcrumb(CaseSearchUserInput.search_first_menu)
     casesearch.check_default_values_displayed(search_property=CaseSearchUserInput.mood,
                                               default_value=CaseSearchUserInput.three,
                                               search_format=text)
@@ -438,7 +440,7 @@ def test_case_17_required_property(driver):
     webapps.open_app(CaseSearchUserInput.linked_case_search_app_name)
     webapps.open_menu(CaseSearchUserInput.search_setting_menu)
     webapps.search_all_cases()
-    webapps.search_button_on_case_search_page()
+    webapps.search_button_on_case_search_page(SSCS=YES)
     casesearch.check_validations_on_property(search_property=CaseSearchUserInput.mood,
                                              message=CaseSearchUserInput.required_msg,
                                              required_or_validated=YES,
@@ -463,7 +465,7 @@ def test_case_18_conditionally_required_condition_property(driver):
     casesearch.search_against_property(search_property=CaseSearchUserInput.rating,
                                        input_value=CaseSearchUserInput.two_star,
                                        property_type=COMBOBOX)
-    webapps.search_button_on_case_search_page()
+    webapps.search_button_on_case_search_page(SSCS=YES)
     casesearch.check_validations_on_property(search_property=CaseSearchUserInput.subgenre,
                                              message=CaseSearchUserInput.required_msg_if_rating_two,
                                              required_or_validated=YES,
@@ -487,7 +489,7 @@ def test_case_18_conditionally_required_condition_property(driver):
     casesearch.search_against_property(search_property=CaseSearchUserInput.subgenre,
                                        input_value=CaseSearchUserInput.latin_jazz,
                                        property_type=COMBOBOX)
-    webapps.search_button_on_case_search_page()
+    webapps.search_button_on_case_search_page(SSCS=YES)
     webapps.select_case_and_continue(CaseSearchUserInput.song_automation_song_24)
     webapps.open_form(CaseSearchUserInput.update_song_form)
     webapps.submit_the_form()
@@ -504,7 +506,7 @@ def test_case_19_json_property_function(driver):
     case_name = casesearch.search_against_property(search_property=CaseSearchUserInput.artist,
                                                    input_value=CaseSearchUserInput.automation_artist_1,
                                                    property_type=TEXT_INPUT)
-    webapps.search_button_on_case_search_page()
+    webapps.search_button_on_case_search_page(SSCS=YES)
     webapps.select_case_and_continue(case_name)
     webapps.open_form(CaseSearchUserInput.add_address_form)
     casesearch.add_address(address=CaseSearchUserInput.full_home_address,
@@ -571,7 +573,7 @@ def test_case_22_dependent_dropdowns_single_select_combobox(driver):
                                     value=CaseSearchUserInput.funk_metal,
                                     present=NO)
     """Search case and check if corresponding case is displayed"""
-    webapps.search_button_on_case_search_page()
+    webapps.search_button_on_case_search_page(SSCS=YES)
     webapps.omni_search(CaseSearchUserInput.song_automation_song_24)
 
 
@@ -619,7 +621,7 @@ def test_case_24_case_search_validations(driver):
                                        input_value=CaseSearchUserInput.value_with_space,
                                        property_type=TEXT_INPUT)
     """Check validations imposed"""
-    webapps.search_button_on_case_search_page()
+    webapps.search_button_on_case_search_page(SSCS=YES)
     casesearch.check_validations_on_property(search_property=CaseSearchUserInput.song_name,
                                              message=CaseSearchUserInput.validation_msg_no_spaces,
                                              required_or_validated=YES,
@@ -643,12 +645,12 @@ def test_case_24_case_search_validations(driver):
     casename = casesearch.search_against_property(search_property=CaseSearchUserInput.song_name,
                                                   input_value=CaseSearchUserInput.song_automation_song_no_space,
                                                   property_type=TEXT_INPUT)
-    webapps.search_button_on_case_search_page()
+    webapps.search_button_on_case_search_page(SSCS=YES)
     webapps.omni_search(casename)
     """Check including blanks"""
     webapps.clear_selections_on_case_search_page()
     casesearch.select_include_blanks(CaseSearchUserInput.rating)
-    webapps.search_button_on_case_search_page()
+    webapps.search_button_on_case_search_page(SSCS=YES)
     casesearch.check_values_on_caselist(row_num=CaseSearchUserInput.four,
                                         expected_value=CaseSearchUserInput.blank)
 
@@ -661,7 +663,7 @@ def test_case_25_checkbox_selection(driver):
     webapps.open_menu(CaseSearchUserInput.checkbox_selection_menu)
     """Check default selections"""
     input_values = casesearch.check_if_checkbox_selected(CaseSearchUserInput.mood, [3, 4])
-    webapps.search_button_on_case_search_page()
+    webapps.search_button_on_case_search_page(SSCS=YES)
     casesearch.check_values_on_caselist(row_num=CaseSearchUserInput.three,
                                         expected_value=input_values,
                                         is_multi=YES)
@@ -669,7 +671,7 @@ def test_case_25_checkbox_selection(driver):
     casesearch.check_if_checkbox_selected(CaseSearchUserInput.mood, [3, 4])
     webapps.clear_selections_on_case_search_page()
     input_values = casesearch.select_checkbox(CaseSearchUserInput.mood, [4, 5], select_by_value=index)
-    webapps.search_button_on_case_search_page()
+    webapps.search_button_on_case_search_page(SSCS=YES)
     casesearch.check_values_on_caselist(row_num=CaseSearchUserInput.three,
                                         expected_value=input_values,
                                         is_multi=YES)
@@ -686,7 +688,7 @@ def test_case_26_checkbox_selection_sticky_search(driver):
     webapps.open_menu(CaseSearchUserInput.checkbox_selection_menu)
     driver.refresh()
     casesearch.check_if_checkbox_selected(CaseSearchUserInput.mood, [3, 4])
-    webapps.search_button_on_case_search_page()
+    webapps.search_button_on_case_search_page(SSCS=YES)
     driver.back()
     casesearch.check_if_checkbox_selected(CaseSearchUserInput.mood, [3, 4])
 
@@ -708,7 +710,7 @@ def test_case_27_checkbox_single_selection_dependent_dropdown(driver):
     casesearch.check_dropdown_value(search_property=CaseSearchUserInput.subgenre,
                                     value=CaseSearchUserInput.funk_metal,
                                     present=NO)
-    webapps.search_button_on_case_search_page()
+    webapps.search_button_on_case_search_page(SSCS=YES)
     webapps.select_first_case_on_list_and_continue()
     webapps.submit_the_form()
 
@@ -733,6 +735,6 @@ def test_case_28_checkbox_multiple_selection_dependent_dropdown(driver):
     casesearch.search_against_property(search_property=CaseSearchUserInput.subgenre,
                                        input_value=CaseSearchUserInput.latin_jazz,
                                        property_type=COMBOBOX)
-    webapps.search_button_on_case_search_page()
+    webapps.search_button_on_case_search_page(SSCS=YES)
     webapps.select_first_case_on_list_and_continue()
     webapps.submit_the_form()

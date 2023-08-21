@@ -2,6 +2,7 @@ from Features.CaseSearch.constants import TEXT_INPUT
 from Features.CaseSearch.test_pages.casesearch_page import CaseSearchWorkflows
 from Features.CaseSearch.user_inputs.casesearch_user_inputs import CaseSearchUserInput
 from common_utilities.selenium.webapps import WebApps
+from Features.CaseSearch.constants import *
 
 """"Contains all case search workflow related test cases"""
 
@@ -18,7 +19,7 @@ def test_case_01_normal_workflow(driver):
     case_name = casesearch.search_against_property(search_property=CaseSearchUserInput.song_name,
                                                    input_value=CaseSearchUserInput.song_automation_song_1,
                                                    property_type=TEXT_INPUT)
-    webapps.search_button_on_case_search_page()
+    webapps.search_button_on_case_search_page(SSCS=YES)
     webapps.omni_search(case_name)
     webapps.select_case_and_continue(case_name)
     webapps.open_form(CaseSearchUserInput.play_song_form)
@@ -39,7 +40,7 @@ def test_case_02_search_first(driver):
     case_name = casesearch.search_against_property(search_property=CaseSearchUserInput.song_name,
                                                    input_value=CaseSearchUserInput.song_automation_song_1,
                                                    property_type=TEXT_INPUT)
-    webapps.search_button_on_case_search_page()
+    webapps.search_button_on_case_search_page(SSCS=YES)
     webapps.omni_search(case_name)
     webapps.select_case_and_continue(case_name)
     webapps.open_form(CaseSearchUserInput.play_song_form)

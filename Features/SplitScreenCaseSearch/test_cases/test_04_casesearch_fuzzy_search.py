@@ -24,7 +24,7 @@ def test_case_01_fuzzy_search_and_case_claim(driver, settings):
     song_automation_song_1 = casesearch.search_against_property(search_property=CaseSearchUserInput.song_name,
                                                                 input_value=CaseSearchUserInput.song_automation_song_1,
                                                                 property_type=TEXT_INPUT)
-    webapps.search_button_on_case_search_page()
+    webapps.search_button_on_case_search_page(SSCS=YES)
     casesearch.check_values_on_caselist(row_num=CaseSearchUserInput.one,
                                         expected_value=song_automation_song_1)
     "Select case to cliam"
@@ -55,13 +55,13 @@ def test_case_03_non_fuzzy_search(driver):
     casesearch.search_against_property(search_property=CaseSearchUserInput.instrument_name,
                                        input_value=CaseSearchUserInput.incomplete_word_guitar,
                                        property_type=TEXT_INPUT)
-    webapps.search_button_on_case_search_page()
+    webapps.search_button_on_case_search_page(SSCS=YES)
     webapps.check_case_list_is_empty(CaseSearchUserInput.list_is_empty)
     driver.back()
     casesearch.search_against_property(search_property=CaseSearchUserInput.instrument_name,
                                        input_value=CaseSearchUserInput.acoustic_bass_guitar,
                                        property_type=TEXT_INPUT)
-    webapps.search_button_on_case_search_page()
+    webapps.search_button_on_case_search_page(SSCS=YES)
     webapps.omni_search("Acoustic bass guitar")
 
 
@@ -86,7 +86,7 @@ def test_case_05_remove_special_characters(driver):
     casesearch.search_against_property(search_property=CaseSearchUserInput.song_id,
                                        input_value=CaseSearchUserInput.id_with_hyphen,
                                        property_type=TEXT_INPUT)
-    webapps.search_button_on_case_search_page()
+    webapps.search_button_on_case_search_page(SSCS=YES)
     casesearch.check_values_on_caselist(row_num=CaseSearchUserInput.seven,
                                         expected_value=CaseSearchUserInput.id_without_hyphen)
 

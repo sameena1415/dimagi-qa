@@ -103,14 +103,15 @@ class WebApps(BasePage):
         self.js_click(self.clear_case_search_page)
         self.wait_for_ajax()
 
-    def search_button_on_case_search_page(self, enter_key=None):
+    def search_button_on_case_search_page(self, enter_key=None, SSCS=NO):
         if enter_key == "YES":
             self.send_keys(self.submit_on_case_search_page, Keys.ENTER)
         else:
             self.js_click(self.submit_on_case_search_page)
             self.wait_for_ajax()
-        self.is_visible_and_displayed(self.case_list, timeout=500)
-        self.is_visible_and_displayed(self.search_again_button)
+        assert self.is_visible_and_displayed(self.case_list, timeout=500)
+        if SSCS == NO:
+            assert self.is_visible_and_displayed(self.search_again_button)
 
     def clear_and_search_all_cases_on_case_search_page(self):
         self.clear_selections_on_case_search_page()
