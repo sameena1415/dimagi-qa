@@ -330,7 +330,7 @@ def test_case_16_multiselect_with_case_tiles(driver, settings):
     webapps.open_app(MultiSelectUserInput.multiselect_app_name)
     webapps.open_menu(MultiSelectUserInput.multi_select_with_case_tiles)
     webapps.search_all_cases()
-    webapps.clear_and_search_all_cases_on_case_search_page()
+    webapps.clear_and_search_all_cases_on_case_search_page(list_type="Case Tile")
     cases_selected = multiselect.multi_select_case_tiles(case_count=1)
     multiselect.continue_to_proceed_multiselect()
     multiselect.check_selected_cases_present_on_form(cases_selected, case_type=SONG)

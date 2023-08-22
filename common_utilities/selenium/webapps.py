@@ -104,17 +104,18 @@ class WebApps(BasePage):
         self.js_click(self.clear_case_search_page)
         self.wait_for_ajax()
 
-    def search_button_on_case_search_page(self, enter_key=None):
+    def search_button_on_case_search_page(self, enter_key=None, list_type="Case List"):
         if enter_key == YES:
             self.send_keys(self.submit_on_case_search_page, Keys.ENTER)
         else:
             self.js_click(self.submit_on_case_search_page)
             self.wait_for_ajax()
-        assert self.is_visible_and_displayed(self.case_list, timeout=500)
+        if list_type == "Case List":
+            assert self.is_visible_and_displayed(self.case_list, timeout=500)
 
-    def clear_and_search_all_cases_on_case_search_page(self):
+    def clear_and_search_all_cases_on_case_search_page(self, list_type):
         self.clear_selections_on_case_search_page()
-        self.search_button_on_case_search_page()
+        self.search_button_on_case_search_page(list_type=list_type)
 
     def omni_search(self, case_name, displayed=YES):
         if self.is_displayed(self.omni_search_input):
