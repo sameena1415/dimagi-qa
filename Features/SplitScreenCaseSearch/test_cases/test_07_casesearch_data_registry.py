@@ -19,7 +19,7 @@ def test_case_01_no_access_dr_caselist(driver):
     case_name = casesearch.search_against_property(search_property=CaseSearchUserInput.song_name,
                                                    input_value=CaseSearchUserInput.song_case_on_casesearch2,
                                                    property_type=TEXT_INPUT)
-    webapps.search_button_on_case_search_page(SSCS=YES)
+    webapps.search_button_on_case_search_page()
     webapps.omni_search(case_name, displayed=NO)
     webapps.open_app(CaseSearchUserInput.linked_case_search_app_name)
     webapps.open_menu(CaseSearchUserInput.load_external_search_first_menu)
@@ -27,7 +27,7 @@ def test_case_01_no_access_dr_caselist(driver):
     case_name = casesearch.search_against_property(search_property=CaseSearchUserInput.song_name,
                                                    input_value=CaseSearchUserInput.song_case_on_casesearch2,
                                                    property_type=TEXT_INPUT)
-    webapps.search_button_on_case_search_page(SSCS=YES)
+    webapps.search_button_on_case_search_page()
     webapps.omni_search(case_name, displayed=NO)
     webapps.open_app(CaseSearchUserInput.linked_case_search_app_name)
     webapps.open_menu(CaseSearchUserInput.smart_link_skip_default_menu)
@@ -35,7 +35,7 @@ def test_case_01_no_access_dr_caselist(driver):
     case_name = casesearch.search_against_property(search_property=CaseSearchUserInput.song_name,
                                                    input_value=CaseSearchUserInput.song_case_on_casesearch2,
                                                    property_type=TEXT_INPUT)
-    webapps.search_button_on_case_search_page(SSCS=YES)
+    webapps.search_button_on_case_search_page()
     webapps.omni_search(case_name, displayed=NO)
 
 
@@ -48,7 +48,7 @@ def test_case_02_access_to_non_dr_caselist(driver):
     case_name = casesearch.search_against_property(search_property=CaseSearchUserInput.song_name,
                                                    input_value=CaseSearchUserInput.song_case_on_casesearch_1,
                                                    property_type=TEXT_INPUT)
-    webapps.search_button_on_case_search_page(SSCS=YES)
+    webapps.search_button_on_case_search_page()
     webapps.omni_search(case_name, displayed=NO)
 
 
@@ -65,7 +65,7 @@ def test_case_03_load_external_case_into_caselist_skip_default(driver):
     casesearch.search_against_property(search_property=CaseSearchUserInput.song_id,
                                        input_value="3300",
                                        property_type=TEXT_INPUT)
-    webapps.search_button_on_case_search_page(SSCS=YES)
+    webapps.search_button_on_case_search_page()
     webapps.omni_search(casename)
     webapps.select_case_and_continue(casename)
     domain_url = driver.current_url
@@ -83,7 +83,7 @@ def test_case_04_load_external_linked_domain_case_into_caselist_search_first(dri
     casesearch.search_against_property(search_property=CaseSearchUserInput.song_name,
                                        input_value=CaseSearchUserInput.casesearch_1,
                                        property_type=TEXT_INPUT)
-    webapps.search_button_on_case_search_page(SSCS=YES)
+    webapps.search_button_on_case_search_page()
     webapps.select_first_case_on_list_and_continue()
     domain_url = driver.current_url
     assert "casesearch" in domain_url
@@ -101,7 +101,7 @@ def test_case_05_load_external_same_domain_into_caselist_search_first(driver):
     casename = casesearch.search_against_property(search_property=CaseSearchUserInput.song_name,
                                                   input_value=CaseSearchUserInput.song_automation_song_1,
                                                   property_type=TEXT_INPUT)
-    webapps.search_button_on_case_search_page(SSCS=YES)
+    webapps.search_button_on_case_search_page()
     webapps.omni_search(casename)
     webapps.select_case_and_continue(casename)
     webapps.open_form(CaseSearchUserInput.play_song_form)
@@ -119,7 +119,7 @@ def test_case_06_smart_link_skip_default(driver):
     casesearch.search_against_property(search_property=CaseSearchUserInput.song_name,
                                        input_value=CaseSearchUserInput.casesearch_1,
                                        property_type=TEXT_INPUT)
-    webapps.search_button_on_case_search_page(SSCS=YES)
+    webapps.search_button_on_case_search_page()
     webapps.select_first_case_on_list_and_continue()
     webapps.select_user(CaseSearchUserInput.kiran)
     domain_url = driver.current_url
@@ -139,7 +139,7 @@ def test_case_07_smart_link_search_first_linked_domain_case(driver):
     casesearch.search_against_property(search_property=CaseSearchUserInput.song_name,
                                        input_value=CaseSearchUserInput.casesearch_1,
                                        property_type=TEXT_INPUT)
-    webapps.search_button_on_case_search_page(SSCS=YES)
+    webapps.search_button_on_case_search_page()
     webapps.select_first_case_on_list_and_continue()
     try:
         webapps.select_user(CaseSearchUserInput.kiran)
@@ -163,7 +163,7 @@ def test_case_08_smart_link_search_first_same_domain_case(driver):
     casename = casesearch.search_against_property(search_property=CaseSearchUserInput.song_name,
                                                   input_value=CaseSearchUserInput.song_automation_song_1,
                                                   property_type=TEXT_INPUT)
-    webapps.search_button_on_case_search_page(SSCS=YES)
+    webapps.search_button_on_case_search_page()
     webapps.omni_search(casename)
     webapps.select_case_and_continue(casename)
     webapps.submit_the_form()
@@ -181,7 +181,7 @@ def test_case_09_unrelated_case_property(driver):
     casename = casesearch.search_against_property(search_property=CaseSearchUserInput.song_name,
                                                   input_value=CaseSearchUserInput.song_automation_song_1,
                                                   property_type=TEXT_INPUT)
-    webapps.search_button_on_case_search_page(SSCS=YES)
+    webapps.search_button_on_case_search_page()
     webapps.omni_search(casename)
     casesearch.check_values_on_caselist(row_num=CaseSearchUserInput.two,
                                         expected_value=CaseSearchUserInput.case_with_unrelated_id.get("case_id"))
