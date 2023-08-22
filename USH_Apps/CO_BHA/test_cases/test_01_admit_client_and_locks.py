@@ -30,7 +30,7 @@ def test_case_01_admit_case_1(driver):
                                        input_value=BhaUserInput.does_not_have_ssn,
                                        property_type=COMBOBOX)
     casesearch.select_checkbox(BhaUserInput.consent, BhaUserInput.yes_small, select_by_value=text)
-    webapps.search_button_on_case_search_page()
+    webapps.search_button_on_case_search_page(SSCS=YES)
     webapps.check_case_list_is_empty(BhaUserInput.no_potential_match_found)
     app.expected_count_on_continue_button(BhaUserInput.zero)
     app.click_on_admit_new_client()
@@ -68,7 +68,7 @@ def test_case_02_admit_case_2(driver):
                                        input_value=BhaUserInput.does_not_have_ssn,
                                        property_type=COMBOBOX)
     casesearch.select_checkbox(BhaUserInput.consent, BhaUserInput.yes_small, select_by_value=text)
-    webapps.search_button_on_case_search_page()
+    webapps.search_button_on_case_search_page(SSCS=YES)
     # CHECK QUESTION TEXT
     app.select_radio(BhaUserInput.yes)
     # CHECK TABLE CONTENT
@@ -85,7 +85,7 @@ def test_case_02_admit_case_2(driver):
     casesearch.search_against_property(search_property=BhaUserInput.name,
                                        input_value=typo_first_name + " " + typo_last_name,
                                        property_type=TEXT_INPUT)
-    webapps.search_button_on_case_search_page()
+    webapps.search_button_on_case_search_page(SSCS=YES)
     casesearch.check_values_on_caselist(row_num=BhaUserInput.one,
                                         expected_value=BhaUserInput.pending)
     casesearch.check_values_on_caselist(row_num=BhaUserInput.two,
@@ -110,7 +110,7 @@ def test_case_03_lock_in_1_1(driver):
     casesearch.search_against_property(search_property=BhaUserInput.date_of_birth,
                                              input_value=BhaUserInput.date_1950_05_01,
                                              property_type=TEXT_INPUT)
-    webapps.search_button_on_case_search_page()
+    webapps.search_button_on_case_search_page(SSCS=YES)
     webapps.select_case(first_name)
     webapps.open_form(BhaUserInput.update_lock_status_request)
     app.select_radio(BhaUserInput.lock_in)
@@ -178,7 +178,7 @@ def test_case_05_admit_case_7(driver):
                                        input_value=BhaUserInput.refused_to_provide,
                                        property_type=COMBOBOX)
     casesearch.select_checkbox(BhaUserInput.consent, BhaUserInput.yes_small, select_by_value=text)
-    webapps.search_button_on_case_search_page()
+    webapps.search_button_on_case_search_page(SSCS=YES)
     webapps.submit_the_form()
     """Case List Report Check"""
     if "staging" in domain_url:

@@ -28,7 +28,7 @@ def test_case_discharge_client_1(driver):
                                        input_value=BhaUserInput.does_not_have_ssn,
                                        property_type=COMBOBOX)
     casesearch.select_checkbox(BhaUserInput.consent, BhaUserInput.yes_small, select_by_value=text)
-    webapps.search_button_on_case_search_page()
+    webapps.search_button_on_case_search_page(SSCS=YES)
     app.click_on_admit_new_client()
     app.select_radio(BhaUserInput.yes)
     app.check_client_info_on_form(search_property=BhaUserInput.first_name_on_form,
@@ -50,7 +50,7 @@ def test_case_discharge_client_1(driver):
     casesearch.search_against_property(search_property=BhaUserInput.dob,
                                        input_value=dob,
                                        property_type=TEXT_INPUT)
-    webapps.search_button_on_case_search_page()
+    webapps.search_button_on_case_search_page(SSCS=YES)
     casesearch.check_values_on_caselist(row_num=BhaUserInput.two,
                                         expected_value=first_name)
     """Search My Clients as clinic user"""
@@ -67,7 +67,7 @@ def test_case_discharge_client_1(driver):
     casesearch.search_against_property(search_property=BhaUserInput.date_of_birth,
                                        input_value=dob,
                                        property_type=TEXT_INPUT)
-    webapps.search_button_on_case_search_page()
+    webapps.search_button_on_case_search_page(SSCS=YES)
     # might fail on prod due to sync delays
     casesearch.check_values_on_caselist(row_num=BhaUserInput.two,
                                         expected_value=first_name)
@@ -84,7 +84,7 @@ def test_case_discharge_client_1(driver):
     casesearch.search_against_property(search_property=BhaUserInput.dob,
                                        input_value=dob,
                                        property_type=TEXT_INPUT)
-    webapps.search_button_on_case_search_page()
+    webapps.search_button_on_case_search_page(SSCS=YES)
     webapps.select_case(first_name)
     webapps.open_form(BhaUserInput.discharge_client)
     app.select_radio(BhaUserInput.suboxone)
@@ -103,6 +103,6 @@ def test_case_discharge_client_1(driver):
     casesearch.search_against_property(search_property=BhaUserInput.dob,
                                        input_value=dob,
                                        property_type=TEXT_INPUT)
-    webapps.search_button_on_case_search_page()
+    webapps.search_button_on_case_search_page(SSCS=YES)
     casesearch.check_values_on_caselist(row_num=BhaUserInput.six,
                                         expected_value=BhaUserInput.discharged)
