@@ -47,7 +47,7 @@ def test_31_lookup_table_form_builder3(driver,settings):
     data.Navigation_to_a_caselist("Lookup table was not found in the project")
     data.delete_caselist()
 
-def test_32_lookup_table_form_builder3(driver,settings):
+def test_32_lookup_table_form_builder4(driver,settings):
     data = LookUpTablePage(driver)
     home = HomePage(driver, settings)
     home.data_menu()
@@ -56,7 +56,7 @@ def test_32_lookup_table_form_builder3(driver,settings):
     data.formbuilder_4()
     data.delete_caselist()
 
-def test_33_lookup_table_form_builder4(driver,settings):
+def test_33_lookup_table_form_builder5(driver,settings):
     data = LookUpTablePage(driver)
     home = HomePage(driver, settings)
     home.data_menu()

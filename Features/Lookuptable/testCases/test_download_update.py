@@ -117,7 +117,7 @@ def test_13_download_update_9(driver,settings):
 @pytest.mark.data
 @pytest.mark.managetables
 @pytest.mark.excel
-def test_14_download_update_9(driver,settings):
+def test_14_download_update_10(driver,settings):
     home = HomePage(driver, settings)
     home.data_menu()
     data = LookUpTablePage(driver)
@@ -130,7 +130,7 @@ def test_14_download_update_9(driver,settings):
 @pytest.mark.data
 @pytest.mark.managetables
 @pytest.mark.excel
-def test_15_download_update_10(driver,settings):
+def test_15_download_update_11(driver,settings):
     home = HomePage(driver, settings)
     home.data_menu()
     data = LookUpTablePage(driver)

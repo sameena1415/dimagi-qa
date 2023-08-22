@@ -11,6 +11,7 @@ from common_utilities.Excel.excel_manage import ExcelManager
 from common_utilities.generate_random_string import fetch_random_string, fetch_string_with_special_chars
 from common_utilities.selenium.base_page import BasePage
 from Features.Lookuptable.userInputs.user_inputs import UserData
+import gettext
 
 """"Contains test page elements and functions related to the Lookup Table module"""
 
@@ -365,7 +366,10 @@ class LookUpTablePage(BasePage):
         self.send_keys(self.upload_table, filepath)
         self.wait_to_click(self.replace_table)
         self.wait_to_click(self.upload)
+        time.sleep(20)
         self.wait_to_click(self.manage_tables_link)
+
+
     def delete_row_from_table(self, downloadpath, tablename):
         download_path = self.latest_download_file()
         excel = ExcelManager(download_path)
@@ -459,6 +463,8 @@ class LookUpTablePage(BasePage):
     def restore_attribute_1(self):
         time.sleep(20)
         self.is_present_and_displayed(self.restore_id,10)
+        a = self.get_text(self.restore_id)
+        print(a)
         print("OTA Restore succesfully with newely created properties")
 
     def test_13(self,download_path,tablename):
@@ -729,4 +735,32 @@ class LookUpTablePage(BasePage):
         time.sleep(3)
 
 
+    def multiple_groups(self,path,table_id):
+        excel = ExcelManager(path)
+        col = excel.col_size(table_id)
+        excel.write_excel_data(table_id, 1, col + 1, "user 1")
+        excel.write_excel_data(table_id, 1, col + 2, "group 1")
+        excel.write_excel_data(table_id, 1, col + 3, "group 2")
+        excel.write_data(table_id, UserData.multiple_values)
+        self.err_upload(path)
+
+    def download_bulk_tables(self):
+        self.wait_to_click(self.manage_tables_link)
+        self.wait_to_click(self.all)
+        self.wait_to_click(self.click_download)
+        self.wait_to_click(self.download_file)
+        time.sleep(15)
+        self.wait_to_click(self.closedownloadpopup)
+
+    def compare_and_delete(self, download_path):
+        excel = ExcelManager(download_path)
+        i = excel.row_size("types")
+        for val in range(1, i):
+            j = excel.get_cell_value("types", 2, val)
+            print(val)
+            print(j)
+            if ( str(j).startswith("lookuptable")):
+                print("Value to be updated")
+                excel.write_excel_data("types",val,1,"Y")
+        self.replace_existing_table(download_path)
 

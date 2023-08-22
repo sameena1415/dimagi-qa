@@ -15,6 +15,7 @@ class UserData:
     # Pre-setup application and case names
     field_val = 'table'+ str(fetch_random_string())
     url = "https://staging.commcarehq.org/a/qa-automation/phone/restore/?version=2.0&as=sameena.shaik@fissionlabs.com"
+    restore_url = "https://staging.commcarehq.org/a/qa-automation/phone/restore/?version=2.0&as=appiumtest@qa-automation.commcarehq.org"
     data_list = [(1, 'Y', '1', 'RWS%DTUYIG*&^%'), (2, 'N', '2', '!#@$%#$RFGH:'), (3, 'N', '3', '!#@$%#$RFGH:')]
     row_value_change =[('','N','23',"appiumtest")]
     data_list_delete = [(1, 'Y', '1', 'RWS%DTUYIG*&^%'), (2, 'N', '2', '!#@$%#$RFGH:')]
@@ -38,3 +39,4 @@ class UserData:
     filter_value = ["test"]
     application = "Lookuptable_tests"
     user_ids_list = ["kiran", "av" , "henry" , "appiumtest" ]
+    multiple_values = [(1, 'N', '1',"kiran"),(2, 'N', '2',"av"),(3, 'N', '3',"","automation_user"),(4, 'N', '4',"","","group new")]

@@ -1,9 +1,9 @@
-import time
 
 import pytest
 
 from HQSmokeTests.testPages.applications.app_preview import AppPreviewPage
 from HQSmokeTests.testPages.home.home_page import HomePage
+from Features.Lookuptable.userInputs.user_inputs import UserData
 from Features.Lookuptable.testPages.data.lookup_table_page import LookUpTablePage
 
 """"Contains test cases related to the Data module"""
@@ -20,7 +20,7 @@ def test_19_create_lookup_table(driver,settings):
 
 @pytest.mark.data
 @pytest.mark.viewtables
-def test_29_view_lookup_table(driver,settings):
+def test_28_view_lookup_table(driver,settings):
     data = LookUpTablePage(driver)
     home = HomePage(driver, settings)
     home.data_menu()
@@ -31,7 +31,7 @@ def test_29_view_lookup_table(driver,settings):
 
 @pytest.mark.data
 @pytest.mark.managetables
-def test_37_select_deselect(driver,settings):
+def test_36_select_deselect(driver,settings):
     home = HomePage(driver, settings)
     home.data_menu()
     data = LookUpTablePage(driver)
@@ -39,7 +39,7 @@ def test_37_select_deselect(driver,settings):
 
 @pytest.mark.data
 @pytest.mark.managetables
-def test_38_edit_table(driver,settings):
+def test_37_edit_table(driver,settings):
     data = LookUpTablePage(driver)
     home = HomePage(driver, settings)
     home.data_menu()
@@ -47,7 +47,7 @@ def test_38_edit_table(driver,settings):
 
 @pytest.mark.data
 @pytest.mark.managetables
-def test_39_create_dummy_id(driver,settings):
+def test_38_create_dummy_id(driver,settings):
         data = LookUpTablePage(driver)
         home = HomePage(driver, settings)
         home.data_menu()
@@ -55,7 +55,7 @@ def test_39_create_dummy_id(driver,settings):
 
 @pytest.mark.data
 @pytest.mark.managetables
-def test_40_edit_dummy_data(driver,settings):
+def test_39_edit_dummy_data(driver,settings):
         data = LookUpTablePage(driver)
         home = HomePage(driver, settings)
         home.data_menu()
@@ -95,8 +95,40 @@ def test_20_creation2(driver,settings):
 
 
 
+@pytest.mark.data
+@pytest.mark.managetables
+@pytest.mark.lookupexcel
+def test_40_Multiple_groups(driver,settings):
+    home = HomePage(driver, settings)
+    home.data_menu()
+    data = LookUpTablePage(driver)
+    values['table_id'] = data.create_download_lookuptable()
+    download_path = data.latest_download_file()
+    data.multiple_groups(download_path,values['table_id'])
+    data.view_lookup_table(values['table_id'])
 
 
+@pytest.mark.data
+@pytest.mark.managetables
+@pytest.mark.lookupexcel
+def test_41_User_restore(driver,settings):
+    home = HomePage(driver, settings)
+    home.data_menu()
+    data = LookUpTablePage(driver)
+    values['table_id'] = data.create_download_lookuptable()
+    download_path = data.latest_download_file()
+    data.multiple_groups(download_path,values['table_id'])
+    driver.get(UserData.restore_url)
+    data.restore_attribute_1()
 
 
+@pytest.mark.data
+@pytest.mark.managetables
+def test_42_delete_test_tables(driver,settings):
+    home = HomePage(driver, settings)
+    home.data_menu()
+    data = LookUpTablePage(driver)
+    values['table_id'] = data.download_bulk_tables()
+    download_path = data.latest_download_file()
+    data.compare_and_delete(download_path)
 
