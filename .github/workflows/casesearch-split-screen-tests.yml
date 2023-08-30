@@ -4,6 +4,8 @@
 name: Case Search Split Screen Tests
 
 on:
+  repository_dispatch:
+    types: [ deploy_success ]
   workflow_dispatch:
     inputs:
       environment:
