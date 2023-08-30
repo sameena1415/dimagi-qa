@@ -67,6 +67,7 @@ class WebApps(BasePage):
         self.application = self.get_element(self.app_name_format, app_name)
         self.application_header = self.get_element(self.app_header_format, app_name)
         self.wait_to_click(self.application)
+        self.wait_for_ajax()
         self.is_visible_and_displayed(self.application_header, timeout=200)
 
     def navigate_to_breadcrumb(self, breadcrumb_value):
