@@ -76,6 +76,10 @@ def test_case_73_non_admin_role_permission(driver, settings):
 @pytest.mark.userExport
 @pytest.mark.p1p2EscapeDefect
 def test_case_74_delete_role_column(driver, settings):
+    login = LoginPage(driver, settings["url"])
+    login.logout()
+    time.sleep(10)
+    login.login(settings["login_username"], settings["login_password"])
     username = "username_p1p2_"+fetch_random_string()
     user = MobileWorkerPage(driver)
     home = HomePage(driver, settings)
