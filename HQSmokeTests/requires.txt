@@ -5,7 +5,7 @@ pandas>=1.2.2
 pytest
 pytest-html
 py
-selenium == 4.10.0
+selenium == 4.11.0
 openpyxl
 matplotlib >= 3.3.4
 pytest-rerunfailures
