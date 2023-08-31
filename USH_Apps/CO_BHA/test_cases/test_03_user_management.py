@@ -3,6 +3,7 @@ from Features.CaseSearch.test_pages.casesearch_page import CaseSearchWorkflows
 from USH_Apps.CO_BHA.test_pages.bha_app_pages import BhaWorkflows
 from USH_Apps.CO_BHA.user_inputs.bha_user_inputs import BhaUserInput
 from common_utilities.selenium.webapps import WebApps
+from Features.CaseSearch.constants import *
 
 
 def test_case_access_to_module_state(driver):

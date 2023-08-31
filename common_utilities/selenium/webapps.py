@@ -67,6 +67,7 @@ class WebApps(BasePage):
         self.application = self.get_element(self.app_name_format, app_name)
         self.application_header = self.get_element(self.app_header_format, app_name)
         self.wait_to_click(self.application)
+        self.wait_for_ajax()
         self.is_visible_and_displayed(self.application_header, timeout=200)
 
     def navigate_to_breadcrumb(self, breadcrumb_value):
@@ -90,6 +91,7 @@ class WebApps(BasePage):
             self.wait_for_element(self.form_name, timeout=500)
             self.scroll_to_element(self.form_name)
             self.js_click(self.form_name)
+            self.wait_for_ajax()
 
     def search_all_cases(self):
         self.scroll_to_element(self.search_all_cases_button)
@@ -105,21 +107,23 @@ class WebApps(BasePage):
         self.wait_for_ajax()
 
     def search_button_on_case_search_page(self, enter_key=None):
-        if enter_key == "YES":
+        if enter_key == YES:
             self.send_keys(self.submit_on_case_search_page, Keys.ENTER)
         else:
             self.js_click(self.submit_on_case_search_page)
             self.wait_for_ajax()
         self.is_visible_and_displayed(self.case_list, timeout=500)
-        self.is_visible_and_displayed(self.search_again_button)
 
     def clear_and_search_all_cases_on_case_search_page(self):
         self.clear_selections_on_case_search_page()
         self.search_button_on_case_search_page()
 
     def omni_search(self, case_name, displayed=YES):
-        self.wait_to_clear_and_send_keys(self.omni_search_input, case_name)
-        self.js_click(self.omni_search_button)
+        if self.is_displayed(self.omni_search_input):
+            self.wait_to_clear_and_send_keys(self.omni_search_input, case_name)
+            self.js_click(self.omni_search_button)
+        else:
+            print("Split Screen Case Search enabled")
         self.case = self.get_element(self.case_name_format, case_name)
         if self.is_displayed(self.last_page) and self.is_displayed(self.case) == False:
             total_pages = int(self.get_attribute(self.last_page, "data-id")) - 1
