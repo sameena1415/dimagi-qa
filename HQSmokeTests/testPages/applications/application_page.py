@@ -105,6 +105,8 @@ class ApplicationPage(BasePage):
         self.code = (By.XPATH, "//code")
         self.close = (By.XPATH, "//div[.//code]/following-sibling::div//a[contains(text(),'Close')]")
         self.override_btn = (By.XPATH, "//button[contains(.,'Overwrite their work')]")
+        self.enter_app_code_link = (By.LINK_TEXT, "Enter App Code")
+
 
     def create_new_application(self):
         self.wait_to_click(self.applications_menu_id)
@@ -226,6 +228,7 @@ class ApplicationPage(BasePage):
         print("Sleeping for the installation code to generate")
         time.sleep(10)
         self.wait_to_click(self.publish_button)
+        self.wait_to_click(self.enter_app_code_link)
         code_text = self.wait_to_get_text(self.code)
         self.wait_to_click(self.close)
         # self.wait_to_click(self.delete_form)

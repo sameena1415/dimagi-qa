@@ -8,10 +8,12 @@ class CaseSearchUserInput:
     casesearch = "casesearch"
     casesearch_1 = "casesearch-1"
     casesearch_2 = "casesearch-2"
+    casesearch_split_screen = "casesearch-split_screen"
 
     """App Names"""
     case_search_app_name = "[Master] Music App (Case Search & Claim)"
     french_app = "[French] Music App"
+    linked_case_search_app_name = "[Linked Master] Music App (Case Search & Claim)"
 
     """Users"""
     user_1 = 'automation-user-1'
@@ -106,6 +108,15 @@ class CaseSearchUserInput:
     date_12_30_2022_hyphen = "12-30-2022"
     date_12_30_22_slash = "12/30/22"
     date_12_30_22_hyphen = "12-30-22"
+
+    date_2023_08_16 = "2023-08-16"
+    date_16_08_2023 = "16/08/2023"
+    date_08_16_2023_slash = "08/16/2023"
+    date_08_16_2023_hyphen = "08-16-2023"
+    date_08_16_23_slash = "08/16/23"
+    date_08_16_23_hyphen = "08-16-23"
+
+
     dates = {"MM/DD/YYYY": '%m/%d/%Y', "MM-DD-YYYY": "%m-%d-%Y",
              "MM/DD/YY": "%m/%d/%y", "MM-DD-YY": "%m-%d-%y",
              "YYYY-MM-DD": '%Y-%m-%d', "DD/MM/YYYY": "%d/%m/%Y"}
