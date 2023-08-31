@@ -14,8 +14,6 @@ from HQSmokeTests.userInputs.user_inputs import UserData
 from common_utilities.generate_random_string import fetch_random_string
 from common_utilities.hq_login.login_page import LoginPage
 
-results = dict()
-
 @pytest.mark.report
 @pytest.mark.reportCaseList
 @pytest.mark.p1p2EscapeDefect
@@ -66,8 +64,6 @@ def test_case_73_non_admin_role_permission(driver, settings):
     login.login(settings["login_username"], settings["login_password"])
     menu.users_menu()
     webuser.edit_user_permission("Admin")
-    results['role'] = rolename
-    return results['role']
 
 @pytest.mark.user
 @pytest.mark.mobileWorker
@@ -76,6 +72,7 @@ def test_case_73_non_admin_role_permission(driver, settings):
 @pytest.mark.userExport
 @pytest.mark.p1p2EscapeDefect
 def test_case_74_delete_role_column(driver, settings):
+    role = RolesPermissionPage(driver)
     login = LoginPage(driver, settings["url"])
     login.logout()
     time.sleep(10)
@@ -92,20 +89,19 @@ def test_case_74_delete_role_column(driver, settings):
     user.click_create(username)
     user.mobile_worker_menu()
     user.select_mobile_worker_created(username)
-    user.update_role_for_mobile_worker(results['role'])
+    user.update_role_for_mobile_worker(role.role_non_admin_created)
     newest_file = user.download_mobile_worker()
-    user.remove_role_in_downloaded_file(newest_file, results['role'])
+    user.remove_role_in_downloaded_file(newest_file, role.role_non_admin_created)
     home.users_menu()
     user.upload_mobile_worker()
     time.sleep(5)
     user.mobile_worker_menu()
     user.select_mobile_worker_created(username)
-    user.verify_role_for_mobile_worker(results['role'])
+    user.verify_role_for_mobile_worker(role.role_non_admin_created)
     home.users_menu()
     user.delete_bulk_users()
     time.sleep(10)
     home.users_menu()
-    role = RolesPermissionPage(driver)
     role.roles_menu_click()
     role.delete_test_roles()
 
