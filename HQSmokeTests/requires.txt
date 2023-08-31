@@ -14,3 +14,7 @@ pytest-xdist[psutil]
 Appium-Python-Client >= 2.10.0
 pyotp >=2.6.0
 pytest-order
+requests
+imap-tools
+beautifulsoup4
+html5lib

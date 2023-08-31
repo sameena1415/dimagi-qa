@@ -151,6 +151,10 @@ class BasePage:
         select_source = Select(self.driver.find_element(*source_locator))
         select_source.select_by_index(value)
 
+    def get_selected_text(self, source_locator):
+        select_source = Select(self.driver.find_element(*source_locator))
+        return select_source.first_selected_option.text
+
     def deselect_all(self, source_locator):
         select_source = Select(self.driver.find_element(*source_locator))
         select_source.deselect_all()
@@ -158,6 +162,10 @@ class BasePage:
     def move_to_element_and_click(self, locator):
         element = self.driver.find_element(*locator)
         ActionChains(self.driver).move_to_element(element).click(element).perform()
+
+    def hover_on_element(self, locator):
+        element = WebDriverWait(self.driver, 20).until(ec.visibility_of_element_located(locator))
+        ActionChains(self.driver).move_to_element(element).pause(2).perform()
 
     def clear(self, locator):
         element = self.driver.find_element(*locator)
@@ -248,6 +256,9 @@ class BasePage:
     def switch_to_new_tab(self):
         self.driver.switch_to.new_window('tab')
 
+    def switch_to_default_content(self):
+        self.driver.switch_to.default_content()
+
     def switch_back_to_prev_tab(self):
         winHandles = self.driver.window_handles
         window_before = winHandles[0]
@@ -293,10 +304,10 @@ class BasePage:
 
     def hover_and_click(self, locator1, locator2):
         action = ActionChains(self.driver)
-        element_1 = self.driver.find_element(locator1)
+        element_1 = WebDriverWait(self.driver, 20).until(ec.visibility_of_element_located(locator1))
         action.move_to_element(element_1).perform()
         # identify sub menu element
-        element_2 = self.driver.find_element(locator2)
+        element_2 = WebDriverWait(self.driver, 20).until(ec.visibility_of_element_located(locator2))
         # hover over element and click
         action.move_to_element(element_2).click().perform()
 

@@ -1,4 +1,5 @@
 import random
+import time
 
 import pytest
 
@@ -110,6 +111,7 @@ def test_case_10_download_and_upload_users(driver, settings):
     newest_file = user.download_mobile_worker()
     print("Group ID:", group_id["value"])
     user.check_for_group_in_downloaded_file(newest_file, group_id["value"])
+    user.remove_role_in_downloaded_file(newest_file, group_id["user"])
     home.users_menu()
     user.upload_mobile_worker()
 
@@ -201,7 +203,16 @@ def test_case_54_add_custom_user_data_profile_to_mobile_worker(driver, settings)
     create.select_profile()
     create.update_information()
     create.select_location()
+    time.sleep(2)
     menu.users_menu()
+    newest_file = create.download_mobile_worker()
+    create.edit_profile_in_downloaded_file(newest_file, group_id["user_new"])
+    menu.users_menu()
+    create.upload_mobile_worker()
+    time.sleep(2)
+    create.mobile_worker_menu()
+    create.select_user_and_update_fields(group_id["user_new"])
+    create.verify_profile_change(UserData.p1p2_profile)
     create.mobile_worker_menu()
     create.delete_bulk_users()
     menu.users_menu()
