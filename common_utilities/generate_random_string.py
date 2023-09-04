@@ -5,6 +5,7 @@ import string
 
 chars = string.ascii_lowercase + string.digits
 random_string = ''.join(random.choices(chars, k=6))
+
 N = 10
 random_number = random.randint(100, 19999)
 
@@ -25,3 +26,11 @@ def fetch_random_digit():
 
 def fetch_random_boolean():
     return random.choice([True, False])
+
+def fetch_string_with_special_chars(length):
+        return ''.join(
+            random.choices(
+                string.ascii_lowercase + string.digits + string.punctuation,
+                k=length
+            )
+        )
