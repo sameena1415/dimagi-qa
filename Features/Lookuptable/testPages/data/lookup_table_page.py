@@ -4,7 +4,6 @@ import string
 import time
 
 from selenium.webdriver.support.select import Select
-
 from common_utilities.path_settings import PathSettings
 from selenium.webdriver.common.by import By
 from common_utilities.Excel.excel_manage import ExcelManager
@@ -19,6 +18,7 @@ class LookUpTablePage(BasePage):
 
     def __init__(self, driver):
         super().__init__(driver)
+
         self.table_id_name = "lookuptable_" + str(fetch_random_string())
         self.dummyid = str(fetch_string_with_special_chars(4))
         self.table_id_fields = "(//label[.='Table ID'][@class='control-label col-sm-2']//following-sibling::div/input[@type='text' and @class = 'form-control'])"
@@ -202,6 +202,7 @@ class LookUpTablePage(BasePage):
         print("LookUp Table created successfully!")
         return self.table_id_name
 
+
     def err_upload(self, filepath):
         self.wait_to_click(self.Data)
         self.wait_to_click(self.view_all)
@@ -279,6 +280,7 @@ class LookUpTablePage(BasePage):
         self.wait_to_click(self.download_file)
         time.sleep(3)
         self.wait_to_click(self.closedownloadpopup)
+
 
     def download1(self):
         self.wait_to_click(self.manage_tables_link)
@@ -445,6 +447,7 @@ class LookUpTablePage(BasePage):
             print(b_row , a_row)
             assert b_row < a_row
 
+
     def delete_field_columns(self,downloadpath,tablename):
         downloadpath = self.latest_download_file()
         excel = ExcelManager(downloadpath)
@@ -459,6 +462,7 @@ class LookUpTablePage(BasePage):
         assert col_TypeSheet_before > col_TypeSheet
         assert col1>col2
         print("Fields got deleted")
+
 
     def restore_attribute_1(self):
         time.sleep(20)
@@ -763,4 +767,5 @@ class LookUpTablePage(BasePage):
                 print("Value to be updated")
                 excel.write_excel_data("types",val,1,"Y")
         self.replace_existing_table(download_path)
+
 

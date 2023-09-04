@@ -14,6 +14,7 @@ values = dict()
 @pytest.mark.data
 @pytest.mark.managetables
 @pytest.mark.excel
+
 def test_05_download1(driver,settings):
     home = HomePage(driver, settings)
     home.data_menu()

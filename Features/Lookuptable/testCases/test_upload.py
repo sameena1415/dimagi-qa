@@ -1,4 +1,3 @@
-
 import pytest
 from HQSmokeTests.testPages.home.home_page import HomePage
 from Features.Lookuptable.testPages.data.lookup_table_page import LookUpTablePage

@@ -1,4 +1,3 @@
-
 import pytest
 
 from HQSmokeTests.testPages.applications.app_preview import AppPreviewPage
@@ -73,6 +72,7 @@ def test_21_Error_upload3(driver,settings):
     data.write_data_excel(values['table_id'], download_path)
     data.upload_1(download_path, '1')
 
+
 @pytest.mark.data
 @pytest.mark.managetables
 @pytest.mark.lookupexcel
@@ -131,4 +131,5 @@ def test_42_delete_test_tables(driver,settings):
     values['table_id'] = data.download_bulk_tables()
     download_path = data.latest_download_file()
     data.compare_and_delete(download_path)
+
 

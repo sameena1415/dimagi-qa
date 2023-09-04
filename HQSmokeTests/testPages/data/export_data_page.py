@@ -3,6 +3,8 @@ import time
 import pandas as pd
 from datetime import datetime, timedelta
 
+import requests
+
 from common_utilities.selenium.base_page import BasePage
 from common_utilities.path_settings import PathSettings
 from HQSmokeTests.userInputs.user_inputs import UserData
@@ -26,7 +28,6 @@ class ExportDataPage(BasePage):
 
     def __init__(self, driver):
         super().__init__(driver)
-
 
         self.presentday = datetime.now()  # or presentday = datetime.today()
         self.date_having_submissions = "2022-01-18" + " to " + datetime.now().strftime('%Y-%m-%d')
@@ -69,21 +70,26 @@ class ExportDataPage(BasePage):
         self.edit_form_case_export = (By.XPATH, "(//a[contains(@data-bind,'edit')])[1]")
         self.create_DSE_checkbox = (By.XPATH, '//*[@id="daily-saved-export-checkbox"]')
         self.download_dse = (By.XPATH, "(//a[@class='btn btn-info btn-xs'])[1]")
-        self.download_dse_form = (By.XPATH, "//h4[.//span[.='"+UserData.form_export_name_dse+"']]/following-sibling::div//*[./i[@class='fa fa-cloud-download']]")
+        self.download_dse_form = (By.XPATH,
+                                  "//h4[.//span[.='" + UserData.form_export_name_dse + "']]/following-sibling::div//*[./i[@class='fa fa-cloud-download']]")
         self.download_dse_case = (By.XPATH,
                                   "//h4[.//span[.='" + UserData.case_export_name_dse + "']]/following-sibling::div//*[./i[@class='fa fa-cloud-download']]")
 
         self.data_upload_msg = (By.XPATH, "//*[contains(text(),'Data update complete')]")
-        self.data_upload_msg_form = (By.XPATH, "//h4[.//span[.='"+UserData.form_export_name_dse+"']]/following-sibling::div//*[contains(text(),'Data update complete')]")
-        self.data_upload_msg_case = (By.XPATH, "//h4[.//span[.='"+UserData.case_export_name_dse+"']]/following-sibling::div//*[contains(text(),'Data update complete')]")
+        self.data_upload_msg_form = (By.XPATH,
+                                     "//h4[.//span[.='" + UserData.form_export_name_dse + "']]/following-sibling::div//*[contains(text(),'Data update complete')]")
+        self.data_upload_msg_case = (By.XPATH,
+                                     "//h4[.//span[.='" + UserData.case_export_name_dse + "']]/following-sibling::div//*[contains(text(),'Data update complete')]")
 
         # Excel Dashboard Integrations, form, case
         self.export_excel_dash_int = (By.LINK_TEXT, 'Excel Dashboard Integration')
         self.update_data = (By.XPATH, "//button[@data-toggle='modal'][1]")
         self.update_data_conf = (By.XPATH, "//button[@data-bind='click: emailedExport.updateData']")
 
-        self.update_data_form = (By.XPATH, "//h4[.//span[.='"+UserData.form_export_name_dse+"']]/following-sibling::div//button[@data-toggle='modal'][1]")
-        self.update_data_conf_form = (By.XPATH, "//h4[.//span[.='"+UserData.form_export_name_dse+"']]/following-sibling::div//button[@data-bind='click: emailedExport.updateData']")
+        self.update_data_form = (By.XPATH,
+                                 "//h4[.//span[.='" + UserData.form_export_name_dse + "']]/following-sibling::div//button[@data-toggle='modal'][1]")
+        self.update_data_conf_form = (By.XPATH,
+                                      "//h4[.//span[.='" + UserData.form_export_name_dse + "']]/following-sibling::div//button[@data-bind='click: emailedExport.updateData']")
         self.update_data_case = (By.XPATH,
                                  "//h4[.//span[.='" + UserData.case_export_name_dse + "']]/following-sibling::div//button[@data-toggle='modal'][1]")
         self.update_data_conf_case = (By.XPATH,
@@ -96,10 +102,14 @@ class ExportDataPage(BasePage):
 
         # Power BI / Tableau Integration, Form
         self.powerBI_tab_int = (By.LINK_TEXT, 'PowerBi/Tableau Integration')
-        self.copy_odata_link_btn_form = (By.XPATH,"//div[./span[text()='" + UserData.odata_feed_form + "']]/following::div[@class='input-group']//a")
-        self.copy_odata_link_form = (By.XPATH,"//div[./span[text()='" + UserData.odata_feed_form + "']]/following::div[@class='input-group']/input")
-        self.copy_odata_link_btn_case = (By.XPATH, "//div[./span[text()='" + UserData.odata_feed_case + "']]/following::div[@class='input-group']//a")
-        self.copy_odata_link_case = (By.XPATH, "//div[./span[text()='" + UserData.odata_feed_case + "']]/following::div[@class='input-group']/input")
+        self.copy_odata_link_btn_form = (
+        By.XPATH, "//div[./span[text()='" + UserData.odata_feed_form + "']]/following::div[@class='input-group']//a")
+        self.copy_odata_link_form = (
+        By.XPATH, "//div[./span[text()='" + UserData.odata_feed_form + "']]/following::div[@class='input-group']/input")
+        self.copy_odata_link_btn_case = (
+        By.XPATH, "//div[./span[text()='" + UserData.odata_feed_case + "']]/following::div[@class='input-group']//a")
+        self.copy_odata_link_case = (
+        By.XPATH, "//div[./span[text()='" + UserData.odata_feed_case + "']]/following::div[@class='input-group']/input")
 
         self.edit_button_case = (By.XPATH,
                                  "(//span[contains(text(), 'Copy & Edit Feed')])")
@@ -111,7 +121,7 @@ class ExportDataPage(BasePage):
         self.failed_to_export = (By.XPATH, "//div[@class='alert alert-danger']")
 
         # bulk export delete
-        self.empty_export_block=(By.XPATH,"(//div[@data-bind='visible: showEmpty'])[1]")
+        self.empty_export_block = (By.XPATH, "(//div[@data-bind='visible: showEmpty'])[1]")
         self.select_all_btn = (By.XPATH, '//button[@data-bind="click: selectAll"]')
         self.delete_selected_exports = (By.XPATH, '//a[@href= "#bulk-delete-export-modal"]')
         self.bulk_delete_confirmation_btn = (By.XPATH, '//button[@data-bind="click: BulkExportDelete"]')
@@ -138,11 +148,6 @@ class ExportDataPage(BasePage):
         print(self.date_having_submissions)
         self.wait_to_clear_and_send_keys(self.date_range, self.date_having_submissions)
         self.wait_and_sleep_to_click(self.apply)
-
-    def data_tab(self):
-        self.driver.refresh()
-        self.wait_to_click(self.data_dropdown)
-        self.wait_to_click(self.view_all_link)
 
     def prepare_and_download_export(self):
         self.wait_and_sleep_to_click(self.export_form_case_data_button)
@@ -191,6 +196,7 @@ class ExportDataPage(BasePage):
         self.select_by_text(self.module, UserData.case_list_name)
         self.select_by_text(self.form, UserData.form_name)
         self.wait_to_click(self.add_export_conf)
+        self.wait_for_element(self.export_name)
         self.wait_to_clear_and_send_keys(self.export_name, UserData.form_export_name)
         self.wait_to_click(self.export_settings_create)
         print("Export created!!")
@@ -208,10 +214,14 @@ class ExportDataPage(BasePage):
         self.wait_and_sleep_to_click(self.add_export_button)
         self.is_clickable(self.application)
         # self.select_by_text(self.application, UserData.village_application)
-        self.select_by_text(self.application, UserData.reassign_cases_application)
+        try:
+            self.select_by_text(self.application, UserData.reassign_cases_application)
+        except:
+            print("Application dropdown is not present")
         # self.select_by_text(self.case, UserData.case_pregnancy)
         self.select_by_text(self.case, UserData.case_reassign)
         self.wait_to_click(self.add_export_conf)
+        self.wait_for_element(self.export_name)
         self.wait_to_clear_and_send_keys(self.export_name, UserData.case_export_name)
         self.wait_to_click(self.export_settings_create)
         print("Export created!!")
@@ -262,7 +272,6 @@ class ExportDataPage(BasePage):
         print("Exported:", exported_file)
         self.assert_downloaded_file(newest_file, exported_file)
 
-
     def cleanup_existing_dse(self):
         # Cleanup existing exports
         self.wait_and_sleep_to_click(self.daily_saved_export_link)
@@ -277,10 +286,10 @@ class ExportDataPage(BasePage):
         except (NoSuchElementException, StaleElementReferenceException):
             self.add_form_exports()
             self.wait_and_sleep_to_click(self.edit_form_case_export)
+        self.wait_for_element(self.export_name)
         self.wait_to_clear_and_send_keys(self.export_name, UserData.form_export_name_dse)
-        self.create_dse_and_download(UserData.form_export_name_dse,"form")
+        self.create_dse_and_download(UserData.form_export_name_dse, "form")
         print("DSE Form Export successful")
-
 
     # Test Case 24_b - Daily saved export, case
     def daily_saved_exports_case(self):
@@ -290,10 +299,10 @@ class ExportDataPage(BasePage):
         except NoSuchElementException:
             self.add_case_exports()
             self.wait_and_sleep_to_click(self.edit_form_case_export)
+        self.wait_for_element(self.export_name)
         self.wait_to_clear_and_send_keys(self.export_name, UserData.case_export_name_dse)
         self.create_dse_and_download(UserData.case_export_name_dse, "case")
         print("DSE Case Export successful")
-
 
     # Test Case - 25 - Excel Dashboard Integration, form
     def excel_dashboard_integration_form(self):
@@ -308,6 +317,7 @@ class ExportDataPage(BasePage):
         self.select_by_text(self.form, UserData.form_name)
         self.wait_and_sleep_to_click(self.add_export_conf)
         print("Dashboard Feed added!!")
+        self.wait_for_element(self.export_name)
         self.wait_to_clear_and_send_keys(self.export_name, UserData.dashboard_feed_form)
         self.click(self.export_settings_create)
         print("Dashboard Form Feed created!!")
@@ -316,7 +326,6 @@ class ExportDataPage(BasePage):
         self.wait_and_sleep_to_click(self.update_data_conf)
         assert self.is_visible_and_displayed(self.data_upload_msg), "Export not completed!"
         self.driver.refresh()
-        self.check_feed_link()
 
     # Test Case - 26 - Excel Dashboard Integration, case
 
@@ -327,10 +336,14 @@ class ExportDataPage(BasePage):
         self.is_visible_and_displayed(self.model)
         self.wait_for_element(self.model, 40)
         self.select_by_value(self.model, UserData.model_type_case)
-        self.select_by_text(self.application, UserData.village_application)
+        try:
+            self.select_by_text(self.application, UserData.village_application)
+        except:
+            print("Application dropdown is not present")
         self.select_by_text(self.case, UserData.case_pregnancy)
         self.wait_and_sleep_to_click(self.add_export_conf)
         print("Dashboard Feed added!!")
+        self.wait_for_element(self.export_name)
         self.wait_to_clear_and_send_keys(self.export_name, UserData.dashboard_feed_case)
         self.click(self.export_settings_create)
         print("Dashboard Form Feed created!!")
@@ -339,7 +352,6 @@ class ExportDataPage(BasePage):
         self.wait_and_sleep_to_click(self.update_data_conf)
         assert self.is_visible_and_displayed(self.data_upload_msg), "Export not completed!"
         self.driver.refresh()
-        self.check_feed_link()
 
     def check_feed_link(self):
         try:
@@ -355,6 +367,7 @@ class ExportDataPage(BasePage):
                 print("Excel Dashboard is empty")
             # self.driver.close()
             self.driver.back()
+            return dashboard_feed_link
         except StaleElementReferenceException:
             print(StaleElementReferenceException)
 
@@ -376,7 +389,7 @@ class ExportDataPage(BasePage):
         self.select_by_text(self.form, UserData.form_name)
         self.wait_and_sleep_to_click(self.add_export_conf)
         print("Odata form Feed added!!")
-        time.sleep(5)
+        self.wait_for_element(self.export_name)
         self.wait_to_clear_and_send_keys(self.export_name, UserData.odata_feed_form)
         self.click(self.export_settings_create)
         print("Odata Form Feed created!!")
@@ -394,11 +407,14 @@ class ExportDataPage(BasePage):
         time.sleep(30)
         self.is_visible_and_displayed(self.model)
         self.select_by_value(self.model, UserData.model_type_case)
-        self.select_by_text(self.application, UserData.village_application)
+        try:
+            self.select_by_text(self.application, UserData.village_application)
+        except:
+            print("Application dropdown is not present")
         self.select_by_text(self.case, UserData.case_pregnancy)
         self.wait_and_sleep_to_click(self.add_export_conf)
         print("Odata Case Feed added!!")
-        time.sleep(5)
+        self.wait_for_element(self.export_name)
         self.wait_to_clear_and_send_keys(self.export_name, UserData.odata_feed_case)
         # selcting first three property
         self.wait_and_sleep_to_click(self.select_none)
@@ -453,10 +469,15 @@ class ExportDataPage(BasePage):
         self.delete_bulk_exports()
         time.sleep(5)
         self.wait_and_sleep_to_click(self.add_export_button)
-        self.is_visible_and_displayed(self.application)
-        self.select_by_text(self.application, UserData.reassign_cases_application)
+        try:
+            self.is_visible_and_displayed(self.application)
+            self.select_by_text(self.application, UserData.reassign_cases_application)
+        except:
+            print("Application dropdown is not present")
+        self.is_visible_and_displayed(self.case)
         self.select_by_text(self.case, UserData.case_update_name)
         self.wait_to_click(self.add_export_conf)
+        self.wait_for_element(self.export_name)
         self.wait_to_clear_and_send_keys(self.export_name, UserData.case_updated_export_name)
         self.wait_to_click(self.export_settings_create)
         print("Export created!!")
@@ -495,3 +516,33 @@ class ExportDataPage(BasePage):
         self.wait_and_sleep_to_click(self.export_case_data_link)
         self.delete_bulk_exports()
         print("Bulk exports deleted for Export Case data")
+
+    def verify_duplicate_data_in_dashboard(self, link, username, password):
+        print(link)
+        resp = requests.get(link, auth=(username, password)).text
+        data = pd.read_html(resp, flavor='html5lib')
+        data = (pd.DataFrame(data[0])).reset_index()
+        duplicate = data[data.duplicated()]
+        if len(duplicate)>0:
+            print(duplicate)
+        else:
+            print("No duplicate data present")
+
+
+    def add_case_exports(self):
+        self.wait_to_click(self.export_case_data_link)
+        self.delete_bulk_exports()
+        self.wait_and_sleep_to_click(self.add_export_button)
+        self.is_clickable(self.application)
+        # self.select_by_text(self.application, UserData.village_application)
+        try:
+            self.select_by_text(self.application, UserData.reassign_cases_application)
+        except:
+            print("Application dropdown is not present")
+        # self.select_by_text(self.case, UserData.case_pregnancy)
+        self.select_by_text(self.case, UserData.case_reassign)
+        self.wait_to_click(self.add_export_conf)
+        self.wait_for_element(self.export_name)
+        self.wait_to_clear_and_send_keys(self.export_name, UserData.case_export_name)
+        self.wait_to_click(self.export_settings_create)
+        print("Export created!!")
