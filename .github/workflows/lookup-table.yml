@@ -75,7 +75,11 @@ jobs:
           echo "matrix environment: ${{ matrix.environment }}"
           echo "NOW=$(date +'%m-%d %H:%M')" >> $GITHUB_ENV
           echo ${{env.NOW}}
+<<<<<<< HEAD
           pytest -v --rootdir= Features/Lookuptable/testCases -n 3 --dist=loadfile --reruns 1 --html=lookup_report_${{ matrix.environment }}.html
+=======
+          pytest -v --rootdir= Features/Lookuptable/testCases -n 4 --dist=loadfile --html=lookup_report_${{ matrix.environment }}.html
+>>>>>>> origin
       - name: Set email vars
         if: ${{ success() || failure() }}
         id: configure_email
@@ -139,4 +143,8 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: test-result-reports-${{ matrix.environment }}
+<<<<<<< HEAD
           path: ${{ github.workspace }}/lookup_report_${{ matrix.environment }}.html
+=======
+          path: ${{ github.workspace }}/lookup_report_${{ matrix.environment }}.html
+>>>>>>> origin

@@ -214,6 +214,22 @@ Features/CaseSearch/settings.cfg
 Features/CaseSearch/report.html
 Features/CaseSearch/test_cases/report.html
 
+#Ignoring compliled files of MultiSelect
+Features/MultiSelect/settings.cfg
+Features/MultiSelect/report.html
+Features/MultiSelect/test_cases/report.html
+
+#Ignoring compliled files of CO BHA
+USH_Apps/CO_BHA/settings.cfg
+USH_Apps/CO_BHA/report.html
+USH_Apps/CO_BHA/test_cases/report.html
+
+
+#Ignoring compliled files of SplitScreenCaseSearch
+Features/SplitScreenCaseSearch/settings.cfg
+Features/SplitScreenCaseSearch/report.html
+Features/SplitScreenCaseSearch/test_cases/report.html
+
 
 
 

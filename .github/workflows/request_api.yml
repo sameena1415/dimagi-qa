@@ -44,6 +44,9 @@ jobs:
     strategy:
       fail-fast: false
       matrix: ${{ fromJSON(needs.set_matrix.outputs.matrix) }}
+    concurrency:
+      group: ${{ github.workflow }}-${{ matrix.environment }}
+      cancel-in-progress: true
     name: Request API on '${{ matrix.environment }}'
     runs-on: ubuntu-latest
 
@@ -90,20 +93,62 @@ jobs:
         attachments: /home/runner/work/dimagi-qa/dimagi-qa/report.html
         priority: normal
 
-    - name: Send Pass Email
-      uses: dawidd6/action-send-mail@v3
-      if: success()
+    - name: Post to Slack channel on Failure
+      id: slack-api
+      uses: slackapi/slack-github-action@v1.23.0
+      if: failure()
       with:
-        server_address: smtp.gmail.com
-        server_port: 465
-        username: ${{secrets.DIMAGIQA_MAIL_USERNAME}}
-        password: ${{secrets.DIMAGIQA_MAIL_PASSWORD}}
-        subject: ${{ github.event.client_payload.environment }} PASS - Request API Tests[#${{github.run_number}}] on branch "${{ github.ref_name }}", ${{env.NOW}}
-        to: qa@dimagi.com, sameena.shaik@fissionlabs.com
-        from: <${{secrets.DIMAGIQA_MAIL_USERNAME}}>
-        html_body: file:////home/runner/work/dimagi-qa/dimagi-qa/RequestAPI/email_pass.html
-        attachments: /home/runner/work/dimagi-qa/dimagi-qa/report.html
-        priority: normal
+        payload: |
+          {
+              "blocks": [
+                  {
+                      "type": "section",
+                      "text": {
+                          "type": "mrkdwn",
+                          "text": " Hola  👋 \n*${{ github.workflow }}* were just triggered!"
+                      }
+                  },
+                  {
+                      "type": "context",
+                      "elements": [
+                          {
+                              "type": "mrkdwn",
+                              "text": "*Environment: *\n ${{ matrix.environment }}  \n"
+                          },
+                        {
+                              "type": "mrkdwn",
+                              "text": " "
+                          },
+                          {
+                              "type": "mrkdwn",
+                              "text": "*Status: *\n ${{ job.status }}  :x:"
+                          }
+                      ]
+                  },
+                  {
+                      "type": "section",
+                      "text": {
+                          "type": "mrkdwn",
+                          "text": "Here's the corresponding workflow execution :arrow_right::arrow_right:"
+                      },
+                      "accessory": {
+                          "type": "button",
+                          "text": {
+                              "type": "plain_text",
+                              "text": "View on Github",
+                              "emoji": true
+                          },
+                          "value": "click_me_123",
+                          "url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}",
+                          "action_id": "button-action",
+                          "style": "danger"
+                      }
+                  }
+              ]
+          }
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL_SMOKE }}
+        SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
 
     - name: Archive test results
       if: always()
