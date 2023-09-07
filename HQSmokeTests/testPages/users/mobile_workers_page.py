@@ -3,6 +3,7 @@ import random
 import time
 
 import pandas as pd
+from openpyxl import load_workbook
 
 from common_utilities.selenium.base_page import BasePage
 from common_utilities.path_settings import PathSettings
@@ -22,6 +23,14 @@ class MobileWorkerPage(BasePage):
 
         # self.username = random.choice(UserData.mobile_username_list)
         # self.user = random.choice(UserData.mobile_user_list)
+        self.file_new_name = "mobile_workers_" + str(fetch_random_string()) + ".xlsx"
+        self.to_be_edited_file = os.path.abspath(
+            os.path.join(UserData.USER_INPUT_BASE_DIR, "test_data/mobile_workers.xlsx"))
+        self.renamed_file = os.path.abspath(
+            os.path.join(UserData.USER_INPUT_BASE_DIR, "test_data/" + self.file_new_name))
+        self.username_cell = "A2"
+
+        self.users_menu_id = (By.ID, "ProjectUsersTab")
         self.login_as_username = "//h3/b[.='{}']"
         self.profile_name_text = "test_profile_" + fetch_random_string()
         self.phone_number = UserData.area_code + fetch_phone_number()
@@ -133,6 +142,7 @@ class MobileWorkerPage(BasePage):
         self.profile_combobox = (
             By.XPATH, "//span[@aria-labelledby='select2-id_data-field-commcare_profile-container']")
         self.profile_selection = (By.XPATH, "//li[contains(text(),'" + self.profile_name_text + "')]")
+        self.profile_dropdown = (By.XPATH, "//select[@name='data-field-commcare_profile']")
         self.phone_number_field = (By.XPATH, "//input[@name='phone_number']")
         self.add_number_button = (By.XPATH, "//button[.='Add Number']")
         self.registered_phone_number = (By.XPATH, "//label[contains(text(),'+" + self.phone_number + "')]")
@@ -156,6 +166,8 @@ class MobileWorkerPage(BasePage):
         self.bulk_user_delete_button = (By.XPATH, "//a[contains(@href,'users/commcare/delete')]")
         self.successfully_deleted = (By.XPATH, "//text()[contains(.,'user&#40;s&#41; deleted')]")
         self.no_user_found = (By.XPATH, "//text()[contains(.,'No users found')]")
+
+        self.role_dropdown = (By.XPATH, "//select[@id='id_role']")
 
     def search_user(self, username):
         self.wait_to_clear_and_send_keys(self.search_mw, username)
@@ -205,6 +217,28 @@ class MobileWorkerPage(BasePage):
         data = pd.read_excel(path, sheet_name='groups')
         df = pd.DataFrame(data, columns=['id'])
         assert group_id_value in df['id'].values, "Group is not present"
+
+    def edit_profile_in_downloaded_file(self, newest_file, user):
+        path = os.path.join(PathSettings.DOWNLOAD_PATH, newest_file)
+        print(path)
+        time.sleep(5)
+        data = pd.read_excel(path, sheet_name='users')
+        df = pd.DataFrame(data)
+        df = df.drop(columns="phone-number 1")
+        df = df.query("username == '"+user+"'")
+        print(df)
+        df.loc[(df['username'] == user), 'user_profile'] = UserData.p1p2_profile
+        df.to_excel(path, sheet_name='users', index=False)
+
+    def remove_role_in_downloaded_file(self, newest_file, user):
+        path = os.path.join(PathSettings.DOWNLOAD_PATH, newest_file)
+        print(path)
+        time.sleep(5)
+        data = pd.read_excel(path, sheet_name='users')
+        df = pd.DataFrame(data)
+        df = df.query("username == '"+user+"'")
+        df = df.drop(columns="role")
+        df.to_excel(path, sheet_name='users',index=False)
 
     def edit_user_field(self):
         self.wait_to_click(self.edit_user_field_xpath)
@@ -530,3 +564,43 @@ class MobileWorkerPage(BasePage):
         except (TimeoutException, NoSuchElementException):
             print("TIMEOUT ERROR: Could not upload file")
 
+
+    def bulk_upload_mobile_worker(self):
+        self.wait_to_click(self.users_menu_id)
+        self.mobile_worker_menu()
+        try:
+            self.click(self.bulk_upload_btn)
+            self.edit_username_in_excel(self.to_be_edited_file, self.username_cell, self.renamed_file)
+            time.sleep(2)
+            self.wait_to_clear_and_send_keys(self.choose_file, self.renamed_file)
+            self.wait_and_sleep_to_click(self.upload)
+            self.wait_for_element(self.successfully_uploaded, 150)
+        except (TimeoutException, NoSuchElementException):
+            print("TIMEOUT ERROR: Could not upload file")
+        assert self.is_present_and_displayed(self.import_complete), "Upload Not Completed! Taking Longer to process.."
+        print("File uploaded successfully")
+
+
+    def edit_username_in_excel(self, edited_file, cell, renamed_file, sheet_name='users'):
+        workbook = load_workbook(filename=edited_file)
+        sheet = workbook.active
+        sheet[cell] = "user_p1p2_"+fetch_random_string()
+        sheet.title = sheet_name
+        workbook.save(filename=renamed_file)
+
+    def update_role_for_mobile_worker(self, role):
+        self.wait_for_element(self.role_dropdown)
+        self.select_by_text(self.role_dropdown, role)
+        self.update_information()
+
+    def verify_role_for_mobile_worker(self, role):
+        self.wait_for_element(self.role_dropdown)
+        text = self.get_selected_text(self.role_dropdown)
+        print(text)
+        assert text == role, "Role is not the same as set before upload"
+
+    def verify_profile_change(self, profile):
+        self.wait_for_element(self.profile_dropdown)
+        text = self.get_selected_text(self.profile_dropdown)
+        print(text)
+        assert text == profile, "Role is not the same as set before upload"

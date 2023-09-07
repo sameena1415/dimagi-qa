@@ -34,6 +34,7 @@ class CaseSearchWorkflows(BasePage):
         self.city_value_home = "//span[@class='caption webapp-markdown-output'][contains(text(), '{}')]"
         self.city_value_work = "//span[@class='caption webapp-markdown-output'][contains(text()[2], '{}')]"
         self.search_screen_title = "//h2[contains(text(), '{}')]"
+        self.search_screen_title_sscs = "//h1[contains(text(), '{}')]"
         self.search_screen_subtitle = "//strong[contains(text(), '{}')]"
         self.date_selected = "(//*[contains(text(),'{}')])[1]"
         self.dropdown_values = self.combox_select + "/option"
@@ -133,10 +134,10 @@ class CaseSearchWorkflows(BasePage):
     def check_value_on_form(self, city_address, type=HOME):
         if type == HOME:
             city_home = self.get_element(self.city_value_home, city_address)
-            assert self.is_present(city_home)
+            assert self.is_present_and_displayed(city_home)
         if type == WORK:
             city_work = self.get_element(self.city_value_work, city_address)
-            assert self.is_present(city_work)
+            assert self.is_present_and_displayed(city_work)
 
     def check_search_screen_title(self, title=None):
         title_on_screen = self.get_element(self.search_screen_title, title)
@@ -144,6 +145,13 @@ class CaseSearchWorkflows(BasePage):
             assert self.is_displayed(title_on_screen)
         else:
             assert not self.is_displayed(title_on_screen)
+
+    def check_search_screen_title_sscs(self, title=None):
+        title_on_screen_sscs = self.get_element(self.search_screen_title_sscs, title)
+        if title is not None:
+            assert self.is_displayed(title_on_screen_sscs)
+        else:
+            assert not self.is_displayed(title_on_screen_sscs)
 
     def check_search_screen_subtitle(self, subtitle):
         subtitle_on_screen = self.get_element(self.search_screen_subtitle, subtitle)
@@ -168,12 +176,14 @@ class CaseSearchWorkflows(BasePage):
             validation_message_per_prop = (
                 By.XPATH, self.required_validation_per_property_combox.format(search_property, message))
         if required_or_validated == YES:
+            self.wait_for_ajax()
             time.sleep(4)
             assert self.is_displayed(
                 validation_message_per_prop), f"Required validation missing {validation_message_per_prop}"
             assert self.is_displayed(
                 validation_message_on_top), f"Required validation missing {validation_message_on_top}"
         elif required_or_validated == NO:
+            self.wait_for_ajax()
             time.sleep(4)
             assert not self.is_displayed(validation_message_per_prop)
 

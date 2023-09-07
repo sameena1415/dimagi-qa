@@ -3,6 +3,8 @@ import time
 import pandas as pd
 from datetime import datetime, timedelta
 
+import requests
+
 from common_utilities.selenium.base_page import BasePage
 from common_utilities.path_settings import PathSettings
 from HQSmokeTests.userInputs.user_inputs import UserData
@@ -324,7 +326,6 @@ class ExportDataPage(BasePage):
         self.wait_and_sleep_to_click(self.update_data_conf)
         assert self.is_visible_and_displayed(self.data_upload_msg), "Export not completed!"
         self.driver.refresh()
-        self.check_feed_link()
 
     # Test Case - 26 - Excel Dashboard Integration, case
 
@@ -351,7 +352,6 @@ class ExportDataPage(BasePage):
         self.wait_and_sleep_to_click(self.update_data_conf)
         assert self.is_visible_and_displayed(self.data_upload_msg), "Export not completed!"
         self.driver.refresh()
-        self.check_feed_link()
 
     def check_feed_link(self):
         try:
@@ -367,6 +367,7 @@ class ExportDataPage(BasePage):
                 print("Excel Dashboard is empty")
             # self.driver.close()
             self.driver.back()
+            return dashboard_feed_link
         except StaleElementReferenceException:
             print(StaleElementReferenceException)
 
@@ -515,3 +516,33 @@ class ExportDataPage(BasePage):
         self.wait_and_sleep_to_click(self.export_case_data_link)
         self.delete_bulk_exports()
         print("Bulk exports deleted for Export Case data")
+
+    def verify_duplicate_data_in_dashboard(self, link, username, password):
+        print(link)
+        resp = requests.get(link, auth=(username, password)).text
+        data = pd.read_html(resp, flavor='html5lib')
+        data = (pd.DataFrame(data[0])).reset_index()
+        duplicate = data[data.duplicated()]
+        if len(duplicate)>0:
+            print(duplicate)
+        else:
+            print("No duplicate data present")
+
+
+    def add_case_exports(self):
+        self.wait_to_click(self.export_case_data_link)
+        self.delete_bulk_exports()
+        self.wait_and_sleep_to_click(self.add_export_button)
+        self.is_clickable(self.application)
+        # self.select_by_text(self.application, UserData.village_application)
+        try:
+            self.select_by_text(self.application, UserData.reassign_cases_application)
+        except:
+            print("Application dropdown is not present")
+        # self.select_by_text(self.case, UserData.case_pregnancy)
+        self.select_by_text(self.case, UserData.case_reassign)
+        self.wait_to_click(self.add_export_conf)
+        self.wait_for_element(self.export_name)
+        self.wait_to_clear_and_send_keys(self.export_name, UserData.case_export_name)
+        self.wait_to_click(self.export_settings_create)
+        print("Export created!!")

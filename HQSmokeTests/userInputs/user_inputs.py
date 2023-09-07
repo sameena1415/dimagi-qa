@@ -17,9 +17,13 @@ class UserData:
     app_login = "appiumtest"
     app_password = "Pass@123"
     two_fa_user = "2fa.commcare.user@gmail.com"
+
     mobile_testuser = "mobile_testuser"
     copied_to_user = "mobile_testuser \"DO NOT DELETE! DO NOT DELETE!\""
     searched_user = "appiumtest \"DO NOT DELETE! DO NOT DELETE!\""
+
+    appiumtest_owner_id = "appiumtest@qa-automation.commcarehq.org"
+    appiumtest_owner_id_prod = "appiumtest@qa-automation-prod.commcarehq.org"
 
     # Phone Number
     area_code = "91"
@@ -33,6 +37,7 @@ class UserData:
     case_register_form = "Case Register"
     case_update_form = "Update Case"
     case_update_name = "reassign_change"
+
     # Export report names
     form_export_name = "Smoke Form Export"
     case_export_name = "Smoke Case Export"
@@ -65,3 +70,17 @@ class UserData:
     """Conditional Alert"""
     alert_case_property = "name"
     alert_case_property_value = "conditional alert"
+
+    """Saved report"""
+    report_for_p1p2 = "Report For P1P2"
+
+    """Web user for p1p2"""
+    p1p2_user = "p1p2.web.user@gmail.com"
+    p1p2_profile = "p1p2_testprofile"
+    from_email_prod = "commcarehq-noreply-production@dimagi.com"
+    from_email = "commcarehq-noreply-staging@dimagi.com"
+
+    """Report email subjects"""
+    daily_form_activity = "Daily Form Activity: Requested export excel data"
+    app_status = "Application Status: Requested export excel data"
+    location_list = ['Delhi', 'Boston', 'Cape Town']

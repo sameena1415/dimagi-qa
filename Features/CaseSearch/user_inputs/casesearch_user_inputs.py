@@ -8,10 +8,12 @@ class CaseSearchUserInput:
     casesearch = "casesearch"
     casesearch_1 = "casesearch-1"
     casesearch_2 = "casesearch-2"
+    casesearch_split_screen = "casesearch-split_screen"
 
     """App Names"""
     case_search_app_name = "[Master] Music App (Case Search & Claim)"
     french_app = "[French] Music App"
+    linked_case_search_app_name = "[Linked Master] Music App (Case Search & Claim)"
 
     """Users"""
     user_1 = 'automation-user-1'
@@ -30,6 +32,7 @@ class CaseSearchUserInput:
     search_setting_menu = "Songs - Case Search Settings"
     without_search_setting_menu = "Songs - Without Case Search Settings"
     inline_search_menu = "Songs Inline Case Search"
+    dot_notations = "Dot Notations"
     old_inline_search_menu = "Old Search Input Instance"
     multi_select_menu = "Songs Multi-Case List"
     display_only_forms_menu = "Play Song - Display Only Forms"
@@ -39,6 +42,8 @@ class CaseSearchUserInput:
     load_external_search_first_menu = "DR: Load external case into form (Search First)"
     smart_link_search_first_menu = "DR: Smart link to external domain (Search First)"
     smart_link_skip_default_menu = "DR: Smart link to external domain (Skip Default)"
+    shadow_smart_link_search_first_menu = "DR Shadow: Smart Link to external domain (Search First)"
+    shadow_smart_link_skip_default_menu = "DR Shadow: Smart Link to external domain (Skip Default)"
     load_external_skip_default_menu = "DR: Load external case into form (Skip Default)"
     unrelated_case_load_external_menu = "Unrelated case id\'s property: Load from external domain."
     checkbox_selection_menu = "Checkbox Selection"
@@ -67,6 +72,7 @@ class CaseSearchUserInput:
     song_case_on_casesearch_1 = "Bugs on casesearch-1"
     song_case_b_users_song = "b_users song"
     song_automation_song_update = "Automation Song Update"
+    song_auto_parent = "(Auto) Parent Song"
 
     # Artist-Cases
     automation_artist_1 = "Automation-Artist-1"
@@ -78,6 +84,7 @@ class CaseSearchUserInput:
     # Show-Cases
     show_case_show1 = "Automation-Show1"
     show_case_casesearch_1 = "on casesearch-1"
+    show_auto = "(Auto) Show"
 
     # Instruments-Cases
     instrument_case_guitar = "Guitar"
@@ -101,6 +108,15 @@ class CaseSearchUserInput:
     date_12_30_2022_hyphen = "12-30-2022"
     date_12_30_22_slash = "12/30/22"
     date_12_30_22_hyphen = "12-30-22"
+
+    date_2023_08_16 = "2023-08-16"
+    date_16_08_2023 = "16/08/2023"
+    date_08_16_2023_slash = "08/16/2023"
+    date_08_16_2023_hyphen = "08-16-2023"
+    date_08_16_23_slash = "08/16/23"
+    date_08_16_23_hyphen = "08-16-23"
+
+
     dates = {"MM/DD/YYYY": '%m/%d/%Y', "MM-DD-YYYY": "%m-%d-%Y",
              "MM/DD/YY": "%m/%d/%y", "MM-DD-YY": "%m-%d-%y",
              "YYYY-MM-DD": '%Y-%m-%d', "DD/MM/YYYY": "%d/%m/%Y"}
@@ -157,6 +173,7 @@ class CaseSearchUserInput:
     rating_input = "Rating Input"
     instrument_name = "Instrument Name"
     song_id = "Song ID"
+    artist_city = "City"
 
     # Case list columns
     one = "1"

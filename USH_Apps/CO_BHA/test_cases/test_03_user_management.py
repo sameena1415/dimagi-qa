@@ -3,6 +3,7 @@ from Features.CaseSearch.test_pages.casesearch_page import CaseSearchWorkflows
 from USH_Apps.CO_BHA.test_pages.bha_app_pages import BhaWorkflows
 from USH_Apps.CO_BHA.user_inputs.bha_user_inputs import BhaUserInput
 from common_utilities.selenium.webapps import WebApps
+from Features.CaseSearch.constants import *
 
 
 def test_case_access_to_module_state(driver):
@@ -16,23 +17,20 @@ def test_case_access_to_module_state(driver):
     """Add Clinic"""
     webapps.open_menu(BhaUserInput.user_management)
     app.check_headers_on_case_list([BhaUserInput.name, BhaUserInput.username, BhaUserInput.creation_date])
-    webapps.search_again_cases()
-    case_name = casesearch.search_against_property(search_property=BhaUserInput.username,
-                                                   input_value=BhaUserInput.provider_level_user,
+    case_name = casesearch.search_against_property(search_property=BhaUserInput.first_name,
+                                                   input_value=BhaUserInput.provider,
                                                    property_type=TEXT_INPUT)
     webapps.search_button_on_case_search_page()
-    webapps.omni_search(case_name)
     webapps.select_case(case_name)
-    app.select_clinic(BhaUserInput.first_choice_counselling)
+    app.select_clinic(BhaUserInput.arts_parkside_clinic)
     webapps.submit_the_form()
     """Remove Clinic"""
     webapps.open_menu(BhaUserInput.user_management)
-    webapps.search_again_cases()
-    casesearch.search_against_property(search_property=BhaUserInput.username,
-                                       input_value=BhaUserInput.provider_level_user,
+    casesearch.search_against_property(search_property=BhaUserInput.first_name,
+                                       input_value=BhaUserInput.provider,
                                        property_type=TEXT_INPUT)
     webapps.search_button_on_case_search_page()
-    webapps.omni_search(case_name)
     webapps.select_case(case_name)
-    app.remove_clinic(BhaUserInput.first_choice_counselling)
+    app.remove_clinic(BhaUserInput.arts_parkside_clinic)
     webapps.submit_the_form()
+
