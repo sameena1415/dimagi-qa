@@ -1,8 +1,8 @@
 import pytest
 
+from HQSmokeTests.testPages.data.copy_cases_page import CopyCasesPage
 from HQSmokeTests.testPages.data.data_dictionary_page import DataDictionaryPage
 from HQSmokeTests.testPages.data.deduplicate_case_page import DeduplicateCasePage
-from HQSmokeTests.testPages.data.export_data_page import ExportDataPage
 from HQSmokeTests.testPages.data.manage_forms_page import ManageFormsPage
 from HQSmokeTests.testPages.data.import_cases_page import ImportCasesPage
 from HQSmokeTests.testPages.data.reassign_cases_page import ReassignCasesPage
@@ -11,7 +11,6 @@ from HQSmokeTests.testPages.data.lookup_table_page import LookUpTablePage
 from HQSmokeTests.testPages.home.home_page import HomePage
 
 """"Contains test cases related to the Data module"""
-
 
 
 @pytest.mark.data
@@ -33,7 +32,6 @@ def test_case_30_reassign_cases(driver, settings):
     reassign.reassign_case()
 
 
-
 @pytest.mark.data
 @pytest.mark.manageForms
 @pytest.mark.archiveForms
@@ -48,7 +46,6 @@ def test_case_31_manage_forms(driver, settings):
     manage.get_archived_forms()
     manage.view_archived_forms()
     manage.restore_forms()
-
 
 
 @pytest.mark.data
@@ -95,7 +92,6 @@ def test_case_58_deduplicate_cases(driver, settings):
     data.remove_rule()
 
 
-
 @pytest.mark.data
 @pytest.mark.dataDictionary
 @pytest.mark.downloadDataDictionary
@@ -107,3 +103,13 @@ def test_case_59_data_dictionary(driver, settings):
     data.open_data_dictionary_case_page()
     data.export_data_dictionary()
     data.import_data_dictionary()
+
+
+@pytest.mark.data
+@pytest.mark.copyCases
+def test_case_60_copy_cases(driver, settings):
+    home = HomePage(driver, settings)
+    home.data_menu()
+    copy = CopyCasesPage(driver, settings)
+    copy.get_cases()
+    copy.copy_case()

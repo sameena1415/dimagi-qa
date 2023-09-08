@@ -17,8 +17,14 @@ class UserData:
     app_login = "appiumtest"
     app_password = "Pass@123"
     two_fa_user = "2fa.commcare.user@gmail.com"
+
+    mobile_testuser = "mobile_testuser"
+    copied_to_user = "mobile_testuser \"DO NOT DELETE! DO NOT DELETE!\""
+    searched_user = "appiumtest \"DO NOT DELETE! DO NOT DELETE!\""
+
     appiumtest_owner_id = "appiumtest@qa-automation.commcarehq.org"
     appiumtest_owner_id_prod = "appiumtest@qa-automation-prod.commcarehq.org"
+
     # Phone Number
     area_code = "91"
 
