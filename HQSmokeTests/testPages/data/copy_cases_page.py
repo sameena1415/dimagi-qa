@@ -1,5 +1,6 @@
 import time
 
+from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
 from common_utilities.selenium.base_page import BasePage
 from HQSmokeTests.userInputs.user_inputs import UserData
@@ -35,7 +36,7 @@ class CopyCasesPage(BasePage):
         self.copy_dropdown = (By.ID, "select2-reassign_owner_select-container")
         self.copy_to_user_dropdown_input = (By.XPATH, "//input[@class='select2-search__field']")
         self.copied_user_from_list = "//li[starts-with(text(), '{}')]"
-        self.success_message = (By.XPATH, "//*[@data-bind='html: message' and contains(.,'Successfully copied')]")
+        self.success_message = (By.XPATH, "//*[@data-bind='html: message' and contains(.,'Cases copied')]")
         self.empty_list = (By.XPATH, "//td[.='No data available to display. Please try changing your filters.']")
 
 
@@ -60,7 +61,9 @@ class CopyCasesPage(BasePage):
         self.wait_to_click(self.select_first_case)
         case_being_copied = self.get_text(self.first_case_name)
         self.wait_to_click(self.copy_dropdown)
+        time.sleep(1)
         self.send_keys(self.copy_to_user_dropdown_input, UserData.mobile_testuser)
+        time.sleep(1)
         assigned_username = self.get_text((By.XPATH,self.copied_user_from_list.format(UserData.mobile_testuser)))
         print("Assigned Username:", assigned_username)
         self.move_to_element_and_click((By.XPATH,self.copied_user_from_list.format(UserData.mobile_testuser)))
@@ -76,6 +79,7 @@ class CopyCasesPage(BasePage):
         self.send_keys(self.search_query, case_being_copied)
         self.wait_to_click(self.apply)
         time.sleep(5)
+        self.scroll_to_bottom()
         if self.is_present(self.empty_list):
             print("No Case Copied, List is empty")
             assert False

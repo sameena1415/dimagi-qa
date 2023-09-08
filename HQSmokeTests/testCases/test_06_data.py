@@ -13,7 +13,6 @@ from HQSmokeTests.testPages.home.home_page import HomePage
 """"Contains test cases related to the Data module"""
 
 
-
 @pytest.mark.data
 @pytest.mark.importCases
 def test_case_29_import_cases(driver, settings):
@@ -33,7 +32,6 @@ def test_case_30_reassign_cases(driver, settings):
     reassign.reassign_case()
 
 
-
 @pytest.mark.data
 @pytest.mark.manageForms
 @pytest.mark.archiveForms
@@ -48,7 +46,6 @@ def test_case_31_manage_forms(driver, settings):
     manage.get_archived_forms()
     manage.view_archived_forms()
     manage.restore_forms()
-
 
 
 @pytest.mark.data
@@ -95,7 +92,6 @@ def test_case_58_deduplicate_cases(driver, settings):
     data.remove_rule()
 
 
-
 @pytest.mark.data
 @pytest.mark.dataDictionary
 @pytest.mark.downloadDataDictionary
@@ -112,8 +108,6 @@ def test_case_59_data_dictionary(driver, settings):
 @pytest.mark.data
 @pytest.mark.copyCases
 def test_case_60_copy_cases(driver, settings):
-    if 'www' in settings['url']:
-        pytest.skip("Changes not yet deployed to Prod")
     home = HomePage(driver, settings)
     home.data_menu()
     copy = CopyCasesPage(driver, settings)
