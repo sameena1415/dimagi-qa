@@ -41,6 +41,8 @@ class UserData:
     # Export report names
     form_export_name = "Smoke Form Export"
     case_export_name = "Smoke Case Export"
+    p1p2_form_export_name = "Smoke Form Export P1P2"
+    p1p2_case_export_name = "Smoke Case Export P1P2"
     form_export_name_dse = "Smoke Form Export DSE"
     case_export_name_dse = "Smoke Case Export DSE"
     dashboard_feed_form = "Smoke Dashboard Form feed"
@@ -84,3 +86,7 @@ class UserData:
     daily_form_activity = "Daily Form Activity: Requested export excel data"
     app_status = "Application Status: Requested export excel data"
     location_list = ['Delhi', 'Boston', 'Cape Town']
+
+    """Data Forwarding"""
+    http_req_methods = ['DELETE','POST','PUT']
+    payload_format = ['XML','JSON']

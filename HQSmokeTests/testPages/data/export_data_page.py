@@ -546,3 +546,68 @@ class ExportDataPage(BasePage):
         self.wait_to_clear_and_send_keys(self.export_name, UserData.case_export_name)
         self.wait_to_click(self.export_settings_create)
         print("Export created!!")
+
+
+    def add_form_exports_reassign(self):
+        self.delete_bulk_exports()
+        self.wait_and_sleep_to_click(self.add_export_button)
+        self.is_clickable(self.app_type)
+        self.select_by_text(self.app_type, UserData.app_type)
+        self.select_by_text(self.application, UserData.reassign_cases_application)
+        self.select_by_text(self.module, UserData.case_list_name)
+        self.select_by_text(self.form, UserData.form_name)
+        self.wait_to_click(self.add_export_conf)
+        self.wait_for_element(self.export_name)
+        self.wait_to_clear_and_send_keys(self.export_name, UserData.p1p2_form_export_name)
+        self.wait_to_click(self.export_settings_create)
+        print("Export created!!")
+        self.download_export_without_condition()
+        newest_file = latest_download_file()
+        print("Newest file:" + newest_file)
+        self.assert_downloaded_file(newest_file, UserData.p1p2_form_export_name)
+        return newest_file
+
+    def verify_export_count(self, name):
+        data = pd.read_excel(name)
+        df = pd.DataFrame(data)
+        rows_count = df.shape[0]
+        print(int(rows_count))
+        assert int(rows_count) >= 2000, "Export is not showing all the data"
+        print("Export is successfully loading more than 2000 rows of data")
+
+    def download_export_without_condition(self):
+        self.wait_and_sleep_to_click(self.export_form_case_data_button)
+        self.wait_and_sleep_to_click(self.prepare_export_button)
+        try:
+            self.wait_till_progress_completes("exports")
+            self.wait_and_sleep_to_click(self.download_button)
+        except TimeoutException:
+            if self.is_visible_and_displayed(self.failed_to_export):
+                self.driver.refresh()
+                self.wait_and_sleep_to_click(self.prepare_export_button)
+                self.wait_till_progress_completes("exports")
+                self.wait_and_sleep_to_click(self.download_button)
+        time.sleep(5)
+        print("Download form button clicked")
+
+    def add_case_exports_reassign(self):
+        self.wait_to_click(self.export_case_data_link)
+        self.delete_bulk_exports()
+        self.wait_and_sleep_to_click(self.add_export_button)
+        self.is_clickable(self.application)
+        try:
+            self.select_by_text(self.application, UserData.reassign_cases_application)
+        except:
+            print("Application dropdown is not present")
+        self.select_by_text(self.case, UserData.case_reassign)
+        self.wait_to_click(self.add_export_conf)
+        self.wait_for_element(self.export_name)
+        self.wait_to_clear_and_send_keys(self.export_name, UserData.p1p2_case_export_name)
+        self.wait_to_click(self.export_settings_create)
+        print("Export created!!")
+        self.download_export_without_condition()
+        newest_file = latest_download_file()
+        print("Newest file:" + newest_file)
+        self.assert_downloaded_file(newest_file, UserData.p1p2_case_export_name)
+        return newest_file
+
