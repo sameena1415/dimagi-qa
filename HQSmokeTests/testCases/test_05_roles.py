@@ -21,10 +21,9 @@ from common_utilities.hq_login.login_page import LoginPage
 def test_case_06_add_role(driver, settings):
     menu = HomePage(driver, settings)
     menu.users_menu()
-    role = RolesPermissionPage(driver)
+    role = RolesPermissionPage(driver, settings)
     role.roles_menu_click()
     print("Opened Roles and Permissions Page")
-    role = RolesPermissionPage(driver)
     role.add_role()
     print("New Role Added")
 
@@ -35,9 +34,8 @@ def test_case_06_add_role(driver, settings):
 def test_case_06_edit_role(driver, settings):
     menu = HomePage(driver, settings)
     menu.users_menu()
-    role = RolesPermissionPage(driver)
+    role = RolesPermissionPage(driver, settings)
     role.roles_menu_click()
-    role = RolesPermissionPage(driver)
     role.edit_role()
     print("Role Edited Successfully")
 
@@ -48,7 +46,7 @@ def test_case_06_edit_role(driver, settings):
 def test_case_12_toggle_option_webapp_permission(driver, settings):
     menu = HomePage(driver, settings)
     menu.users_menu()
-    role = RolesPermissionPage(driver)
+    role = RolesPermissionPage(driver, settings)
     role.roles_menu_click()
     web = WebAppPermissionPage(driver)
     web.webapp_permission_option_toggle()
@@ -62,10 +60,9 @@ def test_case_12_toggle_option_webapp_permission(driver, settings):
 def test_case_73_non_admin_role_permission(driver, settings):
     menu = HomePage(driver, settings)
     menu.users_menu()
-    role = RolesPermissionPage(driver)
+    role = RolesPermissionPage(driver, settings)
     role.roles_menu_click()
     print("Opened Roles and Permissions Page")
-    role = RolesPermissionPage(driver)
     rolename = role.add_non_admin_role()
     webuser = WebUsersPage(driver)
     menu.users_menu()

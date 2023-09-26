@@ -1,7 +1,10 @@
 import time
 
+from selenium.common import ElementNotInteractableException
 from selenium.webdriver.common.actions.interaction import KEY
 
+from HQSmokeTests.testPages.home.home_page import HomePage
+from HQSmokeTests.testPages.users.web_user_page import WebUsersPage
 from common_utilities.selenium.base_page import BasePage
 from common_utilities.generate_random_string import fetch_random_string
 
@@ -13,8 +16,9 @@ from selenium.webdriver.common.by import By
 
 class RolesPermissionPage(BasePage):
 
-    def __init__(self, driver):
+    def __init__(self, driver, settings):
         super().__init__(driver)
+        self.settings = settings
 
         self.role_name_created = "role_" + fetch_random_string()
         self.role_non_admin_created = "role_non_" + fetch_random_string()
@@ -73,18 +77,42 @@ class RolesPermissionPage(BasePage):
     def delete_test_roles(self):
         list_profile = self.driver.find_elements(By.XPATH, "//th[.//span[contains(text(),'role_')]]")
         print(list_profile)
-        if len(list_profile) > 0:
-            for i in range(len(list_profile))[::-1]:
-                text = list_profile[i].text
-                print(text)
-                self.driver.find_element(By.XPATH,
-                                         "(//th[.//span[contains(text(),'role_')]]//following-sibling::td//button[@class='btn btn-danger'])[" + str(
-                                             i + 1) + "]").click()
-                self.wait_to_click(self.confirm_role_delete)
-                time.sleep(2)
-                list_profile = self.driver.find_elements(By.XPATH, "//th[.//span[contains(text(),'role_')]]")
-        else:
-            print("There are no test roles")
+        try:
+            if len(list_profile) > 0:
+                for i in range(len(list_profile))[::-1]:
+                    text = list_profile[i].text
+                    print(text)
+                    self.driver.find_element(By.XPATH,
+                                             "(//th[.//span[contains(text(),'role_')]]//following-sibling::td//button[@class='btn btn-danger'])[" + str(
+                                                 i + 1) + "]").click()
+                    self.wait_to_click(self.confirm_role_delete)
+                    time.sleep(2)
+                    list_profile = self.driver.find_elements(By.XPATH, "//th[.//span[contains(text(),'role_')]]")
+            else:
+                print("There are no test roles")
+        except ElementNotInteractableException:
+            menu = HomePage(self.driver, self.settings)
+            webuser = WebUsersPage(self.driver)
+            menu.users_menu()
+            webuser.edit_user_permission("Admin")
+            menu.users_menu()
+            self.roles_menu_click()
+            list_profile = self.driver.find_elements(By.XPATH, "//th[.//span[contains(text(),'role_')]]")
+            print(list_profile)
+            if len(list_profile) > 0:
+               for i in range(len(list_profile))[::-1]:
+                   text = list_profile[i].text
+                   print(text)
+                   self.driver.find_element(By.XPATH,
+                                                 "(//th[.//span[contains(text(),'role_')]]//following-sibling::td//button[@class='btn btn-danger'])[" + str(
+                                                     i + 1) + "]").click()
+                   self.wait_to_click(self.confirm_role_delete)
+                   time.sleep(2)
+                   list_profile = self.driver.find_elements(By.XPATH, "//th[.//span[contains(text(),'role_')]]")
+               else:
+                   print("There are no test roles")
+
+
 
     def add_non_admin_role(self):
         self.wait_to_click(self.add_new_role)
