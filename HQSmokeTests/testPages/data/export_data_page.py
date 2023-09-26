@@ -489,14 +489,14 @@ class ExportDataPage(BasePage):
         self.wait_and_sleep_to_click(self.prepare_export_button)
         try:
             self.wait_till_progress_completes("exports")
-            self.wait_and_sleep_to_click(self.download_button)
+            self.wait_and_sleep_to_click(self.download_button, 160)
             time.sleep(5)
         except TimeoutException:
             if self.is_visible_and_displayed(self.failed_to_export):
                 self.driver.refresh()
                 self.wait_and_sleep_to_click(self.prepare_export_button)
                 self.wait_till_progress_completes("exports")
-                self.wait_and_sleep_to_click(self.download_button)
+                self.wait_and_sleep_to_click(self.download_button, 160)
                 time.sleep(5)
         print("Download form button clicked")
 

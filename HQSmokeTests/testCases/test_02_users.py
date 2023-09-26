@@ -13,10 +13,10 @@ from HQSmokeTests.testPages.users.web_user_page import WebUsersPage
 """"Contains test cases related to the User's Mobile Worker module"""
 
 group_id = dict()
-group_id["user"]=''
+group_id["user"] = None
 group_id["user_new"] = "username_"+fetch_random_string()+"_new"
-group_id["value"] = ''
-group_id["group_name"] = ''
+group_id["value"] = None
+group_id["group_name"] = None
 
 @pytest.mark.user
 @pytest.mark.groups
@@ -50,7 +50,6 @@ def test_initial_cleanup_items_in_users_menu(driver, settings):
     print("Deleted the group")
 
 
-
 @pytest.mark.user
 @pytest.mark.mobileWorker
 @pytest.mark.run(order=0)
@@ -71,8 +70,9 @@ def test_case_02_create_mobile_worker(driver, settings):
 
 @pytest.mark.user
 @pytest.mark.mobileWorker
-@pytest.mark.skipif(group_id["user"]=='')
 def test_case_03_create_and_assign_user_field(driver, settings):
+    if group_id["user"]==None:
+        pytest.skip("Skipping as user name is null")
     create = MobileWorkerPage(driver)
     menu = HomePage(driver, settings)
     menu.users_menu()
@@ -87,6 +87,8 @@ def test_case_03_create_and_assign_user_field(driver, settings):
 @pytest.mark.user
 @pytest.mark.groups
 def test_case_05_create_group_and_assign_user(driver, settings):
+    if group_id["user"]==None:
+        pytest.skip("Skipping as user name is null")
     menu = HomePage(driver, settings)
     menu.users_menu()
     visible = GroupPage(driver)
@@ -100,7 +102,7 @@ def test_case_05_create_group_and_assign_user(driver, settings):
     print(id_value, group_name)
     group_id["value"] = id_value
     group_id["group_name"] = group_name
-    return group_id
+    return group_id["value"], group_id["group_name"]
 
 
 
@@ -109,8 +111,9 @@ def test_case_05_create_group_and_assign_user(driver, settings):
 @pytest.mark.groups
 @pytest.mark.userImport
 @pytest.mark.userExport
-@pytest.mark.skipif(group_id["value"]=='')
 def test_case_10_download_and_upload_users(driver, settings):
+    if group_id["user"]==None:
+        pytest.skip("Skipping as user name is null")
     user = MobileWorkerPage(driver)
     home = HomePage(driver, settings)
     home.users_menu()
@@ -124,8 +127,9 @@ def test_case_10_download_and_upload_users(driver, settings):
 
 @pytest.mark.user
 @pytest.mark.groups
-@pytest.mark.skipif(group_id["group_name"]=='')
 def test_case_05_edit_user_groups(driver, settings):
+    if group_id["group_name"]==None:
+        pytest.skip("Skipping as group name is null")
     menu = HomePage(driver, settings)
     menu.users_menu()
     edit = GroupPage(driver)
@@ -136,8 +140,9 @@ def test_case_05_edit_user_groups(driver, settings):
 
 @pytest.mark.user
 @pytest.mark.mobileWorker
-@pytest.mark.skipif(group_id["user"]=='')
 def test_case_04_deactivate_user(driver, settings):
+    if group_id["user"]==None:
+        pytest.skip("Skipping as user name is null")
     user = MobileWorkerPage(driver)
     menu = HomePage(driver, settings)
     menu.users_menu()
@@ -148,8 +153,9 @@ def test_case_04_deactivate_user(driver, settings):
 
 @pytest.mark.user
 @pytest.mark.mobileWorker
-@pytest.mark.skipif(group_id["user"]=='')
 def test_case_04_reactivate_user(driver, settings):
+    if group_id["user"]==None:
+        pytest.skip("Skipping as user name is null")
     user = MobileWorkerPage(driver)
     menu = HomePage(driver, settings)
     menu.users_menu()
