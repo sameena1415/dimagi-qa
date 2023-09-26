@@ -58,6 +58,10 @@ def test_case_12_toggle_option_webapp_permission(driver, settings):
 @pytest.mark.bulkUpload
 @pytest.mark.bulkDelete
 def test_case_73_non_admin_role_permission(driver, settings):
+    login = LoginPage(driver, settings["url"])
+    login.logout()
+    time.sleep(10)
+    login.login(settings["login_username"], settings["login_password"])
     menu = HomePage(driver, settings)
     menu.users_menu()
     role = RolesPermissionPage(driver, settings)
@@ -67,7 +71,6 @@ def test_case_73_non_admin_role_permission(driver, settings):
     webuser = WebUsersPage(driver)
     menu.users_menu()
     webuser.edit_user_permission(rolename)
-    login = LoginPage(driver, settings["url"])
     login.logout()
     time.sleep(10)
     login.login(UserData.p1p2_user, settings["login_password"])
@@ -89,7 +92,7 @@ def test_case_73_non_admin_role_permission(driver, settings):
 @pytest.mark.userExport
 @pytest.mark.p1p2EscapeDefect
 def test_case_74_delete_role_column(driver, settings):
-    role = RolesPermissionPage(driver)
+    role = RolesPermissionPage(driver, settings)
     login = LoginPage(driver, settings["url"])
     login.logout()
     time.sleep(10)
@@ -128,7 +131,7 @@ def test_case_74_delete_role_column(driver, settings):
 def test_cleanup_items_in_role_menu(driver, settings):
     menu = HomePage(driver, settings)
     menu.users_menu()
-    clean3 = RolesPermissionPage(driver)
+    clean3 = RolesPermissionPage(driver, settings)
     clean3.roles_menu_click()
     clean3.delete_test_roles()
     print("Deleted the role")
