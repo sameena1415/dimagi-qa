@@ -131,7 +131,11 @@ def test_case_74_delete_role_column(driver, settings):
 def test_cleanup_items_in_role_menu(driver, settings):
     menu = HomePage(driver, settings)
     menu.users_menu()
+    webuser = WebUsersPage(driver)
     clean3 = RolesPermissionPage(driver, settings)
+    clean3.roles_menu_click()
+    webuser.edit_user_permission("Admin")
+    menu.users_menu()
     clean3.roles_menu_click()
     clean3.delete_test_roles()
     print("Deleted the role")

@@ -223,7 +223,7 @@ class MessagingPage(BasePage):
         self.send_keys(self.broadcast_message, "Test Alert:" + self.cond_alert_name_input)
         self.wait_to_click(self.save_button_xpath)
         print("Sleeping till the alert processing completes")
-        time.sleep(20)
+        time.sleep(40)
         self.driver.refresh()
         if self.is_present(self.restart_rule_button_none):
             print("Restart is not required.")
@@ -234,7 +234,7 @@ class MessagingPage(BasePage):
                 time.sleep(5)
                 self.accept_pop_up()
                 print("Sleeping till the alert processing completes")
-                time.sleep(20)
+                time.sleep(40)
                 self.driver.refresh()
             except:
                 print("Restart not required")

@@ -13,9 +13,10 @@ from HQSmokeTests.testPages.users.web_user_page import WebUsersPage
 """"Contains test cases related to the User's Mobile Worker module"""
 
 group_id = dict()
-group_id["user"] = "username_"+fetch_random_string()
+group_id["user"]=''
 group_id["user_new"] = "username_"+fetch_random_string()+"_new"
-
+group_id["value"] = ''
+group_id["group_name"] = ''
 
 @pytest.mark.user
 @pytest.mark.groups
@@ -54,19 +55,23 @@ def test_initial_cleanup_items_in_users_menu(driver, settings):
 @pytest.mark.mobileWorker
 @pytest.mark.run(order=0)
 def test_case_02_create_mobile_worker(driver, settings):
+    username = "username_" + fetch_random_string()
     worker = MobileWorkerPage(driver)
     menu = HomePage(driver, settings)
     menu.users_menu()
     worker.delete_bulk_users()
     worker.mobile_worker_menu()
     worker.create_mobile_worker()
-    worker.mobile_worker_enter_username(group_id["user"])
+    worker.mobile_worker_enter_username(username)
     worker.mobile_worker_enter_password(fetch_random_string())
-    worker.click_create(group_id["user"])
+    worker.click_create(username)
+    group_id["user"] = username
+    return group_id["user"]
 
 
 @pytest.mark.user
 @pytest.mark.mobileWorker
+@pytest.mark.skipif(group_id["user"]=='')
 def test_case_03_create_and_assign_user_field(driver, settings):
     create = MobileWorkerPage(driver)
     menu = HomePage(driver, settings)
@@ -104,6 +109,7 @@ def test_case_05_create_group_and_assign_user(driver, settings):
 @pytest.mark.groups
 @pytest.mark.userImport
 @pytest.mark.userExport
+@pytest.mark.skipif(group_id["value"]=='')
 def test_case_10_download_and_upload_users(driver, settings):
     user = MobileWorkerPage(driver)
     home = HomePage(driver, settings)
@@ -118,6 +124,7 @@ def test_case_10_download_and_upload_users(driver, settings):
 
 @pytest.mark.user
 @pytest.mark.groups
+@pytest.mark.skipif(group_id["group_name"]=='')
 def test_case_05_edit_user_groups(driver, settings):
     menu = HomePage(driver, settings)
     menu.users_menu()
@@ -129,6 +136,7 @@ def test_case_05_edit_user_groups(driver, settings):
 
 @pytest.mark.user
 @pytest.mark.mobileWorker
+@pytest.mark.skipif(group_id["user"]=='')
 def test_case_04_deactivate_user(driver, settings):
     user = MobileWorkerPage(driver)
     menu = HomePage(driver, settings)
@@ -140,6 +148,7 @@ def test_case_04_deactivate_user(driver, settings):
 
 @pytest.mark.user
 @pytest.mark.mobileWorker
+@pytest.mark.skipif(group_id["user"]=='')
 def test_case_04_reactivate_user(driver, settings):
     user = MobileWorkerPage(driver)
     menu = HomePage(driver, settings)
