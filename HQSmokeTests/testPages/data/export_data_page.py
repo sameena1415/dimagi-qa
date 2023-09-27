@@ -191,7 +191,7 @@ class ExportDataPage(BasePage):
         self.wait_for_element(self.add_export_button, 100)
         self.delete_bulk_exports()
         self.wait_and_sleep_to_click(self.add_export_button)
-        self.wait_for_element(self.add_export_conf, 200)
+        self.wait_for_element(self.app_type, 200)
         self.is_clickable(self.app_type)
         self.select_by_text(self.app_type, UserData.app_type)
         self.select_by_text(self.application, UserData.village_application)
@@ -215,7 +215,7 @@ class ExportDataPage(BasePage):
         self.wait_for_element(self.add_export_button, 100)
         self.delete_bulk_exports()
         self.wait_and_sleep_to_click(self.add_export_button)
-        self.wait_for_element(self.add_export_conf, 200)
+        self.wait_for_element(self.application, 200)
         self.is_clickable(self.application)
         # self.select_by_text(self.application, UserData.village_application)
         try:
@@ -489,6 +489,7 @@ class ExportDataPage(BasePage):
         time.sleep(3)
         self.wait_to_clear_and_send_keys(self.date_range, self.current_date_range + Keys.TAB)
         self.wait_and_sleep_to_click(self.prepare_export_button)
+        time.sleep(10)
         try:
             self.wait_till_progress_completes("exports")
             self.wait_and_sleep_to_click(self.download_button, 160)
