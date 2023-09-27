@@ -24,6 +24,7 @@ class UserData:
 
     appiumtest_owner_id = "appiumtest@qa-automation.commcarehq.org"
     appiumtest_owner_id_prod = "appiumtest@qa-automation-prod.commcarehq.org"
+    default_mw_role = "Mobile Worker Default"
 
     # Phone Number
     area_code = "91"

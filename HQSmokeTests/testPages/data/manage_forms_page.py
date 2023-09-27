@@ -18,12 +18,12 @@ class ManageFormsPage(BasePage):
         self.basic_tests_app = (By.XPATH, "//option[text()='Basic Tests']")
         self.apply_button = (By.XPATH, '//*[@id="apply-btn"]')
         self.select_all_checkbox = (By.XPATH, "//input[@name='select_all']")
-        self.second_form_checkbox = (By.XPATH, "(//input[@type='checkbox' and @name='xform_ids'])[2]")
+        self.last_form_checkbox = (By.XPATH, "(//input[@type='checkbox' and @name='xform_ids'])[last()]")
         self.checkbox1 = (By.XPATH, "//*[@id='form_options']//*[@type='checkbox']")
         self.archive_button = (By.XPATH, '//*[@id="submitForms"]')
         self.restore_button = (By.XPATH, '//*[@id="submitForms" and contains(text(),"Restore")]')
         self.success_message = (By.XPATH, "//div[@class='alert alert-success']")
-        self.view_form_link = (By.XPATH, "(//a[@class='ajax_dialog'])[2]")
+        self.view_form_link = (By.XPATH, "(//a[@class='ajax_dialog'])[last()]")
         self.archived_restored_dropdown = (By.XPATH, '//*[@id="select2-report_filter_archive_or_restore-container"]')
         self.archived_forms_option = (By.XPATH, '/html/body/span/span/span[2]/ul/li[2]')
         self.manage_forms_return = (By.XPATH, '//span[contains(text(),"Return to")]/a[.="Manage Forms"]')
@@ -69,7 +69,7 @@ class ManageFormsPage(BasePage):
             self.assert_normal_form_view()
 
     def archive_forms(self):
-        self.wait_and_sleep_to_click(self.second_form_checkbox)
+        self.wait_and_sleep_to_click(self.last_form_checkbox)
         self.wait_and_sleep_to_click(self.archive_button)
         assert self.is_present_and_displayed(self.success_message)
         print("Forms archival successful!!")
@@ -92,7 +92,7 @@ class ManageFormsPage(BasePage):
         self.switch_back_to_prev_tab()
 
     def restore_forms(self):
-        self.wait_and_sleep_to_click(self.second_form_checkbox)
+        self.wait_and_sleep_to_click(self.last_form_checkbox)
         self.wait_and_sleep_to_click(self.archive_button)
         assert self.is_present_and_displayed(self.success_message)
         print("Forms Restoration successful!!")

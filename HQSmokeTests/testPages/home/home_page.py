@@ -56,7 +56,7 @@ class HomePage(BasePage):
 
     def data_menu(self):
         self.open_menu(self.data_menu_id)
-        self.wait_to_click(self.view_all)
+        self.wait_to_click(self.view_all, 100)
         assert self.DATA_TITLE in self.driver.title, "This is not the Data menu page."
 
     def applications_menu(self, app_name):
