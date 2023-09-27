@@ -8,7 +8,9 @@ import pytest
 """"Contains test cases related to the Integrated Exports"""
 
 test_case_update_case = dict()
-
+test_case_update_case["case_id"] = None
+test_case_update_case["case_name"] = None
+test_case_update_case["value"] = None
 
 @pytest.mark.webApps
 @pytest.mark.reports
@@ -93,6 +95,8 @@ def test_exports_cleanup(driver, settings):
 @pytest.mark.caseList
 @pytest.mark.run(order=-1)
 def test_case_55_verify_change_in_export_data(driver, settings):
+    if test_case_update_case["case_id"]==None:
+        pytest.skip("Skipping this as the test case creation failed")
     home = HomePage(driver, settings)
     home.data_menu()
     export = ExportDataPage(driver)
