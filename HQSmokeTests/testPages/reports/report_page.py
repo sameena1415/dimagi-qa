@@ -175,6 +175,7 @@ class ReportPage(BasePage):
         self.users_field = (By.XPATH, "(//textarea[@class='select2-search__field'])[1]")
         self.remove_active_worker = (By.XPATH,"//span[.='[Active Mobile Workers]']//preceding-sibling::button[@class='select2-selection__choice__remove']")
         self.remove_deactive_worker = (By.XPATH, "//span[.='[Deactivated Mobile Workers]']//preceding-sibling::button[@class='select2-selection__choice__remove']")
+        self.remove_buttons = (By.XPATH, "//ul//button")
         self.user_remove_btn = (By.XPATH, "(//button[@class='select2-selection__choice__remove'])[last()]")
         self.user_from_list = "//li[contains(.,'{}')]"
         self.export_to_excel = (By.XPATH, "//a[@id='export-report-excel']")
@@ -646,12 +647,15 @@ class ReportPage(BasePage):
         self.wait_to_click(self.daily_form_activity_rep)
         try:
             self.wait_for_element(self.remove_active_worker)
-            self.wait_to_click(self.remove_active_worker)
-            time.sleep(2)
-            ActionChains(self.driver).send_keys(Keys.TAB).perform()
-            time.sleep(2)
-            self.wait_to_click(self.remove_deactive_worker)
-            time.sleep(2)
+            count = self.find_elements(self.remove_buttons)
+            print(len(count))
+            for i in range(len(count)):
+                count[0].click()
+                time.sleep(2)
+                if len(count) != 1:
+                    ActionChains(self.driver).send_keys(Keys.TAB).perform()
+                    time.sleep(2)
+                count = self.find_elements(self.remove_buttons)
              # self.wait_to_click(self.users_field)
             self.send_keys(self.users_field, UserData.app_login)
             self.wait_to_click((By.XPATH, self.user_from_list.format(UserData.app_login)))
@@ -699,19 +703,22 @@ class ReportPage(BasePage):
         print("Both Excel and Searched results have same amount of data")
         for i in range(len(list)):
             print("Comparing ", html.unescape(str(list[i])), " with ", str(web_data[i]))
-            assert html.unescape(str(list[i])) == str(web_data[i]), "Cpmparision failed for " + list[i] + " and " + \
-                                                                    web_data[i]
+            assert html.unescape(str(list[i])) == str(web_data[i]), "Cpmparision failed for " + list[i] + " and " + web_data[i]
 
     def export_app_status_to_excel(self):
         self.wait_to_click(self.application_status_rep)
         try:
             self.wait_for_element(self.remove_active_worker)
-            self.wait_to_click(self.remove_active_worker)
-            time.sleep(2)
-            ActionChains(self.driver).send_keys(Keys.TAB).perform()
-            time.sleep(2)
-            self.wait_to_click(self.remove_deactive_worker)
-            time.sleep(2)
+            count = self.find_elements(self.remove_buttons)
+            print(len(count))
+            for i in range(len(count)):
+                count[0].click()
+                time.sleep(2)
+                if len(count) != 1:
+                    ActionChains(self.driver).send_keys(Keys.TAB).perform()
+                    time.sleep(2)
+                count = self.find_elements(self.remove_buttons)
+
             # self.wait_to_click(self.users_field)
             self.send_keys(self.users_field, UserData.app_login)
             self.wait_to_click((By.XPATH, self.user_from_list.format(UserData.app_login)))
@@ -758,8 +765,7 @@ class ReportPage(BasePage):
                 print("Not comparing", html.unescape(str(list[i])), " with ", str(web_data[i]))
             else:
                 print("Comparing ", html.unescape(str(list[i])), " with ", str(web_data[i]))
-                assert html.unescape(str(list[i])) == str(web_data[i]), "Cpmparision failed for " + list[i] + " and " + \
-                                                                        web_data[i]
+                assert html.unescape(str(list[i])) == str(web_data[i]), "Cpmparision failed for " + list[i] + " and " + web_data[i]
 
     def verify_form_in_submit_history(self, app_name, lat, lon):
         print("Sleeping for sometime for the case to get registered.")

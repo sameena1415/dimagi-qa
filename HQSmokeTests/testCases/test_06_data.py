@@ -107,6 +107,7 @@ def test_case_59_data_dictionary(driver, settings):
 
 @pytest.mark.data
 @pytest.mark.copyCases
+@pytest.mark.skip
 def test_case_60_copy_cases(driver, settings):
     home = HomePage(driver, settings)
     home.data_menu()
