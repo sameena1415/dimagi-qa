@@ -355,9 +355,11 @@ class MobileWorkerPage(BasePage):
         self.wait_to_click(self.done_button)
 
     def delete_test_user_field(self):
+        time.sleep(3)
         list_profile = self.driver.find_elements(By.XPATH, "//input[contains(@data-bind,'value: slug')]")
         if len(list_profile) > 0:
             for i in range(len(list_profile))[::-1]:
+                time.sleep(3)
                 text = list_profile[i].get_attribute("value")
                 if "field_" in text:
                     self.wait_to_click((By.XPATH, self.remove_choice_button.format(str(i + 1))))
