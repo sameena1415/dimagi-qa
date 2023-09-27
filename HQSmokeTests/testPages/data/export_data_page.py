@@ -191,6 +191,7 @@ class ExportDataPage(BasePage):
         self.wait_for_element(self.add_export_button, 100)
         self.delete_bulk_exports()
         self.wait_and_sleep_to_click(self.add_export_button)
+        self.wait_for_element(self.add_export_conf, 200)
         self.is_clickable(self.app_type)
         self.select_by_text(self.app_type, UserData.app_type)
         self.select_by_text(self.application, UserData.village_application)
@@ -214,6 +215,7 @@ class ExportDataPage(BasePage):
         self.wait_for_element(self.add_export_button, 100)
         self.delete_bulk_exports()
         self.wait_and_sleep_to_click(self.add_export_button)
+        self.wait_for_element(self.add_export_conf, 200)
         self.is_clickable(self.application)
         # self.select_by_text(self.application, UserData.village_application)
         try:
