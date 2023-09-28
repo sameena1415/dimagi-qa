@@ -163,7 +163,7 @@ class ExportDataPage(BasePage):
         self.module = (By.ID, "id_module")
         self.form = (By.ID, "id_form")
         self.case = (By.ID, "id_case_type")
-        self.case_type = (By.NAME, "case_type")
+        self.case_type = (By.XPATH, "//select[@name='case_type']")
         self.model = (By.ID, "id_model_type")
 
         # Import From Excel
@@ -210,17 +210,18 @@ class ExportDataPage(BasePage):
         data = pd.read_excel(newest_file)
         df = pd.DataFrame(data, columns=[row, value])
         ID = df[value].values[0]
+        print("ID: ",ID)
         woman_name_excel = df[row].values[0]
         self.wait_to_clear_and_send_keys(self.find_data_by_ID_textbox, str(ID))
         self.wait_and_sleep_to_click(self.find_data_by_ID_button)
-        self.wait_and_sleep_to_click(self.view_FormID_CaseID)
-        self.switch_to_next_tab()
+        self.wait_for_element(self.view_FormID_CaseID)
+        link = self.get_attribute(self.view_FormID_CaseID, "href")
+        print(link)
+        self.driver.get(link)
         self.is_visible_and_displayed(self.woman_case_name_HQ)
         womanName_HQ = self.wait_to_get_text(name_on_hq)
         assert woman_name_excel == womanName_HQ
         print("Downloaded file has the required data!")
-        self.driver.close()
-        self.switch_back_to_prev_tab()
 
     # Test Case 20_a - Verify Export functionality for Forms
 
@@ -501,17 +502,12 @@ class ExportDataPage(BasePage):
 
     def add_updated_case_exports(self):
         print("Sleeping for some time for the cases to be updated in the exports")
-        time.sleep(100)
+        time.sleep(200)
         self.wait_to_click(self.export_case_data_link)
         self.delete_bulk_exports()
         time.sleep(5)
         self.wait_and_sleep_to_click(self.add_export_button)
-        try:
-            self.is_visible_and_displayed(self.application)
-            self.select_by_text(self.application, UserData.reassign_cases_application)
-        except:
-            print("Application dropdown is not present")
-        self.is_visible_and_displayed(self.case)
+        self.wait_for_element(self.case_type, 200)
         self.select_by_text(self.case, UserData.case_update_name)
         self.wait_to_click(self.add_export_conf)
         self.wait_for_element(self.export_name)
@@ -582,13 +578,7 @@ class ExportDataPage(BasePage):
         self.wait_to_click(self.export_case_data_link)
         self.delete_bulk_exports()
         self.wait_and_sleep_to_click(self.add_export_button)
-        self.is_clickable(self.application)
-        # self.select_by_text(self.application, UserData.village_application)
-        try:
-            self.select_by_text(self.application, UserData.reassign_cases_application)
-        except:
-            print("Application dropdown is not present")
-        # self.select_by_text(self.case, UserData.case_pregnancy)
+        self.wait_for_element(self.case_type, 200)
         self.select_by_text(self.case, UserData.case_reassign)
         self.wait_to_click(self.add_export_conf)
         self.wait_for_element(self.export_name)
@@ -683,8 +673,10 @@ class ExportDataPage(BasePage):
         self.wait_to_click(self.find_data_by_ID)
         self.wait_to_clear_and_send_keys(self.find_data_by_case_ID_textbox, parent_id)
         self.wait_and_sleep_to_click(self.find_data_by_case_ID_button)
-        self.wait_and_sleep_to_click(self.view_FormID_CaseID)
-        self.switch_to_next_tab()
+        self.wait_for_element(self.view_FormID_CaseID)
+        link = self.get_attribute(self.view_FormID_CaseID, "href")
+        print(link)
+        self.driver.get(link)
         self.wait_for_element((By.XPATH, self.case_id_value.format(parent_id)))
         if self.is_present(self.related_cases_tab):
             self.validate_child_case_data()
