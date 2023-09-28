@@ -5,6 +5,7 @@ from datetime import datetime, timedelta
 
 import requests
 from openpyxl import load_workbook
+from selenium.webdriver import ActionChains
 
 from common_utilities.selenium.base_page import BasePage
 from common_utilities.path_settings import PathSettings
@@ -16,13 +17,32 @@ from selenium.webdriver.common.keys import Keys
 
 """"Contains test page elements and functions related to the exports module"""
 
+#
+# def latest_download_file():
+#     os.chdir(PathSettings.DOWNLOAD_PATH)
+#     files = sorted(os.listdir(os.getcwd()), key=os.path.getmtime)
+#     newest = max(files, key=os.path.getctime)
+#     print("File downloaded: " + newest)
+#     return newest
 
-def latest_download_file():
-    os.chdir(PathSettings.DOWNLOAD_PATH)
-    files = sorted(os.listdir(os.getcwd()), key=os.path.getmtime)
-    newest = max(files, key=os.path.getctime)
-    print("File downloaded: " + newest)
-    return newest
+def latest_download_file(type=".xlsx"):
+    cwd = os.getcwd()
+    try:
+        os.chdir(PathSettings.DOWNLOAD_PATH)
+        all_specific_files = filter(lambda x: x.endswith(type), os.listdir(os.getcwd()))
+        files = sorted(all_specific_files, key=os.path.getctime)
+        if files[-1].endswith(".log"):
+            newest = sorted(files, key=os.path.getctime)[-2]
+        elif files[-1].endswith(".xlsx"):
+            newest = sorted(files, key=os.path.getctime)[-1]
+        else:
+            newest = max(files, key=os.path.getctime)
+        print("File downloaded: " + newest)
+        return newest
+    finally:
+        print("Restoring the path...")
+        os.chdir(cwd)
+        print("Current directory is-", os.getcwd())
 
 
 class ExportDataPage(BasePage):
@@ -50,6 +70,10 @@ class ExportDataPage(BasePage):
         self.export_form_data_link = (By.LINK_TEXT, 'Export Form Data')
         self.export_case_data_link = (By.LINK_TEXT, 'Export Case Data')
         self.export_form_case_data_button = (By.XPATH, "(//a[@class='btn btn-primary'])[2]")
+        self.web_users_option = (By.XPATH, "//li/span[.='[Web Users]']")
+        self.all_data_option = (By.XPATH, "//li/span[.='[All Data]']")
+        self.users_field = (By.XPATH, "(//textarea[@class='select2-search__field'])[1]")
+        self.user_from_list = "//li[contains(.,'{}')]"
         self.prepare_export_button = (By.XPATH, "//button[@data-bind='disable: disablePrepareExport']")
         self.download_button = (By.XPATH, "//a[@class='btn btn-primary btn-full-width']")
         self.apply = (By.XPATH, "//button[@class='applyBtn btn btn-sm btn-primary']")
@@ -139,6 +163,7 @@ class ExportDataPage(BasePage):
         self.module = (By.ID, "id_module")
         self.form = (By.ID, "id_form")
         self.case = (By.ID, "id_case_type")
+        self.case_type = (By.NAME, "case_type")
         self.model = (By.ID, "id_model_type")
 
         # Import From Excel
@@ -165,13 +190,15 @@ class ExportDataPage(BasePage):
         self.wait_and_sleep_to_click(self.prepare_export_button)
         try:
             self.wait_till_progress_completes("exports")
-            self.wait_and_sleep_to_click(self.download_button, 150)
+            self.wait_for_element(self.download_button, 300)
+            self.wait_to_click(self.download_button)
         except TimeoutException:
             if self.is_visible_and_displayed(self.failed_to_export):
                 self.driver.refresh()
                 self.wait_and_sleep_to_click(self.prepare_export_button)
                 self.wait_till_progress_completes("exports")
-                self.wait_and_sleep_to_click(self.download_button, 150)
+                self.wait_for_element(self.download_button, 300)
+                self.wait_to_click(self.download_button)
         time.sleep(5)
         print("Download form button clicked")
 
@@ -225,13 +252,9 @@ class ExportDataPage(BasePage):
         self.wait_for_element(self.add_export_button, 100)
         self.delete_bulk_exports()
         self.wait_and_sleep_to_click(self.add_export_button)
-        self.wait_for_element(self.application, 200)
-        self.is_clickable(self.application)
+        self.wait_for_element(self.case_type, 200)
+        # self.is_clickable(self.application)
         # self.select_by_text(self.application, UserData.village_application)
-        try:
-            self.select_by_text(self.application, UserData.reassign_cases_application)
-        except:
-            print("Application dropdown is not present")
         # self.select_by_text(self.case, UserData.case_pregnancy)
         self.select_by_text(self.case, UserData.case_reassign)
         self.wait_to_click(self.add_export_conf)
@@ -497,19 +520,30 @@ class ExportDataPage(BasePage):
         print("Export created!!")
         self.wait_to_click(self.export_button)
         time.sleep(3)
+        self.wait_for_element(self.prepare_export_button)
+        if self.is_present(self.web_users_option):
+            print("Web Users is already selected")
+        else:
+            self.send_keys(self.users_field, UserData.web_user)
+            self.wait_to_click((By.XPATH, self.user_from_list.format(UserData.web_user)))
+            print("Selecting Web Users")
+            time.sleep(2)
+            ActionChains(self.driver).send_keys(Keys.TAB).perform()
         self.wait_to_clear_and_send_keys(self.date_range, self.current_date_range + Keys.TAB)
         self.wait_and_sleep_to_click(self.prepare_export_button)
         time.sleep(10)
         try:
             self.wait_till_progress_completes("exports")
-            self.wait_and_sleep_to_click(self.download_button, 160)
+            self.wait_for_element(self.download_button, 300)
+            self.wait_to_click(self.download_button)
             time.sleep(5)
         except TimeoutException:
             if self.is_visible_and_displayed(self.failed_to_export):
                 self.driver.refresh()
                 self.wait_and_sleep_to_click(self.prepare_export_button)
                 self.wait_till_progress_completes("exports")
-                self.wait_and_sleep_to_click(self.download_button, 160)
+                self.wait_for_element(self.download_button, 300)
+                self.wait_to_click(self.download_button)
                 time.sleep(5)
         print("Download form button clicked")
 
@@ -566,7 +600,7 @@ class ExportDataPage(BasePage):
     def add_form_exports_reassign(self):
         self.delete_bulk_exports()
         self.wait_and_sleep_to_click(self.add_export_button)
-        self.is_clickable(self.app_type)
+        self.wait_for_element(self.app_type, 200)
         self.select_by_text(self.app_type, UserData.app_type)
         self.select_by_text(self.application, UserData.reassign_cases_application)
         self.select_by_text(self.module, UserData.case_list_name)
@@ -576,7 +610,7 @@ class ExportDataPage(BasePage):
         self.wait_to_clear_and_send_keys(self.export_name, UserData.p1p2_form_export_name)
         self.wait_to_click(self.export_settings_create)
         print("Export created!!")
-        self.download_export_without_condition()
+        self.download_export_without_condition("form")
         newest_file = latest_download_file()
         print("Newest file:" + newest_file)
         self.assert_downloaded_file(newest_file, UserData.p1p2_form_export_name)
@@ -590,18 +624,39 @@ class ExportDataPage(BasePage):
         assert int(rows_count) >= 2000, "Export is not showing all the data"
         print("Export is successfully loading more than 2000 rows of data")
 
-    def download_export_without_condition(self):
+    def download_export_without_condition(self, type):
         self.wait_and_sleep_to_click(self.export_form_case_data_button)
+        self.wait_for_element(self.prepare_export_button)
+        if type == "form":
+            if self.is_present(self.web_users_option):
+                print("Web Users is already selected")
+            else:
+                self.send_keys(self.users_field, UserData.web_user)
+                self.wait_to_click((By.XPATH, self.user_from_list.format(UserData.web_user)))
+                print("Selecting Web Users")
+                time.sleep(2)
+                ActionChains(self.driver).send_keys(Keys.TAB).perform()
+        else:
+            if self.is_present(self.all_data_option):
+                print("Web Users is already selected")
+            else:
+                self.send_keys(self.users_field, UserData.all_data)
+                self.wait_to_click((By.XPATH, self.user_from_list.format(UserData.all_data)))
+                print("Selecting Web Users")
+                time.sleep(2)
+                ActionChains(self.driver).send_keys(Keys.TAB).perform()
         self.wait_and_sleep_to_click(self.prepare_export_button)
         try:
             self.wait_till_progress_completes("exports")
-            self.wait_and_sleep_to_click(self.download_button)
+            self.wait_for_element(self.download_button, 300)
+            self.wait_to_click(self.download_button)
         except TimeoutException:
             if self.is_visible_and_displayed(self.failed_to_export):
                 self.driver.refresh()
                 self.wait_and_sleep_to_click(self.prepare_export_button)
                 self.wait_till_progress_completes("exports")
-                self.wait_and_sleep_to_click(self.download_button)
+                self.wait_for_element(self.download_button, 300)
+                self.wait_to_click(self.download_button)
         time.sleep(5)
         print("Download form button clicked")
 
@@ -609,18 +664,14 @@ class ExportDataPage(BasePage):
         self.wait_to_click(self.export_case_data_link)
         self.delete_bulk_exports()
         self.wait_and_sleep_to_click(self.add_export_button)
-        self.is_clickable(self.application)
-        try:
-            self.select_by_text(self.application, UserData.reassign_cases_application)
-        except:
-            print("Application dropdown is not present")
+        self.wait_for_element(self.case_type, 200)
         self.select_by_text(self.case, UserData.case_reassign)
         self.wait_to_click(self.add_export_conf)
         self.wait_for_element(self.export_name)
         self.wait_to_clear_and_send_keys(self.export_name, UserData.p1p2_case_export_name)
         self.wait_to_click(self.export_settings_create)
         print("Export created!!")
-        self.download_export_without_condition()
+        self.download_export_without_condition("case")
         newest_file = latest_download_file()
         print("Newest file:" + newest_file)
         self.assert_downloaded_file(newest_file, UserData.p1p2_case_export_name)

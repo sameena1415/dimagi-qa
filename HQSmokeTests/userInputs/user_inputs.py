@@ -17,7 +17,8 @@ class UserData:
     app_login = "appiumtest"
     app_password = "Pass@123"
     two_fa_user = "2fa.commcare.user@gmail.com"
-
+    web_user = "[Web Users]"
+    all_data = "[All Data]"
     mobile_testuser = "mobile_testuser"
     copied_to_user = "mobile_testuser \"DO NOT DELETE! DO NOT DELETE!\""
     searched_user = "appiumtest \"DO NOT DELETE! DO NOT DELETE!\""
