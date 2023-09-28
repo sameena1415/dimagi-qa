@@ -91,3 +91,11 @@ class UserData:
     """Data Forwarding"""
     http_req_methods = ['DELETE','POST','PUT']
     payload_format = ['XML','JSON']
+
+    """Parent Child Import Case"""
+    parent_1_id = "d1c8f20e-c54d-4207-a4b1-0000bfd5b040"
+    parent_2_id = "0463bcfc80234bfe8d2072eaf2be881b"
+    child_case_id = "ba0ff57e-cbb5-4887-bca6-c43b29e82dde"
+    parent_type = "pregnancy"
+    child_type = "village"
+    child_name = "Saharanpur"

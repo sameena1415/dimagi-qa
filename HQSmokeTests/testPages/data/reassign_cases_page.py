@@ -45,6 +45,8 @@ class ReassignCasesPage(BasePage):
         self.move_to_element_and_click(self.reassigned_user_from_list)
         self.wait_to_click(self.submit)
         self.is_visible_and_displayed(self.out_of_range)
+        print("Sleeping sometime for the case to get updated")
+        time.sleep(10)
         self.driver.refresh()
         self.wait_to_clear_and_send_keys(self.search_query, case_being_reassgined)
         self.send_keys(self.search_query, Keys.TAB)

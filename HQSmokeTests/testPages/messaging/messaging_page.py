@@ -228,9 +228,9 @@ class MessagingPage(BasePage):
         time.sleep(40)
         self.wait_to_clear_and_send_keys(self.search_box, self.cond_alert_name_input)
         self.wait_to_click(self.search_box)
-        self.wait_for_element(self.deactive_button_visible, 300)
+        self.wait_for_element(self.delete_cond_alert, 300)
         self.driver.refresh()
-        if self.is_present(self.deactive_button_visible):
+        if self.is_clickable(self.delete_cond_alert):
             print("Restart is not required.")
         else:
             try:
@@ -242,7 +242,7 @@ class MessagingPage(BasePage):
                 time.sleep(40)
                 self.wait_to_clear_and_send_keys(self.search_box, self.cond_alert_name_input)
                 self.wait_to_click(self.search_box)
-                self.wait_for_element(self.deactive_button_visible, 300)
+                self.wait_for_element(self.delete_cond_alert, 300)
                 self.driver.refresh()
             except:
                 print("Restart not required")
@@ -431,11 +431,10 @@ class MessagingPage(BasePage):
         self.wait_to_clear_and_send_keys(self.search_box, self.cond_alert_name_input)
         self.wait_and_sleep_to_click(self.search_box)
         print("Sleeping till the alert processing completes")
-        time.sleep(40)
         self.driver.refresh()
         self.wait_to_clear_and_send_keys(self.search_box, self.cond_alert_name_input)
         self.wait_and_sleep_to_click(self.search_box)
-        self.wait_for_element(self.deactive_button_visible, 300)
+        self.wait_for_element(self.delete_cond_alert, 300)
         time.sleep(5)
         self.wait_to_click(self.delete_cond_alert)
         try:

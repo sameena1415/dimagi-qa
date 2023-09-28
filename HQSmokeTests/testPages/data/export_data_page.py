@@ -4,6 +4,7 @@ import pandas as pd
 from datetime import datetime, timedelta
 
 import requests
+from openpyxl import load_workbook
 
 from common_utilities.selenium.base_page import BasePage
 from common_utilities.path_settings import PathSettings
@@ -57,8 +58,13 @@ class ExportDataPage(BasePage):
         # Find Data By ID
         self.find_data_by_ID = (By.LINK_TEXT, 'Find Data by ID')
         self.find_data_by_ID_textbox = (By.XPATH, "//input[@placeholder='Form Submission ID']")
-        self.find_data_by_ID_button = (By.XPATH, "(//button[@data-bind='click: find, enable: allowFind'])[2]")
+        self.find_data_by_case_ID_textbox = (By.XPATH, "//input[@placeholder='Case ID']")
+        self.find_data_by_case_ID_button = (By.XPATH, "//div[./input[@placeholder='Case ID']]//following-sibling::div/button")
+        self.find_data_by_ID_button = (By.XPATH, "//div[./input[@placeholder='Form Submission ID']]//following-sibling::div/button")
         self.view_FormID_CaseID = (By.LINK_TEXT, 'View')
+        self.case_id_value = "//th[contains(.,'Case ID')]//following-sibling::td[contains(.,'{}')]"
+        self.related_cases_tab = (By.LINK_TEXT, "Related Cases")
+        self.related_cases_view = (By.XPATH, "//td[contains(.,'"+UserData.child_name+"')]//following-sibling::div/a[contains(.,'View')]")
         self.woman_form_name_HQ = (By.XPATH, "(//div[@class='form-data-readable form-data-raw'])[1]")
         self.woman_case_name_HQ = (By.XPATH, "//th[@title='name']//following::td[1]")
 
@@ -134,6 +140,10 @@ class ExportDataPage(BasePage):
         self.form = (By.ID, "id_form")
         self.case = (By.ID, "id_case_type")
         self.model = (By.ID, "id_model_type")
+
+        # Import From Excel
+        self.to_be_edited_file = os.path.abspath(
+            os.path.join(UserData.USER_INPUT_BASE_DIR, "test_data/import_parent_child_case.xlsx"))
 
     def get_url_paste_browser(self, username, password, item):
         if item == 'cases':
@@ -615,4 +625,70 @@ class ExportDataPage(BasePage):
         print("Newest file:" + newest_file)
         self.assert_downloaded_file(newest_file, UserData.p1p2_case_export_name)
         return newest_file
+
+
+    def check_for_related_cases(self, parent_id):
+        self.wait_for_element(self.find_data_by_ID)
+        self.wait_to_click(self.find_data_by_ID)
+        self.wait_to_clear_and_send_keys(self.find_data_by_case_ID_textbox, parent_id)
+        self.wait_and_sleep_to_click(self.find_data_by_case_ID_button)
+        self.wait_and_sleep_to_click(self.view_FormID_CaseID)
+        self.switch_to_next_tab()
+        self.wait_for_element((By.XPATH, self.case_id_value.format(parent_id)))
+        if self.is_present(self.related_cases_tab):
+            self.validate_child_case_data()
+            return "assign to parent 2"
+        else:
+            return "assign to parent 1"
+
+
+    def validate_child_case_data(self):
+        self.wait_to_click(self.related_cases_tab)
+        self.wait_for_element(self.related_cases_view)
+        self.wait_to_click(self.related_cases_view)
+        time.sleep(5)
+        self.wait_for_element((By.XPATH, self.case_id_value.format(UserData.child_case_id)))
+
+    def prepare_parent_child_import_excel(self, text):
+        if text == "assign to parent 2":
+            print("Preparing excel for assignment to Parent: ", UserData.parent_2_id)
+            workbook = load_workbook(filename=self.to_be_edited_file)
+            sheet = workbook.active
+            sheet["B2"] = UserData.parent_2_id
+            sheet.title = "Sheet 1"
+            filename = os.path.abspath(
+            os.path.join(UserData.USER_INPUT_BASE_DIR, "test_data/import_to_parent_" + UserData.parent_2_id+".xlsx"))
+            workbook.save(filename=filename)
+            return filename
+        else:
+            print("Preparing excel for assignment to Parent: ", UserData.parent_1_id)
+            workbook = load_workbook(filename=self.to_be_edited_file)
+            sheet = workbook.active
+            sheet["B2"] = UserData.parent_1_id
+            sheet.title = "Sheet 1"
+            filename = os.path.abspath(
+                os.path.join(UserData.USER_INPUT_BASE_DIR,
+                             "test_data/import_to_parent_" + UserData.parent_1_id + ".xlsx"))
+            workbook.save(filename=filename)
+            return filename
+
+    def verify_case_import(self, text):
+        self.wait_for_element(self.find_data_by_ID)
+        self.js_click(self.find_data_by_ID)
+        if text == "assign to parent 2":
+            parent_id = UserData.parent_2_id
+        else:
+            parent_id = UserData.parent_1_id
+        self.wait_for_element(self.find_data_by_case_ID_textbox)
+        self.wait_to_clear_and_send_keys(self.find_data_by_case_ID_textbox, parent_id)
+        self.wait_to_click(self.find_data_by_case_ID_button)
+        self.wait_for_element(self.view_FormID_CaseID)
+        link = self.get_attribute(self.view_FormID_CaseID, "href")
+        print(link)
+        self.driver.get(link)
+        # self.wait_to_click(self.view_FormID_CaseID)
+        # self.switch_to_next_tab()
+        self.wait_for_element((By.XPATH, self.case_id_value.format(parent_id)))
+        assert self.is_present(self.related_cases_tab), "Parent not reassigned"
+        self.validate_child_case_data()
 

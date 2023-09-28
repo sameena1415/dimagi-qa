@@ -3,6 +3,7 @@ import pytest
 from HQSmokeTests.testPages.applications.app_preview import AppPreviewPage
 from HQSmokeTests.testPages.applications.application_page import ApplicationPage
 from HQSmokeTests.testPages.data.export_data_page import ExportDataPage
+from HQSmokeTests.testPages.data.import_cases_page import ImportCasesPage
 from HQSmokeTests.testPages.email.email_verification import EmailVerification
 from HQSmokeTests.testPages.home.home_page import HomePage
 from HQSmokeTests.testPages.messaging.messaging_page import MessagingPage
@@ -103,3 +104,22 @@ def test_case_80_case_exports(driver, settings):
     export = ExportDataPage(driver)
     name = export.add_case_exports_reassign()
     export.verify_export_count(name)
+
+@pytest.mark.data
+@pytest.mark.importFromExcel
+@pytest.mark.p1p2EscapeDefect
+def test_case_81_parent_child_case_imports(driver, settings):
+    if 'www' in settings['url']:
+        pytest.skip("Setup not done in Prod yet")
+    home = HomePage(driver, settings)
+    home.data_menu()
+    export = ExportDataPage(driver)
+    assignment = export.check_for_related_cases(UserData.parent_1_id)
+    filename = export.prepare_parent_child_import_excel(assignment)
+    imp = ImportCasesPage(driver)
+    home.data_menu()
+    imp.import_parent_child_excel(filename)
+    home.data_menu()
+    export.verify_case_import(assignment)
+
+
