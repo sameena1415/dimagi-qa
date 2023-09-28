@@ -54,7 +54,9 @@ class ExportDataPage(BasePage):
         self.date_having_submissions = "2022-01-18" + " to " + datetime.now().strftime('%Y-%m-%d')
         # Get Yesterday
         self.yesterday = self.presentday - timedelta(1)
+        self.nextday = self.presentday + timedelta(1)
         self.current_date_range = self.yesterday.strftime('%Y-%m-%d') + " to " + datetime.now().strftime('%Y-%m-%d')
+        self.next_date_range = self.yesterday.strftime('%Y-%m-%d') + " to " + self.nextday.strftime('%Y-%m-%d')
 
         # Add Export
         self.data_dropdown = (By.LINK_TEXT, 'Data')
@@ -525,7 +527,7 @@ class ExportDataPage(BasePage):
             print("Selecting Web Users")
             time.sleep(2)
             ActionChains(self.driver).send_keys(Keys.TAB).perform()
-        self.wait_to_clear_and_send_keys(self.date_range, self.current_date_range + Keys.TAB)
+        self.wait_to_clear_and_send_keys(self.date_range, self.next_date_range + Keys.TAB)
         self.wait_and_sleep_to_click(self.prepare_export_button)
         time.sleep(10)
         try:
@@ -702,6 +704,7 @@ class ExportDataPage(BasePage):
             filename = os.path.abspath(
             os.path.join(UserData.USER_INPUT_BASE_DIR, "test_data/import_to_parent_" + UserData.parent_2_id+".xlsx"))
             workbook.save(filename=filename)
+            print(filename)
             return filename
         else:
             print("Preparing excel for assignment to Parent: ", UserData.parent_1_id)
@@ -729,8 +732,6 @@ class ExportDataPage(BasePage):
         link = self.get_attribute(self.view_FormID_CaseID, "href")
         print(link)
         self.driver.get(link)
-        # self.wait_to_click(self.view_FormID_CaseID)
-        # self.switch_to_next_tab()
         self.wait_for_element((By.XPATH, self.case_id_value.format(parent_id)))
         assert self.is_present(self.related_cases_tab), "Parent not reassigned"
         self.validate_child_case_data()
