@@ -28,7 +28,7 @@ class ImportCasesPage(BasePage):
         self.next_step = (By.XPATH, "(//button[@type='submit'])[1]")
         self.case_type = (By.XPATH, "//select[@id='case_type']")
         self.case_type_option_value = (By.XPATH, "//option[@value='pregnancy']")
-        self.success = "//span[text()='{}']//preceding::span[@class='label label-success']"
+        self.success = "(//span[text()='{}']//preceding::span[@class='label label-success'])[1]"
 
     def replace_property_and_upload(self):
         self.wait_to_click(self.import_cases_menu)
