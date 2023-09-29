@@ -53,8 +53,12 @@ class ImportCasesPage(BasePage):
         self.wait_to_click(self.import_cases_menu)
         self.wait_for_element(self.choose_file)
         print("file path: ", filename)
-        text = str(filename).split("\\")
-        file = text[-1]
+        if "/" in filename:
+            text = str(filename).split("/")
+            file = text[-1]
+        else:
+            text = str(filename).split("\\")
+            file = text[-1]
         print(file)
         self.wait_to_clear_and_send_keys(self.choose_file, filename)
         self.wait_to_click(self.next_step)
