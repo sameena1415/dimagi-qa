@@ -527,6 +527,14 @@ class ExportDataPage(BasePage):
             print("Selecting Web Users")
             time.sleep(2)
             ActionChains(self.driver).send_keys(Keys.TAB).perform()
+        if self.is_present(self.all_data_option):
+            print("Web Users is already selected")
+        else:
+            self.send_keys(self.users_field, UserData.all_data)
+            self.wait_to_click((By.XPATH, self.user_from_list.format(UserData.all_data)))
+            print("Selecting Web Users")
+            time.sleep(2)
+            ActionChains(self.driver).send_keys(Keys.TAB).perform()
         self.wait_to_clear_and_send_keys(self.date_range, self.next_date_range + Keys.TAB)
         self.wait_and_sleep_to_click(self.prepare_export_button)
         time.sleep(10)
