@@ -1,4 +1,5 @@
 import os
+import time
 
 from openpyxl import load_workbook
 from selenium.webdriver.common.by import By
@@ -27,7 +28,7 @@ class ImportCasesPage(BasePage):
         self.next_step = (By.XPATH, "(//button[@type='submit'])[1]")
         self.case_type = (By.XPATH, "//select[@id='case_type']")
         self.case_type_option_value = (By.XPATH, "//option[@value='pregnancy']")
-        self.success = (By.XPATH, "//span[text()='" + self.file_new_name + "']//preceding::span[@class='label label-success']")
+        self.success = "(//span[text()='{}']//preceding::span[@class='label label-success'])[1]"
 
     def replace_property_and_upload(self):
         self.wait_to_click(self.import_cases_menu)
@@ -39,7 +40,7 @@ class ImportCasesPage(BasePage):
         self.wait_to_click(self.next_step)
         self.wait_to_click(self.next_step)
         print("Imported case!")
-        assert self.is_visible_and_displayed(self.success), "Waitinng to start import. Celery might have a high queue."
+        assert self.is_visible_and_displayed((By.XPATH, self.success.format(self.file_new_name))), "Waitinng to start import. Celery might have a high queue."
 
     def edit_spreadsheet(self, edited_file, cell, renamed_file, sheet_name):
         workbook = load_workbook(filename=edited_file)
@@ -47,3 +48,28 @@ class ImportCasesPage(BasePage):
         sheet[cell] = fetch_random_string()
         sheet.title = sheet_name
         workbook.save(filename=renamed_file)
+
+    def import_parent_child_excel(self, filename):
+        self.wait_to_click(self.import_cases_menu)
+        self.wait_for_element(self.choose_file)
+        print("file path: ", filename)
+        if "/" in filename:
+            text = str(filename).split("/")
+            file = text[-1]
+        else:
+            text = str(filename).split("\\")
+            file = text[-1]
+        print(file)
+        self.wait_to_clear_and_send_keys(self.choose_file, filename)
+        self.wait_to_click(self.next_step)
+        self.is_visible_and_displayed(self.case_type)
+        self.select_by_text(self.case_type, UserData.child_type)
+        self.wait_for_element(self.next_step)
+        self.wait_to_click(self.next_step)
+        self.wait_for_element(self.next_step)
+        self.scroll_to_element(self.next_step)
+        self.wait_to_click(self.next_step)
+        print("Imported case!")
+        assert self.is_visible_and_displayed((By.XPATH, self.success.format(file)), 100), "Waitinng to start import. Celery might have a high queue."
+        print("Import Completed")
+

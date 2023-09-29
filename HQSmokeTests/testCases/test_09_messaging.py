@@ -119,7 +119,9 @@ def test_case_51_translations(driver, settings):
 
 @pytest.mark.projectSettings
 @pytest.mark.currentSubscription
-def test_case_52_settings_pages(driver):
+def test_case_52_settings_pages(driver, settings):
+    if "staging" in settings['url']:
+        pytest.xfail("Failing in Staging due to QA-5639")
     msg = MessagingPage(driver)
     msg.project_settings_page()
     msg.current_subscription_page()

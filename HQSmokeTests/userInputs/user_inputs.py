@@ -17,7 +17,8 @@ class UserData:
     app_login = "appiumtest"
     app_password = "Pass@123"
     two_fa_user = "2fa.commcare.user@gmail.com"
-
+    web_user = "[Web Users]"
+    all_data = "[All Data]"
     mobile_testuser = "mobile_testuser"
     copied_to_user = "mobile_testuser \"DO NOT DELETE! DO NOT DELETE!\""
     searched_user = "appiumtest \"DO NOT DELETE! DO NOT DELETE!\""
@@ -42,6 +43,8 @@ class UserData:
     # Export report names
     form_export_name = "Smoke Form Export"
     case_export_name = "Smoke Case Export"
+    p1p2_form_export_name = "Smoke Form Export P1P2"
+    p1p2_case_export_name = "Smoke Case Export P1P2"
     form_export_name_dse = "Smoke Form Export DSE"
     case_export_name_dse = "Smoke Case Export DSE"
     dashboard_feed_form = "Smoke Dashboard Form feed"
@@ -85,3 +88,15 @@ class UserData:
     daily_form_activity = "Daily Form Activity: Requested export excel data"
     app_status = "Application Status: Requested export excel data"
     location_list = ['Delhi', 'Boston', 'Cape Town']
+
+    """Data Forwarding"""
+    http_req_methods = ['DELETE','POST','PUT']
+    payload_format = ['XML','JSON']
+
+    """Parent Child Import Case"""
+    parent_1_id = "d1c8f20e-c54d-4207-a4b1-0000bfd5b040"
+    parent_2_id = "0463bcfc80234bfe8d2072eaf2be881b"
+    child_case_id = "ba0ff57e-cbb5-4887-bca6-c43b29e82dde"
+    parent_type = "pregnancy"
+    child_type = "village"
+    child_name = "Saharanpur"
