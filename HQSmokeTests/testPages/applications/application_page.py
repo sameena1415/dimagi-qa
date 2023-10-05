@@ -51,6 +51,7 @@ class ApplicationPage(BasePage):
         self.settings = (By.XPATH, "//i[@class='fa fa-gear']")
         self.delete_app = (By.XPATH, "//a[@href='#delete-app-modal']")
         self.delete_confirm = (By.XPATH, "(//button[@class='disable-on-submit btn btn-danger'])[last()]")
+        self.delete_success = (By.XPATH, "//div[contains(@class,'alert-success')][contains(.,'You have deleted an application.')]")
 
         # Application Contents
         self.menu_settings = (By.XPATH, "//a[@class='appnav-title appnav-title-secondary appnav-responsive']")
@@ -144,9 +145,13 @@ class ApplicationPage(BasePage):
     def delete_application(self):
         time.sleep(2)
         self.js_click(self.settings)
-        self.wait_to_click(self.actions_tab)
-        self.wait_to_click(self.delete_app)
-        self.wait_to_click(self.delete_confirm)
+        self.wait_for_element(self.actions_tab)
+        self.js_click(self.actions_tab)
+        self.wait_for_element(self.delete_app)
+        self.js_click(self.delete_app)
+        self.wait_for_element(self.delete_confirm)
+        self.js_click(self.delete_confirm)
+        assert self.is_present_and_displayed(self.delete_success, 200), "Application not deleted."
         print("Deleted the application")
 
     def form_xml_download_upload(self):
@@ -318,7 +323,11 @@ class ApplicationPage(BasePage):
         self.wait_to_click((By.LINK_TEXT, app_name))
         time.sleep(2)
         self.js_click(self.settings)
-        self.wait_to_click(self.actions_tab)
-        self.wait_to_click(self.delete_app)
-        self.wait_to_click(self.delete_confirm)
+        self.wait_for_element(self.actions_tab)
+        self.js_click(self.actions_tab)
+        self.wait_for_element(self.delete_app)
+        self.js_click(self.delete_app)
+        self.wait_for_element(self.delete_confirm)
+        self.js_click(self.delete_confirm)
+        assert self.is_present_and_displayed(self.delete_success, 200), "Application not deleted."
         print("Deleted the application")

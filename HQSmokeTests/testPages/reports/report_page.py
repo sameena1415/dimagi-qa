@@ -441,7 +441,7 @@ class ReportPage(BasePage):
 
     def verify_form_data_submit_history(self, case_name, username):
         print("Sleeping for sometime for the case to get registered.")
-        time.sleep(40)
+        time.sleep(90)
         self.wait_to_click(self.submit_history_rep)
         self.wait_to_click(self.users_box)
         self.send_keys(self.search_user, username)
@@ -488,9 +488,8 @@ class ReportPage(BasePage):
         self.driver.back()
 
     def verify_app_data_submit_history(self, case_name):
-
         print("Sleeping for sometime for the case to get registered.")
-        time.sleep(40)
+        time.sleep(90)
         self.wait_to_click(self.submit_history_rep)
         self.wait_to_click(self.users_box)
         self.send_keys(self.search_user, UserData.app_login)
