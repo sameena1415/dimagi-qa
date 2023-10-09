@@ -302,12 +302,14 @@ class MobileWorkerPage(BasePage):
         try:
             self.search_user(username)
             time.sleep(1)
+            self.wait_for_element((By.XPATH, self.username_link.format(username)), 50)
             self.wait_to_click(self.deactivate_buttons_list)
             self.wait_to_click(self.confirm_deactivate_xpath_list)
             time.sleep(5)
             assert self.is_present_and_displayed((By.XPATH, self.reactivate_buttons_list.format(username)))
         except (TimeoutException, NoSuchElementException):
             print("TIMEOUT ERROR: Deactivation Unsuccessful.")
+            assert False
 
     def verify_deactivation_via_login(self, username):
         self.search_webapps_user(username)
@@ -322,12 +324,14 @@ class MobileWorkerPage(BasePage):
             self.wait_to_click(self.show_deactivated_users_btn)
             self.search_user(username)
             time.sleep(1)
+            self.wait_for_element((By.XPATH, self.username_link.format(username)), 50)
             self.wait_to_click((By.XPATH, self.reactivate_buttons_list.format(username)))
             self.wait_to_click(self.confirm_reactivate_xpath_list)
             time.sleep(5)
             assert self.is_present_and_displayed((By.XPATH, self.deactivate_button.format(username)))
         except (TimeoutException, NoSuchElementException):
             print("TIMEOUT ERROR: Reactivation unsuccessful.")
+            assert False
 
     def verify_reactivation_via_login(self, username):
         self.search_webapps_user(username)
