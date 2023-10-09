@@ -179,6 +179,7 @@ class MobileWorkerPage(BasePage):
         self.wait_to_click(self.web_apps_menu_id)
         self.wait_to_click(self.webapp_login)
         time.sleep(1)
+        self.wait_for_element(self.search_user_web_apps, 20)
         self.send_keys(self.search_user_web_apps, username)
         self.wait_to_click(self.search_button_we_apps)
         time.sleep(5)
@@ -304,9 +305,10 @@ class MobileWorkerPage(BasePage):
             time.sleep(1)
             self.wait_for_element((By.XPATH, self.username_link.format(username)), 50)
             self.wait_to_click(self.deactivate_buttons_list)
+            self.wait_for_element(self.confirm_deactivate_xpath_list)
             self.wait_to_click(self.confirm_deactivate_xpath_list)
             time.sleep(5)
-            assert self.is_present_and_displayed((By.XPATH, self.reactivate_buttons_list.format(username)))
+            assert self.is_present_and_displayed((By.XPATH, self.reactivate_buttons_list.format(username)), 20)
         except (TimeoutException, NoSuchElementException):
             print("TIMEOUT ERROR: Deactivation Unsuccessful.")
             assert False
@@ -326,9 +328,10 @@ class MobileWorkerPage(BasePage):
             time.sleep(1)
             self.wait_for_element((By.XPATH, self.username_link.format(username)), 50)
             self.wait_to_click((By.XPATH, self.reactivate_buttons_list.format(username)))
+            self.wait_for_element(self.confirm_reactivate_xpath_list)
             self.wait_to_click(self.confirm_reactivate_xpath_list)
             time.sleep(5)
-            assert self.is_present_and_displayed((By.XPATH, self.deactivate_button.format(username)))
+            assert self.is_present_and_displayed((By.XPATH, self.deactivate_button.format(username)), 20)
         except (TimeoutException, NoSuchElementException):
             print("TIMEOUT ERROR: Reactivation unsuccessful.")
             assert False
