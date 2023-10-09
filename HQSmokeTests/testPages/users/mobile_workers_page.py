@@ -309,15 +309,20 @@ class MobileWorkerPage(BasePage):
             self.wait_to_click(self.confirm_deactivate_xpath_list)
             time.sleep(5)
             assert self.is_present_and_displayed((By.XPATH, self.reactivate_buttons_list.format(username)), 20)
+            print("Deactivation successful")
+            return "Success"
         except (TimeoutException, NoSuchElementException):
             print("TIMEOUT ERROR: Deactivation Unsuccessful.")
-            assert False
+            return "Not Success"
 
-    def verify_deactivation_via_login(self, username):
-        self.search_webapps_user(username)
-        assert self.is_present_and_displayed((By.XPATH, self.login_as_username.format(username)),
-                                             10) == False, "Deactivated mobile worker still visible"
-        self.click(self.show_full_menu_id)
+    def verify_deactivation_via_login(self, username, text):
+        if text == "Success":
+            self.search_webapps_user(username)
+            assert self.is_present_and_displayed((By.XPATH, self.login_as_username.format(username)),
+                                                 10) == False, "Deactivated mobile worker still visible"
+            self.click(self.show_full_menu_id)
+        else:
+            assert False
 
     def reactivate_user(self, username):
         try:
@@ -332,20 +337,25 @@ class MobileWorkerPage(BasePage):
             self.wait_to_click(self.confirm_reactivate_xpath_list)
             time.sleep(5)
             assert self.is_present_and_displayed((By.XPATH, self.deactivate_button.format(username)), 20)
+            print("Reactivation successful")
+            return "Success"
         except (TimeoutException, NoSuchElementException):
             print("TIMEOUT ERROR: Reactivation unsuccessful.")
-            assert False
+            return "Not Success"
 
-    def verify_reactivation_via_login(self, username):
-        self.search_webapps_user(username)
-        assert self.is_present_and_displayed((By.XPATH, self.login_as_username.format(username))), "user is not activated"
-        self.wait_to_click((By.XPATH, self.login_as_username.format(username)))
-        self.wait_to_click(self.webapp_login_confirmation)
-        self.click(self.show_full_menu_id)
-        login_username = self.get_text(self.webapp_working_as)
-        assert login_username == username, "Reactivated user is not visible."
-        print("Working as " + username + " : Reactivation successful!")
-        time.sleep(1)
+    def verify_reactivation_via_login(self, username, text):
+        if text == "Success":
+            self.search_webapps_user(username)
+            assert self.is_present_and_displayed((By.XPATH, self.login_as_username.format(username))), "user is not activated"
+            self.wait_to_click((By.XPATH, self.login_as_username.format(username)))
+            self.wait_to_click(self.webapp_login_confirmation)
+            self.click(self.show_full_menu_id)
+            login_username = self.get_text(self.webapp_working_as)
+            assert login_username == username, "Reactivated user is not visible."
+            print("Working as " + username + " : Reactivation successful!")
+            time.sleep(1)
+        else:
+            assert False
 
     def cleanup_mobile_worker(self):
         try:
