@@ -201,6 +201,7 @@ def test_aftertest_cleanup_items_in_users_menu(driver, settings):
 @pytest.mark.user_profiles
 @pytest.mark.user_fields
 @pytest.mark.user_organization
+@pytest.mark.p1p2EscapeDefect
 def test_case_54_add_custom_user_data_profile_to_mobile_worker(driver, settings):
     create = MobileWorkerPage(driver)
     menu = HomePage(driver, settings)
@@ -213,7 +214,7 @@ def test_case_54_add_custom_user_data_profile_to_mobile_worker(driver, settings)
     create.click_profile()
     create.add_profile("field_" + fetch_random_string())
     create.save_field()
-    create.select_user_and_update_fields(group_id["user_new"])
+    create.select_user_and_update_fields(group_id["user_new"], "field_" + fetch_random_string())
     create.add_phone_number()
     create.select_profile()
     create.update_information()
@@ -225,8 +226,7 @@ def test_case_54_add_custom_user_data_profile_to_mobile_worker(driver, settings)
     menu.users_menu()
     create.upload_mobile_worker()
     time.sleep(2)
-    create.mobile_worker_menu()
-    create.select_user_and_update_fields(group_id["user_new"])
+    create.select_mobile_worker_created(group_id["user_new"])
     create.verify_profile_change(UserData.p1p2_profile)
     create.mobile_worker_menu()
     create.delete_bulk_users()

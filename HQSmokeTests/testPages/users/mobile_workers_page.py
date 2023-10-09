@@ -48,6 +48,7 @@ class MobileWorkerPage(BasePage):
         # remove these two after locators page creation: redundant code
         self.web_apps_menu_id = (By.ID, "CloudcareTab")
         self.show_full_menu_id = (By.ID, "commcare-menu-toggle")
+        self.user_name_span = (By.CLASS_NAME, "user_username")
         self.search_mw = (By.XPATH, "//div[@class='ko-search-box']//input[@type='text']")
         self.search_button_mw = (
             By.XPATH, "//div[@class='ko-search-box']//button[@data-bind='click: clickAction, visible: !immediate']")
@@ -282,6 +283,8 @@ class MobileWorkerPage(BasePage):
         if not self.is_present((By.XPATH, self.username_link.format(username))):
             self.click(self.show_deactivated_users_btn)
         self.click((By.XPATH, self.username_link.format(username)))
+        self.wait_for_element(self.user_name_span)
+        print("Mobile Worker page opened.")
 
     def enter_value_for_created_user_field(self):
         self.select_by_text(self.additional_info_select, "user_field_" + fetch_random_string())
@@ -498,16 +501,10 @@ class MobileWorkerPage(BasePage):
         self.add_choice(userfield)
         self.save_field()
 
-    def select_user_and_update_fields(self, user):
+    def select_user_and_update_fields(self, user, field):
         time.sleep(2)
-        self.wait_to_click(self.mobile_worker_on_left_panel)
-        time.sleep(2)
-        self.wait_to_clear_and_send_keys(self.search_mw, user)
-        time.sleep(2)
-        self.wait_to_click(self.search_button_mw)
-        time.sleep(3)
-        self.click((By.LINK_TEXT, user))
-        self.select_by_text(self.additional_info_select2, "field_" + fetch_random_string())
+        self.select_mobile_worker_created(user)
+        self.select_by_text(self.additional_info_select2, field)
         assert self.is_displayed(self.user_file_additional_info2), "Unable to assign user field to user."
 
     def select_and_delete_mobile_worker(self, user):
@@ -605,4 +602,4 @@ class MobileWorkerPage(BasePage):
         self.wait_for_element(self.profile_dropdown)
         text = self.get_selected_text(self.profile_dropdown)
         print(text)
-        assert text == profile, "Role is not the same as set before upload"
+        assert text == profile, "Profile is not the same as set before upload"
