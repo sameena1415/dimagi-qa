@@ -162,8 +162,8 @@ def test_case_04_reactivate_user(driver, settings):
     menu = HomePage(driver, settings)
     menu.users_menu()
     user.mobile_worker_menu()
-    user.reactivate_user(group_id["user"])
-    user.verify_reactivation_via_login(group_id["user"])
+    text = user.reactivate_user(group_id["user"])
+    user.verify_reactivation_via_login(group_id["user"], text)
 
 
 @pytest.mark.user
