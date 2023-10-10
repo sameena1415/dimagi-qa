@@ -348,8 +348,9 @@ class ExportDataPage(BasePage):
     def excel_dashboard_integration_form(self):
         self.wait_and_sleep_to_click(self.export_excel_dash_int)
         self.wait_and_sleep_to_click(self.add_export_button)
-        time.sleep(5)
+        time.sleep(10)
         self.is_visible_and_displayed(self.model)
+        self.wait_for_element(self.model, 100)
         self.select_by_value(self.model, UserData.model_type_form)
         self.select_by_text(self.app_type, UserData.app_type)
         self.select_by_text(self.application, UserData.village_application)
@@ -374,7 +375,7 @@ class ExportDataPage(BasePage):
         self.wait_and_sleep_to_click(self.add_export_button)
         time.sleep(10)
         self.is_visible_and_displayed(self.model)
-        self.wait_for_element(self.model, 40)
+        self.wait_for_element(self.model, 100)
         self.select_by_value(self.model, UserData.model_type_case)
         try:
             self.select_by_text(self.application, UserData.village_application)
@@ -422,6 +423,7 @@ class ExportDataPage(BasePage):
         self.wait_and_sleep_to_click(self.add_export_button)
         time.sleep(30)
         self.is_visible_and_displayed(self.model)
+        self.wait_for_element(self.model, 100)
         self.select_by_value(self.model, UserData.model_type_form)
         self.select_by_text(self.app_type, UserData.app_type)
         self.select_by_text(self.application, UserData.village_application)
@@ -446,6 +448,7 @@ class ExportDataPage(BasePage):
         self.wait_and_sleep_to_click(self.add_export_button)
         time.sleep(30)
         self.is_visible_and_displayed(self.model)
+        self.wait_for_element(self.model, 100)
         self.select_by_value(self.model, UserData.model_type_case)
         try:
             self.select_by_text(self.application, UserData.village_application)

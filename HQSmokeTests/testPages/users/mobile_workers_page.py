@@ -48,6 +48,7 @@ class MobileWorkerPage(BasePage):
         # remove these two after locators page creation: redundant code
         self.web_apps_menu_id = (By.ID, "CloudcareTab")
         self.show_full_menu_id = (By.ID, "commcare-menu-toggle")
+        self.user_name_span = (By.CLASS_NAME, "user_username")
         self.search_mw = (By.XPATH, "//div[@class='ko-search-box']//input[@type='text']")
         self.search_button_mw = (
             By.XPATH, "//div[@class='ko-search-box']//button[@data-bind='click: clickAction, visible: !immediate']")
@@ -178,6 +179,7 @@ class MobileWorkerPage(BasePage):
         self.wait_to_click(self.web_apps_menu_id)
         self.wait_to_click(self.webapp_login)
         time.sleep(1)
+        self.wait_for_element(self.search_user_web_apps, 20)
         self.send_keys(self.search_user_web_apps, username)
         self.wait_to_click(self.search_button_we_apps)
         time.sleep(5)
@@ -282,6 +284,8 @@ class MobileWorkerPage(BasePage):
         if not self.is_present((By.XPATH, self.username_link.format(username))):
             self.click(self.show_deactivated_users_btn)
         self.click((By.XPATH, self.username_link.format(username)))
+        self.wait_for_element(self.user_name_span)
+        print("Mobile Worker page opened.")
 
     def enter_value_for_created_user_field(self):
         self.select_by_text(self.additional_info_select, "user_field_" + fetch_random_string())
@@ -299,18 +303,26 @@ class MobileWorkerPage(BasePage):
         try:
             self.search_user(username)
             time.sleep(1)
+            self.wait_for_element((By.XPATH, self.username_link.format(username)), 50)
             self.wait_to_click(self.deactivate_buttons_list)
+            self.wait_for_element(self.confirm_deactivate_xpath_list)
             self.wait_to_click(self.confirm_deactivate_xpath_list)
             time.sleep(5)
-            assert self.is_present_and_displayed((By.XPATH, self.reactivate_buttons_list.format(username)))
+            assert self.is_present_and_displayed((By.XPATH, self.reactivate_buttons_list.format(username)), 20)
+            print("Deactivation successful")
+            return "Success"
         except (TimeoutException, NoSuchElementException):
             print("TIMEOUT ERROR: Deactivation Unsuccessful.")
+            return "Not Success"
 
-    def verify_deactivation_via_login(self, username):
-        self.search_webapps_user(username)
-        assert self.is_present_and_displayed((By.XPATH, self.login_as_username.format(username)),
-                                             10) == False, "Deactivated mobile worker still visible"
-        self.click(self.show_full_menu_id)
+    def verify_deactivation_via_login(self, username, text):
+        if text == "Success":
+            self.search_webapps_user(username)
+            assert self.is_present_and_displayed((By.XPATH, self.login_as_username.format(username)),
+                                                 10) == False, "Deactivated mobile worker still visible"
+            self.click(self.show_full_menu_id)
+        else:
+            assert False
 
     def reactivate_user(self, username):
         try:
@@ -319,23 +331,31 @@ class MobileWorkerPage(BasePage):
             self.wait_to_click(self.show_deactivated_users_btn)
             self.search_user(username)
             time.sleep(1)
+            self.wait_for_element((By.XPATH, self.username_link.format(username)), 50)
             self.wait_to_click((By.XPATH, self.reactivate_buttons_list.format(username)))
+            self.wait_for_element(self.confirm_reactivate_xpath_list)
             self.wait_to_click(self.confirm_reactivate_xpath_list)
             time.sleep(5)
-            assert self.is_present_and_displayed((By.XPATH, self.deactivate_button.format(username)))
+            assert self.is_present_and_displayed((By.XPATH, self.deactivate_button.format(username)), 20)
+            print("Reactivation successful")
+            return "Success"
         except (TimeoutException, NoSuchElementException):
             print("TIMEOUT ERROR: Reactivation unsuccessful.")
+            return "Not Success"
 
-    def verify_reactivation_via_login(self, username):
-        self.search_webapps_user(username)
-        assert self.is_present_and_displayed((By.XPATH, self.login_as_username.format(username))), "user is not activated"
-        self.wait_to_click((By.XPATH, self.login_as_username.format(username)))
-        self.wait_to_click(self.webapp_login_confirmation)
-        self.click(self.show_full_menu_id)
-        login_username = self.get_text(self.webapp_working_as)
-        assert login_username == username, "Reactivated user is not visible."
-        print("Working as " + username + " : Reactivation successful!")
-        time.sleep(1)
+    def verify_reactivation_via_login(self, username, text):
+        if text == "Success":
+            self.search_webapps_user(username)
+            assert self.is_present_and_displayed((By.XPATH, self.login_as_username.format(username))), "user is not activated"
+            self.wait_to_click((By.XPATH, self.login_as_username.format(username)))
+            self.wait_to_click(self.webapp_login_confirmation)
+            self.click(self.show_full_menu_id)
+            login_username = self.get_text(self.webapp_working_as)
+            assert login_username == username, "Reactivated user is not visible."
+            print("Working as " + username + " : Reactivation successful!")
+            time.sleep(1)
+        else:
+            assert False
 
     def cleanup_mobile_worker(self):
         try:
@@ -498,16 +518,10 @@ class MobileWorkerPage(BasePage):
         self.add_choice(userfield)
         self.save_field()
 
-    def select_user_and_update_fields(self, user):
+    def select_user_and_update_fields(self, user, field):
         time.sleep(2)
-        self.wait_to_click(self.mobile_worker_on_left_panel)
-        time.sleep(2)
-        self.wait_to_clear_and_send_keys(self.search_mw, user)
-        time.sleep(2)
-        self.wait_to_click(self.search_button_mw)
-        time.sleep(3)
-        self.click((By.LINK_TEXT, user))
-        self.select_by_text(self.additional_info_select2, "field_" + fetch_random_string())
+        self.select_mobile_worker_created(user)
+        self.select_by_text(self.additional_info_select2, field)
         assert self.is_displayed(self.user_file_additional_info2), "Unable to assign user field to user."
 
     def select_and_delete_mobile_worker(self, user):
@@ -605,4 +619,4 @@ class MobileWorkerPage(BasePage):
         self.wait_for_element(self.profile_dropdown)
         text = self.get_selected_text(self.profile_dropdown)
         print(text)
-        assert text == profile, "Role is not the same as set before upload"
+        assert text == profile, "Profile is not the same as set before upload"

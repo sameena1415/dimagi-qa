@@ -17,6 +17,7 @@ group_id["user"] = None
 group_id["user_new"] = "username_"+fetch_random_string()+"_new"
 group_id["value"] = None
 group_id["group_name"] = None
+group_id["active"] = None
 
 @pytest.mark.user
 @pytest.mark.groups
@@ -147,21 +148,22 @@ def test_case_04_deactivate_user(driver, settings):
     menu = HomePage(driver, settings)
     menu.users_menu()
     user.mobile_worker_menu()
-    user.deactivate_user(group_id["user"])
-    user.verify_deactivation_via_login(group_id["user"])
+    text = user.deactivate_user(group_id["user"])
+    user.verify_deactivation_via_login(group_id["user"], text)
+    group_id["active"] = "No"
 
 
 @pytest.mark.user
 @pytest.mark.mobileWorker
 def test_case_04_reactivate_user(driver, settings):
-    if group_id["user"]==None:
-        pytest.skip("Skipping as user name is null")
+    if group_id["user"]==None or group_id["active"] == None:
+        pytest.skip("Skipping as user/active name is null")
     user = MobileWorkerPage(driver)
     menu = HomePage(driver, settings)
     menu.users_menu()
     user.mobile_worker_menu()
-    user.reactivate_user(group_id["user"])
-    user.verify_reactivation_via_login(group_id["user"])
+    text = user.reactivate_user(group_id["user"])
+    user.verify_reactivation_via_login(group_id["user"], text)
 
 
 @pytest.mark.user
@@ -201,6 +203,7 @@ def test_aftertest_cleanup_items_in_users_menu(driver, settings):
 @pytest.mark.user_profiles
 @pytest.mark.user_fields
 @pytest.mark.user_organization
+@pytest.mark.p1p2EscapeDefect
 def test_case_54_add_custom_user_data_profile_to_mobile_worker(driver, settings):
     create = MobileWorkerPage(driver)
     menu = HomePage(driver, settings)
@@ -213,7 +216,7 @@ def test_case_54_add_custom_user_data_profile_to_mobile_worker(driver, settings)
     create.click_profile()
     create.add_profile("field_" + fetch_random_string())
     create.save_field()
-    create.select_user_and_update_fields(group_id["user_new"])
+    create.select_user_and_update_fields(group_id["user_new"], "field_" + fetch_random_string())
     create.add_phone_number()
     create.select_profile()
     create.update_information()
@@ -225,8 +228,7 @@ def test_case_54_add_custom_user_data_profile_to_mobile_worker(driver, settings)
     menu.users_menu()
     create.upload_mobile_worker()
     time.sleep(2)
-    create.mobile_worker_menu()
-    create.select_user_and_update_fields(group_id["user_new"])
+    create.select_mobile_worker_created(group_id["user_new"])
     create.verify_profile_change(UserData.p1p2_profile)
     create.mobile_worker_menu()
     create.delete_bulk_users()
