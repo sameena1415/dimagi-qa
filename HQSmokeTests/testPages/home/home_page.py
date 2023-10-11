@@ -104,12 +104,14 @@ class HomePage(BasePage):
             if self.is_present(self.show_full_menu):
                 self.js_click(self.show_full_menu)
             self.driver.get(self.dashboard_link)
+            self.accept_pop_up()
             self.wait_for_element(menu)
             self.wait_to_click(menu)
         except TimeoutException:
             if self.is_present(login.username_textbox_id):
                 login.login(self.settings["login_username"], self.settings["login_password"])
                 self.driver.get(self.dashboard_link)
+                self.accept_pop_up()
                 self.wait_for_element(menu)
                 self.wait_to_click(menu)
             else:
