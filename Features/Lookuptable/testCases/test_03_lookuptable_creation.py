@@ -125,7 +125,7 @@ def test_case_41_User_restore(driver, settings):
     download_path = data.latest_download_file()
     home.data_menu()
     data.multiple_groups(download_path, value)
-    driver.get(UserData.restore_url)
+    driver.get(settings["url"]+UserData.restore_url)
     data.restore_attribute_1()
 
 

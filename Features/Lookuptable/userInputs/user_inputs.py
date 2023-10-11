@@ -14,8 +14,8 @@ class UserData:
     # Pre-setup application and case names
     field_val = 'table'+ str(fetch_random_string())
 
-    url = "https://staging.commcarehq.org/a/qa-automation/phone/restore/?version=2.0&as="
-    restore_url = "https://staging.commcarehq.org/a/qa-automation/phone/restore/?version=2.0&as=appiumtest@qa-automation.commcarehq.org"
+    url = "/phone/restore/?version=2.0&as="
+    restore_url = "/phone/restore/?version=2.0&as=appiumtest@qa-automation.commcarehq.org"
 
     data_list = [(1, 'Y', '1', 'RWS%DTUYIG*&^%'), (2, 'N', '2', '!#@$%#$RFGH:'), (3, 'N', '3', '!#@$%#$RFGH:')]
     row_value_change =[('','N','23',"appiumtest")]
@@ -27,13 +27,13 @@ class UserData:
     duplicate_values = [(1, 'N', '1'),(1, 'N', '1'),(987, 'N', '543'),(987, 'N', '543'),(987, 'N', '543')]
     type_data_list = [('N', field_val, 'yes',field_val)]
     type_sheet_headers = [('UID', 'Delete(Y/N)', 'field: '+ field_val)]
-    data_upload_path = PathSettings.ROOT + "/userInputs/upload_1.xlsx"
-    hypertension_upload_path = PathSettings.ROOT + "/userInputs/Hypertension.xlsx"
+    data_upload_path = PathSettings.ROOT + "Features/Lookuptable/userInputs/upload_1.xlsx"
+    hypertension_upload_path = PathSettings.ROOT + "Features/Lookuptable/userInputs/Hypertension.xlsx"
     print(hypertension_upload_path)
-    malformed_document_upload_path = PathSettings.ROOT + "/userInputs/MalformedDocument.xlsx"
-    state = PathSettings.ROOT + "/userInputs/States.xlsx"
-    Inapp = PathSettings.ROOT + "/userInputs/Inapp.xlsx"
-    district = PathSettings.ROOT + "/userInputs/districts.xlsx"
+    malformed_document_upload_path = PathSettings.ROOT + "Features/Lookuptable/userInputs/MalformedDocument.xlsx"
+    state = PathSettings.ROOT + "Features/Lookuptable/userInputs/States.xlsx"
+    Inapp = PathSettings.ROOT + "Features/Lookuptable/userInputs/Inapp.xlsx"
+    district = PathSettings.ROOT + "Features/Lookuptable/userInputs/districts.xlsx"
     invalid_data_assert = "However, we ran into the following problems:"
     missing_data_assert = "Please fix the following formatting issues in your Excel file"
     col_headers = ["user 1", "group 1"]

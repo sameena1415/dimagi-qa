@@ -153,7 +153,7 @@ def test_case_16_Attributes_1(driver, settings):
     value = data.create_download_lookup_table_without_field()
     home.data_menu()
     data.attribute_2(download_path, value)
-    driver.get(UserData.url+settings['login_username'])
+    driver.get(settings["url"]+UserData.url+settings['login_username'])
     data.restore_attribute_1()
 
 
