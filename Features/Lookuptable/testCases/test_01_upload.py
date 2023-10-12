@@ -11,7 +11,7 @@ def test_case_01_upload(driver, settings):
     data = LookUpTablePage(driver)
     home = HomePage(driver, settings)
     home.data_menu()
-    data.upload_1(UserData.data_upload_path, '1')
+    data.upload_2(UserData.data_upload_path, '1')
 
 
 @pytest.mark.lookup

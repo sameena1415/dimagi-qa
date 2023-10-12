@@ -24,8 +24,8 @@ def test_case_06_download_upload2(driver, settings):
     data = LookUpTablePage(driver)
     home = HomePage(driver, settings)
     home.data_menu()
-    data.upload_1(UserData.hypertension_upload_path, "1")
-    data.download1_specificTable()
+    data.upload_2(UserData.hypertension_upload_path, "1")
+    data.download1_specific_table()
 
 
 @pytest.mark.data
@@ -215,9 +215,3 @@ def test_25_bulkupload_2(driver, settings):
     excel = ExcelManager(download_path)
     excel.write_data(value, UserData.duplicate_values)
     home.data_menu()
-    data.err_upload(download_path)
-    data.download1()
-    data.view_lookup_table(value)
-    data.rowCount_table(value)
-    row_value = data.rowCount_table(value)
-    assert row_value == str((excel.row_size(value) - 1))

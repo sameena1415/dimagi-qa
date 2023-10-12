@@ -73,11 +73,11 @@ class LookUpTablePage(BasePage):
         self.rowcount = (By.XPATH, "//*[@id='report_table_view_lookup_tables_info']")
         self.restore_id = (By.XPATH, "//*[contains(text(),'" + self.table_id_name + "')]")
         self.delete_state_table = (
-        By.XPATH, "(//td/span[text()='state'])[1]//following::button[@data-bind='click: $root.removeDataType'][1]")
+            By.XPATH, "(//td/span[text()='state'])[1]//following::button[@data-bind='click: $root.removeDataType'][1]")
 
         # in-app effect
         self.applications_menu_id = (By.ID, "ApplicationsTab")
-        self.application = (By.LINK_TEXT, "Lookuptable_tests")
+        self.application = (By.LINK_TEXT, UserData.application)
         self.add_module = (By.XPATH, "//a[@class='appnav-add js-add-new-item']")
         self.add_case_list = (By.XPATH, "//button[@data-type='case']")
         self.delete_popup = (By.XPATH, "(//*[@class='disable-on-submit btn btn-danger'])[1]")
@@ -96,7 +96,7 @@ class LookUpTablePage(BasePage):
         self.question_display_text_name = "select lookuptable"
         self.lookup_table_data = (By.XPATH, "//a[@class='jstree-anchor'][@aria-level='2']")
         self.grid = (
-        By.XPATH, "/html/body/div[1]/div[4]/div/div[2]/div[2]/div/div[1]/div[1]/div[1]/div[4]/div[1]/ul/li/ul/li/a")
+            By.XPATH, "/html/body/div[1]/div[4]/div/div[2]/div[2]/div/div[1]/div[1]/div[1]/div[4]/div[1]/ul/li/ul/li/a")
         self.select_lookup_table = (By.XPATH, "//*[@name='property-itemsetData']")
         self.lookup_table_options = (By.XPATH, "//*[@name='property-itemsetData']/option")
         self.value_field = (By.XPATH, "//*[@id='property-valueRef']")
@@ -120,26 +120,27 @@ class LookUpTablePage(BasePage):
         self.inapp_continue = (By.XPATH, "//*[@class='btn btn-success btn-formnav-submit'][1]")
         self.inapp_success_message = (By.XPATH, "//*[@class='alert alert-success']")
         self.case_list = (By.XPATH, "//*[@aria-label='Case List']")
+        self.delete_success = (By.XPATH, "//div[contains(@class,'alert-success')][contains(.,'You have deleted')]")
         self.registration_form = (By.XPATH, "//*[@aria-label='Registration Form']")
         self.preview = (By.XPATH, "//*[@class='preview-toggler js-preview-toggle']")
         self.confirm = (By.XPATH, "//*[contains(text(),'Yes, log in as this user')]")
         self.specific_registration_form = (
-        By.XPATH, "/html/body/div[1]/div[4]/div/div[1]/nav/ul[1]/li/ul/li[1]/div/a[2]")
+            By.XPATH, "(/html/body/div[1]/div[4]/div/div[1]/nav/ul[1]/li/ul/li[1]/div/a[2])[last()]")
         self.revist_lookup_tabble = (By.XPATH, "//*[@class='fd-scrollable fd-scrollable-tree']/div/ul/li/ul/li/a")
         self.value_error = (
-        By.XPATH, "//*[@class='fd-scrollable fd-props-scrollable']/form/fieldset/div/div/div[2]/div/div/div/div")
+            By.XPATH, "//*[@class='fd-scrollable fd-props-scrollable']/form/fieldset/div/div/div[2]/div/div/div/div")
         self.display_error = (
-        By.XPATH, "//*[@class='fd-scrollable fd-props-scrollable']/form/fieldset/div/div/div[3]/div/div/div")
+            By.XPATH, "//*[@class='fd-scrollable fd-props-scrollable']/form/fieldset/div/div/div[3]/div/div/div")
         self.auto_selected_value = (By.XPATH, "//ul[@class='atwho-view-ul']/li[@class='cur'] ")
         self.auto_selected_value_1 = (
-        By.XPATH, "//*[@id='atwho-ground-property-labelRef']//ul[@class='atwho-view-ul']/li[@class='cur']")
+            By.XPATH, "//*[@id='atwho-ground-property-labelRef']//ul[@class='atwho-view-ul']/li[@class='cur']")
         self.edit_state_table = (By.XPATH, "(//tr[td[span[text()='state']]]//button)[1]")
         self.select_column = (
-        By.XPATH, "(//div[div[h4[span[text()='state']]]]/div[2]/fieldset/div[4]/table/tbody/tr/td[2]/input)[1]")
+            By.XPATH, "(//div[div[h4[span[text()='state']]]]/div[2]/fieldset/div[4]/table/tbody/tr/td[2]/input)[1]")
         self.save_state = (By.XPATH, "//div[div[h4[span[text()='state']]]]//button[@data-bind='click: saveEdit']")
         self.e_case_list = (By.XPATH, "(//*[@data-label='Edit Pen'])[1]")
         self.error_message = (By.XPATH, "(//*[@class='messages'])[1]")
-        self.saved_button = (By.XPATH, "//span[text()='Saved']")
+        self.saved_button = (By.XPATH, "//span[@class='btn btn-info disabled'][.='Saved']")
         self.number_of_questions = (By.XPATH, "//*[@id='formdesigner']/div[1]/div[1]/div[1]/div[4]/div[1]/ul/li")
         self.child_node = (By.XPATH, "//*[@id='formdesigner']/div[1]/div[1]/div[1]/div[4]/div[1]/ul/li/ul")
         self.home = (By.XPATH, "//*[@id='breadcrumb-region']/div/div/ol/li[1]")
@@ -191,6 +192,19 @@ class LookUpTablePage(BasePage):
 
     def upload_1(self, filepath, table_count):
         filepath = str(PathSettings.DOWNLOAD_PATH / filepath)
+        print("File Path: ", filepath)
+        self.wait_to_click(self.manage_tables_link)
+        self.scroll_to_bottom()
+        self.send_keys(self.upload_table, filepath)
+        self.wait_to_click(self.upload)
+        self.wait_for_element(self.success_msg, 10)
+        success = self.get_text(self.success_msg)
+        success_msg = "Successfully uploaded " + table_count + " tables."
+        assert success == success_msg
+        self.wait_to_click(self.manage_tables_link)
+
+    def upload_2(self, filepath, table_count):
+        filepath = str(UserData.user_input_base_dir + "//" + filepath)
         print("File Path: ", filepath)
         self.wait_to_click(self.manage_tables_link)
         self.scroll_to_bottom()
@@ -308,7 +322,7 @@ class LookUpTablePage(BasePage):
         time.sleep(3)
         self.wait_to_click(self.close_download_popup)
 
-    def download1_specificTable(self):
+    def download1_specific_table(self):
         self.wait_to_click(self.manage_tables_link)
         self.wait_to_click(self.select_hypertension_checkbox)
         self.wait_to_click(self.click_download)
@@ -542,18 +556,15 @@ class LookUpTablePage(BasePage):
         self.wait_to_click(self.selected_caselist)
         self.wait_to_click(self.delete_popup)
         self.accept_pop_up()
-        time.sleep(20)
-        self.wait_for_element(self.applications_menu_id, 100)
+        self.wait_for_element(self.delete_success, 100)
 
     def test_application(self):
-        # self.wait_to_click(self.applications_menu_id)
-        self.wait_to_click(self.application)
         self.wait_to_click(self.add_module)
         time.sleep(1)
         self.wait_to_click(self.add_case_list)
         time.sleep(2)
-        self.wait_to_click(self.add_questions)
-        time.sleep(2)
+        self.wait_for_element(self.add_questions, 50)
+        self.js_click(self.add_questions)
         time.sleep(2)
         self.wait_to_click(self.lookup_question)
         time.sleep(2)
@@ -561,6 +572,7 @@ class LookUpTablePage(BasePage):
         time.sleep(2)
         self.send_keys(self.question_display_text, self.question_display_text_name)
         self.wait_to_click(self.save_button)
+        self.wait_for_element(self.saved_button, 50)
         self.wait_to_click(self.lookup_table_data)
         self.wait_to_click(self.grid)
         self.wait_to_click(self.select_lookup_table)
@@ -577,7 +589,7 @@ class LookUpTablePage(BasePage):
         print("expression editior is displayed")
 
     def specific_table_upload(self, tablename):
-        self.navigation_to_application_tab()
+        self.wait_for_element(self.add_module)
         self.wait_to_click(self.add_module)
         time.sleep(1)
         self.wait_to_click(self.add_case_list)
@@ -593,11 +605,9 @@ class LookUpTablePage(BasePage):
         print("tablename:", tablename)
         dd.select_by_visible_text(tablename)
         self.wait_to_click(self.save_button)
-        time.sleep(5)
+        self.wait_for_element(self.saved_button, 50)
 
     def create_new_form(self):
-        # self.wait_to_click(self.applications_menu_id)
-        self.wait_to_click(self.application)
         self.wait_to_click(self.add_module)
         time.sleep(1)
         self.wait_to_click(self.add_case_list)
@@ -611,15 +621,19 @@ class LookUpTablePage(BasePage):
         self.wait_to_click(self.select_lookup_table)
         time.sleep(5)
         self.wait_to_click(self.save_button)
+        time.sleep(2)
+        self.wait_for_element(self.saved_button, 50)
 
     def adding_questions(self):
         time.sleep(3)
+        self.wait_for_element(self.add_questions)
         self.js_click(self.add_questions)
         time.sleep(3)
         self.wait_for_element(self.lookup_question)
         self.hover_and_click(self.lookup_question, self.checkbox_question)
         time.sleep(10)
         self.wait_to_click(self.save_button)
+        self.wait_for_element(self.saved_button, 50)
         self.find_elements(self.number_of_questions)
         question_nodes = len(self.find_elements(self.number_of_questions))
         child_nodes = len(self.find_elements(self.child_node))
@@ -645,6 +659,7 @@ class LookUpTablePage(BasePage):
         self.wait_to_click(self.application)
 
     def navigation_to_a_caselist(self, tablename):
+        self.wait_for_element(self.specific_registration_form)
         self.wait_to_click(self.specific_registration_form)
         self.wait_to_click(self.revist_lookup_tabble)
         dropdown_values = self.lookuptable_display_list()
@@ -675,6 +690,7 @@ class LookUpTablePage(BasePage):
         self.wait_to_click(self.auto_selected_value_1)
         self.wait_to_click(self.save_button)
         time.sleep(3)
+        self.wait_for_element(self.saved_button, 50)
 
     def edit_state(self):
         self.wait_to_click(self.manage_tables_link)
@@ -759,6 +775,7 @@ class LookUpTablePage(BasePage):
         self.send_keys(self.display_condition, '1=2')
         self.wait_to_click(self.save_button)
         time.sleep(3)
+        self.wait_for_element(self.saved_button, 50)
 
     def multiple_groups(self, path, table_id):
         excel = ExcelManager(path)
@@ -784,6 +801,7 @@ class LookUpTablePage(BasePage):
         for val in range(1, i):
             j = excel.get_cell_value("types", 2, val)
             print(val)
+
             print(j)
             if (str(j).startswith("lookuptable")):
                 print("Value to be updated")
@@ -793,3 +811,12 @@ class LookUpTablePage(BasePage):
     def loop_submit_form_on_registration(self):
         for i in range(len(UserData.user_ids_list)):
             self.submit_form_on_registration("en", UserData.user_ids_list[i])
+
+    def bulk_upload_verification(self, download_path, value):
+        self.err_upload(download_path)
+        self.download1()
+        self.view_lookup_table(value)
+        self.rowCount_table(value)
+        row_value = self.rowCount_table(value)
+        excel = ExcelManager(download_path)
+        assert row_value == str((excel.row_size(value) - 1))

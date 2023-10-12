@@ -27,13 +27,12 @@ class UserData:
     duplicate_values = [(1, 'N', '1'),(1, 'N', '1'),(987, 'N', '543'),(987, 'N', '543'),(987, 'N', '543')]
     type_data_list = [('N', field_val, 'yes',field_val)]
     type_sheet_headers = [('UID', 'Delete(Y/N)', 'field: '+ field_val)]
-    data_upload_path = PathSettings.ROOT + "/Features/Lookuptable/userInputs/upload_1.xlsx"
-    hypertension_upload_path = PathSettings.ROOT + "/Features/Lookuptable/userInputs/Hypertension.xlsx"
-    print(hypertension_upload_path)
-    malformed_document_upload_path = PathSettings.ROOT + "/Features/Lookuptable/userInputs/MalformedDocument.xlsx"
-    state = PathSettings.ROOT + "/Features/Lookuptable/userInputs/States.xlsx"
-    Inapp = PathSettings.ROOT + "/Features/Lookuptable/userInputs/Inapp.xlsx"
-    district = PathSettings.ROOT + "/Features/Lookuptable/userInputs/districts.xlsx"
+    data_upload_path = "upload_1.xlsx"
+    hypertension_upload_path = "Hypertension.xlsx"
+    malformed_document_upload_path =  "MalformedDocument.xlsx"
+    state = "States.xlsx"
+    Inapp = "Inapp.xlsx"
+    district = "districts.xlsx"
     invalid_data_assert = "However, we ran into the following problems:"
     missing_data_assert = "Please fix the following formatting issues in your Excel file"
     col_headers = ["user 1", "group 1"]
