@@ -15,7 +15,7 @@ def test_case_01_upload(driver, settings):
 
 
 @pytest.mark.lookup
-def test_case_02_error_upload1(driver, settings):
+def test_case_02_error_upload_1(driver, settings):
     home = HomePage(driver, settings)
     home.data_menu()
     data = LookUpTablePage(driver)
@@ -28,7 +28,7 @@ def test_case_02_error_upload1(driver, settings):
 
 
 @pytest.mark.lookup
-def test_case_03_error_upload2(driver, settings):
+def test_case_03_error_upload_2(driver, settings):
     home = HomePage(driver, settings)
     home.data_menu()
     data = LookUpTablePage(driver)
@@ -41,7 +41,7 @@ def test_case_03_error_upload2(driver, settings):
 
 
 @pytest.mark.lookup
-def test_case_04_Error_upload3(driver, settings):
+def test_case_04_error_upload_3(driver, settings):
     home = HomePage(driver, settings)
     data = LookUpTablePage(driver)
     home.data_menu()

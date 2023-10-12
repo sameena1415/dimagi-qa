@@ -232,8 +232,8 @@ class LookUpTablePage(BasePage):
         return self.table_id_name
 
     def err_upload(self, filepath):
-        if str(PathSettings.DOWNLOAD_PATH) in filepath:
-            print("Complete Path")
+        if str(PathSettings.DOWNLOAD_PATH) in filepath or str(UserData.user_input_base_dir) in filepath:
+            print("Complete Path: ", filepath)
         else:
             filepath = str(PathSettings.DOWNLOAD_PATH / filepath)
             print("File path: ", filepath)
@@ -249,6 +249,7 @@ class LookUpTablePage(BasePage):
 
     def missing_data_assert(self):
         missing_data = self.get_text(self.error_upload_msg)
+        print("Error msg: ", missing_data)
         assert UserData.missing_data_assert in missing_data
 
     def selects_deselects(self):
@@ -351,7 +352,7 @@ class LookUpTablePage(BasePage):
             print("Current directory is-", os.getcwd())
 
     def create_download_lookuptable(self):
-        self.create_lookup_table()
+        table_name = self.create_lookup_table()
         self.download1()
         return self.table_id_name
 

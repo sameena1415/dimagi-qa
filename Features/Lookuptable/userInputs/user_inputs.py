@@ -29,7 +29,7 @@ class UserData:
     type_sheet_headers = [('UID', 'Delete(Y/N)', 'field: '+ field_val)]
     data_upload_path = "upload_1.xlsx"
     hypertension_upload_path = "Hypertension.xlsx"
-    malformed_document_upload_path =  "MalformedDocument.xlsx"
+    malformed_document_upload_path = user_input_base_dir + "//MalformedDocument.xlsx"
     state = "States.xlsx"
     Inapp = "Inapp.xlsx"
     district = "districts.xlsx"
