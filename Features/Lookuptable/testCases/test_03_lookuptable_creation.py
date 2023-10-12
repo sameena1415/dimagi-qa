@@ -95,7 +95,7 @@ def test_case_20_creation2(driver, settings):
     data.formbuilder_5()
     app_preview = AppPreviewPage(driver)
     app_preview.check_access_to_app_preview()
-    data.submit_form_on_registration("en", "kiran")
+    data.submit_form_on_registration(UserData.languages[0], UserData.user_ids_list[0])
     driver.switch_to.default_content()
     data.delete_caselist()
 
