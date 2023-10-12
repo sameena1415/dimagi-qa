@@ -23,7 +23,7 @@ class ExcelManager:
         wb.create_sheet(sheet_name)
         wb.save(self.path)
 
-    def sheet_new(self, sheet_name):
+    def sheet_new(self):
         wb = Workbook()
         ws1 = wb.create_sheet("Sheet_A")
         ws1.title = "Title_A"
@@ -37,12 +37,14 @@ class ExcelManager:
         wb.remove(sheetDelete)
         print(wb.sheetnames)
         wb.save(self.path)
+        print("Sheet deleted")
 
     def update_sheet(self, sheet_name):
         wb = load_workbook(self.path)
         sheet = wb.active
         sheet.title = sheet_name
         wb.save(self.path)
+        print("Sheet updated")
 
     def write_data(self, sheet_name, list_data):
         from openpyxl import load_workbook
@@ -51,12 +53,13 @@ class ExcelManager:
         for i in list_data:
             sheet.append(i)
         wb.save(self.path)
-
+        print("Excel updated")
 
     def get_cell_value(self, sheet_name, col_num, row_num):
         wb = load_workbook(self.path)
         sheet = wb[sheet_name]
         data = sheet.cell(row_num,col_num).value
+        print("Cell value:", data)
         return data
 
     def read_excel(self, sheet_name):
@@ -71,6 +74,7 @@ class ExcelManager:
             for j in range(1, column_count + 1):
                data = sheet.cell(row=i, column=j).value
                data1 = data1+" "+str(data)
+        print("Excel data: ", data1)
         return data1
 
     def get_cell_data(self, sheet_name, column_name, row_num):
@@ -82,6 +86,7 @@ class ExcelManager:
             if sheet.cell(row=1, column=i).value == column_name:
                 column_num = i
         data = sheet.cell(row=row_num, column=column_num).value
+        print("Cell data: ", data)
         return data
 
     def write_excel_data(self, sheet_name, row_num, column_num, value):
@@ -89,29 +94,34 @@ class ExcelManager:
         sheet = wb[sheet_name]
         sheet.cell(row=row_num, column=column_num).value = value
         wb.save(self.path)
+        print("Excel updated")
 
     def delete_column(self, sheet_name, column_number):
         wb = load_workbook(self.path)
         sheet = wb[sheet_name]
         sheet.delete_cols(column_number)
         wb.save(self.path)
+        print("Excel column deleted")
 
     def delete_row(self, sheet_name, row_number):
         wb = load_workbook(self.path)
         sheet = wb[sheet_name]
         sheet.delete_rows(row_number)
         wb.save(self.path)
+        print("Excel row deleted")
 
     def row_size(self, sheet_name):
         wb = load_workbook(self.path)
         sheet = wb[sheet_name]
         row_count = sheet.max_row
+        print("Row Count: ", row_count)
         return row_count
 
     def col_size(self, sheet_name):
         wb = load_workbook(self.path)
         sheet = wb[sheet_name]
         column_count = sheet.max_column
+        print("Column Count: ", column_count)
         return column_count
 
     def upload_to_path(self, table_id, data_list):

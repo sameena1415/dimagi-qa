@@ -66,7 +66,7 @@ def test_case_39_edit_dummy_data(driver, settings):
 @pytest.mark.data
 @pytest.mark.managetables
 @pytest.mark.lookupexcel
-def test_case_21_Error_upload3(driver, settings):
+def test_case_21_error_upload_3(driver, settings):
     home = HomePage(driver, settings)
     home.data_menu()
     data = LookUpTablePage(driver)
@@ -103,7 +103,7 @@ def test_case_20_creation2(driver, settings):
 @pytest.mark.data
 @pytest.mark.managetables
 @pytest.mark.lookupexcel
-def test_case_40_Multiple_groups(driver, settings):
+def test_case_40_multiple_groups(driver, settings):
     home = HomePage(driver, settings)
     home.data_menu()
     data = LookUpTablePage(driver)
@@ -117,7 +117,7 @@ def test_case_40_Multiple_groups(driver, settings):
 @pytest.mark.data
 @pytest.mark.managetables
 @pytest.mark.lookupexcel
-def test_case_41_User_restore(driver, settings):
+def test_case_41_user_restore(driver, settings):
     home = HomePage(driver, settings)
     home.data_menu()
     data = LookUpTablePage(driver)

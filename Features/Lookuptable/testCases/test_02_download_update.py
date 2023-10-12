@@ -56,8 +56,7 @@ def test_case_08_download_update_4(driver, settings):
     excel = ExcelManager(download_path)
     excel.delete_sheet("types")
     home.data_menu()
-    data.err_upload(download_path)
-    data.missing_data_assert()
+    data.verify_missing_data_alert(download_path)
 
 
 @pytest.mark.data
@@ -148,9 +147,9 @@ def test_case_16_Attributes_1(driver, settings):
     home = HomePage(driver, settings)
     home.data_menu()
     data = LookUpTablePage(driver)
+    value = data.create_download_lookup_table_without_field()
     download_path = data.latest_download_file()
     print("path is ", download_path)
-    value = data.create_download_lookup_table_without_field()
     home.data_menu()
     data.attribute_2(download_path, value)
     driver.get(settings["url"]+UserData.url+settings['login_username'])
@@ -164,8 +163,9 @@ def test_case_17_Attributes_2(driver, settings):
     home = HomePage(driver, settings)
     home.data_menu()
     data = LookUpTablePage(driver)
-    download_path = data.latest_download_file()
     value = data.create_download_lookup_table_without_field()
+    download_path = data.latest_download_file()
+    print("path is ", download_path)
     home.data_menu()
     data.attribute_2(download_path, value)
 
@@ -177,9 +177,9 @@ def test_case_18_Attributes_3(driver, settings):
     home = HomePage(driver, settings)
     home.data_menu()
     data = LookUpTablePage(driver)
+    value = data.create_download_lookup_table_without_field()
     download_path = data.latest_download_file()
     print("path is ", download_path)
-    value = data.create_download_lookup_table_without_field()
     home.data_menu()
     data.attribute_2(download_path, value)
     home.data_menu()
@@ -215,3 +215,4 @@ def test_25_bulkupload_2(driver, settings):
     excel = ExcelManager(download_path)
     excel.write_data(value, UserData.duplicate_values)
     home.data_menu()
+    data.bulk_upload_verification(download_path, value)
