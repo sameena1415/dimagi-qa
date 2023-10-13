@@ -1,3 +1,4 @@
+import datetime
 import os.path
 import random
 import string
@@ -70,7 +71,7 @@ class LookUpTablePage(BasePage):
         self.download_file = (By.XPATH, "//*[@id='download-progress']/div/form/a")
         self.close_download_popup = (By.XPATH, "//*[@id='download-progress']/../../div/button[@class='close']")
         self.error_alert_msg = (By.XPATH, "//*[@class='alert alert-danger']/h3")
-        self.replace_table = (By.ID, "replace")
+        self.replace_table = (By.XPATH, "//input[@id='replace'][@type='checkbox']")
         self.rowcount = (By.XPATH, "//*[@id='report_table_view_lookup_tables_info']")
         self.restore_id = (By.XPATH, "//*[contains(text(),'" + self.table_id_name + "')]")
         self.delete_state_table = (
@@ -248,6 +249,10 @@ class LookUpTablePage(BasePage):
         time.sleep(1)
         self.send_keys(self.upload_table, filepath)
         time.sleep(2)
+        self.wait_for_element(self.replace_table)
+        time.sleep(2)
+        self.js_click(self.replace_table)
+        time.sleep(2)
         self.js_click(self.upload)
         time.sleep(10)
         print("Upload successful")
@@ -355,6 +360,12 @@ class LookUpTablePage(BasePage):
             else:
                 newest = max(files, key=os.path.getctime)
             print("File downloaded: " + newest)
+            modTimesinceEpoc = (PathSettings.DOWNLOAD_PATH / newest).stat().st_mtime
+            modificationTime = datetime.datetime.fromtimestamp(modTimesinceEpoc)
+            timeNow = datetime.datetime.now()
+            diff_seconds = round((timeNow - modificationTime).total_seconds())
+            print("Last Modified Time : ", str(modificationTime) + 'Current Time : ', str(timeNow),
+                  "Diff: " + str(diff_seconds))
             return newest
         finally:
             print("Restoring the path...")
@@ -419,14 +430,7 @@ class LookUpTablePage(BasePage):
         return d1, d2
 
     def replace_existing_table(self, filepath):
-        filepath = str(PathSettings.DOWNLOAD_PATH / filepath)
-        print("File path: ", filepath)
-        self.wait_to_click(self.manage_tables_link)
-        self.scroll_to_bottom()
-        self.send_keys(self.upload_table, filepath)
-        self.wait_to_click(self.replace_table)
-        self.wait_to_click(self.upload)
-        self.wait_for_element(self.success_msg, 20)
+        self.err_upload(filepath)
         print("Upload successful")
         self.wait_to_click(self.manage_tables_link)
 
@@ -437,13 +441,13 @@ class LookUpTablePage(BasePage):
         self.download1(tablename)
         # self.view_lookup_table(tablename)
         row_count_before = self.row_count_table(tablename)
+        print("Row count before: ", row_count_before)
         download_path_1 = self.latest_download_file()
         excel = ExcelManager(download_path_1)
         excel.delete_row(tablename, 2)
         self.replace_existing_table(download_path_1)
         # self.view_lookup_table(tablename)
         row_count_after = self.row_count_table(tablename)
-        print("Row count before: ", row_count_before)
         print("Row count after: ", row_count_after)
         assert row_count_before > row_count_after
         print("Row got successfully Deleted")
@@ -500,8 +504,8 @@ class LookUpTablePage(BasePage):
         self.err_upload(upload_path)
         for i in range(0, n):
             tablename = str.split(tablenames, ":")[i]
-            row_count_After = self.row_count_table(tablename)
-            after = after + "," + row_count_After
+            row_count_after = self.row_count_table(tablename)
+            after = after + "," + row_count_after
         after = str.split(after, ",", 1)[1].strip()
         for i in range(0, n):
             b_row = str.split(before, ',')[0]
