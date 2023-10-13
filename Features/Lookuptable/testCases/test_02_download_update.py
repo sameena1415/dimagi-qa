@@ -7,6 +7,7 @@ from Features.Lookuptable.userInputs.user_inputs import UserData
 """"Contains test cases related to the Data module"""
 
 
+
 @pytest.mark.data
 @pytest.mark.managetables
 @pytest.mark.excel
@@ -14,7 +15,9 @@ def test_case_05_download1(driver, settings):
     home = HomePage(driver, settings)
     home.data_menu()
     data = LookUpTablePage(driver)
-    data.create_download_lookuptable()
+    value = data.create_download_lookuptable()
+    home.data_menu()
+    data.delete_lookup_table(value)
 
 
 @pytest.mark.data
@@ -35,13 +38,15 @@ def test_case_07_download_update_3(driver, settings):
     home = HomePage(driver, settings)
     home.data_menu()
     data = LookUpTablePage(driver)
-    data.create_download_lookuptable()
+    value = data.create_download_lookuptable()
     download_path = data.latest_download_file()
     excel = ExcelManager(download_path)
     excel.write_data('types', UserData.type_data_list)
     excel.create_sheet(UserData.field_val)
     excel.write_data(UserData.field_val, UserData.type_sheet_headers)
     data.upload_1(download_path, str(excel.row_size('types') - 1))
+    home.data_menu()
+    data.delete_lookup_table(value)
 
 
 @pytest.mark.data
@@ -51,12 +56,14 @@ def test_case_08_download_update_4(driver, settings):
     data = LookUpTablePage(driver)
     home = HomePage(driver, settings)
     home.data_menu()
-    data.create_download_lookuptable()
+    value = data.create_download_lookuptable()
     download_path = data.latest_download_file()
     excel = ExcelManager(download_path)
     excel.delete_sheet("types")
     home.data_menu()
     data.verify_missing_data_alert(download_path)
+    home.data_menu()
+    data.delete_lookup_table(value)
 
 
 @pytest.mark.data

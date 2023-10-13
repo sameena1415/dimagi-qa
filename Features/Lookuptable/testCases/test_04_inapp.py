@@ -33,6 +33,8 @@ def test_case_30_lookup_table_form_builder1(driver, settings):
 @pytest.mark.inapp
 def test_case_29_lookup_table_form_builder1(driver, settings):  # Hover and click error.
     data = LookUpTablePage(driver)
+    home = HomePage(driver, settings)
+    home.applications_menu(UserData.application)
     data.create_new_form()
     data.adding_questions()
 
@@ -47,7 +49,7 @@ def test_case_31_lookup_table_form_builder3(driver, settings):
     home.applications_menu(UserData.application)
     data.specific_table_upload(UserData.specific_table_data[0])
     home.data_menu()
-    data.delete_specific_lookup_table(UserData.specific_table_data[0])
+    data.delete_lookup_table(UserData.specific_table_data[0])
     home = HomePage(driver, settings)
     home.applications_menu(UserData.application)
     data.navigation_to_a_caselist(UserData.caselist_nav)

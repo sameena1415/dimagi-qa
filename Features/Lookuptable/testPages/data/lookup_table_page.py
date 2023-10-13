@@ -63,19 +63,20 @@ class LookUpTablePage(BasePage):
         self.view_table = (By.ID, "apply-btn")
         self.panel_title = (By.CLASS_NAME, "panel-title")
         self.column_name = (By.XPATH, "(//div[contains(i/following-sibling::text(), '" + self.table_id_name + "')])[1]")
-        self.delete_table = (
-            By.XPATH, self.table_created + "//following::button[@data-bind='click: $root.removeDataType'][1]")
+        self.delete_table = "//td[./span[text()='{}']]//following-sibling::td/button[@data-bind='click: $root.removeDataType']"
         self.select_checkbox = "//td[./span[text() = '{}']]//following-sibling::td/label/input[@type='checkbox']"
         self.select_hypertension_checkbox = (By.XPATH, "//*[text() = 'hypertension'][1] /../../ td / label / input")
         self.click_download = (By.XPATH, "//*[@id='fixtures-ui']/div[1]/p/a")
         self.download_file = (By.XPATH, "//*[@id='download-progress']/div/form/a")
-        self.close_download_popup = (By.XPATH, "//*[@id='download-progress']/../../div/button[@class='close']")
+        self.please_complete = (By.XPATH, "//p[@class='alert alert-success'][.='Process complete.']")
+
+        self.close_download_popup = (By.XPATH, "(//button[@aria-label='Close'])[last()]")
         self.error_alert_msg = (By.XPATH, "//*[@class='alert alert-danger']/h3")
         self.replace_table = (By.XPATH, "//input[@id='replace'][@type='checkbox']")
         self.rowcount = (By.XPATH, "//*[@id='report_table_view_lookup_tables_info']")
         self.restore_id = (By.XPATH, "//*[contains(text(),'" + self.table_id_name + "')]")
-        self.delete_state_table = (
-            By.XPATH, "(//td/span[text()='state'])[1]//following::button[@data-bind='click: $root.removeDataType'][1]")
+        # self.delete_state_table = (
+        #     By.XPATH, "(//td/span[text()='state'])[1]//following::button[@data-bind='click: $root.removeDataType'][1]")
 
         # in-app effect
         self.applications_menu_id = (By.ID, "ApplicationsTab")
@@ -155,29 +156,36 @@ class LookUpTablePage(BasePage):
 
     def create_lookup_table(self):
         self.wait_to_click(self.manage_tables_link)
-        self.wait_to_click(self.add_table)
-        self.send_keys(self.table_id, self.table_id_name)
-        self.send_keys(self.table_id_description, self.table_id_name)
-        self.wait_to_click(self.add_field)
-        self.send_keys(self.field_name, self.table_id_name)
-        self.wait_to_click(self.save_table)
-        time.sleep(2)
-        assert self.is_present_and_displayed(self.table_created_path)
-        print("LookUp Table created successfully!")
-        return self.table_id_name
+        self.wait_for_element(self.add_table)
+        if self.is_present_and_displayed(self.table_created_path, 15):
+            print("Lookup table is already present!")
+        else:
+            self.wait_to_click(self.add_table)
+            self.send_keys(self.table_id, self.table_id_name)
+            self.send_keys(self.table_id_description, self.table_id_name)
+            self.wait_to_click(self.add_field)
+            self.send_keys(self.field_name, self.table_id_name)
+            self.wait_to_click(self.save_table)
+            time.sleep(2)
+            assert self.is_present_and_displayed(self.table_created_path)
+            print("LookUp Table created successfully!")
+            return self.table_id_name
 
     def create_download_lookup_table_without_field(self):
         self.wait_to_click(self.manage_tables_link)
         self.wait_for_element(self.add_table)
-        self.wait_to_click(self.add_table)
-        self.wait_to_clear_and_send_keys(self.table_id, self.table_id_name)
-        self.wait_to_clear_and_send_keys(self.table_id_description, self.table_id_name)
-        self.wait_to_click(self.save_table)
-        time.sleep(2)
-        assert self.is_present_and_displayed(self.table_created_path)
-        print("LookUp Table created successfully! ", self.table_id_name )
-        self.download1(self.table_id_name)
-        return self.table_id_name
+        if self.is_present_and_displayed(self.table_created_path, 15):
+            print("Lookup table is already present!")
+        else:
+            self.wait_to_click(self.add_table)
+            self.wait_to_clear_and_send_keys(self.table_id, self.table_id_name)
+            self.wait_to_clear_and_send_keys(self.table_id_description, self.table_id_name)
+            self.wait_to_click(self.save_table)
+            time.sleep(2)
+            assert self.is_present_and_displayed(self.table_created_path)
+            print("LookUp Table created successfully! ", self.table_id_name )
+            self.download1(self.table_id_name)
+            return self.table_id_name
 
     def view_lookup_table(self, table_id_name):
         self.wait_for_element(self.view_tables_link)
@@ -189,11 +197,10 @@ class LookUpTablePage(BasePage):
         self.wait_for_element(self.panel_title, 20)
         print("LookUp Table can be viewed successfully!")
 
-    def delete_lookup_table(self):
+    def delete_lookup_table(self, table):
         self.wait_to_click(self.manage_tables_link)
-        self.wait_to_click(self.delete_table)
-        obj = self.driver.switch_to.alert
-        obj.accept()
+        self.wait_to_click((By.XPATH, self.delete_table.format(table)))
+        self.accept_pop_up()
         print("LookUp Table deleted successfully!")
 
     def upload_1(self, filepath, table_count):
@@ -333,6 +340,13 @@ class LookUpTablePage(BasePage):
         self.wait_for_element((By.XPATH, self.select_checkbox.format(tablename)))
         self.wait_to_click((By.XPATH, self.select_checkbox.format(tablename)))
         self.wait_to_click(self.click_download)
+        self.wait_for_element(self.close_download_popup)
+        if self.is_present(self.please_complete):
+            self.wait_to_click(self.close_download_popup)
+            self.driver.refresh()
+            self.wait_for_element((By.XPATH, self.select_checkbox.format(tablename)))
+            self.wait_to_click((By.XPATH, self.select_checkbox.format(tablename)))
+            self.wait_to_click(self.click_download)
         self.wait_for_element(self.download_file, 60)
         self.wait_to_click(self.download_file)
         time.sleep(3)
@@ -668,14 +682,6 @@ class LookUpTablePage(BasePage):
         assert dropdown_values[0] != "Custom"
         return dropdown_values
 
-    def delete_specific_lookup_table(self, tablename):
-        self.wait_to_click(self.manage_tables_link)
-        if (tablename == "state"):
-            self.wait_to_click(self.delete_state_table)
-        obj = self.driver.switch_to.alert
-        obj.accept()
-        print("LookUp Table deleted successfully!")
-
     def navigation_to_application_tab(self):
         self.wait_to_click(self.applications_menu_id)
         self.wait_to_click(self.application)
@@ -739,13 +745,13 @@ class LookUpTablePage(BasePage):
     def submit_form_on_registration(self, value, user):
         self.wait_for_element(self.home)
         self.wait_to_click(self.home)
-        self.wait_to_click(self.login_user)
-        time.sleep(2)
-        self.wait_to_click((By.XPATH, self.select_user.format(user)))
-        time.sleep(2)
-        self.wait_for_element(self.login)
-        self.wait_to_click(self.login)
-        time.sleep(2)
+        # self.wait_to_click(self.login_user)
+        # time.sleep(2)
+        # self.wait_to_click((By.XPATH, self.select_user.format(user)))
+        # time.sleep(2)
+        # self.wait_for_element(self.login)
+        # self.wait_to_click(self.login)
+        # time.sleep(2)
         self.language_selection(value)
         self.wait_for_element(self.sync)
         self.wait_to_click(self.sync)
@@ -837,7 +843,6 @@ class LookUpTablePage(BasePage):
     def bulk_upload_verification(self, download_path, value):
         self.err_upload(download_path)
         self.download1(value)
-        # self.view_lookup_table(value)
         self.row_count_table(value)
         row_value = self.row_count_table(value)
         excel = ExcelManager(download_path)
