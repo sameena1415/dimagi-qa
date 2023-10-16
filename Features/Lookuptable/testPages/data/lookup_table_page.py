@@ -169,7 +169,7 @@ class LookUpTablePage(BasePage):
             time.sleep(2)
             assert self.is_present_and_displayed(self.table_created_path)
             print("LookUp Table created successfully!")
-            return self.table_id_name
+        return self.table_id_name
 
     def create_download_lookup_table_without_field(self):
         self.wait_to_click(self.manage_tables_link)
