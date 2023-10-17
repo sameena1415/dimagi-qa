@@ -410,10 +410,12 @@ class LookUpTablePage(BasePage):
         excel = ExcelManager(path)
         col = excel.col_size(table_id)
         excel.write_excel_data(table_id, 1, col + 1, "group 1")
+        time.sleep(2)
         excel.upload_to_path(table_id, UserData.data_list)
+        time.sleep(2)
 
-    def compare_excel(self, df1, df2, compareflag):
-        if (compareflag == 0):
+    def compare_excel(self, df1, df2, compare_flag):
+        if (compare_flag == 0):
             assert df1 == df2
             print("Data is same")
         else:

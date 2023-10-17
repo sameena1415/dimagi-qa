@@ -1,5 +1,3 @@
-import os
-
 import openpyxl
 from openpyxl.reader.excel import load_workbook
 from openpyxl.workbook import Workbook
@@ -53,7 +51,7 @@ class ExcelManager:
         for i in list_data:
             sheet.append(i)
         wb.save(self.path)
-        print("Excel updated")
+        print("List Data updated")
 
     def get_cell_value(self, sheet_name, col_num, row_num):
         wb = load_workbook(self.path)
