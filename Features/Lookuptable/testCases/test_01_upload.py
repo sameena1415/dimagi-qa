@@ -1,9 +1,23 @@
 import pytest
+
+from HQSmokeTests.testPages.applications.application_page import ApplicationPage
 from HQSmokeTests.testPages.home.home_page import HomePage
 from Features.Lookuptable.testPages.data.lookup_table_page import LookUpTablePage
 from Features.Lookuptable.userInputs.user_inputs import UserData
 
 """"Contains test cases related to the Data module"""
+
+
+@pytest.mark.lookup
+@pytest.mark.deleteApp
+@pytest.mark.createApp
+def test_case_00_initial_setup(driver, settings):
+    app = ApplicationPage(driver)
+    app.delete_and_add_app(UserData.application)
+    data = LookUpTablePage(driver)
+    home = HomePage(driver, settings)
+    home.data_menu()
+    data.delete_test_lookup_tables()
 
 
 @pytest.mark.lookup

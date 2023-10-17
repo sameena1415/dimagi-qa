@@ -29,6 +29,7 @@ class ApplicationPage(BasePage):
         self.followup_form_name = "\"" + fetch_random_string() + "\"'& Followup Form"
 
         # Create New Application
+        self.dashboard_tab = (By.ID, "DashboardTab")
         self.applications_menu_id = (By.ID, "ApplicationsTab")
         self.new_application = (By.LINK_TEXT, "New Application")
         self.new_app_created = (By.LINK_TEXT, self.app_name)
@@ -43,7 +44,7 @@ class ApplicationPage(BasePage):
         self.location_question = (By.XPATH, "//a[@data-qtype='Geopoint'][contains(.,'GPS')]")
         self.question_display_text = (By.XPATH, "(//div[@role='textbox'])[1]")
         self.save_button = (By.XPATH, "//span[text()='Save']")
-        self.app_created = "//span[text()='{}']"
+        self.app_created = "(//span[text()='{}'])[1]"
         self.form_link = "//a//*[contains(.,'{}')]"
 
 
@@ -331,3 +332,35 @@ class ApplicationPage(BasePage):
         self.js_click(self.delete_confirm)
         assert self.is_present_and_displayed(self.delete_success, 200), "Application not deleted."
         print("Deleted the application")
+
+    def create_application(self, app_name):
+        self.wait_to_click(self.applications_menu_id)
+        self.wait_to_click(self.new_application)
+        self.wait_to_click(self.edit_app_name)
+        self.clear(self.app_name_textbox)
+        self.send_keys(self.app_name_textbox, app_name)
+        self.wait_to_click(self.confirm_change)
+        self.accept_pop_up()
+        self.wait_for_element((By.XPATH, self.app_created.format(app_name)))
+        self.driver.refresh()
+        time.sleep(3)
+        assert self.is_present_and_displayed((By.XPATH, self.app_created.format(app_name)))
+        print("New App created successfully!")
+
+    def delete_and_add_app(self, app):
+        self.wait_to_click(self.applications_menu_id)
+        time.sleep(2)
+        if self.is_present((By.LINK_TEXT, app)):
+            print("App is already pesent so deleting it")
+            self.wait_to_click((By.LINK_TEXT, app))
+            self.delete_application()
+            time.sleep(2)
+            print("Creating the app")
+            self.wait_to_click(self.dashboard_tab)
+            time.sleep(2)
+            self.create_application(app)
+        else:
+            print("App is not present so creating it")
+            self.wait_to_click(self.dashboard_tab)
+            time.sleep(2)
+            self.create_application(app)

@@ -1,3 +1,5 @@
+import os
+
 import openpyxl
 from openpyxl.reader.excel import load_workbook
 from openpyxl.workbook import Workbook
@@ -51,7 +53,7 @@ class ExcelManager:
         for i in list_data:
             sheet.append(i)
         wb.save(self.path)
-        print("List Data updated")
+        print("Excel updated")
 
     def get_cell_value(self, sheet_name, col_num, row_num):
         wb = load_workbook(self.path)
@@ -122,9 +124,9 @@ class ExcelManager:
         print("Column Count: ", column_count)
         return column_count
 
-    def upload_to_path(self, table_id, data_list):
+    def upload_to_path(self, table_id, data_list, col_name):
         col = self.col_size(table_id)
-        self.write_excel_data(table_id, 1, col + 1, "user 1")
+        self.write_excel_data(table_id, 1, col + 1, col_name)
         row = self.row_size(table_id)
         self.write_data(table_id, data_list)
 

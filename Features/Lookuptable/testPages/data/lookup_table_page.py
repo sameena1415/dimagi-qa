@@ -69,7 +69,7 @@ class LookUpTablePage(BasePage):
         self.click_download = (By.XPATH, "//*[@id='fixtures-ui']/div[1]/p/a")
         self.download_file = (By.XPATH, "//*[@id='download-progress']/div/form/a")
         self.please_complete = (By.XPATH, "//p[@class='alert alert-success'][.='Process complete.']")
-
+        self.lookup_table_checkbox_lists = "//td[./span[starts-with(.,'{}')]]//following-sibling::td[3]/label/input"
         self.close_download_popup = (By.XPATH, "(//button[@aria-label='Close'])[last()]")
         self.error_alert_msg = (By.XPATH, "//*[@class='alert alert-danger']/h3")
         self.replace_table = (By.XPATH, "//input[@id='replace'][@type='checkbox']")
@@ -402,16 +402,11 @@ class LookUpTablePage(BasePage):
 
     def update_excel_user_value(self, table_id, path):
         excel = ExcelManager(path)
-        col = excel.col_size(table_id)
-        excel.write_excel_data(table_id, 1, col + 1, "user 1")
-        excel.upload_to_path(table_id, UserData.data_list)
+        excel.upload_to_path(table_id, UserData.data_list, "user 1")
 
     def update_excel_group_value(self, table_id, path):
         excel = ExcelManager(path)
-        col = excel.col_size(table_id)
-        excel.write_excel_data(table_id, 1, col + 1, "group 1")
-        time.sleep(2)
-        excel.upload_to_path(table_id, UserData.data_list)
+        excel.upload_to_path(table_id, UserData.data_list, "group 1")
         time.sleep(2)
 
     def compare_excel(self, df1, df2, compare_flag):
@@ -448,7 +443,7 @@ class LookUpTablePage(BasePage):
     def replace_existing_table(self, filepath):
         self.err_upload(filepath)
         print("Upload successful")
-        self.wait_to_click(self.manage_tables_link)
+        self.js_click(self.manage_tables_link)
 
     def delete_row_from_table(self, download_path, tablename):
         excel = ExcelManager(download_path)
@@ -831,11 +826,11 @@ class LookUpTablePage(BasePage):
         for val in range(1, i):
             j = excel.get_cell_value("types", 2, val)
             print(val)
-
             print(j)
             if (str(j).startswith("lookuptable")):
                 print("Value to be updated")
                 excel.write_excel_data("types", val, 1, "Y")
+        time.sleep(2)
         self.replace_existing_table(download_path)
 
     def loop_submit_form_on_registration(self):
@@ -857,3 +852,45 @@ class LookUpTablePage(BasePage):
         self.wait_for_element(self.click_download)
         self.err_upload(download_path)
         self.missing_data_assert()
+
+    def delete_test_lookup_tables(self):
+        self.wait_to_click(self.manage_tables_link)
+        self.wait_for_element(self.click_download)
+        list = self.find_elements((By.XPATH, self.lookup_table_checkbox_lists.format("table")))
+        if len(list) > 0:
+            for item in list:
+                self.js_click(item)
+        else:
+            print("No table name starts with table")
+
+        list = self.find_elements((By.XPATH, self.lookup_table_checkbox_lists.format("lookuptable_")))
+        if len(list) > 0:
+            for item in list:
+                self.js_click(item)
+        else:
+            print("No table name starts with lookuptable_")
+        time.sleep(2)
+        self.js_click(self.click_download)
+        self.wait_for_element(self.download_file, 60)
+        self.wait_to_click(self.download_file)
+        self.wait_for_element(self.close_download_popup)
+        if self.is_present(self.please_complete):
+            self.wait_to_click(self.close_download_popup)
+            time.sleep(2)
+            self.js_click(self.click_download)
+        self.wait_for_element(self.download_file, 60)
+        self.wait_to_click(self.download_file)
+        time.sleep(3)
+        self.wait_to_click(self.close_download_popup)
+        download_path = self.latest_download_file()
+        excel = ExcelManager(download_path)
+        i = excel.row_size("types")
+        for val in range(2, i):
+            j = excel.get_cell_value("types", 2, val)
+            print(val)
+            print(j)
+            if (str(j).startswith("lookuptable")) or (str(j).startswith("table")):
+                print("Value to be updated")
+                excel.write_excel_data("types", val, 1, "Y")
+        time.sleep(1)
+        self.replace_existing_table(download_path)

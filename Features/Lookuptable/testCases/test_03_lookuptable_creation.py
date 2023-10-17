@@ -9,7 +9,6 @@ from Features.Lookuptable.testPages.data.lookup_table_page import LookUpTablePag
 
 value = dict()
 value["table_id"] = ""
-value["new_table"] = ""
 
 @pytest.mark.data
 @pytest.mark.managetables
@@ -79,11 +78,11 @@ def test_case_21_error_upload_3(driver, settings):
     home = HomePage(driver, settings)
     home.data_menu()
     data = LookUpTablePage(driver)
-    value = data.create_download_lookuptable()
+    values = data.create_download_lookuptable()
     download_path = data.latest_download_file()
-    data.write_data_excel(value, download_path)
+    data.write_data_excel(values, download_path)
     data.upload_1(download_path, '1')
-    data.delete_lookup_table(value)
+    data.delete_lookup_table(values)
 
 
 @pytest.mark.data
@@ -108,42 +107,38 @@ def test_case_20_creation2(driver, settings):
     data.submit_form_on_registration(UserData.languages[0], UserData.user_ids_list[0])
     driver.switch_to.default_content()
     data.delete_caselist()
-    value["new_table"] = values
-    return value
+    home.data_menu()
+    data.delete_lookup_table(values)
 
 @pytest.mark.data
 @pytest.mark.managetables
 @pytest.mark.lookupexcel
 def test_case_40_multiple_groups(driver, settings):
-    if value["new_table"] == "":
-        pytest.mark.skip("Dependent testcase")
     home = HomePage(driver, settings)
     home.data_menu()
     data = LookUpTablePage(driver)
-    # value = data.create_download_lookuptable()
+    values = data.create_download_lookuptable()
     download_path = data.latest_download_file()
     home.data_menu()
-    data.multiple_groups(download_path, value["new_table"])
-    data.view_lookup_table(value["new_table"])
+    data.multiple_groups(download_path, values)
+    data.view_lookup_table(values)
+    home.data_menu()
+    data.delete_lookup_table(values)
 
 
 @pytest.mark.data
 @pytest.mark.managetables
 @pytest.mark.lookupexcel
 def test_case_41_user_restore(driver, settings):
-    if value["new_table"] == "":
-        pytest.mark.skip("Dependent testcase")
     home = HomePage(driver, settings)
     home.data_menu()
     data = LookUpTablePage(driver)
-    # value = data.create_download_lookuptable()
+    values = data.create_download_lookuptable()
     download_path = data.latest_download_file()
     home.data_menu()
-    data.multiple_groups(download_path, value["new_table"])
+    data.multiple_groups(download_path, values)
     driver.get(settings["url"]+UserData.restore_url)
     data.restore_attribute_1()
-    home.data_menu()
-    data.delete_lookup_table(value["new_table"])
 
 
 @pytest.mark.data
