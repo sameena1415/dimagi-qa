@@ -93,21 +93,22 @@ def test_case_20_creation2(driver, settings):
     home = HomePage(driver, settings)
     home.data_menu()
     data = LookUpTablePage(driver)
-    value["new_table"] = data.create_download_lookuptable()
+    values= data.create_download_lookuptable()
     download_path = data.latest_download_file()
     home.data_menu()
-    data.download_update_8(download_path, value["new_table"])
+    data.download_update_8(download_path, values)
     data.replace_existing_table(download_path)
     home = HomePage(driver, settings)
     home.applications_menu(UserData.application)
     data.create_new_form()
-    data.navigation_to_a_caselist(value["new_table"])
+    data.navigation_to_a_caselist(values)
     data.formbuilder_5()
     app_preview = AppPreviewPage(driver)
     app_preview.check_access_to_app_preview()
     data.submit_form_on_registration(UserData.languages[0], UserData.user_ids_list[0])
     driver.switch_to.default_content()
     data.delete_caselist()
+    value["new_table"] = values
     return value
 
 @pytest.mark.data

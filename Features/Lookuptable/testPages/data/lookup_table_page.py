@@ -185,7 +185,7 @@ class LookUpTablePage(BasePage):
             assert self.is_present_and_displayed(self.table_created_path)
             print("LookUp Table created successfully! ", self.table_id_name )
             self.download1(self.table_id_name)
-            return self.table_id_name
+        return self.table_id_name
 
     def view_lookup_table(self, table_id_name):
         self.wait_for_element(self.view_tables_link)
