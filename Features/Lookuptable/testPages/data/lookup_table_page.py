@@ -155,7 +155,7 @@ class LookUpTablePage(BasePage):
         self.selected_caselist = (By.XPATH, "(//*[@class='appnav-item ']/a[@class='appnav-delete'])[1]")
 
     def create_lookup_table(self):
-        self.wait_to_click(self.manage_tables_link)
+        self.js_click(self.manage_tables_link)
         self.wait_for_element(self.add_table)
         if self.is_present_and_displayed(self.table_created_path, 15):
             print("Lookup table is already present!")
@@ -172,7 +172,7 @@ class LookUpTablePage(BasePage):
         return self.table_id_name
 
     def create_download_lookup_table_without_field(self):
-        self.wait_to_click(self.manage_tables_link)
+        self.js_click(self.manage_tables_link)
         self.wait_for_element(self.add_table)
         if self.is_present_and_displayed(self.table_created_path, 15):
             print("Lookup table is already present!")
@@ -198,7 +198,7 @@ class LookUpTablePage(BasePage):
         print("LookUp Table can be viewed successfully!")
 
     def delete_lookup_table(self, table):
-        self.wait_to_click(self.manage_tables_link)
+        self.js_click(self.manage_tables_link)
         self.wait_to_click((By.XPATH, self.delete_table.format(table)))
         self.accept_pop_up()
         print("LookUp Table deleted successfully!")
@@ -206,7 +206,7 @@ class LookUpTablePage(BasePage):
     def upload_1(self, filepath, table_count):
         filepath = str(PathSettings.DOWNLOAD_PATH / filepath)
         print("File Path: ", filepath)
-        self.wait_to_click(self.manage_tables_link)
+        self.js_click(self.manage_tables_link)
         self.scroll_to_bottom()
         self.send_keys(self.upload_table, filepath)
         self.wait_to_click(self.upload)
@@ -214,12 +214,12 @@ class LookUpTablePage(BasePage):
         success = self.get_text(self.success_msg)
         success_msg = "Successfully uploaded " + table_count + " tables."
         assert success == success_msg
-        self.wait_to_click(self.manage_tables_link)
+        self.js_click(self.manage_tables_link)
 
     def upload_2(self, filepath, table_count):
         filepath = str(UserData.user_input_base_dir + "//" + filepath)
         print("File Path: ", filepath)
-        self.wait_to_click(self.manage_tables_link)
+        self.js_click(self.manage_tables_link)
         self.scroll_to_bottom()
         self.send_keys(self.upload_table, filepath)
         self.wait_to_click(self.upload)
@@ -227,12 +227,12 @@ class LookUpTablePage(BasePage):
         success = self.get_text(self.success_msg)
         success_msg = "Successfully uploaded " + table_count + " tables."
         assert success == success_msg
-        self.wait_to_click(self.manage_tables_link)
+        self.js_click(self.manage_tables_link)
 
     def create_new_lookuptable(self):
         self.table_id_name = "lookuptable_" + ''.join(random.choices(string.ascii_lowercase + string.digits, k=6))
         print("new id:", self.table_id_name)
-        self.wait_to_click(self.manage_tables_link)
+        self.js_click(self.manage_tables_link)
         self.wait_to_click(self.add_table)
         self.send_keys(self.table_id, self.table_id_name)
         self.send_keys(self.table_id_description, self.table_id_name)
@@ -250,7 +250,7 @@ class LookUpTablePage(BasePage):
         else:
             filepath = str(PathSettings.DOWNLOAD_PATH / filepath)
             print("File path: ", filepath)
-        self.wait_to_click(self.manage_tables_link)
+        self.js_click(self.manage_tables_link)
         self.wait_for_element(self.upload_table)
         self.scroll_to_bottom()
         time.sleep(1)
@@ -274,18 +274,18 @@ class LookUpTablePage(BasePage):
         assert UserData.missing_data_assert in missing_data
 
     def selects_deselects(self):
-        self.wait_to_click(self.manage_tables_link)
+        self.js_click(self.manage_tables_link)
         self.wait_to_click(self.all)
         self.wait_to_click(self.none)
 
     def edit_table(self):
-        self.wait_to_click(self.manage_tables_link)
+        self.js_click(self.manage_tables_link)
         self.wait_to_click(self.edit)
         self.wait_to_clear_and_send_keys(self.edit_field, 'testing')
         self.wait_to_click(self.edit_save)
 
     def create_dummyid(self):
-        self.wait_to_click(self.manage_tables_link)
+        self.js_click(self.manage_tables_link)
         time.sleep(2)
         self.wait_to_click(self.add_table)
         time.sleep(2)
@@ -301,10 +301,10 @@ class LookUpTablePage(BasePage):
         print(fail)
         assert "Could not update table because field names were not correctly formatted" in fail
         print("error message displayed")
-        self.wait_to_click(self.manage_tables_link)
+        self.js_click(self.manage_tables_link)
 
     def edit_dummy_data(self):
-        self.wait_to_click(self.manage_tables_link)
+        self.js_click(self.manage_tables_link)
         self.wait_to_click(self.edit)
         time.sleep(2)
         self.wait_to_click(self.new_field)
@@ -321,7 +321,7 @@ class LookUpTablePage(BasePage):
         self.wait_to_click((By.XPATH, self.select_checkbox.format(tablename)))
 
     def select_multiple_tables_download(self, tablenames, n):
-        self.wait_to_click(self.manage_tables_link)
+        self.js_click(self.manage_tables_link)
         tablename = str.split(tablenames, ":")
         for i in range(0, n):
             print("tablename : ", str(tablename[i]))
@@ -336,7 +336,7 @@ class LookUpTablePage(BasePage):
         self.wait_to_click(self.close_download_popup)
 
     def download1(self, tablename):
-        self.wait_to_click(self.manage_tables_link)
+        self.js_click(self.manage_tables_link)
         self.wait_for_element((By.XPATH, self.select_checkbox.format(tablename)))
         self.wait_to_click((By.XPATH, self.select_checkbox.format(tablename)))
         time.sleep(2)
@@ -356,7 +356,7 @@ class LookUpTablePage(BasePage):
         self.wait_to_click(self.close_download_popup)
 
     def download1_specific_table(self):
-        self.wait_to_click(self.manage_tables_link)
+        self.js_click(self.manage_tables_link)
         self.wait_to_click(self.select_hypertension_checkbox)
         self.wait_to_click(self.click_download)
         self.wait_for_element(self.download_file, 60)
@@ -745,7 +745,7 @@ class LookUpTablePage(BasePage):
         self.wait_for_element(self.saved_button, 50)
 
     def edit_state(self):
-        self.wait_to_click(self.manage_tables_link)
+        self.js_click(self.manage_tables_link)
         self.wait_to_click(self.edit_state_table)
         self.wait_for_element(self.select_column)
         self.click(self.select_column)
@@ -843,7 +843,7 @@ class LookUpTablePage(BasePage):
         self.err_upload(path)
 
     def download_bulk_tables(self):
-        self.wait_to_click(self.manage_tables_link)
+        self.js_click(self.manage_tables_link)
         self.wait_to_click(self.all)
         self.wait_to_click(self.click_download)
         self.wait_for_element(self.download_file, 60)
@@ -883,13 +883,13 @@ class LookUpTablePage(BasePage):
     def verify_missing_data_alert(self, download_path):
         print("Sleeping for some time")
         time.sleep(40)
-        self.wait_to_click(self.manage_tables_link)
+        self.js_click(self.manage_tables_link)
         self.wait_for_element(self.click_download)
         self.err_upload(download_path)
         self.missing_data_assert()
 
     def delete_test_lookup_tables(self):
-        self.wait_to_click(self.manage_tables_link)
+        self.js_click(self.manage_tables_link)
         self.wait_for_element(self.click_download)
         list = self.find_elements((By.XPATH, self.lookup_table_checkbox_lists.format("table")))
         if len(list) > 0:
