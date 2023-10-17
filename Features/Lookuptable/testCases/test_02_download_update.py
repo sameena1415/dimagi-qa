@@ -191,6 +191,8 @@ def test_case_18_Attributes_3(driver, settings):
     data.attribute_2(download_path, value)
     home.data_menu()
     data.delete_field_columns(download_path, value)
+    home.data_menu()
+    data.delete_lookup_table(value)
 
 
 @pytest.mark.data
@@ -206,11 +208,13 @@ def test_24_bulkupload_1(driver, settings):
     print("tables", tablenames)
     data.select_multiple_tables_download(tablenames, 2)
     download_path = data.latest_download_file()
-    excel = ExcelManager(download_path)
-    excel.write_data(tableid1, UserData.data_list1)
-    excel.write_data(tableid2, UserData.data_list1)
     home.data_menu()
     data.bulkupload_1(tablenames, 2, download_path)
+    home.data_menu()
+    data.delete_lookup_table(tableid1)
+    home.data_menu()
+    data.delete_lookup_table(tableid2)
+
 
 
 def test_25_bulkupload_2(driver, settings):
@@ -219,7 +223,5 @@ def test_25_bulkupload_2(driver, settings):
     data = LookUpTablePage(driver)
     value = data.create_download_lookuptable()
     download_path = data.latest_download_file()
-    excel = ExcelManager(download_path)
-    excel.write_data(value, UserData.duplicate_values)
     home.data_menu()
     data.bulk_upload_verification(download_path, value)

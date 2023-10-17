@@ -322,10 +322,10 @@ class LookUpTablePage(BasePage):
 
     def select_multiple_tables_download(self, tablenames, n):
         self.wait_to_click(self.manage_tables_link)
+        tablename = str.split(tablenames, ":")
         for i in range(0, n):
-            tablename = str.split(tablenames, ":")[i]
-            print("tablename : ", tablename)
-            self.select_multiple_tables_checkbox(tablename)
+            print("tablename : ", str(tablename[i]))
+            self.select_multiple_tables_checkbox(str(tablename[i]))
         self.click_download_button()
 
     def click_download_button(self):
@@ -339,14 +339,17 @@ class LookUpTablePage(BasePage):
         self.wait_to_click(self.manage_tables_link)
         self.wait_for_element((By.XPATH, self.select_checkbox.format(tablename)))
         self.wait_to_click((By.XPATH, self.select_checkbox.format(tablename)))
-        self.wait_to_click(self.click_download)
+        time.sleep(2)
+        self.js_click(self.click_download)
         self.wait_for_element(self.close_download_popup)
         if self.is_present(self.please_complete):
             self.wait_to_click(self.close_download_popup)
             self.driver.refresh()
             self.wait_for_element((By.XPATH, self.select_checkbox.format(tablename)))
             self.wait_to_click((By.XPATH, self.select_checkbox.format(tablename)))
-            self.wait_to_click(self.click_download)
+            time.sleep(2)
+            self.js_click(self.click_download)
+        time.sleep(2)
         self.wait_for_element(self.download_file, 60)
         self.wait_to_click(self.download_file)
         time.sleep(3)
@@ -420,21 +423,27 @@ class LookUpTablePage(BasePage):
     def download_update_7(self, tableid, path):
         excel = ExcelManager(path)
         df1 = excel.read_excel(tableid)
+        time.sleep(1)
         self.err_upload(path)
         df2 = excel.read_excel(tableid)
+        time.sleep(1)
         return df1, df2
 
     def download_update_8(self, path, table_id):
         excel = ExcelManager(path)
         col = excel.col_size(table_id)
         excel.write_excel_data(table_id, 1, col + 1, "user 1")
+        time.sleep(1)
         excel.write_excel_data(table_id, 1, col + 2, "group 1")
         excel.write_data(table_id, UserData.data_list1)
+        time.sleep(1)
         self.err_upload(path)
         d1 = excel.read_excel(table_id)
         print("data1", d1)
         excel.write_excel_data(table_id, 2, 4, 'kiran')
+        time.sleep(1)
         excel.write_excel_data(table_id, 2, 5, '123')
+        time.sleep(1)
         self.err_upload(path)
         d2 = excel.read_excel(table_id)
         print("data2", d2)
@@ -448,6 +457,7 @@ class LookUpTablePage(BasePage):
     def delete_row_from_table(self, download_path, tablename):
         excel = ExcelManager(download_path)
         excel.write_data(tablename, UserData.data_list1)
+        time.sleep(2)
         self.err_upload(download_path)
         self.download1(tablename)
         # self.view_lookup_table(tablename)
@@ -456,6 +466,7 @@ class LookUpTablePage(BasePage):
         download_path_1 = self.latest_download_file()
         excel = ExcelManager(download_path_1)
         excel.delete_row(tablename, 2)
+        time.sleep(2)
         self.replace_existing_table(download_path_1)
         # self.view_lookup_table(tablename)
         row_count_after = self.row_count_table(tablename)
@@ -473,6 +484,7 @@ class LookUpTablePage(BasePage):
     def update_delete_field(self, download_path, tablename):
         excel = ExcelManager(download_path)
         excel.upload_to_path(tablename, UserData.data_list)
+        time.sleep(2)
         self.err_upload(download_path)
         # self.view_lookup_table(tablename)
         row_count_before = self.row_count_table(tablename)
@@ -493,6 +505,7 @@ class LookUpTablePage(BasePage):
         excel.write_excel_data("types", 2, 5, 'C2')
         excel.write_excel_data(tablename, 1, 3, 'field:C1')
         excel.write_excel_data(tablename, 1, 4, 'field:C2')
+        time.sleep(1)
         excel.write_data(tablename, UserData.new_datalist)
         time.sleep(2)
         self.err_upload(download_path)
@@ -500,6 +513,8 @@ class LookUpTablePage(BasePage):
         time.sleep(10)
         ui_rows = self.row_count_table(tablename)
         self.download1(tablename)
+        latest = self.latest_download_file()
+        excel = ExcelManager(latest)
         excel_rows = excel.row_size(tablename)
         print(str(ui_rows) + " and " + str(excel_rows - 1))
         assert int(ui_rows) == (excel_rows - 1)
@@ -507,11 +522,16 @@ class LookUpTablePage(BasePage):
     def bulkupload_1(self, tablenames, n, upload_path):
         before = ""
         after = ""
+        tablename = str.split(tablenames, ":")
         for i in range(0, n):
-            tablename = str.split(tablenames, ":")[i]
-            row_count_before = self.row_count_table(tablename)
+            row_count_before = self.row_count_table(str(tablename[i]))
             before = before + "," + row_count_before
         before = str.split(before, ",", 1)[1].strip()
+        print(str(tablename[0]), str(tablename[1]))
+        excel = ExcelManager(upload_path)
+        excel.write_data(str(tablename[0]), UserData.data_list1)
+        excel.write_data(str(tablename[1]), UserData.data_list1)
+        time.sleep(2)
         self.err_upload(upload_path)
         for i in range(0, n):
             tablename = str.split(tablenames, ":")[i]
@@ -529,11 +549,14 @@ class LookUpTablePage(BasePage):
         col_TypeSheet_before = excel.col_size("types")
         col1 = excel.col_size(tablename)
         excel.delete_column('types', 4)
+        time.sleep(2)
         excel.delete_column(tablename, 3)
+        time.sleep(2)
         self.err_upload(downloadpath)
         self.view_lookup_table(tablename)
         col_TypeSheet = excel.col_size("types")
         col2 = excel.col_size(tablename)
+        time.sleep(2)
         assert col_TypeSheet_before > col_TypeSheet
         assert col1 > col2
         print("Fields got deleted")
@@ -547,6 +570,7 @@ class LookUpTablePage(BasePage):
 
     def test_13(self, download_path, tablename):
         self.write_data_excel(tablename, download_path)
+        time.sleep(2)
         self.err_upload(download_path)
         self.download1(tablename)
         download_path_1 = self.latest_download_file()
@@ -562,6 +586,7 @@ class LookUpTablePage(BasePage):
     def test_15(self, download_path, tablename):
         excel = ExcelManager(download_path)
         excel.write_data(tablename, UserData.data_list1)
+        time.sleep(2)
         self.err_upload(download_path)
         self.download1(tablename)
         download_path_1 = self.latest_download_file()
@@ -570,6 +595,7 @@ class LookUpTablePage(BasePage):
         UID1 = excel.get_cell_value(tablename, 1, 2)
         print("After UID is:" + UID_before, UID1)
         excel.write_excel_data(tablename, 2, 3, "dnckse")
+        time.sleep(2)
         download_path_2 = self.latest_download_file()
         self.replace_existing_table(download_path_2)
         excel = ExcelManager(download_path_2)
@@ -577,6 +603,7 @@ class LookUpTablePage(BasePage):
         UID_before = excel.get_cell_value(tablename, 3, 2)
         UID1 = excel.get_cell_value(tablename, 1, 2)
         print("After UID is:" + UID_before, UID1)
+        time.sleep(2)
         download_path_3 = self.latest_download_file()
         excel = ExcelManager(download_path_3)
         UID_after = excel.get_cell_value(tablename, 3, 2)
@@ -806,9 +833,13 @@ class LookUpTablePage(BasePage):
         excel = ExcelManager(path)
         col = excel.col_size(table_id)
         excel.write_excel_data(table_id, 1, col + 1, "user 1")
+        time.sleep(1)
         excel.write_excel_data(table_id, 1, col + 2, "group 1")
+        time.sleep(1)
         excel.write_excel_data(table_id, 1, col + 3, "group 2")
+        time.sleep(1)
         excel.write_data(table_id, UserData.multiple_values)
+        time.sleep(2)
         self.err_upload(path)
 
     def download_bulk_tables(self):
@@ -838,11 +869,15 @@ class LookUpTablePage(BasePage):
             self.submit_form_on_registration("en", UserData.user_ids_list[i])
 
     def bulk_upload_verification(self, download_path, value):
+        excel = ExcelManager(download_path)
+        excel.write_data(value, UserData.duplicate_values)
+        time.sleep(2)
         self.err_upload(download_path)
         self.download1(value)
+        latest = self.latest_download_file()
         self.row_count_table(value)
         row_value = self.row_count_table(value)
-        excel = ExcelManager(download_path)
+        excel = ExcelManager(latest)
         assert row_value == str((excel.row_size(value) - 1))
 
     def verify_missing_data_alert(self, download_path):
