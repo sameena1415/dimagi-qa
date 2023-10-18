@@ -4,6 +4,7 @@ from HQSmokeTests.testPages.applications.app_preview import AppPreviewPage
 from HQSmokeTests.testPages.home.home_page import HomePage
 from Features.Lookuptable.userInputs.user_inputs import UserData
 from Features.Lookuptable.testPages.data.lookup_table_page import LookUpTablePage
+from HQSmokeTests.testPages.users.org_structure_page import latest_download_file
 
 """"Contains test cases related to the Data module"""
 
@@ -79,9 +80,8 @@ def test_case_21_error_upload_3(driver, settings):
     home.data_menu()
     data = LookUpTablePage(driver)
     values = data.create_download_lookuptable()
-    download_path = data.latest_download_file()
-    data.write_data_excel(values, download_path)
-    data.upload_1(download_path, '1')
+    download_path = latest_download_file()
+    data.error_upload_update_excel(download_path, values)
     data.delete_lookup_table(values)
 
 
@@ -92,8 +92,8 @@ def test_case_20_creation2(driver, settings):
     home = HomePage(driver, settings)
     home.data_menu()
     data = LookUpTablePage(driver)
-    values= data.create_download_lookuptable()
-    download_path = data.latest_download_file()
+    values = data.create_download_lookuptable()
+    download_path = latest_download_file()
     home.data_menu()
     data.download_update_8(download_path, values)
     data.replace_existing_table(download_path)
@@ -118,7 +118,7 @@ def test_case_40_multiple_groups(driver, settings):
     home.data_menu()
     data = LookUpTablePage(driver)
     values = data.create_download_lookuptable()
-    download_path = data.latest_download_file()
+    download_path = latest_download_file()
     home.data_menu()
     data.multiple_groups(download_path, values)
     data.view_lookup_table(values)
@@ -134,7 +134,7 @@ def test_case_41_user_restore(driver, settings):
     home.data_menu()
     data = LookUpTablePage(driver)
     values = data.create_download_lookuptable()
-    download_path = data.latest_download_file()
+    download_path = latest_download_file()
     home.data_menu()
     data.multiple_groups(download_path, values)
     driver.get(settings["url"]+UserData.restore_url)
@@ -148,6 +148,6 @@ def test_case_42_delete_test_tables(driver, settings):
     home.data_menu()
     data = LookUpTablePage(driver)
     data.download_bulk_tables()
-    download_path = data.latest_download_file()
+    download_path = latest_download_file()
     home.data_menu()
     data.compare_and_delete(download_path)

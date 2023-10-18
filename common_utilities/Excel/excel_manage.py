@@ -10,7 +10,7 @@ from common_utilities.path_settings import PathSettings
 class ExcelManager:
 
     def __init__(self, path):
-        self.path = str(PathSettings.DOWNLOAD_PATH / path)
+        self.path = str(path)
         print("Path", self.path)
 
     def create_workbook(self):

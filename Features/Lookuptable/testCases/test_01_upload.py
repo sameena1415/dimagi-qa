@@ -4,6 +4,7 @@ from HQSmokeTests.testPages.applications.application_page import ApplicationPage
 from HQSmokeTests.testPages.home.home_page import HomePage
 from Features.Lookuptable.testPages.data.lookup_table_page import LookUpTablePage
 from Features.Lookuptable.userInputs.user_inputs import UserData
+from HQSmokeTests.testPages.users.org_structure_page import latest_download_file
 
 """"Contains test cases related to the Data module"""
 
@@ -34,7 +35,7 @@ def test_case_02_error_upload_1(driver, settings):
     home.data_menu()
     data = LookUpTablePage(driver)
     values = data.create_download_lookuptable()
-    download_path = data.latest_download_file()
+    download_path = latest_download_file()
     data.update_excel_user_value(values, download_path)
     home.data_menu()
     data.err_upload(download_path)
@@ -47,7 +48,7 @@ def test_case_03_error_upload_2(driver, settings):
     home.data_menu()
     data = LookUpTablePage(driver)
     values = data.create_download_lookuptable()
-    download_path = data.latest_download_file()
+    download_path = latest_download_file()
     data.update_excel_group_value(values, download_path)
     home.data_menu()
     data.err_upload(download_path)

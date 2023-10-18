@@ -1,5 +1,6 @@
 import pytest
 from HQSmokeTests.testPages.home.home_page import HomePage
+from HQSmokeTests.testPages.users.org_structure_page import latest_download_file
 from common_utilities.Excel.excel_manage import ExcelManager
 from Features.Lookuptable.testPages.data.lookup_table_page import LookUpTablePage
 from Features.Lookuptable.userInputs.user_inputs import UserData
@@ -39,12 +40,8 @@ def test_case_07_download_update_3(driver, settings):
     home.data_menu()
     data = LookUpTablePage(driver)
     value = data.create_download_lookuptable()
-    download_path = data.latest_download_file()
-    excel = ExcelManager(download_path)
-    excel.write_data('types', UserData.type_data_list)
-    excel.create_sheet(UserData.field_val)
-    excel.write_data(UserData.field_val, UserData.type_sheet_headers)
-    data.upload_1(download_path, str(excel.row_size('types') - 1))
+    download_path = latest_download_file()
+    data.upload_1_update_excel(download_path)
     home.data_menu()
     data.delete_lookup_table(value)
 
@@ -57,9 +54,8 @@ def test_case_08_download_update_4(driver, settings):
     home = HomePage(driver, settings)
     home.data_menu()
     value = data.create_download_lookuptable()
-    download_path = data.latest_download_file()
-    excel = ExcelManager(download_path)
-    excel.delete_sheet("types")
+    download_path = latest_download_file()
+    data.delete_excel_sheet(download_path)
     home.data_menu()
     data.verify_missing_data_alert(download_path)
     home.data_menu()
@@ -74,7 +70,7 @@ def test_case_09_download_update_5(driver, settings):
     home.data_menu()
     data = LookUpTablePage(driver)
     value = data.create_download_lookuptable()
-    download_path = data.latest_download_file()
+    download_path = latest_download_file()
     home.data_menu()
     data.update_delete_field(download_path, value)
 
@@ -87,7 +83,7 @@ def test_case_11_download_update_7(driver, settings):
     home.data_menu()
     data = LookUpTablePage(driver)
     value = data.create_download_lookuptable()
-    download_path = data.latest_download_file()
+    download_path = latest_download_file()
     home.data_menu()
     d1, d2 = data.download_update_7(value, download_path)
     data.compare_excel(d1, d2, 0)
@@ -102,7 +98,7 @@ def test_case_12_download_update_8(driver, settings):
     home.data_menu()
     data = LookUpTablePage(driver)
     value = data.create_download_lookuptable()
-    download_path = data.latest_download_file()
+    download_path = latest_download_file()
     home.data_menu()
     d1, d2 = data.download_update_8(download_path, value)
     data.compare_excel(d1, d2, 1)
@@ -116,7 +112,7 @@ def test_case_13_download_update_9(driver, settings):
     home.data_menu()
     data = LookUpTablePage(driver)
     value = data.create_download_lookuptable()
-    download_path = data.latest_download_file()
+    download_path = latest_download_file()
     home.data_menu()
     data.test_13(download_path, value)
 
@@ -129,7 +125,7 @@ def test_case_14_download_update_10(driver, settings):
     home.data_menu()
     data = LookUpTablePage(driver)
     value = data.create_download_lookuptable()
-    download_path = data.latest_download_file()
+    download_path = latest_download_file()
     home.data_menu()
     data.delete_row_from_table(download_path, value)
 
@@ -142,7 +138,7 @@ def test_case_15_download_update_11(driver, settings):
     home.data_menu()
     data = LookUpTablePage(driver)
     value = data.create_download_lookuptable()
-    download_path = data.latest_download_file()
+    download_path = latest_download_file()
     home.data_menu()
     data.test_15(download_path, value)
 
@@ -155,7 +151,7 @@ def test_case_16_Attributes_1(driver, settings):
     home.data_menu()
     data = LookUpTablePage(driver)
     value = data.create_download_lookup_table_without_field()
-    download_path = data.latest_download_file()
+    download_path = latest_download_file()
     print("path is ", download_path)
     home.data_menu()
     data.attribute_2(download_path, value)
@@ -171,7 +167,7 @@ def test_case_17_Attributes_2(driver, settings):
     home.data_menu()
     data = LookUpTablePage(driver)
     value = data.create_download_lookup_table_without_field()
-    download_path = data.latest_download_file()
+    download_path = latest_download_file()
     print("path is ", download_path)
     home.data_menu()
     data.attribute_2(download_path, value)
@@ -185,7 +181,7 @@ def test_case_18_Attributes_3(driver, settings):
     home.data_menu()
     data = LookUpTablePage(driver)
     value = data.create_download_lookup_table_without_field()
-    download_path = data.latest_download_file()
+    download_path = latest_download_file()
     print("path is ", download_path)
     home.data_menu()
     data.attribute_2(download_path, value)
@@ -207,7 +203,7 @@ def test_24_bulkupload_1(driver, settings):
     tablenames = tableid1 + ":" + tableid2
     print("tables", tablenames)
     data.select_multiple_tables_download(tablenames, 2)
-    download_path = data.latest_download_file()
+    download_path = latest_download_file()
     home.data_menu()
     data.bulkupload_1(tablenames, 2, download_path)
     home.data_menu()
@@ -222,6 +218,6 @@ def test_25_bulkupload_2(driver, settings):
     home.data_menu()
     data = LookUpTablePage(driver)
     value = data.create_download_lookuptable()
-    download_path = data.latest_download_file()
+    download_path = latest_download_file()
     home.data_menu()
     data.bulk_upload_verification(download_path, value)
