@@ -405,13 +405,13 @@ class LookUpTablePage(BasePage):
             excel.write_data(table_id, UserData.data_list2)
 
     def update_excel_user_value(self, table_id, path):
-        path = PathSettings.DOWNLOAD_PATH / path
+        path = str(PathSettings.DOWNLOAD_PATH / path)
         time.sleep(5)
         excel = ExcelManager(path)
         excel.upload_to_path(table_id, UserData.data_list, "user 1")
 
     def update_excel_group_value(self, table_id, path):
-        path = PathSettings.DOWNLOAD_PATH / path
+        path = str(PathSettings.DOWNLOAD_PATH / path)
         time.sleep(5)
         excel = ExcelManager(path)
         excel.upload_to_path(table_id, UserData.data_list, "group 1")
@@ -426,7 +426,7 @@ class LookUpTablePage(BasePage):
             print("Data is different in both excels")
 
     def download_update_7(self, tableid, path):
-        path = PathSettings.DOWNLOAD_PATH / path
+        path = str(PathSettings.DOWNLOAD_PATH / path)
         time.sleep(5)
         excel = ExcelManager(path)
         df1 = excel.read_excel(tableid)
@@ -437,7 +437,7 @@ class LookUpTablePage(BasePage):
         return df1, df2
 
     def download_update_8(self, path, table_id):
-        path = PathSettings.DOWNLOAD_PATH / path
+        path = str(PathSettings.DOWNLOAD_PATH / path)
         time.sleep(5)
         excel = ExcelManager(path)
         col = excel.col_size(table_id)
@@ -464,7 +464,7 @@ class LookUpTablePage(BasePage):
         self.js_click(self.manage_tables_link)
 
     def delete_row_from_table(self, download_path, tablename):
-        download_path = PathSettings.DOWNLOAD_PATH / download_path
+        download_path = str(PathSettings.DOWNLOAD_PATH / download_path)
         time.sleep(5)
         excel = ExcelManager(download_path)
         excel.write_data(tablename, UserData.data_list1)
@@ -475,7 +475,7 @@ class LookUpTablePage(BasePage):
         row_count_before = self.row_count_table(tablename)
         print("Row count before: ", row_count_before)
         download_path_1 = latest_download_file()
-        download_path_1 = PathSettings.DOWNLOAD_PATH / download_path_1
+        download_path_1 = str(PathSettings.DOWNLOAD_PATH / download_path_1)
         time.sleep(5)
         excel = ExcelManager(download_path_1)
         excel.delete_row(tablename, 2)
@@ -495,7 +495,7 @@ class LookUpTablePage(BasePage):
         return rowcount
 
     def update_delete_field(self, download_path, tablename):
-        download_path = PathSettings.DOWNLOAD_PATH / download_path
+        download_path = str(PathSettings.DOWNLOAD_PATH / download_path)
         time.sleep(5)
         excel = ExcelManager(download_path)
         excel.upload_to_path(tablename, UserData.data_list, "user 1")
@@ -504,7 +504,7 @@ class LookUpTablePage(BasePage):
         # self.view_lookup_table(tablename)
         row_count_before = self.row_count_table(tablename)
         download_path_1 = latest_download_file()
-        download_path_1 = PathSettings.DOWNLOAD_PATH / download_path_1
+        download_path_1 = str(PathSettings.DOWNLOAD_PATH / download_path_1)
         time.sleep(5)
         excel = ExcelManager(download_path_1)
         excel.write_excel_data(tablename, 3, 2, 'Y')
@@ -515,7 +515,7 @@ class LookUpTablePage(BasePage):
         print("Row got successfully Deleted")
 
     def attribute_2(self, download_path, tablename):
-        download_path = PathSettings.DOWNLOAD_PATH / download_path
+        download_path = str(PathSettings.DOWNLOAD_PATH / download_path)
         time.sleep(5)
         excel = ExcelManager(download_path)
         excel.write_excel_data("types", 1, 4, 'field 1')
@@ -533,7 +533,7 @@ class LookUpTablePage(BasePage):
         ui_rows = self.row_count_table(tablename)
         self.download1(tablename)
         download_path_1 = latest_download_file()
-        download_path_1 = PathSettings.DOWNLOAD_PATH / download_path_1
+        download_path_1 = str(PathSettings.DOWNLOAD_PATH / download_path_1)
         time.sleep(5)
         excel = ExcelManager(download_path_1)
         excel_rows = excel.row_size(tablename)
@@ -541,7 +541,7 @@ class LookUpTablePage(BasePage):
         assert int(ui_rows) == (excel_rows - 1)
 
     def bulkupload_1(self, tablenames, n, upload_path):
-        upload_path = PathSettings.DOWNLOAD_PATH / upload_path
+        upload_path = str(PathSettings.DOWNLOAD_PATH / upload_path)
         time.sleep(5)
         before = ""
         after = ""
@@ -568,7 +568,7 @@ class LookUpTablePage(BasePage):
             assert b_row < a_row
 
     def delete_field_columns(self, downloadpath, tablename):
-        downloadpath = PathSettings.DOWNLOAD_PATH / downloadpath
+        downloadpath = str(PathSettings.DOWNLOAD_PATH / downloadpath)
         time.sleep(5)
         excel = ExcelManager(downloadpath)
         col_TypeSheet_before = excel.col_size("types")
@@ -594,20 +594,20 @@ class LookUpTablePage(BasePage):
         print("OTA Restore succesfully with newely created properties")
 
     def test_13(self, download_path, tablename):
-        download_path = PathSettings.DOWNLOAD_PATH / download_path
+        download_path = str(PathSettings.DOWNLOAD_PATH / download_path)
         time.sleep(5)
         self.write_data_excel(tablename, download_path)
         time.sleep(2)
         self.err_upload(download_path)
         self.download1(tablename)
         download_path_1 = latest_download_file()
-        download_path_1 = PathSettings.DOWNLOAD_PATH / download_path_1
+        download_path_1 = str(PathSettings.DOWNLOAD_PATH / download_path_1)
         time.sleep(5)
         excel = ExcelManager(download_path_1)
         e1 = excel.get_cell_value(tablename, 1, 2)
         self.download1(tablename)
         download_path_2 = latest_download_file()
-        download_path_2 = PathSettings.DOWNLOAD_PATH / download_path_2
+        download_path_2 = str(PathSettings.DOWNLOAD_PATH / download_path_2)
         time.sleep(5)
         excel = ExcelManager(download_path_2)
         e2 = excel.get_cell_value(tablename, 1, 2)
@@ -615,7 +615,7 @@ class LookUpTablePage(BasePage):
         print("UID for existing rows is same")
 
     def test_15(self, download_path, tablename):
-        download_path = PathSettings.DOWNLOAD_PATH / download_path
+        download_path = str(PathSettings.DOWNLOAD_PATH / download_path)
         time.sleep(5)
         excel = ExcelManager(download_path)
         excel.write_data(tablename, UserData.data_list1)
@@ -623,7 +623,7 @@ class LookUpTablePage(BasePage):
         self.err_upload(download_path)
         self.download1(tablename)
         download_path_1 = latest_download_file()
-        download_path_1 = PathSettings.DOWNLOAD_PATH / download_path_1
+        download_path_1 = str(PathSettings.DOWNLOAD_PATH / download_path_1)
         time.sleep(5)
         excel = ExcelManager(download_path_1)
         UID_before = excel.get_cell_value(tablename, 3, 2)
@@ -632,7 +632,7 @@ class LookUpTablePage(BasePage):
         excel.write_excel_data(tablename, 2, 3, "dnckse")
         time.sleep(2)
         download_path_2 = latest_download_file()
-        download_path_2 = PathSettings.DOWNLOAD_PATH / download_path_2
+        download_path_2 = str(PathSettings.DOWNLOAD_PATH / download_path_2)
         time.sleep(5)
         self.replace_existing_table(download_path_2)
         excel = ExcelManager(download_path_2)
@@ -642,7 +642,7 @@ class LookUpTablePage(BasePage):
         print("After UID is:" + UID_before, UID1)
         time.sleep(2)
         download_path_3 = latest_download_file()
-        download_path_3 = PathSettings.DOWNLOAD_PATH / download_path_3
+        download_path_3 = str(PathSettings.DOWNLOAD_PATH / download_path_3)
         time.sleep(5)
         excel = ExcelManager(download_path_3)
         UID_after = excel.get_cell_value(tablename, 3, 2)
@@ -869,7 +869,7 @@ class LookUpTablePage(BasePage):
         self.wait_for_element(self.saved_button, 50)
 
     def multiple_groups(self, path, table_id):
-        path = PathSettings.DOWNLOAD_PATH / path
+        path = str(PathSettings.DOWNLOAD_PATH / path)
         time.sleep(5)
         excel = ExcelManager(path)
         col = excel.col_size(table_id)
@@ -893,7 +893,7 @@ class LookUpTablePage(BasePage):
         self.wait_to_click(self.close_download_popup)
 
     def compare_and_delete(self, download_path):
-        download_path = PathSettings.DOWNLOAD_PATH / download_path
+        download_path = str(PathSettings.DOWNLOAD_PATH / download_path)
         time.sleep(5)
         excel = ExcelManager(download_path)
         i = excel.row_size("types")
@@ -912,7 +912,7 @@ class LookUpTablePage(BasePage):
             self.submit_form_on_registration("en", UserData.user_ids_list[i])
 
     def bulk_upload_verification(self, download_path, value):
-        download_path = PathSettings.DOWNLOAD_PATH / download_path
+        download_path = str(PathSettings.DOWNLOAD_PATH / download_path)
         time.sleep(5)
         excel = ExcelManager(download_path)
         excel.write_data(value, UserData.duplicate_values)
@@ -920,7 +920,7 @@ class LookUpTablePage(BasePage):
         self.err_upload(download_path)
         self.download1(value)
         download_path_1 = latest_download_file()
-        download_path_1 = PathSettings.DOWNLOAD_PATH / download_path_1
+        download_path_1 = str(PathSettings.DOWNLOAD_PATH / download_path_1)
         time.sleep(5)
         self.row_count_table(value)
         row_value = self.row_count_table(value)
@@ -965,7 +965,7 @@ class LookUpTablePage(BasePage):
         time.sleep(3)
         self.wait_to_click(self.close_download_popup)
         download_path_1 = latest_download_file()
-        download_path_1 = PathSettings.DOWNLOAD_PATH / download_path_1
+        download_path_1 = str(PathSettings.DOWNLOAD_PATH / download_path_1)
         time.sleep(5)
         excel = ExcelManager(download_path_1)
         i = excel.row_size("types")
@@ -980,7 +980,7 @@ class LookUpTablePage(BasePage):
         self.replace_existing_table(download_path_1)
 
     def upload_1_update_excel(self, download_path):
-        download_path = PathSettings.DOWNLOAD_PATH / download_path
+        download_path = str(PathSettings.DOWNLOAD_PATH / download_path)
         time.sleep(5)
         excel = ExcelManager(download_path)
         excel.write_data('types', UserData.type_data_list)
@@ -989,13 +989,13 @@ class LookUpTablePage(BasePage):
         self.upload_1(download_path, str(excel.row_size('types') - 1))
 
     def delete_excel_sheet(self, download_path):
-        download_path = PathSettings.DOWNLOAD_PATH / download_path
+        download_path = str(PathSettings.DOWNLOAD_PATH / download_path)
         time.sleep(5)
         excel = ExcelManager(download_path)
         excel.delete_sheet("types")
 
     def error_upload_update_excel(self, download_path, values):
-        download_path = PathSettings.DOWNLOAD_PATH / download_path
+        download_path = str(PathSettings.DOWNLOAD_PATH / download_path)
         time.sleep(5)
         self.write_data_excel(values, download_path)
         self.upload_1(download_path, '1')
