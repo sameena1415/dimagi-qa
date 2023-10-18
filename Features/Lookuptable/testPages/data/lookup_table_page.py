@@ -483,7 +483,7 @@ class LookUpTablePage(BasePage):
 
     def update_delete_field(self, download_path, tablename):
         excel = ExcelManager(download_path)
-        excel.upload_to_path(tablename, UserData.data_list)
+        excel.upload_to_path(tablename, UserData.data_list, "user 1")
         time.sleep(2)
         self.err_upload(download_path)
         # self.view_lookup_table(tablename)

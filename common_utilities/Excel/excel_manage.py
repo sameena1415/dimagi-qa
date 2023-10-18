@@ -33,8 +33,8 @@ class ExcelManager:
 
     def delete_sheet(self, sheet_name):
         wb = openpyxl.load_workbook(self.path)
-        sheetDelete = wb[sheet_name]
-        wb.remove(sheetDelete)
+        sheet_delete = wb[sheet_name]
+        wb.remove(sheet_delete)
         print(wb.sheetnames)
         wb.save(self.path)
         print("Sheet deleted")
@@ -44,6 +44,8 @@ class ExcelManager:
         sheet = wb.active
         sheet.title = sheet_name
         wb.save(self.path)
+        sheet = wb[sheet_name]
+        print("Sheet values: ",list(sheet.values))
         print("Sheet updated")
 
     def write_data(self, sheet_name, list_data):
@@ -53,6 +55,8 @@ class ExcelManager:
         for i in list_data:
             sheet.append(i)
         wb.save(self.path)
+        sheet = wb[sheet_name]
+        print("Sheet values: ",list(sheet.values))
         print("Excel updated")
 
     def get_cell_value(self, sheet_name, col_num, row_num):
@@ -60,6 +64,8 @@ class ExcelManager:
         sheet = wb[sheet_name]
         data = sheet.cell(row_num,col_num).value
         print("Cell value:", data)
+        sheet = wb[sheet_name]
+        print("Sheet values: ",list(sheet.values))
         return data
 
     def read_excel(self, sheet_name):
@@ -94,6 +100,8 @@ class ExcelManager:
         sheet = wb[sheet_name]
         sheet.cell(row=row_num, column=column_num).value = value
         wb.save(self.path)
+        sheet = wb[sheet_name]
+        print("Sheet values: ",list(sheet.values))
         print("Excel updated")
 
     def delete_column(self, sheet_name, column_number):
@@ -101,6 +109,8 @@ class ExcelManager:
         sheet = wb[sheet_name]
         sheet.delete_cols(column_number)
         wb.save(self.path)
+        sheet = wb[sheet_name]
+        print("Sheet values: ",list(sheet.values))
         print("Excel column deleted")
 
     def delete_row(self, sheet_name, row_number):
@@ -108,6 +118,8 @@ class ExcelManager:
         sheet = wb[sheet_name]
         sheet.delete_rows(row_number)
         wb.save(self.path)
+        sheet = wb[sheet_name]
+        print("Sheet values: ",list(sheet.values))
         print("Excel row deleted")
 
     def row_size(self, sheet_name):
@@ -115,6 +127,8 @@ class ExcelManager:
         sheet = wb[sheet_name]
         row_count = sheet.max_row
         print("Row Count: ", row_count)
+        sheet = wb[sheet_name]
+        print("Sheet values: ",list(sheet.values))
         return row_count
 
     def col_size(self, sheet_name):
@@ -122,6 +136,8 @@ class ExcelManager:
         sheet = wb[sheet_name]
         column_count = sheet.max_column
         print("Column Count: ", column_count)
+        sheet = wb[sheet_name]
+        print("Sheet values: ",list(sheet.values))
         return column_count
 
     def upload_to_path(self, table_id, data_list, col_name):
