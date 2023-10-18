@@ -255,7 +255,7 @@ class LookUpTablePage(BasePage):
         self.wait_for_element(self.upload_table)
         self.scroll_to_bottom()
         time.sleep(1)
-        self.send_keys(self.upload_table, filepath)
+        self.send_keys(self.upload_table, str(filepath))
         time.sleep(2)
         self.wait_for_element(self.replace_table)
         time.sleep(2)
@@ -977,7 +977,7 @@ class LookUpTablePage(BasePage):
                 print("Value to be updated")
                 excel.write_excel_data("types", val, 1, "Y")
         time.sleep(1)
-        self.replace_existing_table(str(download_path_1))
+        self.replace_existing_table(download_path_1)
 
     def upload_1_update_excel(self, download_path):
         download_path = PathSettings.DOWNLOAD_PATH / download_path
