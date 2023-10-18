@@ -17,11 +17,13 @@ class ExcelManager:
         wb = Workbook()
         filepath = self.path
         wb.save(filepath)
+        wb.close()
 
     def create_sheet(self, sheet_name):
         wb = load_workbook(self.path)
         wb.create_sheet(sheet_name)
         wb.save(self.path)
+        wb.close()
 
     def sheet_new(self):
         wb = Workbook()
@@ -30,6 +32,7 @@ class ExcelManager:
         ws2 = wb.create_sheet("Sheet_B", 0)
         ws2.title = "Title_B"
         wb.save(filename='sample_book.xlsx')
+        wb.close()
 
     def delete_sheet(self, sheet_name):
         wb = openpyxl.load_workbook(self.path)
@@ -37,6 +40,7 @@ class ExcelManager:
         wb.remove(sheet_delete)
         print(wb.sheetnames)
         wb.save(self.path)
+        wb.close()
         print("Sheet deleted")
 
     def update_sheet(self, sheet_name):
@@ -46,6 +50,7 @@ class ExcelManager:
         wb.save(self.path)
         sheet = wb[sheet_name]
         print("Sheet values: ",list(sheet.values))
+        wb.close()
         print("Sheet updated")
 
     def write_data(self, sheet_name, list_data):
@@ -57,6 +62,7 @@ class ExcelManager:
         wb.save(self.path)
         sheet = wb[sheet_name]
         print("Sheet values: ",list(sheet.values))
+        wb.close()
         print("Excel updated")
 
     def get_cell_value(self, sheet_name, col_num, row_num):
@@ -102,6 +108,7 @@ class ExcelManager:
         wb.save(self.path)
         sheet = wb[sheet_name]
         print("Sheet values: ",list(sheet.values))
+        wb.close()
         print("Excel updated")
 
     def delete_column(self, sheet_name, column_number):
@@ -111,6 +118,7 @@ class ExcelManager:
         wb.save(self.path)
         sheet = wb[sheet_name]
         print("Sheet values: ",list(sheet.values))
+        wb.close()
         print("Excel column deleted")
 
     def delete_row(self, sheet_name, row_number):
@@ -120,6 +128,7 @@ class ExcelManager:
         wb.save(self.path)
         sheet = wb[sheet_name]
         print("Sheet values: ",list(sheet.values))
+        wb.close()
         print("Excel row deleted")
 
     def row_size(self, sheet_name):
