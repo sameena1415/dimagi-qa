@@ -73,6 +73,8 @@ def test_case_09_download_update_5(driver, settings):
     download_path = latest_download_file()
     home.data_menu()
     data.update_delete_field(download_path, value)
+    home.data_menu()
+    data.delete_lookup_table(value)
 
 
 @pytest.mark.data
@@ -87,6 +89,8 @@ def test_case_11_download_update_7(driver, settings):
     home.data_menu()
     d1, d2 = data.download_update_7(value, download_path)
     data.compare_excel(d1, d2, 0)
+    home.data_menu()
+    data.delete_lookup_table(value)
 
 
 # user1 is displayed twice
@@ -102,7 +106,8 @@ def test_case_12_download_update_8(driver, settings):
     home.data_menu()
     d1, d2 = data.download_update_8(download_path, value)
     data.compare_excel(d1, d2, 1)
-
+    home.data_menu()
+    data.delete_lookup_table(value)
 
 @pytest.mark.data
 @pytest.mark.managetables
@@ -115,6 +120,8 @@ def test_case_13_download_update_9(driver, settings):
     download_path = latest_download_file()
     home.data_menu()
     data.test_13(download_path, value)
+    home.data_menu()
+    data.delete_lookup_table(value)
 
 
 @pytest.mark.data
@@ -128,6 +135,8 @@ def test_case_14_download_update_10(driver, settings):
     download_path = latest_download_file()
     home.data_menu()
     data.delete_row_from_table(download_path, value)
+    home.data_menu()
+    data.delete_lookup_table(value)
 
 
 @pytest.mark.data
@@ -141,6 +150,8 @@ def test_case_15_download_update_11(driver, settings):
     download_path = latest_download_file()
     home.data_menu()
     data.test_15(download_path, value)
+    home.data_menu()
+    data.delete_lookup_table(value)
 
 
 @pytest.mark.data
@@ -157,6 +168,8 @@ def test_case_16_Attributes_1(driver, settings):
     data.attribute_2(download_path, value)
     driver.get(settings["url"]+UserData.url+settings['login_username'])
     data.restore_attribute_1()
+    home.data_menu()
+    data.delete_lookup_table(value)
 
 
 @pytest.mark.data
@@ -171,6 +184,8 @@ def test_case_17_Attributes_2(driver, settings):
     print("path is ", download_path)
     home.data_menu()
     data.attribute_2(download_path, value)
+    home.data_menu()
+    data.delete_lookup_table(value)
 
 
 @pytest.mark.data
