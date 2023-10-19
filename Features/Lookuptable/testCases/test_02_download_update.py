@@ -227,7 +227,8 @@ def test_24_bulkupload_1(driver, settings):
     data.delete_lookup_table(tableid2)
 
 
-
+@pytest.mark.lookup
+@pytest.mark.bulkUpload
 def test_25_bulkupload_2(driver, settings):
     home = HomePage(driver, settings)
     home.data_menu()

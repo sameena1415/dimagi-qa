@@ -7,6 +7,7 @@ import time
 from selenium.webdriver.support.select import Select
 
 from Features.Lookuptable.testCases.conftest import settings
+from HQSmokeTests.testPages.applications.app_preview import AppPreviewPage
 from HQSmokeTests.testPages.home.home_page import HomePage
 from HQSmokeTests.testPages.users.org_structure_page import latest_download_file
 from common_utilities.path_settings import PathSettings
@@ -117,11 +118,12 @@ class LookUpTablePage(BasePage):
         self.select_user = "//*[@aria-label='{}']"
         self.login = (By.XPATH, "//*[@id='js-confirmation-confirm']")
         self.start = (By.XPATH, "//*[@class='ff ff-start-fg appicon-icon appicon-icon-fg']")
-        self.inapp_case_list = (By.XPATH, "//*[@class='formplayer-request']")
+        self.inapp_case_list = (By.XPATH, "(//*[@class='formplayer-request'])[last()]")
         self.inapp_registration_form = (By.XPATH, "//h3[text()='Registration Form']")
         self.inapp_select_option = (By.XPATH, "//*[(@class='sel clear')]//div/div[1]/label/span/p")
-        self.inapp_next = (By.XPATH, "//*[@class='btn btn-formnav btn-formnav-next'][1]")
-        self.inapp_continue = (By.XPATH, "//*[@class='btn btn-success btn-formnav-submit'][1]")
+        self.inapp_next = (By.XPATH, "//button[contains(@data-bind,'nextQuestion')]")
+        self.inapp_submit = (By.XPATH, "//button[text()='Submit']")
+        self.inapp_continue = (By.XPATH, "//button[@class='btn btn-success btn-formnav-submit']")
         self.inapp_success_message = (By.XPATH, "//*[@class='alert alert-success']")
         self.case_list = (By.XPATH, "//*[@aria-label='Case List']")
         self.delete_success = (By.XPATH, "//div[contains(@class,'alert-success')][contains(.,'You have deleted')]")
@@ -589,7 +591,13 @@ class LookUpTablePage(BasePage):
         assert col1 > col2
         print("Fields got deleted")
 
-    def restore_attribute_1(self):
+    def restore_attribute_1(self, url):
+        if "www" in url:
+            url = url + UserData.restore_url_prod
+        else:
+            url = url + UserData.restore_url_staging
+        print("URL: ", url)
+        self.driver.get(url)
         time.sleep(20)
         self.is_present_and_displayed(self.restore_id, 10)
         a = self.get_text(self.restore_id)
@@ -811,15 +819,9 @@ class LookUpTablePage(BasePage):
         self.wait_to_click(self.done)
 
     def submit_form_on_registration(self, value, user):
-        self.wait_for_element(self.home)
-        self.wait_to_click(self.home)
-        # self.wait_to_click(self.login_user)
-        # time.sleep(2)
-        # self.wait_to_click((By.XPATH, self.select_user.format(user)))
-        # time.sleep(2)
-        # self.wait_for_element(self.login)
-        # self.wait_to_click(self.login)
-        # time.sleep(2)
+        if self.is_present(self.home):
+            self.wait_for_element(self.home)
+            self.wait_to_click(self.home)
         self.language_selection(value)
         self.wait_for_element(self.sync)
         self.wait_to_click(self.sync)
@@ -832,16 +834,26 @@ class LookUpTablePage(BasePage):
         self.wait_to_click(self.inapp_registration_form)
         time.sleep(3)
         if user != 'appiumtest':
-            self.wait_to_click(self.inapp_select_option)
+            self.wait_for_element(self.inapp_select_option)
+            self.js_click(self.inapp_select_option)
             time.sleep(3)
             value = self.get_text(self.inapp_select_option)
-            self.wait_to_click(self.inapp_next)
             time.sleep(3)
-            self.wait_to_click(self.inapp_continue)
+            if self.is_present(self.inapp_next):
+                self.wait_for_element(self.inapp_next)
+                self.js_click(self.inapp_next)
+                time.sleep(3)
+                self.wait_for_element(self.inapp_continue)
+                self.js_click(self.inapp_continue)
+            else:
+                self.js_click(self.inapp_submit)
             # self.send_keys(self.question_display_text, self.question_display_text_name)
             time.sleep(5)
             assert self.is_present_and_displayed(self.success_msg)
             print("form submitted succesfully:", value)
+            if self.is_present(self.home):
+                self.wait_for_element(self.home)
+                self.wait_to_click(self.home)
             en = "Uttar Pradesh"
             hin = "उत्तर प्रदेश"
             if value == hin:
@@ -913,7 +925,9 @@ class LookUpTablePage(BasePage):
         self.replace_existing_table(download_path)
 
     def loop_submit_form_on_registration(self):
+        app = AppPreviewPage(self.driver)
         for i in range(len(UserData.user_ids_list)):
+            app.login_as_app_preview(UserData.user_ids_list[i])
             self.submit_form_on_registration("en", UserData.user_ids_list[i])
 
     def bulk_upload_verification(self, download_path, value):
@@ -960,13 +974,14 @@ class LookUpTablePage(BasePage):
             print("No table name starts with lookuptable_")
         time.sleep(2)
         self.js_click(self.click_download)
-        self.wait_for_element(self.download_file, 60)
-        self.js_click(self.download_file)
-        self.wait_for_element(self.close_download_popup)
+        time.sleep(4)
+        self.wait_for_element(self.close_download_popup, 40)
         if self.is_present(self.please_complete):
             self.wait_to_click(self.close_download_popup)
             time.sleep(2)
             self.js_click(self.click_download)
+            time.sleep(4)
+            self.wait_for_element(self.close_download_popup, 40)
         self.wait_for_element(self.download_file, 60)
         self.js_click(self.download_file)
         time.sleep(3)

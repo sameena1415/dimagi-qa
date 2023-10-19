@@ -55,7 +55,8 @@ def test_case_31_lookup_table_form_builder3(driver, settings):
     data.navigation_to_a_caselist(UserData.caselist_nav)
     data.delete_caselist()
 
-
+@pytest.mark.lookup
+@pytest.mark.inapp
 def test_case_32_lookup_table_form_builder4(driver, settings):
     data = LookUpTablePage(driver)
     home = HomePage(driver, settings)
@@ -66,7 +67,8 @@ def test_case_32_lookup_table_form_builder4(driver, settings):
     data.formbuilder_4()
     data.delete_caselist()
 
-
+@pytest.mark.lookup
+@pytest.mark.inapp
 def test_case_33_lookup_table_form_builder5(driver, settings):
     data = LookUpTablePage(driver)
     home = HomePage(driver, settings)
@@ -79,7 +81,8 @@ def test_case_33_lookup_table_form_builder5(driver, settings):
     data.edit_state()
     data.delete_caselist()
 
-
+@pytest.mark.lookup
+@pytest.mark.inapp
 def test_case_22_filtered_lookup_table(driver, settings):
     data = LookUpTablePage(driver)
     home = HomePage(driver, settings)
@@ -94,7 +97,8 @@ def test_case_22_filtered_lookup_table(driver, settings):
     driver.switch_to.default_content()
     data.delete_caselist()
 
-
+@pytest.mark.lookup
+@pytest.mark.inapp
 def test_case_35_languages_check(driver, settings):
     data = LookUpTablePage(driver)
     home = HomePage(driver, settings)
@@ -103,8 +107,9 @@ def test_case_35_languages_check(driver, settings):
     home.applications_menu(UserData.application)
     data.specific_table_upload(UserData.specific_table_data[0])
     data.language_check()
-    AppPreview = AppPreviewPage(driver)
-    AppPreview.check_access_to_app_preview()
+    app_preview = AppPreviewPage(driver)
+    app_preview.check_access_to_app_preview()
+    app_preview.login_as_app_preview(UserData.user_ids_list[0])
     data.submit_form_on_registration(UserData.languages[0], UserData.user_ids_list[0])
     data.submit_form_on_registration(UserData.languages[1], UserData.user_ids_list[0])
     driver.switch_to.default_content()

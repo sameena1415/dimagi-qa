@@ -116,15 +116,15 @@ class AppPreviewPage(BasePage):
         print("Latitude: ", lat, "Longitude: ", lon)
         return lat, lon
 
-    def login_as_app_preview(self):
+    def login_as_app_preview(self, username = UserData.app_login):
         self.wait_to_click(self.login_as_button)
-        self.wait_to_clear_and_send_keys(self.search_worker, UserData.app_login)
+        self.wait_to_clear_and_send_keys(self.search_worker, username)
         self.js_click(self.search_users_button)
         time.sleep(2)
-        self.js_click((By.XPATH, self.username_in_list.format(UserData.app_login)))
+        self.js_click((By.XPATH, self.username_in_list.format(username)))
         time.sleep(2)
         self.js_click(self.webapp_login_confirmation)
         time.sleep(2)
         logged_in_username = self.get_text(self.webapp_working_as)
-        assert logged_in_username == UserData.app_login, "Logged in"
+        assert logged_in_username == username, "Logged in"
 

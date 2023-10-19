@@ -15,7 +15,8 @@ class UserData:
     field_val = 'table'+ str(fetch_random_string())
 
     url = "/phone/restore/?version=2.0&as="
-    restore_url = "/phone/restore/?version=2.0&as=appiumtest@qa-automation.commcarehq.org"
+    restore_url_staging = "/phone/restore/?version=2.0&as=appiumtest@qa-automation.commcarehq.org"
+    restore_url_prod = "/phone/restore/?version=2.0&as=appiumtest@qa-automation-prod.commcarehq.org"
 
     data_list = [(1, 'Y', '1', 'RWS%DTUYIG*&^%'), (2, 'N', '2', '!#@$%#$RFGH:'), (3, 'N', '3', '!#@$%#$RFGH:')]
     row_value_change =[('','N','23',"appiumtest")]

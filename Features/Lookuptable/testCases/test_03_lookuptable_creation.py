@@ -96,7 +96,7 @@ def test_case_20_creation2(driver, settings):
     download_path = latest_download_file()
     home.data_menu()
     data.download_update_8(download_path, values)
-    data.replace_existing_table(download_path)
+    # data.replace_existing_table(download_path)
     home = HomePage(driver, settings)
     home.applications_menu(UserData.application)
     data.create_new_form()
@@ -137,8 +137,7 @@ def test_case_41_user_restore(driver, settings):
     download_path = latest_download_file()
     home.data_menu()
     data.multiple_groups(download_path, values)
-    driver.get(settings["url"]+UserData.restore_url)
-    data.restore_attribute_1()
+    data.restore_attribute_1(settings["url"])
 
 
 @pytest.mark.data
