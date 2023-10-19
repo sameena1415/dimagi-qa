@@ -118,11 +118,16 @@ class AppPreviewPage(BasePage):
 
     def login_as_app_preview(self, username = UserData.app_login):
         self.wait_to_click(self.login_as_button)
+        time.sleep(2)
+        self.wait_for_element(self.search_worker)
         self.wait_to_clear_and_send_keys(self.search_worker, username)
+        self.wait_for_element(self.search_users_button)
         self.js_click(self.search_users_button)
         time.sleep(2)
+        self.wait_for_element((By.XPATH, self.username_in_list.format(username)))
         self.js_click((By.XPATH, self.username_in_list.format(username)))
         time.sleep(2)
+        self.wait_for_element(self.webapp_login_confirmation)
         self.js_click(self.webapp_login_confirmation)
         time.sleep(2)
         logged_in_username = self.get_text(self.webapp_working_as)

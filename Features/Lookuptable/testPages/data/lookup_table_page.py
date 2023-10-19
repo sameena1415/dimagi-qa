@@ -1,14 +1,10 @@
-import datetime
-import os.path
 import random
 import string
 import time
 
 from selenium.webdriver.support.select import Select
 
-from Features.Lookuptable.testCases.conftest import settings
 from HQSmokeTests.testPages.applications.app_preview import AppPreviewPage
-from HQSmokeTests.testPages.home.home_page import HomePage
 from HQSmokeTests.testPages.users.org_structure_page import latest_download_file
 from common_utilities.path_settings import PathSettings
 from selenium.webdriver.common.by import By
@@ -16,7 +12,6 @@ from common_utilities.Excel.excel_manage import ExcelManager
 from common_utilities.generate_random_string import fetch_random_string, fetch_string_with_special_chars
 from common_utilities.selenium.base_page import BasePage
 from Features.Lookuptable.userInputs.user_inputs import UserData
-import gettext
 
 """"Contains test page elements and functions related to the Lookup Table module"""
 
@@ -77,8 +72,6 @@ class LookUpTablePage(BasePage):
         self.replace_table = (By.XPATH, "//input[@id='replace'][@type='checkbox']")
         self.rowcount = (By.XPATH, "//*[@id='report_table_view_lookup_tables_info']")
         self.restore_id = (By.XPATH, "//*[contains(text(),'" + self.table_id_name + "')]")
-        # self.delete_state_table = (
-        #     By.XPATH, "(//td/span[text()='state'])[1]//following::button[@data-bind='click: $root.removeDataType'][1]")
 
         # in-app effect
         self.applications_menu_id = (By.ID, "ApplicationsTab")
@@ -345,6 +338,7 @@ class LookUpTablePage(BasePage):
         time.sleep(2)
         self.js_click(self.click_download)
         self.wait_for_element(self.close_download_popup)
+        time.sleep(2)
         if self.is_present(self.please_complete):
             self.wait_to_click(self.close_download_popup)
             self.driver.refresh()
@@ -367,31 +361,6 @@ class LookUpTablePage(BasePage):
         self.js_click(self.download_file)
         time.sleep(3)
         self.wait_to_click(self.close_download_popup)
-
-    # def latest_download_file(self, type=".xlsx"):
-    #     cwd = os.getcwd()
-    #     try:
-    #         os.chdir(PathSettings.DOWNLOAD_PATH)
-    #         all_specific_files = filter(lambda x: x.endswith(type), os.listdir(os.getcwd()))
-    #         files = sorted(all_specific_files, key=os.path.getctime)
-    #         if files[-1].endswith(".log"):
-    #             newest = sorted(files, key=os.path.getctime)[-2]
-    #         elif files[-1].endswith(".xlsx"):
-    #             newest = sorted(files, key=os.path.getctime)[-1]
-    #         else:
-    #             newest = max(files, key=os.path.getctime)
-    #         print("File downloaded: " + newest)
-    #         modTimesinceEpoc = (PathSettings.DOWNLOAD_PATH / newest).stat().st_mtime
-    #         modificationTime = datetime.datetime.fromtimestamp(modTimesinceEpoc)
-    #         timeNow = datetime.datetime.now()
-    #         diff_seconds = round((timeNow - modificationTime).total_seconds())
-    #         print("Last Modified Time : ", str(modificationTime) + 'Current Time : ', str(timeNow),
-    #               "Diff: " + str(diff_seconds))
-    #         return newest
-    #     finally:
-    #         print("Restoring the path...")
-    #         os.chdir(cwd)
-    #         print("Current directory is-", os.getcwd())
 
     def create_download_lookuptable(self):
         table_name = self.create_lookup_table()
@@ -843,7 +812,7 @@ class LookUpTablePage(BasePage):
         self.wait_for_element(self.inapp_registration_form)
         self.wait_to_click(self.inapp_registration_form)
         time.sleep(3)
-        if user != 'appiumtest':
+        if user != UserData.user_ids_list[0]:
             self.wait_for_element(self.inapp_select_option)
             self.js_click(self.inapp_select_option)
             time.sleep(3)
@@ -857,7 +826,6 @@ class LookUpTablePage(BasePage):
                 self.js_click(self.inapp_continue)
             else:
                 self.js_click(self.inapp_submit)
-            # self.send_keys(self.question_display_text, self.question_display_text_name)
             time.sleep(5)
             assert self.is_present_and_displayed(self.success_msg)
             print("form submitted succesfully:", value)
@@ -937,6 +905,9 @@ class LookUpTablePage(BasePage):
     def loop_submit_form_on_registration(self):
         app = AppPreviewPage(self.driver)
         for i in range(len(UserData.user_ids_list)):
+            if self.is_present(self.home):
+                self.wait_for_element(self.home)
+                self.wait_to_click(self.home)
             app.login_as_app_preview(UserData.user_ids_list[i])
             self.submit_form_on_registration("en", UserData.user_ids_list[i])
 
@@ -967,6 +938,7 @@ class LookUpTablePage(BasePage):
         self.missing_data_assert()
 
     def delete_test_lookup_tables(self):
+        self.wait_for_element(self.manage_tables_link)
         self.js_click(self.manage_tables_link)
         self.wait_for_element(self.click_download)
         list = self.find_elements((By.XPATH, self.lookup_table_checkbox_lists.format("table")))
@@ -986,12 +958,14 @@ class LookUpTablePage(BasePage):
         self.js_click(self.click_download)
         time.sleep(4)
         self.wait_for_element(self.close_download_popup, 40)
+        time.sleep(2)
         if self.is_present(self.please_complete):
             self.wait_to_click(self.close_download_popup)
             time.sleep(2)
             self.js_click(self.click_download)
             time.sleep(4)
             self.wait_for_element(self.close_download_popup, 40)
+            time.sleep(2)
         self.wait_for_element(self.download_file, 60)
         self.js_click(self.download_file)
         time.sleep(3)
