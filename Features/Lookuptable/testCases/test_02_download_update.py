@@ -166,7 +166,7 @@ def test_case_16_Attributes_1(driver, settings):
     print("path is ", download_path)
     home.data_menu()
     data.attribute_2(download_path, value)
-    data.restore_attribute_1(settings["url"]+UserData.url+settings['login_username'])
+    data.restore_attribute_default(settings["url"]+UserData.url+settings['login_username'])
     home.data_menu()
     data.delete_lookup_table(value)
 

@@ -604,6 +604,16 @@ class LookUpTablePage(BasePage):
         print(a)
         print("OTA Restore succesfully with newely created properties")
 
+    def restore_attribute_default(self, url):
+        print("URL: ", url)
+        self.driver.get(url)
+        time.sleep(20)
+        self.is_present_and_displayed(self.restore_id, 10)
+        a = self.get_text(self.restore_id)
+        print(a)
+        print("OTA Restore succesfully with newely created properties")
+
+
     def test_13(self, download_path, tablename):
         download_path = str(PathSettings.DOWNLOAD_PATH / download_path)
         time.sleep(5)
