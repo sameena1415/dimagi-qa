@@ -145,6 +145,7 @@ class LookUpTablePage(BasePage):
         self.home = (By.XPATH, "//*[@id='breadcrumb-region']/div/div/ol/li[1]")
         self.sync = (By.XPATH, "//*[@class='ff ff-sync appicon-icon']")
         self.label = (By.XPATH, "//*[@data-qtype='Trigger']")
+        self.refresh = (By.XPATH, "//button[contains(@class,'refresh')]")
         self.settings = (By.XPATH, "//*[@class='fa fa-gear appicon-icon']")
         self.app_language = (By.XPATH, "//*[@class='form-control js-lang']")
         self.done = (By.XPATH, "//*[@class='btn btn-primary js-done']")
@@ -797,11 +798,11 @@ class LookUpTablePage(BasePage):
         self.select_by_text(self.app_language, value)
         self.wait_to_click(self.done)
 
-    def submit_form_on_registration(self, value, user):
+    def submit_form_on_registration(self, lang, user, type=None):
         if self.is_present(self.home):
             self.wait_for_element(self.home)
             self.wait_to_click(self.home)
-        self.language_selection(value)
+        self.language_selection(lang)
         self.wait_for_element(self.sync)
         self.wait_to_click(self.sync)
         time.sleep(20)
@@ -812,7 +813,7 @@ class LookUpTablePage(BasePage):
         self.wait_for_element(self.inapp_registration_form)
         self.wait_to_click(self.inapp_registration_form)
         time.sleep(3)
-        if user != UserData.user_ids_list[0]:
+        if user != UserData.user_ids_list[-1]:
             self.wait_for_element(self.inapp_select_option)
             self.js_click(self.inapp_select_option)
             time.sleep(3)
@@ -829,15 +830,16 @@ class LookUpTablePage(BasePage):
             time.sleep(5)
             assert self.is_present_and_displayed(self.success_msg)
             print("form submitted succesfully:", value)
+            if type == 'state':
+                en = "Uttar Pradesh"
+                hin = "उत्तर प्रदेश"
+                if value == hin:
+                    print("Form submitted in HINDI")
+                elif value == en:
+                    print("Form submitted in ENGLISH")
             if self.is_present(self.home):
                 self.wait_for_element(self.home)
                 self.wait_to_click(self.home)
-            en = "Uttar Pradesh"
-            hin = "उत्तर प्रदेश"
-            if value == hin:
-                print("Form submitted in HINDI")
-            elif value == en:
-                print("Form submitted in ENGLISH")
         else:
             print(
                 "Make sure the 'Inapp' lookup table is available, and that its contents are accessible to the current user.")
@@ -853,7 +855,12 @@ class LookUpTablePage(BasePage):
         time.sleep(2)
         self.wait_to_click(self.label)
         self.wait_to_click(self.dropdown_logic)
-        self.wait_to_click(self.logic)
+        self.wait_for_element(self.logic)
+        state = self.get_attribute(self.logic, "class")
+        if state == "selected":
+            print("Already selected")
+        else:
+            self.wait_to_click(self.logic)
         self.send_keys(self.question_display_text_en, "en")
         self.clear(self.question_display_text_hin)
         self.send_keys(self.question_display_text_hin, "hin")
@@ -910,6 +917,21 @@ class LookUpTablePage(BasePage):
                 self.wait_to_click(self.home)
             app.login_as_app_preview(UserData.user_ids_list[i])
             self.submit_form_on_registration("en", UserData.user_ids_list[i])
+
+    def language_submit_form_on_registration(self, language_list, user, type):
+        app_preview = AppPreviewPage(self.driver)
+        app_preview.check_access_to_app_preview()
+        self.driver.switch_to.default_content()
+        self.wait_for_element(self.refresh)
+        self.js_click(self.refresh)
+        self.driver.switch_to.frame(self.find_element(app_preview.iframe_app_preview))
+        if self.is_present(self.home):
+            self.wait_for_element(self.home)
+            self.wait_to_click(self.home)
+        app_preview.login_as_app_preview(user)
+        for i in range(len(language_list)):
+            self.submit_form_on_registration(language_list[i], user, type)
+
 
     def bulk_upload_verification(self, download_path, value):
         download_path = str(PathSettings.DOWNLOAD_PATH / download_path)

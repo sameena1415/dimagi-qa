@@ -1,6 +1,7 @@
 import pytest
 
 from HQSmokeTests.testPages.applications.app_preview import AppPreviewPage
+from HQSmokeTests.testPages.applications.application_page import ApplicationPage
 from HQSmokeTests.testPages.home.home_page import HomePage
 from Features.Lookuptable.testPages.data.lookup_table_page import LookUpTablePage
 from Features.Lookuptable.userInputs.user_inputs import UserData
@@ -105,12 +106,11 @@ def test_case_35_languages_check(driver, settings):
     home.data_menu()
     data.upload_2(UserData.state, "1")
     home.applications_menu(UserData.application)
+    application = ApplicationPage(driver)
+    application.add_language(UserData.languages[0])
+    application.add_language(UserData.languages[1])
     data.specific_table_upload(UserData.specific_table_data[0])
     data.language_check()
-    app_preview = AppPreviewPage(driver)
-    app_preview.check_access_to_app_preview()
-    app_preview.login_as_app_preview(UserData.user_ids_list[0])
-    data.submit_form_on_registration(UserData.languages[0], UserData.user_ids_list[0])
-    data.submit_form_on_registration(UserData.languages[1], UserData.user_ids_list[0])
+    data.language_submit_form_on_registration(UserData.languages, UserData.user_ids_list[0], UserData.specific_table_data[0])
     driver.switch_to.default_content()
     data.delete_caselist()

@@ -109,6 +109,12 @@ class ApplicationPage(BasePage):
         self.override_btn = (By.XPATH, "//button[contains(.,'Overwrite their work')]")
         self.enter_app_code_link = (By.LINK_TEXT, "Enter App Code")
 
+        # language tab
+        self.language_option = "//select[contains(@data-bind,'langcode')]/option[.='{}']"
+        self.add_language_button = (By.XPATH, "//button[contains(@data-bind,'addLanguage')]")
+        self.language_selector = (By.XPATH, "(//table//tr/td[2]/form//b)[last()]")
+        self.language_option_select = "//li[@role='option'][contains(.,'{} (')]"
+        self.save_language = (By.XPATH, "//div[.='Save'][@class='btn btn-primary']")
 
     def create_new_application(self):
         self.wait_to_click(self.applications_menu_id)
@@ -364,3 +370,20 @@ class ApplicationPage(BasePage):
             self.wait_to_click(self.dashboard_tab)
             time.sleep(2)
             self.create_application(app)
+
+    def add_language(self, lang):
+        self.wait_for_element(self.settings)
+        self.js_click(self.settings)
+        time.sleep(2)
+        self.wait_for_element(self.languages_tab)
+        if self.is_present((By.XPATH, self.language_option.format(lang))):
+            print("Language is already present")
+        else:
+            self.wait_to_click(self.add_language_button)
+            self.wait_to_click(self.language_selector)
+            time.sleep(1)
+            self.scroll_to_element((By.XPATH, self.language_option_select.format(lang)))
+            self.wait_to_click((By.XPATH, self.language_option_select.format(lang)))
+            time.sleep(2)
+            self.wait_to_click(self.save_language)
+
