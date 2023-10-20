@@ -1,7 +1,6 @@
 import pytest
 
 from RequestAPI.testMethods.miscellaneous_methods import MiscellaneousMethods
-from RequestAPI.testMethods.mobile_worker_methods import MobileWorkerMethods
 from RequestAPI.userInputs.user_inputs import UserData
 
 """"Contains all test cases that aren't specifically related any menu modules"""
