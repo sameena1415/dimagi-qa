@@ -226,5 +226,10 @@ Features/SplitScreenCaseSearch/report.html
 Features/SplitScreenCaseSearch/test_cases/report.html
 
 
+#Ignoring compliled files of LookupTable
+Features/Lookuptable/settings.cfg
+Features/Lookuptable/report.html
+Features/Lookuptable/testCases/report.html
+
 
 
