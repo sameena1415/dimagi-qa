@@ -5,7 +5,7 @@ from common_utilities.Excel.excel_manage import ExcelManager
 from Features.Lookuptable.testPages.data.lookup_table_page import LookUpTablePage
 from Features.Lookuptable.userInputs.user_inputs import UserData
 
-""""Contains test cases related to the Data module"""
+""""Contains test cases related to the lookup table download and updates"""
 
 
 
