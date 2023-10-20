@@ -6,7 +6,7 @@ from Features.Lookuptable.userInputs.user_inputs import UserData
 from Features.Lookuptable.testPages.data.lookup_table_page import LookUpTablePage
 from HQSmokeTests.testPages.users.org_structure_page import latest_download_file
 
-""""Contains test cases related to the Data module"""
+""""Contains test cases related to new lookup table creation"""
 
 value = dict()
 value["table_id"] = ""
