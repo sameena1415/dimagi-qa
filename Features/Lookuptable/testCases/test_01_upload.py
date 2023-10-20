@@ -6,7 +6,7 @@ from Features.Lookuptable.testPages.data.lookup_table_page import LookUpTablePag
 from Features.Lookuptable.userInputs.user_inputs import UserData
 from HQSmokeTests.testPages.users.org_structure_page import latest_download_file
 
-""""Contains test cases related to the Data module"""
+""""Contains test cases related to the lookup table uploads """
 
 
 @pytest.mark.lookup
