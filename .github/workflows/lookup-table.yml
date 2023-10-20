@@ -8,6 +8,8 @@ on:
     branches: [ master ]
   pull_request:
     branches: [ master ]
+  schedule:
+    - cron: ‘10 0 * * *’
   workflow_dispatch:
     inputs:
       environment:
@@ -100,7 +102,7 @@ jobs:
             
             let receivers = 'qa-automation@dimagi.com'
             if (context.eventName !== "pull_request" || context.eventName !== "push") {
-              receivers = 'kbordoloi@dimagi.com , sameena.shaik@fissionlabs.com'
+              receivers = 'qa@dimagi.com, sameena.shaik@fissionlabs.com, shalini.goli@fissionlabs.com'
             }
             return {
               "subject": subject,
@@ -124,6 +126,62 @@ jobs:
           attachments: ${{ github.workspace }}/lookup_report_${{ matrix.environment }}.html
           in_reply_to: ${{ fromJSON(steps.configure_email.outputs.result).reference }}
 
+      - name: Post to Slack channel on Failure
+        id: slack
+        uses: slackapi/slack-github-action@v1.23.0
+        if: ${{ success() || failure() }}
+        with:
+          payload: |
+            {
+                "blocks": [
+                    {
+                        "type": "section",
+                        "text": {
+                            "type": "mrkdwn",
+                            "text": " Hey Folks!!:bye_boo: \n*${{ github.workflow }}* were just triggered!"
+                        }
+                    },
+                    {
+                        "type": "context",
+                        "elements": [
+                            {
+                                "type": "mrkdwn",
+                                "text": "*Environment: *\n ${{ matrix.environment }}  \n"
+                            },
+                          {
+                                "type": "mrkdwn",
+                                "text": " "
+                            },
+                            {
+                                "type": "mrkdwn",
+                                "text": "*Status: *\n ${{ job.status }}  :x:"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "section",
+                        "text": {
+                            "type": "mrkdwn",
+                            "text": "Here's the corresponding workflow execution :arrow_right::arrow_right:"
+                        },
+                        "accessory": {
+                            "type": "button",
+                            "text": {
+                                "type": "plain_text",
+                                "text": "View on Github",
+                                "emoji": true
+                            },
+                            "value": "click_me_123",
+                            "url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}",
+                            "action_id": "button-action",
+                            "style": "danger"
+                        }
+                    }
+                ]
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL_FEATURES }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
 
       - name: Archive test results
         if: ${{ success() || failure() }}
