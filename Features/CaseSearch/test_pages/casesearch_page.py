@@ -34,6 +34,7 @@ class CaseSearchWorkflows(BasePage):
         self.city_value_home = "//span[@class='caption webapp-markdown-output'][contains(text(), '{}')]"
         self.city_value_work = "//span[@class='caption webapp-markdown-output'][contains(text()[2], '{}')]"
         self.search_screen_title = "//h2[contains(text(), '{}')]"
+        self.search_screen_title_sscs = "//h1[contains(text(), '{}')]"
         self.search_screen_subtitle = "//strong[contains(text(), '{}')]"
         self.date_selected = "(//*[contains(text(),'{}')])[1]"
         self.dropdown_values = self.combox_select + "/option"
@@ -42,23 +43,28 @@ class CaseSearchWorkflows(BasePage):
         self.webapps_home = (By.XPATH, "//i[@class='fcc fcc-flower']")
         self.case_detail_value = "//th[contains(text(), '{}')]//following-sibling::td[contains(text(), '{}')]"
         self.case_detail_tab = "//a[text()='{}']"
-        self.close_case_detail_tab = (By.XPATH, "(//div[@id='case-detail-modal']//following:: button[@class='close'])[1]")
+        self.close_case_detail_tab = (
+            By.XPATH, "(//div[@id='case-detail-modal']//following:: button[@class='close'])[1]")
         # Reports
         self.case_type_select = (By.ID, "report_filter_case_type")
         self.report_search = (By.ID, "report_filter_search_query")
         self.report_apply_filters = (By.ID, "apply-filters")
-        self.commcare_case_claim_case = "//a[contains(text(), '{}')]//following::*[text()='{}'][1]"
+        self.commcare_case_claim_case = "//td[contains(text(), '{}')]"
         # Multi-select
         self.select_all_checkbox = (By.ID, "select-all-checkbox")
         self.case_names = (By.XPATH, "//td[contains(@class,'case-list-column')][3]")
         self.multi_select_continue = (By.ID, "multi-select-continue-btn")
         self.selected_case_names_on_forms = (By.XPATH, "//span[@class='caption webapp-markdown-output']")
+        self.checkbox_xpath = "//label[contains (text(),'{}')][1]//following::input[@value='{}'][1]"
+        self.search_property_checked = "//label[contains (text(),'{}')][1]//following::input[@value='{}' and @checked][1]"
+        self.remove_combobox_selection = "//label[contains(text(),'{}')]//following::button[@aria-label='Remove all items'][1]"
+        self.rating_answer = "//span[text()='Rating']/following::input[@value='{}'][1]"
 
     def check_values_on_caselist(self, row_num, expected_value, is_multi=NO):
         self.value_in_table = self.get_element(self.value_in_table_format, row_num)
         self.wait_for_element(self.value_in_table)
         values_ = self.find_elements_texts(self.value_in_table)
-        print(expected_value, values_) # added for debugging
+        print(expected_value, values_)  # added for debugging
         if is_multi == YES:
             assert all(item in values_ for item in expected_value) or any(item in values_ for item in expected_value)
         elif is_multi == NO:
@@ -113,8 +119,9 @@ class CaseSearchWorkflows(BasePage):
         assert self.is_visible_and_displayed(help_text)
 
     def check_date_range(self, date_range):
-        time.sleep(10)
+        time.sleep(5)
         date_element = self.get_element(self.date_selected, date_range)
+        print(date_element)
         assert self.is_present(date_element)
 
     def add_address(self, address, search_property):
@@ -127,10 +134,10 @@ class CaseSearchWorkflows(BasePage):
     def check_value_on_form(self, city_address, type=HOME):
         if type == HOME:
             city_home = self.get_element(self.city_value_home, city_address)
-            assert self.is_present(city_home)
+            assert self.is_present_and_displayed(city_home)
         if type == WORK:
             city_work = self.get_element(self.city_value_work, city_address)
-            assert self.is_present(city_work)
+            assert self.is_present_and_displayed(city_work)
 
     def check_search_screen_title(self, title=None):
         title_on_screen = self.get_element(self.search_screen_title, title)
@@ -138,6 +145,13 @@ class CaseSearchWorkflows(BasePage):
             assert self.is_displayed(title_on_screen)
         else:
             assert not self.is_displayed(title_on_screen)
+
+    def check_search_screen_title_sscs(self, title=None):
+        title_on_screen_sscs = self.get_element(self.search_screen_title_sscs, title)
+        if title is not None:
+            assert self.is_displayed(title_on_screen_sscs)
+        else:
+            assert not self.is_displayed(title_on_screen_sscs)
 
     def check_search_screen_subtitle(self, subtitle):
         subtitle_on_screen = self.get_element(self.search_screen_subtitle, subtitle)
@@ -162,25 +176,32 @@ class CaseSearchWorkflows(BasePage):
             validation_message_per_prop = (
                 By.XPATH, self.required_validation_per_property_combox.format(search_property, message))
         if required_or_validated == YES:
+            self.wait_for_ajax()
             time.sleep(4)
-            assert self.is_displayed(validation_message_per_prop), f"Required validation missing {validation_message_per_prop}"
-            assert self.is_displayed(validation_message_on_top), f"Required validation missing {validation_message_on_top}"
+            assert self.is_displayed(
+                validation_message_per_prop), f"Required validation missing {validation_message_per_prop}"
+            assert self.is_displayed(
+                validation_message_on_top), f"Required validation missing {validation_message_on_top}"
         elif required_or_validated == NO:
+            self.wait_for_ajax()
             time.sleep(4)
             assert not self.is_displayed(validation_message_per_prop)
 
-    def check_dropdown_value(self, search_property, not_to_be_present):
+    def check_dropdown_value(self, search_property, value, present):
         dropdown_values_ = self.get_element(self.dropdown_values, search_property)
         values = self.find_elements_texts(dropdown_values_)
-        assert not_to_be_present not in values
+        if present == NO:
+            assert value not in values
+        if present == YES:
+            assert value in values
 
     def check_eof_navigation(self, eof_nav, menu=None):
-        if eof_nav == PREV_MENU:
+        if eof_nav == PREV_MENU or eof_nav == FORM:
             header = self.get_element(self.menu_header, menu)
-            assert self.is_displayed(header)
+            assert self.is_displayed(header), f"Navigated to {header}"
         elif eof_nav == MENU or FIRST_MENU:
             header = self.get_element(self.menu_breadcrumb, menu)
-            assert self.is_displayed(header)
+            assert self.is_displayed(header), f"Navigated to {header}"
         elif eof_nav == HOME_SCREEN:
             assert self.is_displayed(self.webapps_home)
 
@@ -195,13 +216,14 @@ class CaseSearchWorkflows(BasePage):
         assert self.is_visible_and_displayed(value)
         self.js_click(self.close_case_detail_tab)
 
-    def check_case_claim_case_type(self, claimed_case_name, claimed_user):
+    def check_todays_case_claim_present_on_report(self):
         self.select_by_text(self.case_type_select, "commcare-case-claim")
-        self.wait_to_clear_and_send_keys(self.report_search, claimed_case_name)
         self.wait_to_click(self.report_apply_filters)
-        claim_case_type = (By.XPATH, self.commcare_case_claim_case.format(claimed_case_name, claimed_user))
+        date_on_report = str((datetime.today()).date().strftime("%b %d, %Y"))
+        recent_claim_case = (By.XPATH, self.commcare_case_claim_case.format(date_on_report))
+        print(date_on_report, recent_claim_case)
         try:
-            assert self.is_visible_and_displayed(claim_case_type)
+            assert self.is_visible_and_displayed(recent_claim_case)
         except AssertionError:
             logging.basicConfig(filename='logs.log', encoding='utf-8', level=logging.DEBUG)
             logging.warning("Elastic search is taking too long to update the case")
@@ -209,10 +231,45 @@ class CaseSearchWorkflows(BasePage):
     def select_all_cases_and_check_selected_cases_present_on_form(self):
         self.wait_to_click(self.select_all_checkbox)
         song_names = self.find_elements_texts(self.case_names)
+        song_names_on_case_list = list(filter(None, song_names))
         self.js_click(self.multi_select_continue)
         song_names_on_form = self.find_elements_texts(self.selected_case_names_on_forms)
-        stripped = list(filter(None, [s.replace("song: by","") for s in song_names_on_form]))
-        stripped_final = list(filter(None, [s.lstrip() for s in stripped]))
-        assert stripped_final == song_names, f"No, list1 {stripped_final} doesn't match list2{song_names}"
+        stripped = list(filter(None, [s.replace("song: by", "") for s in song_names_on_form]))
+        stripped_final = list([s.lstrip() for s in stripped])
+        assert stripped_final == song_names_on_case_list, \
+            f"No, form songs {stripped_final} doesn't match case list songs{song_names_on_case_list}"
 
+    def check_label_in_form(self, expected_value):
+        rating_on_form = self.find_elements_texts(self.selected_case_names_on_forms)
+        for rating_value in rating_on_form:
+            print(rating_on_form, expected_value)
+            assert expected_value in rating_value
 
+    def check_if_checkbox_selected(self, search_property, values):
+        for value in values:
+            search_property_checked_xpath = (By.XPATH, self.search_property_checked.format(search_property, value - 1))
+            self.is_present(search_property_checked_xpath)
+        list_string = map(str, values)
+        return list(list_string)
+
+    def select_checkbox(self, search_property, values, select_by_value):
+        if select_by_value == text:
+            checkbox_xpath = (By.XPATH, self.checkbox_xpath.format(search_property, values))
+            self.js_click(checkbox_xpath)
+        elif select_by_value == index:
+            for value in values:
+                checkbox_xpath = (By.XPATH, self.checkbox_xpath.format(search_property, value - 1))
+                self.js_click(checkbox_xpath)
+            list_string = map(str, values)
+            return list(list_string)
+
+    def check_clear_button_in_singleselect_combobox(self, expected, search_property):
+        remove_selection = self.get_element(self.remove_combobox_selection, search_property)
+        if expected == YES:
+            assert self.is_present(remove_selection)
+        if expected == NO:
+            assert not self.is_present(remove_selection)
+
+    def select_rating_answer_(self, rating_input):
+        rating_selection = self.get_element(self.rating_answer, rating_input)
+        self.js_click(rating_selection)

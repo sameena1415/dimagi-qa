@@ -70,6 +70,8 @@ class MessagingPage(BasePage):
             self.cond_alert_name_input) + "']]//following-sibling::td/div/button[contains(@data-bind,'restart')]")
         self.restart_rule_button_none = (By.XPATH, "//td[./a[text()='" + str(
             self.cond_alert_name_input) + "']]//following-sibling::td/div[@style='display: none;']/button[contains(@data-bind,'restart')]")
+        self.deactive_button_visible = (By.XPATH, "//td[./a[text()='" + str(
+            self.cond_alert_name_input) + "']]//following-sibling::td/button[contains(@data-bind,'toggleStatus')]/span[contains(@data-bind,'visible: active')]")
         self.empty_table_alert = (
         By.XPATH, "//div[contains(@data-bind, 'emptyTable()')][contains(.,'There are no alerts to display')]")
         self.select_recipient_type = (By.XPATH, "//ul[@id='select2-id_schedule-recipient_types-results']/li[.='Users']")
@@ -133,6 +135,7 @@ class MessagingPage(BasePage):
         self.lang_input_textarea = (By.XPATH, "(//span[@role='combobox'])[last()]")
         self.select_first_lang = (By.XPATH, "(//li[@role='option'])[1]")
         self.select_second_lang = (By.XPATH, "(//li[@role='option'])[2]")
+        self.language_list = (By.XPATH, "//ul[@role='listbox']")
         self.save_lang = (By.XPATH, "(//div[@class='btn btn-primary'])[1]")
         self.delete_lang = (By.XPATH, "(//a[@data-bind='click: $root.removeLanguage'])[last()]")
         self.lang_error = (By.XPATH, "//p[text()='Language appears twice']")
@@ -222,9 +225,12 @@ class MessagingPage(BasePage):
         self.send_keys(self.broadcast_message, "Test Alert:" + self.cond_alert_name_input)
         self.wait_to_click(self.save_button_xpath)
         print("Sleeping till the alert processing completes")
-        time.sleep(20)
+        time.sleep(40)
+        self.wait_to_clear_and_send_keys(self.search_box, self.cond_alert_name_input)
+        self.wait_to_click(self.search_box)
+        self.wait_for_element(self.delete_cond_alert, 500)
         self.driver.refresh()
-        if self.is_present(self.restart_rule_button_none):
+        if self.is_clickable(self.delete_cond_alert):
             print("Restart is not required.")
         else:
             try:
@@ -233,7 +239,10 @@ class MessagingPage(BasePage):
                 time.sleep(5)
                 self.accept_pop_up()
                 print("Sleeping till the alert processing completes")
-                time.sleep(20)
+                time.sleep(40)
+                self.wait_to_clear_and_send_keys(self.search_box, self.cond_alert_name_input)
+                self.wait_to_click(self.search_box)
+                self.wait_for_element(self.delete_cond_alert, 500)
                 self.driver.refresh()
             except:
                 print("Restart not required")
@@ -330,6 +339,7 @@ class MessagingPage(BasePage):
         self.wait_to_click(self.add_lang)
         self.wait_to_click(self.lang_input_textarea)
         time.sleep(1)
+        self.wait_for_element(self.language_list)
         self.wait_to_click(self.select_first_lang)
         try:
             if self.is_displayed(self.lang_error):
@@ -342,6 +352,7 @@ class MessagingPage(BasePage):
                 self.wait_to_click(self.add_lang)
                 self.wait_to_click(self.lang_input_textarea)
                 time.sleep(1)
+                self.wait_for_element(self.language_list)
                 self.wait_to_click(self.select_first_lang)
         except (NoSuchElementException, TimeoutException):
             print("One lang only")
@@ -349,6 +360,7 @@ class MessagingPage(BasePage):
         time.sleep(1)
         self.wait_to_click(self.lang_input_textarea)
         time.sleep(1)
+        self.wait_for_element(self.language_list)
         self.wait_to_click(self.select_second_lang)
         self.wait_to_click(self.save_lang)
         time.sleep(1)
@@ -416,9 +428,14 @@ class MessagingPage(BasePage):
 
     def remove_cond_alert(self):
         self.wait_and_sleep_to_click(self.cond_alerts)
+        self.wait_to_clear_and_send_keys(self.search_box, self.cond_alert_name_input)
+        self.wait_and_sleep_to_click(self.search_box)
+        print("Sleeping till the alert processing completes")
         self.driver.refresh()
         self.wait_to_clear_and_send_keys(self.search_box, self.cond_alert_name_input)
         self.wait_and_sleep_to_click(self.search_box)
+        self.wait_for_element(self.delete_cond_alert, 300)
+        time.sleep(5)
         self.wait_to_click(self.delete_cond_alert)
         try:
             obj = self.driver.switch_to.alert

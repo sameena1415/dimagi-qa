@@ -2,6 +2,8 @@ import time
 
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
+
+from HQSmokeTests.testPages.data.copy_cases_page import CopyCasesPage
 from common_utilities.selenium.base_page import BasePage
 from HQSmokeTests.userInputs.user_inputs import UserData
 
@@ -12,6 +14,7 @@ class ReassignCasesPage(BasePage):
 
     def __init__(self, driver, settings):
         super().__init__(driver)
+        self.settings = settings
 
         self.env_url = settings["url"]
         self.reassign_cases_menu = (By.LINK_TEXT, "Reassign Cases")
@@ -36,6 +39,9 @@ class ReassignCasesPage(BasePage):
         self.wait_to_click(self.apply)
 
     def reassign_case(self):
+        copy = CopyCasesPage(self.driver, self.settings)
+        copy.sort_for_latest_on_top()
+        time.sleep(5)
         self.wait_to_click(self.select_first_case)
         case_being_reassgined = self.get_text(self.first_case_name)
         self.wait_to_click(self.user_search_dropdown)
@@ -45,12 +51,16 @@ class ReassignCasesPage(BasePage):
         self.move_to_element_and_click(self.reassigned_user_from_list)
         self.wait_to_click(self.submit)
         self.is_visible_and_displayed(self.out_of_range)
+        print("Sleeping sometime for the case to get updated")
+        time.sleep(10)
         self.driver.refresh()
         self.wait_to_clear_and_send_keys(self.search_query, case_being_reassgined)
         self.send_keys(self.search_query, Keys.TAB)
         self.wait_to_click(self.apply)
         time.sleep(5)
         self.wait_for_element(self.new_owner_name)
+        copy.sort_for_latest_on_top()
+        time.sleep(5)
         reassigned_username = self.get_text(self.new_owner_name)
         print("Reassigned Username:", reassigned_username)
         assert UserData.app_login in reassigned_username

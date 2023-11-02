@@ -1,6 +1,7 @@
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.by import By
 
+from common_utilities.hq_login.login_page import LoginPage
 from common_utilities.selenium.base_page import BasePage
 from HQSmokeTests.userInputs.user_inputs import UserData
 
@@ -11,6 +12,7 @@ class HomePage(BasePage):
 
     def __init__(self, driver, settings):
         super().__init__(driver)
+        self.settings = settings
 
         self.available_application = UserData.village_application
         self.dashboard_link = settings['url']+"/dashboard/project/"
@@ -42,11 +44,11 @@ class HomePage(BasePage):
 
     def reports_menu(self):
         try:
-            self.wait_to_click(self.reports_menu_id)
+            self.open_menu(self.reports_menu_id)
         except TimeoutException:
             if self.is_displayed(self.show_full_menu_id):
                 self.click(self.show_full_menu_id)
-                self.click(self.reports_menu_id)
+                self.open_menu(self.reports_menu_id)
             else:
                 raise TimeoutException
         self.wait_to_click(self.view_all)
@@ -54,7 +56,7 @@ class HomePage(BasePage):
 
     def data_menu(self):
         self.open_menu(self.data_menu_id)
-        self.wait_to_click(self.view_all)
+        self.wait_to_click(self.view_all, 100)
         assert self.DATA_TITLE in self.driver.title, "This is not the Data menu page."
 
     def applications_menu(self, app_name):
@@ -97,8 +99,20 @@ class HomePage(BasePage):
         assert self.USERS_TITLE in self.driver.title, "Rage clicks failed!."
 
     def open_menu(self, menu):
-        if self.is_present(self.show_full_menu):
-            self.js_click(self.show_full_menu)
-        self.driver.get(self.dashboard_link)
-        self.wait_for_element(menu)
-        self.wait_to_click(menu)
+        login = LoginPage(self.driver, self.settings["url"])
+        try:
+            if self.is_present(self.show_full_menu):
+                self.js_click(self.show_full_menu)
+            self.driver.get(self.dashboard_link)
+            self.accept_pop_up()
+            self.wait_for_element(menu)
+            self.wait_to_click(menu)
+        except TimeoutException:
+            if self.is_present(login.username_textbox_id):
+                login.login(self.settings["login_username"], self.settings["login_password"])
+                self.driver.get(self.dashboard_link)
+                self.accept_pop_up()
+                self.wait_for_element(menu)
+                self.wait_to_click(menu)
+            else:
+                print(TimeoutException)

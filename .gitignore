@@ -218,6 +218,22 @@ Features/MultiSelect/settings.cfg
 Features/MultiSelect/report.html
 Features/MultiSelect/test_cases/report.html
 
+#Ignoring compliled files of CO BHA
+USH_Apps/CO_BHA/settings.cfg
+USH_Apps/CO_BHA/report.html
+USH_Apps/CO_BHA/test_cases/report.html
+
+
+#Ignoring compliled files of SplitScreenCaseSearch
+Features/SplitScreenCaseSearch/settings.cfg
+Features/SplitScreenCaseSearch/report.html
+Features/SplitScreenCaseSearch/test_cases/report.html
+
+
+#Ignoring compliled files of LookupTable
+Features/Lookuptable/settings.cfg
+Features/Lookuptable/report.html
+Features/Lookuptable/testCases/report.html
 
 
 

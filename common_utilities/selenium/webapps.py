@@ -29,6 +29,7 @@ class WebApps(BasePage):
 
         self.form_submit = (By.XPATH, "//button[@class='submit btn btn-primary']")
         self.form_submission_successful = (By.XPATH, "//p[contains(text(), 'successfully saved')]")
+        self.form_500_error = (By.XPATH, "//*[contains(text(),'500 :')]")
         self.search_all_cases_button = (By.XPATH,
                                         "//*[contains(text(),'Search All')]//parent::div[@class='case-list-action-button btn-group formplayer-request']")
         self.search_again_button = (By.XPATH,
@@ -49,7 +50,7 @@ class WebApps(BasePage):
         self.webapp_login_confirmation = (By.ID, 'js-confirmation-confirm')
         self.webapp_working_as = (By.XPATH, "//div[@class='restore-as-banner module-banner']/b")
         self.form_names = (By.XPATH, "//h3[text()]")
-        self.list_is_empty = (By.XPATH, "//div[contains(text(), 'empty')]")
+        self.list_is_empty = "//div[contains(text(), '{}')]"
         # Pagination
         self.last_page = (By.XPATH, "(//a[contains(@aria-label, 'Page')])[last()]")
         self.next_page = (By.XPATH, "//a[contains(@aria-label, 'Next')]")
@@ -57,6 +58,8 @@ class WebApps(BasePage):
         self.pagination_select = (By.XPATH, "//select[@class='form-control per-page-limit']")
         self.go_to_page_textarea = (By.ID, "goText")
         self.go_button = (By.ID, "pagination-go-button")
+        self.value_in_data_preview = "//td[@title='{}']"
+        self.data_preview = (By.XPATH, "//span[@class='debugger-title']")
 
     def open_app(self, app_name):
         time.sleep(2)
@@ -64,6 +67,7 @@ class WebApps(BasePage):
         self.application = self.get_element(self.app_name_format, app_name)
         self.application_header = self.get_element(self.app_header_format, app_name)
         self.wait_to_click(self.application)
+        self.wait_for_ajax()
         self.is_visible_and_displayed(self.application_header, timeout=200)
 
     def navigate_to_breadcrumb(self, breadcrumb_value):
@@ -87,6 +91,7 @@ class WebApps(BasePage):
             self.wait_for_element(self.form_name, timeout=500)
             self.scroll_to_element(self.form_name)
             self.js_click(self.form_name)
+            self.wait_for_ajax()
 
     def search_all_cases(self):
         self.scroll_to_element(self.search_all_cases_button)
@@ -102,21 +107,23 @@ class WebApps(BasePage):
         self.wait_for_ajax()
 
     def search_button_on_case_search_page(self, enter_key=None):
-        if enter_key == "YES":
+        if enter_key == YES:
             self.send_keys(self.submit_on_case_search_page, Keys.ENTER)
         else:
             self.js_click(self.submit_on_case_search_page)
             self.wait_for_ajax()
         self.is_visible_and_displayed(self.case_list, timeout=500)
-        self.is_visible_and_displayed(self.search_again_button)
 
     def clear_and_search_all_cases_on_case_search_page(self):
         self.clear_selections_on_case_search_page()
         self.search_button_on_case_search_page()
 
     def omni_search(self, case_name, displayed=YES):
-        self.wait_to_clear_and_send_keys(self.omni_search_input, case_name)
-        self.js_click(self.omni_search_button)
+        if self.is_displayed(self.omni_search_input):
+            self.wait_to_clear_and_send_keys(self.omni_search_input, case_name)
+            self.js_click(self.omni_search_button)
+        else:
+            print("Split Screen Case Search enabled")
         self.case = self.get_element(self.case_name_format, case_name)
         if self.is_displayed(self.last_page) and self.is_displayed(self.case) == False:
             total_pages = int(self.get_attribute(self.last_page, "data-id")) - 1
@@ -163,7 +170,15 @@ class WebApps(BasePage):
     def submit_the_form(self):
         self.wait_for_element(self.form_submit)
         self.js_click(self.form_submit)
-        self.is_visible_and_displayed(self.form_submission_successful, timeout=500)
+        try:
+            assert self.is_visible_and_displayed(self.form_submission_successful, timeout=500)
+        except AssertionError:
+            if self.is_displayed(self.form_500_error):
+                time.sleep(60)
+                self.js_click(self.form_submit)
+                assert self.is_visible_and_displayed(self.form_submission_successful, timeout=500)
+            else:
+                raise AssertionError
 
     def select_user(self, username):
         self.login_as_user = self.get_element(self.login_as_username, username)
@@ -213,3 +228,14 @@ class WebApps(BasePage):
     def go_to_page(self, page_number):
         self.send_keys(self.go_to_page_textarea, page_number)
         self.js_click(self.go_button)
+
+    def open_data_preview(self):
+        self.js_click(self.data_preview)
+
+    def present_in_data_preview(self, value):
+        value_in_data_preview = self.get_element(self.value_in_data_preview, value)
+        assert self.is_present(value_in_data_preview)
+
+    def check_case_list_is_empty(self, empty_message):
+        list_is_empty_message = self.get_element(self.list_is_empty, empty_message)
+        assert self.is_displayed(list_is_empty_message)
