@@ -1,9 +1,8 @@
 import os
-import pytest
 
 from configparser import ConfigParser
 from pathlib import Path
-
+from common_utilities.fixtures import *
 """"This file provides fixture functions for driver initialization"""
 
 
