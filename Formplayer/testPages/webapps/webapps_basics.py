@@ -149,8 +149,12 @@ class WebAppsBasics(BasePage):
 
 
     def sync_forms(self):
-        self.wait_to_click(self.home_icon)
-        self.wait_to_click(self.sync)
+        time.sleep(2)
+        self.wait_for_element(self.home_icon)
+        self.js_click(self.home_icon)
+        time.sleep(2)
+        self.wait_for_element(self.sync)
+        self.js_click(self.sync)
         assert self.is_present_and_displayed(self.sync_success_message), ("Sync is successful!")
         time.sleep(20)
         print("Sleeping for some time for the data to get updated")
