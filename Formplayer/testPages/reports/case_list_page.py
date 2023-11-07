@@ -4,13 +4,16 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as ec
 
+from Formplayer.testPages.webapps.webapps_basics import WebAppsBasics
 from Formplayer.userInputs.user_inputs import UserData
 from common_utilities.selenium.base_page import BasePage
 
+global webapp
 
 class CaseListPage(BasePage):
     def __init__(self, driver, settings):
         super().__init__(driver)
+        webapp = WebAppsBasics(self.driver)
 
         self.dashboard_link = settings['url'] + "/dashboard/project/"
         self.reports_menu_id = (By.ID, "ProjectReportsTab")
@@ -50,8 +53,8 @@ class CaseListPage(BasePage):
             self.js_click(self.show_full_menu)
         self.driver.get(self.dashboard_link)
         self.wait_for_element(self.reports_menu_id)
-        self.wait_to_click(self.reports_menu_id)
-        self.wait_to_click(self.view_all)
+        webapp.wait_to_click(self.reports_menu_id)
+        webapp.wait_to_click(self.view_all)
         assert self.REPORTS_TITLE in self.driver.title, "This is not the Reports menu page."
 
     def verify_table_not_empty(self, locator):
@@ -67,15 +70,15 @@ class CaseListPage(BasePage):
             return False
 
     def verify_form_data_case_list(self, test_data):
-        self.wait_to_click(self.case_list_rep)
+        webapp.wait_to_click(self.case_list_rep)
         print("Waiting some time for the data to get updated")
         time.sleep(40)
-        self.wait_to_click(self.users_box)
+        webapp.wait_to_click(self.users_box)
         self.send_keys(self.search_user, UserData.automation_user)
-        self.wait_to_click((By.XPATH, self.app_user_select.format(UserData.automation_user_group)))
+        webapp.wait_to_click((By.XPATH, self.app_user_select.format(UserData.automation_user_group)))
         self.select_by_text(self.case_type_select, UserData.case_type_formplayer)
         self.send_keys(self.search_input, test_data['sub_case_name'])
-        self.wait_to_click(self.apply_id)
+        webapp.wait_to_click(self.apply_id)
         time.sleep(15)
         self.scroll_to_bottom()
         self.verify_table_not_empty(self.case_list_table)
@@ -87,9 +90,9 @@ class CaseListPage(BasePage):
         assert True, "Sub Case name is present in Case List"
         assert self.is_present_and_displayed(
             (By.XPATH, self.table_data.format('parent case name', test_data['parent case name'])))
-        self.wait_to_click(self.related_cases_tab)
+        webapp.wait_to_click(self.related_cases_tab)
         assert self.is_visible_and_displayed((By.XPATH, self.view_button.format(test_data['parent case name'])))
-        self.wait_to_click((By.XPATH, self.view_button.format(test_data['parent case name'])))
+        webapp.wait_to_click((By.XPATH, self.view_button.format(test_data['parent case name'])))
         time.sleep(1)
         assert self.is_present_and_displayed(
             (By.XPATH, self.table_data.format('Name', test_data['parent case name'])))

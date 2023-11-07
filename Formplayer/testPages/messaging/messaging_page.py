@@ -4,13 +4,16 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as ec
 
+from Formplayer.testPages.webapps.webapps_basics import WebAppsBasics
 from Formplayer.userInputs.user_inputs import UserData
 from common_utilities.selenium.base_page import BasePage
 
+global webapp
 
 class MessagingPage(BasePage):
     def __init__(self, driver, settings):
         super().__init__(driver)
+        webapp = WebAppsBasics(self.driver)
 
         self.dashboard_link = settings['url'] + "/dashboard/project/"
         self.messaging_menu_id = (By.ID, "MessagingTab")
@@ -38,27 +41,27 @@ class MessagingPage(BasePage):
             self.js_click(self.show_full_menu)
         self.driver.get(self.dashboard_link)
         self.wait_for_element(self.messaging_menu_id)
-        self.wait_to_click(self.messaging_menu_id)
-        self.wait_to_click(self.view_all)
+        webapp.wait_to_click(self.messaging_menu_id)
+        webapp.wait_to_click(self.view_all)
         assert self.MESSAGING_TITLE in self.driver.title, "This is not the Messaging menu page."
 
     def open_keywords_link(self):
         self.open_reports_menu()
-        self.wait_to_click(self.keywords_link)
+        webapp.wait_to_click(self.keywords_link)
         assert self.KEYWORDS_TITLE in self.driver.title, "This is not the Keywords page."
 
     def add_keywords(self, list):
         self.wait_for_element(self.add_keyword_button)
         self.delete_keywords(list)
         for items, surveys in zip(list, UserData.sms_survey_list):
-            self.wait_to_click(self.add_keyword_button)
+            webapp.wait_to_click(self.add_keyword_button)
             self.wait_to_clear_and_send_keys(self.keyword_field, items)
             self.wait_to_clear_and_send_keys(self.description_field, items)
             self.select_by_text(self.send_to_sender,"SMS Survey")
             self.wait_for_element(self.survey)
             self.select_by_text(self.survey, surveys)
             self.scroll_to_element(self.save_button)
-            self.wait_to_click(self.save_button)
+            webapp.wait_to_click(self.save_button)
             time.sleep(2)
             self.driver.refresh()
             time.sleep(5)
@@ -69,8 +72,8 @@ class MessagingPage(BasePage):
     def delete_keywords(self, list):
         for items in list:
             if self.is_present_and_displayed((By.LINK_TEXT, items),10):
-                self.wait_to_click((By.XPATH, self.keyword_delete_button.format(items)))
-                self.wait_to_click((By.XPATH,self.confirm_delete.format(items)))
+                webapp.wait_to_click((By.XPATH, self.keyword_delete_button.format(items)))
+                webapp.wait_to_click((By.XPATH,self.confirm_delete.format(items)))
                 time.sleep(2)
                 self.driver.refresh()
             else:

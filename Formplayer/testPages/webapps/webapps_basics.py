@@ -2,7 +2,6 @@ import time
 from random import randint
 from datetime import datetime
 
-
 from common_utilities.generate_random_string import fetch_random_string, fetch_random_digit_with_range, \
     fetch_phone_number
 from common_utilities.selenium.base_page import BasePage
@@ -30,11 +29,11 @@ class WebAppsBasics(BasePage):
         self.login_as_button = (By.XPATH, "//div[@class='js-restore-as-item appicon appicon-restore-as']")
         self.filter_workers = (By.XPATH, "//input[@class= 'js-user-query form-control']")
         self.search_button = (By.XPATH, "//i[@class = 'fa fa-search']")
-        self.login_user = (By.XPATH, "//td[.//b[.='"+UserData.app_preview_mobile_worker+"']]")
+        self.login_user = (By.XPATH, "//td[.//b[.='" + UserData.app_preview_mobile_worker + "']]")
         self.confirm_login_button = (By.XPATH, "//button[@id ='js-confirmation-confirm']")
-        self.test_application = (By.XPATH, "//h3[contains(text(), '"+UserData.test_application['tests_app']+"')]")
-        self.case_list_menu = (By.XPATH, "//h3[contains(text(), '"+UserData.test_application['case_list']+"')]")
-        self.registration_form = (By.XPATH, "//h3[contains(text(), '"+UserData.test_application['form_name']+"')]")
+        self.test_application = (By.XPATH, "//h3[contains(text(), '" + UserData.test_application['tests_app'] + "')]")
+        self.case_list_menu = (By.XPATH, "//h3[contains(text(), '" + UserData.test_application['case_list'] + "')]")
+        self.registration_form = (By.XPATH, "//h3[contains(text(), '" + UserData.test_application['form_name'] + "')]")
         self.followup_form = (By.XPATH, "//h3[contains(text(), 'Followup Form')]")
         self.name_question = (By.XPATH, "//label[.//span[text()='Name']]/following-sibling::div//textarea")
         self.dob_question = (By.XPATH, "//label[.//span[text()='DOB']]/following-sibling::div//input")
@@ -45,9 +44,10 @@ class WebAppsBasics(BasePage):
         self.success_message = (By.XPATH, "//p[contains(text(),'successfully saved')]")
         self.sync_success_message = (By.XPATH, "(//div[text()='User Data successfully synced.'])[1]")
         self.search_case_filter = (By.XPATH, "//input[@id ='searchText']")
-        self.case_name = (By.XPATH, "//tr[td[text()='" + self.name_input +"']]")
+        self.case_name = (By.XPATH, "//tr[td[text()='" + self.name_input + "']]")
         self.continue_button = (By.XPATH, "//button[text()='Continue']")
-        self.parent_question = (By.XPATH, "//label[.//span[text()='Parent/Gaurdian Name']]/following-sibling::div//textarea")
+        self.parent_question = (
+        By.XPATH, "//label[.//span[text()='Parent/Gaurdian Name']]/following-sibling::div//textarea")
         self.no_of_kids = (By.XPATH, "//label[.//span[text()='No of Kids']]/following-sibling::div//input")
         self.settings = (By.XPATH, "//h3[text()='Settings']")
         self.break_button = (By.XPATH, "//button[text()='Break']")
@@ -59,7 +59,7 @@ class WebAppsBasics(BasePage):
         self.sign_out = (By.XPATH, "//a[@data-label ='Sign Out']")
         self.question_display_text = (By.XPATH, "//span[text()='Name (es)']")
 
-        #login xpaths
+        # login xpaths
         self.username_textbox_id = (By.ID, "id_auth-username")
         self.password_textbox_id = (By.ID, "id_auth-password")
         self.submit_button_xpath = (By.XPATH, '(//button[@type="submit"])[last()]')
@@ -105,9 +105,9 @@ class WebAppsBasics(BasePage):
             self.wait_to_click(self.webapps_menu_id)
 
     def get_links(self):
-        form_link = self.get_attribute(self.this_form,"href")
+        form_link = self.get_attribute(self.this_form, "href")
         case_link = self.get_attribute(self.this_case, "href")
-        return form_link,case_link
+        return form_link, case_link
 
     def application_is_present(self):
         self.open_web_apps_menu()
@@ -147,18 +147,16 @@ class WebAppsBasics(BasePage):
         assert self.is_present(self.ribbon_logo)
         print("Dimagi Ribbon Logo is present")
 
-
     def sync_forms(self):
         time.sleep(2)
         self.wait_for_element(self.home_icon)
         self.js_click(self.home_icon)
         time.sleep(2)
-        self.wait_for_element(self.sync)
-        self.js_click(self.sync)
-        assert self.is_present_and_displayed(self.sync_success_message), ("Sync is successful!")
+        self.wait_to_click(self.sync)
+        time.sleep(2)
+        assert self.is_present_and_displayed(self.sync_success_message), ("Sync is not successful!")
         time.sleep(20)
         print("Sleeping for some time for the data to get updated")
-
 
     def login_as_a_user(self):
         self.wait_to_click(self.login_as_button)
@@ -178,12 +176,14 @@ class WebAppsBasics(BasePage):
         self.wait_to_click(self.registration_form)
         time.sleep(2)
         self.wait_to_clear_and_send_keys(self.name_question, self.name_input)
-        self.send_keys(self.dob_question,self.get_current_date_form_input()+Keys.TAB)
+        self.send_keys(self.dob_question, self.get_current_date_form_input() + Keys.TAB)
         # self.wait_to_click(self.click_today_date)
         # self.wait_to_click(self.close_date_picker)
         self.wait_to_clear_and_send_keys(self.mobileno_question, fetch_phone_number() + Keys.TAB)
+        time.sleep(2)
         self.js_click(self.submit_form_button)
-        assert self.is_present_and_displayed(self.success_message), ("Form is not submitted!")
+        time.sleep(2)
+        assert self.is_present_and_displayed(self.success_message, 100), ("Form is not submitted!")
         self.wait_to_click(self.case_list_menu)
         self.wait_to_click(self.followup_form)
         self.wait_to_clear_and_send_keys(self.search_case_filter, self.name_input)
@@ -191,10 +191,9 @@ class WebAppsBasics(BasePage):
         self.js_click(self.case_name)
         self.wait_to_click(self.continue_button)
         self.wait_to_clear_and_send_keys(self.parent_question, self.parent_name_input)
-        self.wait_to_clear_and_send_keys(self.no_of_kids, fetch_random_digit_with_range(1,5))
+        self.wait_to_clear_and_send_keys(self.no_of_kids, fetch_random_digit_with_range(1, 5))
         self.js_click(self.submit_form_button)
-        assert self.is_present_and_displayed(self.success_message)
-
+        assert self.is_present_and_displayed(self.success_message, 100)
 
     def get_present_date(self):
         # Get today's date
@@ -204,7 +203,7 @@ class WebAppsBasics(BasePage):
         # Get Tomorrow
         # tomorrow = presentday + timedelta(1)
 
-        return presentday.strftime('%Y-%m-%d')+" to "+presentday.strftime('%Y-%m-%d')
+        return presentday.strftime('%Y-%m-%d') + " to " + presentday.strftime('%Y-%m-%d')
 
     def get_current_date_form_input(self):
         # Get today's date
@@ -229,7 +228,8 @@ class WebAppsBasics(BasePage):
         self.open_submit_history_form_link(application, UserData.app_preview_mobile_worker)
         time.sleep(2)
         try:
-            assert self.is_present_and_displayed((By.XPATH,self.case_name_field.format(case_name))), "Case name "+case_name+"is not present in Submit history"
+            assert self.is_present_and_displayed((By.XPATH, self.case_name_field.format(
+                case_name))), "Case name " + case_name + "is not present in Submit history"
         except:
             print("Case Name is not yet updated in Submit History")
         self.driver.back()
@@ -258,7 +258,7 @@ class WebAppsBasics(BasePage):
         self.select_by_text(self.form_select, application['form_name'])
         date_range = self.get_present_date()
         self.clear(self.date_input)
-        self.send_keys(self.date_input, date_range+Keys.TAB)
+        self.send_keys(self.date_input, date_range + Keys.TAB)
         self.wait_to_click(self.apply_id)
         time.sleep(10)
         self.scroll_to_bottom()
@@ -330,5 +330,7 @@ class WebAppsBasics(BasePage):
         self.wait_to_click(self.registration_form)
         assert self.is_present_and_displayed(self.question_display_text)
 
-
-
+    def wait_to_click(self, locator, timeout=50):
+        self.wait_for_element(locator, timeout)
+        time.sleep(2)
+        self.js_click(locator)

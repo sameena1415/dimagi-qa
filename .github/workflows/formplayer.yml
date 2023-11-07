@@ -38,13 +38,13 @@ jobs:
       - id: set-matrix-default
         if: ${{ !contains(github.event_name , 'dispatch') }}
         run: |
-          echo "::set-output name=matrix::{\"environment\": [\"production\", \"staging\"]}"
+          echo "::set-output name=matrix::{\"environment\": [\"staging\"]}"
   build:
     needs: set_matrix
     strategy:
       fail-fast: false
       matrix: ${{ fromJSON(needs.set_matrix.outputs.matrix) }}
-    name: Lookup tests on '${{ matrix.environment }}'
+    name: Formplayer tests on '${{ matrix.environment }}'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2

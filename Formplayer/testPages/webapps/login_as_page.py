@@ -9,12 +9,13 @@ from common_utilities.selenium.base_page import BasePage
 from Formplayer.userInputs.user_inputs import UserData
 
 """"Contains test page elements and functions related to the Homepage of Commcare"""
-
+global webapp
 
 class LoginAsPage(BasePage):
 
     def __init__(self, driver, settings):
         super().__init__(driver)
+        webapp = WebAppsBasics(self.driver)
 
 
         self.form_input = "web app test"+fetch_random_string()
@@ -51,7 +52,7 @@ class LoginAsPage(BasePage):
         self.switch_to_default_content()
         self.driver.get(self.dashboard_link)
         print("Opening Web Apps Menu")
-        self.wait_to_click(self.web_apps_menu)
+        webapp.wait_to_click(self.web_apps_menu)
 
     def login_as_presence(self):
         self.open_webapps_menu()
@@ -65,7 +66,7 @@ class LoginAsPage(BasePage):
         time.sleep(2)
         self.js_click((By.XPATH, self.username_in_list.format(self.username)))
         time.sleep(2)
-        self.wait_to_click(self.webapp_login_confirmation)
+        webapp.wait_to_click(self.webapp_login_confirmation)
         time.sleep(5)
         logged_in_username = self.get_text(self.webapp_working_as)
         print(logged_in_username)
@@ -79,7 +80,7 @@ class LoginAsPage(BasePage):
         self.js_click(self.basic_tests_form)
         time.sleep(2)
         self.wait_to_clear_and_send_keys(self.basic_tests_answer_input, input_text)
-        self.wait_to_click(self.submit)
+        webapp.wait_to_click(self.submit)
         assert self.is_visible_and_displayed(self.submit_success)
 
     def submit_history_verification(self):
@@ -88,7 +89,7 @@ class LoginAsPage(BasePage):
         assert self.is_displayed(self.submitted_by), "Submission verification failed"
 
     def login_as_user(self, username):
-        self.wait_to_click(self.login_as)
+        webapp.wait_to_click(self.login_as)
         self.wait_to_clear_and_send_keys(self.search_user_input_area, username)
         self.js_click(self.search_users_button)
         time.sleep(2)
