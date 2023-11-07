@@ -395,11 +395,12 @@ class BasicTestWebApps(BasePage):
         assert self.is_present((By.XPATH, self.county_options.format("Wilmington")))
         assert self.is_present((By.XPATH, self.county_options.format("Cambridge")))
         self.js_click((By.XPATH, self.county_options.format("Cambridge")))
+        time.sleep(1)
         self.scroll_to_element((By.XPATH, self.choose_radio_button.format(
-            "Now we'll test other grouping structures. Do you want to skip the first group?",
+            "Do you want to skip the first group?",
             'Yes')))
         self.js_click((By.XPATH, self.choose_radio_button.format(
-            "Now we'll test other grouping structures. Do you want to skip the first group?",
+            "Do you want to skip the first group?",
             'Yes')))
         self.scroll_to_element((By.XPATH, self.choose_radio_button.format(
             "The next section tests groups within other groups. Which parts of the group do you want to skip?",

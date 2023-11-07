@@ -22,7 +22,7 @@ class MessagingPage(BasePage):
         self.MESSAGING_TITLE = "Dashboard : Messaging :: - CommCare HQ"
         self.KEYWORDS_TITLE = "Keywords : Messaging :: - CommCare HQ"
 
-        self.keyword_delete_button = "//td[.//a[.='{}']]//following-sibling::td/a[contains(@data-bind,'delete')]"
+        self.keyword_delete_button = "//td[.//a[.='{}']]//following-sibling::td/button[contains(@data-bind,'delete')]"
         self.confirm_delete = "//td[.//a[.='{}']]//following-sibling::td//a[.='Cancel']//preceding-sibling::a[contains(@class,'confirm')]/i[@class='fa fa-remove']"
 
         self.add_keyword_button = (By.XPATH, "//a[contains(@href,'keywords/normal/add/')]")

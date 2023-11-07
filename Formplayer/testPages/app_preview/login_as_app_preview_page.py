@@ -92,8 +92,10 @@ class LoginAsAppPreviewPage(BasePage):
     def login_as_app_preview_form_submission(self, text):
         self.switch_to_frame(self.iframe)
         self.wait_to_click(self.start_option)
-        self.wait_to_click(self.basic_tests_case)
-        self.wait_to_click(self.basic_tests_form)
+        self.wait_for_element(self.basic_tests_case)
+        self.js_click(self.basic_tests_case)
+        self.wait_for_element(self.basic_tests_form)
+        self.js_click(self.basic_tests_form)
         self.wait_to_clear_and_send_keys(self.basic_tests_answer_input, text+Keys.TAB)
         self.js_click(self.next_button)
         time.sleep(2)
