@@ -1,21 +1,19 @@
 import time
 
 from Formplayer.testPages.webapps.webapps_basics import WebAppsBasics
-from common_utilities.generate_random_string import fetch_random_string, fetch_phone_number, fetch_random_digit, \
-    fetch_random_digit_with_range
+
 from common_utilities.selenium.base_page import BasePage
-from Formplayer.userInputs.user_inputs import UserData
+
 
 from selenium.webdriver.common.by import By
 
 """"Contains test page elements and functions related to the WebApps Access/Basics of Commcare"""
 
-global webapp
 class ProjectSettingsPage(BasePage):
 
     def __init__(self, driver, settings):
         super().__init__(driver)
-        webapp = WebAppsBasics(self.driver)
+        self.webapp = WebAppsBasics(self.driver)
 
         self.manage_settings = (By.XPATH, "//a[@aria-label='Manage Settings']")
         self.project_settings_link = (By.XPATH, "//a[@data-label='Update Project Settings']")
@@ -27,32 +25,32 @@ class ProjectSettingsPage(BasePage):
         self.dashboard_link = settings['url'] + "/dashboard/project/"
 
     def set_inactivity_timeout(self):
-        webapp.wait_to_click(self.manage_settings)
-        webapp.wait_to_click(self.project_settings_link)
-        webapp.wait_to_click(self.privacy_security)
+        self.webapp.wait_to_click(self.manage_settings)
+        self.webapp.wait_to_click(self.project_settings_link)
+        self.webapp.wait_to_click(self.privacy_security)
         self.wait_for_element(self.inactivity_timeout)
-        webapp.wait_to_click(self.shortened_inactivity)
+        self.webapp.wait_to_click(self.shortened_inactivity)
         time.sleep(2)
         assert self.is_selected(self.shortened_inactivity)
         self.send_keys(self.inactivity_timeout, "5")
         self.scroll_to_element(self.update_button)
-        webapp.wait_to_click(self.update_button)
+        self.webapp.wait_to_click(self.update_button)
         time.sleep(3)
         self.wait_for_element(self.success_message)
 
     def clear_inactivity_timeout(self):
-        webapp.wait_to_click(self.manage_settings)
-        webapp.wait_to_click(self.project_settings_link)
-        webapp.wait_to_click(self.privacy_security)
+        self.webapp.wait_to_click(self.manage_settings)
+        self.webapp.wait_to_click(self.project_settings_link)
+        self.webapp.wait_to_click(self.privacy_security)
         self.wait_for_element(self.inactivity_timeout)
         if self.is_selected(self.shortened_inactivity):
-            webapp.wait_to_click(self.shortened_inactivity)
+            self.webapp.wait_to_click(self.shortened_inactivity)
             time.sleep(2)
             assert not self.is_selected(self.shortened_inactivity)
             time.sleep(2)
             self.clear(self.inactivity_timeout)
             self.scroll_to_element(self.update_button)
-            webapp.wait_to_click(self.update_button)
+            self.webapp.wait_to_click(self.update_button)
             time.sleep(3)
             self.wait_for_element(self.success_message)
         else:

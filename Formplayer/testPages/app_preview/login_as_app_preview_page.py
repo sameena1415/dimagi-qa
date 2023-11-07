@@ -10,13 +10,13 @@ from Formplayer.testPages.webapps.webapps_basics import WebAppsBasics
 
 """"Contains test page elements and functions related to the Homepage of Commcare"""
 
-global webapp
-class LoginAsAppPreviewPage(BasePage):
 
+class LoginAsAppPreviewPage(BasePage):
+    
     def __init__(self, driver, settings):
         super().__init__(driver)
-        webapp = WebAppsBasics(self.driver)
-
+        self.webapp = WebAppsBasics(self.driver)
+        
         self.dashboard_link = settings['url'] + "/dashboard/project/"
         self.form_input_no_login = "app preview test without login" + fetch_random_string()
         self.form_input_login = "app preview test" + fetch_random_string()
@@ -59,23 +59,23 @@ class LoginAsAppPreviewPage(BasePage):
         self.driver.get(self.dashboard_link)
         self.wait_for_element(self.application_menu_id)
         if self.is_present(self.application_menu_id):
-            webapp.wait_to_click(self.application_menu_id)
+            self.webapp.wait_to_click(self.application_menu_id)
         else:
-            webapp.wait_to_click(self.full_menu)
-            webapp.wait_to_click(self.application_menu_id)
-        webapp.wait_to_click((By.XPATH, self.select_test_application.format(test_app)))
+            self.webapp.wait_to_click(self.full_menu)
+            self.webapp.wait_to_click(self.application_menu_id)
+        self.webapp.wait_to_click((By.XPATH, self.select_test_application.format(test_app)))
         if not self.is_present(self.view_app_preview_show):
-            webapp.wait_to_click(self.view_app_preview)
+            self.webapp.wait_to_click(self.view_app_preview)
         else:
             print("App preview is already open")
-        webapp.wait_to_click(self.refresh_button)
+        self.webapp.wait_to_click(self.refresh_button)
         time.sleep(3)
 
     def login_as_app_preview_presence(self):
         self.switch_to_frame(self.iframe)
         time.sleep(2)
         assert self.is_visible_and_displayed(self.title_bar), "This is not the Webaspps menu page."
-        webapp.wait_to_click(self.login_as_button)
+        self.webapp.wait_to_click(self.login_as_button)
 
 
     def login_as_app_preview_content(self):
@@ -92,7 +92,7 @@ class LoginAsAppPreviewPage(BasePage):
 
     def login_as_app_preview_form_submission(self, text):
         self.switch_to_frame(self.iframe)
-        webapp.wait_to_click(self.start_option)
+        self.webapp.wait_to_click(self.start_option)
         self.wait_for_element(self.basic_tests_case)
         self.js_click(self.basic_tests_case)
         self.wait_for_element(self.basic_tests_form)
@@ -116,7 +116,7 @@ class LoginAsAppPreviewPage(BasePage):
 
     def login_as_user(self, username):
         self.switch_to_frame(self.iframe)
-        webapp.wait_to_click(self.login_as_button)
+        self.webapp.wait_to_click(self.login_as_button)
         self.wait_to_clear_and_send_keys(self.search_worker, username)
         self.js_click(self.search_users_button)
         time.sleep(2)

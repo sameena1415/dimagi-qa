@@ -1,18 +1,16 @@
 import time
 
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.wait import WebDriverWait
-from selenium.webdriver.support import expected_conditions as ec
 
 from Formplayer.testPages.webapps.webapps_basics import WebAppsBasics
 from Formplayer.userInputs.user_inputs import UserData
 from common_utilities.selenium.base_page import BasePage
 
-global webapp
+
 class MobileUserPage(BasePage):
     def __init__(self, driver, settings):
         super().__init__(driver)
-        webapp = WebAppsBasics(self.driver)
+        self.webapp = WebAppsBasics(self.driver)
         self.dashboard_link = settings['url'] + "/dashboard/project/"
         self.users_menu_id = (By.ID, "ProjectUsersTab")
         self.view_all = (By.LINK_TEXT, "View All")
@@ -39,21 +37,21 @@ class MobileUserPage(BasePage):
             self.js_click(self.show_full_menu)
         self.driver.get(self.dashboard_link)
         self.wait_for_element(self.users_menu_id)
-        webapp.wait_to_click(self.users_menu_id)
-        webapp.wait_to_click(self.mobile_workers_links)
+        self.webapp.wait_to_click(self.users_menu_id)
+        self.webapp.wait_to_click(self.mobile_workers_links)
         assert self.USERS_TITLE in self.driver.title, "This is not the Users menu page."
 
     def add_mobile_number_mobile_user(self, username):
         self.wait_to_clear_and_send_keys(self.search_mw, username)#UserData.app_preview_mobile_worker)
         time.sleep(2)
-        webapp.wait_to_click(self.search_button_mw)
+        self.webapp.wait_to_click(self.search_button_mw)
         self.wait_for_element((By.XPATH, self.searched_user.format(username)))
-        webapp.wait_to_click((By.XPATH, self.searched_user.format(username)))
+        self.webapp.wait_to_click((By.XPATH, self.searched_user.format(username)))
         time.sleep(5)
         self.scroll_to_bottom()
         if self.is_present(self.phone_verify_button):
-            webapp.wait_to_click(self.phone_number_delete)
-            webapp.wait_to_click(self.confirm_delete_pn)
+            self.webapp.wait_to_click(self.phone_number_delete)
+            self.webapp.wait_to_click(self.confirm_delete_pn)
             time.sleep(3)
             self.scroll_to_bottom()
             assert not self.is_present(self.phone_verify_button)
@@ -61,12 +59,12 @@ class MobileUserPage(BasePage):
             print("Phone Number not already added")
 
         self.wait_to_clear_and_send_keys(self.phone_number_input, UserData.text_now_number)
-        webapp.wait_to_click(self.add_number_button)
+        self.webapp.wait_to_click(self.add_number_button)
         self.wait_for_element(self.number_added_success)
         self.scroll_to_bottom()
         if self.is_present(self.already_in_use):
             print("Number is already in use and no verification needed")
             return "No"
         else:
-            webapp.wait_to_click(self.phone_verify_button)
+            self.webapp.wait_to_click(self.phone_verify_button)
             return "Yes"
