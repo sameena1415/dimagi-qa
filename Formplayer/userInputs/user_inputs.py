@@ -20,12 +20,12 @@ class UserData:
                    "case_list": "Basic Form Tests",
                    "form_name": "Basic Form"}
 
-    app_preview_mobile_worker = "appiumtest"
+    app_preview_mobile_worker = "formplayer_user"
     automation_user = "automation_user"
     automation_user_group = "automation_user [group]"
 
     # Mobile Worker name
-    mw_username = "appiumtest@qa-automation.commcarehq.org"
+    mw_username = "formplayer_user@qa-automation.commcarehq.org"
     mw_password = "Pass@123"
     language = 'es'
     web_user = "automation.user.commcarehq@gmail.com"

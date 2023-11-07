@@ -20,10 +20,9 @@ on:
         type: choice
         options:
           - staging
-          - production
 
 concurrency:
-  group: lookup-table-tests-${{ github.ref }}
+  group: Formplayer-table-tests-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -58,7 +57,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r Formplayer/requires.txt
-      - name: Lookup table tests with pytest
+      - name: Formplayer tests with pytest
         env:
           DIMAGIQA_ENV: ${{ matrix.environment }}
           DIMAGIQA_LOGIN_USERNAME: ${{ secrets.DIMAGIQA_LOGIN_USERNAME }}
@@ -84,7 +83,7 @@ jobs:
           script: |
             const { promises: fs } = require('fs')
             const {JOB_STATUS, NOW, CC_ENV, GITHUB_HEAD_REF} = process.env
-            const prefix = `[${CC_ENV}] Lookuptable Tests - ${JOB_STATUS.toUpperCase()} - Run #${context.runNumber}`
+            const prefix = `[${CC_ENV}] Formplayer Tests - ${JOB_STATUS.toUpperCase()} - Run #${context.runNumber}`
             const suffix = `at ${NOW}`
             let subject = `${prefix} on branch "${GITHUB_HEAD_REF}" ${suffix}`
 
