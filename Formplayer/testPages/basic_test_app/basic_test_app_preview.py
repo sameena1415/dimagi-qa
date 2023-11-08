@@ -712,7 +712,9 @@ class BasicTestAppPreview(BasePage):
         assert not self.is_present_and_displayed(self.blank_latitude, 10)
         self.js_click(self.next_question)
         time.sleep(2)
-        self.webapp.wait_to_click((By.XPATH, self.input_field.format(
+        self.wait_for_element((By.XPATH, self.input_field.format(
+            "Enter a date:")))
+        self.click((By.XPATH, self.input_field.format(
             "Enter a date:")))
         self.webapp.wait_to_click(self.click_today_date)
         self.webapp.wait_to_click(self.close_date_picker)
@@ -876,7 +878,9 @@ class BasicTestAppPreview(BasePage):
         assert not self.is_present_and_displayed(self.blank_latitude, 10)
         self.js_click(self.next_question)
         time.sleep(2)
-        self.webapp.wait_to_click((By.XPATH, self.input_field.format(
+        self.wait_for_element((By.XPATH, self.input_field.format(
+            "Enter a date:")))
+        self.click((By.XPATH, self.input_field.format(
             "Enter a date:")))
         self.webapp.wait_to_click(self.click_today_date)
         self.webapp.wait_to_click(self.close_date_picker)
@@ -1091,7 +1095,9 @@ class BasicTestAppPreview(BasePage):
         self.webapp.wait_to_click(self.next_question)
         self.wait_for_element(
             (By.XPATH, self.text_success.format("greater than 20 and smaller than 8000")))
-        self.webapp.wait_to_click((By.XPATH, self.input_field.format(
+        self.wait_for_element((By.XPATH, self.input_field.format(
+            "This date must be after today.")))
+        self.click((By.XPATH, self.input_field.format(
             "This date must be after today.")))
         self.webapp.wait_to_click(self.click_today_date)
         self.webapp.wait_to_click(self.close_date_picker)
@@ -1109,7 +1115,9 @@ class BasicTestAppPreview(BasePage):
             "This date has to be today or in the past.")), self.input_date_add(2) + Keys.TAB)
         self.wait_for_element(
             (By.XPATH, self.danger_warning.format("This date has to be today or in the past.")))
-        self.webapp.wait_to_click((By.XPATH, self.input_field.format(
+        self.wait_for_element((By.XPATH, self.input_field.format(
+            "This date has to be today or in the past.")))
+        self.click((By.XPATH, self.input_field.format(
             "This date has to be today or in the past.")))
         self.webapp.wait_to_click(self.click_today_date)
         self.webapp.wait_to_click(self.close_date_picker)

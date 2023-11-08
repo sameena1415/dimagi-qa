@@ -49,7 +49,7 @@ class LoginAsPage(BasePage):
         self.switch_to_default_content()
         self.driver.get(self.dashboard_link)
         print("Opening Web Apps Menu")
-        self.webapp.wait_to_click(self.web_apps_menu)
+        self.wait_to_click(self.web_apps_menu)
 
     def login_as_presence(self):
         self.open_webapps_menu()

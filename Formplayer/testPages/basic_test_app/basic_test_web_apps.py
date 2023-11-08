@@ -179,11 +179,11 @@ class BasicTestWebApps(BasePage):
         self.clear_select2 = "(//label[.//span[contains(.,'{}')]]//following-sibling::div//button[contains(@data-bind,'click: onClear')][@style=''])[2]"
 
         # repeat group
-        self.delete_repeat = "//legend/span[contains(.,'{}')]//following-sibling::button"
-        self.repeat_input_field = "//div[@class='gr repetition'][.//legend/span[contains(.,'{}')]]//following-sibling::div[./fieldset[.//label[.//span[contains(.,'{}')]]]]//following-sibling::div//input"
-        self.add_new_repeat = (By.XPATH, "//button[.='Add new repeat']")
-        self.danger_warning_repeat = "//div[@class='gr repetition'][.//legend/span[contains(.,'{}')]]//following-sibling::div[./fieldset[.//label[.//span[contains(.,'{}')]]]]//following-sibling::div//i[contains(@class,'text-danger')]"
-        self.text_success_repeat = "//div[@class='gr repetition'][.//legend/span[contains(.,'{}')]]//following-sibling::div[./fieldset[.//label[.//span[contains(.,'{}')]]]]//following-sibling::div//i[contains(@class,'text-success')]"
+        self.delete_repeat = (By.XPATH, "(//div[@class='gr repetition']//following-sibling::button)[last()]")
+        self.repeat_input_field = "(//div[@class='gr repetition']//fieldset[.//label[.//span[contains(.,'{}')]]]//following-sibling::div//input)[last()]"
+        self.add_new_repeat = (By.XPATH, "//button[@id='repeat-add-new']")
+        self.danger_warning_repeat = "(//div[@class='gr repetition']//fieldset[.//label[.//span[contains(.,'{}')]]]//following-sibling::div//i[contains(@class,'text-danger')])[last()]"
+        self.text_success_repeat = "(//div[@class='gr repetition']//fieldset[.//label[.//span[contains(.,'{}')]]]//following-sibling::div//i[contains(@class,'text-success')])[last()]"
 
         self.new_update_popup = (By.XPATH, "//h4[.='A new version of this app is available']")
         self.update_later = (By.XPATH, "//button[.='Update Later']")
@@ -1830,25 +1830,25 @@ class BasicTestWebApps(BasePage):
 
         self.scroll_to_element(self.add_new_repeat)
         self.js_click(self.add_new_repeat)
-        self.wait_for_element((By.XPATH, self.repeat_input_field.format("1/1", "Enter a number")))
-        self.send_keys((By.XPATH, self.repeat_input_field.format("1/1", "Enter a number")), "abc" + Keys.TAB)
-        self.wait_for_element((By.XPATH, self.danger_warning_repeat.format("1/1", "Enter a number")))
-        self.wait_to_clear_and_send_keys((By.XPATH, self.repeat_input_field.format("1/1", "Enter a number")),
+        self.wait_for_element((By.XPATH, self.repeat_input_field.format("Enter a number")))
+        self.send_keys((By.XPATH, self.repeat_input_field.format("Enter a number")), "abc" + Keys.TAB)
+        self.wait_for_element((By.XPATH, self.danger_warning_repeat.format( "Enter a number")))
+        self.wait_to_clear_and_send_keys((By.XPATH, self.repeat_input_field.format("Enter a number")),
                                          "12" + Keys.TAB)
-        self.wait_for_element((By.XPATH, self.text_success_repeat.format("1/1", "Enter a number")))
+        self.wait_for_element((By.XPATH, self.text_success_repeat.format("Enter a number")))
 
         self.scroll_to_element(self.add_new_repeat)
         self.js_click(self.add_new_repeat)
-        self.wait_for_element((By.XPATH, self.repeat_input_field.format("2/2", "Enter a number")))
-        self.send_keys((By.XPATH, self.repeat_input_field.format("2/2", "Enter a number")), "abc" + Keys.TAB)
-        self.wait_for_element((By.XPATH, self.danger_warning_repeat.format("2/2", "Enter a number")))
-        self.wait_to_clear_and_send_keys((By.XPATH, self.repeat_input_field.format("2/2", "Enter a number")),
+        self.wait_for_element((By.XPATH, self.repeat_input_field.format("Enter a number")))
+        self.send_keys((By.XPATH, self.repeat_input_field.format("Enter a number")), "abc" + Keys.TAB)
+        self.wait_for_element((By.XPATH, self.danger_warning_repeat.format( "Enter a number")))
+        self.wait_to_clear_and_send_keys((By.XPATH, self.repeat_input_field.format( "Enter a number")),
                                          "45" + Keys.TAB)
-        self.wait_for_element((By.XPATH, self.text_success_repeat.format("2/2", "Enter a number")))
+        self.wait_for_element((By.XPATH, self.text_success_repeat.format("Enter a number")))
 
-        self.webapp.wait_to_click((By.XPATH, self.delete_repeat.format("2/2")))
+        self.webapp.wait_to_click(self.delete_repeat)
         time.sleep(3)
-        self.webapp.wait_to_click((By.XPATH, self.delete_repeat.format("1/1")))
+        self.webapp.wait_to_click(self.delete_repeat)
         time.sleep(3)
         assert not self.is_present((By.XPATH, self.repeat_input_field.format("1/1", "Enter a number")))
         time.sleep(2)
