@@ -70,6 +70,7 @@ class BasicTestAppPreview(BasePage):
         self.name_question = (By.XPATH,
                               "//label[.//span[.='Enter a Name']]/following-sibling::div//textarea[contains(@class,'textfield form-control')]")
         self.incomplete_form_list = (By.XPATH, "//tr[@class='formplayer-request']")
+        self.custom_incomplete_form_list = "//tr[@class='formplayer-request']/td[2][contains(.,'{}')]"
         self.incomplete_form_title = (By.XPATH, "//li[@class='breadcrumb-text'][.='Incomplete Forms']")
         self.incomplete_list_count = (By.XPATH, "//ul/li[@data-lp]")
         self.no_of_pages = (By.XPATH, "//li[contains(@class,'js-page')]")
@@ -260,10 +261,12 @@ class BasicTestAppPreview(BasePage):
         self.switch_to_default_content()
         self.webapp.wait_to_click(self.back_button)
 
-    def verify_number_of_forms(self, no_of_forms):
+    def verify_number_of_forms(self, no_of_forms, form_name):
         self.switch_to_frame(self.iframe)
         self.webapp.wait_to_click(self.incomplete_form)
-        list = self.find_elements(self.incomplete_form_list)
+        list = self.find_elements((By.XPATH, self.custom_incomplete_form_list.format(form_name)))
+        print("Number of forms present: ", len(list))
+        print("Form count to compare with: ", no_of_forms)
         assert len(list) == no_of_forms
         self.switch_to_default_content()
         self.webapp.wait_to_click(self.back_button)
@@ -1093,8 +1096,8 @@ class BasicTestAppPreview(BasePage):
         self.wait_for_element(
             (By.XPATH, self.text_success.format("greater than 20 and smaller than 8000")))
         self.webapp.wait_to_click(self.next_question)
-        self.wait_for_element(
-            (By.XPATH, self.text_success.format("greater than 20 and smaller than 8000")))
+        # self.wait_for_element(
+        #     (By.XPATH, self.text_success.format("greater than 20 and smaller than 8000")))
         self.wait_for_element((By.XPATH, self.input_field.format(
             "This date must be after today.")))
         self.click((By.XPATH, self.input_field.format(

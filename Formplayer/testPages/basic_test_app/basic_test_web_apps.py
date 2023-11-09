@@ -87,6 +87,7 @@ class BasicTestWebApps(BasePage):
         self.name_question = (By.XPATH,
                               "//label[.//span[.='Enter a Name']]/following-sibling::div//textarea[contains(@class,'textfield form-control')]")
         self.incomplete_form_list = (By.XPATH, "//tr[@class='formplayer-request']")
+        self.custom_incomplete_form_list = "//tr[@class='formplayer-request']/td[2][contains(.,'{}')]"
         self.incomplete_list_count = (By.XPATH, "//ul/li[@data-lp]")
         self.delete_incomplete_form = "(//tr[@class='formplayer-request']/descendant::div[@aria-label='Delete form'])[{}]"
         self.edit_incomplete_form = (
@@ -216,7 +217,8 @@ class BasicTestWebApps(BasePage):
 
     def save_incomplete_form(self, value):
         self.wait_for_element(self.name_question)
-        self.send_keys(self.name_question, value)
+        self.send_keys(self.name_question, value+Keys.TAB)
+        time.sleep(1)
         self.webapp.wait_to_click(self.home_button)
         time.sleep(2)
 
@@ -262,9 +264,11 @@ class BasicTestWebApps(BasePage):
                 print("No incomplete form present")
         self.driver.back()
 
-    def verify_number_of_forms(self, no_of_forms):
+    def verify_number_of_forms(self, no_of_forms, form_name):
         self.webapp.wait_to_click(self.incomplete_form)
-        list = self.find_elements(self.incomplete_form_list)
+        list = self.find_elements((By.XPATH, self.custom_incomplete_form_list.format(form_name)))
+        print("Number of forms present: ", len(list))
+        print("Form count to compare with: ", no_of_forms)
         assert len(list) == no_of_forms
         self.driver.back()
 
@@ -601,7 +605,9 @@ class BasicTestWebApps(BasePage):
         self.webapp.wait_to_click(self.search_location_button)
         time.sleep(2)
         assert not self.is_present_and_displayed(self.blank_latitude, 10)
-        self.webapp.wait_to_click((By.XPATH, self.input_field.format(
+        self.scroll_to_element((By.XPATH, self.input_field.format(
+            "Enter a date:")))
+        self.click((By.XPATH, self.input_field.format(
             "Enter a date:")))
         self.webapp.wait_to_click(self.click_today_date)
         self.webapp.wait_to_click(self.close_date_picker)
@@ -778,7 +784,9 @@ class BasicTestWebApps(BasePage):
         time.sleep(2)
         assert not self.is_present_and_displayed(self.blank_latitude, 10)
         time.sleep(2)
-        self.webapp.wait_to_click((By.XPATH, self.input_field.format(
+        self.scroll_to_element((By.XPATH, self.input_field.format(
+            "Enter a date:")))
+        self.click((By.XPATH, self.input_field.format(
             "Enter a date:")))
         self.webapp.wait_to_click(self.click_today_date)
         self.webapp.wait_to_click(self.close_date_picker)
@@ -815,14 +823,14 @@ class BasicTestWebApps(BasePage):
         self.wait_for_element(
             (By.XPATH, self.text_success.format("Select at least 2!")))
         self.scroll_to_element(
-            (By.XPATH, self.radio_option_list.format('Only vl1 and 2 should be able to see this! Select a county!')))
+            (By.XPATH, self.radio_option_list.format('Pick a county!')))
         time.sleep(1)
         assert not self.is_present_and_displayed((By.XPATH, self.radio_option_list.format('Select a city!')), 10)
         time.sleep(1)
         self.wait_for_element(
-            (By.XPATH, self.radio_option_list.format('Only vl1 and 2 should be able to see this! Select a county!')))
+            (By.XPATH, self.radio_option_list.format('Pick a county!')))
         self.webapp.wait_to_click((By.XPATH, self.choose_radio_button.format(
-            'Only vl1 and 2 should be able to see this! Select a county!', 'Essex')))
+            'Pick a county!', 'Essex')))
         time.sleep(1)
         assert self.is_present_and_displayed((By.XPATH, self.radio_option_list.format('Select a city!')), 10)
         self.webapp.wait_to_click((By.XPATH, self.choose_radio_button.format('Select a city!', 'Andover')))
@@ -958,7 +966,7 @@ class BasicTestWebApps(BasePage):
             "This date has to be today or in the past.")), self.input_date_add(2) + Keys.TAB)
         self.wait_for_element(
             (By.XPATH, self.danger_warning.format("This date has to be today or in the past.")))
-        self.webapp.wait_to_click((By.XPATH, self.input_field.format(
+        self.click((By.XPATH, self.input_field.format(
             "This date has to be today or in the past.")))
         self.webapp.wait_to_click(self.click_today_date)
         self.webapp.wait_to_click(self.close_date_picker)
