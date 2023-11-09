@@ -3,7 +3,7 @@ from Formplayer.testPages.reports.case_list_page import CaseListPage
 from Formplayer.testPages.webapps.login_as_page import LoginAsPage
 from Formplayer.userInputs.user_inputs import UserData
 
-test_data = {'parent case name': 'min_dup_casesfjxbo', 'sub_case_name': 'min_dup_subcasesfjxbo', 'number': '2', 'text': 'min_dup_casesfjxbo_min_dup_subcasesfjxbo', 'phone number': '4919429005', 'singleselect': 'B', 'multiselect': ['A', 'C'], 'intval': '274', 'place': 'Delhi', 'dateval': '2023-11-09', 'data node': '324'}
+test_data = dict()
 
 def test_case_29_minimize_duplicate(driver, settings):
     login = LoginAsPage(driver, settings)

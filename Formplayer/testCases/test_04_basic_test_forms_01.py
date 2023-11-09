@@ -23,10 +23,10 @@ def test_case_16_incomplete_form_app_preview(driver, settings):
     basic.verify_number_of_forms(3, UserData.basic_tests_app['form_name'])
     basic.delete_first_form()
     app_preview.open_view_app_preview(UserData.basic_tests_app['tests_app'])
-    basic.verify_saved_form_and_submit_unchanged(basic.name_input2)
+    basic.verify_saved_form_and_submit_unchanged(basic.name_input2, UserData.basic_tests_app['form_name'])
     basic.verify_submit_history(basic.name_input2, UserData.app_preview_mobile_worker)
     app_preview.open_view_app_preview(UserData.basic_tests_app['tests_app'])
-    basic.verify_saved_form_and_submit_changed(basic.name_input1)
+    basic.verify_saved_form_and_submit_changed(basic.name_input1, UserData.basic_tests_app['form_name'])
     basic.verify_submit_history(basic.changed_name_input, UserData.app_preview_mobile_worker)
 
 
@@ -46,11 +46,11 @@ def test_case_17_incomplete_form_web_apps(driver, settings):
     basic.open_form(UserData.basic_tests_app['case_list'], UserData.basic_tests_app['form_name'])
     basic.save_incomplete_form(basic.name_input3)
     basic.verify_number_of_forms(3, UserData.basic_tests_app['form_name'])
-    basic.delete_first_form()
-    basic.verify_saved_form_and_submit_unchanged(basic.name_input2)
+    basic.delete_first_form(UserData.basic_tests_app['form_name'])
+    basic.verify_saved_form_and_submit_unchanged(basic.name_input2, UserData.basic_tests_app['form_name'])
     basic.verify_submit_history(basic.name_input2, UserData.app_preview_mobile_worker)
     login.open_webapps_menu()
-    basic.verify_saved_form_and_submit_changed(basic.name_input1)
+    basic.verify_saved_form_and_submit_changed(basic.name_input1, UserData.basic_tests_app['form_name'])
     basic.verify_submit_history(basic.changed_name_input, UserData.app_preview_mobile_worker)
 
 

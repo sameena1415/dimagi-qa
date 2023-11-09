@@ -84,8 +84,8 @@ class BasicTestAppPreview(BasePage):
         self.go_to_page_input = (By.XPATH, "//input[@placeholder='Go to page']")
         self.go_button = (By.XPATH, "//button[@id='pagination-go-button']")
         self.delete_incomplete_form = "(//tr[@class='formplayer-request']/descendant::div[@aria-label='Delete form'])[{}]"
-        self.edit_incomplete_form = (
-            By.XPATH, "(//tr[@class='formplayer-request']/descendant::div//i[contains(@class,'fa fa-pencil')])[1]")
+        self.custom_delete_incomplete_form = "(//tr[@class='formplayer-request']/td[2][contains(.,'{}')]/descendant::div[@aria-label='Delete form'])[{}]"
+        self.edit_incomplete_form = "(//tr[@class='formplayer-request'][./td[2][contains(.,'{}')]]/descendant::div//i[contains(@class,'fa fa-pencil')])[1]"
         self.click_today_date = (By.XPATH, "//a[@data-action='today']")
         self.close_date_picker = (By.XPATH, "//a[@data-action='close']")
         self.mobileno_question = (By.XPATH, "//label[.//span[text()='Mobile No.']]/following-sibling::div//input")
@@ -271,30 +271,30 @@ class BasicTestAppPreview(BasePage):
         self.switch_to_default_content()
         self.webapp.wait_to_click(self.back_button)
 
-    def delete_first_form(self):
+    def delete_first_form(self, form_name):
         self.switch_to_frame(self.iframe)
         self.webapp.wait_to_click(self.incomplete_form)
-        list = self.find_elements(self.incomplete_form_list)
+        list = self.find_elements((By.XPATH, self.custom_incomplete_form_list.format(form_name)))
         print(len(list))
         if len(list) != 0:
-            self.js_click_direct((By.XPATH, self.delete_incomplete_form.format(1)))
+            self.js_click_direct((By.XPATH, self.custom_delete_incomplete_form.format(form_name, 1)))
             self.webapp.wait_to_click(self.delete_confirm)
         else:
             print("There are no incomplete forms")
-        list_new = self.find_elements(self.incomplete_form_list)
+        list_new = self.find_elements((By.XPATH, self.custom_incomplete_form_list.format(form_name)))
         assert len(list) - 1 == len(list_new)
         print("deleted first incomplete form")
         self.switch_to_default_content()
         self.webapp.wait_to_click(self.back_button)
 
-    def verify_saved_form_and_submit_unchanged(self, value):
+    def verify_saved_form_and_submit_unchanged(self, value, form_name):
         print(value)
         self.switch_to_frame(self.iframe)
         self.webapp.wait_to_click(self.incomplete_form)
-        list = self.find_elements(self.incomplete_form_list)
+        list = self.find_elements(self.custom_incomplete_form_list.format(form_name))
         print(len(list))
         if len(list) != 0:
-            self.js_click(self.edit_incomplete_form)
+            self.js_click((By.XPATH, self.edit_incomplete_form.format(form_name)))
             time.sleep(3)
             self.wait_for_element(self.name_question)
             text = self.get_attribute(self.name_question, "value")
@@ -317,13 +317,13 @@ class BasicTestAppPreview(BasePage):
         time.sleep(2)
         self.switch_to_default_content()
 
-    def verify_saved_form_and_submit_changed(self, value):
+    def verify_saved_form_and_submit_changed(self, value, form_name):
         self.switch_to_frame(self.iframe)
         self.webapp.wait_to_click(self.incomplete_form)
-        list = self.find_elements(self.incomplete_form_list)
+        list = self.find_elements((By.XPATH, self.custom_incomplete_form_list.format(form_name)))
         print(len(list))
         if len(list) != 0:
-            self.js_click(self.edit_incomplete_form)
+            self.js_click((By.XPATH, self.edit_incomplete_form.format(form_name)))
             time.sleep(3)
             self.wait_for_element(self.name_question)
             text = self.get_attribute(self.name_question, "value")
