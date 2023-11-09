@@ -45,7 +45,7 @@ class CaseListPage(BasePage):
         self.related_cases_tab = (By.LINK_TEXT, "Related Cases")
         self.case_properties_tab = (By.PARTIAL_LINK_TEXT, "Case Properties")
         self.view_button = "//text()[contains(.,'{}')]//following-sibling::div/a[contains(@class,'view-related-case-link')]"
-        self.table_data = "//th[.//a[//text()[contains(.,'{}')]]]//following-sibling::td[contains(.,'{}')]"
+        self.table_data = "//th[.//a[@data-property-name='{}']]//following-sibling::td[contains(.,'{}')]"
 
     def open_reports_menu(self):
         if self.is_present(self.show_full_menu):
@@ -82,21 +82,22 @@ class CaseListPage(BasePage):
         self.scroll_to_bottom()
         self.verify_table_not_empty(self.case_list_table)
         self.page_source_contains(test_data['sub_case_name'])
-        self.wait_and_sleep_to_click((By.LINK_TEXT, str(test_data['sub_case_name'])))
+        self.wait_to_click((By.LINK_TEXT, str(test_data['sub_case_name'])))
+        time.sleep(5)
         self.switch_to_next_tab()
         time.sleep(3)
         self.page_source_contains(test_data['sub_case_name'])
         assert True, "Sub Case name is present in Case List"
         assert self.is_present_and_displayed(
-            (By.XPATH, self.table_data.format('parent case name', test_data['parent case name'])))
+            (By.XPATH, self.table_data.format('parent_case_name', test_data['parent case name'])))
         self.webapp.wait_to_click(self.related_cases_tab)
         assert self.is_visible_and_displayed((By.XPATH, self.view_button.format(test_data['parent case name'])))
         self.webapp.wait_to_click((By.XPATH, self.view_button.format(test_data['parent case name'])))
         time.sleep(1)
         assert self.is_present_and_displayed(
-            (By.XPATH, self.table_data.format('Name', test_data['parent case name'])))
+            (By.XPATH, self.table_data.format('name', test_data['parent case name'])))
         assert self.is_present_and_displayed(
-            (By.XPATH, self.table_data.format('data node', test_data['data node'])))
+            (By.XPATH, self.table_data.format('data_node', test_data['data node'])))
         assert self.is_present_and_displayed(
             (By.XPATH, self.table_data.format('dateval', test_data['dateval'])))
         assert self.is_present_and_displayed(
@@ -109,7 +110,7 @@ class CaseListPage(BasePage):
         assert self.is_present_and_displayed(
             (By.XPATH, self.table_data.format('text', test_data['text'])))
         assert self.is_present_and_displayed(
-            (By.XPATH, self.table_data.format('phone number', test_data['phone number'])))
+            (By.XPATH, self.table_data.format('phone_number', test_data['phone number'])))
         self.driver.close()
         self.switch_back_to_prev_tab()
 
