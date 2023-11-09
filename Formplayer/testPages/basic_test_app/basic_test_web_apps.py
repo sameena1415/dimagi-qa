@@ -142,6 +142,7 @@ class BasicTestWebApps(BasePage):
         self.text_area_field = "//label[.//span[contains(.,'{}')]]//following-sibling::div//textarea"
         self.text_area_field2 = "(//label[.//span[contains(.,'{}')]]//following-sibling::div//textarea)[2]"
         self.input_field = "(//label[.//span[contains(.,'{}')]]//following-sibling::div//input)[1]"
+        self.date_input_field = "//label[.//span[contains(.,'{}')]]//following-sibling::div//input[@placeholder='MM/DD/YYYY']"
         self.breadcrumbs = "//h1[@class='page-title'][.='{}']"
         self.search_input = (By.XPATH, "//input[@id='searchText']")
         self.search_button = (By.XPATH, "//button[@id='case-list-search-button']")
@@ -288,7 +289,7 @@ class BasicTestWebApps(BasePage):
 
     def verify_saved_form_and_submit_unchanged(self, value, form_name):
         self.webapp.wait_to_click(self.incomplete_form)
-        list = self.find_elements(self.custom_incomplete_form_list.format(form_name))
+        list = self.find_elements((By.XPATH, self.custom_incomplete_form_list.format(form_name)))
         print(len(list))
         if len(list) != 0:
             self.js_click((By.XPATH, self.edit_incomplete_form.format(form_name)))
@@ -950,40 +951,42 @@ class BasicTestWebApps(BasePage):
                                          "811" + Keys.TAB)
         self.scroll_to_element(
             (By.XPATH, self.text_success.format("greater than 20 and smaller than 8000")))
-        self.scroll_to_element((By.XPATH, self.input_field.format(
-            "This date must be after today.")))
-        self.click((By.XPATH, self.input_field.format(
-            "This date must be after today.")))
-        self.webapp.wait_to_click(self.click_today_date)
-        self.webapp.wait_to_click(self.close_date_picker)
+        time.sleep(5)
+        # print(self.is_clickable((By.XPATH, self.date_input_field.format(
+        #     "This date must be after today.")), 50))
+        # self.js_click((By.XPATH, self.date_input_field.format("This date must be after today.")))
+        # self.webapp.wait_to_click(self.click_today_date)
+        # self.webapp.wait_to_click(self.close_date_picker)
+        self.js_send_keys((By.XPATH, self.date_input_field.format(
+            "This date must be after today.")), self.input_date_add(0) + Keys.TAB)
         time.sleep(2)
         self.scroll_to_element(
             (By.XPATH, self.danger_warning.format("This date must be after today.")))
-        self.wait_to_clear_and_send_keys((By.XPATH, self.input_field.format(
+        self.wait_to_clear_and_send_keys((By.XPATH, self.date_input_field.format(
             "This date must be after today.")), self.input_date_add(1) + Keys.TAB)
         self.wait_for_element(
             (By.XPATH, self.text_success.format("This date must be after today.")))
         time.sleep(10)
-        self.send_keys((By.XPATH, self.input_field.format(
+        self.send_keys((By.XPATH, self.date_input_field.format(
             "This date has to be today or in the past.")), self.input_date_add(2) + Keys.TAB)
         self.wait_for_element(
             (By.XPATH, self.danger_warning.format("This date has to be today or in the past.")))
-        self.click((By.XPATH, self.input_field.format(
+        self.click((By.XPATH, self.date_input_field.format(
             "This date has to be today or in the past.")))
         self.webapp.wait_to_click(self.click_today_date)
         self.webapp.wait_to_click(self.close_date_picker)
         time.sleep(2)
         self.wait_for_element(
             (By.XPATH, self.text_success.format("This date has to be today or in the past.")))
-        self.wait_to_clear_and_send_keys((By.XPATH, self.input_field.format(
+        self.wait_to_clear_and_send_keys((By.XPATH, self.date_input_field.format(
             "This date has to be today or in the past.")), self.input_date_subtract(1) + Keys.TAB)
         self.wait_for_element(
             (By.XPATH, self.text_success.format("This date has to be today or in the past.")))
-        self.send_keys((By.XPATH, self.input_field.format(
+        self.send_keys((By.XPATH, self.date_input_field.format(
             "The date entered must be within the last 10 months.")), self.input_date_subtract(340) + Keys.TAB)
         self.wait_for_element(
             (By.XPATH, self.danger_warning.format("The date entered must be within the last 10 months.")))
-        self.wait_to_clear_and_send_keys((By.XPATH, self.input_field.format(
+        self.wait_to_clear_and_send_keys((By.XPATH, self.date_input_field.format(
             "The date entered must be within the last 10 months.")), self.input_date_subtract(100) + Keys.TAB)
         self.wait_for_element(
             (By.XPATH, self.text_success.format("The date entered must be within the last 10 months.")))

@@ -21,7 +21,7 @@ def test_case_16_incomplete_form_app_preview(driver, settings):
     basic.open_form(UserData.basic_tests_app['case_list'], UserData.basic_tests_app['form_name'])
     basic.save_incomplete_form(basic.name_input3)
     basic.verify_number_of_forms(3, UserData.basic_tests_app['form_name'])
-    basic.delete_first_form()
+    basic.delete_first_form(UserData.basic_tests_app['form_name'])
     app_preview.open_view_app_preview(UserData.basic_tests_app['tests_app'])
     basic.verify_saved_form_and_submit_unchanged(basic.name_input2, UserData.basic_tests_app['form_name'])
     basic.verify_submit_history(basic.name_input2, UserData.app_preview_mobile_worker)

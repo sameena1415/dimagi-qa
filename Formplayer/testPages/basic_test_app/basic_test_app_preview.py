@@ -206,7 +206,7 @@ class BasicTestAppPreview(BasePage):
         self.switch_to_frame(self.iframe)
         self.wait_for_element(self.name_question)
         print("typing value: ", value)
-        self.send_keys(self.name_question, value)
+        self.send_keys(self.name_question, value+Keys.TAB)
         time.sleep(2)
         self.webapp.wait_to_click(self.next_question)
         time.sleep(2)
@@ -291,7 +291,7 @@ class BasicTestAppPreview(BasePage):
         print(value)
         self.switch_to_frame(self.iframe)
         self.webapp.wait_to_click(self.incomplete_form)
-        list = self.find_elements(self.custom_incomplete_form_list.format(form_name))
+        list = self.find_elements((By.XPATH, self.custom_incomplete_form_list.format(form_name)))
         print(len(list))
         if len(list) != 0:
             self.js_click((By.XPATH, self.edit_incomplete_form.format(form_name)))
@@ -1320,10 +1320,14 @@ class BasicTestAppPreview(BasePage):
         self.webapp.wait_to_click(self.prev_question)
         self.wait_for_element(
             (By.XPATH, self.input_field.format("If you capture your location, you should not see the message.")))
-        self.send_keys(
+        self.scroll_to_element(
+            (By.XPATH, self.input_field.format("If you capture your location, you should not see the message.")))
+        time.sleep(2)
+        self.wait_to_clear_and_send_keys(
             (By.XPATH, self.input_field.format("If you capture your location, you should not see the message.")), "Delhi"+Keys.ENTER)
         time.sleep(5)
         self.webapp.wait_to_click(self.next_question)
+        time.sleep(2)
         assert not self.is_present((By.XPATH, self.div_span.format(
             "You should only see this message if the previous question was left empty.")))
         self.wait_for_element((By.XPATH, self.choose_radio_button.format(
