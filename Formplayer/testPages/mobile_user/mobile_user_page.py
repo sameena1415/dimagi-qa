@@ -37,8 +37,8 @@ class MobileUserPage(BasePage):
             self.js_click(self.show_full_menu)
         self.driver.get(self.dashboard_link)
         self.wait_for_element(self.users_menu_id)
-        self.webapp.wait_to_click(self.users_menu_id)
-        self.webapp.wait_to_click(self.mobile_workers_links)
+        self.click(self.users_menu_id)
+        self.wait_to_click(self.mobile_workers_links)
         assert self.USERS_TITLE in self.driver.title, "This is not the Users menu page."
 
     def add_mobile_number_mobile_user(self, username):

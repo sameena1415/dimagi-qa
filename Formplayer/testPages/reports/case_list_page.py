@@ -52,8 +52,8 @@ class CaseListPage(BasePage):
             self.js_click(self.show_full_menu)
         self.driver.get(self.dashboard_link)
         self.wait_for_element(self.reports_menu_id)
-        self.webapp.wait_to_click(self.reports_menu_id)
-        self.webapp.wait_to_click(self.view_all)
+        self.click(self.reports_menu_id)
+        self.wait_to_click(self.view_all)
         assert self.REPORTS_TITLE in self.driver.title, "This is not the Reports menu page."
 
     def verify_table_not_empty(self, locator):

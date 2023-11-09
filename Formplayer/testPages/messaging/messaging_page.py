@@ -38,8 +38,8 @@ class MessagingPage(BasePage):
             self.js_click(self.show_full_menu)
         self.driver.get(self.dashboard_link)
         self.wait_for_element(self.messaging_menu_id)
-        self.webapp.wait_to_click(self.messaging_menu_id)
-        self.webapp.wait_to_click(self.view_all)
+        self.click(self.messaging_menu_id)
+        self.wait_to_click(self.view_all)
         assert self.MESSAGING_TITLE in self.driver.title, "This is not the Messaging menu page."
 
     def open_keywords_link(self):

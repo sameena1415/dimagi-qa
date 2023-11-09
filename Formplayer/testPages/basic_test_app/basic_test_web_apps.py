@@ -950,7 +950,9 @@ class BasicTestWebApps(BasePage):
                                          "811" + Keys.TAB)
         self.scroll_to_element(
             (By.XPATH, self.text_success.format("greater than 20 and smaller than 8000")))
-        self.webapp.wait_to_click((By.XPATH, self.input_field.format(
+        self.scroll_to_element((By.XPATH, self.input_field.format(
+            "This date must be after today.")))
+        self.click((By.XPATH, self.input_field.format(
             "This date must be after today.")))
         self.webapp.wait_to_click(self.click_today_date)
         self.webapp.wait_to_click(self.close_date_picker)
@@ -1398,7 +1400,9 @@ class BasicTestWebApps(BasePage):
         self.js_click(self.search_location_button)
         time.sleep(2)
         assert not self.is_present_and_displayed(self.blank_latitude, 20)
-        self.webapp.wait_to_click((By.XPATH, self.input_field.format(
+        self.scroll_to_element((By.XPATH, self.input_field.format(
+            "Enter a date:")))
+        self.click((By.XPATH, self.input_field.format(
             "Enter a date:")))
         self.webapp.wait_to_click(self.click_today_date)
         self.webapp.wait_to_click(self.close_date_picker)
