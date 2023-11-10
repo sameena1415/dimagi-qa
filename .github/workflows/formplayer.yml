@@ -8,8 +8,8 @@ on:
     branches: [ master ]
   pull_request:
     branches: [ master ]
-  schedule:
-    - cron: '0 0 * * 0'
+  repository_dispatch:
+    types: [ deploy_success ]
   workflow_dispatch:
     inputs:
       environment:
@@ -19,17 +19,18 @@ on:
         type: choice
         options:
           - staging
-
-concurrency:
-  group: Formplayer-table-tests-${{ github.ref }}
-  cancel-in-progress: true
+          - production
 
 jobs:
   set_matrix:
     runs-on: ubuntu-latest
     outputs:
-      matrix: ${{ steps.set-matrix-manual.outputs.matrix || steps.set-matrix-default.outputs.matrix }}
+      matrix: ${{ steps.set-matrix-deploy.outputs.matrix || steps.set-matrix-manual.outputs.matrix || steps.set-matrix-default.outputs.matrix }}
     steps:
+      - id: set-matrix-deploy
+        if: ${{ github.event_name == 'repository_dispatch' }}
+        run: |
+          echo "::set-output name=matrix::{\"environment\": [\"${{ github.event.client_payload.environment }}\"]}"
       - id: set-matrix-manual
         if: ${{ github.event_name == 'workflow_dispatch' }}
         run: |
@@ -43,7 +44,10 @@ jobs:
     strategy:
       fail-fast: false
       matrix: ${{ fromJSON(needs.set_matrix.outputs.matrix) }}
-    name: Formplayer tests on '${{ matrix.environment }}'
+    concurrency:
+      group: ${{ github.workflow }}-${{ matrix.environment }}
+      cancel-in-progress: true
+    name: Formplayer Regression on '${{ matrix.environment }}'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -56,9 +60,10 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r Formplayer/requires.txt
-      - name: Formplayer tests with pytest
+
+      - name: Formplayer Regression Test with pytest
         env:
-          DIMAGIQA_ENV: ${{ matrix.environment }}
+          DIMAGIQA_ENV: ${{ matrix.environment }}  #${{ secrets.DIMAGIQA_URL }}
           DIMAGIQA_LOGIN_USERNAME: ${{ secrets.DIMAGIQA_LOGIN_USERNAME }}
           DIMAGIQA_LOGIN_PASSWORD: ${{ secrets.DIMAGIQA_LOGIN_PASSWORD }}
           DIMAGIQA_MAIL_USERNAME: ${{ secrets.DIMAGIQA_MAIL_USERNAME }}
@@ -71,8 +76,9 @@ jobs:
           echo "NOW=$(date +'%m-%d %H:%M')" >> $GITHUB_ENV
           echo ${{env.NOW}}
           pytest -v --rootdir= Formplayer/testCases -n 4 --dist=loadfile --reruns 1 --html=formplayer_${{ matrix.environment }}.html
+
       - name: Set email vars
-        if: ${{ success() || failure() }}
+        if: ${{ failure() }}
         id: configure_email
         uses: actions/github-script@v6
         env:
@@ -81,36 +87,43 @@ jobs:
         with:
           script: |
             const { promises: fs } = require('fs')
+
             const {JOB_STATUS, NOW, CC_ENV, GITHUB_HEAD_REF} = process.env
-            const prefix = `[${CC_ENV}] Formplayer Tests - ${JOB_STATUS.toUpperCase()} - Run #${context.runNumber}`
+            const prefix = `[${CC_ENV}] Smoke Tests - ${JOB_STATUS.toUpperCase()} - Run #${context.runNumber}`
             const suffix = `at ${NOW}`
-            let subject = `${prefix} on branch "${GITHUB_HEAD_REF}" ${suffix}`
+
+            let subject = `${prefix} on "deploy_success" ${suffix}`
+            if (context.eventName !== "repository_dispatch") {
+              subject = `${prefix} on branch "${GITHUB_HEAD_REF}" ${suffix}`
+            }
 
             let bodyFile = './common_utilities/mail_templates/email_pass.md'
             if (JOB_STATUS !== 'success') {
               bodyFile = './common_utilities/mail_templates/email_fail.md'
             }
-            
+
             let actionRunLink = context.payload.repository.html_url + `/actions/runs/${context.runId}`
-            let testSuite = 'Formplayer Regression'
+            let testSuite = 'CommCare HQ Smoke Test'
             let bodyContent = await fs.readFile(bodyFile, 'utf8')
             bodyContent = bodyContent.replace(/{{actionRunLink}}/g, actionRunLink)
                 .replace(/{{runNumber}}/g, context.runNumber)
                 .replace(/{{environment}}/g, CC_ENV)
                 .replace(/{{testSuite}}/g, testSuite)
-            
+
             let receivers = 'qa-automation@dimagi.com'
             if (context.eventName !== "pull_request" || context.eventName !== "push") {
               receivers = 'kbordoloi@dimagi.com'
             }
+
             return {
               "subject": subject,
               "body": bodyContent,
               "reference": Math.random().toString(36).substr(2),  // used to prevent threading of similar emails
               "receivers": receivers
             }
+
       - name: Send Result Email
-        if: ${{ success() || failure() }}
+        if: ${{ failure() }}
         uses: dawidd6/action-send-mail@v3
         with:
           server_address: smtp.gmail.com
@@ -126,7 +139,7 @@ jobs:
           in_reply_to: ${{ fromJSON(steps.configure_email.outputs.result).reference }}
 
       - name: Post to Slack channel on Failure
-        id: slack_fail
+        id: slack
         uses: slackapi/slack-github-action@v1.23.0
         if: failure()
         with:
@@ -137,7 +150,7 @@ jobs:
                         "type": "section",
                         "text": {
                             "type": "mrkdwn",
-                            "text": " Hey Folks!! :bye_boo: \n*${{ github.workflow }}* were just triggered!"
+                            "text": " Bonjour :alphabet-yellow-q::alphabet-yellow-a: 👋 \n*${{ github.workflow }}* were just triggered!"
                         }
                     },
                     {
@@ -182,66 +195,10 @@ jobs:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL_FEATURES }}
           SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
 
-      - name: Post to Slack channel on Success
-        id: slack_pass
-        uses: slackapi/slack-github-action@v1.23.0
-        if: success()
-        with:
-          payload: |
-            {
-                "blocks": [
-                    {
-                        "type": "section",
-                        "text": {
-                            "type": "mrkdwn",
-                            "text": " Hey Folks!! :bye_boo: \n*${{ github.workflow }}* were just triggered!"
-                        }
-                    },
-                    {
-                        "type": "context",
-                        "elements": [
-                            {
-                                "type": "mrkdwn",
-                                "text": "*Environment: *\n ${{ matrix.environment }}  \n"
-                            },
-                          {
-                                "type": "mrkdwn",
-                                "text": " "
-                            },
-                            {
-                                "type": "mrkdwn",
-                                "text": "*Status: *\n ${{ job.status }}  :white_check_mark:"
-                            }
-                        ]
-                    },
-                    {
-                        "type": "section",
-                        "text": {
-                            "type": "mrkdwn",
-                            "text": "Here's the corresponding workflow execution :arrow_right::arrow_right:"
-                        },
-                        "accessory": {
-                            "type": "button",
-                            "text": {
-                                "type": "plain_text",
-                                "text": "View on Github",
-                                "emoji": true
-                            },
-                            "value": "click_me_123",
-                            "url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}",
-                            "action_id": "button-action",
-                            "style": "primary"
-                        }
-                    }
-                ]
-            }
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL_FEATURES }}
-          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
-
       - name: Archive test results
         if: ${{ success() || failure() }}
         uses: actions/upload-artifact@v2
         with:
           name: test-result-reports-${{ matrix.environment }}
           path: ${{ github.workspace }}/formplayer_${{ matrix.environment }}.html
+          retention-days: 2
