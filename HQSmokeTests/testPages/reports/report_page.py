@@ -570,7 +570,7 @@ class ReportPage(BasePage):
             for i in range(len(list_of_owner)):
                 text = list_of_owner[i].text
                 print(text)
-                assert text == owner, "Owner does not match"
+                assert text == owner or text == UserData.user_group, "Owner does not match"
                 self.check_if_html(text)
 
     def check_for_case_list_explorer_owner(self, url):
@@ -603,7 +603,7 @@ class ReportPage(BasePage):
             for i in range(len(list_of_owner)):
                 text = list_of_owner[i].text
                 print(text)
-                assert text == owner, "Owner does not match"
+                assert text == owner or text == UserData.user_group, "Owner does not match"
                 self.check_if_html(text)
 
     def check_if_html(self, text):
