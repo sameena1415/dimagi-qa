@@ -86,7 +86,7 @@ class MobileWorkerPage(BasePage):
         self.new_user_created_xpath = (By.XPATH,
                                        "//*[@class='success']//a[contains(@data-bind,'attr: {href: edit_url}, visible: user_id')]//following-sibling::strong")
         self.NEW = (By.XPATH, "//span[@class='text-success']")
-        self.edit_user_field_xpath = (By.XPATH, "//*[@id='btn-edit_user_fields']")
+        self.edit_user_field_xpath = (By.XPATH, "//a[contains(.,'Edit User Fields')]")
         self.add_field_xpath = (By.XPATH, "//button[@data-bind='click: addField']")
         self.user_property_xpath = (By.XPATH, "(//input[contains(@data-bind,'value: slug')])[last()]")
         self.label_xpath = (By.XPATH, "(//input[contains(@data-bind,'value: label')])[last()]")
