@@ -38,7 +38,7 @@ class WebAppsPage(BasePage):
         self.update_value_area = (By.XPATH, "//label[./div[./span[contains(text(),'Update')]]]/following-sibling::div[@data-bind='css: controlWidth']//div/textarea")
         self.form_link = (By.XPATH, "//*[text()='" + UserData.form_name + "']")
         self.form_case_name_input = (By.XPATH, "//textarea[contains(@class,'textfield form-control')]")
-        self.form_submit_button = (By.XPATH, "//button[@class='submit btn btn-primary']")
+        self.form_submit_button = (By.XPATH, "//div[@data-bind='css: submitClass']/button[contains(@class,'submit')]")
         self.success_message = (By.XPATH, "//p[contains(text(),'successfully saved')]")
         self.show_full_menu_link = (By.LINK_TEXT, "Show Full Menu")
         self.search_text = (By.XPATH, "//input[@id='searchText']")
@@ -73,6 +73,7 @@ class WebAppsPage(BasePage):
         self.wait_for_element(self.success_message)
         assert self.is_displayed(self.success_message), "Form not submitted"
         print("Form successfully submitted")
+        time.sleep(10)
         self.js_click(self.home_button)
         self.wait_for_element(self.sync_button)
         self.js_click(self.sync_button)
