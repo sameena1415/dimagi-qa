@@ -27,7 +27,7 @@ class WebApps(BasePage):
         self.answer_format = "(//label[.//span[text()='{}']]/following-sibling::div//{})"
         self.per_answer_format = "(//label[.//span[text()='{}']]/following-sibling::div//{})[{}]"
 
-        self.form_submit = (By.XPATH, "//button[@class='submit btn btn-primary']")
+        self.form_submit = (By.XPATH, "//div[@data-bind='css: submitClass']/button[contains(@class,'submit')]")
         self.form_submission_successful = (By.XPATH, "//p[contains(text(), 'successfully saved')]")
         self.form_500_error = (By.XPATH, "//*[contains(text(),'500 :')]")
         self.search_all_cases_button = (By.XPATH,
