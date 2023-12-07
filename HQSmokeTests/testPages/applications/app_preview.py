@@ -48,7 +48,7 @@ class AppPreviewPage(BasePage):
         self.next_question_force = (By.XPATH, "//button[contains(@data-bind,'clickedNextOnRequired')]")
         self.complete_form = (By.XPATH, "//button[@data-bind='visible: atLastIndex(), click: submitForm']")
         self.success_message = (By.XPATH, "//p[contains(text(),'successfully saved')]")
-        self.home_button = (By.XPATH, "//li[./i[@class='fa fa-home']]")
+        self.home_button = (By.XPATH, "//li[contains(@class,'home')]")
         self.sync_button = (By.XPATH, "//div[@class='js-sync-item appicon appicon-sync']")
         self.sync_message = (By.XPATH, "//p[contains(text(),'successfully synced')]")
 

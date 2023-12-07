@@ -26,7 +26,7 @@ class WebAppsPage(BasePage):
         self.login_user = (By.XPATH, "//*[text()='" + UserData.login_as + "']")
         self.confirm_user_login = (By.XPATH, "//button[@id='js-confirmation-confirm']")
         self.sync_button = (By.XPATH, "//h3[.='Sync']")
-        self.home_button = (By.XPATH, "//i[@class='fa fa-home']")
+        self.home_button = (By.XPATH, "//li[contains(@class,'home')]")
         self.apps_links = (By.XPATH, "//*[@class='fcc fcc-flower appicon-icon']")
         self.web_app_link = (By.XPATH, "//*[text()='" + UserData.reassign_cases_application + "']")
         self.case_list_link = (By.XPATH, "//*[text()='" + UserData.case_list_name + "']")
