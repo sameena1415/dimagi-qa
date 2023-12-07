@@ -142,7 +142,7 @@ class LookUpTablePage(BasePage):
         self.saved_button = (By.XPATH, "//span[@class='btn btn-info disabled'][.='Saved']")
         self.number_of_questions = (By.XPATH, "//*[@id='formdesigner']/div[1]/div[1]/div[1]/div[4]/div[1]/ul/li")
         self.child_node = (By.XPATH, "//*[@id='formdesigner']/div[1]/div[1]/div[1]/div[4]/div[1]/ul/li/ul")
-        self.home = (By.XPATH, "//*[@id='breadcrumb-region']/div/div/ol/li[1]")
+        self.home = (By.XPATH, "//li[contains(@class,'home')]")
         self.sync = (By.XPATH, "//*[@class='ff ff-sync appicon-icon']")
         self.label = (By.XPATH, "//*[@data-qtype='Trigger']")
         self.refresh = (By.XPATH, "//button[contains(@class,'refresh')]")
