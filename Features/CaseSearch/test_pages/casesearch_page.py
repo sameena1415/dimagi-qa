@@ -53,7 +53,7 @@ class CaseSearchWorkflows(BasePage):
         # Multi-select
         self.select_all_checkbox = (By.ID, "select-all-checkbox")
         self.case_names = (By.XPATH, "//td[contains(@class,'case-list-column')][3]")
-        self.multi_select_continue = (By.ID, "multi-select-continue-btn")
+        self.multi_select_continue = (By.XPATH, "(//button[contains(@class,'multi-select-continue-btn')])[1]")
         self.selected_case_names_on_forms = (By.XPATH, "//span[@class='caption webapp-markdown-output']")
         self.checkbox_xpath = "//label[contains (text(),'{}')][1]//following::input[@value='{}'][1]"
         self.search_property_checked = "//label[contains (text(),'{}')][1]//following::input[@value='{}' and @checked][1]"
