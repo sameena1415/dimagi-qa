@@ -1,6 +1,7 @@
 import time
 import datetime
 
+from dateutil.parser import parse
 from selenium.webdriver.support.select import Select
 from selenium.common.exceptions import TimeoutException, ElementClickInterceptedException, \
     UnexpectedAlertPresentException, StaleElementReferenceException, NoSuchElementException
@@ -90,7 +91,7 @@ class BasePage:
     def wait_for_element(self, locator, timeout=20):
         clickable = ec.element_to_be_clickable(locator)
         WebDriverWait(self.driver, timeout, poll_frequency=5).until(clickable,
-                                                  message="Couldn't find locator: " + str(locator))
+                                                                    message="Couldn't find locator: " + str(locator))
 
     def wait_and_sleep_to_click(self, locator, timeout=90):
         element = None
@@ -223,7 +224,8 @@ class BasePage:
         try:
             visible = ec.visibility_of_element_located(locator)
             element = WebDriverWait(self.driver, timeout, poll_frequency=10).until(visible,
-                                                                message="Element" + str(locator) + "not displayed")
+                                                                                   message="Element" + str(
+                                                                                       locator) + "not displayed")
             is_displayed = element.is_displayed()
         except TimeoutException:
             is_displayed = False
@@ -233,7 +235,8 @@ class BasePage:
         try:
             visible = ec.presence_of_element_located(locator)
             element = WebDriverWait(self.driver, timeout, poll_frequency=10).until(visible,
-                                                                message="Element" + str(locator) + "not displayed")
+                                                                                   message="Element" + str(
+                                                                                       locator) + "not displayed")
             is_displayed = element.is_displayed()
         except TimeoutException:
             is_displayed = False
@@ -334,14 +337,16 @@ class BasePage:
         self.driver.execute_script("arguments[0].scrollIntoView();", element)
 
     def wait_and_find_elements(self, locator, cols, timeout=500):
-        elements = WebDriverWait(self.driver, timeout, poll_frequency=10).until(lambda driver: len(driver.find_elements(*locator)) >= int(cols))
+        elements = WebDriverWait(self.driver, timeout, poll_frequency=10).until(
+            lambda driver: len(driver.find_elements(*locator)) >= int(cols))
         return elements
 
     def wait_till_progress_completes(self, type="export"):
         if type == "export":
             if self.is_present((By.XPATH, "//div[contains(@class,'progress-bar')]")):
                 WebDriverWait(self.driver, 600, poll_frequency=10).until(
-                        ec.visibility_of_element_located((By.XPATH, "//div[contains(@class,'progress-bar')][.//span[@data-bind='text: progress'][.='100']]")))
+                    ec.visibility_of_element_located((By.XPATH,
+                                                      "//div[contains(@class,'progress-bar')][.//span[@data-bind='text: progress'][.='100']]")))
         elif type == "integration":
             WebDriverWait(self.driver, 600, poll_frequency=10).until(
                 ec.invisibility_of_element_located((By.XPATH, "//div[contains(@class,'progress-bar')]")))
@@ -350,7 +355,8 @@ class BasePage:
         try:
             clickable = ec.element_to_be_clickable(locator)
             element = WebDriverWait(self.driver, timeout, poll_frequency=10).until(clickable,
-                                                                message="Element" + str(locator) + "not displayed")
+                                                                                   message="Element" + str(
+                                                                                       locator) + "not displayed")
             is_clickable = element.is_enabled()
         except TimeoutException:
             is_clickable = False
@@ -365,3 +371,25 @@ class BasePage:
         wait.until(lambda driver: self.driver.execute_script('return jQuery.active') == 0)
         wait.until(lambda driver: self.driver.execute_script('return document.readyState') == 'complete')
 
+    def is_date(self, string, fuzzy=False):
+        """
+        Return whether the string can be interpreted as a date.
+
+        :param string: str, string to check for date
+        :param fuzzy: bool, ignore unknown tokens in string if True
+        """
+        try:
+            parse(string, fuzzy=fuzzy)
+            return True
+
+        except ValueError:
+            return False
+
+    def get_all_dropdown_options(self, source_locator):
+        select_source = Select(self.driver.find_element(*source_locator))
+        list_opt = []
+        for opt in select_source.options:
+            print(opt.text)
+            list_opt.append(opt.text)
+        print("Option list", list_opt)
+        return list_opt
