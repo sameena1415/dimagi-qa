@@ -27,7 +27,7 @@ class WebApps(BasePage):
         self.answer_format = "(//label[.//span[text()='{}']]/following-sibling::div//{})"
         self.per_answer_format = "(//label[.//span[text()='{}']]/following-sibling::div//{})[{}]"
 
-        self.form_submit = (By.XPATH, "//div[@data-bind='css: submitClass']/button[contains(@class,'submit')]")
+        self.form_submit = (By.XPATH, "//div[contains(@data-bind,'css: submitClass')]/button[contains(@class,'submit')]")
         self.form_submission_successful = (By.XPATH, "//p[contains(text(), 'successfully saved')]")
         self.form_500_error = (By.XPATH, "//*[contains(text(),'500 :')]")
         self.search_all_cases_button = (By.XPATH,
@@ -36,7 +36,7 @@ class WebApps(BasePage):
                                     "//*[contains(text(),'Search Again')]//parent::div[@class='case-list-action-button btn-group formplayer-request']")
         self.clear_case_search_page = (By.XPATH, "//button[@id='query-clear-button']")
         self.submit_on_case_search_page = (By.XPATH, "//button[@type='submit' and @id='query-submit-button']")
-        self.case_list = (By.XPATH, "//table[@class='table module-table module-table-case-list']")
+        self.case_list = (By.XPATH, "//table")#"//table[@class='table module-table module-table-case-list']")
         self.omni_search_input = (By.ID, "searchText")
         self.omni_search_button = (By.ID, "case-list-search-button")
         self.continue_button = (By.ID, "select-case")
