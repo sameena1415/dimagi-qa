@@ -236,7 +236,9 @@ class CaseSearchWorkflows(BasePage):
         song_names_on_case_list = list(filter(None, song_names))
         print("Selected cases: ", song_names_on_case_list)
         self.js_click(self.multi_select_continue)
-        time.sleep(5)
+        print("Waiting for the form to load")
+        time.sleep(20)
+        self.wait_for_element((By.XPATH, self.song_label.format(song_names_on_case_list[0])))
         for item in song_names_on_case_list:
             self.scroll_to_element((By.XPATH, self.song_label.format(item)))
             assert self.is_present_and_displayed((By.XPATH, self.song_label.format(item))), "Song "+item+" is not present in the form"
