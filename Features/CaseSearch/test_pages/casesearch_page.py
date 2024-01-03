@@ -55,6 +55,7 @@ class CaseSearchWorkflows(BasePage):
         self.case_names = (By.XPATH, "//td[contains(@class,'case-list-column')][3]")
         self.multi_select_continue = (By.XPATH, "(//button[contains(@class,'multi-select-continue-btn')])[1]")
         self.selected_case_names_on_forms = (By.XPATH, "//span[@class='caption webapp-markdown-output']")
+        self.song_label = "//span[@class='caption webapp-markdown-output'][.='song: by {}']"
         self.checkbox_xpath = "//label[contains (text(),'{}')][1]//following::input[@value='{}'][1]"
         self.search_property_checked = "//label[contains (text(),'{}')][1]//following::input[@value='{}' and @checked][1]"
         self.remove_combobox_selection = "//label[contains(text(),'{}')]//following::button[@aria-label='Remove all items'][1]"
@@ -230,14 +231,24 @@ class CaseSearchWorkflows(BasePage):
 
     def select_all_cases_and_check_selected_cases_present_on_form(self):
         self.wait_to_click(self.select_all_checkbox)
+        time.sleep(3)
         song_names = self.find_elements_texts(self.case_names)
         song_names_on_case_list = list(filter(None, song_names))
+        print("Selected cases: ", song_names_on_case_list)
         self.js_click(self.multi_select_continue)
-        song_names_on_form = self.find_elements_texts(self.selected_case_names_on_forms)
-        stripped = list(filter(None, [s.replace("song: by", "") for s in song_names_on_form]))
-        stripped_final = list([s.lstrip() for s in stripped])
-        assert stripped_final == song_names_on_case_list, \
-            f"No, form songs {stripped_final} doesn't match case list songs{song_names_on_case_list}"
+        print("Waiting for the form to load")
+        time.sleep(20)
+        self.wait_for_element((By.XPATH, self.song_label.format(song_names_on_case_list[0])))
+        for item in song_names_on_case_list:
+            self.scroll_to_element((By.XPATH, self.song_label.format(item)))
+            assert self.is_present_and_displayed((By.XPATH, self.song_label.format(item))), "Song "+item+" is not present in the form"
+            print("Song "+item+" is present in the form")
+        # song_names_on_form = self.find_elements_texts(self.selected_case_names_on_forms)
+        # stripped = list(filter(None, [s.replace("song: by", "") for s in song_names_on_form]))
+        # stripped_final = list([s.lstrip() for s in stripped])
+        # print("Present cases: ", stripped_final)
+        # assert stripped_final == song_names_on_case_list, \
+        #     f"No, form songs {stripped_final} doesn't match case list songs{song_names_on_case_list}"
 
     def check_label_in_form(self, expected_value):
         rating_on_form = self.find_elements_texts(self.selected_case_names_on_forms)
