@@ -240,7 +240,10 @@ class ApplicationPage(BasePage):
         print("Sleeping for the installation code to generate")
         time.sleep(10)
         self.wait_to_click(self.publish_button)
-        self.wait_to_click(self.enter_app_code_link)
+        if self.is_present_and_displayed(self.enter_app_code_link):
+            self.wait_to_click(self.enter_app_code_link)
+        else:
+            print("Enter App Code link is not present")
         code_text = self.wait_to_get_text(self.code)
         self.wait_to_click(self.close)
         # self.wait_to_click(self.delete_form)
