@@ -230,12 +230,16 @@ class CaseSearchWorkflows(BasePage):
 
     def select_all_cases_and_check_selected_cases_present_on_form(self):
         self.wait_to_click(self.select_all_checkbox)
+        time.sleep(3)
         song_names = self.find_elements_texts(self.case_names)
         song_names_on_case_list = list(filter(None, song_names))
+        print("Selected cases: ", song_names_on_case_list)
         self.js_click(self.multi_select_continue)
+        time.sleep(5)
         song_names_on_form = self.find_elements_texts(self.selected_case_names_on_forms)
         stripped = list(filter(None, [s.replace("song: by", "") for s in song_names_on_form]))
         stripped_final = list([s.lstrip() for s in stripped])
+        print("Present cases: ", stripped_final)
         assert stripped_final == song_names_on_case_list, \
             f"No, form songs {stripped_final} doesn't match case list songs{song_names_on_case_list}"
 
