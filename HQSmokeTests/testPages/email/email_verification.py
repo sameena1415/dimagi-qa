@@ -1,6 +1,6 @@
 import datetime
 
-from imap_tools import MailBox, A
+from imap_tools import MailBox
 from imap_tools import AND, OR, NOT
 from bs4 import BeautifulSoup
 import re
@@ -26,16 +26,16 @@ class EmailVerification:
 
         with MailBox(self.imap_host).login(self.imap_user, self.imap_pass, 'INBOX') as mailbox:
             bodies = [msg.html for msg in
-                      mailbox.fetch(AND(subject=subject, from_=from_email, date=datetime.date.today()))]
-        soup = BeautifulSoup(str(bodies), "html.parser")
+                      mailbox.fetch(AND(subject=subject, from_ =from_email, date=datetime.date.today()))]
+        soup = BeautifulSoup(str(bodies[len(bodies)-1]), "html.parser")
         links = []
         for link in soup.findAll('a', attrs={'href': re.compile("^https://")}):
             links.append(link.get('href'))
             # print("link: ", link)
         # links  # in this you will have to check the link number starting from 0.
         print(len(links))
-        print(links[len(links) - 1])
-        return str(links[len(links) - 1])
+        print(links[0])
+        return str(links[0])
 
     def get_email_body_from_latest_email(self, subject, url):
         if 'www' in url:
