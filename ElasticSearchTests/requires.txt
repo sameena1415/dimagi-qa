@@ -12,3 +12,7 @@ pytest-xdist[psutil]
 pytest-order
 python-dateutil
 natsort
+pyotp
+imap-tools
+beautifulsoup4
+html5lib

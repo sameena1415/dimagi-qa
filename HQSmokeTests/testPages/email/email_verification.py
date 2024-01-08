@@ -1,3 +1,5 @@
+import datetime
+
 from imap_tools import MailBox, A
 from imap_tools import AND, OR, NOT
 from bs4 import BeautifulSoup
@@ -24,7 +26,7 @@ class EmailVerification:
 
         with MailBox(self.imap_host).login(self.imap_user, self.imap_pass, 'INBOX') as mailbox:
             bodies = [msg.html for msg in
-                      mailbox.fetch(AND(subject=subject, from_=from_email))]
+                      mailbox.fetch(AND(subject=subject, from_=from_email, date=datetime.date.today()))]
         soup = BeautifulSoup(str(bodies), "html.parser")
         links = []
         for link in soup.findAll('a', attrs={'href': re.compile("^https://")}):
@@ -43,7 +45,7 @@ class EmailVerification:
         print(subject)
         with MailBox(self.imap_host).login(self.imap_user, self.imap_pass, 'INBOX') as mailbox:
             bodies = [msg.html for msg in
-                      mailbox.fetch(AND(subject=subject, from_=from_email))]
+                      mailbox.fetch(AND(subject=subject, from_=from_email,  date=datetime.date.today()))]
         print(len(bodies))
         n = ''
         if "Worker Activity" in subject or "Case Activity" in subject:
@@ -74,7 +76,7 @@ class EmailVerification:
         print(subject)
         with MailBox(self.imap_host).login(self.imap_user, self.imap_pass, 'INBOX') as mailbox:
             bodies = [msg.html for msg in
-                      mailbox.fetch(AND(subject=subject, from_=from_email))]
+                      mailbox.fetch(AND(subject=subject, from_=from_email, date=datetime.date.today()))]
         soup = BeautifulSoup(str(bodies[len(bodies)-1]), "html.parser")
         tr = []
         td = []
