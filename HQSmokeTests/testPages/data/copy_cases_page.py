@@ -20,8 +20,8 @@ class CopyCasesPage(BasePage):
         self.case_type_dropdown = (By.XPATH, "//label[.='Case Type']//following-sibling::div/select[@name='case_type']")
 
 
-        self.select_first_case = (By.XPATH, "(//input[@type='checkbox'])[2]")
-        self.first_case_name = (By.XPATH, "(//a[contains(@class, 'ajax_dialog')])[1]")
+        self.select_first_case = (By.XPATH, "(//td[2][not(contains(.,'no name'))]//preceding-sibling::td/input[@type='checkbox'])[1]")
+        self.first_case_name = (By.XPATH, "(//a[contains(@class, 'ajax_dialog')][not(contains(.,'no name'))])[1]")
         self.user_search_dropdown = (By.ID, "report_filter_individual")
         self.user_to_be_copied = (By.XPATH, "(//li[contains(.,'All Mobile Workers')])[1]")
 

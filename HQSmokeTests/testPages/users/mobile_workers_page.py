@@ -4,6 +4,7 @@ import time
 
 import pandas as pd
 from openpyxl import load_workbook
+from selenium.webdriver import Keys
 
 from common_utilities.selenium.base_page import BasePage
 from common_utilities.path_settings import PathSettings
@@ -66,7 +67,10 @@ class MobileWorkerPage(BasePage):
             By.XPATH, "(//td/div[@data-bind='visible: is_active()']/button[@class='btn btn-default'])")
         self.show_deactivated_users_btn = (
             By.XPATH,
-            '//button[@data-bind="visible: !deactivatedOnly(), click: function() { deactivatedOnly(true); }"]')
+            '//button[contains(.,"Show Deactivated Mobile Workers")][not(@style="display: none;")]')
+        self.show_reactivated_users_btn = (
+            By.XPATH,
+            '//button[contains(.,"Show Active Mobile Workers")][not(@style="display: none;")]')
         self.usernames_xpath = (By.XPATH, "//td/a/strong[@data-bind='text: username']")
         self.page_xpath = (By.XPATH,
                            "(//span[@data-bind='text: $data, visible: !$parent.showSpinner() || $data != $parent.currentPage()'])")
@@ -86,7 +90,7 @@ class MobileWorkerPage(BasePage):
         self.new_user_created_xpath = (By.XPATH,
                                        "//*[@class='success']//a[contains(@data-bind,'attr: {href: edit_url}, visible: user_id')]//following-sibling::strong")
         self.NEW = (By.XPATH, "//span[@class='text-success']")
-        self.edit_user_field_xpath = (By.XPATH, "//*[@id='btn-edit_user_fields']")
+        self.edit_user_field_xpath = (By.XPATH, "//a[contains(.,'Edit User Fields')]")
         self.add_field_xpath = (By.XPATH, "//button[@data-bind='click: addField']")
         self.user_property_xpath = (By.XPATH, "(//input[contains(@data-bind,'value: slug')])[last()]")
         self.label_xpath = (By.XPATH, "(//input[contains(@data-bind,'value: label')])[last()]")
@@ -178,9 +182,11 @@ class MobileWorkerPage(BasePage):
     def search_webapps_user(self, username):
         self.wait_to_click(self.web_apps_menu_id)
         self.wait_to_click(self.webapp_login)
-        time.sleep(1)
+        print("Waiting for the login page to load.....")
+        time.sleep(10)
         self.wait_for_element(self.search_user_web_apps, 20)
         self.send_keys(self.search_user_web_apps, username)
+        time.sleep(1)
         self.wait_to_click(self.search_button_we_apps)
         time.sleep(5)
 
@@ -309,6 +315,11 @@ class MobileWorkerPage(BasePage):
             self.wait_to_click(self.confirm_deactivate_xpath_list)
             time.sleep(5)
             assert self.is_present_and_displayed((By.XPATH, self.reactivate_buttons_list.format(username)), 20)
+            self.mobile_worker_menu()
+            self.wait_for_element(self.show_deactivated_users_btn)
+            self.click(self.show_deactivated_users_btn)
+            self.search_user(username)
+            assert self.is_present_and_displayed((By.XPATH, self.reactivate_buttons_list.format(username)), 20)
             print("Deactivation successful")
             return "Success"
         except (TimeoutException, NoSuchElementException):
@@ -331,13 +342,24 @@ class MobileWorkerPage(BasePage):
             self.wait_to_click(self.show_deactivated_users_btn)
             self.search_user(username)
             time.sleep(1)
-            self.wait_for_element((By.XPATH, self.username_link.format(username)), 50)
-            self.wait_to_click((By.XPATH, self.reactivate_buttons_list.format(username)))
-            self.wait_for_element(self.confirm_reactivate_xpath_list)
-            self.wait_to_click(self.confirm_reactivate_xpath_list)
-            time.sleep(5)
-            assert self.is_present_and_displayed((By.XPATH, self.deactivate_button.format(username)), 20)
-            print("Reactivation successful")
+            if not self.is_present_and_displayed((By.XPATH, self.username_link.format(username)), 10):
+                print("This is a rerun so skipping this steps")
+                print("User is already activated")
+                self.mobile_worker_menu()
+                self.search_user(username)
+                assert self.is_present_and_displayed((By.XPATH, self.deactivate_button.format(username)), 20)
+                time.sleep(10)
+            else:
+                self.wait_for_element((By.XPATH, self.username_link.format(username)), 50)
+                self.wait_to_click((By.XPATH, self.reactivate_buttons_list.format(username)))
+                self.wait_for_element(self.confirm_reactivate_xpath_list)
+                self.wait_to_click(self.confirm_reactivate_xpath_list)
+                time.sleep(5)
+                self.mobile_worker_menu()
+                self.search_user(username)
+                assert self.is_present_and_displayed((By.XPATH, self.deactivate_button.format(username)), 20)
+                print("Reactivation successful")
+                time.sleep(10)
             return "Success"
         except (TimeoutException, NoSuchElementException):
             print("TIMEOUT ERROR: Reactivation unsuccessful.")

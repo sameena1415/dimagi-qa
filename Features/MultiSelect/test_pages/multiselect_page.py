@@ -17,7 +17,7 @@ class MultiSelectWorkflows(BasePage):
         self.value_in_table_format = "(//td[@class='module-case-list-column-checkbox']//following::td[@class='module-case-list-column'][1])[{}]"
         self.select_all_checkbox = (By.ID, "select-all-checkbox")
         self.case_names = (By.XPATH, "//td[contains(@class,'case-list-column')][3]")
-        self.multi_select_continue = (By.ID, "multi-select-continue-btn")
+        self.multi_select_continue = (By.XPATH, "(//button[contains(@class,'multi-select-continue-btn')])[1]")
         self.selected_case_names_on_forms = (By.XPATH, "//span[@class='caption webapp-markdown-output']")
         self.select_case_button = (By.ID, "select-case")
         self.checkbox = "(//td[@class='module-case-list-column' and text() = '{}'][1]//preceding::input[1])[1]"

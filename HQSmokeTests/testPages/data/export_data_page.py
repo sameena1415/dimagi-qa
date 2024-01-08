@@ -231,6 +231,7 @@ class ExportDataPage(BasePage):
         self.wait_for_element(self.add_export_button, 100)
         self.delete_bulk_exports()
         self.wait_and_sleep_to_click(self.add_export_button)
+        time.sleep(30)
         self.wait_for_element(self.app_type, 200)
         self.is_clickable(self.app_type)
         self.select_by_text(self.app_type, UserData.app_type)
@@ -255,6 +256,7 @@ class ExportDataPage(BasePage):
         self.wait_for_element(self.add_export_button, 100)
         self.delete_bulk_exports()
         self.wait_and_sleep_to_click(self.add_export_button)
+        time.sleep(30)
         self.wait_for_element(self.case_type, 200)
         # self.is_clickable(self.application)
         # self.select_by_text(self.application, UserData.village_application)
@@ -373,8 +375,8 @@ class ExportDataPage(BasePage):
     def excel_dashboard_integration_case(self):
         self.wait_and_sleep_to_click(self.export_excel_dash_int)
         self.wait_and_sleep_to_click(self.add_export_button)
-        time.sleep(10)
-        self.is_visible_and_displayed(self.model)
+        time.sleep(50)
+        self.is_visible_and_displayed(self.model, 200)
         self.wait_for_element(self.model, 100)
         self.select_by_value(self.model, UserData.model_type_case)
         try:
@@ -447,7 +449,7 @@ class ExportDataPage(BasePage):
         self.delete_bulk_exports()
         self.wait_and_sleep_to_click(self.add_export_button)
         time.sleep(30)
-        self.is_visible_and_displayed(self.model)
+        self.is_visible_and_displayed(self.model, 200)
         self.wait_for_element(self.model, 100)
         self.select_by_value(self.model, UserData.model_type_case)
         try:

@@ -150,8 +150,11 @@ output.json
 /HQSmokeTests/testCases/report.html
 /report.html
 HQSmokeTests/report.html
+HQSmokeTests/report_*
 HQSmokeTests/settings.cfg
 /HQSmokeTests/userInputs/test_data/reassign_cases_*
+/HQSmokeTests/userInputs/test_data/mobile_workers_*
+/HQSmokeTests/userInputs/test_data/import_to_parent_*
 
 
 #Ignoring compliled files of POCs
