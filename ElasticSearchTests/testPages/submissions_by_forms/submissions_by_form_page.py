@@ -408,7 +408,7 @@ class SubmissionsByFormPage(BasePage):
         list2_names = list()
         for item in list2:
             list2_names.append(item.text)
-        rev_list = sorted(list1_names, reverse=True)
+        rev_list = list(reversed(sorted_list))
         assert list2_names == rev_list, "List is not sorted"
         print("List is in descending order")
 

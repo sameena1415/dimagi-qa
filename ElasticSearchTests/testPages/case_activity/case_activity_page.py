@@ -76,7 +76,8 @@ class CaseActivityPage(BasePage):
         self.hide_filters_options = (By.XPATH, "//a[.='Hide Filter Options']")
         self.show_filters_options = (By.XPATH, "//a[.='Show Filter Options']")
         self.user_sort = (
-        By.XPATH, "(//text()[contains(.,'User')]//preceding-sibling::i[@class='icon-white fa dt-sort-icon'])[1]")
+            By.XPATH, "(//text()[contains(.,'User')]//preceding-sibling::i[@class='icon-white fa dt-sort-icon'])[1]")
+        self.user_sort_asc = (By.XPATH, "//th[contains(@aria-label,'Users')][contains(@class,'headerSortAsc')]//i")
         self.active_cases_column_list = (By.XPATH, "//table[@id='report_table_case_activity']//tbody//td[7]")
         self.total_cases_shared_column_list = (By.XPATH, "//table[@id='report_table_case_activity']//tbody//td[8]")
         self.column_name_headers = "//table[@id='report_table_case_activity']//thead//th/div/div[contains(.,'{}')]"
@@ -343,6 +344,8 @@ class CaseActivityPage(BasePage):
 
     def verify_sorted_list(self):
         self.select_by_value(self.page_list_dropdown, UserData.pagination[3])
+        self.scroll_to_element(self.user_sort)
+        self.click(self.user_sort)
         time.sleep(10)
         list1 = self.find_elements(self.user_names_column_list)
         list1_names = list()
@@ -350,15 +353,18 @@ class CaseActivityPage(BasePage):
             list1_names.append(item.text)
         sorted_list = sorted(list1_names)
         assert list1_names == sorted_list, "List is not sorted"
-        print("List is in ascending order")
-        self.wait_to_click(self.user_sort)
+        rev_list = list(reversed(sorted_list))
+        print("List is in ascending order", list1_names)
+        self.scroll_to_element(self.user_sort)
+        self.click(self.user_sort)
         time.sleep(15)
+        print("Reversed list: ", rev_list)
         list2 = self.find_elements(self.user_names_column_list)
         list2_names = list()
         for item in list2:
             list2_names.append(item.text)
-        rev_list = sorted(list1_names, reverse=True)
-        assert list2_names == rev_list, "List is not sorted"
+        print("New List: ", list2_names)
+        assert list2_names == rev_list, "List is not reversed"
         print("List is in descending order")
 
     def value_date_range_7_days(self):

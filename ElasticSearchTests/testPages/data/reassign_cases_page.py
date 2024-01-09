@@ -67,6 +67,7 @@ class ReassignCasesPage(BasePage):
         print("Assigned Username:", assigned_username)
         self.move_to_element_and_click((By.XPATH, self.reassigned_user_from_list.format(UserData.assign_case_user)))
         self.wait_to_click(self.submit)
+        time.sleep(20)
         self.is_visible_and_displayed(self.out_of_range)
         print("Sleeping sometime for the case to get updated")
         time.sleep(10)

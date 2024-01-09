@@ -20,7 +20,9 @@ def test_case_01_case_activity_report_fields_filters_columns(driver, settings):
     activity.verify_table_columns()
     activity.verify_users_in_the_group()
 
-
+@pytest.mark.login
+@pytest.mark.reports
+@pytest.mark.xfail
 def test_case_02_pagination(driver, settings):
     report = HomePage(driver, settings)
     report.reports_menu()

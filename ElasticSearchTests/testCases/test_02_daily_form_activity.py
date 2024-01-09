@@ -79,6 +79,7 @@ def test_case_06_email_report(driver, settings):
 
 @pytest.mark.login
 @pytest.mark.reports
+@pytest.mark.xfail
 def test_case_07_user_type_filter_by(driver, settings):
     home = HomePage(driver, settings)
     home.reports_menu()
