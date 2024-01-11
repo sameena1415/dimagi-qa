@@ -45,7 +45,7 @@ class ReassignCasesPage(BasePage):
         self.last_modified_ascending = (By.XPATH, "(//text()[contains(.,'Last Modified')]//preceding-sibling::i[@class='icon-white fa dt-sort-icon'])[1]//parent::div//parent::th[@aria-sort='ascending']")
         self.last_modified_descending = (By.XPATH, "(//text()[contains(.,'Last Modified')]//preceding-sibling::i[@class='icon-white fa dt-sort-icon'])[1]//parent::div//parent::th[@aria-sort='descending']")
 
-    def get_cases(self):
+    def get_cases(self, text):
         self.wait_to_click(self.reassign_cases_menu)
         self.wait_for_element(self.case_owner_field)
         self.wait_to_click(self.remove_project_data)
@@ -53,10 +53,13 @@ class ReassignCasesPage(BasePage):
         self.wait_to_click((By.XPATH, self.user_from_list.format(UserData.user_group_shared)))
         time.sleep(2)
         ActionChains(self.driver).send_keys(Keys.TAB).perform()
+        self.send_keys(self.search_query, text)
         self.wait_to_click(self.apply)
+        print("Sleeping for the list to load")
+        time.sleep(20)
 
-    def reassign_case(self):
-        self.get_cases()
+    def reassign_case(self, text):
+        self.get_cases(text)
         copy = CopyCasesPage(self.driver, self.settings)
         copy.sort_for_latest_on_top()
         time.sleep(5)

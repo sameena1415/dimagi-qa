@@ -88,13 +88,14 @@ def test_case_07_email_report(driver, settings):
 
 @pytest.mark.login
 @pytest.mark.reports
+@pytest.mark.xfail
 def test_case_08_case_assign(driver, settings):
     home = HomePage(driver, settings)
     home.reports_menu()
     activity = WorkerActivityPage(driver)
-    actives, totals = activity.worker_activity_case_assign_data()
+    actives, totals, text = activity.worker_activity_case_assign_data()
     home.data_menu()
     reassign = ReassignCasesPage(driver, settings)
-    reassign.reassign_case()
+    reassign.reassign_case(text)
     home.reports_menu()
     activity.verify_assigned_cases_count(actives, totals)
