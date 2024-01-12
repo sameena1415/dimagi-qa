@@ -663,6 +663,8 @@ class DailyFormActivityPage(BasePage):
         self.wait_to_click(self.export_to_excel)
         self.wait_for_element(self.export_success)
         print("Export to excel successful")
+        print("Sleeping for some time for the email to be sent")
+        time.sleep(30)
         return list
 
     def compare_dfa_with_email(self, link, web_data):
@@ -719,6 +721,8 @@ class DailyFormActivityPage(BasePage):
         self.email_report_form_not_save(subject)
         self.email_report_form(subject)
         print("Export to excel successful")
+        print("Sleeping for some time for the email to be sent")
+        time.sleep(30)
         return list, subject
 
     def email_report_form_not_save(self, subject):

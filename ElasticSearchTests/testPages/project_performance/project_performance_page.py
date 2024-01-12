@@ -761,6 +761,8 @@ class ProjectPerformancePage(BasePage):
         list_inactive = list(map(lambda x: x.replace('    ', '--'), list_inactive))
         list_high = list(map(lambda x: x.replace('    ', '--'), list_high))
         web_data=[list_low+ list_inactive+ list_high]
+        print("Sleeping for some time for the email to be sent")
+        time.sleep(30)
         return web_data, subject
 
     def email_report_form_not_save(self, subject):

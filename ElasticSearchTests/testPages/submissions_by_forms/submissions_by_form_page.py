@@ -730,7 +730,7 @@ class SubmissionsByFormPage(BasePage):
         ext_list = []
         ext_list.extend(new_data.values.tolist())
         list = []
-        for i in range(len(ext_list) - 1)[:]:
+        for i in range(len(ext_list))[:-1]:
             list += ext_list[i]
         print("List New: ", list)
         print("Old data rows: ", len(web_data), "New data rows: ", len(list))
