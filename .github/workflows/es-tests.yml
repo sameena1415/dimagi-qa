@@ -8,8 +8,8 @@ on:
     branches: [ master ]
   pull_request:
     branches: [ master ]
-  repository_dispatch:
-    types: [ deploy_success ]
+  schedule:
+    - cron: '0 0 * * 0'
   workflow_dispatch:
     inputs:
       environment:
@@ -25,12 +25,8 @@ jobs:
   set_matrix:
     runs-on: ubuntu-latest
     outputs:
-      matrix: ${{ steps.set-matrix-deploy.outputs.matrix || steps.set-matrix-manual.outputs.matrix || steps.set-matrix-default.outputs.matrix }}
+      matrix: ${{ steps.set-matrix-manual.outputs.matrix || steps.set-matrix-default.outputs.matrix }}
     steps:
-      - id: set-matrix-deploy
-        if: ${{ github.event_name == 'repository_dispatch' }}
-        run: |
-          echo "::set-output name=matrix::{\"environment\": [\"${{ github.event.client_payload.environment }}\"]}"
       - id: set-matrix-manual
         if: ${{ github.event_name == 'workflow_dispatch' }}
         run: |
