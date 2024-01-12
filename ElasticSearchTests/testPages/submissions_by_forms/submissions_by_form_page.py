@@ -718,6 +718,8 @@ class SubmissionsByFormPage(BasePage):
         print(list_col)
         self.wait_to_click(self.export_to_excel)
         print("Export to excel successful")
+        print("sleeping for sometime for the download to complete")
+        time.sleep(15)
         return list_col
 
     def compare_sbf_with_email(self, web_data):
