@@ -1,3 +1,5 @@
+import pytest
+
 from Features.CaseSearch.constants import *
 from Features.CaseSearch.test_pages.casesearch_page import CaseSearchWorkflows
 from USH_Apps.CO_BHA.test_pages.bha_app_pages import BhaWorkflows
@@ -5,6 +7,9 @@ from USH_Apps.CO_BHA.user_inputs.bha_user_inputs import BhaUserInput
 from common_utilities.selenium.webapps import WebApps
 import names
 
+value = dict()
+value["first_name"]=None
+value["last_name"] = None
 
 def test_case_01_admit_case_1(driver):
     """use case: Admit the client - case doesn't exist"""
@@ -16,7 +21,7 @@ def test_case_01_admit_case_1(driver):
     webapps.open_app(BhaUserInput.bha_app_name)
     webapps.open_menu(BhaUserInput.search_and_admit_client)
     app.check_search_properties_present([BhaUserInput.client_id, BhaUserInput.ssn, BhaUserInput.medicaid_id])
-    global first_name, last_name
+
     first_name = casesearch.search_against_property(search_property=BhaUserInput.first_name_required,
                                                     input_value=names.get_first_name(),
                                                     property_type=TEXT_INPUT)
@@ -44,9 +49,13 @@ def test_case_01_admit_case_1(driver):
                                   search_value=dob)
     app.select_clinic(BhaUserInput.aurora_therapy_center)
     webapps.submit_the_form()
-
+    value["first_name"] = first_name
+    value["last_name"] = last_name
+    return value
 
 def test_case_02_admit_case_2(driver):
+    if value["first_name"] == None and value["last_name"] == None:
+        pytest.skip("Skipping as name is null")
     """use case: Admit a client - case does exist -> Request pending admission"""
     webapps = WebApps(driver)
     casesearch = CaseSearchWorkflows(driver)
@@ -56,10 +65,10 @@ def test_case_02_admit_case_2(driver):
     webapps.open_app(BhaUserInput.bha_app_name)
     webapps.open_menu(BhaUserInput.search_and_admit_client)
     typo_first_name = casesearch.search_against_property(search_property=BhaUserInput.first_name_required,
-                                                         input_value=app.replace_one_char(first_name),
+                                                         input_value=app.replace_one_char(value["first_name"]),
                                                          property_type=TEXT_INPUT)
     typo_last_name = casesearch.search_against_property(search_property=BhaUserInput.last_name_required,
-                                                        input_value=app.replace_one_char(last_name),
+                                                        input_value=app.replace_one_char(value["last_name"]),
                                                         property_type=TEXT_INPUT)
     casesearch.search_against_property(search_property=BhaUserInput.dob_required,
                                        input_value=BhaUserInput.date_1950_05_01,
@@ -93,6 +102,8 @@ def test_case_02_admit_case_2(driver):
 
 
 def test_case_03_lock_in_1_1(driver):
+    if value["first_name"] == None and value["last_name"] == None:
+        pytest.skip("Skipping as name is null")
     """use case: no existing lock status for clinic user"""
     webapps = WebApps(driver)
     casesearch = CaseSearchWorkflows(driver)
@@ -102,16 +113,16 @@ def test_case_03_lock_in_1_1(driver):
     webapps.open_app(BhaUserInput.bha_app_name)
     webapps.open_menu(BhaUserInput.search_my_clients)
     casesearch.search_against_property(search_property=BhaUserInput.first_name,
-                                                    input_value=first_name,
+                                                    input_value=value["first_name"],
                                                     property_type=TEXT_INPUT)
     casesearch.search_against_property(search_property=BhaUserInput.last_name,
-                                                   input_value=last_name,
+                                                   input_value=value["last_name"],
                                                    property_type=TEXT_INPUT)
     casesearch.search_against_property(search_property=BhaUserInput.date_of_birth,
                                              input_value=BhaUserInput.date_1950_05_01,
                                              property_type=TEXT_INPUT)
     webapps.search_button_on_case_search_page()
-    webapps.select_case(first_name)
+    webapps.select_case(value["first_name"])
     webapps.open_form(BhaUserInput.update_lock_status_request)
     app.select_radio(BhaUserInput.lock_in)
     app.select_clinic(BhaUserInput.aurora_therapy_center)
@@ -122,6 +133,8 @@ def test_case_03_lock_in_1_1(driver):
 
 
 def test_case_04_lock_in_1_2(driver):
+    if value["first_name"] == None and value["last_name"] == None:
+        pytest.skip("Skipping as name is null")
     """use case: no existing lock status for state user"""
     webapps = WebApps(driver)
     casesearch = CaseSearchWorkflows(driver)
@@ -130,7 +143,7 @@ def test_case_04_lock_in_1_2(driver):
     webapps.login_as(BhaUserInput.state_level_user)
     webapps.open_app(BhaUserInput.bha_app_name)
     webapps.open_menu(BhaUserInput.pending_requests)
-    full_name = first_name + " " + last_name
+    full_name = value["first_name"] + " " + value["last_name"]
     casesearch.search_against_property(search_property=BhaUserInput.case_name,
                                                    input_value=full_name,
                                                    property_type=TEXT_INPUT)
@@ -145,6 +158,8 @@ def test_case_04_lock_in_1_2(driver):
 
 
 def test_case_05_admit_case_7(driver):
+    if value["first_name"] == None and value["last_name"] == None:
+        pytest.skip("Skipping as name is null")
     """use case: match on inactive client"""
     webapps = WebApps(driver)
     casesearch = CaseSearchWorkflows(driver)

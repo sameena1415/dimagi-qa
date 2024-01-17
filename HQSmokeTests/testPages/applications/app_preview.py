@@ -66,7 +66,8 @@ class AppPreviewPage(BasePage):
         self.wait_to_click(self.followup_form)
         self.wait_to_click(self.first_case_on_case_list)
         time.sleep(2)
-        self.wait_to_click(self.continue_button)
+        if self.is_present(self.continue_button):
+            self.wait_to_click(self.continue_button)
         time.sleep(2)
         if self.is_displayed(self.next_button):
             self.wait_to_click(self.next_button)
