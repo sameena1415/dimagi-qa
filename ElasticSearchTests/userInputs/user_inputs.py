@@ -25,6 +25,7 @@ class UserData:
     automation_group_users = ["appiumtest", "formplayer_user"]
     appiumtest_owner_id = "appiumtest@qa-automation.commcarehq.org"
     appiumtest_owner_id_prod = "appiumtest@qa-automation-prod.commcarehq.org"
+    web_user = "automation.user.commcarehq@gmail.com"
     default_mw_role = "Mobile Worker Default"
     user_group = "automation_user"
     user_group_shared = "automation_user [case sharing]"
@@ -45,6 +46,9 @@ class UserData:
 
     fct_column_names = ["User", "Average", "Std. Dev.", "Shortest", "Longest", "No. of Forms"]
     fcst_column_names = ["User", "Completion Time", "Submission Time", "Form Name", "Difference"]
+
+    sh_column_group_names = ["View Form", "Username", "Completion Time", "Form"]
+
     pagination = ['10', '25', '50', '100']
     # Phone Number
     area_code = "91"
