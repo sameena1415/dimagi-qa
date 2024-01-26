@@ -110,7 +110,10 @@ class SubmitHistoryPage(BasePage):
         self.archive_this_form = (By.XPATH, "//button[contains(.,'Archive this form')]")
         self.restore_this_form = (By.XPATH, "//button[contains(.,'Restore this form')]")
         self.delete_this_form = (By.XPATH, "//button[contains(.,'Delete this form')]")
-        self.delete_confirm_button = (By.XPATH, "//button[@id='delete-form-btn']")
+        self.delete_confirm_button = (By.XPATH, "//div[@class='modal-footer']/*[contains(@class,'btn btn-danger')]")
+        self.delete_case_confirm = (By.XPATH, "//*[@data-target='#delete_case_confirmation']")
+        self.case_text = (By.XPATH, "//p[contains(.,'delete this form, type')]/strong")
+        self.textarea_delete_popup = (By.XPATH, "//p[contains(.,'delete this form, type')][./strong]//following-sibling::textarea")
         self.archive_success_msg = (By.XPATH, "//div[contains(@class,'alert-margin-top')][contains(.,'Form was successfully archived')]")
         self.restore_success_msg = (
         By.XPATH, "//div[contains(@class,'alert-margin-top')][contains(.,'Form was successfully restored')]")
@@ -1248,7 +1251,11 @@ class SubmitHistoryPage(BasePage):
         self.send_keys(self.users_field, UserData.web_user)
         self.wait_to_click((By.XPATH, self.users_list_item.format(UserData.web_user)))
         time.sleep(1)
-        self.select_by_text(self.application_dropdown, UserData.reassign_cases_application)
+        self.select_application_and_forms(UserData.reassign_cases_application,
+                                          list(UserData.reasign_modules_forms.keys())[1],
+                                          UserData.reasign_modules_forms[
+                                              list(UserData.reasign_modules_forms.keys())[1]][2])
+
         self.select_by_text(self.filter_dates_by, UserData.filter_dates_by[0])
         self.wait_to_click(self.date_input)
         self.wait_to_click((By.XPATH, self.date_range_type.format(UserData.date_range[0])))
@@ -1289,6 +1296,14 @@ class SubmitHistoryPage(BasePage):
         assert self.is_present(self.delete_this_form)
         self.wait_to_click(self.delete_this_form)
         self.wait_to_click(self.delete_confirm_button)
+        time.sleep(2)
+        if self.is_present(self.delete_case_confirm):
+            self.wait_to_click(self.delete_case_confirm)
+            self.wait_for_element(self.textarea_delete_popup)
+            text = self.get_text(self.case_text)
+            text = str(text).strip()
+            self.send_keys(self.textarea_delete_popup, text)
+            self.wait_to_click(self.delete_confirm_button)
         time.sleep(10)
         self.wait_for_element(self.apply_id, 100)
         assert self.SUBMIT_HISTORY_TITLE in self.driver.title, "This is not the Submit History page."
