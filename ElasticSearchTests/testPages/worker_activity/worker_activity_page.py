@@ -673,7 +673,7 @@ class WorkerActivityPage(BasePage):
             elif self.is_date(str(web_data[i])) == self.is_date(str(list[i])):
                 assert True, "Comparision failed for " + list[i] + " and " + web_data[i]
             elif "%" in str(web_data[i]):
-                assert str(round(int(list[i]))) == str(web_data[i]).replace("%",""), "Comparision failed for " + list[i] + " and " + web_data[i]
+                assert str(round(float(list[i]))) == str(web_data[i]).replace("%",""), "Comparision failed for " + list[i] + " and " + web_data[i]
             else:
                 assert html.unescape(str(list[i])) == str(web_data[i]), "Comparision failed for " + list[i] + " and " + \
                                                                         web_data[i]
