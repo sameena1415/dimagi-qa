@@ -35,7 +35,7 @@ class WebUsersPage(BasePage):
         self.verify_user = (By.XPATH,
                             "//td[.//text()[contains(.,'" + UserData.yahoo_user_name + "')]]/following-sibling::td[.//text()[contains(.,'Delivered')]]")
         self.remove_user_invite = (By.XPATH,
-                                   "//td[.//text()[contains(.,'" + UserData.yahoo_user_name + "')]]/following-sibling::td//i[@class='fa fa-trash']")
+                                   "//td[.//text()[contains(.,'" + UserData.yahoo_user_name + "')]]/following-sibling::td//i[contains(@class,'fa-trash')]")
         self.login_username = (By.ID, "login-username")
         self.next_button = (By.ID, "login-signin")
         self.login_password = (By.NAME, "password")
