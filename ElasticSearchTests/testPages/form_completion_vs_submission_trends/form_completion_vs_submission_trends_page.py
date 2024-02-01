@@ -6,7 +6,7 @@ import dateutil.relativedelta
 import pandas as pd
 
 from datetime import datetime, timedelta, date
-from dateutil.parser import parse
+from dateutil.parser import parse, parser
 from dateutil.relativedelta import relativedelta
 from selenium.webdriver import ActionChains
 
@@ -22,7 +22,8 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as ec
-from natsort import natsorted
+from natsort import natsorted, natsort_key
+
 """"Contains test page elements and functions related to the Reports module"""
 
 
@@ -437,7 +438,13 @@ class FormCompletionVsSubmissionTrends(BasePage):
         for item in list1:
             list1_names.append(item.text)
         if "Difference" in col_name:
+            list1_names = [parser().parse(x).time() for x in list1_names]
             sorted_list = natsorted(list1_names)
+        elif "Time" in col_name:
+            list1_names = [sub.replace(' IST', '') for sub in list1_names]
+            print(list1_names)
+            sorted_list = sorted(list1_names,
+                                 key=lambda list1_names: datetime.strptime(list1_names, "%b %d, %Y %H:%M"))
         else:
             sorted_list = sorted(list1_names)
         print(list1_names)
@@ -462,9 +469,17 @@ class FormCompletionVsSubmissionTrends(BasePage):
         for item in list2:
             list2_names.append(item.text)
         if "Difference" in col_name:
+            list2_names = [parser().parse(x).time() for x in list2_names]
             rev_list = natsorted(list1_names, reverse=True)
+        elif "Time" in col_name:
+            list1_names = [sub.replace(' IST', '') for sub in list1_names]
+            list2_names = [sub.replace(' IST', '') for sub in list2_names]
+            print(list1_names)
+            rev_list = sorted(list1_names, reverse=True,
+                                 key=lambda list1_names: datetime.strptime(list1_names, "%b %d, %Y %H:%M"))
         else:
             rev_list = sorted(list1_names, reverse=True)
+
         print(list2_names)
         print(rev_list)
         assert list2_names == rev_list, "List is not sorted"

@@ -43,6 +43,8 @@ class SubmitHistoryPage(BasePage):
         self.homepage = (By.XPATH, ".//a[@href='/homepage/']")
         self.date_range_error = (By.XPATH, "//td[contains(.,'You are limited to a span of 90 days,')]")
         self.report_loading = (By.XPATH, "//div[@id='report_table_submit_history_processing'][@style='display: block;']")
+        self.report_loading_done = (
+        By.XPATH, "//div[@id='report_table_submit_history_processing'][@style='display: none;']")
 
         self.form_activity_results = (By.XPATH, "//table[@id='report_table_submit_history']/tbody/tr")
         self.form_activity_results_cells = (By.XPATH, "//table[@id='report_table_submit_history']/tbody/tr/td")
@@ -77,7 +79,7 @@ class SubmitHistoryPage(BasePage):
         self.column_group_names = (By.XPATH, "(//thead)[1]/tr/th/div")
         self.user_names_column_list = (By.XPATH, "//table[@id='report_table_submit_history']//tbody//td[1]")
         self.last_submission_column_list = (By.XPATH, "//table[@id='report_table_submit_history']//tbody//td[4]")
-        self.result_table = (By.XPATH, "(//div[@id='report-content']//table//tbody//td[1])[1]")
+        self.result_table = (By.XPATH, "(//div[@id='report-content']//table//tbody//td[not(contains(@class,'dataTables_empty'))])[1]")
         self.results_rows = (By.XPATH, "//tbody/tr/td[2]")
         self.result_rows_names = "//tbody/tr/td[2][contains(.,'{}')]"
         self.hide_filters_options = (By.XPATH, "//a[.='Hide Filter Options']")
@@ -491,7 +493,13 @@ class SubmitHistoryPage(BasePage):
         list1_names = list()
         for item in list1:
             list1_names.append(item.text)
-        sorted_list = sorted(list1_names)
+        if "Completion" in col_name:
+            list1_names = [sub.replace(' IST', '') for sub in list1_names]
+            print(list1_names)
+            sorted_list = sorted(list1_names,
+                                 key=lambda list1_names: datetime.strptime(list1_names, "%b %d, %Y %H:%M:%S"))
+        else:
+            sorted_list = sorted(list1_names)
         print(list1_names)
         print(sorted_list)
         assert list1_names == sorted_list, "List is not sorted"
@@ -509,13 +517,18 @@ class SubmitHistoryPage(BasePage):
         list2_names = list()
         for item in list2:
             list2_names.append(item.text)
-        rev_list = sorted(list1_names, reverse=True)
+        if "Completion" in col_name:
+            list1_names = [sub.replace(' IST', '') for sub in list1_names]
+            list2_names = [sub.replace(' IST', '') for sub in list2_names]
+            print(list1_names)
+            rev_list = sorted(list1_names, reverse=True,
+                                 key=lambda list1_names: datetime.strptime(list1_names, "%b %d, %Y %H:%M:%S"))
+        else:
+            rev_list = sorted(list1_names, reverse=True)
         print(list2_names)
         print(rev_list)
         assert list2_names == rev_list, "List is not sorted"
         print("List is in descending order")
-
-
 
     def verify_pagination_dropdown(self):
         info = self.get_text(self.table_info)
