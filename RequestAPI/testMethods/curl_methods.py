@@ -4,7 +4,7 @@ from common_utilities.path_settings import PathSettings
 
 class CurlMethods(Base):
     def __init__(self, settings):
-        self.filepath = PathSettings.ROOT + "/Payloads/"
+        self.filepath = PathSettings.ROOT + "/RequestAPI/Payloads/"
         self.password = settings["password"]
         self.api_key = settings['api_key']
         self.headers = {'Content-Type': 'application/xml',
