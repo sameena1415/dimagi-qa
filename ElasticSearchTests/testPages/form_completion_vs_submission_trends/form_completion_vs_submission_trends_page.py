@@ -6,7 +6,7 @@ import dateutil.relativedelta
 import pandas as pd
 
 from datetime import datetime, timedelta, date
-from dateutil.parser import parse
+from dateutil.parser import parse, parser
 from dateutil.relativedelta import relativedelta
 from selenium.webdriver import ActionChains
 
@@ -22,7 +22,8 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as ec
-from natsort import natsorted
+from natsort import natsorted, natsort_key
+
 """"Contains test page elements and functions related to the Reports module"""
 
 
@@ -201,7 +202,7 @@ class FormCompletionVsSubmissionTrends(BasePage):
 
     def verify_form_comp_sub_trends_page_fields(self):
         self.wait_to_click(self.form_comp_sub_trends_rep)
-        self.wait_for_element(self.apply_id)
+        self.wait_for_element(self.apply_id, 100)
         assert self.form_comp_sub_trends_TITLE in self.driver.title, "This is not the Form Completion vs. Submission Trends page."
         assert self.is_present(self.users_field), "User field is not present"
         assert self.is_present(self.application_dropdown), "Application dropdown is not present"
@@ -221,7 +222,7 @@ class FormCompletionVsSubmissionTrends(BasePage):
 
     def verify_table_columns(self):
         self.wait_to_click(self.form_comp_sub_trends_rep)
-        self.wait_for_element(self.apply_id)
+        self.wait_for_element(self.apply_id, 100)
         assert self.form_comp_sub_trends_TITLE in self.driver.title, "This is not the Form Completion vs. Submission Trends page."
         self.verify_user_lookup_table()
         self.remove_default_users()
@@ -333,7 +334,7 @@ class FormCompletionVsSubmissionTrends(BasePage):
 
     def form_comp_sub_trends_pagination_list(self):
         self.wait_to_click(self.form_comp_sub_trends_rep)
-        self.wait_for_element(self.apply_id)
+        self.wait_for_element(self.apply_id, 100)
         assert self.form_comp_sub_trends_TITLE in self.driver.title, "This is not the Worker Activity page."
         self.select_application_and_forms(UserData.reassign_cases_application,
                                           list(UserData.reasign_modules_forms.keys())[1],
@@ -437,7 +438,13 @@ class FormCompletionVsSubmissionTrends(BasePage):
         for item in list1:
             list1_names.append(item.text)
         if "Difference" in col_name:
+            list1_names = [parser().parse(x).time() for x in list1_names]
             sorted_list = natsorted(list1_names)
+        elif "Time" in col_name:
+            list1_names = [sub.replace(' IST', '') for sub in list1_names]
+            print(list1_names)
+            sorted_list = sorted(list1_names,
+                                 key=lambda list1_names: datetime.strptime(list1_names, "%b %d, %Y %H:%M"))
         else:
             sorted_list = sorted(list1_names)
         print(list1_names)
@@ -462,9 +469,17 @@ class FormCompletionVsSubmissionTrends(BasePage):
         for item in list2:
             list2_names.append(item.text)
         if "Difference" in col_name:
+            list2_names = [parser().parse(x).time() for x in list2_names]
             rev_list = natsorted(list1_names, reverse=True)
+        elif "Time" in col_name:
+            list1_names = [sub.replace(' IST', '') for sub in list1_names]
+            list2_names = [sub.replace(' IST', '') for sub in list2_names]
+            print(list1_names)
+            rev_list = sorted(list1_names, reverse=True,
+                                 key=lambda list1_names: datetime.strptime(list1_names, "%b %d, %Y %H:%M"))
         else:
             rev_list = sorted(list1_names, reverse=True)
+
         print(list2_names)
         print(rev_list)
         assert list2_names == rev_list, "List is not sorted"
@@ -495,7 +510,7 @@ class FormCompletionVsSubmissionTrends(BasePage):
     def form_comp_sub_trends_search(self, date_range=UserData.date_range[0]):
         date_string = start_date = end_date = ''
         self.wait_to_click(self.form_comp_sub_trends_rep)
-        self.wait_for_element(self.apply_id)
+        self.wait_for_element(self.apply_id, 100)
         assert self.form_comp_sub_trends_TITLE in self.driver.title, "This is not the Form Completion vs. Submission Trends page."
         
         self.wait_to_click(self.date_input)
@@ -535,7 +550,7 @@ class FormCompletionVsSubmissionTrends(BasePage):
 
     def form_comp_sub_trends_search_custom_date(self):
         self.wait_to_click(self.form_comp_sub_trends_rep)
-        self.wait_for_element(self.apply_id)
+        self.wait_for_element(self.apply_id, 100)
         assert self.form_comp_sub_trends_TITLE in self.driver.title, "This is not the Form Completion vs. Submission Trends page."
         
         date_string, start_date, end_date = self.get_custom_dates_past(0, 0, 5)
@@ -553,7 +568,7 @@ class FormCompletionVsSubmissionTrends(BasePage):
         assert self.is_present_and_displayed(self.date_range_error), "Date Range Error not displayed"
         print("Date Range error correctly displayed")
         self.wait_to_click(self.form_comp_sub_trends_rep)
-        self.wait_for_element(self.apply_id)
+        self.wait_for_element(self.apply_id, 100)
         assert self.form_comp_sub_trends_TITLE in self.driver.title, "This is not the Form Completion vs. Submission Trends page."
         self.wait_to_click(self.date_input)
         self.wait_to_click((By.XPATH, self.date_range_type.format(UserData.date_range[3])))
@@ -613,7 +628,7 @@ class FormCompletionVsSubmissionTrends(BasePage):
 
     def form_comp_sub_trends_save_report(self):
         self.wait_to_click(self.form_comp_sub_trends_rep)
-        self.wait_for_element(self.apply_id)
+        self.wait_for_element(self.apply_id, 100)
         assert self.form_comp_sub_trends_TITLE in self.driver.title, "This is not the Worker Activity page."
         self.verify_user_lookup_table()
         self.remove_default_users()
@@ -642,7 +657,7 @@ class FormCompletionVsSubmissionTrends(BasePage):
         self.verify_favorite_empty(report_name)
         report = self.save_report(report_name)
         self.wait_to_click(self.form_comp_sub_trends_rep)
-        self.wait_for_element(self.apply_id)
+        self.wait_for_element(self.apply_id, 100)
         self.verify_favorite_created(report)
         time.sleep(10)
         self.verify_users_in_the_group()
@@ -679,7 +694,7 @@ class FormCompletionVsSubmissionTrends(BasePage):
 
     def save_report_error(self):
         self.wait_to_click(self.form_comp_sub_trends_rep)
-        self.wait_for_element(self.apply_id)
+        self.wait_for_element(self.apply_id, 100)
         assert self.form_comp_sub_trends_TITLE in self.driver.title, "This is not the Worker Activity page."
         self.verify_user_lookup_table()
         self.remove_default_users()
@@ -791,7 +806,7 @@ class FormCompletionVsSubmissionTrends(BasePage):
 
     def export_form_comp_sub_trends_to_excel(self):
         self.wait_to_click(self.form_comp_sub_trends_rep)
-        self.wait_for_element(self.apply_id)
+        self.wait_for_element(self.apply_id, 100)
         assert self.form_comp_sub_trends_TITLE in self.driver.title, "This is not the Worker Activity page."
         self.verify_user_lookup_table()
         self.remove_default_users()
@@ -858,7 +873,7 @@ class FormCompletionVsSubmissionTrends(BasePage):
 
     def export_form_comp_sub_trends_email(self):
         self.wait_to_click(self.form_comp_sub_trends_rep)
-        self.wait_for_element(self.apply_id)
+        self.wait_for_element(self.apply_id, 100)
         assert self.form_comp_sub_trends_TITLE in self.driver.title, "This is not the Form Completion vs. Submission Trends page."
         self.verify_user_lookup_table()
         self.remove_default_users()
@@ -928,13 +943,13 @@ class FormCompletionVsSubmissionTrends(BasePage):
 
     def form_comp_sub_trends_users_active(self):
         self.wait_to_click(self.form_comp_sub_trends_rep)
-        self.wait_for_element(self.apply_id)
+        self.wait_for_element(self.apply_id, 100)
         assert self.form_comp_sub_trends_TITLE in self.driver.title, "This is not the Worker Activity page."
         self.wait_to_click(self.remove_active_worker)
         assert not self.is_present(self.remove_active_worker), "Active Mobile Worker is still not removed"
         print("Active Mobile Worker is removed successfully")
         self.driver.refresh()
-        self.wait_for_element(self.apply_id)
+        self.wait_for_element(self.apply_id, 100)
         self.verify_user_lookup_table()
         self.remove_default_users()
         self.send_keys(self.users_field, UserData.app_login)
@@ -966,13 +981,13 @@ class FormCompletionVsSubmissionTrends(BasePage):
 
     def form_comp_sub_trends_users_deactivated(self):
         self.wait_to_click(self.form_comp_sub_trends_rep)
-        self.wait_for_element(self.apply_id)
+        self.wait_for_element(self.apply_id, 100)
         assert self.form_comp_sub_trends_TITLE in self.driver.title, "This is not the Worker Activity page."
         self.wait_to_click(self.remove_deactive_worker)
         assert not self.is_present(self.remove_deactive_worker), "Deactivated Mobile Worker is still not removed"
         print("Deactivated Mobile Worker is removed successfully")
         self.driver.refresh()
-        self.wait_for_element(self.apply_id)
+        self.wait_for_element(self.apply_id, 100)
         self.verify_user_lookup_table()
         self.remove_default_users()
         self.send_keys(self.users_field, UserData.mobile_testuser)
@@ -1000,7 +1015,7 @@ class FormCompletionVsSubmissionTrends(BasePage):
         print("Sleeping for some time for the cases to be assigned")
         time.sleep(60)
         self.wait_to_click(self.form_comp_sub_trends_rep)
-        self.wait_for_element(self.apply_id)
+        self.wait_for_element(self.apply_id, 100)
         assert self.form_comp_sub_trends_TITLE in self.driver.title, "This is not the Worker Activity page."
         self.send_keys(self.users_field, UserData.user_group)
         self.wait_to_click((By.XPATH, self.user_from_list.format(UserData.user_group)))
@@ -1035,7 +1050,7 @@ class FormCompletionVsSubmissionTrends(BasePage):
 
     def filter_dates_and_verify(self):
         self.wait_to_click(self.form_comp_sub_trends_rep)
-        self.wait_for_element(self.apply_id)
+        self.wait_for_element(self.apply_id, 100)
         assert self.form_comp_sub_trends_TITLE in self.driver.title, "This is not the Worker Activity page."
         self.verify_user_lookup_table()
         self.remove_default_users()
@@ -1100,9 +1115,9 @@ class FormCompletionVsSubmissionTrends(BasePage):
 
     def advanced_options(self):
         self.wait_to_click(self.form_comp_sub_trends_rep)
-        self.wait_for_element(self.apply_id)
+        self.wait_for_element(self.apply_id, 100)
         assert self.form_comp_sub_trends_TITLE in self.driver.title, "This is not the Worker Activity page."
-        self.wait_for_element(self.apply_id)
+        self.wait_for_element(self.apply_id, 100)
         self.verify_user_lookup_table()
         self.remove_default_users()
         self.send_keys(self.users_field, UserData.daily_form_groups[0])
@@ -1205,7 +1220,7 @@ class FormCompletionVsSubmissionTrends(BasePage):
 
     def form_column_verification(self, app, mod=None, form=None):
         self.wait_to_click(self.form_comp_sub_trends_rep)
-        self.wait_for_element(self.apply_id)
+        self.wait_for_element(self.apply_id, 100)
         assert self.form_comp_sub_trends_TITLE in self.driver.title, "This is not the Worker Activity page."
         self.verify_user_lookup_table()
         self.remove_default_users()
@@ -1280,7 +1295,7 @@ class FormCompletionVsSubmissionTrends(BasePage):
 
     def no_form_selected(self):
         self.wait_to_click(self.form_comp_sub_trends_rep)
-        self.wait_for_element(self.apply_id)
+        self.wait_for_element(self.apply_id, 100)
         assert self.form_comp_sub_trends_TITLE in self.driver.title, "This is not the Worker Activity page."
         self.verify_user_lookup_table()
         self.remove_default_users()

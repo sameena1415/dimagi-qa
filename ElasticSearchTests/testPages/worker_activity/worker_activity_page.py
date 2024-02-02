@@ -154,7 +154,7 @@ class WorkerActivityPage(BasePage):
 
     def worker_activity_report_no_case_type(self):
         self.wait_to_click(self.worker_activity_rep)
-        self.wait_for_element(self.apply_id)
+        self.wait_for_element(self.apply_id, 100)
         assert self.WORKER_ACTIVITY_TITLE in self.driver.title, "This is not the Worker Activity page."
         self.send_keys(self.users_field, UserData.user_group)
         self.wait_to_click((By.XPATH, self.user_from_list.format(UserData.user_group)))
@@ -190,7 +190,7 @@ class WorkerActivityPage(BasePage):
 
     def worker_activity_report_group_case_type(self):
         self.wait_to_click(self.worker_activity_rep)
-        self.wait_for_element(self.apply_id)
+        self.wait_for_element(self.apply_id, 100)
         assert self.WORKER_ACTIVITY_TITLE in self.driver.title, "This is not the Worker Activity page."
         self.send_keys(self.users_field, UserData.user_group)
         self.wait_to_click((By.XPATH, self.user_from_list.format(UserData.user_group)))
@@ -236,7 +236,7 @@ class WorkerActivityPage(BasePage):
 
     def worker_activity_pagination_list(self):
         self.wait_to_click(self.worker_activity_rep)
-        self.wait_for_element(self.apply_id)
+        self.wait_for_element(self.apply_id, 100)
         assert self.WORKER_ACTIVITY_TITLE in self.driver.title, "This is not the Worker Activity page."
         self.select_by_text(self.view_by_dropdown, UserData.view_by[0])
         self.wait_to_click(self.date_input)
@@ -355,7 +355,7 @@ class WorkerActivityPage(BasePage):
     def worker_activity_search(self, date_range=UserData.date_range[0]):
         date_string = start_date = end_date = ''
         self.wait_to_click(self.worker_activity_rep)
-        self.wait_for_element(self.apply_id)
+        self.wait_for_element(self.apply_id, 100)
         assert self.WORKER_ACTIVITY_TITLE in self.driver.title, "This is not the Worker Activity page."
         self.send_keys(self.users_field, UserData.user_group)
         self.wait_to_click((By.XPATH, self.user_from_list.format(UserData.user_group)))
@@ -414,7 +414,7 @@ class WorkerActivityPage(BasePage):
 
     def worker_activity_search_custom_date(self):
         self.wait_to_click(self.worker_activity_rep)
-        self.wait_for_element(self.apply_id)
+        self.wait_for_element(self.apply_id, 100)
         assert self.WORKER_ACTIVITY_TITLE in self.driver.title, "This is not the Worker Activity page."
         self.send_keys(self.users_field, UserData.user_group)
         self.wait_to_click((By.XPATH, self.user_from_list.format(UserData.user_group)))
@@ -494,7 +494,7 @@ class WorkerActivityPage(BasePage):
 
     def worker_activity_save_report(self):
         self.wait_to_click(self.worker_activity_rep)
-        self.wait_for_element(self.apply_id)
+        self.wait_for_element(self.apply_id, 100)
         assert self.WORKER_ACTIVITY_TITLE in self.driver.title, "This is not the Worker Activity page."
         self.send_keys(self.users_field, UserData.user_group)
         self.wait_to_click((By.XPATH, self.user_from_list.format(UserData.user_group)))
@@ -521,7 +521,7 @@ class WorkerActivityPage(BasePage):
         self.save_report_donot_save()
         report = self.save_report()
         self.wait_to_click(self.worker_activity_rep)
-        self.wait_for_element(self.apply_id)
+        self.wait_for_element(self.apply_id, 100)
         self.verify_favorite_created(report)
         self.delete_saved_report(report)
         self.wait_to_click(self.worker_activity_rep)
@@ -615,7 +615,7 @@ class WorkerActivityPage(BasePage):
 
     def export_worker_activity_to_excel(self):
         self.wait_to_click(self.worker_activity_rep)
-        self.wait_for_element(self.apply_id)
+        self.wait_for_element(self.apply_id, 100)
         assert self.WORKER_ACTIVITY_TITLE in self.driver.title, "This is not the Worker Activity page."
         self.send_keys(self.users_field, UserData.user_group)
         self.wait_to_click((By.XPATH, self.user_from_list.format(UserData.user_group)))
@@ -680,7 +680,7 @@ class WorkerActivityPage(BasePage):
 
     def export_worker_activity_email(self):
         self.wait_to_click(self.worker_activity_rep)
-        self.wait_for_element(self.apply_id)
+        self.wait_for_element(self.apply_id, 100)
         assert self.WORKER_ACTIVITY_TITLE in self.driver.title, "This is not the Worker Activity page."
         self.send_keys(self.users_field, UserData.user_group)
         self.wait_to_click((By.XPATH, self.user_from_list.format(UserData.user_group)))
@@ -742,7 +742,7 @@ class WorkerActivityPage(BasePage):
 
     def worker_activity_case_assign_data(self):
         self.wait_to_click(self.worker_activity_rep)
-        self.wait_for_element(self.apply_id)
+        self.wait_for_element(self.apply_id, 100)
         assert self.WORKER_ACTIVITY_TITLE in self.driver.title, "This is not the Worker Activity page."
         self.send_keys(self.users_field, UserData.user_group)
         self.wait_to_click((By.XPATH, self.user_from_list.format(UserData.user_group)))
@@ -783,7 +783,7 @@ class WorkerActivityPage(BasePage):
         print("Sleeping for some time for the cases to be assigned")
         time.sleep(60)
         self.wait_to_click(self.worker_activity_rep)
-        self.wait_for_element(self.apply_id)
+        self.wait_for_element(self.apply_id, 100)
         assert self.WORKER_ACTIVITY_TITLE in self.driver.title, "This is not the Worker Activity page."
         self.send_keys(self.users_field, UserData.user_group)
         self.wait_to_click((By.XPATH, self.user_from_list.format(UserData.user_group)))

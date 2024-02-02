@@ -46,7 +46,7 @@ class ApplicationPage(BasePage):
         self.save_button = (By.XPATH, "//span[text()='Save']")
         self.app_created = "(//span[text()='{}'])[1]"
         self.form_link = "//a//*[contains(.,'{}')]"
-
+        self.app_list = (By.XPATH, "//a[contains(.,'Applications')]//following-sibling::ul/li/a[contains(.,'App ')]")
 
         # Delete Application
         self.settings = (By.XPATH, "//i[@class='fa fa-gear']")
@@ -151,13 +151,14 @@ class ApplicationPage(BasePage):
 
     def delete_application(self):
         time.sleep(2)
-        self.js_click(self.settings)
-        self.wait_for_element(self.actions_tab)
-        self.js_click(self.actions_tab)
-        self.wait_for_element(self.delete_app)
-        self.js_click(self.delete_app)
+        self.wait_for_element(self.settings, 50)
+        self.click(self.settings)
+        self.wait_for_element(self.actions_tab, 50)
+        self.click(self.actions_tab)
+        self.wait_for_element(self.delete_app, 50)
+        self.click(self.delete_app)
         self.wait_for_element(self.delete_confirm)
-        self.js_click(self.delete_confirm)
+        self.click(self.delete_confirm)
         assert self.is_present_and_displayed(self.delete_success, 200), "Application not deleted."
         print("Deleted the application")
 
@@ -332,13 +333,14 @@ class ApplicationPage(BasePage):
         self.wait_to_click(self.applications_menu_id)
         self.wait_to_click((By.LINK_TEXT, app_name))
         time.sleep(2)
-        self.js_click(self.settings)
-        self.wait_for_element(self.actions_tab)
-        self.js_click(self.actions_tab)
-        self.wait_for_element(self.delete_app)
-        self.js_click(self.delete_app)
+        self.wait_for_element(self.settings, 50)
+        self.click(self.settings)
+        self.wait_for_element(self.actions_tab, 50)
+        self.click(self.actions_tab)
+        self.wait_for_element(self.delete_app, 50)
+        self.click(self.delete_app)
         self.wait_for_element(self.delete_confirm)
-        self.js_click(self.delete_confirm)
+        self.click(self.delete_confirm)
         assert self.is_present_and_displayed(self.delete_success, 200), "Application not deleted."
         print("Deleted the application")
 
@@ -390,3 +392,31 @@ class ApplicationPage(BasePage):
             time.sleep(2)
             self.wait_to_click(self.save_language)
 
+
+    def get_all_application_name(self):
+        self.wait_to_click(self.applications_menu_id)
+        app_list = self.find_elements(self.app_list)
+        app_names = list()
+        if len(app_list)>0:
+            for items in app_list:
+                app_names.append(items.text)
+        else:
+            print("No test app present")
+        print(app_names)
+        return app_names
+
+    def delete_all_application(self, apps):
+        for app in apps:
+            self.wait_to_click(self.applications_menu_id)
+            self.wait_to_click((By.LINK_TEXT, app))
+            time.sleep(2)
+            self.wait_for_element(self.settings, 50)
+            self.click(self.settings)
+            self.wait_for_element(self.actions_tab, 50)
+            self.click(self.actions_tab)
+            self.wait_for_element(self.delete_app, 50)
+            self.click(self.delete_app)
+            self.wait_for_element(self.delete_confirm)
+            self.click(self.delete_confirm)
+            assert self.is_present_and_displayed(self.delete_success, 200), "Application "+app+" not deleted."
+            print("Deleted the application", app)
