@@ -172,7 +172,7 @@ class CaseActivityPage(BasePage):
 
     def verify_case_activity_page_fields(self):
         self.wait_to_click(self.case_activity_rep)
-        self.wait_for_element(self.apply_id)
+        self.wait_for_element(self.apply_id, 100)
         assert self.case_activity_TITLE in self.driver.title, "This is not the Case Activity page."
         assert self.is_present(self.users_field), "User field is not present"
         assert self.is_present(self.case_type_dropdown), "Case Type dropdown is not present"
@@ -181,7 +181,7 @@ class CaseActivityPage(BasePage):
 
     def verify_table_columns(self):
         self.wait_to_click(self.case_activity_rep)
-        self.wait_for_element(self.apply_id)
+        self.wait_for_element(self.apply_id, 100)
         assert self.case_activity_TITLE in self.driver.title, "This is not the Case Activity page."
         self.verify_user_lookup_table()
         self.remove_default_users()
@@ -269,7 +269,7 @@ class CaseActivityPage(BasePage):
 
     def case_activity_pagination_list(self):
         self.wait_to_click(self.case_activity_rep)
-        self.wait_for_element(self.apply_id)
+        self.wait_for_element(self.apply_id, 100)
         assert self.case_activity_TITLE in self.driver.title, "This is not the Case Activity page."
         self.select_by_text(self.case_type_dropdown, UserData.case_reassign)
         self.wait_to_click(self.apply_id)
@@ -392,7 +392,7 @@ class CaseActivityPage(BasePage):
     def case_activity_search(self, date_range=UserData.date_range[0]):
         date_string = start_date = end_date = ''
         self.wait_to_click(self.case_activity_rep)
-        self.wait_for_element(self.apply_id)
+        self.wait_for_element(self.apply_id, 100)
         assert self.case_activity_TITLE in self.driver.title, "This is not theCase Activity page."
         self.select_by_text(self.filter_dates_by, UserData.filter_dates_by[0])
         self.wait_to_click(self.date_input)
@@ -432,7 +432,7 @@ class CaseActivityPage(BasePage):
 
     def case_activity_search_custom_date(self):
         self.wait_to_click(self.case_activity_rep)
-        self.wait_for_element(self.apply_id)
+        self.wait_for_element(self.apply_id, 100)
         assert self.case_activity_TITLE in self.driver.title, "This is not theCase Activity page."
         self.select_by_text(self.filter_dates_by, UserData.filter_dates_by[0])
         date_string, start_date, end_date = self.get_custom_dates_past(0, 0, 5)
@@ -450,7 +450,7 @@ class CaseActivityPage(BasePage):
         assert self.is_present_and_displayed(self.date_range_error), "Date Range Error not displayed"
         print("Date Range error correctly displayed")
         self.wait_to_click(self.case_activity_rep)
-        self.wait_for_element(self.apply_id)
+        self.wait_for_element(self.apply_id, 100)
         assert self.case_activity_TITLE in self.driver.title, "This is not theCase Activity page."
         self.wait_to_click(self.date_input)
         self.wait_to_click((By.XPATH, self.date_range_type.format(UserData.date_range[3])))
@@ -511,7 +511,7 @@ class CaseActivityPage(BasePage):
 
     def case_activity_save_report(self):
         self.wait_to_click(self.case_activity_rep)
-        self.wait_for_element(self.apply_id)
+        self.wait_for_element(self.apply_id, 100)
         assert self.case_activity_TITLE in self.driver.title, "This is not the Worker Activity page."
         self.verify_user_lookup_table()
         self.remove_default_users()
@@ -532,7 +532,7 @@ class CaseActivityPage(BasePage):
         self.save_report_donot_save(report_name)
         self.save_report(report_name)
         self.wait_to_click(self.case_activity_rep)
-        self.wait_for_element(self.apply_id)
+        self.wait_for_element(self.apply_id, 100)
         self.verify_favorite_created(report_name)
         time.sleep(10)
         self.verify_users_in_the_group()
@@ -627,7 +627,7 @@ class CaseActivityPage(BasePage):
 
     def export_case_activity_to_excel(self):
         self.wait_to_click(self.case_activity_rep)
-        self.wait_for_element(self.apply_id)
+        self.wait_for_element(self.apply_id, 100)
         assert self.case_activity_TITLE in self.driver.title, "This is not the Worker Activity page."
         self.verify_user_lookup_table()
         self.remove_default_users()
@@ -683,7 +683,7 @@ class CaseActivityPage(BasePage):
 
     def export_case_activity_email(self):
         self.wait_to_click(self.case_activity_rep)
-        self.wait_for_element(self.apply_id)
+        self.wait_for_element(self.apply_id, 100)
         assert self.case_activity_TITLE in self.driver.title, "This is not theCase Activity page."
         self.verify_user_lookup_table()
         self.remove_default_users()
@@ -750,13 +750,13 @@ class CaseActivityPage(BasePage):
 
     def case_activity_users_active(self):
         self.wait_to_click(self.case_activity_rep)
-        self.wait_for_element(self.apply_id)
+        self.wait_for_element(self.apply_id, 100)
         assert self.case_activity_TITLE in self.driver.title, "This is not the Worker Activity page."
         self.wait_to_click(self.remove_active_worker)
         assert not self.is_present(self.remove_active_worker), "Active Mobile Worker is still not removed"
         print("Active Mobile Worker is removed successfully")
         self.driver.refresh()
-        self.wait_for_element(self.apply_id)
+        self.wait_for_element(self.apply_id, 100)
         self.verify_user_lookup_table()
         self.remove_default_users()
         self.send_keys(self.users_field, UserData.daily_form_groups[0])
@@ -778,13 +778,13 @@ class CaseActivityPage(BasePage):
 
     def case_activity_users_deactivated(self):
         self.wait_to_click(self.case_activity_rep)
-        self.wait_for_element(self.apply_id)
+        self.wait_for_element(self.apply_id, 100)
         assert self.case_activity_TITLE in self.driver.title, "This is not the Worker Activity page."
         self.wait_to_click(self.remove_deactive_worker)
         assert not self.is_present(self.remove_deactive_worker), "Deactivated Mobile Worker is still not removed"
         print("Deactivated Mobile Worker is removed successfully")
         self.driver.refresh()
-        self.wait_for_element(self.apply_id)
+        self.wait_for_element(self.apply_id, 100)
         self.verify_user_lookup_table()
         self.remove_default_users()
         self.send_keys(self.users_field, UserData.daily_form_groups[1])
@@ -804,7 +804,7 @@ class CaseActivityPage(BasePage):
 
     def user_data_verify(self):
         self.wait_to_click(self.case_activity_rep)
-        self.wait_for_element(self.apply_id)
+        self.wait_for_element(self.apply_id, 100)
         assert self.case_activity_TITLE in self.driver.title, "This is not the Worker Activity page."
         self.verify_user_lookup_table()
         self.remove_default_users()

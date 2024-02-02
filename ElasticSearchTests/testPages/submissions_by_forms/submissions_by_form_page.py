@@ -191,7 +191,7 @@ class SubmissionsByFormPage(BasePage):
 
     def verify_sub_by_form_page_fields(self):
         self.wait_to_click(self.sub_by_form_rep)
-        self.wait_for_element(self.apply_id)
+        self.wait_for_element(self.apply_id, 100)
         assert self.sub_by_form_TITLE in self.driver.title, "This is not the Submissions By Form page."
         assert self.is_present(self.users_field), "User field is not present"
         assert self.is_present(self.application_dropdown), "Application dropdown is not present"
@@ -203,7 +203,7 @@ class SubmissionsByFormPage(BasePage):
 
     def verify_table_columns(self):
         self.wait_to_click(self.sub_by_form_rep)
-        self.wait_for_element(self.apply_id)
+        self.wait_for_element(self.apply_id, 100)
         assert self.sub_by_form_TITLE in self.driver.title, "This is not the Submissions By Form page."
         self.verify_user_lookup_table()
         self.remove_default_users()
@@ -310,7 +310,7 @@ class SubmissionsByFormPage(BasePage):
 
     def sub_by_form_pagination_list(self):
         self.wait_to_click(self.sub_by_form_rep)
-        self.wait_for_element(self.apply_id)
+        self.wait_for_element(self.apply_id, 100)
         assert self.sub_by_form_TITLE in self.driver.title, "This is not the Worker Activity page."
         self.select_application_and_forms(UserData.reassign_cases_application,
                                           list(UserData.reasign_modules_forms.keys())[1],
@@ -437,7 +437,7 @@ class SubmissionsByFormPage(BasePage):
     def sub_by_form_search(self, date_range=UserData.date_range[0]):
         date_string = start_date = end_date = ''
         self.wait_to_click(self.sub_by_form_rep)
-        self.wait_for_element(self.apply_id)
+        self.wait_for_element(self.apply_id, 100)
         assert self.sub_by_form_TITLE in self.driver.title, "This is not the Submissions By Form page."
         self.select_by_text(self.filter_dates_by, UserData.filter_dates_by[0])
         self.wait_to_click(self.date_input)
@@ -477,7 +477,7 @@ class SubmissionsByFormPage(BasePage):
 
     def sub_by_form_search_custom_date(self):
         self.wait_to_click(self.sub_by_form_rep)
-        self.wait_for_element(self.apply_id)
+        self.wait_for_element(self.apply_id, 100)
         assert self.sub_by_form_TITLE in self.driver.title, "This is not the Submissions By Form page."
         self.select_by_text(self.filter_dates_by, UserData.filter_dates_by[0])
         date_string, start_date, end_date = self.get_custom_dates_past(0, 0, 5)
@@ -495,7 +495,7 @@ class SubmissionsByFormPage(BasePage):
         assert self.is_present_and_displayed(self.date_range_error), "Date Range Error not displayed"
         print("Date Range error correctly displayed")
         self.wait_to_click(self.sub_by_form_rep)
-        self.wait_for_element(self.apply_id)
+        self.wait_for_element(self.apply_id, 100)
         assert self.sub_by_form_TITLE in self.driver.title, "This is not the Submissions By Form page."
         self.wait_to_click(self.date_input)
         self.wait_to_click((By.XPATH, self.date_range_type.format(UserData.date_range[3])))
@@ -555,7 +555,7 @@ class SubmissionsByFormPage(BasePage):
 
     def sub_by_form_save_report(self):
         self.wait_to_click(self.sub_by_form_rep)
-        self.wait_for_element(self.apply_id)
+        self.wait_for_element(self.apply_id, 100)
         assert self.sub_by_form_TITLE in self.driver.title, "This is not the Worker Activity page."
         self.verify_user_lookup_table()
         self.remove_default_users()
@@ -585,7 +585,7 @@ class SubmissionsByFormPage(BasePage):
         self.save_report_donot_save(report_name)
         report = self.save_report(report_name)
         self.wait_to_click(self.sub_by_form_rep)
-        self.wait_for_element(self.apply_id)
+        self.wait_for_element(self.apply_id, 100)
         self.verify_favorite_created(report)
         time.sleep(10)
         self.verify_users_in_the_group()
@@ -689,7 +689,7 @@ class SubmissionsByFormPage(BasePage):
 
     def export_sub_by_form_to_excel(self):
         self.wait_to_click(self.sub_by_form_rep)
-        self.wait_for_element(self.apply_id)
+        self.wait_for_element(self.apply_id, 100)
         assert self.sub_by_form_TITLE in self.driver.title, "This is not the Worker Activity page."
         self.verify_user_lookup_table()
         self.remove_default_users()
@@ -747,7 +747,7 @@ class SubmissionsByFormPage(BasePage):
 
     def export_sub_by_form_email(self):
         self.wait_to_click(self.sub_by_form_rep)
-        self.wait_for_element(self.apply_id)
+        self.wait_for_element(self.apply_id, 100)
         assert self.sub_by_form_TITLE in self.driver.title, "This is not the Submissions By Form page."
         self.verify_user_lookup_table()
         self.remove_default_users()
@@ -817,13 +817,13 @@ class SubmissionsByFormPage(BasePage):
 
     def sub_by_form_users_active(self):
         self.wait_to_click(self.sub_by_form_rep)
-        self.wait_for_element(self.apply_id)
+        self.wait_for_element(self.apply_id, 100)
         assert self.sub_by_form_TITLE in self.driver.title, "This is not the Worker Activity page."
         self.wait_to_click(self.remove_active_worker)
         assert not self.is_present(self.remove_active_worker), "Active Mobile Worker is still not removed"
         print("Active Mobile Worker is removed successfully")
         self.driver.refresh()
-        self.wait_for_element(self.apply_id)
+        self.wait_for_element(self.apply_id, 100)
         self.verify_user_lookup_table()
         self.remove_default_users()
         self.send_keys(self.users_field, UserData.daily_form_groups[0])
@@ -851,13 +851,13 @@ class SubmissionsByFormPage(BasePage):
 
     def sub_by_form_users_deactivated(self):
         self.wait_to_click(self.sub_by_form_rep)
-        self.wait_for_element(self.apply_id)
+        self.wait_for_element(self.apply_id, 100)
         assert self.sub_by_form_TITLE in self.driver.title, "This is not the Worker Activity page."
         self.wait_to_click(self.remove_deactive_worker)
         assert not self.is_present(self.remove_deactive_worker), "Deactivated Mobile Worker is still not removed"
         print("Deactivated Mobile Worker is removed successfully")
         self.driver.refresh()
-        self.wait_for_element(self.apply_id)
+        self.wait_for_element(self.apply_id, 100)
         self.verify_user_lookup_table()
         self.remove_default_users()
         self.send_keys(self.users_field, UserData.daily_form_groups[1])
@@ -887,7 +887,7 @@ class SubmissionsByFormPage(BasePage):
         print("Sleeping for some time for the cases to be assigned")
         time.sleep(60)
         self.wait_to_click(self.sub_by_form_rep)
-        self.wait_for_element(self.apply_id)
+        self.wait_for_element(self.apply_id, 100)
         assert self.sub_by_form_TITLE in self.driver.title, "This is not the Worker Activity page."
         self.send_keys(self.users_field, UserData.user_group)
         self.wait_to_click((By.XPATH, self.user_from_list.format(UserData.user_group)))
@@ -922,7 +922,7 @@ class SubmissionsByFormPage(BasePage):
 
     def filter_dates_and_verify(self, filter):
         self.wait_to_click(self.sub_by_form_rep)
-        self.wait_for_element(self.apply_id)
+        self.wait_for_element(self.apply_id, 100)
         assert self.sub_by_form_TITLE in self.driver.title, "This is not the Worker Activity page."
         self.verify_user_lookup_table()
         self.remove_default_users()
@@ -990,9 +990,9 @@ class SubmissionsByFormPage(BasePage):
 
     def advanced_options(self):
         self.wait_to_click(self.sub_by_form_rep)
-        self.wait_for_element(self.apply_id)
+        self.wait_for_element(self.apply_id, 100)
         assert self.sub_by_form_TITLE in self.driver.title, "This is not the Worker Activity page."
-        self.wait_for_element(self.apply_id)
+        self.wait_for_element(self.apply_id, 100)
         self.verify_user_lookup_table()
         self.remove_default_users()
         self.send_keys(self.users_field, UserData.daily_form_groups[0])
@@ -1081,7 +1081,7 @@ class SubmissionsByFormPage(BasePage):
 
     def form_column_verification(self, app, mod=None, form=None):
         self.wait_to_click(self.sub_by_form_rep)
-        self.wait_for_element(self.apply_id)
+        self.wait_for_element(self.apply_id, 100)
         assert self.sub_by_form_TITLE in self.driver.title, "This is not the Worker Activity page."
         self.verify_user_lookup_table()
         self.remove_default_users()
