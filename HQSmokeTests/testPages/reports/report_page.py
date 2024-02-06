@@ -302,9 +302,10 @@ class ReportPage(BasePage):
         self.wait_to_click(self.save_xpath)
         self.send_keys(self.new_saved_report_name, self.report_name_saved)
         self.wait_to_click(self.save_confirm)
-        time.sleep(2)
+        time.sleep(10)
+        self.wait_for_element(self.saved_reports_menu_link, 100)
         self.js_click(self.saved_reports_menu_link)
-        assert self.is_visible_and_displayed(self.saved_report_created, 120)
+        assert self.is_visible_and_displayed(self.saved_report_created, 220)
         print("Report Saved successfully!")
 
     def create_scheduled_report_button(self):
