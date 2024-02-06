@@ -512,24 +512,29 @@ class WorkerActivityPage(BasePage):
         self.wait_to_click((By.XPATH, self.date_range_type.format(UserData.date_range[0])))
         self.wait_to_click(self.apply_id)
         time.sleep(10)
+        report_name = "Saved Worker Activity Report " + fetch_random_string()
         self.wait_for_element(self.result_table, 300)
         assert self.is_visible_and_displayed(self.report_content_id, 120), "Report not loaded"
         print("Report loaded successfully!")
         self.verify_case_type_data()
         time.sleep(10)
-        self.verify_favorite_empty()
-        self.save_report_donot_save()
-        report = self.save_report()
+        self.verify_favorite_empty(report_name)
+        self.save_report_donot_save(report_name)
+        self.save_report(report_name)
         self.wait_to_click(self.worker_activity_rep)
         self.wait_for_element(self.apply_id, 100)
-        self.verify_favorite_created(report)
-        self.delete_saved_report(report)
+        self.verify_favorite_created(report_name)
+        self.delete_saved_report(report_name)
         self.wait_to_click(self.worker_activity_rep)
-        self.verify_favorite_empty()
+        self.verify_favorite_empty(report_name)
 
-    def verify_favorite_empty(self):
+    def verify_favorite_empty(self, report=None):
         self.wait_to_click(self.favorite_button)
-        assert self.is_visible_and_displayed(self.empty_fav_list), "Favorites Already Present"
+        if report == None:
+            assert self.is_visible_and_displayed(self.empty_fav_list), "Favorites Already Present"
+        else:
+            assert not self.is_visible_and_displayed((By.XPATH, self.saved_fav.format(report)),
+                                                     30), "Favorite is already Present"
         print("No Favorites yet.")
 
     def verify_favorite_created(self, report):
@@ -550,10 +555,9 @@ class WorkerActivityPage(BasePage):
         assert not self.is_visible_and_displayed((By.XPATH, self.saved_report_created.format(report)), 20)
         print("Deleted Report Successfully")
 
-    def save_report_donot_save(self):
+    def save_report_donot_save(self, report_name):
         self.wait_for_element(self.save_config_button)
         self.wait_to_click(self.save_config_button)
-        report_name = "Saved Worker Activity Report " + fetch_random_string()
         self.wait_to_clear_and_send_keys(self.name_field, report_name)
         text = self.get_selected_text(self.date_range_field_select)
         print(text)
@@ -564,10 +568,10 @@ class WorkerActivityPage(BasePage):
         assert not self.is_visible_and_displayed(self.name_field, 10), "Save Report Form not closed"
         print("Save Report Form is closed")
 
-    def save_report(self):
+
+    def save_report(self, report_name):
         self.wait_for_element(self.save_config_button)
         self.wait_to_click(self.save_config_button)
-        report_name = "Saved Worker Activity Report " + fetch_random_string()
         self.wait_to_clear_and_send_keys(self.name_field, report_name)
         text = self.get_selected_text(self.date_range_field_select)
         print(text)
@@ -579,7 +583,6 @@ class WorkerActivityPage(BasePage):
         self.wait_to_click(self.saved_reports_menu_link)
         assert self.is_visible_and_displayed((By.XPATH, self.saved_report_created.format(report_name)), 120)
         print("Report Saved successfully!")
-        return report_name
 
     def verify_case_type_data(self):
         case_type_list = self.find_elements(self.case_created_column)

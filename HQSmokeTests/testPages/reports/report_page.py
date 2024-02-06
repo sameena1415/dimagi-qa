@@ -233,6 +233,7 @@ class ReportPage(BasePage):
 
     def submit_history_report(self):
         self.wait_to_click(self.submit_history_rep)
+        self.wait_for_element(self.users_box, 200)
         self.check_if_report_loaded()
 
     def case_list_report(self):
@@ -301,9 +302,10 @@ class ReportPage(BasePage):
         self.wait_to_click(self.save_xpath)
         self.send_keys(self.new_saved_report_name, self.report_name_saved)
         self.wait_to_click(self.save_confirm)
-        time.sleep(2)
+        time.sleep(10)
+        self.wait_for_element(self.saved_reports_menu_link, 100)
         self.js_click(self.saved_reports_menu_link)
-        assert self.is_visible_and_displayed(self.saved_report_created, 120)
+        assert self.is_visible_and_displayed(self.saved_report_created, 220)
         print("Report Saved successfully!")
 
     def create_scheduled_report_button(self):
@@ -443,6 +445,7 @@ class ReportPage(BasePage):
         print("Sleeping for sometime for the case to get registered.")
         time.sleep(90)
         self.wait_to_click(self.submit_history_rep)
+        self.wait_for_element(self.users_box, 200)
         self.wait_to_click(self.users_box)
         self.send_keys(self.search_user, username)
         self.wait_to_click((By.XPATH, self.app_user_select.format(username)))
@@ -491,6 +494,7 @@ class ReportPage(BasePage):
         print("Sleeping for sometime for the case to get registered.")
         time.sleep(90)
         self.wait_to_click(self.submit_history_rep)
+        self.wait_for_element(self.users_box, 300)
         self.wait_to_click(self.users_box)
         self.send_keys(self.search_user, UserData.app_login)
         self.wait_to_click((By.XPATH, self.app_user_select.format(UserData.app_login)))
@@ -774,6 +778,7 @@ class ReportPage(BasePage):
         print("Sleeping for sometime for the case to get registered.")
         time.sleep(140)
         self.wait_to_click(self.submit_history_rep)
+        self.wait_for_element(self.users_box, 200)
         self.wait_to_click(self.users_box)
         self.send_keys(self.search_user, UserData.app_login)
         self.wait_to_click((By.XPATH, self.app_user_select.format(UserData.app_login)))

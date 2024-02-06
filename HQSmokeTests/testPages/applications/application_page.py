@@ -53,6 +53,7 @@ class ApplicationPage(BasePage):
         self.delete_app = (By.XPATH, "//a[@href='#delete-app-modal']")
         self.delete_confirm = (By.XPATH, "(//button[@class='disable-on-submit btn btn-danger'])[last()]")
         self.delete_success = (By.XPATH, "//div[contains(@class,'alert-success')][contains(.,'You have deleted an application.')]")
+        self.app_link = "(//li/a[contains(., '{}')])[1]"
 
         # Application Contents
         self.menu_settings = (By.XPATH, "//a[@class='appnav-title appnav-title-secondary appnav-responsive']")
@@ -403,12 +404,14 @@ class ApplicationPage(BasePage):
         else:
             print("No test app present")
         print(app_names)
+        self.driver.refresh()
+        time.sleep(5)
         return app_names
 
     def delete_all_application(self, apps):
         for app in apps:
             self.wait_to_click(self.applications_menu_id)
-            self.wait_to_click((By.LINK_TEXT, app))
+            self.wait_to_click((By.XPATH, self.app_link.format(app)))
             time.sleep(2)
             self.wait_for_element(self.settings, 50)
             self.click(self.settings)
