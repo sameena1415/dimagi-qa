@@ -209,7 +209,7 @@ class ExportDataPage(BasePage):
         print("Newest file:" + newest_file)
         self.assert_downloaded_file(newest_file, export_name)
         self.wait_to_click(self.find_data_by_ID)
-        data = pd.read_excel(newest_file)
+        data = pd.read_excel((PathSettings.DOWNLOAD_PATH / newest_file))
         df = pd.DataFrame(data, columns=[row, value])
         ID = df[value].values[0]
         print("ID: ",ID)
@@ -232,6 +232,7 @@ class ExportDataPage(BasePage):
         self.delete_bulk_exports()
         self.wait_and_sleep_to_click(self.add_export_button)
         time.sleep(50)
+        self.is_visible_and_displayed(self.app_type, 200)
         self.wait_for_element(self.app_type, 200)
         self.is_clickable(self.app_type)
         self.select_by_text(self.app_type, UserData.app_type)
@@ -257,6 +258,7 @@ class ExportDataPage(BasePage):
         self.delete_bulk_exports()
         self.wait_and_sleep_to_click(self.add_export_button)
         time.sleep(50)
+        self.is_visible_and_displayed(self.case_type, 200)
         self.wait_for_element(self.case_type, 200)
         # self.is_clickable(self.application)
         # self.select_by_text(self.application, UserData.village_application)
@@ -351,7 +353,7 @@ class ExportDataPage(BasePage):
         self.wait_and_sleep_to_click(self.export_excel_dash_int)
         self.wait_and_sleep_to_click(self.add_export_button)
         time.sleep(50)
-        self.is_visible_and_displayed(self.model)
+        self.is_visible_and_displayed(self.model, 200)
         self.wait_for_element(self.model, 100)
         self.select_by_value(self.model, UserData.model_type_form)
         self.select_by_text(self.app_type, UserData.app_type)
@@ -424,7 +426,7 @@ class ExportDataPage(BasePage):
         self.delete_bulk_exports()
         self.wait_and_sleep_to_click(self.add_export_button)
         time.sleep(50)
-        self.is_visible_and_displayed(self.model)
+        self.is_visible_and_displayed(self.model, 120)
         self.wait_for_element(self.model, 100)
         self.select_by_value(self.model, UserData.model_type_form)
         self.select_by_text(self.app_type, UserData.app_type)
@@ -515,6 +517,7 @@ class ExportDataPage(BasePage):
         time.sleep(5)
         self.wait_and_sleep_to_click(self.add_export_button)
         time.sleep(50)
+        self.is_visible_and_displayed(self.case_type, 200)
         self.wait_for_element(self.case_type, 200)
         self.select_by_text(self.case, UserData.case_update_name)
         self.wait_to_click(self.add_export_conf)
@@ -564,7 +567,7 @@ class ExportDataPage(BasePage):
         newest_file = latest_download_file()
         print("Newest file:" + newest_file)
         self.assert_downloaded_file(newest_file, UserData.case_updated_export_name)
-        data = pd.read_excel(newest_file)
+        data = pd.read_excel((PathSettings.DOWNLOAD_PATH / newest_file))
         df = pd.DataFrame(data, columns=[UserData.case_id, UserData.text_value, UserData.random_value])
         case_id_row = df[df[UserData.case_id] == case_id].index[0]
         name_in_file = df[UserData.text_value].loc[case_id_row]
@@ -595,6 +598,7 @@ class ExportDataPage(BasePage):
         self.delete_bulk_exports()
         self.wait_and_sleep_to_click(self.add_export_button)
         time.sleep(50)
+        self.is_visible_and_displayed(self.case_type, 200)
         self.wait_for_element(self.case_type, 200)
         self.select_by_text(self.case, UserData.case_reassign)
         self.wait_to_click(self.add_export_conf)
@@ -608,6 +612,7 @@ class ExportDataPage(BasePage):
         self.delete_bulk_exports()
         self.wait_and_sleep_to_click(self.add_export_button)
         time.sleep(50)
+        self.is_visible_and_displayed(self.app_type, 200)
         self.wait_for_element(self.app_type, 200)
         self.select_by_text(self.app_type, UserData.app_type)
         self.select_by_text(self.application, UserData.reassign_cases_application)
@@ -625,7 +630,7 @@ class ExportDataPage(BasePage):
         return newest_file
 
     def verify_export_count(self, name):
-        data = pd.read_excel(name)
+        data = pd.read_excel((PathSettings.DOWNLOAD_PATH / name))
         df = pd.DataFrame(data)
         rows_count = df.shape[0]
         print(int(rows_count))
@@ -673,6 +678,7 @@ class ExportDataPage(BasePage):
         self.delete_bulk_exports()
         self.wait_and_sleep_to_click(self.add_export_button)
         time.sleep(50)
+        self.is_visible_and_displayed(self.case_type, 200)
         self.wait_for_element(self.case_type, 200)
         self.select_by_text(self.case, UserData.case_reassign)
         self.wait_to_click(self.add_export_conf)
