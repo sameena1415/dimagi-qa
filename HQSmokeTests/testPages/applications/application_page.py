@@ -49,7 +49,7 @@ class ApplicationPage(BasePage):
         self.app_list = (By.XPATH, "//a[contains(.,'Applications')]//following-sibling::ul/li/a[contains(.,'App ')]")
 
         # Delete Application
-        self.settings = (By.XPATH, "//i[@class='fa fa-gear']")
+        self.settings = (By.XPATH, "//i[contains(@class,'fa-gear')]")
         self.delete_app = (By.XPATH, "//a[@href='#delete-app-modal']")
         self.delete_confirm = (By.XPATH, "(//button[@class='disable-on-submit btn btn-danger'])[last()]")
         self.delete_success = (By.XPATH, "//div[contains(@class,'alert-success')][contains(.,'You have deleted an application.')]")

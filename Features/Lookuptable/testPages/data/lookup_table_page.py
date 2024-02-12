@@ -146,7 +146,7 @@ class LookUpTablePage(BasePage):
         self.sync = (By.XPATH, "//*[@class='ff ff-sync appicon-icon']")
         self.label = (By.XPATH, "//*[@data-qtype='Trigger']")
         self.refresh = (By.XPATH, "//button[contains(@class,'refresh')]")
-        self.settings = (By.XPATH, "//*[@class='fa fa-gear appicon-icon']")
+        self.settings = (By.XPATH, "//*[contains(@class,'fa-gear appicon-icon')]")
         self.app_language = (By.XPATH, "//*[@class='form-control js-lang']")
         self.done = (By.XPATH, "//*[@class='btn btn-primary js-done']")
         self.selected_caselist = (By.XPATH, "(//*[@class='appnav-item ']/a[@class='appnav-delete'])[1]")
