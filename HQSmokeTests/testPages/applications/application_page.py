@@ -49,7 +49,7 @@ class ApplicationPage(BasePage):
         self.app_list = (By.XPATH, "//a[contains(.,'Applications')]//following-sibling::ul/li/a[contains(.,'App ')]")
 
         # Delete Application
-        self.settings = (By.XPATH, "//i[@class='fa fa-gear']")
+        self.settings = (By.XPATH, "//i[contains(@class,'fa-gear')]")
         self.delete_app = (By.XPATH, "//a[@href='#delete-app-modal']")
         self.delete_confirm = (By.XPATH, "(//button[@class='disable-on-submit btn btn-danger'])[last()]")
         self.delete_success = (By.XPATH, "//div[contains(@class,'alert-success')][contains(.,'You have deleted an application.')]")
@@ -91,7 +91,7 @@ class ApplicationPage(BasePage):
         self.form_edit_app = (By.XPATH,"//a[contains(text(),'"+ UserData.reassign_cases_application+"')]")
         self.form_name_save_button = (By.XPATH, "//button[text()='Save']")
         self.reg_form_head_text = (By.XPATH, "//span[@class='fd-head-text']")
-        self.form_settings_btn = "//a[.//span[contains(.,'{}')]]//following-sibling::a//i[@class='fa fa-gear appnav-show-on-hover']"
+        self.form_settings_btn = "//a[.//span[contains(.,'{}')]]//following-sibling::a//i[contains(@class,'fa-gear appnav-show-on-hover')]"
         self.reg_form_variable_name = (By.XPATH, "//span[@class='variable-form_name']")
         self.add_form_question = (By.XPATH, "//*[@class='fd-add-question dropdown-toggle btn btn-purple']")
         self.field_edit_app_name =  "//span[text()='{}']"
