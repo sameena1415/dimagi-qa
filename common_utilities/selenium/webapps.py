@@ -103,6 +103,7 @@ class WebApps(BasePage):
 
     def clear_selections_on_case_search_page(self):
         self.wait_for_element(self.clear_case_search_page, timeout=500)
+        time.sleep(2)
         self.js_click(self.clear_case_search_page)
         self.wait_for_ajax()
 
