@@ -23,7 +23,7 @@ class DataDictionaryPage(BasePage):
 
         self.data_dictionary_link = (By.LINK_TEXT, "Data Dictionary")
         self.export_button = (By.ID, "download-dict")
-        self.import_button = (By.XPATH, "//i[@class ='fa fa-cloud-upload']")
+        self.import_button = (By.XPATH, "//a[contains(@href,'import')]/i[contains(@class,'fa-cloud')]")
         self.choose_file = (By.XPATH, "//input[@data-bind ='value: file']")
         self.upload = (By.XPATH, "//button[@data-bind ='disable: !file()']")
         self.success_message = (By.XPATH , "//div[@class= 'alert alert-margin-top fade in alert-success']")

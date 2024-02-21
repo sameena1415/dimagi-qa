@@ -91,6 +91,7 @@ class ExportDataPage(BasePage):
         self.case_id_value = "//th[contains(.,'Case ID')]//following-sibling::td[contains(.,'{}')]"
         self.related_cases_tab = (By.LINK_TEXT, "Related Cases")
         self.related_cases_view = (By.XPATH, "//td[contains(.,'"+UserData.child_name+"')]//following-sibling::div/a[contains(.,'View')]")
+        self.expand_case = (By.XPATH, "//a[@title='Expand']")
         self.woman_form_name_HQ = (By.XPATH, "(//div[@class='form-data-readable form-data-raw'])[1]")
         self.woman_case_name_HQ = (By.XPATH, "//th[@title='name']//following::td[1]")
 
@@ -103,9 +104,9 @@ class ExportDataPage(BasePage):
         self.create_DSE_checkbox = (By.XPATH, '//*[@id="daily-saved-export-checkbox"]')
         self.download_dse = (By.XPATH, "(//a[@class='btn btn-info btn-xs'])[1]")
         self.download_dse_form = (By.XPATH,
-                                  "//h4[.//span[.='" + UserData.form_export_name_dse + "']]/following-sibling::div//*[./i[@class='fa fa-cloud-download']]")
+                                  "//h4[.//span[.='" + UserData.form_export_name_dse + "']]/following-sibling::div//*[./i[contains(@class,'fa-cloud')]]")
         self.download_dse_case = (By.XPATH,
-                                  "//h4[.//span[.='" + UserData.case_export_name_dse + "']]/following-sibling::div//*[./i[@class='fa fa-cloud-download']]")
+                                  "//h4[.//span[.='" + UserData.case_export_name_dse + "']]/following-sibling::div//*[./i[contains(@class,'fa-cloud')]]")
 
         self.data_upload_msg = (By.XPATH, "//*[contains(text(),'Data update complete')]")
         self.data_upload_msg_form = (By.XPATH,
@@ -712,7 +713,12 @@ class ExportDataPage(BasePage):
 
     def validate_child_case_data(self):
         self.wait_to_click(self.related_cases_tab)
-        self.wait_for_element(self.related_cases_view)
+        time.sleep(2)
+        if self.is_visible_and_displayed(self.related_cases_view, 20):
+            self.wait_for_element(self.related_cases_view)
+        else:
+            self.wait_to_click(self.expand_case)
+            self.wait_for_element(self.related_cases_view)
         self.wait_to_click(self.related_cases_view)
         time.sleep(5)
         self.wait_for_element((By.XPATH, self.case_id_value.format(UserData.child_case_id)))
