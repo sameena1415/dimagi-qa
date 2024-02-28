@@ -28,6 +28,12 @@ class BhaUserInput:
 
     arts_parkside_clinic = "ARTS Parkside Clinic"
     aurora_therapy_center = "Aurora Therapy Center"
+    baymark_baart_brighton = "BAYMARK (BAART) - Brighton"
+    baymark_baart_brighton_clinic_type = "Opioid Treatment Programs, Substance Use Services"
+    baymark_baart_brighton_address = "5 South 1st Avenue, Brighton, CO 80601"
+    baymark_baart_brighton_phone_number = "(720) 909-6008"
+    staging_baymark_baart_brighton_case_id = "2ab5d27d377b4fb4ba5acb85a86a5335"
+    prod_baymark_baart_brighton_case_id = "29f0b47367e04fe0b722e33bf490b696"
 
     """Labels On Form"""
     first_name_on_form = "First Name"
@@ -37,6 +43,11 @@ class BhaUserInput:
     completed_treatment = "Completed treatment"
     suboxone = "Suboxone"
     lock_in = "Lock In"
+    clinic_id = "Clinic ID"
+    type = "Type"
+    address = "Address"
+    phone_number = "Phone Number"
+
 
     "Questions"
     where_admit = "(Required) Where would you like to admit this client?"
@@ -75,7 +86,7 @@ class BhaUserInput:
     yes_small = "yes"
     approve = "Approve"
     provider = "Provider"
-
+    
     """Values_on Case List"""
     zero = "0"
     one = "1"

@@ -22,6 +22,22 @@ def test_case_access_to_module_state(driver):
                                                    property_type=TEXT_INPUT)
     webapps.search_button_on_case_search_page()
     webapps.select_case(case_name)
+    # Check table values
+    domain_url = driver.current_url
+    clinics_table = {
+        "headers": [BhaUserInput.clinic_id, BhaUserInput.name, BhaUserInput.type, BhaUserInput.address, BhaUserInput.phone_number], 
+        "body": {
+                BhaUserInput.name: BhaUserInput.baymark_baart_brighton, 
+                BhaUserInput.type: BhaUserInput.baymark_baart_brighton_clinic_type,
+                BhaUserInput.address: BhaUserInput.baymark_baart_brighton_address,
+                BhaUserInput.phone_number: BhaUserInput.baymark_baart_brighton_phone_number
+            }
+    }
+    if "staging" in domain_url:
+        clinics_table[BhaUserInput.clinic_id]  = BhaUserInput.staging_baymark_baart_brighton_case_id
+    elif "www" in domain_url:
+        clinics_table[BhaUserInput.clinic_id] = BhaUserInput.prod_baymark_baart_brighton_case_id
+    webapps.check_form_table_values(clinics_table)
     app.select_clinic(BhaUserInput.arts_parkside_clinic)
     webapps.submit_the_form()
     """Remove Clinic"""

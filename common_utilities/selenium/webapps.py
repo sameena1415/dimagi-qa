@@ -60,6 +60,7 @@ class WebApps(BasePage):
         self.go_button = (By.ID, "pagination-go-button")
         self.value_in_data_preview = "//td[@title='{}']"
         self.data_preview = (By.XPATH, "//span[@class='debugger-title']")
+        self.single_row_table = "//thead[1][.//th[{}][.='{}']]//following-sibling::tbody[1]/tr[1]/td[{}][contains(.,'{}')]"
 
     def open_app(self, app_name):
         time.sleep(2)
@@ -240,3 +241,8 @@ class WebApps(BasePage):
     def check_case_list_is_empty(self, empty_message):
         list_is_empty_message = self.get_element(self.list_is_empty, empty_message)
         assert self.is_displayed(list_is_empty_message)
+
+    def check_form_table_values(self, table):
+        for index, header in enumerate(table["headers"]):
+            row_value = table["body"][header]
+            self.is_visible_and_displayed((By.XPATH,self.single_row_table.format(index+1, header,index+1, row_value)))
