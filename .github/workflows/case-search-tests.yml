@@ -141,15 +141,15 @@ jobs:
           result-encoding: string
           script: |
             const {CC_ENV, JOB_STATUS, CC_EVENT} = process.env
-            let SLACK_WEBHOOK_URL = '${{ secrets.SLACK_WEBHOOK_URL_SMOKE }}'
+            let SLACK_WEBHOOK_URL = '${{ secrets.SLACK_WEBHOOK_URL_USH }}'
             if (CC_EVENT == 'repository_dispatch' && CC_ENV == 'production') {
               SLACK_WEBHOOK_URL = '${{ secrets.SLACK_WEBHOOK_URL_PROD_RESULTS }}'
               console.log( "Prod deploy")
             } else if (CC_EVENT != 'repository_dispatch' && CC_ENV == 'production' && JOB_STATUS == 'failure') {
-              SLACK_WEBHOOK_URL = '${{ secrets.SLACK_WEBHOOK_URL_SMOKE }}'
+              SLACK_WEBHOOK_URL = '${{ secrets.SLACK_WEBHOOK_URL_USH }}'
               console.log( "Not Prod deploy but Prof failure")
             } else if (CC_ENV == 'staging' && JOB_STATUS == 'failure') {
-              SLACK_WEBHOOK_URL = '${{ secrets.SLACK_WEBHOOK_URL_SMOKE }}'
+              SLACK_WEBHOOK_URL = '${{ secrets.SLACK_WEBHOOK_URL_USH }}'
               console.log("Staging Failure")
             } else {
               SLACK_WEBHOOK_URL = ' '
