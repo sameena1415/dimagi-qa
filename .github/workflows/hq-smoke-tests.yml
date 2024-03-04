@@ -172,9 +172,9 @@ jobs:
             return SLACK_WEBHOOK_URL
 
       - name: Post to Slack channel on Failure
-        id: slack
+        id: slack_fail
         uses: slackapi/slack-github-action@v1.23.0
-        if: ${{ steps.configure_slack.outputs.result != ' ' && ( success() || failure() ) }}
+        if: ${{ steps.configure_slack.outputs.result != ' ' && failure() }}
         with:
           payload: |
             {
@@ -227,6 +227,65 @@ jobs:
         env:
           SLACK_WEBHOOK_URL: ${{ steps.configure_slack.outputs.result }}
           SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+
+      - name: Post to Slack channel on Success
+        id: slack_pass
+        uses: slackapi/slack-github-action@v1.23.0
+        if: ${{ steps.configure_slack.outputs.result != ' ' && success() }}
+        with:
+          payload: |
+            {
+                "blocks": [
+                    {
+                        "type": "section",
+                        "text": {
+                            "type": "mrkdwn",
+                            "text": " Bonjour :alphabet-yellow-q::alphabet-yellow-a: 👋 \n*${{ github.workflow }}* were just triggered!"
+                        }
+                    },
+                    {
+                        "type": "context",
+                        "elements": [
+                            {
+                                "type": "mrkdwn",
+                                "text": "*Environment: *\n ${{ matrix.environment }}  \n"
+                            },
+                          {
+                                "type": "mrkdwn",
+                                "text": " "
+                            },
+                            {
+                                "type": "mrkdwn",
+                                "text": "*Status: *\n ${{ job.status }}  :x:"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "section",
+                        "text": {
+                            "type": "mrkdwn",
+                            "text": "Here's the corresponding workflow execution :arrow_right::arrow_right:"
+                        },
+                        "accessory": {
+                            "type": "button",
+                            "text": {
+                                "type": "plain_text",
+                                "text": "View on Github",
+                                "emoji": true
+                            },
+                            "value": "click_me_123",
+                            "url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}",
+                            "action_id": "button-action",
+                            "style": "primary"
+                        }
+                    }
+                ]
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ steps.configure_slack.outputs.result }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+
+
 
       - name: Archive test results
         if: ${{ success() || failure() }}
