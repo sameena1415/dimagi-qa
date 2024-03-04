@@ -244,7 +244,7 @@ jobs:
                             },
                             {
                                 "type": "mrkdwn",
-                                "text": "*Status: *\n ${{ job.status }}  :x:"
+                                "text": "*Status: *\n ${{ job.status }}  :white_check_mark:"
                             }
                         ]
                     },
