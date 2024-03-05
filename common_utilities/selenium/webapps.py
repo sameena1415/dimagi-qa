@@ -243,6 +243,9 @@ class WebApps(BasePage):
         assert self.is_displayed(list_is_empty_message)
 
     def check_form_table_values(self, table):
+        print("Table: ", table)
         for index, header in enumerate(table["headers"]):
             row_value = table["body"][header]
+            print("Header: ", header)
+            print("Row: ", row_value)
             self.is_visible_and_displayed((By.XPATH,self.single_row_table.format(index+1, header,index+1, row_value)))

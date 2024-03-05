@@ -34,9 +34,9 @@ def test_case_access_to_module_state(driver):
             }
     }
     if "staging" in domain_url:
-        clinics_table[BhaUserInput.clinic_id]  = BhaUserInput.staging_baymark_baart_brighton_case_id
+        clinics_table["body"][BhaUserInput.clinic_id]  = BhaUserInput.staging_baymark_baart_brighton_case_id
     elif "www" in domain_url:
-        clinics_table[BhaUserInput.clinic_id] = BhaUserInput.prod_baymark_baart_brighton_case_id
+        clinics_table["body"][BhaUserInput.clinic_id] = BhaUserInput.prod_baymark_baart_brighton_case_id
     webapps.check_form_table_values(clinics_table)
     app.select_clinic(BhaUserInput.arts_parkside_clinic)
     webapps.submit_the_form()
