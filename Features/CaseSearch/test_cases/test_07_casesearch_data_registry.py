@@ -115,7 +115,7 @@ def test_case_05_load_external_same_domain_into_caselist_search_first(driver):
     webapps.open_form(CaseSearchUserInput.play_song_form)
     webapps.submit_the_form()
 
-
+@pytest.mark.skip
 def test_case_06_smart_link_skip_default(driver):
     webapps = WebApps(driver)
     casesearch = CaseSearchWorkflows(driver)

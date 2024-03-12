@@ -22,7 +22,7 @@ class WebApps(BasePage):
         self.menu_name_header_format = '//*[contains(text(),"{}")]'
         self.form_name_format = "//h3[contains(text(), '{}')]"
         self.form_name_header_format = "//h1[contains(text(), '{}')]"
-        self.case_name_format = "//tr[.//td[contains(text(),'{}')]]"
+        self.case_name_format = "//div[@id='module-case-list']//*[contains(text(),'{}')]"
         self.breadcrumb_format = "//li[contains(text(), '{}')]"
         self.answer_format = "(//label[.//span[text()='{}']]/following-sibling::div//{})"
         self.per_answer_format = "(//label[.//span[text()='{}']]/following-sibling::div//{})[{}]"

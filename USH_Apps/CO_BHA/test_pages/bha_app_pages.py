@@ -23,6 +23,8 @@ class BhaWorkflows(BasePage):
         self.clinic_close_button = "//button[@aria-label='Remove item' and contains(@aria-describedby , '{}')]"
         self.case_list_display_properties = "(//tr[.//th[contains(text(),'{}')]])[1]"
         self.case_prop_value = "//th[@title='{}']/following::td[contains(text(),'{}')]"
+        self.value_in_outputs = "//div[@class='list-grid-style-{} box']//strong"
+
 
         # Messages
         self.view_latest_details_by_type = "(//a[contains(text(),'{}')]/following::a[text()='View Details'])[1]"
@@ -97,4 +99,12 @@ class BhaWorkflows(BasePage):
         assert self.is_present(date_locator)
         self.switch_back_to_prev_tab()
 
-
+    def check_values_on_caselist(self, row_num, expected_value, is_multi=NO):
+        self.value_in_table = self.get_element(self.value_in_outputs, row_num)
+        self.wait_for_element(self.value_in_table)
+        values_ = self.find_elements_texts(self.value_in_table)
+        print(expected_value, values_)  # added for debugging
+        if is_multi == YES:
+            assert all(item in values_ for item in expected_value) or any(item in values_ for item in expected_value)
+        elif is_multi == NO:
+            assert expected_value in values_
