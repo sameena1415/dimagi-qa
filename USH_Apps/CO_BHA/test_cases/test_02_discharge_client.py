@@ -67,10 +67,11 @@ def test_case_discharge_client_1(driver):
     casesearch.search_against_property(search_property=BhaUserInput.date_of_birth,
                                        input_value=dob,
                                        property_type=TEXT_INPUT)
+    full_name = first_name + " " + last_name
     webapps.search_button_on_case_search_page()
     # might fail on prod due to sync delays
-    casesearch.check_values_on_caselist(row_num=BhaUserInput.two,
-                                        expected_value=first_name)
+    app.check_values_on_caselist(row_num=BhaUserInput.one,
+                                        expected_value=full_name)
     """Search Central Registry as state user"""
     webapps.login_as(BhaUserInput.state_level_user)
     webapps.open_app(BhaUserInput.bha_app_name)
@@ -84,9 +85,8 @@ def test_case_discharge_client_1(driver):
     casesearch.search_against_property(search_property=BhaUserInput.dob,
                                        input_value=dob,
                                        property_type=TEXT_INPUT)
-    full_name = first_name + " " + last_name
     webapps.search_button_on_case_search_page()
-    webapps.select_case(full_name)
+    webapps.select_case(first_name)
     webapps.open_form(BhaUserInput.discharge_client)
     app.select_radio(BhaUserInput.suboxone)
     app.select_radio(BhaUserInput.completed_treatment)
