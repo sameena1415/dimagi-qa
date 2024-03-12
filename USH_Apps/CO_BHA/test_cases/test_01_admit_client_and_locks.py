@@ -121,8 +121,9 @@ def test_case_03_lock_in_1_1(driver):
     casesearch.search_against_property(search_property=BhaUserInput.date_of_birth,
                                              input_value=BhaUserInput.date_1950_05_01,
                                              property_type=TEXT_INPUT)
+    full_name = value["first_name"] + " " + value["last_name"]
     webapps.search_button_on_case_search_page()
-    webapps.select_case(value["first_name"])
+    webapps.select_case(full_name)
     webapps.open_form(BhaUserInput.update_lock_status_request)
     app.select_radio(BhaUserInput.lock_in)
     app.select_clinic(BhaUserInput.aurora_therapy_center)

@@ -84,8 +84,9 @@ def test_case_discharge_client_1(driver):
     casesearch.search_against_property(search_property=BhaUserInput.dob,
                                        input_value=dob,
                                        property_type=TEXT_INPUT)
+    full_name = first_name + " " + last_name
     webapps.search_button_on_case_search_page()
-    webapps.select_case(first_name)
+    webapps.select_case(full_name)
     webapps.open_form(BhaUserInput.discharge_client)
     app.select_radio(BhaUserInput.suboxone)
     app.select_radio(BhaUserInput.completed_treatment)
