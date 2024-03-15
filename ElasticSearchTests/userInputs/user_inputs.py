@@ -11,6 +11,10 @@ class UserData:
     reassign_cases_application = 'Reassign Cases'
     case_pregnancy = "pregnancy"
     case_reassign = "reassign"
+    case_reassign_change = "reassign_change"
+    case_commcare = "commcare-user"
+    case_navigation = "Navigation"
+    case_case = "case"
     model_type_case = "case"
     model_type_form = "form"
     new_form_name = "Android Test Form"
@@ -25,7 +29,9 @@ class UserData:
     automation_group_users = ["appiumtest", "formplayer_user"]
     appiumtest_owner_id = "appiumtest@qa-automation.commcarehq.org"
     appiumtest_owner_id_prod = "appiumtest@qa-automation-prod.commcarehq.org"
-    web_user = "automation.user.commcarehq@gmail.com"
+    web_user_email = "automation.user.commcarehq@gmail.com"
+    web_user_id_staging = "7ed7f6e897b973005cb9d142c12ecdfd"
+    appiumtest_id_staging = "46bc847216904511927af0e89adcb2d0"
     default_mw_role = "Mobile Worker Default"
     user_group = "automation_user"
     user_group_shared = "automation_user [case sharing]"
@@ -48,6 +54,8 @@ class UserData:
     fcst_column_names = ["User", "Completion Time", "Submission Time", "Form Name", "Difference"]
 
     sh_column_group_names = ["View Form", "Username", "Completion Time", "Form"]
+
+    cl_column_names = ["Case Type", "Name", "Owner", "Created Date", "Created By", "Modified Date", "Status"]
 
     pagination = ['10', '25', '50', '100']
     # Phone Number
@@ -86,3 +94,12 @@ class UserData:
     app_type_list = ["Show all Application Types", "Active CommCare Applications", "Deleted CommCare Applications"]
     fct_app_type_list = ["Select an Application Type", "Active CommCare Applications", "Deleted CommCare Applications"]
     view_form_tabs = ["Form Properties", "Case Changes", "Form Metadata", "Raw XML"]
+    default_case_list_dropdown = ["All Case Types", "Show All"]
+    open_close_options = ["Show All", "Only Open", "Only Closed"]
+    case_data_property = ["Name", "Case Type", "Last Submitter", "Case ID"]
+    case_data_history = ["received_on", "readable_name", "username", "user_type"]
+    case_data_vs_dictionary = {
+                                  "Form Name": "readable_name",
+                                  "Form Submitted By": "Last Submitter", "Form User Type": "user_type",
+                                  "case_name": "Name", "case_type": "Case Type", "owner_id" : "owner_id"
+    }
