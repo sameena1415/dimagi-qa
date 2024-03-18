@@ -1245,7 +1245,7 @@ class CaseListPage(BasePage):
         self.verify_users_used_in_the_group([UserData.web_user_email])
         time.sleep(10)
         assert "closed" in self.get_text(self.status_column_first)
-        assert data_dict['url'] == self.get_text(self.name_form_column_first)
+        assert data_dict['url'] == self.get_attribute(self.name_form_column_first, "href")
         print("Case closed successfully")
         # check in Open Case list
         self.select_by_text(self.open_close_dropdown, UserData.open_close_options[1])
