@@ -287,33 +287,6 @@ class CaseListPage(BasePage):
             assert "case_" in items.text, "Input text is not present"
 
 
-    def verify_table_columns(self):
-        self.wait_to_click(self.case_list_rep)
-        self.wait_for_element(self.apply_id, 100)
-        assert self.CASE_LIST_TITLE in self.driver.title, "This is not the Case List page."
-        self.verify_user_lookup_table()
-        self.remove_default_users()
-        self.send_keys(self.users_field, UserData.user_group)
-        self.wait_to_click((By.XPATH, self.users_list_item.format(UserData.user_group)))
-        time.sleep(1)
-        self.select_by_text(self.filter_dates_by, UserData.filter_dates_by[0])
-        self.wait_to_click(self.date_input)
-        self.wait_to_click((By.XPATH, self.date_range_type.format(UserData.date_range[0])))
-        text = self.get_attribute(self.date_input, "value")
-        print(text)
-        date_string, start_date, end_date = self.value_date_range_7_days()
-        time.sleep(2)
-        self.wait_to_click(self.apply_id)
-        time.sleep(10)
-        self.wait_for_element(self.result_table, 300)
-        assert self.is_visible_and_displayed(self.report_content_id, 120), "Report not loaded"
-        print("Report loaded successfully!")
-        self.scroll_to_element(self.result_table)
-        time.sleep(5)
-        assert self.is_present(self.user_column), "Username Column not present"
-        assert self.is_present(self.total_column), "Total Column not present"
-        list_of_columns = self.date_generator(start_date, end_date)
-        self.verify_date_column_name_headers(list_of_columns)
 
     def verify_user_lookup_table(self):
         self.wait_to_click(self.users_field)

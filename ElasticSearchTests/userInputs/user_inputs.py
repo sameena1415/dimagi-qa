@@ -59,6 +59,7 @@ class UserData:
 
     as_column_names = ["Username", "Last Submission", "Last Sync", "Application", "Application Version", "CommCare Version", "Number of unsent forms in user\'s phone"]
 
+    red_column_names = ["View Form", "Username", "Submit Time", "Form Type", "Error Type", "Error Message"]
     pagination = ['10', '25', '50', '100']
     # Phone Number
     area_code = "91"
@@ -108,3 +109,4 @@ class UserData:
                                   "case_name": "Name", "case_type": "Case Type", "owner_id" : "owner_id"
     }
     manage_deployments_list = ["Application Status", "Aggregate User Status", "Raw Forms, Errors & Duplicates", "Device Log Details", "Application Error Report"]
+    submit_form_type = ["Normal Form", "Form with Errors", "Duplicate Form", "Overwritten Form", "Generic Error", "Archived Form"]
