@@ -48,15 +48,20 @@ class EmailVerification:
                       mailbox.fetch(AND(subject=subject, from_=from_email,  date=datetime.date.today()))]
         print(len(bodies))
         n = ''
+        end = -1
         if "Worker Activity" in subject or "Case Activity" in subject:
             n = 2
         else:
             n = 1
+        if "Application Status" in subject:
+            end = None
+        else:
+            end = -1
         soup = BeautifulSoup(str(bodies[len(bodies)-1]), "html.parser")
         tr = []
         table = []
 
-        for row in soup.select("tr")[n:-1]:
+        for row in soup.select("tr")[n:end]:
             for td in row.select("td"):
                 td = td.get_text()
                 td = str(td).replace("\\r", '')

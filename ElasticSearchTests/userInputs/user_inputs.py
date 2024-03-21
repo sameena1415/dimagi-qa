@@ -11,6 +11,10 @@ class UserData:
     reassign_cases_application = 'Reassign Cases'
     case_pregnancy = "pregnancy"
     case_reassign = "reassign"
+    case_reassign_change = "reassign_change"
+    case_commcare = "commcare-user"
+    case_navigation = "Navigation"
+    case_case = "case"
     model_type_case = "case"
     model_type_form = "form"
     new_form_name = "Android Test Form"
@@ -25,7 +29,9 @@ class UserData:
     automation_group_users = ["appiumtest", "formplayer_user"]
     appiumtest_owner_id = "appiumtest@qa-automation.commcarehq.org"
     appiumtest_owner_id_prod = "appiumtest@qa-automation-prod.commcarehq.org"
-    web_user = "automation.user.commcarehq@gmail.com"
+    web_user_email = "automation.user.commcarehq@gmail.com"
+    web_user_id_staging = "7ed7f6e897b973005cb9d142c12ecdfd"
+    appiumtest_id_staging = "46bc847216904511927af0e89adcb2d0"
     default_mw_role = "Mobile Worker Default"
     user_group = "automation_user"
     user_group_shared = "automation_user [case sharing]"
@@ -49,6 +55,11 @@ class UserData:
 
     sh_column_group_names = ["View Form", "Username", "Completion Time", "Form"]
 
+    cl_column_names = ["Case Type", "Name", "Owner", "Created Date", "Created By", "Modified Date", "Status"]
+
+    as_column_names = ["Username", "Last Submission", "Last Sync", "Application", "Application Version", "CommCare Version", "Number of unsent forms in user\'s phone"]
+
+    red_column_names = ["View Form", "Username", "Submit Time", "Form Type", "Error Type", "Error Message"]
     pagination = ['10', '25', '50', '100']
     # Phone Number
     area_code = "91"
@@ -77,6 +88,8 @@ class UserData:
     email_proj_perf_report = "Project Performance Report sent via scripts"
     email_sub_by_form_report = "Submissions By Form Report sent via scripts"
     email_form_comp_report = "Form Completion Time Report sent via scripts"
+    app_status_report = "Application Status: Requested export excel data"
+    email_app_status_report = "Application Status Report sent via scripts"
 
     reasign_modules_forms = {"Case Change": ["Case Register", "Update Case"],
                              "Case List": ["Android Test Form", "Followup Form", "Registration Form"]}
@@ -86,3 +99,14 @@ class UserData:
     app_type_list = ["Show all Application Types", "Active CommCare Applications", "Deleted CommCare Applications"]
     fct_app_type_list = ["Select an Application Type", "Active CommCare Applications", "Deleted CommCare Applications"]
     view_form_tabs = ["Form Properties", "Case Changes", "Form Metadata", "Raw XML"]
+    default_case_list_dropdown = ["All Case Types", "Show All"]
+    open_close_options = ["Show All", "Only Open", "Only Closed"]
+    case_data_property = ["Name", "Case Type", "Last Submitter", "Case ID"]
+    case_data_history = ["received_on", "readable_name", "username", "user_type"]
+    case_data_vs_dictionary = {
+                                  "Form Name": "readable_name",
+                                  "Form Submitted By": "Last Submitter", "Form User Type": "user_type",
+                                  "case_name": "Name", "case_type": "Case Type", "owner_id" : "owner_id"
+    }
+    manage_deployments_list = ["Application Status", "Aggregate User Status", "Raw Forms, Errors & Duplicates", "Device Log Details", "Application Error Report"]
+    submit_form_type = ["Normal Form", "Form with Errors", "Duplicate Form", "Overwritten Form", "Generic Error", "Archived Form"]
