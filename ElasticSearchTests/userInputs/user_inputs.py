@@ -60,6 +60,9 @@ class UserData:
     as_column_names = ["Username", "Last Submission", "Last Sync", "Application", "Application Version", "CommCare Version", "Number of unsent forms in user\'s phone"]
 
     red_column_names = ["View Form", "Username", "Submit Time", "Form Type", "Error Type", "Error Message"]
+
+    device_logs_column_names = ["Log Date", "Log Submission Date", "Log Type", "Logged in Username", "Device Users", "Device ID", "Message", "App Version", "CommCare Version"]
+
     pagination = ['10', '25', '50', '100']
     # Phone Number
     area_code = "91"
@@ -83,6 +86,8 @@ class UserData:
     email_worker_report = "Worker Activity Report sent via scripts"
     daily_form_report = "Daily Form Activity: Requested export excel data"
     email_daily_form_report = "Daily Form Activity Report sent via scripts"
+    device_logs_report = "Device Log Details Activity: Requested export excel data"
+    email_device_logs_report = "Device Log Details Activity Report sent via scripts"
     case_report = "Case Activity: Requested export excel data"
     email_case_report = "Case Activity Report sent via scripts"
     email_proj_perf_report = "Project Performance Report sent via scripts"
@@ -110,3 +115,5 @@ class UserData:
     }
     manage_deployments_list = ["Application Status", "Aggregate User Status", "Raw Forms, Errors & Duplicates", "Device Log Details", "Application Error Report"]
     submit_form_type = ["Normal Form", "Form with Errors", "Duplicate Form", "Overwritten Form", "Generic Error", "Archived Form"]
+
+    logs_by_tags_options = ["commcare-update", "data-change", "exception", "form-entry", "form-submission", "maintenance", "resources", "user"]
