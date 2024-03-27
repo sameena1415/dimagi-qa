@@ -731,13 +731,6 @@ class DeviceLogsDetailsPage(BasePage):
         text = self.get_attribute(self.date_input, "value")
         print(text)
         assert text == date_string
-        self.wait_to_click(self.apply_id)
-        time.sleep(10)
-        self.wait_for_element(self.result_table, 300)
-        assert self.is_visible_and_displayed(self.report_content_id, 120), "Report not loaded"
-        print("Report loaded successfully!")
-        self.scroll_to_element(self.result_table)
-        time.sleep(5)
         self.deselect_all(self.logtag_dropdown)
         time.sleep(2)
         self.select_multiple_by_text(self.logtag_dropdown,

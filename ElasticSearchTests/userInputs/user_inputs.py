@@ -37,6 +37,7 @@ class UserData:
     user_group_shared = "automation_user [case sharing]"
     assign_case_user = "mobile_testuser"
     view_by = ["Users", "Groups"]
+    deleted_group = "deleted_group"
     filter_dates_by = ["Completion Time", "Submission Time"]
     location = "updated_on"
     arrows_code = ['color: #8b0000', 'color: rgb(139, 0, 0)', 'color: #006400', 'color: rgb(0, 100, 0)']
@@ -63,6 +64,9 @@ class UserData:
 
     device_logs_column_names = ["Log Date", "Log Submission Date", "Log Type", "Logged in Username", "Device Users", "Device ID", "Message", "App Version", "CommCare Version"]
 
+    sms_usage_column_names = ["User Name", "Number of Messages Received", "Number of Messages Sent", "Number of Phone Numbers Used"]
+
+    cle_column_names = ["View Case", "@case_type", "@case_name", "last modified"]
     pagination = ['10', '25', '50', '100']
     # Phone Number
     area_code = "91"
@@ -95,6 +99,8 @@ class UserData:
     email_form_comp_report = "Form Completion Time Report sent via scripts"
     app_status_report = "Application Status: Requested export excel data"
     email_app_status_report = "Application Status Report sent via scripts"
+    case_list_explorer_report = "Case List Explorer: Requested export excel data"
+    email_case_list_explorer_report = "Case List Explorer Report sent via scripts"
 
     reasign_modules_forms = {"Case Change": ["Case Register", "Update Case"],
                              "Case List": ["Android Test Form", "Followup Form", "Registration Form"]}
@@ -116,4 +122,9 @@ class UserData:
     manage_deployments_list = ["Application Status", "Aggregate User Status", "Raw Forms, Errors & Duplicates", "Device Log Details", "Application Error Report"]
     submit_form_type = ["Normal Form", "Form with Errors", "Duplicate Form", "Overwritten Form", "Generic Error", "Archived Form"]
 
+    messaging_list = ["SMS Usage", "Messaging History", "Message Log", "SMS Opt Out Report", "Scheduled Messaging Events"]
+
     logs_by_tags_options = ["commcare-update", "data-change", "exception", "form-entry", "form-submission", "maintenance", "resources", "user"]
+    sms_usage_group_default = ["Everybody"]
+
+    proj_settings_timezones = ["America/Toronto", "Asia/Kolkata"]
