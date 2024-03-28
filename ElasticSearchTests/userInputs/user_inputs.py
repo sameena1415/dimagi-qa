@@ -67,6 +67,8 @@ class UserData:
     sms_usage_column_names = ["User Name", "Number of Messages Received", "Number of Messages Sent", "Number of Phone Numbers Used"]
 
     cle_column_names = ["View Case", "@case_type", "@case_name", "last modified"]
+    ml_column_names = ["Timestamp", "User Name", "Phone Number", "Direction", "Message", "Status", "Event", "Type"]
+
     pagination = ['10', '25', '50', '100']
     # Phone Number
     area_code = "91"
@@ -128,3 +130,7 @@ class UserData:
     sms_usage_group_default = ["Everybody"]
 
     proj_settings_timezones = ["America/Toronto", "Asia/Kolkata"]
+
+    message_type = ["Reminder", "Keyword", "Broadcast", "Callback", "Survey", "Default", "Other"]
+    location_filter = ["Off", "On"]
+    location_dropdown_default = ["All", "Active Mobile Worker"]
