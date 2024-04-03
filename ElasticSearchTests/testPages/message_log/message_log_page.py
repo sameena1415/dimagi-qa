@@ -785,6 +785,7 @@ class MessageLogPage(BasePage):
         print("Save Report Form is closed")
 
     def save_report(self, report_name):
+        time.sleep(15)
         self.wait_for_element(self.save_config_button)
         self.wait_to_click(self.save_config_button)
         text = self.get_selected_text(self.date_range_field_select)

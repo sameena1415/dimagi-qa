@@ -60,7 +60,7 @@ class UserData:
 
     as_column_names = ["Username", "Last Submission", "Last Sync", "Application", "Application Version", "CommCare Version", "Number of unsent forms in user\'s phone"]
 
-    red_column_names = ["View Form", "Username", "Submit Time", "Form Type", "Error Type", "Error Message"]
+    red_column_names = ["View Form", "Username", "Submit Time", "Form Type", "Error Type", "Error Message", "View Cases"]
 
     device_logs_column_names = ["Log Date", "Log Submission Date", "Log Type", "Logged in Username", "Device Users", "Device ID", "Message", "App Version", "CommCare Version"]
 

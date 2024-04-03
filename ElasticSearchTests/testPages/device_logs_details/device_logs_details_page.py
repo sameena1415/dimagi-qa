@@ -454,8 +454,13 @@ class DeviceLogsDetailsPage(BasePage):
             assert self.is_present(self.prev_page_button_disabled), "Previous button is not disabled."
             print("Previous button disabled correctly")
             print("Clicking on page " + last_page)
-            self.wait_to_click((By.XPATH, self.page_button.format(last_page)))
-            time.sleep(15)
+            for i in range(0, 3):
+                class_type = self.get_attribute((By.XPATH, self.page_button.format(last_page)), 'class')
+                if class_type != 'active':
+                    self.wait_to_click((By.XPATH, self.page_button.format(last_page)))
+                    time.sleep(15)
+                else:
+                    break
             assert self.is_present(self.next_page_button_disabled), "Next button is not disabled."
             print("Next button disabled correctly")
             time.sleep(5)
@@ -898,6 +903,7 @@ class DeviceLogsDetailsPage(BasePage):
         print("Deleted Report Successfully")
 
     def save_report_donot_save(self, report_name):
+        time.sleep(5)
         self.wait_for_element(self.save_config_button)
         self.wait_to_click(self.save_config_button)
         self.wait_to_clear_and_send_keys(self.name_field, report_name)
@@ -924,6 +930,7 @@ class DeviceLogsDetailsPage(BasePage):
         print("Save Report Form is closed")
 
     def save_report(self, report_name):
+        time.sleep(10)
         self.wait_for_element(self.save_config_button)
         self.wait_to_click(self.save_config_button)
         text = self.get_selected_text(self.date_range_field_select)
