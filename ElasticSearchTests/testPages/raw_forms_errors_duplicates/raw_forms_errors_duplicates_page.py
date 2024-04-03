@@ -431,6 +431,7 @@ class RawFormsErrorsDuplicatesPage(BasePage):
             print("Both Previous and Next Page buttons are disabled correctly.")
 
     def verify_pagination_dropdown(self):
+        self.wait_for_element(self.table_info, 200)
         info = self.get_text(self.table_info)
         info = str(info).split(" ")
         print("Total records: ", info[-2])

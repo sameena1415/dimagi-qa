@@ -511,7 +511,7 @@ class WorkerActivityPage(BasePage):
         self.wait_to_click(self.date_input)
         self.wait_to_click((By.XPATH, self.date_range_type.format(UserData.date_range[0])))
         self.wait_to_click(self.apply_id)
-        time.sleep(10)
+        time.sleep(15)
         report_name = "Saved Worker Activity Report " + fetch_random_string()
         self.wait_for_element(self.result_table, 300)
         assert self.is_visible_and_displayed(self.report_content_id, 120), "Report not loaded"
