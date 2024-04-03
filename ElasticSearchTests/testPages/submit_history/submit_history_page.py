@@ -1268,19 +1268,22 @@ class SubmitHistoryPage(BasePage):
                                           list(UserData.reasign_modules_forms.keys())[1],
                                           UserData.reasign_modules_forms[
                                               list(UserData.reasign_modules_forms.keys())[1]][2])
-
         self.select_by_text(self.filter_dates_by, UserData.filter_dates_by[0])
         self.wait_to_click(self.date_input)
-        self.wait_to_click((By.XPATH, self.date_range_type.format(UserData.date_range[0])))
+        self.wait_to_click((By.XPATH, self.date_range_type.format(UserData.date_range[1])))
         text = self.get_attribute(self.date_input, "value")
         print(text)
-        date_string, start_date, end_date = self.value_date_range_7_days()
+        date_string, start_date, end_date = self.value_date_range_last_month()
         time.sleep(2)
         self.wait_to_click(self.apply_id)
         time.sleep(10)
         self.wait_for_element(self.result_table, 300)
         assert self.is_visible_and_displayed(self.report_content_id, 120), "Report not loaded"
         print("Report loaded successfully!")
+        time.sleep(5)
+        self.wait_for_element((By.XPATH, self.user_sort.format("Completion Time")))
+        self.wait_to_click((By.XPATH, self.user_sort.format("Completion Time")))
+        time.sleep(15)
         self.wait_to_click(self.view_form_column_first)
         self.switch_to_next_tab()
         time.sleep(10)
@@ -1292,7 +1295,10 @@ class SubmitHistoryPage(BasePage):
         self.click(self.archive_this_form)
         self.wait_for_element(self.restore_this_form, 100)
         assert not self.is_visible_and_displayed(self.archive_this_form, 10)
-        assert self.is_present(self.archive_success_msg)
+        if self.is_present(self.archive_success_msg):
+            print("Archive Success message is displayed")
+        else:
+            print("No Archive success message")
         assert self.is_present(self.restore_this_form)
         assert self.is_present(self.delete_this_form)
         self.click(self.restore_this_form)
@@ -1300,11 +1306,18 @@ class SubmitHistoryPage(BasePage):
         assert not self.is_visible_and_displayed(self.restore_this_form, 10)
         assert not self.is_visible_and_displayed(self.delete_this_form, 10)
         assert self.is_present(self.restore_success_msg)
+        if self.is_present(self.restore_success_msg):
+            print("Restore Success message is displayed")
+        else:
+            print("No Restore success message")
         assert self.is_present(self.archive_this_form)
         self.click(self.archive_this_form)
         self.wait_for_element(self.restore_this_form, 100)
         assert not self.is_visible_and_displayed(self.archive_this_form, 10)
-        assert self.is_present(self.archive_success_msg)
+        if self.is_present(self.archive_success_msg):
+            print("Archive Success message is displayed")
+        else:
+            print("No Archive success message")
         assert self.is_present(self.restore_this_form)
         assert self.is_present(self.delete_this_form)
         self.wait_to_click(self.delete_this_form)

@@ -891,6 +891,7 @@ class DailyFormActivityPage(BasePage):
             print("Correct Column present")
             self.scroll_to_bottom()
             time.sleep(2)
+            self.wait_for_element(self.submit_history_table_info, 120)
             info = self.get_text(self.submit_history_table_info)
             print(info)
             info = str(info).split(" ")
