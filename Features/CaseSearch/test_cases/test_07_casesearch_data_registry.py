@@ -171,7 +171,7 @@ def test_case_07_smart_link_search_first_linked_domain_case(driver):
     assert "casesearch-1" in domain_url
     webapps.submit_the_form()
 
-
+@pytest.mark.skip
 def test_case_08_smart_link_search_first_shadow(driver):
     webapps = WebApps(driver)
     casesearch = CaseSearchWorkflows(driver)

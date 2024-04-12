@@ -26,9 +26,10 @@ class ImportCasesPage(BasePage):
         self.download_file = (By.XPATH, "(//span[@data-bind='text: upload_file_name'])[1]")
         self.choose_file = (By.ID, "file")
         self.next_step = (By.XPATH, "(//button[@type='submit'])[1]")
+        self.confirm_import = (By.XPATH, "//button[@type='submit'][contains(.,'Confirm Import')]")
         self.case_type = (By.XPATH, "//select[@id='case_type']")
         self.case_type_option_value = (By.XPATH, "//option[@value='pregnancy']")
-        self.success = "(//span[text()='{}']//preceding::span[@class='label label-success'])[1]"
+        self.success = "(//span[text()='{}']//preceding::span[contains(@class,'success')])[1]"
 
     def replace_property_and_upload(self):
         self.wait_to_click(self.import_cases_menu)
@@ -38,7 +39,9 @@ class ImportCasesPage(BasePage):
         self.is_visible_and_displayed(self.case_type)
         self.select_by_text(self.case_type, UserData.case_pregnancy)
         self.wait_to_click(self.next_step)
-        self.wait_to_click(self.next_step)
+        time.sleep(5)
+        self.scroll_to_element(self.confirm_import)
+        self.js_click(self.confirm_import)
         print("Imported case!")
         assert self.is_visible_and_displayed((By.XPATH, self.success.format(self.file_new_name))), "Waitinng to start import. Celery might have a high queue."
 
@@ -67,8 +70,9 @@ class ImportCasesPage(BasePage):
         self.wait_for_element(self.next_step)
         self.wait_to_click(self.next_step)
         self.wait_for_element(self.next_step)
-        self.scroll_to_element(self.next_step)
-        self.wait_to_click(self.next_step)
+        time.sleep(5)
+        self.scroll_to_element(self.confirm_import)
+        self.js_click(self.confirm_import)
         print("Imported case!")
         assert self.is_visible_and_displayed((By.XPATH, self.success.format(file)), 100), "Waitinng to start import. Celery might have a high queue."
         print("Import Completed")

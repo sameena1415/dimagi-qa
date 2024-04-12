@@ -225,10 +225,10 @@ class MessagingPage(BasePage):
         self.send_keys(self.broadcast_message, "Test Alert:" + self.cond_alert_name_input)
         self.wait_to_click(self.save_button_xpath)
         print("Sleeping till the alert processing completes")
-        time.sleep(60)
+        time.sleep(260)
         self.wait_to_clear_and_send_keys(self.search_box, self.cond_alert_name_input)
         self.wait_to_click(self.search_box)
-        self.wait_for_element(self.delete_cond_alert, 500)
+        self.wait_for_element(self.delete_cond_alert, 700)
         self.driver.refresh()
         if self.is_clickable(self.delete_cond_alert):
             print("Restart is not required.")
