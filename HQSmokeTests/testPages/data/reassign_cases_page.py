@@ -1,5 +1,6 @@
 import time
 
+from selenium.webdriver import ActionChains
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 
@@ -21,7 +22,8 @@ class ReassignCasesPage(BasePage):
         self.apply = (By.ID, "apply-btn")
         self.case_type = (By.ID, "report_filter_case_type")
         self.case_type_option_value = (By.XPATH, "//option[@value='reassign']")
-        self.select_first_case = (By.XPATH, "(//td[2][not(contains(.,'no name'))]//preceding-sibling::td/input[@type='checkbox'])[1]")
+        self.select_first_case = (
+        By.XPATH, "(//td[2][not(contains(.,'no name'))]//preceding-sibling::td/input[@type='checkbox'])[1]")
         self.first_case_name = (By.XPATH, "(//a[contains(@class, 'ajax_dialog')][not(contains(.,'no name'))])[1]")
         self.user_search_dropdown = (By.ID, "select2-reassign_owner_select-container")
         self.user_to_be_reassigned = (By.XPATH, "(//li[contains(.,'Active Mobile Worker')])[1]")
@@ -31,11 +33,33 @@ class ReassignCasesPage(BasePage):
         self.out_of_range = (By.XPATH, "(//span[@class='label label-warning'])[1]")
         self.search_query = (By.ID, "report_filter_search_query")
         self.reassign_to_user_dropdwon_input = (By.XPATH, "//input[@class='select2-search__field']")
-        self.reassigned_user_from_list = (By.XPATH, "//li[starts-with(text(), 'appiumtest') and contains(text(), 'Active Mobile Worker')]")
+        self.reassigned_user_from_list = (
+        By.XPATH, "//li[starts-with(text(), 'appiumtest') and contains(text(), 'Active Mobile Worker')]")
 
-    def get_cases(self):
+        self.users_field = (By.XPATH, "(//textarea[@class='select2-search__field'])[1]")
+        self.users_list_item = "//ul[@role='listbox']/li[contains(.,'{}')]"
+        self.remove_buttons = (By.XPATH, "//ul//button")
+
+    def remove_default_users(self):
+        self.wait_for_element(self.users_field)
+        count = self.find_elements(self.remove_buttons)
+        print(len(count))
+        for i in range(len(count)):
+            count[0].click()
+            time.sleep(2)
+            if len(count) != 1:
+                ActionChains(self.driver).send_keys(Keys.TAB).perform()
+                time.sleep(2)
+            count = self.find_elements(self.remove_buttons)
+        ActionChains(self.driver).send_keys(Keys.ESCAPE).perform()
+
+    def get_cases(self, username):
         self.wait_to_click(self.reassign_cases_menu)
         self.select_by_value(self.case_type, UserData.case_reassign)
+        self.remove_default_users()
+        self.send_keys(self.users_field, username)
+        self.wait_to_click((By.XPATH, self.users_list_item.format(username)))
+        time.sleep(1)
         self.wait_to_click(self.apply)
 
     def reassign_case(self):
@@ -54,6 +78,8 @@ class ReassignCasesPage(BasePage):
         print("Sleeping sometime for the case to get updated")
         time.sleep(10)
         self.driver.refresh()
+        time.sleep(5)
+        self.remove_default_users()
         self.wait_to_clear_and_send_keys(self.search_query, case_being_reassgined)
         self.send_keys(self.search_query, Keys.TAB)
         self.wait_to_click(self.apply)

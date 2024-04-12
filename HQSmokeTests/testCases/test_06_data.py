@@ -28,7 +28,7 @@ def test_case_30_reassign_cases(driver, settings):
     home = HomePage(driver, settings)
     home.data_menu()
     reassign = ReassignCasesPage(driver, settings)
-    reassign.get_cases()
+    reassign.get_cases(settings['login_username'])
     reassign.reassign_case()
 
 
