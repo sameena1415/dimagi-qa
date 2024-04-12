@@ -48,6 +48,8 @@ class GroupPage(BasePage):
     def add_user_to_group(self, username, group_name):
         self.send_keys(self.users_drop_down, username)
         self.wait_to_click((By.XPATH, self.select_user.format(username)))
+        time.sleep(20)
+        self.wait_for_element(self.users_drop_down, 400)
         self.wait_to_click(self.update_button)
         print(self.driver.current_url)
         group_id_value = self.driver.current_url.split("/")[-2]
