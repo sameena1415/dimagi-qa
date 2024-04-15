@@ -150,11 +150,12 @@ class WorkloadModelSteps(SequentialTaskSet):
                         i) + " is " + str(total_time) + " seconds.")
                 logging.info(
                     "user: " + self.user.username + "; mobile worker: " + self.user.login_as + "; request: navigate_menu")
-                logging.info("mobile worker: " + self.user.login_as + " Sleeping for-->" + str(rng))
-                time.sleep(rng)
             except Exception as e:
                 logging.info(
                     "user: " + self.user.username + "; mobile worker: " + self.user.login_as + "; request: navigate_menu; exception: " + str(e))
+
+            logging.info("mobile worker: " + self.user.login_as + " Sleeping for-->" + str(rng))
+            time.sleep(rng)
 
         @task
         def stop(self):
