@@ -33,6 +33,7 @@ class GroupPage(BasePage):
         self.confirm_delete = (By.XPATH, "//button[@class='btn btn-danger disable-on-submit']")
         self.delete_success_message = (By.XPATH, "//div[@class='alert alert-margin-top fade in html alert-success']")
         # self.renamed_group_link = (By.LINK_TEXT, self.renamed_group)
+        self.group_loading = (By.XPATH, "//div[@id='membership_updating'][@style='display: none']")
 
     def click_group_menu(self):
         self.wait_to_click(self.group_menu_xpath)
@@ -51,6 +52,7 @@ class GroupPage(BasePage):
         time.sleep(20)
         self.wait_for_element(self.users_drop_down, 400)
         self.wait_to_click(self.update_button)
+        self.wait_for_element(self.group_loading, 300)
         print(self.driver.current_url)
         group_id_value = self.driver.current_url.split("/")[-2]
         time.sleep(2)
@@ -69,6 +71,7 @@ class GroupPage(BasePage):
         renamed_group = group_name+"_rename"
         self.wait_to_clear_and_send_keys(self.group_name_input, renamed_group)
         self.click(self.save_button)
+        self.wait_for_element(self.group_loading, 300)
         assert self.is_visible_and_displayed(self.success_alert), "Group could not be renamed"
         print("Renamed a group")
         return renamed_group
@@ -77,6 +80,7 @@ class GroupPage(BasePage):
         time.sleep(3)
         self.js_click(self.remove_user)
         self.js_click(self.update_button)
+        self.wait_for_element(self.group_loading, 300)
         assert self.is_visible_and_displayed(self.success_alert), "User deletion from group not successful"
         print("Removed added user from group")
         time.sleep(2)
