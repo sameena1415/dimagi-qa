@@ -40,7 +40,7 @@ class WorkloadModelSteps(SequentialTaskSet):
 
 
     def _log_in(self):
-        logging.info("_log_in")
+        logging.info("_log_in - mobile worker: " + self.user.login_as)
         login_url = f'/a/{self.user.domain}/login/'
         response = self.client.get(login_url)
         response = self.client.post(
@@ -59,7 +59,7 @@ class WorkloadModelSteps(SequentialTaskSet):
         assert ('Sign In' not in response.text)  # make sure we weren't just redirected back to login
 
     def _get_build_info(self):
-        logging.info("_get_build_info")
+        logging.info("_get_build_info - mobile worker: " + self.user.login_as)
         response = self.client.get(f'/a/{self.user.domain}/cloudcare/apps/v2/?option=apps', name='build info')
         assert (response.status_code == 200)
         for app in response.json():
@@ -85,10 +85,10 @@ class WorkloadModelSteps(SequentialTaskSet):
     @task
     def home_screen(self):
         try:
-            logging.info("home_screen")
+            logging.info("home_screen - mobile worker: " + self.user.login_as)
             data = self._formplayer_post("navigate_menu_start", name="Home Screen", checkKey="title",
                                          checkValue=self.FUNC_HOME_SCREEN['title'])
-            assert (data['title'] == self.FUNC_HOME_SCREEN['title'])
+            assert data['title'] == self.FUNC_HOME_SCREEN['title'], "formplayer response does not contain title or title is incorrect - with mobile worker: " + self.user.login_as
             logging.info(
                 "user: " + self.user.username + "; mobile worker: " + self.user.login_as + "; request: navigate_menu_start")
         except Exception as e:
@@ -99,12 +99,12 @@ class WorkloadModelSteps(SequentialTaskSet):
     @task
     def search_for_beds_menu(self):
         try:
-            logging.info("all_cases_case_list")
+            logging.info("all_cases_case_list - mobile worker:" + self.user.login_as)
             data = self._formplayer_post("navigate_menu", extra_json={
                 "selections": [self.FUNC_SEARCH_FOR_BEDS_MENU['selections']],
             }, name="Open Search for Beds Menu", checkKey="title", checkValue=self.FUNC_SEARCH_FOR_BEDS_MENU['title'])
             # logging.info("===>>>>>>>>>" + str(data))
-            assert (data['title'] == self.FUNC_SEARCH_FOR_BEDS_MENU['title'])
+            assert data['title'] == self.FUNC_SEARCH_FOR_BEDS_MENU['title'],  "formplayer response does not contain title or title is incorrect - with mobile worker: " + self.user.login_as
             logging.info(
                 "user: " + self.user.username + "; mobile worker: " + self.user.login_as + "; request: navigate_menu")
         except Exception as e:
@@ -117,7 +117,7 @@ class WorkloadModelSteps(SequentialTaskSet):
     def perform_a_search(self):
         for i in range(0, 20):
             try:
-                logging.info("perform_a_search_" + str(i))
+                logging.info("perform_a_search_" + str(i) + " mobile worker:" + self.user.login_as)
                 start_time = time.time()
                 data = self._formplayer_post("navigate_menu", extra_json={
                     "query_data": {
@@ -141,23 +141,24 @@ class WorkloadModelSteps(SequentialTaskSet):
                     },
                     "selections": ["0"],
                 }, name="Perform a Search")
-                assert ('entities' in data)
+                assert 'entities' in data, "formplayer response does not contain entities - with mobile worker: " + self.user.login_as
                 end_time = time.time()
                 total_time = end_time - start_time
                 rng = random.randrange(5, 15)
-                time.sleep(rng)
-                logging.info("Sleeping for-->" + str(rng))
                 logging.info(
                     "Total response time for Bed Tracking Search for user: " + self.user.username + " with mobile worker: " + self.user.login_as + " for loop " + str(
                         i) + " is " + str(total_time) + " seconds.")
                 logging.info(
                     "user: " + self.user.username + "; mobile worker: " + self.user.login_as + "; request: navigate_menu")
+                logging.info("mobile worker: " + self.user.login_as + " Sleeping for-->" + str(rng))
+                time.sleep(rng)
             except Exception as e:
                 logging.info(
                     "user: " + self.user.username + "; mobile worker: " + self.user.login_as + "; request: navigate_menu; exception: " + str(e))
 
         @task
         def stop(self):
+            logging.info("stopping - mobile worker: " + self.user.login_as)
             self.interrupt()
 
     def _formplayer_post(self, command, extra_json=None, name=None, checkKey=None, checkValue=None, checkLen=None):
