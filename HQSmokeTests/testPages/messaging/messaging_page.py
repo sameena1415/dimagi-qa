@@ -225,7 +225,7 @@ class MessagingPage(BasePage):
         self.send_keys(self.broadcast_message, "Test Alert:" + self.cond_alert_name_input)
         self.wait_to_click(self.save_button_xpath)
         print("Sleeping till the alert processing completes")
-        time.sleep(260)
+        time.sleep(360)
         self.wait_to_clear_and_send_keys(self.search_box, self.cond_alert_name_input)
         self.wait_to_click(self.search_box)
         self.wait_for_element(self.delete_cond_alert, 700)
@@ -239,10 +239,10 @@ class MessagingPage(BasePage):
                 time.sleep(5)
                 self.accept_pop_up()
                 print("Sleeping till the alert processing completes")
-                time.sleep(60)
+                time.sleep(360)
                 self.wait_to_clear_and_send_keys(self.search_box, self.cond_alert_name_input)
                 self.wait_to_click(self.search_box)
-                self.wait_for_element(self.delete_cond_alert, 500)
+                self.wait_for_element(self.delete_cond_alert, 700)
                 self.driver.refresh()
             except:
                 print("Restart not required")
@@ -372,6 +372,9 @@ class MessagingPage(BasePage):
 
     def remove_keyword(self):
         self.wait_to_click(self.keywords)
+        self.wait_for_element(self.page_limit)
+        self.select_by_value(self.page_limit, "50")
+        time.sleep(10)
         self.wait_to_click(self.delete_keyword)
         self.wait_to_click(self.confirm_delete_keyword)
         self.driver.refresh()
@@ -385,6 +388,9 @@ class MessagingPage(BasePage):
 
     def remove_structured_keyword(self):
         self.wait_to_click(self.keywords)
+        self.wait_for_element(self.page_limit)
+        self.select_by_value(self.page_limit, "50")
+        time.sleep(10)
         self.wait_to_click(self.delete_structured_keyword)
         self.wait_to_click(self.confirm_delete_structured_keyword)
         self.driver.refresh()
@@ -493,7 +499,12 @@ class MessagingPage(BasePage):
         assert self.is_visible_and_displayed(self.upload_success_message), "Msg Trans not uploaded successfully"
         print("Msg Trans uploaded successfully!")
 
-    def project_settings_page(self):
+    def project_settings_page(self, value=None):
+        if value==True:
+            self.switch_to_default_content()
+            time.sleep(5)
+        else:
+            print("Value null")
         self.wait_to_click(self.settings_bar)
         self.wait_to_click(self.project_settings_menu)
         assert self.is_visible_and_displayed(

@@ -113,7 +113,7 @@ class AppPreviewPage(BasePage):
         time.sleep(2)
         self.switch_to_default_content()
         print("Sleeping for sometime so the form data is updated")
-        time.sleep(30)
+        time.sleep(100)
         print("Latitude: ", lat, "Longitude: ", lon)
         return lat, lon
 
