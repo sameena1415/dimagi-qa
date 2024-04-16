@@ -341,8 +341,6 @@ class LoginCommCareHQWithUniqueUsers(HttpUser):
             app_config = "project-config/" + project + "/" + app_config_force
         else:
             app_config = config['app_config']
-        owner_id = config['owner_id']
-        case_type = config['case_type']
 
     # get domain user credential and app config info
     with open(domain_user_credential) as json_file:
