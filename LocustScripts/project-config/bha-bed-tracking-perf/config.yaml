@@ -4,6 +4,4 @@ domain: co-carecoordination-perf
 app_id: b62974969e57051ad70160a798ed79e8
 domain_user_credential: project-config/bha-bed-tracking-perf/user_credentials.json
 owner_id: 3ca0fb9a3402487590f9b2eb5f0c876e
-case_type: song_perf_10_100000
 app_config: project-config/bha-bed-tracking-perf/app_config.json
-login_as: perf.test_template.user
