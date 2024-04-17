@@ -15,6 +15,45 @@ from datetime import datetime
 class WorkloadModelSteps(SequentialTaskSet):
     wait_time = between(5, 15)
 
+    def on_start(self):
+        # get domain user credential and app config info
+        with open(self.user.app_config) as json_file:
+            data = json.load(json_file)
+            self.FUNC_HOME_SCREEN = data['FUNC_HOME_SCREEN']
+
+        self._log_in()
+        self._get_build_info()
+
+    # noinspection PyUnusedLocal
+    def _log_in(self):
+        logging.info("_log_in - mobile worker: " + self.user.login_as)
+        login_url = f'/a/{self.user.domain}/login/'
+        response = self.client.get(login_url)
+        response = self.client.post(
+            login_url,
+            {
+                "auth-username": self.user.username,
+                "auth-password": self.user.password,
+                "cloud_care_login_view-current_step": ['auth'],  # fake out two_factor ManagementForm
+            },
+            headers={
+                "X-CSRFToken": self.client.cookies.get('csrftoken'),
+                "REFERER": f'{self.user.host}{login_url}',  # csrf requires this for secure requests
+            },
+        )
+        assert (response.status_code == 200)
+        assert ('Sign In' not in response.text)  # make sure we weren't just redirected back to login
+
+    def _get_build_info(self):
+        logging.info("_get_build_info - mobile worker: " + self.user.login_as)
+        response = self.client.get(f'/a/{self.user.domain}/cloudcare/apps/v2/?option=apps', name='build info')
+        assert (response.status_code == 200)
+        for app in response.json():
+            if app['copy_of'] == self.user.app_id:
+                # get build_id
+                self.build_id = app['_id']
+        logging.info("build_id: " + self.build_id)
+
 class LoginCommCareHQWithUniqueUsers(HttpUser):
     tasks = [WorkloadModelSteps]
 
