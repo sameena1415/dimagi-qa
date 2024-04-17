@@ -54,6 +54,62 @@ class WorkloadModelSteps(SequentialTaskSet):
                 self.build_id = app['_id']
         logging.info("build_id: " + self.build_id)
 
+    @tag('home_screen')
+    @task
+    def home_screen(self):
+        try:
+            logging.info("home_screen - mobile worker: " + self.user.login_as)
+            data = self._formplayer_post("navigate_menu_start", name="Home Screen", checkKey="title",
+                                         checkValue=self.FUNC_HOME_SCREEN['title'])
+            assert data['title'] == self.FUNC_HOME_SCREEN['title'], "formplayer response does not contain title or title is incorrect - with mobile worker: " + self.user.login_as            
+            logging.info(
+                "user: " + self.user.username + "; mobile worker: " + self.user.login_as + "; request: navigate_menu_start")
+        except Exception as e:
+            logging.info(
+                "user: " + self.user.username + "; mobile worker: " + self.user.login_as + "; request: navigate_menu_start; exception: " + str(e))
+
+    def _formplayer_post(self, command, extra_json=None, name=None, checkKey=None, checkValue=None, checkLen=None):
+        json = {
+            "app_id": self.build_id,
+            "domain": self.user.domain,
+            "locale": "en",
+            "restoreAs": self.user.login_as,
+            "username": self.user.username,
+        }
+        if extra_json:
+            json.update(extra_json)
+        name = name or command
+
+        if 'XSRF-TOKEN' not in self.client.cookies:
+            response = self.client.get(f"{self.parent.formplayer_host}/serverup")
+            response.raise_for_status()
+
+        xsrf_token = self.client.cookies['XSRF-TOKEN']
+        headers = {'X-XSRF-TOKEN': xsrf_token}
+        self.client.headers.update(headers)
+
+        with self.client.post(f"{self.user.formplayer_host}/{command}/", json=json, name=name,
+                              catch_response=True) as response:
+            data = response.json()
+            # logging.info("data-->" + str(data))
+            if "exception" in data:
+                logging.info("ERROR::exception error--" + data['exception'])
+                logging.info("ERROR::user-info::" + self.user.username + "::" + self.user.login_as)
+                response.failure("exception error--" + data['exception'])
+            elif checkKey and checkKey not in data:
+                logging.info("error::" + checkKey + " not in data")
+                response.failure("ERROR::" + checkKey + " not in data")
+            elif checkKey and checkLen:
+                if len(data[checkKey]) != checkLen:
+                    logging.info("ERROR::len(data['" + checkKey + "']) != " + checkLen)
+                    response.failure("error::len(data['" + checkKey + "']) != " + checkLen)
+            elif checkKey and checkValue:
+                if data[checkKey] != checkValue:
+                    logging.info("ERROR::data['" + checkKey + "'] != " + checkValue)
+                    response.failure("error::data['" + checkKey + "'] != " + checkValue)
+        return response.json()
+
+
 class LoginCommCareHQWithUniqueUsers(HttpUser):
     tasks = [WorkloadModelSteps]
 
