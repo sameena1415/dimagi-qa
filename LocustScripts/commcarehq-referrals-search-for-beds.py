@@ -21,7 +21,9 @@ class WorkloadModelSteps(SequentialTaskSet):
             data = json.load(json_file)
             self.FUNC_HOME_SCREEN = data['FUNC_HOME_SCREEN']
             self.FUNC_SEARCH_FOR_BEDS_MENU = data['FUNC_SEARCH_FOR_BEDS_MENU']
+            self.FUNC_CREATE_PROFILE_AND_REFER_FORM = data['FUNC_CREATE_PROFILE_AND_REFER_FORM']
 
+        self.cases_per_page = 100
         self._log_in()
         self._get_build_info()
 
@@ -76,14 +78,47 @@ class WorkloadModelSteps(SequentialTaskSet):
             logging.info("all_cases_case_list - mobile worker:" + self.user.login_as)
             data = self._formplayer_post("navigate_menu", extra_json={
                 "selections": [self.FUNC_SEARCH_FOR_BEDS_MENU['selections']],
+                "cases_per_page": self.cases_per_page,
             }, name="Open Search for Beds Menu", checkKey="title", checkValue=self.FUNC_SEARCH_FOR_BEDS_MENU['title'])
             # logging.info("===>>>>>>>>>" + str(data))
             assert data['title'] == self.FUNC_SEARCH_FOR_BEDS_MENU['title'],  "formplayer response does not contain title or title is incorrect - with mobile worker: " + self.user.login_as
             logging.info(
                 "user: " + self.user.username + "; mobile worker: " + self.user.login_as + "; request: navigate_menu")
+            self.page_count = data["pageCount"]
         except Exception as e:
             logging.info(
                 "user: " + self.user.username + "; mobile worker: " + self.user.login_as + "; request: navigate_menu; exception: " + str(e))
+
+    @tag('selectCases')
+    @task
+    def select_cases(self):
+        logging.info("Selecting Random Cases " + self.user.login_as)
+        total_qty_cases_to_select = random.randrange(5,11)
+        self.selected_case_ids = set()
+        while len(self.selected_case_ids) < total_qty_cases_to_select:
+            random_page_num = random.randrange(0, self.page_count)
+            offset = random_page_num * self.cases_per_page
+
+            random_qty_cases_to_select_per_page = random.randrange(1, total_qty_cases_to_select + 1)
+            qty_cases_remaining_to_select = total_qty_cases_to_select - len(self.selected_case_ids)
+            qty_to_select = min(random_qty_cases_to_select_per_page, qty_cases_remaining_to_select)
+            logging.info("offset:" + str(offset) + " qty_to_select: " + str(qty_to_select))
+            data = self._formplayer_post("navigate_menu", extra_json={
+                "selections": [self.FUNC_SEARCH_FOR_BEDS_MENU['selections']],
+                "cases_per_page": self.cases_per_page,
+                "offset": offset,
+            }, name="Open Search for Beds Menu", checkKey="title", checkValue=self.FUNC_SEARCH_FOR_BEDS_MENU['title'])
+
+            entities = data["entities"]
+            ids = [entity["id"] for entity in entities if entity["id"] not in self.selected_case_ids]
+            if len(ids) < qty_to_select:
+                self.selected_case_ids.update(ids)
+            else:
+                for _ in range(qty_to_select):
+                    random_case_index = random.randrange(0, len(ids))
+                    self.selected_case_ids.add(ids[random_case_index])
+        logging.info("want to select " + str(total_qty_cases_to_select))
+        logging.info("selected cases are " + str(self.selected_case_ids) + " for mobile worker " + self.user.login_as)
 
     def _formplayer_post(self, command, extra_json=None, name=None, checkKey=None, checkValue=None, checkLen=None):
         json = {
