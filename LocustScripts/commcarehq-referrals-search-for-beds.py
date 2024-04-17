@@ -144,6 +144,10 @@ class WorkloadModelSteps(SequentialTaskSet):
                               catch_response=True) as response:
             data = response.json()
             # logging.info("data-->" + str(data))
+            if "notification" in data and data["notification"]:
+                if data["notification"]["type"] == "error":
+                    logging.info("ERROR::-" + data["notification"]["message"] + ": With json" + str(json))
+                    response.failure("exception error--" + data["notification"]["message"])
             if "exception" in data:
                 logging.info("ERROR::exception error--" + data['exception'])
                 logging.info("ERROR::user-info::" + self.user.username + "::" + self.user.login_as)
