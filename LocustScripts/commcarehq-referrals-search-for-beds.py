@@ -20,6 +20,7 @@ class WorkloadModelSteps(SequentialTaskSet):
         with open(self.user.app_config) as json_file:
             data = json.load(json_file)
             self.FUNC_HOME_SCREEN = data['FUNC_HOME_SCREEN']
+            self.FUNC_SEARCH_FOR_BEDS_MENU = data['FUNC_SEARCH_FOR_BEDS_MENU']
 
         self._log_in()
         self._get_build_info()
@@ -67,6 +68,22 @@ class WorkloadModelSteps(SequentialTaskSet):
         except Exception as e:
             logging.info(
                 "user: " + self.user.username + "; mobile worker: " + self.user.login_as + "; request: navigate_menu_start; exception: " + str(e))
+
+    @tag('search_for_beds_menu')
+    @task
+    def search_for_beds_menu(self):
+        try:
+            logging.info("all_cases_case_list - mobile worker:" + self.user.login_as)
+            data = self._formplayer_post("navigate_menu", extra_json={
+                "selections": [self.FUNC_SEARCH_FOR_BEDS_MENU['selections']],
+            }, name="Open Search for Beds Menu", checkKey="title", checkValue=self.FUNC_SEARCH_FOR_BEDS_MENU['title'])
+            # logging.info("===>>>>>>>>>" + str(data))
+            assert data['title'] == self.FUNC_SEARCH_FOR_BEDS_MENU['title'],  "formplayer response does not contain title or title is incorrect - with mobile worker: " + self.user.login_as
+            logging.info(
+                "user: " + self.user.username + "; mobile worker: " + self.user.login_as + "; request: navigate_menu")
+        except Exception as e:
+            logging.info(
+                "user: " + self.user.username + "; mobile worker: " + self.user.login_as + "; request: navigate_menu; exception: " + str(e))
 
     def _formplayer_post(self, command, extra_json=None, name=None, checkKey=None, checkValue=None, checkLen=None):
         json = {
