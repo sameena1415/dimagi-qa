@@ -119,6 +119,23 @@ class WorkloadModelSteps(SequentialTaskSet):
                     self.selected_case_ids.add(ids[random_case_index])
         logging.info("selected cases are " + str(self.selected_case_ids) + " for mobile worker " + self.user.login_as)
 
+
+    @tag('enterForm')
+    @task
+    def enter_form(self):
+        try:
+            logging.info("Entering form - mobile worker:" + self.user.login_as)
+            data = self._formplayer_post("navigate_menu", extra_json={
+                        "selected_values": (list(self.selected_case_ids)),
+                        "query_data": {},
+                        "selections": [self.FUNC_SEARCH_FOR_BEDS_MENU['selections'], "use_selected_values"],
+                    }, name="Enter 'Create Profile and Refer' Form")
+            assert "title" in data, "formplayer response does not contain title"
+            assert data['title'] == self.FUNC_CREATE_PROFILE_AND_REFER_FORM['title'], "title " + data['title'] + " is incorrect"
+        except Exception as e:
+            logging.info(
+                "user: " + self.user.username + "; mobile worker: " + self.user.login_as + "; request: navigate_menu; exception: " + str(e))
+
     def _formplayer_post(self, command, extra_json=None, name=None, checkKey=None, checkValue=None, checkLen=None):
         json = {
             "app_id": self.build_id,
