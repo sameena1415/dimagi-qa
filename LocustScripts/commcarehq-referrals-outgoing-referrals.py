@@ -19,6 +19,7 @@ class WorkloadModelSteps(SequentialTaskSet):
         # get domain user credential and app config info
         with open(self.user.app_config) as json_file:
             data = json.load(json_file)
+            self.FUNC_OUTGOING_REFERRALS_MENU = data["FUNC_OUTGOING_REFERRALS_MENU"]
 
         self._log_in()
         self._get_build_info()
@@ -52,6 +53,22 @@ class WorkloadModelSteps(SequentialTaskSet):
                 # get build_id
                 self.build_id = app['_id']
         logging.info("build_id: " + self.build_id)
+
+    @tag('outgoing_referrals_menu')
+    @task
+    def outgoing_referrals_menu(self):
+        try:
+            logging.info("all_cases_case_list - mobile worker:" + self.user.login_as)
+            data = self._formplayer_post("navigate_menu", extra_json={
+                "selections": [self.FUNC_OUTGOING_REFERRALS_MENU['selections']],
+            }, name="Open Outgoing Referrals Menu", checkKey="title", checkValue=self.FUNC_OUTGOING_REFERRALS_MENU['title'])
+            assert "title" in data, "formplayer response does not contain title"
+            assert data['title'] == self.FUNC_OUTGOING_REFERRALS_MENU['title'], "title " + data['title'] + " is incorrect"
+            logging.info(
+                "user: " + self.user.username + "; mobile worker: " + self.user.login_as + "; request: navigate_menu")
+        except Exception as e:
+            logging.info(
+                "user: " + self.user.username + "; mobile worker: " + self.user.login_as + "; request: navigate_menu; exception: " + str(e))
 
     def _formplayer_post(self, command, extra_json=None, name=None, checkKey=None, checkValue=None, checkLen=None):
         json = {

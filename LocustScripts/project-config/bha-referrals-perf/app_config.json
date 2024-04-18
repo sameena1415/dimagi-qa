@@ -5,6 +5,9 @@
     "FUNC_SEARCH_FOR_BEDS_MENU": {
         "selections":"0", "title":"Search for Beds"
     },
+    "FUNC_OUTGOING_REFERRALS_MENU": {
+        "selections":"5", "title": "Search Outgoing Referrals"
+    },
     "FUNC_CREATE_PROFILE_AND_REFER_FORM": {
         "selections":"0", "title":"Create Profile and Refer"
     },
