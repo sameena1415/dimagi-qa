@@ -25,5 +25,8 @@
     },
     "FORM_QUESTION_CONSENT": {
         "ix":"0,1,15", "answer": [1]
+    },
+    "FUNC_CREATE_PROFILE_AND_REFER_FORM_SUBMIT": {
+        "submitResponseMessage":"'Create Profile and Refer' successfully saved!"
     }
 }

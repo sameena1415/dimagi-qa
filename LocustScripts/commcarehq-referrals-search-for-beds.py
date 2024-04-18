@@ -30,6 +30,7 @@ class WorkloadModelSteps(SequentialTaskSet):
                 "FORM_QUESTION_SYMPTOMS": data['FORM_QUESTION_SYMPTOMS'],
                 "FORM_QUESTION_CONSENT": data['FORM_QUESTION_CONSENT'],
             }
+            self.FUNC_CREATE_PROFILE_AND_REFER_FORM_SUBMIT = data['FUNC_CREATE_PROFILE_AND_REFER_FORM_SUBMIT']
         self.cases_per_page = 100
         self._log_in()
         self._get_build_info()
@@ -172,6 +173,58 @@ class WorkloadModelSteps(SequentialTaskSet):
         except Exception as e:
             logging.info(
                 "user: " + self.user.username + "; mobile worker: " + self.user.login_as + "; request: answer; exception: " + str(e))
+
+    @tag('submit_create_profile_and_refer_form')
+    @task
+    def submit_create_profile_and_refer_form(self):
+        logging.info("Submitting form - mobile worker:" + self.user.login_as)
+        current_time_seconds = time.time()
+        utc_time_tuple = time.gmtime(current_time_seconds)
+        year = utc_time_tuple.tm_year
+        month = utc_time_tuple.tm_mon
+        day = utc_time_tuple.tm_mday
+        formatted_date = "{:04d}-{:02d}-{:02d}".format(year, month, day)
+        answers = {
+            "2": "OK",
+            "4": "OK",
+            "5": None,
+            "7": "OK",
+            "8": "OK",
+            "0,1,0": "OK",
+            "0,1,1": 21,
+            "0,1,2": 2,
+            "0,1,3": formatted_date,
+            "0,1,4": "Symptoms encouraged visit",
+            "0,1,5": "Inpatient",
+            "0,1,6": "NOT HEADACHE",
+            "0,1,7": None,
+            "0,1,8": None,
+            "0,1,9": None,
+            "0,1,10": None,
+            "0,1,11": None,
+            "0,1,12": None,
+            "0,1,13": None,
+            "0,1,14": None,
+            "0,1,15": [1],
+            "3_0,2,0,0": "OK",
+            "3_0,2,0,1": "OK",
+            "3_0,2,0,2": "OK",
+            "3_0,2,0,3": "OK",
+            "3_0,2,0,4": "OK",
+            "3_0,2,0,5": "OK",
+            "3_0,3": None
+        }
+        input_answers= {d["ix"]: d["answer"] for d in self.FUNC_CREATE_PROFILE_AND_REFER_FORM_QUESTIONS.values()}
+        answers.update(input_answers)
+
+        data = self._formplayer_post("submit-all", extra_json={
+            "answers": answers,
+            "prevalidated": True,
+            "debuggerEnabled": True,
+            "session_id": self.session_id,
+        }, name = "Create Profile and Refer Form Submit", checkKey="submitResponseMessage",
+                                         checkValue=self.FUNC_CREATE_PROFILE_AND_REFER_FORM_SUBMIT[
+                                             'submitResponseMessage'])
 
     def _formplayer_post(self, command, extra_json=None, name=None, checkKey=None, checkValue=None, checkLen=None):
         json = {
