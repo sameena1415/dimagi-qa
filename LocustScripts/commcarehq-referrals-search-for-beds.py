@@ -121,7 +121,7 @@ class WorkloadModelSteps(SequentialTaskSet):
                 "selections": [self.FUNC_SEARCH_FOR_BEDS_MENU['selections']],
                 "cases_per_page": self.cases_per_page,
                 "offset": offset,
-            }, name="Open Search for Beds Menu", checkKey="title", checkValue=self.FUNC_SEARCH_FOR_BEDS_MENU['title'])
+            }, name="Paginate for Case Selection", checkKey="title", checkValue=self.FUNC_SEARCH_FOR_BEDS_MENU['title'])
 
             entities = data["entities"]
             ids = [entity["id"] for entity in entities if entity["id"] not in self.selected_case_ids]
@@ -222,7 +222,7 @@ class WorkloadModelSteps(SequentialTaskSet):
             "prevalidated": True,
             "debuggerEnabled": True,
             "session_id": self.session_id,
-        }, name = "Create Profile and Refer Form Submit", checkKey="submitResponseMessage",
+        }, name = "Submit Create Profile and Refer Form", checkKey="submitResponseMessage",
                                          checkValue=self.FUNC_CREATE_PROFILE_AND_REFER_FORM_SUBMIT[
                                              'submitResponseMessage'])
 
