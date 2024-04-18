@@ -22,7 +22,14 @@ class WorkloadModelSteps(SequentialTaskSet):
             self.FUNC_HOME_SCREEN = data['FUNC_HOME_SCREEN']
             self.FUNC_SEARCH_FOR_BEDS_MENU = data['FUNC_SEARCH_FOR_BEDS_MENU']
             self.FUNC_CREATE_PROFILE_AND_REFER_FORM = data['FUNC_CREATE_PROFILE_AND_REFER_FORM']
-
+            self.FUNC_CREATE_PROFILE_AND_REFER_FORM_QUESTIONS = {
+                "FORM_QUESTION_AGE": data['FORM_QUESTION_AGE'],
+                "FORM_QUESTION_GENDER": data['FORM_QUESTION_GENDER'],
+                "FORM_QUESTION_SEEKING_CARE_REASON": data['FORM_QUESTION_SEEKING_CARE_REASON'],
+                "FORM_QUESTION_LEVEL_CARE_NEEDED": data['FORM_QUESTION_LEVEL_CARE_NEEDED'],
+                "FORM_QUESTION_SYMPTOMS": data['FORM_QUESTION_SYMPTOMS'],
+                "FORM_QUESTION_CONSENT": data['FORM_QUESTION_CONSENT'],
+            }
         self.cases_per_page = 100
         self._log_in()
         self._get_build_info()
@@ -144,9 +151,27 @@ class WorkloadModelSteps(SequentialTaskSet):
                     }, name="Enter 'Create Profile and Refer' Form")
             assert "title" in data, "formplayer response does not contain title"
             assert data['title'] == self.FUNC_CREATE_PROFILE_AND_REFER_FORM['title'], "title " + data['title'] + " is incorrect"
+            self.session_id = data['session_id']
         except Exception as e:
             logging.info(
                 "user: " + self.user.username + "; mobile worker: " + self.user.login_as + "; request: navigate_menu; exception: " + str(e))
+
+    @tag('answerFormQuestions')
+    @task
+    def answer_questions(self):
+        logging.info("Answering Questions - mobile worker:" + self.user.login_as)
+        try:
+            for question in self.FUNC_CREATE_PROFILE_AND_REFER_FORM_QUESTIONS.values():
+                    data = self._formplayer_post("answer", extra_json={
+                                "ix": question["ix"],
+                                "answer": question["answer"],
+                                "session_id": self.session_id,
+                            }, name="Answer 'Create Profile and Refer' Question")
+                    rng = random.randrange(1,3)
+                    time.sleep(rng)
+        except Exception as e:
+            logging.info(
+                "user: " + self.user.username + "; mobile worker: " + self.user.login_as + "; request: answer; exception: " + str(e))
 
     def _formplayer_post(self, command, extra_json=None, name=None, checkKey=None, checkValue=None, checkLen=None):
         json = {
