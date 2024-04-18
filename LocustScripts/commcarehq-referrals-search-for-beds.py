@@ -96,6 +96,12 @@ class WorkloadModelSteps(SequentialTaskSet):
         logging.info("Selecting Random Cases - mobile worker:" + self.user.login_as)
         total_qty_cases_to_select = random.randrange(5,11)
         self.selected_case_ids = set()
+
+        # As is, this doesn't handle if there aren't enough cases to select. Also it won't handle well
+        # situations where the ratio of # cases to select: # cases available to select are too high
+        # since the same random case could be chosen multiple times. But for our use case, this ratio will be very low
+        max_num_iterations = total_qty_cases_to_select
+        i = 0
         while len(self.selected_case_ids) < total_qty_cases_to_select:
             random_page_num = random.randrange(0, self.page_count)
             offset = random_page_num * self.cases_per_page
@@ -117,6 +123,12 @@ class WorkloadModelSteps(SequentialTaskSet):
                 for _ in range(qty_to_select):
                     random_case_index = random.randrange(0, len(ids))
                     self.selected_case_ids.add(ids[random_case_index])
+
+            # crude way to avoid looping infinitely
+            i += 1
+            assert i < max_num_iterations, "exceeded allowed number of iterations to select cases"
+            rng = random.randrange(1,3)
+            time.sleep(rng)
         logging.info("selected cases are " + str(self.selected_case_ids) + " for mobile worker " + self.user.login_as)
 
 
