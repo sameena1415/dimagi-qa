@@ -98,7 +98,7 @@ class WorkloadModelSteps(SequentialTaskSet):
             logging.info(
                 "user: " + self.user.username + "; mobile worker: " + self.user.login_as + "; request: navigate_menu; exception: " + str(e))
 
-    @tag('selectCases')
+    @tag('select_cases')
     @task
     def select_cases(self):
         logging.info("Selecting Random Cases - mobile worker:" + self.user.login_as)
@@ -134,15 +134,15 @@ class WorkloadModelSteps(SequentialTaskSet):
 
             # crude way to avoid looping infinitely
             i += 1
-            assert i < max_num_iterations, "exceeded allowed number of iterations to select cases"
+            assert i < max_num_iterations, "exceeded allowed number of iterations to select cases for mobile worker " + self.user.login_as
             rng = random.randrange(1,3)
             time.sleep(rng)
         logging.info("selected cases are " + str(self.selected_case_ids) + " for mobile worker " + self.user.login_as)
 
 
-    @tag('enterForm')
+    @tag('enter_create_profile_and_refer_form')
     @task
-    def enter_form(self):
+    def enter_create_profile_and_refer_form(self):
         try:
             logging.info("Entering form - mobile worker:" + self.user.login_as)
             data = self._formplayer_post("navigate_menu", extra_json={
@@ -157,9 +157,9 @@ class WorkloadModelSteps(SequentialTaskSet):
             logging.info(
                 "user: " + self.user.username + "; mobile worker: " + self.user.login_as + "; request: navigate_menu; exception: " + str(e))
 
-    @tag('answerFormQuestions')
+    @tag('answer_create_profile_and_refer_form_questions')
     @task
-    def answer_questions(self):
+    def answer_create_profile_and_refer_form_questions(self):
         logging.info("Answering Questions - mobile worker:" + self.user.login_as)
         try:
             for question in self.FUNC_CREATE_PROFILE_AND_REFER_FORM_QUESTIONS.values():
