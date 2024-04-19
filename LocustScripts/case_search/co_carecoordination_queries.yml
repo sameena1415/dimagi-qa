@@ -1,0 +1,158 @@
+queries:
+  - name: search_admit_client
+    case_types: [client]
+    value_set_key: client
+    query_params:
+      _xpath_query:
+        - central_registry = "yes" and current_status != "pending"
+        - consent_collected = "yes"
+        - (
+            (
+              (
+                (
+                  fuzzy-match(first_name, "{first_name}") and fuzzy-match(last_name, "{last_name}"))
+                  or (
+                    phonetic-match(first_name, "{first_name}") and phonetic-match(last_name, "{last_name}")
+                  )
+                ) and fuzzy-match(dob, "{dob}")
+              )
+            ) or subcase-exists("parent", @case_type = "alias" and @status = "open" and (
+              (
+                (fuzzy-match(first_name, "{first_name}") and fuzzy-match(last_name, "{last_name}"))
+                or (phonetic-match(first_name, "{first_name}") and phonetic-match(last_name, "{last_name}"))
+              ) and fuzzy-match(dob, "{dob}")
+            )
+          )
+  - name: search_my_clients
+    case_types: [client]
+    value_set_key: registry_clinic_search
+    query_params:
+      _xpath_query:
+        - central_registry = "yes" and subcase-exists(
+            "parent", @case_type = "service" and @status != "closed" and central_registry = "yes"
+            and selected(clinic_case_id,"{clinic_case_ids}")
+          )
+        - match-none() or match-none() or match-none() or match-none() or (
+            (
+              (
+                (fuzzy-match(first_name, "{first_name}") or phonetic-match(first_name, "{first_name}"))
+                and (fuzzy-match(last_name, "{last_name}") or phonetic-match(last_name, "{last_name}"))
+              )
+              or subcase-exists(
+                "parent", @case_type = "alias" and @status != "closed" and (
+                  (fuzzy-match(first_name, "{first_name}") or phonetic-match(first_name, "{first_name}"))
+                  and (fuzzy-match(last_name, "{last_name}") or phonetic-match(last_name, "{last_name}"))
+                  )
+                )
+              ) and (match-all())
+            )
+          - current_status = "admitted" and selected(active_admission_clinic_id, "{clinic_case_ids}")",
+          - match-all()
+          - match-all()
+  - name: search_incoming_requests
+    case_types: [client]
+    value_set_key: search_incoming_requests
+    query_params:
+      x_commcare_include_all_related_cases: true
+      _xpath_query:
+        - selected(destination_clinic_case_id, "{destination_clinic_case_ids}")
+        - ancestor-exists(parent,  @status = "open" and @case_type = "client" and current_status != "closed" and central_registry = "no")
+        - ancestor-exists(parent, @status = 'open' and @case_type = 'client' and current_status != 'closed' and selected(gender, '{gender}') or selected(gender, '{gender_restrictions}'))
+        - ancestor-exists(parent, @status = 'open' and @case_type = 'client' and current_status != 'closed' and age > '{age_range_low}' and age < '{age_range_high}')
+        - selected(current_status, 'open info_requested')
+        - match-all()
+        - match-all()
+        - match-all()
+  - name: potential_duplicate_clients
+    case_types: [ client ]
+    value_set_key: potential_duplicate_clients
+    query_params:
+      _xpath_query:
+        - central_registry = "yes"
+        - consent_collected = "yes"
+        - match-none() or match-none() or match-none() or match-none() or (
+            (
+              (
+                (fuzzy-match(first_name, "{first_name}") or phonetic-match(first_name, "{first_name}"))
+                and (fuzzy-match(last_name, "{last_name}") or phonetic-match(last_name, "{last_name}"))
+              )
+              or subcase-exists("parent", 
+                @case_type = "alias" and @status != "closed"
+                and (
+                  (fuzzy-match(first_name, "{first_name}") or phonetic-match(first_name, "{first_name}"))
+                  and (fuzzy-match(last_name, "{last_name}") or phonetic-match(last_name, "{last_name}"))
+                )
+              )
+            ) and (
+              fuzzy-match(dob, "{dob}")
+              or subcase-exists("parent", @case_type = "alias" and @status != "closed" and fuzzy-match(dob, "{dob}"))
+            )
+          )
+        - @case_id != "{case_id}"
+        - not(selected(@case_id, "{case_id}"))
+  - name: find_new_facilities
+    case_types: [unit]
+    query_params:
+      commcare_sort: +clinic_display_name:exact
+      _xpath_query:
+        - current_status != "closed"
+        - match-all()
+        - match-all()
+        - match-all()
+        - match-all()
+        - match-all()
+        - match-all()
+        - match-all()
+        - match-all()
+        - match-all()
+  - name: search_outgoing_referrals
+    case_types: [ referral ]
+    value_set_key: search_outgoing_referrals
+    query_params:
+      x_commcare_include_all_related_cases: true
+      _xpath_query:
+        - selected(referring_clinic_case_id, "{referring_clinic_case_ids}")
+        - ancestor-exists(parent,  @status = "open" and @case_type = "client" and central_registry = "no" and (
+            current_status = "open" or current_status = "withdrawn" or current_status = "escalated"
+          ))
+        - match-all()
+        - match-all()
+        - ancestor-exists(parent, @status = 'open' and @case_type = 'client' and current_status != 'closed' and age > '{age_range_low}' and age < '{age_range_high}')
+        - match-all()
+        - match-all()
+        - match-all()
+        - match-all()
+value_sets:
+  - name: client_search1
+    keys: [client]
+    values:
+      first_name: bob
+      last_name: smith
+      dob: 2000-01-01
+  - name: registry_clinic_search1
+    keys: [registry_clinic_search]
+    values:
+      first_name: alice
+      last_name: wonderland
+      clinic_case_ids: 123 abc 456
+  - name: search_incoming_requests1
+    keys: [search_incoming_requests]
+    values:
+      gender: men
+      gender_restrictions: no_gender_restrictions
+      age_range_low: 17
+      age_range_high: 65
+      destination_clinic_case_ids: 123 abc 456
+  - name: potential_duplicate_clients1
+    keys: [potential_duplicate_clients]
+    values:
+      first_name: alice
+      last_name: wonderland
+      dob: 2000-01-01
+      case_id: 123
+  - name: search_outgoing_referrals1
+    keys: [search_outgoing_referrals]
+    values:
+      referring_clinic_case_ids: 123 abc 456
+      age_range_low: 17
+      age_range_high: 65

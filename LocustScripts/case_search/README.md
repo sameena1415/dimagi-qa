@@ -44,9 +44,22 @@ parameters with values from a random value set.
 Query fields:
 - `name`: The name of the query (used for logging)
 - `case_types`: A list of case types to pass via the 'case_type' query parameter (required)
-- `value_set_key`: The value set type key to use to select a value set for the query at runtime (required)
+- `value_set_key`: The value set type key to use to select a value set for the query at runtime (optional)
 - `query_params`: A dictionary of query parameters to pass in the request. They query values may contain
-  variable references using the '{name}' syntax which will be filled by values from the value set.
+  variable references using the '{name}' syntax which will be filled by values from the value set. The values
+  of the dictionary may be a string or a list.
+
+```yaml
+queries:
+  - name: test
+    case_types: [client]
+    value_set_key: client
+    query_params:
+      case_name: {case_name}
+      _xpath_query:
+        - first_name='{first_name}' and last_name='{last_name}'
+        - subcase-exists('parent', @case_type = 'alias' and first_name='{first_name}' and last_name='{last_name}')
+```
 
 ### Value Sets ("value_sets" key)
 A list of parameter values which are used to format the queries.
@@ -57,3 +70,13 @@ Value set fields:
   a key matching `query.value_set_key` will be selected at runtime.
 - `values`: A dictionary of values which are used to format the query at runtime. The keys in this dictionary are used
   to replace the variable references in the query parameters.
+
+```yaml
+value_sets:
+  - name: bob
+    keys: [client, alias]  # can be used for client or alias queries
+    values:
+      first_name: bob
+      last_name: smith
+      alias: bobby
+```

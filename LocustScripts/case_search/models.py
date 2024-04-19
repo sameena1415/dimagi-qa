@@ -9,13 +9,21 @@ import pydantic
 class Query(pydantic.BaseModel):
     name: str
     case_types: list[str]
-    value_set_key: str
-    query_params: dict[str, str]
+    query_params: dict[str, str | list[str]]
+    value_set_key: str | None = None
 
-    def get_query_params_for_request(self, value_set):
+    def get_query_params_for_request(self, value_set=None):
+        def _format_value(value):
+            if not value_set:
+                return value
+
+            if isinstance(value, list):
+                return [v.format(**value_set) for v in value]
+            return value.format(**value_set)
+
         return {
             "case_type": self.case_types,
-            **{key: value.format(**value_set) for key, value in self.query_params.items()}
+            **{key: _format_value(value) for key, value in self.query_params.items()}
         }
 
 
@@ -46,9 +54,14 @@ class QueryData(pydantic.BaseModel):
 
     def get_random_query(self):
         query = random.choice(self.queries)
-        value_set = random.choice(self.value_sets_by_key[query.value_set_key])
-        name = f"{query.name}:{value_set.name}"
-        return name, query.get_query_params_for_request(value_set.values)
+        if not query.value_set_key:
+            name = query.name
+            data = query.get_query_params_for_request()
+        else:
+            value_set = random.choice(self.value_sets_by_key[query.value_set_key])
+            name = f"{query.name}:{value_set.name}"
+            data = query.get_query_params_for_request(value_set.values)
+        return name, data
 
 
 class UserDetails(pydantic.BaseModel):
