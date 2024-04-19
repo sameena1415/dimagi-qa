@@ -135,10 +135,10 @@ class CaseSearchUser(HttpUser):
 
     @task
     def search_case(self):
-        url = f"/a/{self.environment.parsed_options.domain}/phone/search/{self.environment.parsed_options.app_id}"
+        url = f"/a/{self.environment.parsed_options.domain}/phone/search/{self.environment.parsed_options.app_id}/"
         name, query = get_random_query()
-        self.client.get(
+        self.client.post(
             url,
-            params=query,
+            data=query,
             name=f"Search cases: {name}"
         )
