@@ -3,12 +3,14 @@ queries:
     case_types: [client]
     value_set_key: client
     query_params:
-      _xpath_query: first_name={first_name} and last_name={last_name}
+      _xpath_query: first_name='{first_name}' and last_name='{last_name}'
   - name: test2
     case_types: [client]
     value_set_key: client
     query_params:
-      _xpath_query: first_name={first_name} or alias={first_name} or subcase-exists('parent', first_name={first_name} and last_name={last_name})
+      _xpath_query: |
+        first_name='{first_name}' or alias='{first_name}'
+        or subcase-exists('parent', first_name='{first_name}' and last_name='{last_name}')
 value_sets:
   - name: bob
     keys: [client]

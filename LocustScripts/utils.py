@@ -1,5 +1,6 @@
 import csv
 import json
+import random
 
 import yaml
 
@@ -26,3 +27,16 @@ def load_yaml_data(path, model=None):
 def load_json_data(path):
     with path.open() as f:
         return json.load(f)
+
+
+class RandomItems:
+    def __init__(self, items=None):
+        self.items = list(items) if items else []
+        random.shuffle(self.items)
+
+    def set(self, items):
+        self.items = list(items)
+        random.shuffle(self.items)
+
+    def get(self):
+        return self.items.pop()

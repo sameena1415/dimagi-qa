@@ -7,9 +7,9 @@ from typing import Self
 
 import pydantic
 from locust import HttpUser, constant, events, task
-from locust.exception import InterruptTaskSet
+from locust.exception import InterruptTaskSet, StopUser
 
-from utils import load_yaml_data
+from utils import RandomItems, load_json_data, load_yaml_data
 
 
 def file_path(value):
@@ -23,8 +23,8 @@ def file_path(value):
 def _(parser):
     parser.add_argument("--domain", help="CommCare domain", required=True, env_var="COMMCARE_DOMAIN")
     parser.add_argument("--app-id", help="CommCare app id", required=True, env_var="COMMCARE_APP_ID")
-    parser.add_argument("--queries", type=file_path, help="Path to queries YAML file", required=True)
-    parser.add_argument("--user-details", type=file_path, help="Path to user details file", required=True)
+    parser.add_argument("--queries", help="Path to queries YAML file", required=True)
+    parser.add_argument("--user-details", help="Path to user details file", required=True)
 
 
 class Query(pydantic.BaseModel):
@@ -68,17 +68,28 @@ class QueryData(pydantic.BaseModel):
     def get_random_query(self):
         query = random.choice(self.queries)
         value_set = random.choice(self.value_sets_by_key[query.value_set_key])
-        return query.get_query_params_for_request(value_set)
+        name = f"{query.name}:{value_set.name}"
+        return name, query.get_query_params_for_request(value_set.values)
+
+
+class UserDetails(pydantic.BaseModel):
+    username: str
+    password: str
+    login_as: str | None = None
 
 
 QUERY_DATA = []
-USERS = []
+USERS = RandomItems()
+
+
+def get_random_query():
+    return QUERY_DATA[-1].get_random_query()
 
 
 @events.init.add_listener
 def _(environment, **kw):
     try:
-        queries = environment.parsed_options.queries
+        queries = file_path(environment.parsed_options.queries)
         QUERY_DATA.append(load_yaml_data(queries, QueryData))
         logging.info("Loaded %s queries and %s value sets", len(QUERY_DATA[0].queries), len(QUERY_DATA[0].value_sets))
     except Exception as e:
@@ -86,9 +97,10 @@ def _(environment, **kw):
         raise InterruptTaskSet from e
 
     try:
-        user_path = environment.parsed_options.user_details
-        USERS.extend(load_yaml_data(user_path)["user"])
-        logging.info("Loaded %s users", len(USERS))
+        user_path = file_path(environment.parsed_options.user_details)
+        user_data = load_json_data(user_path)["user"]
+        USERS.set([UserDetails(**user) for user in user_data])
+        logging.info("Loaded %s users", len(USERS.items))
     except Exception as e:
         logging.error("Error loading users: %s", e)
         raise InterruptTaskSet from e
@@ -98,10 +110,35 @@ class CaseSearchUser(HttpUser):
     wait_time = constant(1)
 
     def on_start(self):
-        print("on start")
+        self.user_details = USERS.get()
+        self.login()
+
+    def login(self):
+        login_url = f"/a/{self.environment.parsed_options.domain}/login/"
+        self.client.get(login_url)  # get CSRF token
+        response = self.client.post(
+            login_url,
+            {
+                "auth-username": self.user_details.username,
+                "auth-password": self.user_details.password,
+                "cloud_care_login_view-current_step": ['auth'],  # fake out two_factor ManagementForm
+            },
+            headers={
+                "X-CSRFToken": self.client.cookies.get('csrftoken'),
+                "REFERER": f"{self.environment.parsed_options.host}{login_url}",  # csrf requires this
+            },
+        )
+        if not response.status_code == 200:
+            raise StopUser(f"Login failed for user {self.user_details.username}: {response.status_code}")
+        if 'Sign In' in response.text:
+            raise StopUser(f"Login failed for user {self.user_details.username}: Sign In failed")
 
     @task
     def search_case(self):
-        print("search case")
-        # self.client.get("/a/bed-tracking/case-search/?case_id=1")
-        # print("search case done")
+        url = f"/a/{self.environment.parsed_options.domain}/phone/search/{self.environment.parsed_options.app_id}"
+        name, query = get_random_query()
+        self.client.get(
+            url,
+            params=query,
+            name=f"Search cases: {name}"
+        )
