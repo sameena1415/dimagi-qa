@@ -9,7 +9,7 @@ import pydantic
 from locust import HttpUser, constant, events, task
 from locust.exception import InterruptTaskSet, StopUser
 
-from utils import RandomItems, load_json_data, load_yaml_data
+from common.utils import RandomItems, load_json_data, load_yaml_data
 
 
 def file_path(value):
