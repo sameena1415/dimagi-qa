@@ -1,7 +1,7 @@
 import random
 from collections import defaultdict
 from functools import cached_property
-from typing import Self
+from typing import Any, Self
 
 import pydantic
 
@@ -9,17 +9,37 @@ import pydantic
 class Query(pydantic.BaseModel):
     name: str
     case_types: list[str]
-    query_params: dict[str, str | list[str]]
-    value_set_key: str | None = None
+    query_params: dict[str, list[str]]
+    value_set_keys: list[str] = pydantic.Field(default_factory=list)
+
+    @pydantic.model_validator(mode='before')
+    @classmethod
+    def ensure_value_set_keys_list(cls, data: Any) -> Any:
+        data = cls._value_set_keys_to_list(data)
+        return cls._query_params_to_list(data)
+
+    @classmethod
+    def _value_set_keys_to_list(cls, data):
+        if "value_set_keys" not in data:
+            data["value_set_keys"] = []
+        value_set_keys = data["value_set_keys"]
+        data["value_set_keys"] = value_set_keys if isinstance(value_set_keys, list) else [value_set_keys]
+        return data
+
+    @classmethod
+    def _query_params_to_list(cls, data):
+        query_params = data["query_params"]
+        data["query_params"] = {
+            key: value if isinstance(value, list) else [value] for key, value in query_params.items()
+        }
+        return data
 
     def get_query_params_for_request(self, value_set=None):
         def _format_value(value):
             if not value_set:
                 return value
 
-            if isinstance(value, list):
-                return [v.format(**value_set) for v in value]
-            return value.format(**value_set)
+            return [v.format(**value_set) for v in value]
 
         return {
             "case_type": self.case_types,
@@ -46,21 +66,25 @@ class QueryData(pydantic.BaseModel):
         return by_key
 
     @pydantic.model_validator(mode='after')
-    def check_passwords_match(self) -> Self:
+    def check_value_sets_exist(self) -> Self:
         for query in self.queries:
-            if query.value_set_key not in self.value_sets_by_key:
-                raise ValueError(f"Value set not found: {query.value_set_key}")
+            for key in query.value_set_keys:
+                if key not in self.value_sets_by_key:
+                    raise ValueError(f"Value set not found: {key}")
         return self
 
     def get_random_query(self):
         query = random.choice(self.queries)
-        if not query.value_set_key:
-            name = query.name
-            data = query.get_query_params_for_request()
-        else:
-            value_set = random.choice(self.value_sets_by_key[query.value_set_key])
-            name = f"{query.name}:{value_set.name}"
-            data = query.get_query_params_for_request(value_set.values)
+        return self._get_query_name_and_data(query)
+
+    def _get_query_name_and_data(self, query):
+        merged_values = {}
+        name = f"{query.name}"
+        for key in query.value_set_keys:
+            value_set = random.choice(self.value_sets_by_key[key])
+            merged_values.update(value_set.values)
+            name += f":{value_set.name}"
+        data = query.get_query_params_for_request(merged_values)
         return name, data
 
 

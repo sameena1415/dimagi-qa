@@ -26,7 +26,7 @@ locust -f case_search/main.py --headless -u 1 -r 1 \
 ## Request generation
 
 1. Select a random query.
-2. Select a random value set for the query using the `query.value_set_key` field and match it against
+2. Select a random value set for the query using the `query.value_set_keys` field and match it against
    the `value_set.keys` field.
 3. Fill in the query parameters with values from the value set.
 4. Send the request.
@@ -44,7 +44,8 @@ parameters with values from a random value set.
 Query fields:
 - `name`: The name of the query (used for logging)
 - `case_types`: A list of case types to pass via the 'case_type' query parameter (required)
-- `value_set_key`: The value set type key to use to select a value set for the query at runtime (optional)
+- `value_set_keys`: (optional) The value set keys to use to select a value set data for the query at runtime. If
+  multiple keys are provided, the data will be merged into a single dictionary before filling in the query parameters.
 - `query_params`: A dictionary of query parameters to pass in the request. They query values may contain
   variable references using the '{name}' syntax which will be filled by values from the value set. The values
   of the dictionary may be a string or a list.
@@ -53,7 +54,7 @@ Query fields:
 queries:
   - name: test
     case_types: [client]
-    value_set_key: client
+    value_set_keys: client
     query_params:
       case_name: {case_name}
       _xpath_query:
@@ -67,7 +68,7 @@ A list of parameter values which are used to format the queries.
 Value set fields:
 - `name`: The name of the value set (used for logging)
 - `keys`: A list of keys which indicate which query sets this value set may be used for. A query set with
-  a key matching `query.value_set_key` will be selected at runtime.
+  a key matching `query.value_set_keys` will be selected at runtime.
 - `values`: A dictionary of values which are used to format the query at runtime. The keys in this dictionary are used
   to replace the variable references in the query parameters.
 
