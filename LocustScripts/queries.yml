@@ -1,3 +1,24 @@
+# This file contains the queries and value sets that will be used by the locust scripts to perform case search
+# requests.
+
+# Queries
+# A list of parameterized queries. Each case search will select one query at random and fill in the
+# parameters with values from a random value set.
+# Each query has the following fields:
+# - name: The name of the query
+# - case_types: A list of case types to pass via the 'case_type' query parameter (required)
+# - value_set_key: The key of the value set to use to format the query at runtime (required)
+# - query_params: A dictionary of query parameters to pass to the case search endpoint. They query values may contain
+#   variable references using the '{name}' syntax.
+
+# Value Sets
+# A list of parameter values which are used to format the queries.
+# Each value set has the following fields:
+# - name: The name of the value set
+# - keys: A list of keys which are used to select a value set for a query by matching the `query.value_set_key` field
+# - values: A dictionary of values which are used to format the query at runtime. The keys in this dictionary are used
+#   to replace the variable references in the query parameters.
+
 queries:
   - name: test
     case_types: [client]
@@ -6,24 +27,23 @@ queries:
       _xpath_query: first_name='{first_name}' and last_name='{last_name}'
   - name: test2
     case_types: [client]
-    value_set_key: client
+    value_set_key: alias
     query_params:
       _xpath_query: |
-        first_name='{first_name}' or alias='{first_name}'
-        or subcase-exists('parent', first_name='{first_name}' and last_name='{last_name}')
+        subcase-exists('parent', @case_type='alias' and first_name='{alias}' or last_name='{alias}')
 value_sets:
   - name: bob
-    keys: [client]
+    keys: [client, alias]
     values:
       first_name: bob
       last_name: smith
+      alias: bobby
   - name: alice
     keys: [client]
     values:
       first_name: alice
       last_name: wonderland
   - name: charlie
-    keys: [client]
+    keys: [alias]
     values:
-      first_name: charlie
-      last_name: chaplin
+      alias: charlie
