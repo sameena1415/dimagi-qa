@@ -31,5 +31,14 @@
     },
     "FUNC_CREATE_PROFILE_AND_REFER_FORM_SUBMIT": {
         "submitResponseMessage":"'Create Profile and Refer' successfully saved!"
+    },
+    "FUNC_ENTER_STATUS": {
+        "input":"current_status", "inputValue":"open"
+    },
+    "FUNC_ENTER_GENDER": {
+        "input":"gender", "inputValue":"men"
+    },
+    "FUNC_ENTER_TYPE_OF_CARE": {
+        "input":"type_of_care", "inputValue":"both"
     }
 }

@@ -20,6 +20,9 @@ class WorkloadModelSteps(SequentialTaskSet):
         with open(self.user.app_config) as json_file:
             data = json.load(json_file)
             self.FUNC_OUTGOING_REFERRALS_MENU = data["FUNC_OUTGOING_REFERRALS_MENU"]
+            self.FUNC_ENTER_STATUS = data["FUNC_ENTER_STATUS"]
+            self.FUNC_ENTER_GENDER = data["FUNC_ENTER_GENDER"]
+            self.FUNC_ENTER_TYPE_OF_CARE = data["FUNC_ENTER_TYPE_OF_CARE"]
 
         self._log_in()
         self._get_build_info()
@@ -69,6 +72,34 @@ class WorkloadModelSteps(SequentialTaskSet):
         except Exception as e:
             logging.info(
                 "user: " + self.user.username + "; mobile worker: " + self.user.login_as + "; request: navigate_menu; exception: " + str(e))
+
+    @tag('perform_a_search')
+    @task
+    def perform_a_search(self):
+        logging.info("Performing Search - mobile worker:" + self.user.login_as)
+        try:
+            data = self._formplayer_post("navigate_menu", extra_json={
+                        "query_data": {
+                            "search_command.m10_results": {
+                                "inputs": {
+                                    self.FUNC_ENTER_STATUS['input']: self.FUNC_ENTER_STATUS['inputValue'],
+                                    self.FUNC_ENTER_GENDER['input']: self.FUNC_ENTER_GENDER['inputValue'],
+                                    self.FUNC_ENTER_TYPE_OF_CARE['input']: self.FUNC_ENTER_TYPE_OF_CARE['inputValue']
+                                },
+                                "execute": True,
+                                "force_manual_search": True}
+                        },
+                        "selections": [self.FUNC_OUTGOING_REFERRALS_MENU["selections"]],
+                    }, name="Perform a Search")
+            logging.info(data)
+            assert 'entities' in data, "formplayer response does not contain entities"
+            entities = data["entities"]
+            assert len(entities) > 0, "entities is empty"
+            self.selected_case = entities[0]['id']
+        except Exception as e:
+            logging.info(
+                "user: " + self.user.username + "; mobile worker: " + self.user.login_as + "; request: navigate_menu; exception: " + str(e))
+
 
     def _formplayer_post(self, command, extra_json=None, name=None, checkKey=None, checkValue=None, checkLen=None):
         json = {
