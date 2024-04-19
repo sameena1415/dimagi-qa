@@ -24,6 +24,7 @@ def _(parser):
     parser.add_argument("--domain", help="CommCare domain", required=True, env_var="COMMCARE_DOMAIN")
     parser.add_argument("--app-id", help="CommCare app id", required=True, env_var="COMMCARE_APP_ID")
     parser.add_argument("--queries", type=file_path, help="Path to queries YAML file", required=True)
+    parser.add_argument("--user-details", type=file_path, help="Path to user details file", required=True)
 
 
 class Query(pydantic.BaseModel):
@@ -71,6 +72,7 @@ class QueryData(pydantic.BaseModel):
 
 
 QUERY_DATA = []
+USERS = []
 
 
 @events.init.add_listener
@@ -81,6 +83,14 @@ def _(environment, **kw):
         logging.info("Loaded %s queries and %s value sets", len(QUERY_DATA[0].queries), len(QUERY_DATA[0].value_sets))
     except Exception as e:
         logging.error("Error loading queries: %s", e)
+        raise InterruptTaskSet from e
+
+    try:
+        user_path = environment.parsed_options.user_details
+        USERS.extend(load_yaml_data(user_path)["user"])
+        logging.info("Loaded %s users", len(USERS))
+    except Exception as e:
+        logging.error("Error loading users: %s", e)
         raise InterruptTaskSet from e
 
 
