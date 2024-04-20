@@ -66,7 +66,6 @@ queries:
 A list of parameter values which are used to format the queries.
 
 Value set fields:
-- `name`: The name of the value set (used for logging)
 - `type`: A string which indicates which type of value set this is. A value set with
   a type matching `query.value_set_types` will be selected at runtime.
 - `values`: A dictionary of values which are used to format the query at runtime. The keys in this dictionary are used
@@ -74,8 +73,7 @@ Value set fields:
 
 ```yaml
 value_sets:
-  - name: bob
-    type: client
+  - type: client
     values:
       first_name: bob
       last_name: smith

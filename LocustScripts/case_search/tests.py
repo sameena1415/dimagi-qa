@@ -1,3 +1,4 @@
+import pathlib
 from unittest import mock
 
 import pytest
@@ -49,18 +50,16 @@ def test_get_query_params_for_request():
     }
 
 
-@pytest.mark.parametrize(("query", "value_sets", "expected_name", "expected_data"), [
+@pytest.mark.parametrize(("query", "value_sets", "expected_data"), [
     pytest.param(
         Query(name="query1", case_types=["case1"], query_params={"param1": ["value1"]}),
         [],
-        "query1",
         {"case_type": ["case1"], "param1": ["value1"]},
         id="no_value_set",
     ),
     pytest.param(
         Query(name="query1", case_types=["case1"], query_params={"param1": ["{value_key1}"]}, value_set_types=["type1"]),
-        [ValueSet(name="value_set1", type="type1", values={"value_key1": "value1"})],
-        "query1:value_set1",
+        [ValueSet(type="type1", values={"value_key1": "value1"})],
         {"case_type": ["case1"], "param1": ["value1"]},
         id="single_value_set",
     ),
@@ -72,45 +71,44 @@ def test_get_query_params_for_request():
             value_set_types=["type1", "type2"],
         ),
         [
-            ValueSet(name="value_set1", type="type1", values={"value_key1": "value1"}),
-            ValueSet(name="value_set2", type="type2", values={"value_key2": "value2"}),
+            ValueSet(type="type1", values={"value_key1": "value1"}),
+            ValueSet(type="type2", values={"value_key2": "value2"}),
         ],
-        "query3:value_set1:value_set2",
         {"case_type": ["case2"], "param2": ["value1", "value2"]},
         id="multiple_value_sets",
     ),
 ])
-def test_get_query_name_and_data(query, value_sets, expected_name, expected_data):
+def test_get_query_name_and_data(query, value_sets, expected_data):
     data = QueryData(queries=[query], value_sets=value_sets)
     name, request_data = data._get_query_name_and_data(query)
-    assert name == expected_name
     assert request_data == expected_data
 
 
+@mock.patch("case_search.loader._get_reference_path")
 @mock.patch("case_search.loader.load_yaml_data")
 @mock.patch("case_search.loader.load_csv_data")
-def test_load_query_data(load_csv_data, load_yaml_data):
+def test_load_query_data(load_csv_data, load_yaml_data, _):
     load_yaml_data.return_value = {
         "queries": [
             {"name": "query1", "case_types": ["case1"], "query_params": {"param1": ["value1"]}},
         ],
         "value_sets": [
-            {"name": "value_set1", "type": "type1", "values": {"value_key1": "value1"}},
-            {"path": "value_sets.csv", "type": "type2", "format": "csv", "name_template": "{a}-{b}"},
+            {"type": "type1", "values": {"value_key1": "value1"}},
+            {"path": "value_sets.csv", "type": "type2", "format": "csv"},
         ],
     }
     load_csv_data.return_value = [
         {"a": "a1", "b": "b1"},
         {"a": "a2", "b": "b2"},
     ]
-    query_data = load_query_data("path")
+    query_data = load_query_data(pathlib.Path("co_carecoordination_queries.yml"))
     assert query_data == QueryData(
         queries=[
             Query(name="query1", case_types=["case1"], query_params={"param1": ["value1"]}),
         ],
         value_sets=[
-            ValueSet(name="value_set1", type="type1", values={"value_key1": "value1"}),
-            ValueSet(name="a1-b1", type="type2", values={"a": "a1", "b": "b1"}),
-            ValueSet(name="a2-b2", type="type2", values={"a": "a2", "b": "b2"}),
+            ValueSet(type="type1", values={"value_key1": "value1"}),
+            ValueSet(type="type2", values={"a": "a1", "b": "b1"}),
+            ValueSet(type="type2", values={"a": "a2", "b": "b2"}),
         ],
     )

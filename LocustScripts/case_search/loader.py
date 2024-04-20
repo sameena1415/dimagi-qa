@@ -21,31 +21,32 @@ def load_query_data(path):
 
 def load_value_set_from_reference(source_path, reference):
     path_str = reference.pop("path")
-    path = pathlib.Path(path_str)
-    if not path.is_absolute():
-        path = source_path.parent / path
-
-    if not path.exists():
-        raise ValueError(f"Value set file not found: {path}")
-
+    path = _get_reference_path(path_str, source_path)
     _format = reference.pop("format")
     return {
         "csv": load_value_set_from_csv,
     }[_format](path, **reference)
 
 
-def load_value_set_from_csv(path, name_template, type):
+def _get_reference_path(path_str, source_path):
+    path = pathlib.Path(path_str)
+    if not path.is_absolute():
+        path = source_path.resolve().parent / path
+    if not path.exists():
+        raise ValueError(f"Value set file not found: {path}")
+    return path
+
+
+def load_value_set_from_csv(path, type):
     """Load value sets from a CSV file.
 
     Args:
         path (Path): Path to the CSV file.
-        name_template (str): Template for the value set name. Will be formaqted with each row.
-        keys (list[str]): Keys for the value set.
+        type (str): Keys for the value set.
     """
     data = load_csv_data(path)
     return [
         {
-            "name": name_template.format(**row),
             "type": type,
             "values": row,
         }

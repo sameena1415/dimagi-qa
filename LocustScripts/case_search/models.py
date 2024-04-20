@@ -48,7 +48,6 @@ class Query(pydantic.BaseModel):
 
 
 class ValueSet(pydantic.BaseModel):
-    name: str
     type: str
     values: dict[str, str | int | float | bool]
 
@@ -78,13 +77,11 @@ class QueryData(pydantic.BaseModel):
 
     def _get_query_name_and_data(self, query):
         merged_values = {}
-        name = f"{query.name}"
         for key in query.value_set_types:
             value_set = random.choice(self.value_sets_by_key[key])
             merged_values.update(value_set.values)
-            name += f":{value_set.name}"
         data = query.get_query_params_for_request(merged_values)
-        return name, data
+        return query.name, data
 
 
 class UserDetails(pydantic.BaseModel):

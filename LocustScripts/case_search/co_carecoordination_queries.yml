@@ -127,23 +127,18 @@ value_sets:
   - path: ush_envelop_testing_clients.csv
     type: client
     format: csv
-    name_template: "{first_name}-{last_name}"
-  - name: clinic_case_ids1
-    type: clinic_case_ids
+  - type: clinic_case_ids
     values:
       clinic_case_ids: 123 abc 456
-  - name: gender_men_no_restrictions
-    type: gender_params
+  - type: gender_params
     values:
       gender: men
       gender_restrictions: no_gender_restrictions
-  - name: gender_women_no_restrictions
-    type: gender_params
+  - type: gender_params
     values:
       gender: women
       gender_restrictions: no_gender_restrictions
-  - name: age_range_adult
-    type: age_range_adult
+  - type: age_range_adult
     values:
       age_range_low: 17
       age_range_high: 65
