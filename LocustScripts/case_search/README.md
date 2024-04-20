@@ -25,17 +25,16 @@ locust -f case_search/main.py --headless -u 1 -r 1 \
 
 ## Request generation
 
-1. Select a random query.
-2. Select a random value set for the query using the `query.value_set_types` field and match it against
-   the `value_set.keys` field.
+Each request is generated as follows:
+
+1. Select a random query from the list of queries provided.
+2. Select random value sets for the query using the `query.value_set_types` field.
 3. Fill in the query parameters with values from the value set.
 4. Send the request.
 
 ## Queries file
 
-This file contains request data that will be used by the locust scripts to perform case search requests.
-
-See `queries_example.yml` for an example.
+This YAML file contains request data that will be used by the locust scripts to perform case search requests.
 
 ### Queries ("queries" key)
 A list of parameterized queries. Each request will select one query at random and fill in the
@@ -44,8 +43,8 @@ parameters with values from a random value set.
 Query fields:
 - `name`: The name of the query (used for logging)
 - `case_types`: A list of case types to pass via the 'case_type' query parameter (required)
-- `value_set_types`: (optional) The value set keys to use to select a value set data for the query at runtime. If
-  multiple keys are provided, the data will be merged into a single dictionary before filling in the query parameters.
+- `value_set_types`: (optional) The value set types to use to select a value set data for the query at runtime. If
+  multiple types are provided, the data will be merged into a single dictionary before filling in the query parameters.
 - `query_params`: A dictionary of query parameters to pass in the request. They query values may contain
   variable references using the '{name}' syntax which will be filled by values from the value set. The values
   of the dictionary may be a string or a list.

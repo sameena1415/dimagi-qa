@@ -46,9 +46,9 @@ queries:
                 )
               ) and (match-all())
             )
-          - current_status = "admitted" and selected(active_admission_clinic_id, "{clinic_case_ids}")",
-          - match-all()
-          - match-all()
+        - current_status = "admitted" and selected(active_admission_clinic_id, "{clinic_case_ids}")
+        - match-all()
+        - match-all()
   - name: search_incoming_requests
     case_types: [client]
     value_set_types: [gender_params, age_range_adult, clinic_case_ids]

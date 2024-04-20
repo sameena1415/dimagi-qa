@@ -4,9 +4,9 @@ from locust import HttpUser, constant, events, task
 from locust.exception import InterruptTaskSet, StopUser
 
 from case_search.loader import load_query_data
-from case_search.models import QueryData, UserDetails
-from common.utils import RandomItems, load_json_data, load_yaml_data
+from case_search.models import UserDetails
 from common.args import file_path
+from common.utils import RandomItems, load_json_data
 
 
 @events.init_command_line_parser.add_listener
@@ -76,8 +76,11 @@ class CaseSearchUser(HttpUser):
     def search_case(self):
         url = f"/a/{self.environment.parsed_options.domain}/phone/search/{self.environment.parsed_options.app_id}/"
         name, query = get_random_query()
-        self.client.post(
+        with self.client.post(
             url,
             data=query,
-            name=f"Search cases: {name}"
-        )
+            name=f"Search cases: {name}",
+            catch_response=True,
+        ) as resp:
+            if resp.status_code == 400:
+                logging.error("Bad request for query '%s': %s", name, resp.text)
