@@ -25,7 +25,7 @@ def load_value_set_from_reference(reference):
     }[_format](path, **reference)
 
 
-def load_value_set_from_csv(path, name_template, keys):
+def load_value_set_from_csv(path, name_template, type):
     """Load value sets from a CSV file.
 
     Args:
@@ -37,7 +37,7 @@ def load_value_set_from_csv(path, name_template, keys):
     return [
         {
             "name": name_template.format(**row),
-            "keys": keys,
+            "type": type,
             "values": row,
         }
         for row in data

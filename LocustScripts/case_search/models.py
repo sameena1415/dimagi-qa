@@ -10,7 +10,7 @@ class Query(pydantic.BaseModel):
     name: str
     case_types: list[str]
     query_params: dict[str, list[str]]
-    value_set_keys: list[str] = pydantic.Field(default_factory=list)
+    value_set_types: list[str] = pydantic.Field(default_factory=list)
 
     @pydantic.model_validator(mode='before')
     @classmethod
@@ -20,10 +20,10 @@ class Query(pydantic.BaseModel):
 
     @classmethod
     def _value_set_keys_to_list(cls, data):
-        if "value_set_keys" not in data:
-            data["value_set_keys"] = []
-        value_set_keys = data["value_set_keys"]
-        data["value_set_keys"] = value_set_keys if isinstance(value_set_keys, list) else [value_set_keys]
+        if "value_set_types" not in data:
+            data["value_set_types"] = []
+        value_set_types = data["value_set_types"]
+        data["value_set_types"] = value_set_types if isinstance(value_set_types, list) else [value_set_types]
         return data
 
     @classmethod
@@ -49,7 +49,7 @@ class Query(pydantic.BaseModel):
 
 class ValueSet(pydantic.BaseModel):
     name: str
-    keys: list[str]
+    type: str
     values: dict[str, str | int | float | bool]
 
 
@@ -61,14 +61,13 @@ class QueryData(pydantic.BaseModel):
     def value_sets_by_key(self):
         by_key = defaultdict(list)
         for value_set in self.value_sets:
-            for key in value_set.keys:
-                by_key[key].append(value_set)
+            by_key[value_set.type].append(value_set)
         return by_key
 
     @pydantic.model_validator(mode='after')
     def check_value_sets_exist(self) -> Self:
         for query in self.queries:
-            for key in query.value_set_keys:
+            for key in query.value_set_types:
                 if key not in self.value_sets_by_key:
                     raise ValueError(f"Value set not found: {key}")
         return self
@@ -80,7 +79,7 @@ class QueryData(pydantic.BaseModel):
     def _get_query_name_and_data(self, query):
         merged_values = {}
         name = f"{query.name}"
-        for key in query.value_set_keys:
+        for key in query.value_set_types:
             value_set = random.choice(self.value_sets_by_key[key])
             merged_values.update(value_set.values)
             name += f":{value_set.name}"

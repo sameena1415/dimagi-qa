@@ -1,7 +1,7 @@
 queries:
   - name: search_admit_client
     case_types: [client]
-    value_set_keys: client
+    value_set_types: client
     query_params:
       _xpath_query:
         - central_registry = "yes" and current_status != "pending"
@@ -25,7 +25,7 @@ queries:
           )
   - name: search_my_clients
     case_types: [client]
-    value_set_keys: [client, clinic_case_ids]
+    value_set_types: [client, clinic_case_ids]
     query_params:
       _xpath_query:
         - central_registry = "yes" and subcase-exists(
@@ -51,7 +51,7 @@ queries:
           - match-all()
   - name: search_incoming_requests
     case_types: [client]
-    value_set_keys: [search_incoming_requests, age_range_adult]
+    value_set_types: [search_incoming_requests, age_range_adult]
     query_params:
       x_commcare_include_all_related_cases: true
       _xpath_query:
@@ -65,7 +65,7 @@ queries:
         - match-all()
   - name: potential_duplicate_clients
     case_types: [ client ]
-    value_set_keys: [ client, client_case_id]
+    value_set_types: [ client, client_case_id]
     query_params:
       _xpath_query:
         - central_registry = "yes"
@@ -107,7 +107,7 @@ queries:
         - match-all()
   - name: search_outgoing_referrals
     case_types: [ referral ]
-    value_set_keys: [referring_clinic_case_ids, age_range_adult]
+    value_set_types: [referring_clinic_case_ids, age_range_adult]
     query_params:
       x_commcare_include_all_related_cases: true
       _xpath_query:
@@ -124,29 +124,29 @@ queries:
         - match-all()
 value_sets:
   - path: co_client_cases.csv
+    type: client
     format: csv
     name_template: "{first_name}-{last_name}"
-    keys: [client]
   - name: clinic_case_ids1
-    keys: [clinic_case_ids]
+    type: [clinic_case_ids]
     values:
       clinic_case_ids: 123 abc 456
   - name: search_incoming_requests1
-    keys: [search_incoming_requests]
+    type: search_incoming_requests
     values:
       gender: men
       gender_restrictions: no_gender_restrictions
       destination_clinic_case_ids: 123 abc 456
   - name: client_case_id1
-    keys: [client_case_id]
+    type: client_case_id
     values:
       case_id: 123
   - name: referring_clinic_case_ids1
-    keys: [referring_clinic_case_ids]
+    type: referring_clinic_case_ids
     values:
       referring_clinic_case_ids: 123 abc 456
   - name: age_range_adult
-    keys: [ age_range_adult ]
+    type: age_range_adult
     values:
       age_range_low: 17
       age_range_high: 65

@@ -8,11 +8,11 @@ from case_search.models import Query, QueryData, ValueSet
 
 @pytest.mark.parametrize("query_data", [
     pytest.param(
-        {"name": "query1", "case_types": ["case1"], "query_params": {"param1": ["value1"]}, "value_set_keys": "key1"},
-        id="value_set_keys to list",
+        {"name": "query1", "case_types": ["case1"], "query_params": {"param1": ["value1"]}, "value_set_types": "type1"},
+        id="value_set_types to list",
     ),
     pytest.param(
-        {"name": "query1", "case_types": ["case1"], "query_params": {"param1": "value1"}, "value_set_keys": ["key1"]},
+        {"name": "query1", "case_types": ["case1"], "query_params": {"param1": "value1"}, "value_set_types": ["type1"]},
         id="param values to list",
     ),
 ])
@@ -22,7 +22,7 @@ def test_query_model_values_to_list(query_data):
         name="query1",
         case_types=["case1"],
         query_params={"param1": ["value1"]},
-        value_set_keys=["key1"],
+        value_set_types=["type1"],
     )
 
 
@@ -32,7 +32,7 @@ def test_query_model_values_none():
         name="query1",
         case_types=["case1"],
         query_params={},
-        value_set_keys=[],
+        value_set_types=[],
     )
 
 
@@ -58,8 +58,8 @@ def test_get_query_params_for_request():
         id="no_value_set",
     ),
     pytest.param(
-        Query(name="query1", case_types=["case1"], query_params={"param1": ["{value_key1}"]}, value_set_keys=["key1"]),
-        [ValueSet(name="value_set1", keys=["key1"], values={"value_key1": "value1"})],
+        Query(name="query1", case_types=["case1"], query_params={"param1": ["{value_key1}"]}, value_set_types=["type1"]),
+        [ValueSet(name="value_set1", type="type1", values={"value_key1": "value1"})],
         "query1:value_set1",
         {"case_type": ["case1"], "param1": ["value1"]},
         id="single_value_set",
@@ -69,11 +69,11 @@ def test_get_query_params_for_request():
             name="query3",
             case_types=["case2"],
             query_params={"param2": ["{value_key1}", "{value_key2}"]},
-            value_set_keys=["key1", "key2"],
+            value_set_types=["type1", "type2"],
         ),
         [
-            ValueSet(name="value_set1", keys=["key1"], values={"value_key1": "value1"}),
-            ValueSet(name="value_set2", keys=["key2"], values={"value_key2": "value2"}),
+            ValueSet(name="value_set1", type="type1", values={"value_key1": "value1"}),
+            ValueSet(name="value_set2", type="type2", values={"value_key2": "value2"}),
         ],
         "query3:value_set1:value_set2",
         {"case_type": ["case2"], "param2": ["value1", "value2"]},
@@ -95,8 +95,8 @@ def test_load_query_data(load_csv_data, load_yaml_data):
             {"name": "query1", "case_types": ["case1"], "query_params": {"param1": ["value1"]}},
         ],
         "value_sets": [
-            {"name": "value_set1", "keys": ["key1"], "values": {"value_key1": "value1"}},
-            {"path": "value_sets.csv", "keys": ["key1"], "format": "csv", "name_template": "{a}-{b}"},
+            {"name": "value_set1", "type": "type1", "values": {"value_key1": "value1"}},
+            {"path": "value_sets.csv", "type": "type2", "format": "csv", "name_template": "{a}-{b}"},
         ],
     }
     load_csv_data.return_value = [
@@ -109,8 +109,8 @@ def test_load_query_data(load_csv_data, load_yaml_data):
             Query(name="query1", case_types=["case1"], query_params={"param1": ["value1"]}),
         ],
         value_sets=[
-            ValueSet(name="value_set1", keys=["key1"], values={"value_key1": "value1"}),
-            ValueSet(name="a1-b1", keys=["key1"], values={"a": "a1", "b": "b1"}),
-            ValueSet(name="a2-b2", keys=["key1"], values={"a": "a2", "b": "b2"}),
+            ValueSet(name="value_set1", type="type1", values={"value_key1": "value1"}),
+            ValueSet(name="a1-b1", type="type2", values={"a": "a1", "b": "b1"}),
+            ValueSet(name="a2-b2", type="type2", values={"a": "a2", "b": "b2"}),
         ],
     )
