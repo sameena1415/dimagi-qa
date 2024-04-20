@@ -7,10 +7,20 @@ import random
 import json
 
 from collections import defaultdict
-from locust import HttpUser, SequentialTaskSet, between, task, tag, TaskSet
+from common.utils import load_json_data
+from common.args import file_path
+from locust import HttpUser, SequentialTaskSet, between, task, tag, events
+from locust.exception import InterruptTaskSet
 from lxml import etree
 from datetime import datetime
 
+@events.init_command_line_parser.add_listener
+def _(parser):
+    parser.add_argument("--host", help="host url", required=True, env_var="HOST_URL")
+    parser.add_argument("--domain", help="CommCare domain", required=True, env_var="COMMCARE_DOMAIN")
+    parser.add_argument("--app-id", help="CommCare app id", required=True, env_var="COMMCARE_APP_ID")
+    parser.add_argument("--app-config", help="Configuration of CommCare app", required=True)
+    parser.add_argument("--user-details", help="Path to user details file", required=True)
 
 class WorkloadModelSteps(SequentialTaskSet):
     wait_time = between(5, 15)
