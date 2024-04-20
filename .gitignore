@@ -239,4 +239,5 @@ ElasticSearchTests/settings.cfg
 ElasticSearchTests/report.html
 ElasticSearchTests/testCases/report.html
 
-
+.envrc
+.direnv

@@ -1,3 +1,4 @@
-locust==1.2.3
-lxml~=4.6.4
-PyYAML~=6.0
+locust>2.24.0
+lxml>5.0.0
+PyYAML>6.0.0
+pydantic>2.0.0
