@@ -7,11 +7,11 @@ The query data for each request is selected by randomizing the data in the query
 Run from `LocustScripts` directory:
 
 ```shell
-locust -f case_search/main.py --headless -u 1 -r 1 \
+locust -f case_search/locustfile.py --headless -u 1 -r 1 \
   --host http://localhost:8000 \
   --domain skelly-1 \
   --app-id b62974969e57051ad70160a798ed79e8  \
-  --queries case_search/queries_example.yml \
+  --queries case_search/co_carecoordination_queries.yml \
   --user-details case_search/user_credentials_example.json
 ```
 
