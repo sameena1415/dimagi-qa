@@ -3,6 +3,7 @@ import logging
 from locust import HttpUser, constant, events, task
 from locust.exception import InterruptTaskSet, StopUser
 
+from case_search.loader import load_query_data
 from case_search.models import QueryData, UserDetails
 from common.utils import RandomItems, load_json_data, load_yaml_data
 from common.args import file_path
@@ -28,7 +29,7 @@ def get_random_query():
 def _(environment, **kw):
     try:
         queries = file_path(environment.parsed_options.queries)
-        QUERY_DATA.append(load_yaml_data(queries, QueryData))
+        QUERY_DATA.append(load_query_data(queries))
         logging.info("Loaded %s queries and %s value sets", len(QUERY_DATA[0].queries), len(QUERY_DATA[0].value_sets))
     except Exception as e:
         logging.error("Error loading queries: %s", e)
