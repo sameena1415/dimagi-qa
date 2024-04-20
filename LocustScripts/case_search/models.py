@@ -50,8 +50,3 @@ class QueryData(pydantic.BaseModel):
         name = f"{query.name}:{value_set.name}"
         return name, query.get_query_params_for_request(value_set.values)
 
-
-class UserDetails(pydantic.BaseModel):
-    username: str
-    password: str
-    login_as: str | None = None

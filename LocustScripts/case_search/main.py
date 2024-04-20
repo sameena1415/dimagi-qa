@@ -3,7 +3,8 @@ import logging
 from locust import HttpUser, constant, events, task
 from locust.exception import InterruptTaskSet, StopUser
 
-from case_search.models import QueryData, UserDetails
+from user.models import UserDetails
+from case_search.models import QueryData
 from common.utils import RandomItems, load_json_data, load_yaml_data
 from common.args import file_path
 

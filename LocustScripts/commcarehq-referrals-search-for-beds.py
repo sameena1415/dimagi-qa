@@ -10,37 +10,38 @@ from collections import defaultdict
 from common.utils import load_json_data
 from common.args import file_path
 from locust import HttpUser, SequentialTaskSet, between, task, tag, events
-from locust.exception import InterruptTaskSet
+from locust.exception import InterruptTaskSet, StopUser
 from lxml import etree
 from datetime import datetime
 
+from user.models import UserDetails
+
 @events.init_command_line_parser.add_listener
 def _(parser):
-    parser.add_argument("--host", help="host url", required=True, env_var="HOST_URL")
     parser.add_argument("--domain", help="CommCare domain", required=True, env_var="COMMCARE_DOMAIN")
     parser.add_argument("--app-id", help="CommCare app id", required=True, env_var="COMMCARE_APP_ID")
     parser.add_argument("--app-config", help="Configuration of CommCare app", required=True)
     parser.add_argument("--user-details", help="Path to user details file", required=True)
 
+APP_CONFIG = {}
+USERS = []
+
 class WorkloadModelSteps(SequentialTaskSet):
     wait_time = between(5, 15)
 
     def on_start(self):
-        # get domain user credential and app config info
-        with open(self.user.app_config) as json_file:
-            data = json.load(json_file)
-            self.FUNC_HOME_SCREEN = data['FUNC_HOME_SCREEN']
-            self.FUNC_SEARCH_FOR_BEDS_MENU = data['FUNC_SEARCH_FOR_BEDS_MENU']
-            self.FUNC_CREATE_PROFILE_AND_REFER_FORM = data['FUNC_CREATE_PROFILE_AND_REFER_FORM']
-            self.FUNC_CREATE_PROFILE_AND_REFER_FORM_QUESTIONS = {
-                "FORM_QUESTION_AGE": data['FORM_QUESTION_AGE'],
-                "FORM_QUESTION_GENDER": data['FORM_QUESTION_GENDER'],
-                "FORM_QUESTION_SEEKING_CARE_REASON": data['FORM_QUESTION_SEEKING_CARE_REASON'],
-                "FORM_QUESTION_LEVEL_CARE_NEEDED": data['FORM_QUESTION_LEVEL_CARE_NEEDED'],
-                "FORM_QUESTION_SYMPTOMS": data['FORM_QUESTION_SYMPTOMS'],
-                "FORM_QUESTION_CONSENT": data['FORM_QUESTION_CONSENT'],
-            }
-            self.FUNC_CREATE_PROFILE_AND_REFER_FORM_SUBMIT = data['FUNC_CREATE_PROFILE_AND_REFER_FORM_SUBMIT']
+        self.FUNC_HOME_SCREEN = APP_CONFIG['FUNC_HOME_SCREEN']
+        self.FUNC_SEARCH_FOR_BEDS_MENU = APP_CONFIG['FUNC_SEARCH_FOR_BEDS_MENU']
+        self.FUNC_CREATE_PROFILE_AND_REFER_FORM = APP_CONFIG['FUNC_CREATE_PROFILE_AND_REFER_FORM']
+        self.FUNC_CREATE_PROFILE_AND_REFER_FORM_QUESTIONS = {
+            "FORM_QUESTION_AGE": APP_CONFIG['FORM_QUESTION_AGE'],
+            "FORM_QUESTION_GENDER": APP_CONFIG['FORM_QUESTION_GENDER'],
+            "FORM_QUESTION_SEEKING_CARE_REASON": APP_CONFIG['FORM_QUESTION_SEEKING_CARE_REASON'],
+            "FORM_QUESTION_LEVEL_CARE_NEEDED": APP_CONFIG['FORM_QUESTION_LEVEL_CARE_NEEDED'],
+            "FORM_QUESTION_SYMPTOMS": APP_CONFIG['FORM_QUESTION_SYMPTOMS'],
+            "FORM_QUESTION_CONSENT": APP_CONFIG['FORM_QUESTION_CONSENT'],
+        }
+        self.FUNC_CREATE_PROFILE_AND_REFER_FORM_SUBMIT = APP_CONFIG['FUNC_CREATE_PROFILE_AND_REFER_FORM_SUBMIT']
         self.cases_per_page = 100
         self._log_in()
         self._get_build_info()
@@ -281,49 +282,42 @@ class WorkloadModelSteps(SequentialTaskSet):
                     response.failure("error::data['" + checkKey + "'] != " + checkValue)
         return response.json()
 
+@events.init.add_listener
+def _(environment, **kw):
+    try:
+        app_config_path = file_path(environment.parsed_options.app_config)
+        APP_CONFIG.update(load_json_data(app_config_path))
+        logging.info("Loaded app config")
+    except Exception as e:
+        logging.error("Error loading app config: %s", e)
+        raise InterruptTaskSet from e
+    try:
+        user_path = file_path(environment.parsed_options.user_details)
+        user_data = load_json_data(user_path)["user"]
+        USERS.extend([UserDetails(**user) for user in user_data])
+        logging.info("Loaded %s users", len(USERS))
+    except Exception as e:
+        logging.error("Error loading users: %s", e)
+        raise InterruptTaskSet from e
 
 class LoginCommCareHQWithUniqueUsers(HttpUser):
     tasks = [WorkloadModelSteps]
+    wait_time = between(5, 10)
 
     formplayer_host = "/formplayer"
     project = 'bha-referrals-perf'  # str(os.environ.get("project"))
-    domain_user_credential_force = str(os.environ.get("user_credential"))
-    app_config_force = str(os.environ.get("app_config"))
-    wait_time_force = "test"
-
-    if wait_time_force == "test":
-        wait_time = between(5, 10)
-
-    else:
-        wait_time = between(45, 90)
-
-    with open("project-config/" + project + "/config.yaml") as f:
-        config = yaml.safe_load(f)
-        host = config['host']
-        domain = config['domain']
-        app_id = config['app_id']
-        if domain_user_credential_force != "None":
-            domain_user_credential = "project-config/" + project + "/" + domain_user_credential_force
-        else:
-            domain_user_credential = config['domain_user_credential']
-        if app_config_force != "None":
-            app_config = "project-config/" + project + "/" + app_config_force
-        else:
-            app_config = config['app_config']
-
-    # get domain user credential and app config info
-    with open(domain_user_credential) as json_file:
-        data = json.load(json_file)
-        data_user = data['user']
 
     def on_start(self):
+        self.domain = self.environment.parsed_options.domain
+        self.host = self.environment.parsed_options.host
+        self.app_id = self.environment.parsed_options.app_id
         now = datetime.now()
         timestamp = datetime.timestamp(now)
         dt_object = datetime.fromtimestamp(timestamp)
-        user_info = self.data_user.pop()
-        self.username = user_info['username']
-        self.password = user_info['password']
-        self.login_as = user_info['login_as']
+        user_info = USERS.pop()
+        self.username = user_info.username
+        self.password = user_info.password
+        self.login_as = user_info.login_as
         print("userinfo===>>" + str(user_info))
 
         logging.info("timestamp-->>>" + str(dt_object))
@@ -331,5 +325,3 @@ class LoginCommCareHQWithUniqueUsers(HttpUser):
         logging.info("login_as-->>>" + self.login_as)
         logging.info("username-->>>" + self.username)
         logging.info("domain-->>>" + self.domain)
-        logging.info("domain_user_credential-->>>" + self.domain_user_credential)
-        logging.info("app_config-->>>" + self.app_config)
