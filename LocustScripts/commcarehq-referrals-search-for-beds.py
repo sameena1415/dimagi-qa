@@ -7,14 +7,14 @@ import random
 import json
 
 from collections import defaultdict
-from common.utils import load_json_data
-from common.args import file_path
 from locust import HttpUser, SequentialTaskSet, between, task, tag, events
-from locust.exception import InterruptTaskSet, StopUser
+from locust.exception import InterruptTaskSet
 from lxml import etree
 from datetime import datetime
 
-from user.models import UserDetails
+from user.models import UserDetails, HQUser
+from common.args import file_path
+from common.utils import load_json_data
 
 @events.init_command_line_parser.add_listener
 def _(parser):
@@ -24,7 +24,7 @@ def _(parser):
     parser.add_argument("--user-details", help="Path to user details file", required=True)
 
 APP_CONFIG = {}
-USERS = []
+USERS_DETAILS = []
 
 class WorkloadModelSteps(SequentialTaskSet):
     wait_time = between(5, 15)
@@ -43,28 +43,7 @@ class WorkloadModelSteps(SequentialTaskSet):
         }
         self.FUNC_CREATE_PROFILE_AND_REFER_FORM_SUBMIT = APP_CONFIG['FUNC_CREATE_PROFILE_AND_REFER_FORM_SUBMIT']
         self.cases_per_page = 100
-        self._log_in()
         self._get_build_info()
-
-    # noinspection PyUnusedLocal
-    def _log_in(self):
-        logging.info("_log_in - mobile worker: " + self.user.login_as)
-        login_url = f'/a/{self.user.domain}/login/'
-        response = self.client.get(login_url)
-        response = self.client.post(
-            login_url,
-            {
-                "auth-username": self.user.username,
-                "auth-password": self.user.password,
-                "cloud_care_login_view-current_step": ['auth'],  # fake out two_factor ManagementForm
-            },
-            headers={
-                "X-CSRFToken": self.client.cookies.get('csrftoken'),
-                "REFERER": f'{self.user.host}{login_url}',  # csrf requires this for secure requests
-            },
-        )
-        assert (response.status_code == 200)
-        assert ('Sign In' not in response.text)  # make sure we weren't just redirected back to login
 
     def _get_build_info(self):
         logging.info("_get_build_info - mobile worker: " + self.user.login_as)
@@ -294,8 +273,8 @@ def _(environment, **kw):
     try:
         user_path = file_path(environment.parsed_options.user_details)
         user_data = load_json_data(user_path)["user"]
-        USERS.extend([UserDetails(**user) for user in user_data])
-        logging.info("Loaded %s users", len(USERS))
+        USERS_DETAILS.extend([UserDetails(**user) for user in user_data])
+        logging.info("Loaded %s users", len(USERS_DETAILS))
     except Exception as e:
         logging.error("Error loading users: %s", e)
         raise InterruptTaskSet from e
@@ -314,14 +293,20 @@ class LoginCommCareHQWithUniqueUsers(HttpUser):
         now = datetime.now()
         timestamp = datetime.timestamp(now)
         dt_object = datetime.fromtimestamp(timestamp)
-        user_info = USERS.pop()
-        self.username = user_info.username
-        self.password = user_info.password
-        self.login_as = user_info.login_as
-        print("userinfo===>>" + str(user_info))
+        self.user_detail = USERS_DETAILS.pop()
+        self.HQ_user = HQUser( self.user_detail)
+        self.username = self.user_detail.username
+        self.password = self.user_detail.password
+        self.login_as = self.user_detail.login_as
+        print("userinfo===>>" + str( self.user_detail))
 
         logging.info("timestamp-->>>" + str(dt_object))
         logging.info("host-->>>" + self.host)
         logging.info("login_as-->>>" + self.login_as)
         logging.info("username-->>>" + self.username)
         logging.info("domain-->>>" + self.domain)
+
+        self.login()
+
+    def login(self):
+        self.HQ_user.login(self.domain, self.host, self.client)
