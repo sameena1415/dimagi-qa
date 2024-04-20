@@ -5,6 +5,16 @@ import random
 import yaml
 
 
+def load_data(path):
+    if path.suffix == ".csv":
+        return load_csv_data(path)
+    if path.suffix == ".json":
+        return load_json_data(path)
+    if path.suffix == ".yaml":
+        return load_yaml_data(path)
+    raise ValueError(f"Unsupported file type: {path.suffix}")
+
+
 def load_csv_data(path, model=None):
     with path.open() as f:
         reader = csv.DictReader(f)

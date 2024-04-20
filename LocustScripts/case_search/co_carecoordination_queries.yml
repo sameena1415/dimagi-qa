@@ -123,12 +123,10 @@ queries:
         - match-all()
         - match-all()
 value_sets:
-  - name: client_search1
+  - path: co_client_cases.csv
+    format: csv
+    name_template: "{first_name}-{last_name}"
     keys: [client]
-    values:
-      first_name: bob
-      last_name: smith
-      dob: 2000-01-01
   - name: clinic_case_ids1
     keys: [clinic_case_ids]
     values:

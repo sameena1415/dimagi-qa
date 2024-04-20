@@ -1,5 +1,8 @@
+from unittest import mock
+
 import pytest
 
+from case_search.loader import load_query_data
 from case_search.models import Query, QueryData, ValueSet
 
 
@@ -82,3 +85,32 @@ def test_get_query_name_and_data(query, value_sets, expected_name, expected_data
     name, request_data = data._get_query_name_and_data(query)
     assert name == expected_name
     assert request_data == expected_data
+
+
+@mock.patch("case_search.loader.load_yaml_data")
+@mock.patch("case_search.loader.load_csv_data")
+def test_load_query_data(load_csv_data, load_yaml_data):
+    load_yaml_data.return_value = {
+        "queries": [
+            {"name": "query1", "case_types": ["case1"], "query_params": {"param1": ["value1"]}},
+        ],
+        "value_sets": [
+            {"name": "value_set1", "keys": ["key1"], "values": {"value_key1": "value1"}},
+            {"path": "value_sets.csv", "keys": ["key1"], "format": "csv", "name_template": "{a}-{b}"},
+        ],
+    }
+    load_csv_data.return_value = [
+        {"a": "a1", "b": "b1"},
+        {"a": "a2", "b": "b2"},
+    ]
+    query_data = load_query_data("path")
+    assert query_data == QueryData(
+        queries=[
+            Query(name="query1", case_types=["case1"], query_params={"param1": ["value1"]}),
+        ],
+        value_sets=[
+            ValueSet(name="value_set1", keys=["key1"], values={"value_key1": "value1"}),
+            ValueSet(name="a1-b1", keys=["key1"], values={"a": "a1", "b": "b1"}),
+            ValueSet(name="a2-b2", keys=["key1"], values={"a": "a2", "b": "b2"}),
+        ],
+    )
