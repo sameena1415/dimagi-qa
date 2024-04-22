@@ -49,7 +49,8 @@ class WorkloadModelSteps(SequentialTaskSet):
     @task
     def home_screen(self):
         logging.info("home_screen - mobile worker: " + self.user.user_detail.login_as + "; request: navigate_menu_start")
-        validation = formplayer.ValidationCriteria(key_value_pairs = {"title": self.FUNC_HOME_SCREEN['title']})
+        validation = formplayer.ValidationCriteria(keys=["title"],
+                                                key_value_pairs = {"title": self.FUNC_HOME_SCREEN['title']})
         try:
             self.user.HQ_user.post_formplayer("navigate_menu_start", self.client,
                                             self.user.app_details, name="Home Screen",
@@ -62,7 +63,8 @@ class WorkloadModelSteps(SequentialTaskSet):
     @task
     def search_for_beds_menu(self):
         logging.info("all_cases_case_list - mobile worker:" + self.user.user_detail.login_as + "; request: navigate_menu")
-        validation = formplayer.ValidationCriteria(key_value_pairs = {"title": self.FUNC_SEARCH_FOR_BEDS_MENU['title']})
+        validation = formplayer.ValidationCriteria(keys=["title"],
+                                                key_value_pairs = {"title": self.FUNC_SEARCH_FOR_BEDS_MENU['title']})
         try:
             extra_json = {
                 "selections": [self.FUNC_SEARCH_FOR_BEDS_MENU['selections']],
@@ -95,7 +97,8 @@ class WorkloadModelSteps(SequentialTaskSet):
             qty_cases_remaining_to_select = total_qty_cases_to_select - len(self.selected_case_ids)
             qty_to_select = min(random_qty_cases_to_select_per_page, qty_cases_remaining_to_select)
 
-            validation = formplayer.ValidationCriteria(key_value_pairs = {"title": self.FUNC_SEARCH_FOR_BEDS_MENU['title']})
+            validation = formplayer.ValidationCriteria(keys=["title"],
+                                                    key_value_pairs = {"title": self.FUNC_SEARCH_FOR_BEDS_MENU['title']})
             extra_json={
                 "selections": [self.FUNC_SEARCH_FOR_BEDS_MENU['selections']],
                 "cases_per_page": self.cases_per_page,
@@ -130,7 +133,8 @@ class WorkloadModelSteps(SequentialTaskSet):
     def enter_create_profile_and_refer_form(self):
         logging.info("Entering form - mobile worker:" + self.user.user_detail.login_as + "; request: navigate_menu")
 
-        validation = formplayer.ValidationCriteria(key_value_pairs = {"title": self.FUNC_CREATE_PROFILE_AND_REFER_FORM['title']})
+        validation = formplayer.ValidationCriteria(keys=["title"],
+                                                key_value_pairs = {"title": self.FUNC_CREATE_PROFILE_AND_REFER_FORM['title']})
         extra_json = {
                     "selected_values": (list(self.selected_case_ids)),
                     "query_data": {},
@@ -201,7 +205,8 @@ class WorkloadModelSteps(SequentialTaskSet):
         input_answers= {d["ix"]: d["answer"] for d in self.FUNC_CREATE_PROFILE_AND_REFER_FORM_QUESTIONS.values()}
         answers.update(input_answers)
 
-        validation = formplayer.ValidationCriteria(key_value_pairs={"submitResponseMessage": self.FUNC_CREATE_PROFILE_AND_REFER_FORM_SUBMIT['submitResponseMessage']})
+        validation = formplayer.ValidationCriteria(keys=["submitResponseMessage"],
+                                                key_value_pairs={"submitResponseMessage": self.FUNC_CREATE_PROFILE_AND_REFER_FORM_SUBMIT['submitResponseMessage']})
         extra_json = {
             "answers": answers,
             "prevalidated": True,
