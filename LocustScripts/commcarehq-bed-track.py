@@ -208,9 +208,9 @@ class LoginCommCareHQWithUniqueUsers(HttpUser):
     tasks = [WorkloadModelSteps]
 
     formplayer_host = "/formplayer"
-    project = 'bha-bed-tracking-perf'  # str(os.environ.get("project"))
+    project = 'co-carecoordination-perf'  # str(os.environ.get("project"))
     domain_user_credential_force = str(os.environ.get("user_credential"))
-    app_config_force = str(os.environ.get("app_config"))
+    app_config_force = str(os.environ.get("app_config_bed_tracking_tool"))
     wait_time_force = "test"
 
     if wait_time_force == "test":
@@ -231,7 +231,7 @@ class LoginCommCareHQWithUniqueUsers(HttpUser):
         if app_config_force != "None":
             app_config = "project-config/" + project + "/" + app_config_force
         else:
-            app_config = config['app_config']
+            app_config = config['app_config_bed_tracking_tool']
 
     # get domain user credential and app config info
     with open(domain_user_credential) as json_file:

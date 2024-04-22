@@ -1,7 +1,0 @@
-host: https://www.commcarehq.org
-domain: co-carecoordination-perf
-## Model Iteration
-app_id: f83dc516d1e3f382528198375de23adb
-domain_user_credential: project-config/bha-referrals-perf/user_credentials.json
-owner_id: 3ca0fb9a3402487590f9b2eb5f0c876e
-app_config: project-config/bha-referrals-perf/app_config.json
