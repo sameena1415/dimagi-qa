@@ -23,6 +23,9 @@
             "FORM_QUESTION_SYMPTOMS": {
                 "ix":"0,1,6", "answer": "Headaches"
             },
+            "FORM_QUESTON_TYPE_OF_CARE": {
+                "ix":"0,1,7", "answer": 3
+            },
             "FORM_QUESTION_CONSENT": {
                 "ix":"0,1,15", "answer": [1]
             }
