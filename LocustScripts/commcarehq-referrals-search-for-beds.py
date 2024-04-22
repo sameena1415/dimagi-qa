@@ -12,6 +12,7 @@ from locust.exception import InterruptTaskSet
 from lxml import etree
 from datetime import datetime
 
+import formplayer
 from user.models import UserDetails, HQUser, AppDetails
 from common.args import file_path
 from common.utils import load_json_data
@@ -47,17 +48,15 @@ class WorkloadModelSteps(SequentialTaskSet):
     @tag('home_screen')
     @task
     def home_screen(self):
+        logging.info("home_screen - mobile worker: " + self.user.login_as + "; request: navigate_menu_start")
+        validation = formplayer.ValidationCriteria(key_value_pairs = {"tile": self.FUNC_HOME_SCREEN['title']})
         try:
-            logging.info("home_screen - mobile worker: " + self.user.login_as)
-            data = self._formplayer_post("navigate_menu_start", name="Home Screen", checkKey="title",
-                                         checkValue=self.FUNC_HOME_SCREEN['title'])
-            assert "title" in data, "formplayer response does not contain title"
-            assert data['title'] == self.FUNC_HOME_SCREEN['title'], "title " + data['title'] + " is incorrect"
-            logging.info(
-                "user: " + self.user.username + "; mobile worker: " + self.user.login_as + "; request: navigate_menu_start")
-        except Exception as e:
-            logging.info(
-                "user: " + self.user.username + "; mobile worker: " + self.user.login_as + "; request: navigate_menu_start; exception: " + str(e))
+            data = self.user.HQ_user.post_formplayer("navigate_menu_start", self.client,
+                                                        self.user.app_details, name="Home Screen",
+                                                        validation=validation)
+        except formplayer.FormplayerResponseError as e:
+            logging.info(str(e))
+
 
     @tag('search_for_beds_menu')
     @task
@@ -272,7 +271,6 @@ class LoginCommCareHQWithUniqueUsers(HttpUser):
     tasks = [WorkloadModelSteps]
     wait_time = between(5, 10)
 
-    formplayer_host = "/formplayer"
     project = 'bha-referrals-perf'  # str(os.environ.get("project"))
 
     def on_start(self):

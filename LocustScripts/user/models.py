@@ -1,3 +1,4 @@
+import formplayer
 from locust.exception import StopUser
 import pydantic
 
@@ -35,3 +36,6 @@ class HQUser():
             raise StopUser(f"Login failed for user {self.user_details.username}: {response.status_code}")
         if 'Sign In' in response.text:
             raise StopUser(f"Login failed for user {self.user_details.username}: Sign In failed")
+
+    def post_formplayer(self, command, client, app_details, extra_json=None, name=None, validation=None):
+        return formplayer.post(command, client, app_details, self.user_details, extra_json, name, validation)
