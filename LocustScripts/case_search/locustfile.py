@@ -1,12 +1,13 @@
+
 import logging
 
 from locust import HttpUser, constant, events, task
 from locust.exception import InterruptTaskSet, StopUser
 
+from case_search.loader import load_query_data
 from user.models import UserDetails
-from case_search.models import QueryData
-from common.utils import RandomItems, load_json_data, load_yaml_data
 from common.args import file_path
+from common.utils import RandomItems, load_json_data
 
 
 @events.init_command_line_parser.add_listener
@@ -29,7 +30,7 @@ def get_random_query():
 def _(environment, **kw):
     try:
         queries = file_path(environment.parsed_options.queries)
-        QUERY_DATA.append(load_yaml_data(queries, QueryData))
+        QUERY_DATA.append(load_query_data(queries))
         logging.info("Loaded %s queries and %s value sets", len(QUERY_DATA[0].queries), len(QUERY_DATA[0].value_sets))
     except Exception as e:
         logging.error("Error loading queries: %s", e)
@@ -76,8 +77,11 @@ class CaseSearchUser(HttpUser):
     def search_case(self):
         url = f"/a/{self.environment.parsed_options.domain}/phone/search/{self.environment.parsed_options.app_id}/"
         name, query = get_random_query()
-        self.client.post(
+        with self.client.post(
             url,
             data=query,
-            name=f"Search cases: {name}"
-        )
+            name=f"Search cases: {name}",
+            catch_response=True,
+        ) as resp:
+            if resp.status_code == 400:
+                logging.error("Bad request for query '%s': %s", name, resp.text)
