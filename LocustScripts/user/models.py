@@ -6,6 +6,11 @@ class UserDetails(pydantic.BaseModel):
     password: str
     login_as: str | None = None
 
+class AppDetails(pydantic.BaseModel):
+    domain: str
+    app_id: str
+    build_id: str
+
 class HQUser():
 
     def __init__(self, user_details):

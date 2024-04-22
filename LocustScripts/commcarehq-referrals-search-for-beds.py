@@ -12,7 +12,7 @@ from locust.exception import InterruptTaskSet
 from lxml import etree
 from datetime import datetime
 
-from user.models import UserDetails, HQUser
+from user.models import UserDetails, HQUser, AppDetails
 from common.args import file_path
 from common.utils import load_json_data
 
@@ -43,17 +43,6 @@ class WorkloadModelSteps(SequentialTaskSet):
         }
         self.FUNC_CREATE_PROFILE_AND_REFER_FORM_SUBMIT = APP_CONFIG['FUNC_CREATE_PROFILE_AND_REFER_FORM_SUBMIT']
         self.cases_per_page = 100
-        self._get_build_info()
-
-    def _get_build_info(self):
-        logging.info("_get_build_info - mobile worker: " + self.user.login_as)
-        response = self.client.get(f'/a/{self.user.domain}/cloudcare/apps/v2/?option=apps', name='build info')
-        assert (response.status_code == 200)
-        for app in response.json():
-            if app['copy_of'] == self.user.app_id:
-                # get build_id
-                self.build_id = app['_id']
-        logging.info("build_id: " + self.build_id)
 
     @tag('home_screen')
     @task
@@ -218,7 +207,7 @@ class WorkloadModelSteps(SequentialTaskSet):
 
     def _formplayer_post(self, command, extra_json=None, name=None, checkKey=None, checkValue=None, checkLen=None):
         json = {
-            "app_id": self.build_id,
+            "app_id": self.user.app_details.build_id,
             "domain": self.user.domain,
             "locale": "en",
             "restoreAs": self.user.login_as,
@@ -289,7 +278,6 @@ class LoginCommCareHQWithUniqueUsers(HttpUser):
     def on_start(self):
         self.domain = self.environment.parsed_options.domain
         self.host = self.environment.parsed_options.host
-        self.app_id = self.environment.parsed_options.app_id
         now = datetime.now()
         timestamp = datetime.timestamp(now)
         dt_object = datetime.fromtimestamp(timestamp)
@@ -307,6 +295,20 @@ class LoginCommCareHQWithUniqueUsers(HttpUser):
         logging.info("domain-->>>" + self.domain)
 
         self.login()
+        self.app_details = AppDetails(
+        domain = self.domain,
+        app_id = self.environment.parsed_options.app_id,
+        build_id = self._get_build_info(self.environment.parsed_options.app_id)
+        )
 
     def login(self):
         self.HQ_user.login(self.domain, self.host, self.client)
+
+    def _get_build_info(self, app_id):
+        response = self.client.get(f'/a/{self.domain}/cloudcare/apps/v2/?option=apps', name='build info')
+        assert (response.status_code == 200)
+        for app in response.json():
+            if app['copy_of'] == app_id:
+                # get build_id
+                logging.info("build_id: " + app['_id'])
+                return app['_id']
