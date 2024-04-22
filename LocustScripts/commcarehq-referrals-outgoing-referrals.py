@@ -34,6 +34,7 @@ class WorkloadModelSteps(SequentialTaskSet):
         self.FUNC_ENTER_STATUS = APP_CONFIG["FUNC_ENTER_STATUS"]
         self.FUNC_ENTER_GENDER = APP_CONFIG["FUNC_ENTER_GENDER"]
         self.FUNC_ENTER_TYPE_OF_CARE = APP_CONFIG["FUNC_ENTER_TYPE_OF_CARE"]
+        self.FUNC_OUTGOING_REFERRAL_DETAILS_FORM= APP_CONFIG["FUNC_OUTGOING_REFERRAL_DETAILS_FORM"]
 
     @tag('outgoing_referrals_menu')
     @task
@@ -75,9 +76,27 @@ class WorkloadModelSteps(SequentialTaskSet):
                                                      validation=validation, name="Perform a Search")
             entities = data["entities"]
             assert len(entities) > 0, "entities is empty"
-            self.selected_case = entities[0]['id']
+            self.selected_case_id = entities[0]['id']
         except formplayer.FormplayerResponseError as e:
             logging.info(str(e) + " - mobile worker: " + self.user.user_detail.login_as)
+
+    @tag('enter_outgoing_referral_details_form')
+    @task
+    def enter_create_profile_and_refer_form(self):
+        logging.info("Entering form - mobile worker:" + self.user.user_detail.login_as + "; request: navigate_menu")
+
+        validation = formplayer.ValidationCriteria(keys=["title"],
+                                                key_value_pairs = {"title": self.FUNC_OUTGOING_REFERRAL_DETAILS_FORM['title']})
+        extra_json = {
+                    "selections": [self.FUNC_OUTGOING_REFERRAL_DETAILS_FORM['selections'], self.selected_case_id, "0"],
+                }
+        try:
+            data = self.user.HQ_user.post_formplayer("navigate_menu", self.client,  self.user.app_details,
+                                                    extra_json=extra_json, name="Enter 'Outgoing Referral Details' Form",
+                                                    validation=validation)
+        except formplayer.FormplayerResponseError as e:
+            logging.info(str(e) + " - mobile worker: " + self.user.user_detail.login_as)
+        self.session_id = data['session_id']
 
 @events.init.add_listener
 def _(environment, **kw):

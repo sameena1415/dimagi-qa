@@ -11,6 +11,9 @@
     "FUNC_CREATE_PROFILE_AND_REFER_FORM": {
         "selections":"0", "title":"Create Profile and Refer"
     },
+    "FUNC_OUTGOING_REFERRAL_DETAILS_FORM": {
+        "selections":"0", "title":"Outgoing Referral Details"
+    },
     "FORM_QUESTION_AGE": {
         "ix":"0,1,1", "answer":36
     },
