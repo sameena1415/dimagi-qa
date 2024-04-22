@@ -12,6 +12,7 @@ from locust.exception import InterruptTaskSet
 from lxml import etree
 from datetime import datetime
 
+import formplayer
 from user.models import UserDetails, HQUser, AppDetails
 from common.args import file_path
 from common.utils import load_json_data
@@ -37,91 +38,46 @@ class WorkloadModelSteps(SequentialTaskSet):
     @tag('outgoing_referrals_menu')
     @task
     def outgoing_referrals_menu(self):
+        logging.info("all_cases_case_list - mobile worker: " + self.user.user_detail.login_as + "; request: navigate_menu")
+        validation = formplayer.ValidationCriteria(keys=["title"],
+                                                key_value_pairs = {"title": self.FUNC_OUTGOING_REFERRALS_MENU['title']})
+        extra_json = {
+            "selections": [self.FUNC_OUTGOING_REFERRALS_MENU['selections']]
+        }
         try:
-            logging.info("all_cases_case_list - mobile worker:" + self.user.login_as)
-            data = self._formplayer_post("navigate_menu", extra_json={
-                "selections": [self.FUNC_OUTGOING_REFERRALS_MENU['selections']],
-            }, name="Open Outgoing Referrals Menu", checkKey="title", checkValue=self.FUNC_OUTGOING_REFERRALS_MENU['title'])
-            assert "title" in data, "formplayer response does not contain title"
-            assert data['title'] == self.FUNC_OUTGOING_REFERRALS_MENU['title'], "title " + data['title'] + " is incorrect"
-            logging.info(
-                "user: " + self.user.username + "; mobile worker: " + self.user.login_as + "; request: navigate_menu")
-        except Exception as e:
-            logging.info(
-                "user: " + self.user.username + "; mobile worker: " + self.user.login_as + "; request: navigate_menu; exception: " + str(e))
+            self.user.HQ_user.post_formplayer("navigate_menu", self.client,
+                                            self.user.app_details, extra_json=extra_json,
+                                            name="Home Screen", validation=validation)
+        except formplayer.FormplayerResponseError as e:
+            logging.info(str(e) + " - mobile worker: " + self.user.user_detail.login_as)
 
     @tag('perform_a_search')
     @task
     def perform_a_search(self):
-        logging.info("Performing Search - mobile worker:" + self.user.login_as)
+        logging.info("Performing Search - mobile worker:" + self.user.user_detail.login_as + "; request: navigate_menu")
+        validation = formplayer.ValidationCriteria(keys=["entities"])
+        extra_json = {
+            "query_data": {
+                "search_command.m10_results": {
+                    "inputs": {
+                        self.FUNC_ENTER_STATUS['input']: self.FUNC_ENTER_STATUS['inputValue'],
+                        self.FUNC_ENTER_GENDER['input']: self.FUNC_ENTER_GENDER['inputValue'],
+                        self.FUNC_ENTER_TYPE_OF_CARE['input']: self.FUNC_ENTER_TYPE_OF_CARE['inputValue']
+                    },
+                    "execute": True,
+                    "force_manual_search": True}
+            },
+            "selections": [self.FUNC_OUTGOING_REFERRALS_MENU["selections"]],
+        }
         try:
-            data = self._formplayer_post("navigate_menu", extra_json={
-                        "query_data": {
-                            "search_command.m10_results": {
-                                "inputs": {
-                                    self.FUNC_ENTER_STATUS['input']: self.FUNC_ENTER_STATUS['inputValue'],
-                                    self.FUNC_ENTER_GENDER['input']: self.FUNC_ENTER_GENDER['inputValue'],
-                                    self.FUNC_ENTER_TYPE_OF_CARE['input']: self.FUNC_ENTER_TYPE_OF_CARE['inputValue']
-                                },
-                                "execute": True,
-                                "force_manual_search": True}
-                        },
-                        "selections": [self.FUNC_OUTGOING_REFERRALS_MENU["selections"]],
-                    }, name="Perform a Search")
-            logging.info(data)
-            assert 'entities' in data, "formplayer response does not contain entities"
+            data = self.user.HQ_user.post_formplayer("navigate_menu", self.client,
+                                                     self.user.app_details, extra_json=extra_json,
+                                                     validation=validation, name="Perform a Search")
             entities = data["entities"]
             assert len(entities) > 0, "entities is empty"
             self.selected_case = entities[0]['id']
-        except Exception as e:
-            logging.info(
-                "user: " + self.user.username + "; mobile worker: " + self.user.login_as + "; request: navigate_menu; exception: " + str(e))
-
-
-    def _formplayer_post(self, command, extra_json=None, name=None, checkKey=None, checkValue=None, checkLen=None):
-        json = {
-            "app_id": self.build_id,
-            "domain": self.user.domain,
-            "locale": "en",
-            "restoreAs": self.user.login_as,
-            "username": self.user.username,
-        }
-        if extra_json:
-            json.update(extra_json)
-        name = name or command
-
-        if 'XSRF-TOKEN' not in self.client.cookies:
-            response = self.client.get(f"{self.parent.formplayer_host}/serverup")
-            response.raise_for_status()
-
-        xsrf_token = self.client.cookies['XSRF-TOKEN']
-        headers = {'X-XSRF-TOKEN': xsrf_token}
-        self.client.headers.update(headers)
-
-        with self.client.post(f"{self.user.formplayer_host}/{command}/", json=json, name=name,
-                              catch_response=True) as response:
-            data = response.json()
-            # logging.info("data-->" + str(data))
-            if "notification" in data and data["notification"]:
-                if data["notification"]["type"] == "error":
-                    logging.info("ERROR::-" + data["notification"]["message"] + ": With json" + str(json))
-                    response.failure("exception error--" + data["notification"]["message"])
-            if "exception" in data:
-                logging.info("ERROR::exception error--" + data['exception'])
-                logging.info("ERROR::user-info::" + self.user.username + "::" + self.user.login_as)
-                response.failure("exception error--" + data['exception'])
-            elif checkKey and checkKey not in data:
-                logging.info("error::" + checkKey + " not in data")
-                response.failure("ERROR::" + checkKey + " not in data")
-            elif checkKey and checkLen:
-                if len(data[checkKey]) != checkLen:
-                    logging.info("ERROR::len(data['" + checkKey + "']) != " + checkLen)
-                    response.failure("error::len(data['" + checkKey + "']) != " + checkLen)
-            elif checkKey and checkValue:
-                if data[checkKey] != checkValue:
-                    logging.info("ERROR::data['" + checkKey + "'] != " + checkValue)
-                    response.failure("error::data['" + checkKey + "'] != " + checkValue)
-        return response.json()
+        except formplayer.FormplayerResponseError as e:
+            logging.info(str(e) + " - mobile worker: " + self.user.user_detail.login_as)
 
 @events.init.add_listener
 def _(environment, **kw):
