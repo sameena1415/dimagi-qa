@@ -24,10 +24,10 @@ def post(command, client, app_details, user_details, extra_json=None, name=None,
     with client.post(f"{formplayer_host}/{command}/", json=json, name=name,
                             catch_response=True) as response:
         if validation:
-            validate_response_data(response, validation)
+            validate_response(response, validation)
         return response.json()
 
-def validate_response_data(response, validation):
+def validate_response(response, validation):
     data = response.json()
     for checkKey, checkValue in validation.key_value_pairs.items():
         checkLen = validation.length_check.get(checkKey, None)

@@ -48,20 +48,20 @@ class WorkloadModelSteps(SequentialTaskSet):
     @tag('home_screen')
     @task
     def home_screen(self):
-        logging.info("home_screen - mobile worker: " + self.user.login_as + "; request: navigate_menu_start")
+        logging.info("home_screen - mobile worker: " + self.user.user_detail.login_as + "; request: navigate_menu_start")
         validation = formplayer.ValidationCriteria(key_value_pairs = {"title": self.FUNC_HOME_SCREEN['title']})
         try:
             self.user.HQ_user.post_formplayer("navigate_menu_start", self.client,
                                             self.user.app_details, name="Home Screen",
                                             validation=validation)
         except formplayer.FormplayerResponseError as e:
-            logging.info(str(e) + " - mobile worker: " + self.user.login_as)
+            logging.info(str(e) + " - mobile worker: " + self.user.user_detail.login_as)
 
 
     @tag('search_for_beds_menu')
     @task
     def search_for_beds_menu(self):
-        logging.info("all_cases_case_list - mobile worker:" + self.user.login_as + "; request: navigate_menu")
+        logging.info("all_cases_case_list - mobile worker:" + self.user.user_detail.login_as + "; request: navigate_menu")
         validation = formplayer.ValidationCriteria(key_value_pairs = {"title": self.FUNC_SEARCH_FOR_BEDS_MENU['title']})
         try:
             extra_json = {
@@ -73,12 +73,12 @@ class WorkloadModelSteps(SequentialTaskSet):
                                                     validation=validation)
             self.page_count = data["pageCount"]
         except formplayer.FormplayerResponseError as e:
-            logging.info(str(e) + " - mobile worker: " + self.user.login_as)
+            logging.info(str(e) + " - mobile worker: " + self.user.user_detail.login_as)
 
     @tag('select_cases')
     @task
     def select_cases(self):
-        logging.info("Selecting Random Cases - mobile worker:" + self.user.login_as + "; request: navigate_menu")
+        logging.info("Selecting Random Cases - mobile worker:" + self.user.user_detail.login_as + "; request: navigate_menu")
         total_qty_cases_to_select = random.randrange(5,11)
         self.selected_case_ids = set()
 
@@ -106,7 +106,7 @@ class WorkloadModelSteps(SequentialTaskSet):
                                                         extra_json=extra_json, name="Paginate for Case Selection",
                                                         validation=validation)
             except formplayer.FormplayerResponseError as e:
-                logging.info(str(e) + " - mobile worker: " + self.user.login_as)
+                logging.info(str(e) + " - mobile worker: " + self.user.user_detail.login_as)
 
             entities = data["entities"]
             ids = [entity["id"] for entity in entities if entity["id"] not in self.selected_case_ids]
@@ -119,16 +119,16 @@ class WorkloadModelSteps(SequentialTaskSet):
 
             # crude way to avoid looping infinitely
             i += 1
-            assert i < max_num_iterations, "exceeded allowed number of iterations to select cases for mobile worker " + self.user.login_as
+            assert i < max_num_iterations, "exceeded allowed number of iterations to select cases for mobile worker " + self.user.user_detail.login_as
             rng = random.randrange(1,3)
             time.sleep(rng)
-        logging.info("selected cases are " + str(self.selected_case_ids) + " for mobile worker " + self.user.login_as)
+        logging.info("selected cases are " + str(self.selected_case_ids) + " for mobile worker " + self.user.user_detail.login_as)
 
 
     @tag('enter_create_profile_and_refer_form')
     @task
     def enter_create_profile_and_refer_form(self):
-        logging.info("Entering form - mobile worker:" + self.user.login_as + "; request: navigate_menu")
+        logging.info("Entering form - mobile worker:" + self.user.user_detail.login_as + "; request: navigate_menu")
 
         validation = formplayer.ValidationCriteria(key_value_pairs = {"title": self.FUNC_CREATE_PROFILE_AND_REFER_FORM['title']})
         extra_json = {
@@ -141,13 +141,13 @@ class WorkloadModelSteps(SequentialTaskSet):
                                                     extra_json=extra_json, name="Enter 'Create Profile and Refer' Form",
                                                     validation=validation)
         except formplayer.FormplayerResponseError as e:
-            logging.info(str(e) + " - mobile worker: " + self.user.login_as)
+            logging.info(str(e) + " - mobile worker: " + self.user.user_detail.login_as)
         self.session_id = data['session_id']
 
     @tag('answer_create_profile_and_refer_form_questions')
     @task
     def answer_create_profile_and_refer_form_questions(self):
-        logging.info("Answering Questions - mobile worker:" + self.user.login_as + "; request: answer")
+        logging.info("Answering Questions - mobile worker:" + self.user.user_detail.login_as + "; request: answer")
         for question in self.FUNC_CREATE_PROFILE_AND_REFER_FORM_QUESTIONS.values():
             extra_json = {
                     "ix": question["ix"],
@@ -158,14 +158,14 @@ class WorkloadModelSteps(SequentialTaskSet):
                 self.user.HQ_user.post_formplayer("answer", self.client, self.user.app_details,
                                                 extra_json=extra_json, name="Answer 'Create Profile and Refer' Question")
             except formplayer.FormplayerResponseError as e:
-                logging.info(str(e) + " - mobile worker: " + self.user.login_as)
+                logging.info(str(e) + " - mobile worker: " + self.user.user_detail.login_as)
             rng = random.randrange(1,3)
             time.sleep(rng)
 
     @tag('submit_create_profile_and_refer_form')
     @task
     def submit_create_profile_and_refer_form(self):
-        logging.info("Submitting form - mobile worker:" + self.user.login_as + "; request: submit_all")
+        logging.info("Submitting form - mobile worker:" + self.user.user_detail.login_as + "; request: submit_all")
         utc_time_tuple = time.gmtime(time.time())
         formatted_date = "{:04d}-{:02d}-{:02d}".format(utc_time_tuple.tm_year, utc_time_tuple.tm_mon, utc_time_tuple.tm_mday)
         answers = {
@@ -233,26 +233,12 @@ class LoginCommCareHQWithUniqueUsers(HttpUser):
     tasks = [WorkloadModelSteps]
     wait_time = between(5, 10)
 
-    project = 'bha-referrals-perf'  # str(os.environ.get("project"))
-
     def on_start(self):
         self.domain = self.environment.parsed_options.domain
         self.host = self.environment.parsed_options.host
-        now = datetime.now()
-        timestamp = datetime.timestamp(now)
-        dt_object = datetime.fromtimestamp(timestamp)
         self.user_detail = USERS_DETAILS.pop()
         self.HQ_user = HQUser( self.user_detail)
-        self.username = self.user_detail.username
-        self.password = self.user_detail.password
-        self.login_as = self.user_detail.login_as
-        print("userinfo===>>" + str( self.user_detail))
-
-        logging.info("timestamp-->>>" + str(dt_object))
-        logging.info("host-->>>" + self.host)
-        logging.info("login_as-->>>" + self.login_as)
-        logging.info("username-->>>" + self.username)
-        logging.info("domain-->>>" + self.domain)
+        logging.info("userinfo-->>>" + str(self.user_detail))
 
         self.login()
         self.app_details = AppDetails(
