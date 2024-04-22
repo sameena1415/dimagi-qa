@@ -34,7 +34,8 @@ class WorkloadModelSteps(SequentialTaskSet):
         self.FUNC_ENTER_STATUS = APP_CONFIG["FUNC_ENTER_STATUS"]
         self.FUNC_ENTER_GENDER = APP_CONFIG["FUNC_ENTER_GENDER"]
         self.FUNC_ENTER_TYPE_OF_CARE = APP_CONFIG["FUNC_ENTER_TYPE_OF_CARE"]
-        self.FUNC_OUTGOING_REFERRAL_DETAILS_FORM= APP_CONFIG["FUNC_OUTGOING_REFERRAL_DETAILS_FORM"]
+        self.FUNC_OUTGOING_REFERRAL_DETAILS_FORM = APP_CONFIG["FUNC_OUTGOING_REFERRAL_DETAILS_FORM"]
+        self.FUNC_OUTGOING_REFERRAL_DETAILS_FORM_SUBMIT = APP_CONFIG["FUNC_OUTGOING_REFERRAL_DETAILS_FORM_SUBMIT"]
 
     @tag('outgoing_referrals_menu')
     @task
@@ -115,6 +116,126 @@ class WorkloadModelSteps(SequentialTaskSet):
                 logging.info(str(e) + " - mobile worker: " + self.user.user_detail.login_as)
             rng = random.randrange(1,3)
             time.sleep(rng)
+
+    @tag('submit_outgoing_referral_details_form')
+    @task
+    def submit_outgoing_referral_details_form(self):
+        logging.info("Submitting form - mobile worker:" + self.user.user_detail.login_as + "; request: submit_all")
+        utc_time_tuple = time.gmtime(time.time())
+        formatted_date = "{:04d}-{:02d}-{:02d}".format(utc_time_tuple.tm_year, utc_time_tuple.tm_mon, utc_time_tuple.tm_mday)
+
+        answers = {
+            "2,0": 1,
+            "3,1": 1,
+            "3,6": formatted_date,
+            "7,0": "OK",
+            "8,0": "OK",
+            "8,1": "OK",
+            "8,2": None,
+            "8,3,0": "OK",
+            "8,3,1": "OK",
+            "8,3,2": "OK",
+            "8,3,3": "OK",
+            "8,3,4": "OK",
+            "8,3,5": "OK",
+            "8,3,6": "OK",
+            "8,3,7": "OK",
+            "8,3,8": "OK",
+            "8,3,9": "OK",
+            "8,3,10": "OK",
+            "8,3,11": "OK",
+            "8,3,12": "OK",
+            "8,3,13": "OK",
+            "8,3,14": "OK",
+            "8,3,15": "OK",
+            "8,3,16": "OK",
+            "8,3,17": "OK",
+            "8,3,18": "OK",
+            "8,3,19": "OK",
+            "8,3,20": "OK",
+            "10,0_0,0": "OK",
+            "10,0_0,1,0": "OK",
+            "10,0_0,1,1": "OK",
+            "10,0_0,1,2": "OK",
+            "10,0_0,1,7": "OK",
+            "10,0_0,3,0": "OK",
+            "10,0_0,3,1": "OK",
+            "10,0_1,0": "OK",
+            "10,0_1,1,0": "OK",
+            "10,0_1,1,1": "OK",
+            "10,0_1,1,2": "OK",
+            "10,0_1,1,7": "OK",
+            "10,0_1,3,0": "OK",
+            "10,0_1,3,1": "OK",
+            "10,0_2,0": "OK",
+            "10,0_2,1,0": "OK",
+            "10,0_2,1,1": "OK",
+            "10,0_2,1,2": "OK",
+            "10,0_2,1,7": "OK",
+            "10,0_2,3,0": "OK",
+            "10,0_2,3,1": "OK",
+            "10,0_3,0": "OK",
+            "10,0_3,1,0": "OK",
+            "10,0_3,1,1": "OK",
+            "10,0_3,1,2": "OK",
+            "10,0_3,1,7": "OK",
+            "10,0_3,3,0": "OK",
+            "10,0_3,3,1": "OK",
+            "10,0_4,0": "OK",
+            "10,0_4,1,0": "OK",
+            "10,0_4,1,1": "OK",
+            "10,0_4,1,2": "OK",
+            "10,0_4,1,7": "OK",
+            "10,0_4,3,0": "OK",
+            "10,0_4,3,1": "OK",
+            "10,0_5,0": "OK",
+            "10,0_5,1,0": "OK",
+            "10,0_5,1,1": "OK",
+            "10,0_5,1,2": "OK",
+            "10,0_5,1,7": "OK",
+            "10,0_5,3,0": "OK",
+            "10,0_5,3,1": "OK",
+            "10,0_6,0": "OK",
+            "10,0_6,1,0": "OK",
+            "10,0_6,1,1": "OK",
+            "10,0_6,1,2": "OK",
+            "10,0_6,1,7": "OK",
+            "10,0_6,3,0": "OK",
+            "10,0_6,3,1": "OK",
+            "10,0_7,0": "OK",
+            "10,0_7,1,0": "OK",
+            "10,0_7,1,1": "OK",
+            "10,0_7,1,2": "OK",
+            "10,0_7,1,7": "OK",
+            "10,0_7,3,0": "OK",
+            "10,0_7,3,1": "OK",
+            "10,0_8,0": "OK",
+            "10,0_8,1,0": "OK",
+            "10,0_8,1,1": "OK",
+            "10,0_8,1,2": "OK",
+            "10,0_8,1,7": "OK",
+            "10,0_8,3,0": "OK",
+            "10,0_8,3,1": "OK",
+            "10,0_9,0": "OK",
+            "10,0_9,1,0": "OK",
+            "10,0_9,1,1": "OK",
+            "10,0_9,1,2": "OK",
+            "10,0_9,1,7": "OK"
+        }
+        input_answers= {d["ix"]: d["answer"] for d in self.FUNC_OUTGOING_REFERRAL_DETAILS_FORM.questions.values()}
+        answers.update(input_answers)
+
+        validation = formplayer.ValidationCriteria(keys=["submitResponseMessage"],
+                                                key_value_pairs={"submitResponseMessage": self.FUNC_OUTGOING_REFERRAL_DETAILS_FORM_SUBMIT['submitResponseMessage']})
+        extra_json = {
+            "answers": answers,
+            "prevalidated": True,
+            "debuggerEnabled": True,
+            "session_id": self.session_id,
+        }
+        self.user.HQ_user.post_formplayer("submit-all", self.client, self.user.app_details, extra_json=extra_json,
+                                        name = "Submit Outgoing Referral Details Form", validation=validation)
+
 
 @events.init.add_listener
 def _(environment, **kw):

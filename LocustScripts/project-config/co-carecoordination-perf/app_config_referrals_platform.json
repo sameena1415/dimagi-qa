@@ -46,6 +46,9 @@
     "FUNC_CREATE_PROFILE_AND_REFER_FORM_SUBMIT": {
         "submitResponseMessage":"'Create Profile and Refer' successfully saved!"
     },
+    "FUNC_OUTGOING_REFERRAL_DETAILS_FORM_SUBMIT": {
+        "submitResponseMessage":"'Create Profile and Refer' successfully saved!"
+    },
     "FUNC_ENTER_STATUS": {
         "input":"current_status", "inputValue":"open"
     },
