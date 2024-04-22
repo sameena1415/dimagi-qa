@@ -12,7 +12,18 @@
         "selections":"0", "title":"Create Profile and Refer"
     },
     "FUNC_OUTGOING_REFERRAL_DETAILS_FORM": {
-        "selections":"0", "title":"Outgoing Referral Details"
+        "selections":"0", "title":"Outgoing Referral Details",
+        "questions": {
+            "QUESTION_UPDATE_CLEINT_PROFILE_STATUS": {
+                "ix":"2,0", "answer":1
+            },
+            "QUESTION_WHERE_CLIENT_PLACED": {
+                "ix":"3,1", "answer":1
+            },
+            "QUESTION_DATE_PLACED": {
+                "ix":"3,6", "answer":"2024-04-22"
+            }
+        }
     },
     "FORM_QUESTION_AGE": {
         "ix":"0,1,1", "answer":36

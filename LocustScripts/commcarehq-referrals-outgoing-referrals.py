@@ -98,6 +98,24 @@ class WorkloadModelSteps(SequentialTaskSet):
             logging.info(str(e) + " - mobile worker: " + self.user.user_detail.login_as)
         self.session_id = data['session_id']
 
+    @tag('answer_outgoing_referral_details_form_questions')
+    @task
+    def answer_outgoing_referral_details_form_questions(self):
+        logging.info("Answering Questions - mobile worker:" + self.user.user_detail.login_as + "; request: answer")
+        for question in self.FUNC_OUTGOING_REFERRAL_DETAILS_FORM.questions.values():
+            extra_json = {
+                    "ix": question["ix"],
+                    "answer": question["answer"],
+                    "session_id": self.session_id,
+                }
+            try:
+                self.user.HQ_user.post_formplayer("answer", self.client, self.user.app_details,
+                                                extra_json=extra_json, name="Answer 'Outgoing Referral Details' Question")
+            except formplayer.FormplayerResponseError as e:
+                logging.info(str(e) + " - mobile worker: " + self.user.user_detail.login_as)
+            rng = random.randrange(1,3)
+            time.sleep(rng)
+
 @events.init.add_listener
 def _(environment, **kw):
     try:
