@@ -108,7 +108,7 @@ class WorkloadModelSteps(SequentialTaskSet):
                     "session_id": self.session_id,
                 }
             try:
-                self.user.HQ_user.post_formplayer("answer", self.client, self.user.app_detail, validation=validation,
+                self.user.HQ_user.post_formplayer("answer", self.client, self.user.app_details, validation=validation,
                                                 extra_json=extra_json, name="Answer 'Outgoing Referral Details' Question")
             except formplayer.FormplayerResponseError as e:
                 logging.info(str(e) + " - mobile worker: " + self.user.user_detail.login_as)
@@ -232,7 +232,7 @@ class WorkloadModelSteps(SequentialTaskSet):
             "session_id": self.session_id,
         }
         self.user.HQ_user.post_formplayer("submit-all", self.client, self.user.app_details, extra_json=extra_json,
-                                        name = "Submit Outgoing Referral Details Form", validation=validation)
+                                        name="Submit Outgoing Referral Details Form", validation=validation)
 
 
 @events.init.add_listener

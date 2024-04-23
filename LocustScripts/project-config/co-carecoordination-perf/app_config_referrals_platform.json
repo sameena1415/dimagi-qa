@@ -41,10 +41,10 @@
                 "ix":"2,0", "answer":1
             },
             "QUESTION_WHERE_CLIENT_PLACED": {
-                "ix":"3,1", "answer":1
+                "ix":"3,1,0", "answer":1
             },
             "QUESTION_DATE_PLACED": {
-                "ix":"3,6", "answer":"2024-04-22"
+                "ix":"3,1,5", "answer":"2024-04-22"
             }
         }
     },
@@ -52,7 +52,7 @@
         "submitResponseMessage":"'Create Profile and Refer' successfully saved!"
     },
     "FUNC_OUTGOING_REFERRAL_DETAILS_FORM_SUBMIT": {
-        "submitResponseMessage":"'Create Profile and Refer' successfully saved!"
+        "submitResponseMessage":"'Outgoing Referral Details' successfully saved!"
     },
     "FUNC_ENTER_GENDER": {
         "input":"gender", "inputValue":"men"
