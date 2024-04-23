@@ -1,0 +1,37 @@
+{
+    "FUNC_HOME_SCREEN": {
+        "title":"Referrals Platform"
+    },
+    "FUNC_SEARCH_FOR_BEDS_MENU": {
+        "selections":"0", "title":"Search for Beds"
+    },
+    "FUNC_CREATE_PROFILE_AND_REFER_FORM": {
+        "selections":"0", "title":"Create Profile and Refer",
+        "questions": {
+            "FORM_QUESTION_AGE": {
+                "ix":"0,1,1", "answer":36
+            },
+            "FORM_QUESTION_GENDER": {
+                "ix":"0,1,2", "answer":2
+            },
+            "FORM_QUESTION_SEEKING_CARE_REASON": {
+                "ix":"0,1,4", "answer": "Symptoms encouraged visit"
+            },
+            "FORM_QUESTION_LEVEL_CARE_NEEDED": {
+                "ix":"0,1,5", "answer": "Inpatient"
+            },
+            "FORM_QUESTION_SYMPTOMS": {
+                "ix":"0,1,6", "answer": "Headaches"
+            },
+            "FORM_QUESTON_TYPE_OF_CARE": {
+                "ix":"0,1,7", "answer": 3
+            },
+            "FORM_QUESTION_CONSENT": {
+                "ix":"0,1,15", "answer": [1]
+            }
+        }
+    },
+    "FUNC_CREATE_PROFILE_AND_REFER_FORM_SUBMIT": {
+        "submitResponseMessage":"'Create Profile and Refer' successfully saved!"
+    }
+}

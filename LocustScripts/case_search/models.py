@@ -83,8 +83,3 @@ class QueryData(pydantic.BaseModel):
         data = query.get_query_params_for_request(merged_values)
         return query.name, data
 
-
-class UserDetails(pydantic.BaseModel):
-    username: str
-    password: str
-    login_as: str | None = None

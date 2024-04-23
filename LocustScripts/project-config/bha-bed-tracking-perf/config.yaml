@@ -1,7 +1,0 @@
-host: https://www.commcarehq.org
-domain: co-carecoordination-perf
-## Model Iteration
-app_id: b62974969e57051ad70160a798ed79e8
-domain_user_credential: project-config/bha-bed-tracking-perf/user_credentials.json
-owner_id: 3ca0fb9a3402487590f9b2eb5f0c876e
-app_config: project-config/bha-bed-tracking-perf/app_config.json
