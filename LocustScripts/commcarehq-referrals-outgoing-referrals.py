@@ -100,13 +100,15 @@ class WorkloadModelSteps(SequentialTaskSet):
     def answer_outgoing_referral_details_form_questions(self):
         logging.info("Answering Questions - mobile worker:" + self.user.user_detail.login_as + "; request: answer")
         for question in self.FUNC_OUTGOING_REFERRAL_DETAILS_FORM["questions"].values():
+            validation = formplayer.ValidationCriteria(keys=["title"],
+                                                    key_value_pairs = {"title": self.FUNC_OUTGOING_REFERRAL_DETAILS_FORM['title']})
             extra_json = {
                     "ix": question["ix"],
                     "answer": question["answer"],
                     "session_id": self.session_id,
                 }
             try:
-                self.user.HQ_user.post_formplayer("answer", self.client, self.user.app_details,
+                self.user.HQ_user.post_formplayer("answer", self.client, self.user.app_detail, validation=validation,
                                                 extra_json=extra_json, name="Answer 'Outgoing Referral Details' Question")
             except formplayer.FormplayerResponseError as e:
                 logging.info(str(e) + " - mobile worker: " + self.user.user_detail.login_as)
