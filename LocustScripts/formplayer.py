@@ -58,7 +58,7 @@ def validate_response(response, validation: ValidationCriteria):
                 raise FormplayerResponseError(msg)
         elif checkKey and checkValue:
             if data[checkKey] != checkValue:
-                msg = "ERROR::data['" + checkKey + "'] != " + checkValue
+                msg = "ERROR::data['" + checkKey + "'], " + data[checkKey] + " != " + checkValue
                 response.failure(msg)
                 raise FormplayerResponseError(msg)
 
