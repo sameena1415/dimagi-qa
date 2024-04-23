@@ -85,7 +85,7 @@ class WorkloadModelSteps(SequentialTaskSet):
         validation = formplayer.ValidationCriteria(keys=["title"],
                                                 key_value_pairs = {"title": self.FUNC_OUTGOING_REFERRAL_DETAILS_FORM['title']})
         extra_json = {
-                    "selections": [self.FUNC_OUTGOING_REFERRAL_DETAILS_FORM['selections'], self.selected_case_id, "0"],
+                    "selections": [self.FUNC_OUTGOING_REFERRALS_MENU['selections'], self.selected_case_id, self.FUNC_OUTGOING_REFERRAL_DETAILS_FORM['selections']],
                 }
         try:
             data = self.user.HQ_user.post_formplayer("navigate_menu", self.client,  self.user.app_details,
