@@ -31,9 +31,7 @@ class WorkloadModelSteps(SequentialTaskSet):
 
     def on_start(self):
         self.FUNC_OUTGOING_REFERRALS_MENU = APP_CONFIG["FUNC_OUTGOING_REFERRALS_MENU"]
-        self.FUNC_ENTER_STATUS = APP_CONFIG["FUNC_ENTER_STATUS"]
         self.FUNC_ENTER_GENDER = APP_CONFIG["FUNC_ENTER_GENDER"]
-        self.FUNC_ENTER_TYPE_OF_CARE = APP_CONFIG["FUNC_ENTER_TYPE_OF_CARE"]
         self.FUNC_OUTGOING_REFERRAL_DETAILS_FORM = APP_CONFIG["FUNC_OUTGOING_REFERRAL_DETAILS_FORM"]
         self.FUNC_OUTGOING_REFERRAL_DETAILS_FORM_SUBMIT = APP_CONFIG["FUNC_OUTGOING_REFERRAL_DETAILS_FORM_SUBMIT"]
 
@@ -62,9 +60,7 @@ class WorkloadModelSteps(SequentialTaskSet):
             "query_data": {
                 "search_command.m10_results": {
                     "inputs": {
-                        self.FUNC_ENTER_STATUS['input']: self.FUNC_ENTER_STATUS['inputValue'],
-                        self.FUNC_ENTER_GENDER['input']: self.FUNC_ENTER_GENDER['inputValue'],
-                        self.FUNC_ENTER_TYPE_OF_CARE['input']: self.FUNC_ENTER_TYPE_OF_CARE['inputValue']
+                        self.FUNC_ENTER_GENDER['input']: self.FUNC_ENTER_GENDER['inputValue']
                     },
                     "execute": True,
                     "force_manual_search": True}
