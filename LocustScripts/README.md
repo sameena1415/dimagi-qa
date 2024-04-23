@@ -1,4 +1,7 @@
 # Installation and setup
+
+You will need python 3.11+ to run these tests - 
+
 pip install -r requirements.txt
 
 A CommCareHQ web user who is a member of the test domain is required. This user's username and password should be specified as the environment variables LOCUST_USERNAME and LOCUST_PASSWORD.
