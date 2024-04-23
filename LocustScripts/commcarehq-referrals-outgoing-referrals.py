@@ -103,7 +103,7 @@ class WorkloadModelSteps(SequentialTaskSet):
     @task
     def answer_outgoing_referral_details_form_questions(self):
         logging.info("Answering Questions - mobile worker:" + self.user.user_detail.login_as + "; request: answer")
-        for question in self.FUNC_OUTGOING_REFERRAL_DETAILS_FORM.questions.values():
+        for question in self.FUNC_OUTGOING_REFERRAL_DETAILS_FORM["questions"].values():
             extra_json = {
                     "ix": question["ix"],
                     "answer": question["answer"],
@@ -222,7 +222,7 @@ class WorkloadModelSteps(SequentialTaskSet):
             "10,0_9,1,2": "OK",
             "10,0_9,1,7": "OK"
         }
-        input_answers= {d["ix"]: d["answer"] for d in self.FUNC_OUTGOING_REFERRAL_DETAILS_FORM.questions.values()}
+        input_answers= {d["ix"]: d["answer"] for d in self.FUNC_OUTGOING_REFERRAL_DETAILS_FORM["questions"].values()}
         answers.update(input_answers)
 
         validation = formplayer.ValidationCriteria(keys=["submitResponseMessage"],
