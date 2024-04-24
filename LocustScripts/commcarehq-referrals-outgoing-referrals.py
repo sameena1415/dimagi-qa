@@ -108,12 +108,29 @@ class WorkloadModelSteps(SequentialTaskSet):
                     "session_id": self.session_id,
                 }
             try:
-                self.user.HQ_user.post_formplayer("answer", self.client, self.user.app_details, validation=validation,
+                data = self.user.HQ_user.post_formplayer("answer", self.client, self.user.app_details, validation=validation,
                                                 extra_json=extra_json, name="Answer 'Outgoing Referral Details' Question")
             except formplayer.FormplayerResponseError as e:
                 logging.info(str(e) + " - mobile worker: " + self.user.user_detail.login_as)
             rng = random.randrange(1,3)
             time.sleep(rng)
+
+        def find_question_ix(data, result=dict()):
+            nested_items = data.get('children', {})
+            for children in nested_items:
+                    # If the current item matches the target_ix, check if it's a question
+                if children.get('type') == 'question':
+                    result[children.get('ix')] = "OK"
+                if 'children' in children:
+                    # If the current item has children, recursively call the function on them
+                    find_question_ix(children, result)
+            return result
+
+        # Question ix 10 is a count repeat group that varies depending on the case selected. So the "answer" with the appropriate
+        # ix keys need to be dynamically generated to be used in submit
+        for item in data["tree"]:
+            if item.get('ix') == "10":
+                self.attached_referral_requests_answers = find_question_ix(item)
 
     @tag('submit_outgoing_referral_details_form')
     @task
@@ -153,6 +170,7 @@ class WorkloadModelSteps(SequentialTaskSet):
             "8,3,20": "OK",
             "8,3,21":"OK",
         }
+        answers.update(self.attached_referral_requests_answers)
         input_answers= {d["ix"]: d["answer"] for d in self.FUNC_OUTGOING_REFERRAL_DETAILS_FORM["questions"].values()}
         answers.update(input_answers)
 
