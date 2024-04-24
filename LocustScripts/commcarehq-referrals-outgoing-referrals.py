@@ -34,6 +34,7 @@ class WorkloadModelSteps(SequentialTaskSet):
         self.FUNC_ENTER_GENDER = APP_CONFIG["FUNC_ENTER_GENDER"]
         self.FUNC_OUTGOING_REFERRAL_DETAILS_FORM = APP_CONFIG["FUNC_OUTGOING_REFERRAL_DETAILS_FORM"]
         self.FUNC_OUTGOING_REFERRAL_DETAILS_FORM_SUBMIT = APP_CONFIG["FUNC_OUTGOING_REFERRAL_DETAILS_FORM_SUBMIT"]
+        self.cases_per_page = 100
 
     @tag('outgoing_referrals_menu')
     @task
@@ -65,23 +66,59 @@ class WorkloadModelSteps(SequentialTaskSet):
                     "execute": True,
                     "force_manual_search": True}
             },
+            "cases_per_page": self.cases_per_page,
             "selections": [self.FUNC_OUTGOING_REFERRALS_MENU["selections"]],
         }
         try:
             data = self.user.HQ_user.post_formplayer("navigate_menu", self.client,
                                                      self.user.app_details, extra_json=extra_json,
                                                      validation=validation, name="Perform a Search")
-            entities = data["entities"]
-            assert len(entities) > 0, "entities is empty"
-            self.selected_case_id = entities[0]['id']
+            self.entities = data["entities"]
+            self.page_count = data["pageCount"]
+            assert len(self.entities) > 0, "entities is empty"
         except formplayer.FormplayerResponseError as e:
             logging.info(str(e) + " - mobile worker: " + self.user.user_detail.login_as)
+
+    @tag('select_case')
+    @task
+    def select_case(self):
+        logging.info("Selecting Case - mobile worker:" + self.user.user_detail.login_as + "; request: navigate_menu")
+        self.selected_case_id = None
+
+        page_num = 0
+        while (not self.selected_case_id and page_num < self.page_count):
+            for entity in self.entities:
+                # When a case goes through this entire workflow, its status is changed to
+                # "resolved" or "client_placed". However, it stays in the caselist. The workflow and form defined
+                # in this test is specific to and work only if the case selected has status "open".
+                if "open" in entity["data"]:
+                    self.selected_case_id = entity["id"]
+                    break
+            if self.selected_case_id:
+                break
+
+            page_num+=1
+            offset = page_num * self.cases_per_page
+            validation = formplayer.ValidationCriteria(keys=["entities"])
+            extra_json={
+                "selections": [self.FUNC_OUTGOING_REFERRALS_MENU['selections']],
+                "cases_per_page": self.cases_per_page,
+                "offset": offset,
+            }
+            try:
+                data = self.user.HQ_user.post_formplayer("navigate_menu", self.client,  self.user.app_details,
+                                                        extra_json=extra_json, name="Paginate for Case Selection",
+                                                        validation=validation)
+                self.entities = data["entities"]
+            except formplayer.FormplayerResponseError as e:
+                logging.info(str(e) + " - mobile worker: " + self.user.user_detail.login_as)
+        assert self.selected_case_id != None, "No case with status 'open' is available to be selected. A valid case needs to be created first"
+        logging.info("selected case_id is " + str(self.selected_case_id) + " for mobile worker " + self.user.user_detail.login_as)
 
     @tag('enter_outgoing_referral_details_form')
     @task
     def enter_create_profile_and_refer_form(self):
         logging.info("Entering form - mobile worker:" + self.user.user_detail.login_as + "; request: navigate_menu")
-
         validation = formplayer.ValidationCriteria(keys=["title"],
                                                 key_value_pairs = {"title": self.FUNC_OUTGOING_REFERRAL_DETAILS_FORM['title']})
         extra_json = {
@@ -173,7 +210,6 @@ class WorkloadModelSteps(SequentialTaskSet):
         answers.update(self.attached_referral_requests_answers)
         input_answers= {d["ix"]: d["answer"] for d in self.FUNC_OUTGOING_REFERRAL_DETAILS_FORM["questions"].values()}
         answers.update(input_answers)
-
         validation = formplayer.ValidationCriteria(keys=["submitResponseMessage"],
                                                 key_value_pairs={"submitResponseMessage": self.FUNC_OUTGOING_REFERRAL_DETAILS_FORM_SUBMIT['submitResponseMessage']})
         extra_json = {
