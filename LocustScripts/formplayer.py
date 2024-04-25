@@ -29,14 +29,12 @@ def post(command, client, app_details, user_details, extra_json=None, name=None,
 
 @dataclass
 class ValidationCriteria:
-    keys: Optional[List[str]] = None
     key_value_pairs: Optional[Dict[str, Optional[str]]] = field(default_factory=dict)
     length_check: Optional[Dict[str, int]] = field(default_factory=dict)
 
 def validate_response(response, validation: ValidationCriteria):
     data = response.json()
-    for checkKey in validation.keys:
-        checkValue = validation.key_value_pairs.get(checkKey, None)
+    for checkKey, checkValue in validation.key_value_pairs.items():
         checkLen = validation.length_check.get(checkKey, None)
         if "notification" in data and data["notification"]:
             if data["notification"]["type"] == "error":
