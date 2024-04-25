@@ -82,7 +82,7 @@ class LoginCommCareHQWithUniqueUsers(HttpUser):
         response = self.client.get(f'/a/{self.domain}/cloudcare/apps/v2/?option=apps', name='build info')
         assert (response.status_code == 200)
         for app in response.json():
-            if app['copy_of'] == app_id:
+            if app['copy_of'] == app_id or app['_id'] == app_id:
                 # get build_id
                 logging.info("build_id: " + app['_id'])
                 return app['_id']
