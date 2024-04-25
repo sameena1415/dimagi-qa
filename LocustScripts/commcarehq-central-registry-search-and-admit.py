@@ -27,6 +27,7 @@ def _(parser):
 
 APP_CONFIG = {}
 USERS_DETAILS = []
+CASES_TO_SELECT = {}
 
 class WorkloadModelSteps(SequentialTaskSet):
     wait_time = between(5, 15)
@@ -51,7 +52,7 @@ def _(environment, **kw):
         raise InterruptTaskSet from e
     try:
         wb = load_workbook(filename=environment.parsed_options.cases_to_select, read_only=True)
-        cases_to_select = _extract_data_from_sheet(wb, ["name", "first_name", "last_name", "dob", "medicaid_id"])
+        CASES_TO_SELECT.update(_extract_data_from_sheet(wb, ["name", "first_name", "last_name", "dob", "medicaid_id"]))
     except Exception as e:
         logging.error("Error loading cases to select: %s", e)
         raise InterruptTaskSet from e
