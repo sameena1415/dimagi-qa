@@ -4,19 +4,17 @@ from locust import HttpUser, SequentialTaskSet, constant_pacing, events, run_sin
 from locust.exception import InterruptTaskSet
 
 from common.args import file_path
-from common.utils import load_json_data
+from common.utils import load_json_data, load_yaml_data
 from common.web_apps import get_app_build_info
 from user.models import AppDetails, HQUser, UserDetails
 
 
 @events.init_command_line_parser.add_listener
 def _(parser):
-    parser.add_argument("--domain", help="CommCare domain", required=True, env_var="COMMCARE_DOMAIN")
-    parser.add_argument("--app-id", help="CommCare app id", required=True, env_var="COMMCARE_APP_ID")
-    parser.add_argument("--app-config", help="Configuration of CommCare app", required=True)
-    parser.add_argument("--user-details", help="Path to user details file", required=True)
+    parser.add_argument("--test-config", help="Configuration of test", required=True)
 
 
+CONFIG = {}
 APP_CONFIG = {}
 USERS_DETAILS = []
 
@@ -24,14 +22,23 @@ USERS_DETAILS = []
 @events.init.add_listener
 def _(environment, **kw):
     try:
-        app_config_path = file_path(environment.parsed_options.app_config)
-        APP_CONFIG.update(load_json_data(app_config_path))
-        logging.info("Loaded app config")
+        config_path = file_path(environment.parsed_options.test_config)
+        CONFIG.update(load_yaml_data(config_path))
+        logging.info("Loaded config")
     except Exception as e:
         logging.error("Error loading app config: %s", e)
         raise InterruptTaskSet from e
+
     try:
-        user_path = file_path(environment.parsed_options.user_details)
+        config_path = file_path(CONFIG["app_config_bed_tracking_tool"])
+        APP_CONFIG.update(load_json_data(config_path))
+        logging.info("Loaded config")
+    except Exception as e:
+        logging.error("Error loading app config: %s", e)
+        raise InterruptTaskSet from e
+
+    try:
+        user_path = file_path(CONFIG["domain_user_credential"])
         user_data = load_json_data(user_path)["user"]
         USERS_DETAILS.extend([UserDetails(**user) for user in user_data])
         logging.info("Loaded %s users", len(USERS_DETAILS))
@@ -125,14 +132,13 @@ class LoginCommCareHQWithUniqueUsers(HttpUser):
     tasks = [WorkloadModelSteps]
 
     def on_start(self):
-        self.domain = self.environment.parsed_options.domain
-        self.host = self.environment.parsed_options.host
+        self.domain = CONFIG["domain"]
         self.user_detail = USERS_DETAILS.pop()
         logging.info("userinfo-->>>" + str(self.user_detail))
 
         app_details = AppDetails(
             domain=self.domain,
-            app_id=self.environment.parsed_options.app_id,
+            app_id=CONFIG["app_id"],
         )
         self.hq_user = HQUser(self.client, self.user_detail, app_details)
         self.hq_user.login(self.domain, self.host)
@@ -145,3 +151,7 @@ class LoginCommCareHQWithUniqueUsers(HttpUser):
         else:
             logging.warning("No build found for app: %s", app_id)
         return build_id
+
+
+if __name__ == "__main__":
+    run_single_user(LoginCommCareHQWithUniqueUsers)
