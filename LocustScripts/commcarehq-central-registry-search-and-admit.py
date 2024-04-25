@@ -32,6 +32,20 @@ CASES_TO_SELECT = {}
 class WorkloadModelSteps(SequentialTaskSet):
     wait_time = between(5, 15)
 
+    def on_start(self):
+        self.FUNC_HOME_SCREEN = APP_CONFIG['FUNC_HOME_SCREEN']
+
+    @tag('home_screen')
+    @task
+    def home_screen(self):
+        logging.info("home_screen - mobile worker: " + self.user.user_detail.login_as + "; request: navigate_menu_start")
+        validation = formplayer.ValidationCriteria(key_value_pairs = {"title": self.FUNC_HOME_SCREEN['title']})
+        try:
+            self.user.HQ_user.post_formplayer("navigate_menu_start", self.client,
+                                            self.user.app_details, name="Home Screen",
+                                            validation=validation)
+        except formplayer.FormplayerResponseError as e:
+            logging.info(str(e) + " - mobile worker: " + self.user.user_detail.login_as)
 
 @events.init.add_listener
 def _(environment, **kw):
