@@ -53,6 +53,7 @@ class WorkloadModelSteps(SequentialTaskSet):
         # get domain user credential and app config info
         self.FUNC_HOME_SCREEN = APP_CONFIG['FUNC_HOME_SCREEN']
         self.FUNC_SEARCH_FOR_BEDS_MENU = APP_CONFIG['FUNC_SEARCH_FOR_BEDS_MENU']
+        self.FUNC_SEARCH_FOR_BEDS_MENU_QUERY_KEY = APP_CONFIG['FUNC_SEARCH_FOR_BEDS_MENU_QUERY_KEY']
         self.FUNC_ENTER_AGE = APP_CONFIG['FUNC_ENTER_AGE']
         self.FUNC_GENDER_IDENTITY = APP_CONFIG['FUNC_GENDER_IDENTITY']
         self.FUNC_INVOLUNTARY_CLIENT = APP_CONFIG['FUNC_INVOLUNTARY_CLIENT']
@@ -100,7 +101,7 @@ class WorkloadModelSteps(SequentialTaskSet):
         for i in range(20):
             data = {
                 "query_data": {
-                    "search_command.m1": {
+                    self.FUNC_SEARCH_FOR_BEDS_MENU_QUERY_KEY: {
                         "inputs": {
                             self.FUNC_ENTER_AGE['input']: self.FUNC_ENTER_AGE['inputValue'],
                             self.FUNC_GENDER_IDENTITY['input']: self.FUNC_GENDER_IDENTITY['inputValue'],
