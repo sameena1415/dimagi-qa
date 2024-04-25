@@ -4,7 +4,7 @@ from typing import Dict, Optional
 
 def post(command, client, app_details, user_details, extra_json=None, name=None, validation=None):
     formplayer_host = "/formplayer"
-    json = {
+    data = {
         "app_id": app_details.id,
         "domain": app_details.domain,
         "locale": "en",
@@ -12,7 +12,7 @@ def post(command, client, app_details, user_details, extra_json=None, name=None,
         "username": user_details.username,
     }
     if extra_json:
-        json.update(extra_json)
+        data.update(extra_json)
     name = name or command
 
     if 'XSRF-TOKEN' not in client.cookies:
@@ -22,7 +22,7 @@ def post(command, client, app_details, user_details, extra_json=None, name=None,
     xsrf_token = client.cookies['XSRF-TOKEN']
     headers = {'X-XSRF-TOKEN': xsrf_token}
     client.headers.update(headers)
-    with client.post(f"{formplayer_host}/{command}/", json=json, name=name,
+    with client.post(f"{formplayer_host}/{command}/", json=data, name=name,
                      catch_response=True) as response:
         if validation:
             validate_response(response, validation)

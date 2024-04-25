@@ -5,7 +5,6 @@ import time
 from locust import HttpUser, SequentialTaskSet, between, events, tag, task
 from locust.exception import InterruptTaskSet
 
-import formplayer
 from common.args import file_path
 from common.utils import load_json_data
 from common.web_apps import get_app_build_info
@@ -38,33 +37,22 @@ class WorkloadModelSteps(SequentialTaskSet):
     @tag('home_screen')
     @task
     def home_screen(self):
-        logging.info(
-            "home_screen - mobile worker: " + self.user.user_detail.login_as + "; request: navigate_menu_start")
-        validation = formplayer.ValidationCriteria(key_value_pairs={"title": self.FUNC_HOME_SCREEN['title']})
-        try:
-            self.user.HQ_user.post_formplayer("navigate_menu_start", self.client,
-                                              self.user.app_details, name="Home Screen",
-                                              validation=validation)
-        except formplayer.FormplayerResponseError as e:
-            logging.info(str(e) + " - mobile worker: " + self.user.user_detail.login_as)
+        self.user.HQ_user.navigate_start(self.user, expected_title=self.FUNC_HOME_SCREEN['title'])
 
     @tag('search_for_beds_menu')
     @task
     def search_for_beds_menu(self):
-        logging.info(
-            "all_cases_case_list - mobile worker:" + self.user.user_detail.login_as + "; request: navigate_menu")
-        validation = formplayer.ValidationCriteria(key_value_pairs={"title": self.FUNC_SEARCH_FOR_BEDS_MENU['title']})
-        try:
-            extra_json = {
+        data = self.user.HQ_user.navigate(
+            "Open Search for Beds Menu",
+            self.user,
+            data={
                 "selections": [self.FUNC_SEARCH_FOR_BEDS_MENU['selections']],
                 "cases_per_page": self.cases_per_page,
-            }
-            data = self.user.HQ_user.post_formplayer("navigate_menu", self.client, self.user.app_details,
-                                                     extra_json=extra_json, name="Open Search for Beds Menu",
-                                                     validation=validation)
+            },
+            expected_title=self.FUNC_SEARCH_FOR_BEDS_MENU['title']
+        )
+        if data:
             self.page_count = data["pageCount"]
-        except formplayer.FormplayerResponseError as e:
-            logging.info(str(e) + " - mobile worker: " + self.user.user_detail.login_as)
 
     @tag('select_cases')
     @task
@@ -87,19 +75,18 @@ class WorkloadModelSteps(SequentialTaskSet):
             qty_cases_remaining_to_select = total_qty_cases_to_select - len(self.selected_case_ids)
             qty_to_select = min(random_qty_cases_to_select_per_page, qty_cases_remaining_to_select)
 
-            validation = formplayer.ValidationCriteria(
-                key_value_pairs={"title": self.FUNC_SEARCH_FOR_BEDS_MENU['title']})
             extra_json = {
                 "selections": [self.FUNC_SEARCH_FOR_BEDS_MENU['selections']],
                 "cases_per_page": self.cases_per_page,
                 "offset": offset,
             }
-            try:
-                data = self.user.HQ_user.post_formplayer("navigate_menu", self.client, self.user.app_details,
-                                                         extra_json=extra_json, name="Paginate for Case Selection",
-                                                         validation=validation)
-            except formplayer.FormplayerResponseError as e:
-                logging.info(str(e) + " - mobile worker: " + self.user.user_detail.login_as)
+
+            data = self.user.HQ_user.navigate(
+                "Paginate for Case Selection",
+                self.user,
+                data=extra_json,
+                expected_title=self.FUNC_SEARCH_FOR_BEDS_MENU['title']
+            )
 
             entities = data["entities"]
             ids = [entity["id"] for entity in entities if entity["id"] not in self.selected_case_ids]
@@ -123,20 +110,18 @@ class WorkloadModelSteps(SequentialTaskSet):
     def enter_create_profile_and_refer_form(self):
         logging.info("Entering form - mobile worker:" + self.user.user_detail.login_as + "; request: navigate_menu")
 
-        validation = formplayer.ValidationCriteria(
-            key_value_pairs={"title": self.FUNC_CREATE_PROFILE_AND_REFER_FORM['title']})
         extra_json = {
             "selected_values": (list(self.selected_case_ids)),
             "query_data": {},
             "selections": [self.FUNC_SEARCH_FOR_BEDS_MENU['selections'], "use_selected_values"],
         }
-        try:
-            data = self.user.HQ_user.post_formplayer("navigate_menu", self.client, self.user.app_details,
-                                                     extra_json=extra_json,
-                                                     name="Enter 'Create Profile and Refer' Form",
-                                                     validation=validation)
-        except formplayer.FormplayerResponseError as e:
-            logging.info(str(e) + " - mobile worker: " + self.user.user_detail.login_as)
+
+        data = self.user.HQ_user.navigate(
+            "Enter 'Create Profile and Refer' Form",
+            self.user,
+            data=extra_json,
+            expected_title=self.FUNC_CREATE_PROFILE_AND_REFER_FORM['title']
+        )
         self.session_id = data['session_id']
 
     @tag('answer_create_profile_and_refer_form_questions')
@@ -149,12 +134,11 @@ class WorkloadModelSteps(SequentialTaskSet):
                 "answer": question["answer"],
                 "session_id": self.session_id,
             }
-            try:
-                self.user.HQ_user.post_formplayer("answer", self.client, self.user.app_details,
-                                                  extra_json=extra_json,
-                                                  name="Answer 'Create Profile and Refer' Question")
-            except formplayer.FormplayerResponseError as e:
-                logging.info(str(e) + " - mobile worker: " + self.user.user_detail.login_as)
+            self.user.HQ_user.answer(
+                "Answer 'Create Profile and Refer' Question",
+                self.user,
+                data=extra_json,
+            )
             rng = random.randrange(1, 3)
             time.sleep(rng)
 
@@ -198,16 +182,19 @@ class WorkloadModelSteps(SequentialTaskSet):
         input_answers = {d["ix"]: d["answer"] for d in self.FUNC_CREATE_PROFILE_AND_REFER_FORM_QUESTIONS.values()}
         answers.update(input_answers)
 
-        validation = formplayer.ValidationCriteria(key_value_pairs={
-            "submitResponseMessage": self.FUNC_CREATE_PROFILE_AND_REFER_FORM_SUBMIT['submitResponseMessage']})
         extra_json = {
             "answers": answers,
             "prevalidated": True,
             "debuggerEnabled": True,
             "session_id": self.session_id,
         }
-        self.user.HQ_user.post_formplayer("submit-all", self.client, self.user.app_details, extra_json=extra_json,
-                                          name="Submit Create Profile and Refer Form", validation=validation)
+        
+        self.user.HQ_user.submit_all(
+            "Submit Create Profile and Refer Form",
+            self.user,
+            extra_json,
+            expected_response_message=self.FUNC_CREATE_PROFILE_AND_REFER_FORM_SUBMIT['submitResponseMessage']
+        )
 
 
 @events.init.add_listener

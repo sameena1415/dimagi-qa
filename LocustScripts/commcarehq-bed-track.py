@@ -1,6 +1,4 @@
 import logging
-import random
-import time
 
 from locust import HttpUser, SequentialTaskSet, between, events, tag, task
 from locust.exception import InterruptTaskSet
@@ -8,7 +6,6 @@ from locust.exception import InterruptTaskSet
 from common.args import file_path
 from common.utils import load_json_data
 from common.web_apps import get_app_build_info
-from formplayer import ValidationCriteria
 from user.models import AppDetails, HQUser, UserDetails
 
 
@@ -80,96 +77,48 @@ class WorkloadModelSteps(SequentialTaskSet):
     @tag('home_screen')
     @task
     def home_screen(self):
-        try:
-            logging.info("home_screen - mobile worker: " + self.user.user_details.login_as)
-            data = self._formplayer_post(
-                "navigate_menu_start",
-                name="Home Screen",
-                validation=ValidationCriteria(key_value_pairs={"title": self.FUNC_HOME_SCREEN['title']})
-            )
-            assert data['title'] == self.FUNC_HOME_SCREEN[
-                'title'], "formplayer response does not contain title or title is incorrect - with mobile worker: " + self.user.login_as
-            logging.info(
-                "user: " + self.user.user_details.username + "; mobile worker: " + self.user.user_details.login_as + "; request: navigate_menu_start")
-        except Exception as e:
-            logging.info(
-                "user: " + self.user.user_details.username + "; mobile worker: " + self.user.user_details.login_as + "; request: navigate_menu_start; exception: " + str(
-                    e))
+        self.user.hq_user.navigate_start(self.user, expected_title=self.FUNC_HOME_SCREEN['title'])
 
     @tag('search_for_beds_menu')
     @task
     def search_for_beds_menu(self):
-        try:
-            logging.info("all_cases_case_list - mobile worker:" + self.user.user_details.login_as)
-            data = self._formplayer_post(
-                "navigate_menu",
-                name="Open Search for Beds Menu",
-                data={"selections": [self.FUNC_SEARCH_FOR_BEDS_MENU['selections']]},
-                validation=ValidationCriteria(key_value_pairs={"title": self.FUNC_SEARCH_FOR_BEDS_MENU['title']})
-            )
-            # logging.info("===>>>>>>>>>" + str(data))
-            assert data['title'] == self.FUNC_SEARCH_FOR_BEDS_MENU[
-                'title'], "formplayer response does not contain title or title is incorrect - with mobile worker: " + self.user.login_as
-            logging.info(
-                "user: " + self.user.user_details.username + "; mobile worker: " + self.user.user_details.login_as + "; request: navigate_menu")
-        except Exception as e:
-            logging.info(
-                "user: " + self.user.user_details.username + "; mobile worker: " + self.user.user_details.login_as + "; request: navigate_menu; exception: " + str(
-                    e))
+        data = {"selections": [self.FUNC_SEARCH_FOR_BEDS_MENU['selections']]}
+        self.user.hq_user.navigate(
+            "Open Search for Beds Menu",
+            self.user, data=data, expected_title=self.FUNC_SEARCH_FOR_BEDS_MENU['title']
+        )
 
     @tag('perform_a_search')
     @task
     def perform_a_search(self):
         for i in range(0, 20):
-            try:
-                logging.info("perform_a_search_" + str(i) + " mobile worker:" + self.user.user_details.login_as)
-                start_time = time.time()
-                data = self._formplayer_post(
-                    "navigate_menu",
-                    name="Perform a Search",
-                    data={
-                        "query_data": {
-                            "search_command.m1": {
-                                "inputs": {
-                                    self.FUNC_ENTER_AGE['input']: self.FUNC_ENTER_AGE['inputValue'],
-                                    self.FUNC_GENDER_IDENTITY['input']: self.FUNC_GENDER_IDENTITY['inputValue'],
-                                    self.FUNC_INVOLUNTARY_CLIENT['input']: self.FUNC_INVOLUNTARY_CLIENT['inputValue'],
-                                    self.FUNC_JUSTICE_INVOLVED_CLIENT['input']: self.FUNC_JUSTICE_INVOLVED_CLIENT[
-                                        'inputValue'],
-                                    self.FUNC_CARE_TYPE['input']: self.FUNC_CARE_TYPE['inputValue'],
-                                    self.FUNC_FACILITY_NAME['input']: self.FUNC_FACILITY_NAME['inputValue'],
-                                    self.FUNC_RESIDENTIAL_SERVICE['input']: self.FUNC_RESIDENTIAL_SERVICE['inputValue'],
-                                    self.FUNC_POPULATION_SPECIALTY['input']: self.FUNC_POPULATION_SPECIALTY['inputValue'],
-                                    self.FUNC_INSURANCE_ACCEPTED['input']: self.FUNC_INSURANCE_ACCEPTED['inputValue'],
-                                    self.FUNC_ACCOMMODATIONS['input']: self.FUNC_ACCOMMODATIONS['inputValue'],
-                                    self.FUNC_LANGUAGE_SERVICES['input']: self.FUNC_LANGUAGE_SERVICES['inputValue'],
-                                    self.FUNC_OPEN_BEDS['input']: self.FUNC_OPEN_BEDS['inputValue']
-                                },
-                                "execute": True}
+            data = {
+                "query_data": {
+                    "search_command.m1": {
+                        "inputs": {
+                            self.FUNC_ENTER_AGE['input']: self.FUNC_ENTER_AGE['inputValue'],
+                            self.FUNC_GENDER_IDENTITY['input']: self.FUNC_GENDER_IDENTITY['inputValue'],
+                            self.FUNC_INVOLUNTARY_CLIENT['input']: self.FUNC_INVOLUNTARY_CLIENT['inputValue'],
+                            self.FUNC_JUSTICE_INVOLVED_CLIENT['input']: self.FUNC_JUSTICE_INVOLVED_CLIENT[
+                                'inputValue'],
+                            self.FUNC_CARE_TYPE['input']: self.FUNC_CARE_TYPE['inputValue'],
+                            self.FUNC_FACILITY_NAME['input']: self.FUNC_FACILITY_NAME['inputValue'],
+                            self.FUNC_RESIDENTIAL_SERVICE['input']: self.FUNC_RESIDENTIAL_SERVICE['inputValue'],
+                            self.FUNC_POPULATION_SPECIALTY['input']: self.FUNC_POPULATION_SPECIALTY['inputValue'],
+                            self.FUNC_INSURANCE_ACCEPTED['input']: self.FUNC_INSURANCE_ACCEPTED['inputValue'],
+                            self.FUNC_ACCOMMODATIONS['input']: self.FUNC_ACCOMMODATIONS['inputValue'],
+                            self.FUNC_LANGUAGE_SERVICES['input']: self.FUNC_LANGUAGE_SERVICES['inputValue'],
+                            self.FUNC_OPEN_BEDS['input']: self.FUNC_OPEN_BEDS['inputValue']
                         },
-                        "selections": ["0"],
-                    }
-                )
-                assert 'entities' in data, "formplayer response does not contain entities - with mobile worker: " + self.user.user_details.login_as
-                end_time = time.time()
-                total_time = end_time - start_time
-                rng = random.randrange(5, 15)
-                logging.info(
-                    "Total response time for Bed Tracking Search for user: " + self.user.user_details.username + " with mobile worker: " + self.user.user_details.login_as + " for loop " + str(
-                        i) + " is " + str(total_time) + " seconds.")
-                logging.info(
-                    "user: " + self.user.user_details.username + "; mobile worker: " + self.user.user_details.login_as + "; request: navigate_menu")
-            except Exception as e:
-                logging.info(
-                    "user: " + self.user.user_details.username + "; mobile worker: " + self.user.user_details.login_as + "; request: navigate_menu; exception: " + str(
-                        e))
-
-            logging.info("mobile worker: " + self.user.user_details.login_as + " Sleeping for-->" + str(rng))
-            time.sleep(rng)
+                        "execute": True}
+                },
+                "selections": ["0"],
+            }
+            self.user.hq_user.navigate("Perform a Search", self.user, data=data)
 
     @task
     def stop(self):
-        logging.info("stopping - mobile worker: " + self.user.user_details.login_as)
+        logging.info("stopping - mobile worker: " + self.user.user_detail.login_as)
         self.interrupt()
 
     def _formplayer_post(self, command, name, data=None, validation=None):
@@ -185,13 +134,12 @@ class WorkloadModelSteps(SequentialTaskSet):
 
 class LoginCommCareHQWithUniqueUsers(HttpUser):
     tasks = [WorkloadModelSteps]
-    wait_time = between(5, 10)
 
     def on_start(self):
         self.domain = self.environment.parsed_options.domain
         self.host = self.environment.parsed_options.host
         self.user_detail = USERS_DETAILS.pop()
-        self.HQ_user = HQUser(self.user_detail)
+        self.hq_user = HQUser(self.user_detail)
         logging.info("userinfo-->>>" + str(self.user_detail))
 
         self.login()
@@ -202,7 +150,7 @@ class LoginCommCareHQWithUniqueUsers(HttpUser):
         )
 
     def login(self):
-        self.HQ_user.login(self.domain, self.host, self.client)
+        self.hq_user.login(self.domain, self.host, self.client)
 
     def _get_build_info(self, app_id):
         build_id = get_app_build_info(self.client, self.domain, app_id)
