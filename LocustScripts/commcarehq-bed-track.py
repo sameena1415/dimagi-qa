@@ -121,6 +121,7 @@ class WorkloadModelSteps(SequentialTaskSet):
                 "selections": ["0"],
             }
             self.user.hq_user.navigate("Perform a Search", data=data)
+            self.wait()
 
     @task
     def stop(self):
@@ -129,6 +130,7 @@ class WorkloadModelSteps(SequentialTaskSet):
 
 
 class LoginCommCareHQWithUniqueUsers(HttpUser):
+    wait_time = constant_pacing(5)
     tasks = [WorkloadModelSteps]
 
     def on_start(self):
