@@ -37,14 +37,13 @@ class WorkloadModelSteps(SequentialTaskSet):
     @tag('home_screen')
     @task
     def home_screen(self):
-        self.user.HQ_user.navigate_start(self.user, expected_title=self.FUNC_HOME_SCREEN['title'])
+        self.user.hq_user.navigate_start(expected_title=self.FUNC_HOME_SCREEN['title'])
 
     @tag('search_for_beds_menu')
     @task
     def search_for_beds_menu(self):
-        data = self.user.HQ_user.navigate(
+        data = self.user.hq_user.navigate(
             "Open Search for Beds Menu",
-            self.user,
             data={
                 "selections": [self.FUNC_SEARCH_FOR_BEDS_MENU['selections']],
                 "cases_per_page": self.cases_per_page,
@@ -81,9 +80,8 @@ class WorkloadModelSteps(SequentialTaskSet):
                 "offset": offset,
             }
 
-            data = self.user.HQ_user.navigate(
+            data = self.user.hq_user.navigate(
                 "Paginate for Case Selection",
-                self.user,
                 data=extra_json,
                 expected_title=self.FUNC_SEARCH_FOR_BEDS_MENU['title']
             )
@@ -116,9 +114,8 @@ class WorkloadModelSteps(SequentialTaskSet):
             "selections": [self.FUNC_SEARCH_FOR_BEDS_MENU['selections'], "use_selected_values"],
         }
 
-        data = self.user.HQ_user.navigate(
+        data = self.user.hq_user.navigate(
             "Enter 'Create Profile and Refer' Form",
-            self.user,
             data=extra_json,
             expected_title=self.FUNC_CREATE_PROFILE_AND_REFER_FORM['title']
         )
@@ -134,9 +131,8 @@ class WorkloadModelSteps(SequentialTaskSet):
                 "answer": question["answer"],
                 "session_id": self.session_id,
             }
-            self.user.HQ_user.answer(
+            self.user.hq_user.answer(
                 "Answer 'Create Profile and Refer' Question",
-                self.user,
                 data=extra_json,
             )
             rng = random.randrange(1, 3)
@@ -189,9 +185,8 @@ class WorkloadModelSteps(SequentialTaskSet):
             "session_id": self.session_id,
         }
         
-        self.user.HQ_user.submit_all(
+        self.user.hq_user.submit_all(
             "Submit Create Profile and Refer Form",
-            self.user,
             extra_json,
             expected_response_message=self.FUNC_CREATE_PROFILE_AND_REFER_FORM_SUBMIT['submitResponseMessage']
         )
