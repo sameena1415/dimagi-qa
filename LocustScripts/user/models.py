@@ -19,7 +19,7 @@ class UserDetails(pydantic.BaseModel):
 class AppDetails(pydantic.BaseModel):
     domain: str
     app_id: str
-    build_id: str
+    build_id: str | None = None
 
     @property
     def id(self):
@@ -28,13 +28,15 @@ class AppDetails(pydantic.BaseModel):
 
 class HQUser:
 
-    def __init__(self, user_details):
+    def __init__(self, client, user_details, app_details):
+        self.client = client
         self.user_details = user_details
+        self.app_details = app_details
 
-    def login(self, domain, host, client):
+    def login(self, domain, host):
         login_url = f"/a/{domain}/login/"
-        client.get(login_url)  # get CSRF token
-        response = client.post(
+        self.client.get(login_url)  # get CSRF token
+        response = self.client.post(
             login_url,
             {
                 "auth-username": self.user_details.username,
@@ -42,7 +44,7 @@ class HQUser:
                 "cloud_care_login_view-current_step": ['auth'],  # fake out two_factor ManagementForm
             },
             headers={
-                "X-CSRFToken": client.cookies.get('csrftoken'),
+                "X-CSRFToken": self.client.cookies.get('csrftoken'),
                 "REFERER": f"{host}{login_url}",  # csrf requires this
             },
         )
@@ -52,43 +54,42 @@ class HQUser:
             raise StopUser(f"Login failed for user {self.user_details.username}: Sign In failed")
         logging.info("User logged in: " + self.user_details.username)
 
-    def navigate_start(self, user, expected_title=None):
+    def navigate_start(self, expected_title=None):
         validation = None
         if expected_title:
             validation = formplayer.ValidationCriteria(key_value_pairs={"title": expected_title})
         return self.post_formplayer(
             "navigate_menu_start",
-            user,
             name="Home Screen",
             validation=validation
         )
 
-    def navigate(self, name, user, data, expected_title=None):
+    def navigate(self, name, data, expected_title=None):
         validation = None
         if expected_title:
             validation = formplayer.ValidationCriteria(key_value_pairs={"title": expected_title})
         return self.post_formplayer(
-            "navigate_menu", user, data, name=name, validation=validation
+            "navigate_menu", data, name=name, validation=validation
         )
 
-    def answer(self, name, user, data):
-        return self.post_formplayer("answer", user, data, name=name)
+    def answer(self, name, data):
+        return self.post_formplayer("answer", data, name=name)
 
-    def submit_all(self, name, user, data, expected_response_message=None):
+    def submit_all(self, name, data, expected_response_message=None):
         validation = None
         if expected_response_message:
             validation = formplayer.ValidationCriteria(key_value_pairs={
                 "submitResponseMessage": expected_response_message
             })
         return self.post_formplayer(
-            "submit-all", user, data, name=name, validation=validation
+            "submit-all", data, name=name, validation=validation
         )
 
-    def post_formplayer(self, command, user, extra_json=None, name=None, validation=None):
-        logging.info(f"User: {self.user_details}; Request: {command}")
+    def post_formplayer(self, command, extra_json=None, name=None, validation=None):
+        logging.info("User: %s; Request: %s; Name: %s", self.user_details, command, name)
         try:
             return formplayer.post(
-                command, user.client, user.app_details, self.user_details, extra_json, name, validation
+                command, self.client, self.app_details, self.user_details, extra_json, name, validation
             )
         except Exception as e:
             logging.error("user: %s; request: %s; exception: %s", self.user_details, command, str(e))

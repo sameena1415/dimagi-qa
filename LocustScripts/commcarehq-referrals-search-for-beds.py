@@ -224,18 +224,14 @@ class LoginCommCareHQWithUniqueUsers(HttpUser):
         self.domain = self.environment.parsed_options.domain
         self.host = self.environment.parsed_options.host
         self.user_detail = USERS_DETAILS.pop()
-        self.HQ_user = HQUser(self.user_detail)
-        logging.info("userinfo-->>>" + str(self.user_detail))
 
-        self.login()
-        self.app_details = AppDetails(
+        app_details = AppDetails(
             domain=self.domain,
             app_id=self.environment.parsed_options.app_id,
-            build_id=self._get_build_info(self.environment.parsed_options.app_id)
         )
-
-    def login(self):
-        self.HQ_user.login(self.domain, self.host, self.client)
+        self.hq_user = HQUser(self.client, self.user_detail, app_details)
+        self.hq_user.login(self.domain, self.host)
+        self.hq_user.app_details.build_id = self._get_build_info(self.environment.parsed_options.app_id)
 
     def _get_build_info(self, app_id):
         build_id = get_app_build_info(self.client, self.domain, app_id)

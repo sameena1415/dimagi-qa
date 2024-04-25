@@ -1,6 +1,6 @@
 import logging
 
-from locust import HttpUser, SequentialTaskSet, between, events, tag, task
+from locust import HttpUser, SequentialTaskSet, constant_pacing, events, run_single_user, tag, task
 from locust.exception import InterruptTaskSet
 
 from common.args import file_path
@@ -41,7 +41,6 @@ def _(environment, **kw):
 
 
 class WorkloadModelSteps(SequentialTaskSet):
-    wait_time = between(5, 15)
 
     def on_start(self):
         # get domain user credential and app config info
@@ -77,7 +76,7 @@ class WorkloadModelSteps(SequentialTaskSet):
     @tag('home_screen')
     @task
     def home_screen(self):
-        self.user.hq_user.navigate_start(self.user, expected_title=self.FUNC_HOME_SCREEN['title'])
+        self.user.hq_user.navigate_start(expected_title=self.FUNC_HOME_SCREEN['title'])
 
     @tag('search_for_beds_menu')
     @task
@@ -85,13 +84,13 @@ class WorkloadModelSteps(SequentialTaskSet):
         data = {"selections": [self.FUNC_SEARCH_FOR_BEDS_MENU['selections']]}
         self.user.hq_user.navigate(
             "Open Search for Beds Menu",
-            self.user, data=data, expected_title=self.FUNC_SEARCH_FOR_BEDS_MENU['title']
+            data=data, expected_title=self.FUNC_SEARCH_FOR_BEDS_MENU['title']
         )
 
     @tag('perform_a_search')
     @task
     def perform_a_search(self):
-        for i in range(0, 20):
+        for i in range(20):
             data = {
                 "query_data": {
                     "search_command.m1": {
@@ -114,22 +113,12 @@ class WorkloadModelSteps(SequentialTaskSet):
                 },
                 "selections": ["0"],
             }
-            self.user.hq_user.navigate("Perform a Search", self.user, data=data)
+            self.user.hq_user.navigate("Perform a Search", data=data)
 
     @task
     def stop(self):
-        logging.info("stopping - mobile worker: " + self.user.user_detail.login_as)
+        logging.info("stopping - mobile worker: %s", self.user.user_detail)
         self.interrupt()
-
-    def _formplayer_post(self, command, name, data=None, validation=None):
-        return self.user.post_formplayer(
-            command,
-            self.client,
-            self.user.app_details,
-            extra_json=data,
-            name=name,
-            validation=validation
-        )
 
 
 class LoginCommCareHQWithUniqueUsers(HttpUser):
@@ -139,18 +128,15 @@ class LoginCommCareHQWithUniqueUsers(HttpUser):
         self.domain = self.environment.parsed_options.domain
         self.host = self.environment.parsed_options.host
         self.user_detail = USERS_DETAILS.pop()
-        self.hq_user = HQUser(self.user_detail)
         logging.info("userinfo-->>>" + str(self.user_detail))
 
-        self.login()
-        self.app_details = AppDetails(
+        app_details = AppDetails(
             domain=self.domain,
             app_id=self.environment.parsed_options.app_id,
-            build_id=self._get_build_info(self.environment.parsed_options.app_id)
         )
-
-    def login(self):
-        self.hq_user.login(self.domain, self.host, self.client)
+        self.hq_user = HQUser(self.client, self.user_detail, app_details)
+        self.hq_user.login(self.domain, self.host)
+        self.hq_user.app_details.build_id = self._get_build_info(CONFIG["app_id"])
 
     def _get_build_info(self, app_id):
         build_id = get_app_build_info(self.client, self.domain, app_id)
