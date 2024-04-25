@@ -14,6 +14,9 @@ class AppDetails(pydantic.BaseModel):
     app_id: str
     build_id: str
 
+    def id(self):
+        return self.build_id or self.app_id
+
 
 class HQUser:
 

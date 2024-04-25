@@ -5,7 +5,7 @@ from typing import Dict, Optional
 def post(command, client, app_details, user_details, extra_json=None, name=None, validation=None):
     formplayer_host = "/formplayer"
     json = {
-        "app_id": app_details.build_id,
+        "app_id": app_details.id,
         "domain": app_details.domain,
         "locale": "en",
         "restoreAs": user_details.login_as,

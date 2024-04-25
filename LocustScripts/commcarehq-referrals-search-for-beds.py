@@ -1,21 +1,15 @@
 import logging
-import os
+import random
 import time
 
-import yaml
-import random
-import json
-
-from collections import defaultdict
-from locust import HttpUser, SequentialTaskSet, between, task, tag, events
+from locust import HttpUser, SequentialTaskSet, between, events, tag, task
 from locust.exception import InterruptTaskSet
-from lxml import etree
-from datetime import datetime
 
 import formplayer
-from user.models import UserDetails, HQUser, AppDetails
 from common.args import file_path
 from common.utils import load_json_data
+from common.web_apps import get_app_build_info
+from user.models import AppDetails, HQUser, UserDetails
 
 
 @events.init_command_line_parser.add_listener
@@ -257,10 +251,6 @@ class LoginCommCareHQWithUniqueUsers(HttpUser):
         self.HQ_user.login(self.domain, self.host, self.client)
 
     def _get_build_info(self, app_id):
-        response = self.client.get(f'/a/{self.domain}/cloudcare/apps/v2/?option=apps', name='build info')
-        assert (response.status_code == 200)
-        for app in response.json():
-            if app['copy_of'] == app_id:
-                # get build_id
-                logging.info("build_id: " + app['_id'])
-                return app['_id']
+        build_id = get_app_build_info(self.client, self.domain, app_id)
+        logging.info("build_id: " + app['_id'])
+        return build_id
