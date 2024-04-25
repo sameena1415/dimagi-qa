@@ -12,7 +12,7 @@ Domain and application, both required, are specified in config.yaml.
 Basic usage, for a single test user:
 
 ```shell
-locust -f commcarehq-bed-track.py --headless -u 1 -r 1
+locust -f commcarehq-bed-track.py --headless -u 1 -r 1 --test-config project-config/co-carecoordination-perf/config.yaml
 ```
 
 Leave off --headless to view results in the Locust web UI. See docs for options to set number of users, run time, etc.
