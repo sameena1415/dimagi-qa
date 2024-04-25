@@ -1,6 +1,7 @@
 from dataclasses import dataclass, field
 from typing import Dict, Optional
 
+
 def post(command, client, app_details, user_details, extra_json=None, name=None, validation=None):
     formplayer_host = "/formplayer"
     json = {
@@ -22,10 +23,11 @@ def post(command, client, app_details, user_details, extra_json=None, name=None,
     headers = {'X-XSRF-TOKEN': xsrf_token}
     client.headers.update(headers)
     with client.post(f"{formplayer_host}/{command}/", json=json, name=name,
-                            catch_response=True) as response:
+                     catch_response=True) as response:
         if validation:
             validate_response(response, validation)
         return response.json()
+
 
 def validate_response(response, validation):
     data = response.json()
@@ -38,7 +40,7 @@ def validate_response(response, validation):
                 raise FormplayerResponseError("ERROR::-" + data["notification"]["message"])
         if "exception" in data:
             msg = "ERROR::exception error--" + data['exception']
-            response.failure(msg) 
+            response.failure(msg)
             raise FormplayerResponseError(msg)
         elif checkKey and checkKey not in data:
             msg = "error::" + checkKey + " not in data"
@@ -55,8 +57,10 @@ def validate_response(response, validation):
                 response.failure(msg)
                 raise FormplayerResponseError(msg)
 
+
 class FormplayerResponseError(Exception):
     pass
+
 
 @dataclass
 class ValidationCriteria:

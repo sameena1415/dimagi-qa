@@ -38,7 +38,6 @@ class WorkloadModelSteps(SequentialTaskSet):
         self._log_in()
         self._get_build_info()
 
-
     def _log_in(self):
         logging.info("_log_in - mobile worker: " + self.user.login_as)
         login_url = f'/a/{self.user.domain}/login/'
@@ -88,12 +87,14 @@ class WorkloadModelSteps(SequentialTaskSet):
             logging.info("home_screen - mobile worker: " + self.user.login_as)
             data = self._formplayer_post("navigate_menu_start", name="Home Screen", checkKey="title",
                                          checkValue=self.FUNC_HOME_SCREEN['title'])
-            assert data['title'] == self.FUNC_HOME_SCREEN['title'], "formplayer response does not contain title or title is incorrect - with mobile worker: " + self.user.login_as
+            assert data['title'] == self.FUNC_HOME_SCREEN[
+                'title'], "formplayer response does not contain title or title is incorrect - with mobile worker: " + self.user.login_as
             logging.info(
                 "user: " + self.user.username + "; mobile worker: " + self.user.login_as + "; request: navigate_menu_start")
         except Exception as e:
             logging.info(
-                "user: " + self.user.username + "; mobile worker: " + self.user.login_as + "; request: navigate_menu_start; exception: " + str(e))
+                "user: " + self.user.username + "; mobile worker: " + self.user.login_as + "; request: navigate_menu_start; exception: " + str(
+                    e))
 
     @tag('search_for_beds_menu')
     @task
@@ -104,13 +105,14 @@ class WorkloadModelSteps(SequentialTaskSet):
                 "selections": [self.FUNC_SEARCH_FOR_BEDS_MENU['selections']],
             }, name="Open Search for Beds Menu", checkKey="title", checkValue=self.FUNC_SEARCH_FOR_BEDS_MENU['title'])
             # logging.info("===>>>>>>>>>" + str(data))
-            assert data['title'] == self.FUNC_SEARCH_FOR_BEDS_MENU['title'],  "formplayer response does not contain title or title is incorrect - with mobile worker: " + self.user.login_as
+            assert data['title'] == self.FUNC_SEARCH_FOR_BEDS_MENU[
+                'title'], "formplayer response does not contain title or title is incorrect - with mobile worker: " + self.user.login_as
             logging.info(
                 "user: " + self.user.username + "; mobile worker: " + self.user.login_as + "; request: navigate_menu")
         except Exception as e:
             logging.info(
-                "user: " + self.user.username + "; mobile worker: " + self.user.login_as + "; request: navigate_menu; exception: " + str(e))
-
+                "user: " + self.user.username + "; mobile worker: " + self.user.login_as + "; request: navigate_menu; exception: " + str(
+                    e))
 
     @tag('perform_a_search')
     @task
@@ -152,7 +154,8 @@ class WorkloadModelSteps(SequentialTaskSet):
                     "user: " + self.user.username + "; mobile worker: " + self.user.login_as + "; request: navigate_menu")
             except Exception as e:
                 logging.info(
-                    "user: " + self.user.username + "; mobile worker: " + self.user.login_as + "; request: navigate_menu; exception: " + str(e))
+                    "user: " + self.user.username + "; mobile worker: " + self.user.login_as + "; request: navigate_menu; exception: " + str(
+                        e))
 
             logging.info("mobile worker: " + self.user.login_as + " Sleeping for-->" + str(rng))
             time.sleep(rng)
