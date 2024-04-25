@@ -252,5 +252,8 @@ class LoginCommCareHQWithUniqueUsers(HttpUser):
 
     def _get_build_info(self, app_id):
         build_id = get_app_build_info(self.client, self.domain, app_id)
-        logging.info("build_id: " + app['_id'])
+        if build_id:
+            logging.info("Using app build: %s", build_id)
+        else:
+            logging.warning("No build found for app: %s", app_id)
         return build_id
