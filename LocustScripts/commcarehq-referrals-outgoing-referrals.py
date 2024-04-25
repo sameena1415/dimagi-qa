@@ -1,18 +1,10 @@
 import logging
-import os
 import time
-
-import yaml
 import random
-import json
 
-from collections import defaultdict
 from locust import HttpUser, SequentialTaskSet, between, task, tag, events
 from locust.exception import InterruptTaskSet
-from lxml import etree
-from datetime import datetime
 
-import formplayer
 from user.models import UserDetails, HQUser, AppDetails
 from common.args import file_path
 from common.utils import load_json_data
