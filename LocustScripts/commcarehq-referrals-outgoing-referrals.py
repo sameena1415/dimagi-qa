@@ -40,24 +40,15 @@ class WorkloadModelSteps(SequentialTaskSet):
     @tag('outgoing_referrals_menu')
     @task
     def outgoing_referrals_menu(self):
-        logging.info("all_cases_case_list - mobile worker: " + self.user.user_detail.login_as + "; request: navigate_menu")
-        validation = formplayer.ValidationCriteria(keys=["title"],
-                                                key_value_pairs = {"title": self.FUNC_OUTGOING_REFERRALS_MENU['title']})
-        extra_json = {
-            "selections": [self.FUNC_OUTGOING_REFERRALS_MENU['selections']]
-        }
-        try:
-            self.user.HQ_user.post_formplayer("navigate_menu", self.client,
-                                            self.user.app_details, extra_json=extra_json,
-                                            name="Home Screen", validation=validation)
-        except formplayer.FormplayerResponseError as e:
-            logging.info(str(e) + " - mobile worker: " + self.user.user_detail.login_as)
+        self.user.hq_user.navigate(
+            "Open Outgoing Referrals Menu",
+            data={"selections": [self.FUNC_OUTGOING_REFERRALS_MENU['selections']]},
+            expected_title=self.FUNC_OUTGOING_REFERRALS_MENU['title']
+        )
 
     @tag('perform_a_search')
     @task
     def perform_a_search(self):
-        logging.info("Performing Search - mobile worker:" + self.user.user_detail.login_as + "; request: navigate_menu")
-        validation = formplayer.ValidationCriteria(keys=["entities"])
         extra_json = {
             "query_data": {
                 "search_command.m10_results": {
@@ -70,27 +61,27 @@ class WorkloadModelSteps(SequentialTaskSet):
             "cases_per_page": self.cases_per_page,
             "selections": [self.FUNC_OUTGOING_REFERRALS_MENU["selections"]],
         }
-        try:
-            data = self.user.HQ_user.post_formplayer("navigate_menu", self.client,
-                                                     self.user.app_details, extra_json=extra_json,
-                                                     validation=validation, name="Perform a Search")
-            self.entities = data["entities"]
-            self.page_count = data["pageCount"]
-            assert len(self.entities) > 0, "entities is empty"
-        except formplayer.FormplayerResponseError as e:
-            logging.info(str(e) + " - mobile worker: " + self.user.user_detail.login_as)
+
+        data = self.user.hq_user.navigate(
+            "Perform a Search",
+            data=extra_json,
+            expected_title=self.FUNC_OUTGOING_REFERRALS_MENU['title']
+        )
+
+        self.entities = data["entities"]
+        self.page_count = data["pageCount"]
+        assert len(self.entities) > 0, "entities is empty"
 
     @tag('select_case')
     @task
     def select_case(self):
-        logging.info("Selecting Case - mobile worker:" + self.user.user_detail.login_as + "; request: navigate_menu")
         self.selected_case_id = None
 
         page_num = 0
         while (not self.selected_case_id and page_num < self.page_count):
             for entity in self.entities:
-                # When a case goes through this entire workflow, its status is changed to
-                # "resolved" or "client_placed". However, it stays in the caselist. The workflow and form defined
+                # When a case goes through this entire workflow, its status is changed to "resolved"
+                # or "client_placed". However, it stays in the caselist. The workflow and form defined
                 # in this test is specific to and work only if the case selected has status "open".
                 if "open" in entity["data"]:
                     self.selected_case_id = entity["id"]
@@ -100,56 +91,54 @@ class WorkloadModelSteps(SequentialTaskSet):
 
             page_num+=1
             offset = page_num * self.cases_per_page
-            validation = formplayer.ValidationCriteria(keys=["entities"])
+
             extra_json={
                 "selections": [self.FUNC_OUTGOING_REFERRALS_MENU['selections']],
                 "cases_per_page": self.cases_per_page,
                 "offset": offset,
             }
-            try:
-                data = self.user.HQ_user.post_formplayer("navigate_menu", self.client,  self.user.app_details,
-                                                        extra_json=extra_json, name="Paginate for Case Selection",
-                                                        validation=validation)
-                self.entities = data["entities"]
-            except formplayer.FormplayerResponseError as e:
-                logging.info(str(e) + " - mobile worker: " + self.user.user_detail.login_as)
-        assert self.selected_case_id != None, "No case with status 'open' is available to be selected. A valid case needs to be created first"
-        logging.info("selected case_id is " + str(self.selected_case_id) + " for mobile worker " + self.user.user_detail.login_as)
+            data = self.user.hq_user.navigate(
+                "Paginate for Case Selection",
+                data=extra_json,
+                expected_title=self.FUNC_OUTGOING_REFERRALS_MENU['title']
+            )
+            self.entities = data["entities"]
+
+        assert self.selected_case_id != None, (
+            "No case with status 'open' is available to be selected. "
+            "A valid case needs to be created first "
+        )
+        logging.info("selected cases are " + str(
+            self.selected_case_id) + " for mobile worker " + self.user.user_detail.login_as)
 
     @tag('enter_outgoing_referral_details_form')
     @task
     def enter_create_profile_and_refer_form(self):
-        logging.info("Entering form - mobile worker:" + self.user.user_detail.login_as + "; request: navigate_menu")
-        validation = formplayer.ValidationCriteria(keys=["title"],
-                                                key_value_pairs = {"title": self.FUNC_OUTGOING_REFERRAL_DETAILS_FORM['title']})
-        extra_json = {
-                    "selections": [self.FUNC_OUTGOING_REFERRALS_MENU['selections'], self.selected_case_id, self.FUNC_OUTGOING_REFERRAL_DETAILS_FORM['selections']],
-                }
-        try:
-            data = self.user.HQ_user.post_formplayer("navigate_menu", self.client,  self.user.app_details,
-                                                    extra_json=extra_json, name="Enter 'Outgoing Referral Details' Form",
-                                                    validation=validation)
-        except formplayer.FormplayerResponseError as e:
-            logging.info(str(e) + " - mobile worker: " + self.user.user_detail.login_as)
+        data = self.user.hq_user.navigate(
+            "Enter 'Outgoing Referral Details' Form",
+            data={"selections": [self.FUNC_OUTGOING_REFERRALS_MENU['selections'],
+                                 self.selected_case_id,
+                                 self.FUNC_OUTGOING_REFERRAL_DETAILS_FORM['selections']
+                                ]
+                },
+            expected_title=self.FUNC_OUTGOING_REFERRAL_DETAILS_FORM['title']
+        )
         self.session_id = data['session_id']
 
     @tag('answer_outgoing_referral_details_form_questions')
     @task
     def answer_outgoing_referral_details_form_questions(self):
-        logging.info("Answering Questions - mobile worker:" + self.user.user_detail.login_as + "; request: answer")
         for question in self.FUNC_OUTGOING_REFERRAL_DETAILS_FORM["questions"].values():
-            validation = formplayer.ValidationCriteria(keys=["title"],
-                                                    key_value_pairs = {"title": self.FUNC_OUTGOING_REFERRAL_DETAILS_FORM['title']})
             extra_json = {
                     "ix": question["ix"],
                     "answer": question["answer"],
                     "session_id": self.session_id,
                 }
-            try:
-                data = self.user.HQ_user.post_formplayer("answer", self.client, self.user.app_details, validation=validation,
-                                                extra_json=extra_json, name="Answer 'Outgoing Referral Details' Question")
-            except formplayer.FormplayerResponseError as e:
-                logging.info(str(e) + " - mobile worker: " + self.user.user_detail.login_as)
+
+            data = self.user.hq_user.answer(
+                "Answer 'Outgoing Referral Details' Question",
+                data=extra_json,
+            )
             rng = random.randrange(1,3)
             time.sleep(rng)
 
@@ -164,8 +153,8 @@ class WorkloadModelSteps(SequentialTaskSet):
                     find_question_ix(children, result)
             return result
 
-        # Question ix 10 is a count repeat group that varies depending on the case selected. So the "answer" with the appropriate
-        # ix keys need to be dynamically generated to be used in submit
+        # Question ix 10 is a count repeat group that varies depending on the case selected. 
+        # So the "answer" with the appropriate ix keys need to be dynamically generated to be used in submit
         for item in data["tree"]:
             if item.get('ix') == "10":
                 self.attached_referral_requests_answers = find_question_ix(item)
@@ -173,9 +162,9 @@ class WorkloadModelSteps(SequentialTaskSet):
     @tag('submit_outgoing_referral_details_form')
     @task
     def submit_outgoing_referral_details_form(self):
-        logging.info("Submitting form - mobile worker:" + self.user.user_detail.login_as + "; request: submit_all")
         utc_time_tuple = time.gmtime(time.time() - 86400) #ensure we're not picking a date that would be tomorrow in local time
-        formatted_date = "{:04d}-{:02d}-{:02d}".format(utc_time_tuple.tm_year, utc_time_tuple.tm_mon, utc_time_tuple.tm_mday)
+        formatted_date = "{:04d}-{:02d}-{:02d}".format(utc_time_tuple.tm_year, utc_time_tuple.tm_mon,
+                                                       utc_time_tuple.tm_mday)
 
         answers = {
             "2,0": 1,
@@ -211,17 +200,18 @@ class WorkloadModelSteps(SequentialTaskSet):
         answers.update(self.attached_referral_requests_answers)
         input_answers= {d["ix"]: d["answer"] for d in self.FUNC_OUTGOING_REFERRAL_DETAILS_FORM["questions"].values()}
         answers.update(input_answers)
-        validation = formplayer.ValidationCriteria(keys=["submitResponseMessage"],
-                                                key_value_pairs={"submitResponseMessage": self.FUNC_OUTGOING_REFERRAL_DETAILS_FORM_SUBMIT['submitResponseMessage']})
+
         extra_json = {
             "answers": answers,
             "prevalidated": True,
             "debuggerEnabled": True,
             "session_id": self.session_id,
         }
-        self.user.HQ_user.post_formplayer("submit-all", self.client, self.user.app_details, extra_json=extra_json,
-                                        name="Submit Outgoing Referral Details Form", validation=validation)
-
+        self.user.hq_user.submit_all(
+            "Submit Outgoing Referral Details Form",
+            extra_json,
+            expected_response_message=self.FUNC_OUTGOING_REFERRAL_DETAILS_FORM_SUBMIT['submitResponseMessage']
+        )
 
 @events.init.add_listener
 def _(environment, **kw):
