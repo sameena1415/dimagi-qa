@@ -1,6 +1,5 @@
 from dataclasses import dataclass, field
-from typing import Dict, Optional
-
+from typing import List, Dict, Optional
 
 def post(command, client, app_details, user_details, extra_json=None, name=None, validation=None):
     formplayer_host = "/formplayer"
@@ -28,10 +27,16 @@ def post(command, client, app_details, user_details, extra_json=None, name=None,
             validate_response(response, validation)
         return response.json()
 
+@dataclass
+class ValidationCriteria:
+    keys: Optional[List[str]] = None
+    key_value_pairs: Optional[Dict[str, Optional[str]]] = field(default_factory=dict)
+    length_check: Optional[Dict[str, int]] = field(default_factory=dict)
 
-def validate_response(response, validation):
+def validate_response(response, validation: ValidationCriteria):
     data = response.json()
-    for checkKey, checkValue in validation.key_value_pairs.items():
+    for checkKey in validation.keys:
+        checkValue = validation.key_value_pairs.get(checkKey, None)
         checkLen = validation.length_check.get(checkKey, None)
         if "notification" in data and data["notification"]:
             if data["notification"]["type"] == "error":
@@ -53,16 +58,10 @@ def validate_response(response, validation):
                 raise FormplayerResponseError(msg)
         elif checkKey and checkValue:
             if data[checkKey] != checkValue:
-                msg = "ERROR::data['" + checkKey + "'] != " + checkValue
+                msg = "ERROR::data['" + checkKey + "'], " + data[checkKey] + " != " + checkValue
                 response.failure(msg)
                 raise FormplayerResponseError(msg)
 
 
 class FormplayerResponseError(Exception):
     pass
-
-
-@dataclass
-class ValidationCriteria:
-    key_value_pairs: Optional[Dict[str, Optional[str]]] = field(default_factory=dict)
-    length_check: Optional[Dict[str, int]] = field(default_factory=dict)
