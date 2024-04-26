@@ -1,21 +1,15 @@
 import logging
-import os
+import random
 import time
 
-import yaml
-import random
-import json
-
-from collections import defaultdict
-from locust import HttpUser, SequentialTaskSet, between, task, tag, events
+from locust import HttpUser, SequentialTaskSet, between, events, tag, task
 from locust.exception import InterruptTaskSet
-from lxml import etree
-from datetime import datetime
 
-import formplayer
-from user.models import UserDetails, HQUser, AppDetails
 from common.args import file_path
 from common.utils import load_json_data
+from common.web_apps import get_app_build_info
+from user.models import AppDetails, HQUser, UserDetails
+
 
 @events.init_command_line_parser.add_listener
 def _(parser):
@@ -24,8 +18,10 @@ def _(parser):
     parser.add_argument("--app-config", help="Configuration of CommCare app", required=True)
     parser.add_argument("--user-details", help="Path to user details file", required=True)
 
+
 APP_CONFIG = {}
 USERS_DETAILS = []
+
 
 class WorkloadModelSteps(SequentialTaskSet):
     wait_time = between(5, 15)
@@ -41,40 +37,28 @@ class WorkloadModelSteps(SequentialTaskSet):
     @tag('home_screen')
     @task
     def home_screen(self):
-        logging.info("home_screen - mobile worker: " + self.user.user_detail.login_as + "; request: navigate_menu_start")
-        validation = formplayer.ValidationCriteria(keys=["title"],
-                                                key_value_pairs = {"title": self.FUNC_HOME_SCREEN['title']})
-        try:
-            self.user.HQ_user.post_formplayer("navigate_menu_start", self.client,
-                                            self.user.app_details, name="Home Screen",
-                                            validation=validation)
-        except formplayer.FormplayerResponseError as e:
-            logging.info(str(e) + " - mobile worker: " + self.user.user_detail.login_as)
-
+        self.user.hq_user.navigate_start(expected_title=self.FUNC_HOME_SCREEN['title'])
 
     @tag('search_for_beds_menu')
     @task
     def search_for_beds_menu(self):
-        logging.info("all_cases_case_list - mobile worker:" + self.user.user_detail.login_as + "; request: navigate_menu")
-        validation = formplayer.ValidationCriteria(keys=["title"],
-                                                key_value_pairs = {"title": self.FUNC_SEARCH_FOR_BEDS_MENU['title']})
-        try:
-            extra_json = {
+        data = self.user.hq_user.navigate(
+            "Open Search for Beds Menu",
+            data={
                 "selections": [self.FUNC_SEARCH_FOR_BEDS_MENU['selections']],
                 "cases_per_page": self.cases_per_page,
-            }
-            data = self.user.HQ_user.post_formplayer("navigate_menu", self.client, self.user.app_details, 
-                                                    extra_json=extra_json, name="Open Search for Beds Menu",
-                                                    validation=validation)
+            },
+            expected_title=self.FUNC_SEARCH_FOR_BEDS_MENU['title']
+        )
+        if data:
             self.page_count = data["pageCount"]
-        except formplayer.FormplayerResponseError as e:
-            logging.info(str(e) + " - mobile worker: " + self.user.user_detail.login_as)
 
     @tag('select_cases')
     @task
     def select_cases(self):
-        logging.info("Selecting Random Cases - mobile worker:" + self.user.user_detail.login_as + "; request: navigate_menu")
-        total_qty_cases_to_select = random.randrange(5,11)
+        logging.info(
+            "Selecting Random Cases - mobile worker:" + self.user.user_detail.login_as + "; request: navigate_menu")
+        total_qty_cases_to_select = random.randrange(5, 11)
         self.selected_case_ids = set()
 
         # As is, this doesn't handle if there aren't enough cases to select. Also it won't handle well
@@ -90,19 +74,17 @@ class WorkloadModelSteps(SequentialTaskSet):
             qty_cases_remaining_to_select = total_qty_cases_to_select - len(self.selected_case_ids)
             qty_to_select = min(random_qty_cases_to_select_per_page, qty_cases_remaining_to_select)
 
-            validation = formplayer.ValidationCriteria(keys=["title"],
-                                                    key_value_pairs = {"title": self.FUNC_SEARCH_FOR_BEDS_MENU['title']})
-            extra_json={
+            extra_json = {
                 "selections": [self.FUNC_SEARCH_FOR_BEDS_MENU['selections']],
                 "cases_per_page": self.cases_per_page,
                 "offset": offset,
             }
-            try:
-                data = self.user.HQ_user.post_formplayer("navigate_menu", self.client,  self.user.app_details,
-                                                        extra_json=extra_json, name="Paginate for Case Selection",
-                                                        validation=validation)
-            except formplayer.FormplayerResponseError as e:
-                logging.info(str(e) + " - mobile worker: " + self.user.user_detail.login_as)
+
+            data = self.user.hq_user.navigate(
+                "Paginate for Case Selection",
+                data=extra_json,
+                expected_title=self.FUNC_SEARCH_FOR_BEDS_MENU['title']
+            )
 
             entities = data["entities"]
             ids = [entity["id"] for entity in entities if entity["id"] not in self.selected_case_ids]
@@ -116,29 +98,27 @@ class WorkloadModelSteps(SequentialTaskSet):
             # crude way to avoid looping infinitely
             i += 1
             assert i < max_num_iterations, "exceeded allowed number of iterations to select cases for mobile worker " + self.user.user_detail.login_as
-            rng = random.randrange(1,3)
+            rng = random.randrange(1, 3)
             time.sleep(rng)
-        logging.info("selected cases are " + str(self.selected_case_ids) + " for mobile worker " + self.user.user_detail.login_as)
-
+        logging.info("selected cases are " + str(
+            self.selected_case_ids) + " for mobile worker " + self.user.user_detail.login_as)
 
     @tag('enter_create_profile_and_refer_form')
     @task
     def enter_create_profile_and_refer_form(self):
         logging.info("Entering form - mobile worker:" + self.user.user_detail.login_as + "; request: navigate_menu")
 
-        validation = formplayer.ValidationCriteria(keys=["title"],
-                                                key_value_pairs = {"title": self.FUNC_CREATE_PROFILE_AND_REFER_FORM['title']})
         extra_json = {
-                    "selected_values": (list(self.selected_case_ids)),
-                    "query_data": {},
-                    "selections": [self.FUNC_SEARCH_FOR_BEDS_MENU['selections'], "use_selected_values"],
-                }
-        try:
-            data = self.user.HQ_user.post_formplayer("navigate_menu", self.client,  self.user.app_details,
-                                                    extra_json=extra_json, name="Enter 'Create Profile and Refer' Form",
-                                                    validation=validation)
-        except formplayer.FormplayerResponseError as e:
-            logging.info(str(e) + " - mobile worker: " + self.user.user_detail.login_as)
+            "selected_values": (list(self.selected_case_ids)),
+            "query_data": {},
+            "selections": [self.FUNC_SEARCH_FOR_BEDS_MENU['selections'], "use_selected_values"],
+        }
+
+        data = self.user.hq_user.navigate(
+            "Enter 'Create Profile and Refer' Form",
+            data=extra_json,
+            expected_title=self.FUNC_CREATE_PROFILE_AND_REFER_FORM['title']
+        )
         self.session_id = data['session_id']
 
     @tag('answer_create_profile_and_refer_form_questions')
@@ -147,16 +127,15 @@ class WorkloadModelSteps(SequentialTaskSet):
         logging.info("Answering Questions - mobile worker:" + self.user.user_detail.login_as + "; request: answer")
         for question in self.FUNC_CREATE_PROFILE_AND_REFER_FORM_QUESTIONS.values():
             extra_json = {
-                    "ix": question["ix"],
-                    "answer": question["answer"],
-                    "session_id": self.session_id,
-                }
-            try:
-                self.user.HQ_user.post_formplayer("answer", self.client, self.user.app_details,
-                                                extra_json=extra_json, name="Answer 'Create Profile and Refer' Question")
-            except formplayer.FormplayerResponseError as e:
-                logging.info(str(e) + " - mobile worker: " + self.user.user_detail.login_as)
-            rng = random.randrange(1,3)
+                "ix": question["ix"],
+                "answer": question["answer"],
+                "session_id": self.session_id,
+            }
+            self.user.hq_user.answer(
+                "Answer 'Create Profile and Refer' Question",
+                data=extra_json,
+            )
+            rng = random.randrange(1, 3)
             time.sleep(rng)
 
     @tag('submit_create_profile_and_refer_form')
@@ -164,7 +143,8 @@ class WorkloadModelSteps(SequentialTaskSet):
     def submit_create_profile_and_refer_form(self):
         logging.info("Submitting form - mobile worker:" + self.user.user_detail.login_as + "; request: submit_all")
         utc_time_tuple = time.gmtime(time.time())
-        formatted_date = "{:04d}-{:02d}-{:02d}".format(utc_time_tuple.tm_year, utc_time_tuple.tm_mon, utc_time_tuple.tm_mday)
+        formatted_date = "{:04d}-{:02d}-{:02d}".format(utc_time_tuple.tm_year, utc_time_tuple.tm_mon,
+                                                       utc_time_tuple.tm_mday)
         answers = {
             "2": "OK",
             "4": "OK",
@@ -195,19 +175,22 @@ class WorkloadModelSteps(SequentialTaskSet):
             "3_0,2,0,5": "OK",
             "3_0,3": None
         }
-        input_answers= {d["ix"]: d["answer"] for d in self.FUNC_CREATE_PROFILE_AND_REFER_FORM_QUESTIONS.values()}
+        input_answers = {d["ix"]: d["answer"] for d in self.FUNC_CREATE_PROFILE_AND_REFER_FORM_QUESTIONS.values()}
         answers.update(input_answers)
 
-        validation = formplayer.ValidationCriteria(keys=["submitResponseMessage"],
-                                                key_value_pairs={"submitResponseMessage": self.FUNC_CREATE_PROFILE_AND_REFER_FORM_SUBMIT['submitResponseMessage']})
         extra_json = {
             "answers": answers,
             "prevalidated": True,
             "debuggerEnabled": True,
             "session_id": self.session_id,
         }
-        self.user.HQ_user.post_formplayer("submit-all", self.client, self.user.app_details, extra_json=extra_json,
-                                        name = "Submit Create Profile and Refer Form", validation=validation)
+        
+        self.user.hq_user.submit_all(
+            "Submit Create Profile and Refer Form",
+            extra_json,
+            expected_response_message=self.FUNC_CREATE_PROFILE_AND_REFER_FORM_SUBMIT['submitResponseMessage']
+        )
+
 
 @events.init.add_listener
 def _(environment, **kw):
@@ -227,6 +210,7 @@ def _(environment, **kw):
         logging.error("Error loading users: %s", e)
         raise InterruptTaskSet from e
 
+
 class LoginCommCareHQWithUniqueUsers(HttpUser):
     tasks = [WorkloadModelSteps]
     wait_time = between(5, 10)
@@ -235,24 +219,19 @@ class LoginCommCareHQWithUniqueUsers(HttpUser):
         self.domain = self.environment.parsed_options.domain
         self.host = self.environment.parsed_options.host
         self.user_detail = USERS_DETAILS.pop()
-        self.HQ_user = HQUser( self.user_detail)
-        logging.info("userinfo-->>>" + str(self.user_detail))
 
-        self.login()
-        self.app_details = AppDetails(
-        domain = self.domain,
-        app_id = self.environment.parsed_options.app_id,
-        build_id = self._get_build_info(self.environment.parsed_options.app_id)
+        app_details = AppDetails(
+            domain=self.domain,
+            app_id=self.environment.parsed_options.app_id,
         )
-
-    def login(self):
-        self.HQ_user.login(self.domain, self.host, self.client)
+        self.hq_user = HQUser(self.client, self.user_detail, app_details)
+        self.hq_user.login(self.domain, self.host)
+        self.hq_user.app_details.build_id = self._get_build_info(self.environment.parsed_options.app_id)
 
     def _get_build_info(self, app_id):
-        response = self.client.get(f'/a/{self.domain}/cloudcare/apps/v2/?option=apps', name='build info')
-        assert (response.status_code == 200)
-        for app in response.json():
-            if app['copy_of'] == app_id:
-                # get build_id
-                logging.info("build_id: " + app['_id'])
-                return app['_id']
+        build_id = get_app_build_info(self.client, self.domain, app_id)
+        if build_id:
+            logging.info("Using app build: %s", build_id)
+        else:
+            logging.warning("No build found for app: %s", app_id)
+        return build_id

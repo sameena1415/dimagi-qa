@@ -1,26 +1,42 @@
+import logging
+
 import formplayer
 from locust.exception import StopUser
 import pydantic
+
 
 class UserDetails(pydantic.BaseModel):
     username: str
     password: str
     login_as: str | None = None
 
+    def __str__(self):
+        if self.login_as:
+            return f"{self.username} as {self.login_as}"
+        return self.username
+
+
 class AppDetails(pydantic.BaseModel):
     domain: str
     app_id: str
-    build_id: str
+    build_id: str | None = None
 
-class HQUser():
+    @property
+    def id(self):
+        return self.build_id or self.app_id
 
-    def __init__(self, user_details):
+
+class HQUser:
+
+    def __init__(self, client, user_details, app_details):
+        self.client = client
         self.user_details = user_details
+        self.app_details = app_details
 
-    def login(self, domain, host, client):
+    def login(self, domain, host):
         login_url = f"/a/{domain}/login/"
-        client.get(login_url)  # get CSRF token
-        response = client.post(
+        self.client.get(login_url)  # get CSRF token
+        response = self.client.post(
             login_url,
             {
                 "auth-username": self.user_details.username,
@@ -28,7 +44,7 @@ class HQUser():
                 "cloud_care_login_view-current_step": ['auth'],  # fake out two_factor ManagementForm
             },
             headers={
-                "X-CSRFToken": client.cookies.get('csrftoken'),
+                "X-CSRFToken": self.client.cookies.get('csrftoken'),
                 "REFERER": f"{host}{login_url}",  # csrf requires this
             },
         )
@@ -36,6 +52,44 @@ class HQUser():
             raise StopUser(f"Login failed for user {self.user_details.username}: {response.status_code}")
         if 'Sign In' in response.text:
             raise StopUser(f"Login failed for user {self.user_details.username}: Sign In failed")
+        logging.info("User logged in: " + self.user_details.username)
 
-    def post_formplayer(self, command, client, app_details, extra_json=None, name=None, validation=None):
-        return formplayer.post(command, client, app_details, self.user_details, extra_json, name, validation)
+    def navigate_start(self, expected_title=None):
+        validation = None
+        if expected_title:
+            validation = formplayer.ValidationCriteria(key_value_pairs={"title": expected_title})
+        return self.post_formplayer(
+            "navigate_menu_start",
+            name="Home Screen",
+            validation=validation
+        )
+
+    def navigate(self, name, data, expected_title=None):
+        validation = None
+        if expected_title:
+            validation = formplayer.ValidationCriteria(key_value_pairs={"title": expected_title})
+        return self.post_formplayer(
+            "navigate_menu", data, name=name, validation=validation
+        )
+
+    def answer(self, name, data):
+        return self.post_formplayer("answer", data, name=name)
+
+    def submit_all(self, name, data, expected_response_message=None):
+        validation = None
+        if expected_response_message:
+            validation = formplayer.ValidationCriteria(key_value_pairs={
+                "submitResponseMessage": expected_response_message
+            })
+        return self.post_formplayer(
+            "submit-all", data, name=name, validation=validation
+        )
+
+    def post_formplayer(self, command, extra_json=None, name=None, validation=None):
+        logging.info("User: %s; Request: %s; Name: %s", self.user_details, command, name)
+        try:
+            return formplayer.post(
+                command, self.client, self.app_details, self.user_details, extra_json, name, validation
+            )
+        except Exception as e:
+            logging.error("user: %s; request: %s; exception: %s", self.user_details, command, str(e))
