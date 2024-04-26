@@ -1,5 +1,7 @@
 import logging
 from openpyxl import load_workbook
+import random
+import time
 
 from locust import HttpUser, SequentialTaskSet, between, task, tag, events
 from locust.exception import InterruptTaskSet
@@ -27,6 +29,8 @@ class WorkloadModelSteps(SequentialTaskSet):
     def on_start(self):
         self.FUNC_HOME_SCREEN = APP_CONFIG['FUNC_HOME_SCREEN']
         self.FUNC_SEARCH_AND_ADMIT_MENU = APP_CONFIG['FUNC_SEARCH_AND_ADMIT_MENU']
+        self.FUNC_ADMIT_CLIENT_FORM = APP_CONFIG['FUNC_ADMIT_CLIENT_FORM']
+        self.SEARCH_AND_ADMIT_INPUTS = self.FUNC_SEARCH_AND_ADMIT_MENU["inputs"]
 
     @tag('home_screen')
     @task
@@ -40,6 +44,69 @@ class WorkloadModelSteps(SequentialTaskSet):
             "Open 'Search And Admit' Menu",
             data={"selections": [self.FUNC_SEARCH_AND_ADMIT_MENU['selections']]},
             expected_title=self.FUNC_SEARCH_AND_ADMIT_MENU['title']
+        )
+
+    @tag('case_search_inputs')
+    @task
+    def case_search_input(self):
+        self.case_to_select = random.choice(list(CASES_TO_SELECT.values()))
+        self.inputs = {
+            "case_search_ts": self.SEARCH_AND_ADMIT_INPUTS["INPUT_CASE_SEARCH_TS"],
+            "fuzzy_match_dob": self.SEARCH_AND_ADMIT_INPUTS["INPUT_FUZZY_MATCH_DOB"] 
+        }
+
+        additional_inputs = {
+            "first_name": self.case_to_select["first_name"],
+            "last_name": self.case_to_select["last_name"],
+            "dob": self.case_to_select["dob"].strftime('%Y-%m-%d'),
+            "medicaid_id": self.case_to_select["medicaid_id"],
+            "reason_for_no_ssn": self.SEARCH_AND_ADMIT_INPUTS["INPUT_REASON_FOR_NO_SSN"],
+            "consent_collected": self.SEARCH_AND_ADMIT_INPUTS["INPUT_CONSENT_COLLECTED"],
+        }
+
+        for key, value in additional_inputs.items():
+            self.inputs[key] = value
+
+            extra_json = {
+                "query_data": {
+                    "m11_results:inline": {
+                        "inputs": self.inputs,
+                        "execute": False,
+                        "force_manual_search": True,
+                        "selections": [self.FUNC_SEARCH_AND_ADMIT_MENU["selections"]]
+                    }
+                },
+                "selections": [self.FUNC_SEARCH_AND_ADMIT_MENU["selections"]]
+            }
+
+            self.user.hq_user.navigate(
+                "Input for fields in 'Search and Admit' Menu",
+                data=extra_json,
+                expected_title=self.FUNC_SEARCH_AND_ADMIT_MENU['title']
+            )
+
+            rng = random.randrange(1, 3)
+            time.sleep(rng)
+
+    @tag('perform_a_search_and_enter_admit_client_form')
+    @task
+    def perform_a_search(self):
+        extra_json = {
+            "query_data": {
+                "m11_results:inline": {
+                    "inputs": self.inputs,
+                    "execute": True,
+                    "force_manual_search": True,
+                    "selections": [self.FUNC_SEARCH_AND_ADMIT_MENU["selections"]]
+                }
+            },
+            "selections": [self.FUNC_SEARCH_AND_ADMIT_MENU["selections"]]
+        }
+
+        self.user.hq_user.navigate(
+            "Perform a Search and enter 'Admit Client' Form",
+            data=extra_json,
+            expected_title=self.FUNC_ADMIT_CLIENT_FORM['title']
         )
 
 @events.init.add_listener
