@@ -106,7 +106,7 @@ def _extract_data_from_sheet(workbook, headers_of_interest):
         raise InterruptTaskSet
 
     name_dict = {}
-    for row in range(2, sheet.max_row):
+    for row in range(2, sheet.max_row+1):
         name = sheet.cell(row=row, column=header_col_mapping["name"]).value
         data = {header: sheet.cell(row=row, column=col).value for header, col in header_col_mapping.items()}
         name_dict[name] = data
