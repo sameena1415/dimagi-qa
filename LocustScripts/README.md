@@ -15,6 +15,25 @@ Basic usage, for a single test user:
 locust -f commcarehq-bed-track.py --headless -u 1 -r 1 --test-config project-config/co-carecoordination-perf/config.yaml
 ```
 
+### Tags:
+
+* home_screen
+* search_for_beds_menu
+* non_facet_search
+* facet_search
+
+Run a facet search test use:
+
+```shell
+# Non-facet search test:
+--exclude-tags facet_search
+
+# Facet search test
+--exclude-tags non_facet_search
+```
+
+Note that `search_for_beds_menu` will also perform 1 non-facet search.
+
 Leave off --headless to view results in the Locust web UI. See docs for options to set number of users, run time, etc.
 
 ## Running with a step load

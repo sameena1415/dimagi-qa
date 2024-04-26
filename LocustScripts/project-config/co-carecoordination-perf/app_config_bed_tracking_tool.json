@@ -5,7 +5,6 @@
     "FUNC_SEARCH_FOR_BEDS_MENU": {
         "selections":"0", "title":"Search for Beds"
     },
-    "FUNC_SEARCH_FOR_BEDS_MENU_QUERY_KEY": "search_command.m1",
     "FUNC_ENTER_AGE": {
         "selections":"0", "input":"age", "inputValue": "adults"
     },
