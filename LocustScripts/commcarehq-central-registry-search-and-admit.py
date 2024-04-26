@@ -1,21 +1,13 @@
 import logging
-import os
-import time
 from openpyxl import load_workbook
-import yaml
-import random
-import json
 
-from collections import defaultdict
 from locust import HttpUser, SequentialTaskSet, between, task, tag, events
 from locust.exception import InterruptTaskSet
-from lxml import etree
-from datetime import datetime
 
-import formplayer
 from user.models import UserDetails, HQUser, AppDetails
 from common.args import file_path
 from common.utils import load_json_data
+from common.web_apps import get_app_build_info
 
 @events.init_command_line_parser.add_listener
 def _(parser):
@@ -38,14 +30,7 @@ class WorkloadModelSteps(SequentialTaskSet):
     @tag('home_screen')
     @task
     def home_screen(self):
-        logging.info("home_screen - mobile worker: " + self.user.user_detail.login_as + "; request: navigate_menu_start")
-        validation = formplayer.ValidationCriteria(key_value_pairs = {"title": self.FUNC_HOME_SCREEN['title']})
-        try:
-            self.user.HQ_user.post_formplayer("navigate_menu_start", self.client,
-                                            self.user.app_details, name="Home Screen",
-                                            validation=validation)
-        except formplayer.FormplayerResponseError as e:
-            logging.info(str(e) + " - mobile worker: " + self.user.user_detail.login_as)
+        self.user.hq_user.navigate_start(expected_title=self.FUNC_HOME_SCREEN['title'])
 
 @events.init.add_listener
 def _(environment, **kw):
@@ -79,27 +64,22 @@ class LoginCommCareHQWithUniqueUsers(HttpUser):
         self.domain = self.environment.parsed_options.domain
         self.host = self.environment.parsed_options.host
         self.user_detail = USERS_DETAILS.pop()
-        self.HQ_user = HQUser( self.user_detail)
-        logging.info("userinfo-->>>" + str(self.user_detail))
 
-        self.login()
-        self.app_details = AppDetails(
-        domain = self.domain,
-        app_id = self.environment.parsed_options.app_id,
-        build_id = self._get_build_info(self.environment.parsed_options.app_id)
+        app_details = AppDetails(
+            domain=self.domain,
+            app_id=self.environment.parsed_options.app_id,
         )
-
-    def login(self):
-        self.HQ_user.login(self.domain, self.host, self.client)
+        self.hq_user = HQUser(self.client, self.user_detail, app_details)
+        self.hq_user.login(self.domain, self.host)
+        self.hq_user.app_details.build_id = self._get_build_info(self.environment.parsed_options.app_id)
 
     def _get_build_info(self, app_id):
-        response = self.client.get(f'/a/{self.domain}/cloudcare/apps/v2/?option=apps', name='build info')
-        assert (response.status_code == 200)
-        for app in response.json():
-            if app['copy_of'] == app_id or app['_id'] == app_id:
-                # get build_id
-                logging.info("build_id: " + app['_id'])
-                return app['_id']
+        build_id = get_app_build_info(self.client, self.domain, app_id)
+        if build_id:
+            logging.info("Using app build: %s", build_id)
+        else:
+            logging.warning("No build found for app: %s", app_id)
+        return build_id
 
 def _extract_data_from_sheet(workbook, headers_of_interest):
     sheet = workbook.active
