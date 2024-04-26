@@ -26,11 +26,21 @@ class WorkloadModelSteps(SequentialTaskSet):
 
     def on_start(self):
         self.FUNC_HOME_SCREEN = APP_CONFIG['FUNC_HOME_SCREEN']
+        self.FUNC_SEARCH_AND_ADMIT_MENU = APP_CONFIG['FUNC_SEARCH_AND_ADMIT_MENU']
 
     @tag('home_screen')
     @task
     def home_screen(self):
         self.user.hq_user.navigate_start(expected_title=self.FUNC_HOME_SCREEN['title'])
+
+    @tag('search_and_admit_menu')
+    @task
+    def outgoing_referrals_menu(self):
+        self.user.hq_user.navigate(
+            "Open 'Search And Admit' Menu",
+            data={"selections": [self.FUNC_SEARCH_AND_ADMIT_MENU['selections']]},
+            expected_title=self.FUNC_SEARCH_AND_ADMIT_MENU['title']
+        )
 
 @events.init.add_listener
 def _(environment, **kw):

@@ -1,5 +1,8 @@
 {
     "FUNC_HOME_SCREEN": {
         "title":"[Linked version]Central Registry"
+    },
+    "FUNC_SEARCH_AND_ADMIT_MENU": {
+        "selections":"0", "title":"Search and Admit Client"
     }
 }
