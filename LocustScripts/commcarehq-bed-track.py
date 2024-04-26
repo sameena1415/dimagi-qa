@@ -107,7 +107,7 @@ class WorkloadModelSteps(SequentialTaskSet):
                 },
                 "selections": ["0"],
             }
-            self.user.hq_user.navigate("Perform a Search", data=data)
+            self.user.hq_user.navigate("Perform a non-faceted search", data=data)
             self.wait()
 
     @tag('facet_search')
@@ -136,7 +136,7 @@ class WorkloadModelSteps(SequentialTaskSet):
                 },
                 "selections": ["0"],
             }
-            self.user.hq_user.navigate("Perform a Search", data=data)
+            self.user.hq_user.navigate("Perform a faceted search", data=data)
             self.wait()
 
     @task
