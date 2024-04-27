@@ -3,13 +3,13 @@ from openpyxl import load_workbook
 import random
 import time
 
-from locust import HttpUser, SequentialTaskSet, between, task, tag, events
+from locust import SequentialTaskSet, between, task, tag, events
 from locust.exception import InterruptTaskSet
 
-from user.models import UserDetails, HQUser, AppDetails
+from user.models import UserDetails, BaseLoginCommCareUser
 from common.args import file_path
 from common.utils import load_json_data
-from common.web_apps import get_app_build_info
+
 
 @events.init_command_line_parser.add_listener
 def _(parser):
@@ -133,30 +133,17 @@ def _(environment, **kw):
         logging.error("Error loading cases to select: %s", e)
         raise InterruptTaskSet from e
 
-class LoginCommCareHQWithUniqueUsers(HttpUser):
+class LoginCommCareHQWithUniqueUsers(BaseLoginCommCareUser):
     tasks = [WorkloadModelSteps]
     wait_time = between(5, 10)
 
     def on_start(self):
-        self.domain = self.environment.parsed_options.domain
-        self.host = self.environment.parsed_options.host
-        self.user_detail = USERS_DETAILS.pop()
-
-        app_details = AppDetails(
-            domain=self.domain,
-            app_id=self.environment.parsed_options.app_id,
+        super().on_start(
+            domain=self.environment.parsed_options.domain,
+            host=self.environment.parsed_options.host,
+            user_details=USERS_DETAILS,
+            app_id=self.environment.parsed_options.app_id
         )
-        self.hq_user = HQUser(self.client, self.user_detail, app_details)
-        self.hq_user.login(self.domain, self.host)
-        self.hq_user.app_details.build_id = self._get_build_info(self.environment.parsed_options.app_id)
-
-    def _get_build_info(self, app_id):
-        build_id = get_app_build_info(self.client, self.domain, app_id)
-        if build_id:
-            logging.info("Using app build: %s", build_id)
-        else:
-            logging.warning("No build found for app: %s", app_id)
-        return build_id
 
 def _extract_data_from_sheet(workbook, headers_of_interest):
     sheet = workbook.active
