@@ -1,12 +1,11 @@
 import logging
 
-from locust import HttpUser, SequentialTaskSet, constant_pacing, events, run_single_user, tag, task
+from locust import SequentialTaskSet, constant_pacing, events, run_single_user, tag, task
 from locust.exception import InterruptTaskSet
 
 from common.args import file_path
 from common.utils import load_json_data, load_yaml_data
-from common.web_apps import get_app_build_info
-from user.models import AppDetails, HQUser, UserDetails
+from user.models import UserDetails, BaseLoginCommCareUser
 
 
 @events.init_command_line_parser.add_listener
@@ -144,32 +143,17 @@ class WorkloadModelSteps(SequentialTaskSet):
         logging.info("stopping - mobile worker: %s", self.user.user_detail)
         self.interrupt()
 
-
-class LoginCommCareHQWithUniqueUsers(HttpUser):
-    wait_time = constant_pacing(5)
+class LoginCommCareHQWithUniqueUsers(BaseLoginCommCareUser):
     tasks = [WorkloadModelSteps]
+    wait_time = constant_pacing(5)
 
     def on_start(self):
-        self.domain = CONFIG["domain"]
-        self.user_detail = USERS_DETAILS.pop()
-        logging.info("userinfo-->>>" + str(self.user_detail))
-
-        app_details = AppDetails(
-            domain=self.domain,
-            app_id=CONFIG["app_id"],
+        super().on_start(
+            domain=CONFIG["domain"],
+            host=CONFIG["host"],
+            user_details=USERS_DETAILS,
+            app_id=CONFIG["app_id"]
         )
-        self.hq_user = HQUser(self.client, self.user_detail, app_details)
-        self.hq_user.login(self.domain, self.host)
-        self.hq_user.app_details.build_id = self._get_build_info(CONFIG["app_id"])
-
-    def _get_build_info(self, app_id):
-        build_id = get_app_build_info(self.client, self.domain, app_id)
-        if build_id:
-            logging.info("Using app build: %s", build_id)
-        else:
-            logging.warning("No build found for app: %s", app_id)
-        return build_id
-
 
 if __name__ == "__main__":
     run_single_user(LoginCommCareHQWithUniqueUsers)

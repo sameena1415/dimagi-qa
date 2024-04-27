@@ -1,6 +1,8 @@
 import logging
 
+from common.web_apps import get_app_build_info
 import formplayer
+from locust import HttpUser
 from locust.exception import StopUser
 import pydantic
 
@@ -93,3 +95,25 @@ class HQUser:
             )
         except Exception as e:
             logging.error("user: %s; request: %s; exception: %s", self.user_details, command, str(e))
+
+class BaseLoginCommCareUser(HttpUser):
+    abstract=True
+
+    def on_start(self, domain, host, user_details, app_id):
+        self.user_detail = user_details.pop()
+
+        app_details = AppDetails(
+            domain=domain,
+            app_id=app_id
+        )
+        self.hq_user = HQUser(self.client, self.user_detail, app_details)
+        self.hq_user.login(domain, host)
+        self.hq_user.app_details.build_id = self._get_build_info(app_id, domain)
+
+    def _get_build_info(self, app_id, domain):
+        build_id = get_app_build_info(self.client, domain, app_id)
+        if build_id:
+            logging.info("Using app build: %s", build_id)
+        else:
+            logging.warning("No build found for app: %s", app_id)
+        return build_id
