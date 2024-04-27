@@ -1,12 +1,11 @@
 import logging
 
-from locust import HttpUser, SequentialTaskSet, constant_pacing, events, run_single_user, tag, task
+from locust import SequentialTaskSet, constant_pacing, events, run_single_user, tag, task
 from locust.exception import InterruptTaskSet
 
 from common.args import file_path
 from common.utils import load_json_data, load_yaml_data
-from common.web_apps import get_app_build_info
-from user.models import AppDetails, HQUser, UserDetails, BaseLoginCommCareUser
+from user.models import UserDetails, BaseLoginCommCareUser
 
 
 @events.init_command_line_parser.add_listener
