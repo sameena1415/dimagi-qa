@@ -37,7 +37,7 @@ class MobileWorkerPage(BasePage):
         self.phone_number = UserData.area_code + fetch_phone_number()
 
         self.username_link = "//a[./i[@class='fa fa-user']][strong[.='{}']]"
-        self.remove_choice_button = "(//input[contains(@data-bind,'value: slug')]//following::a[contains(@class,'danger')][1])//preceding::*[contains(@data-bind,'removeChoice')][1][{}]"
+        self.remove_choice_button = "((//input[contains(@data-bind,'value: slug')]//following::a[contains(@class,'danger')][1])//preceding::*[contains(@data-bind,'removeChoice')][1])[{}]"
         self.confirm_user_field_delete = (
         By.XPATH, "(//a[.='Cancel']//following-sibling::button[@class='btn btn-danger'])[last()]")
         self.delete_user_field = "(//input[contains(@data-bind,'value: slug')]//following::a[contains(@class,'danger')][1])[{}]"
@@ -130,7 +130,7 @@ class MobileWorkerPage(BasePage):
         self.profile_tab = (By.XPATH, "//a[@href='#tabs-profiles']")
         self.add_new_profile = (By.XPATH, "//button[@data-bind='click: addProfile']")
         self.profile_name = (By.XPATH, "//tr[last()]//input[contains(@data-bind,'value: name')]")
-        self.profile_edit_button = (By.XPATH, "//tr[last()]//a[@class='btn btn-default enum-edit']")
+        self.profile_edit_button = (By.XPATH, "//tr[last()]//a[contains(@class,'enum-edit')]")
         self.profile_delete_button = (
             By.XPATH, "//tbody[@data-bind='foreach: profiles']//tr[last()]//td[last()]//i[@class='fa fa-times']")
         self.add_profile_item = (

@@ -2,6 +2,8 @@ import os
 import time
 from datetime import date
 
+from selenium.webdriver import Keys
+
 from HQSmokeTests.testPages.home.home_page import HomePage
 from common_utilities.selenium.base_page import BasePage
 from common_utilities.path_settings import PathSettings
@@ -64,7 +66,7 @@ class OrganisationStructurePage(BasePage):
         self.add_choice_btn_xpath = (By.XPATH, "(//button[contains(@data-bind,'click: addChoice')])[last()]")
         self.choice_xpath = (By.XPATH, "(//input[contains(@data-bind,'value: value')])[last()]")
         self.save_btn_id = (By.ID, "save-custom-fields")
-        self.success_msg_xpath = (By.XPATH, "//div[@class='alert alert-margin-top fade in alert-success']")
+        self.success_msg_xpath = (By.XPATH, "//div[contains(@class,'alert-success')]")
         self.additional_info_drop_down = (
             By.XPATH, "//*[@id='select2-id_data-field-" + self.loc_field_name + "-container']")
         self.select_value_drop_down = (By.XPATH, "//li[text()='" + self.loc_field_name + "']")
@@ -72,8 +74,8 @@ class OrganisationStructurePage(BasePage):
         self.org_level_menu_link_text = (By.LINK_TEXT, "Organization Levels")
         self.new_org_level_btn_xpath = (By.XPATH, "//button[@data-bind='click: new_loctype']")
         self.org_level_value_xpath = (By.XPATH, "(//input[@data-bind='value: name'])[last()]")
-        self.save_btn_xpath = (By.XPATH, "//button[@type='submit' and @class='btn btn-default pull-right btn-primary']")
-        self.save_btn_delete = (By.XPATH, "//button[@class='btn btn-default pull-right']")
+        self.save_btn_xpath = (By.XPATH, "//button[@type='submit' and contains(@class,'pull-right')]")
+        self.save_btn_delete = (By.XPATH, "//button[contains(@class,'pull-right')]")
         self.download_loc_btn = (By.LINK_TEXT, "Download Organization Structure")
         self.upload_loc_btn = (By.LINK_TEXT, "Bulk Upload")
         self.upload = (By.XPATH, "//button[@class='btn btn-primary disable-on-submit']")
@@ -97,9 +99,9 @@ class OrganisationStructurePage(BasePage):
         self.delete_confirm = (By.XPATH, '//input[@data-bind ="value: signOff, valueUpdate: \'input\'"]')
         self.delete_confirm_button = (
             By.XPATH, "//button[@data-bind ='click: delete_fn, css: {disabled: !(signOff() == count)}']")
-        self.delete_loc_field = (By.XPATH, "(//a[@class='btn btn-danger'])[last()]")
-        self.delete_org_level = (By.XPATH, "(//a[.='Cancel']//following-sibling::button[@class='btn btn-danger'])[last()]")
-        self.delete_success = (By.XPATH, "//div[@class='alert fade in message-alert alert-success']")
+        self.delete_loc_field = (By.XPATH, "(//a[contains(@class,'danger')])[last()]")
+        self.delete_org_level = (By.XPATH, "(//a[.='Cancel']//following-sibling::button[contains(@class,'danger')])[last()]")
+        self.delete_success = (By.XPATH, "//div[contains(@class,'alert-success')]")
 
     def organisation_menu_open(self):
         self.wait_to_click(self.org_menu_link_text)
@@ -137,10 +139,13 @@ class OrganisationStructurePage(BasePage):
         self.wait_to_click(self.edit_loc_field_btn_xpath)
         self.wait_to_click(self.add_field_btn_xpath)
         self.wait_to_clear_and_send_keys(self.loc_property_xpath, self.loc_field_name)
-        self.wait_to_clear_and_send_keys(self.loc_label_xpath, self.loc_field_name)
+        self.wait_to_clear_and_send_keys(self.loc_label_xpath, self.loc_field_name+Keys.TAB)
         if self.is_present(self.choices_button_xpath):
-            self.wait_to_click(self.choices_button_xpath)
-        self.click(self.add_choice_btn_xpath)
+            self.js_click(self.choices_button_xpath)
+            time.sleep(5)
+        self.scroll_to_element(self.add_choice_btn_xpath)
+        self.wait_for_element(self.add_choice_btn_xpath)
+        self.wait_to_click(self.add_choice_btn_xpath)
         self.wait_to_clear_and_send_keys(self.choice_xpath, self.loc_field_name)
         self.click(self.save_btn_id)
         assert self.is_displayed(self.success_msg_xpath), "Location field edit not successful!"
@@ -193,8 +198,10 @@ class OrganisationStructurePage(BasePage):
         # Delete User Field
         self.wait_to_click(self.org_menu_link_text)
         self.wait_to_click(self.edit_loc_field_btn_xpath)
-        self.wait_to_click(self.delete_loc_field)
+        self.scroll_to_element(self.delete_loc_field)
+        self.js_click(self.delete_loc_field)
         self.wait_to_click(self.delete_org_level)
+        self.scroll_to_element(self.save_btn_id)
         self.wait_to_click(self.save_btn_id)
         print("Location field deleted successfully")
         self.delete_test_location()
