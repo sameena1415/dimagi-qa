@@ -37,10 +37,10 @@ class MobileWorkerPage(BasePage):
         self.phone_number = UserData.area_code + fetch_phone_number()
 
         self.username_link = "//a[./i[@class='fa fa-user']][strong[.='{}']]"
-        self.remove_choice_button = "(//input[contains(@data-bind,'value: slug')]//following::a[@class='btn btn-danger' and @data-toggle='modal'][1])[{}]//preceding::*[contains(@data-bind,'removeChoice')][1]"
+        self.remove_choice_button = "(//input[contains(@data-bind,'value: slug')]//following::a[contains(@class,'danger')][1])//preceding::*[contains(@data-bind,'removeChoice')][1][{}]"
         self.confirm_user_field_delete = (
         By.XPATH, "(//a[.='Cancel']//following-sibling::button[@class='btn btn-danger'])[last()]")
-        self.delete_user_field = "(//input[contains(@data-bind,'value: slug')]//following::a[@class='btn btn-danger' and @data-toggle='modal'][1])[{}]"
+        self.delete_user_field = "(//input[contains(@data-bind,'value: slug')]//following::a[contains(@class,'danger')][1])[{}]"
         self.delete_success_mw = (By.XPATH, "//div[@class='alert alert-margin-top fade in alert-success']")
         self.confirm_delete_mw = (By.ID, "delete-user-icon")
         self.enter_username = (By.XPATH, '//input[@data-bind="value: signOff, valueUpdate: \'textchange\'"]')
@@ -95,11 +95,11 @@ class MobileWorkerPage(BasePage):
         self.user_property_xpath = (By.XPATH, "(//input[contains(@data-bind,'value: slug')])[last()]")
         self.label_xpath = (By.XPATH, "(//input[contains(@data-bind,'value: label')])[last()]")
         self.add_choice_button_xpath = (By.XPATH, "(//*[contains(@data-bind,'addChoice')])[last()]")
-        self.choices_button_xpath = (By.XPATH, "(//*[contains(@data-bind,\"validationMode('choice')\")][contains(.,'Choices')])[last()]")
+        self.choices_button_xpath = (By.XPATH, "(//*[contains(.,'Choices')])[last()]")
         self.choice_xpath = (By.XPATH, "(//input[contains(@data-bind,'value: value')])[last()]")
         self.save_field_id = (By.ID, "save-custom-fields")
         self.duplicate_field_error = (By.XPATH, "//div[contains(text(), 'was duplicated, key names must be unique')]")
-        self.user_field_success_msg = (By.XPATH, "//div[@class='alert alert-margin-top fade in alert-success']")
+        self.user_field_success_msg = (By.XPATH, "//div[contains(@class,'alert-success')]")
         self.mobile_worker_on_left_panel = (By.XPATH, "//a[@data-title='Mobile Workers']")
         self.next_page_button_xpath = (By.XPATH, "//a[contains(@data-bind,'click: nextPage')]")
         self.additional_info_dropdown = (
@@ -260,11 +260,14 @@ class MobileWorkerPage(BasePage):
 
     def add_label(self, label):
         self.clear(self.label_xpath)
-        self.send_keys(self.label_xpath, label)
+        self.send_keys(self.label_xpath, label+Keys.TAB)
 
     def add_choice(self, choice):
         if self.is_present(self.choices_button_xpath):
-            self.wait_to_click(self.choices_button_xpath)
+            self.js_click(self.choices_button_xpath)
+            time.sleep(5)
+        else:
+            print("Choices button not present")
         self.scroll_to_element(self.add_choice_button_xpath)
         self.wait_for_element(self.add_choice_button_xpath)
         self.wait_to_click(self.add_choice_button_xpath)
@@ -404,11 +407,13 @@ class MobileWorkerPage(BasePage):
                 time.sleep(3)
                 text = list_profile[i].get_attribute("value")
                 if "field_" in text:
-                    self.wait_to_click((By.XPATH, self.remove_choice_button.format(str(i + 1))))
-                    self.wait_to_click((By.XPATH, self.delete_user_field.format(str(i+1))))
+                    self.js_click((By.XPATH, self.remove_choice_button.format(str(i + 1))))
+                    time.sleep(5)
+                    self.js_click((By.XPATH, self.delete_user_field.format(str(i+1))))
                     # self.driver.find_element(By.XPATH,
                     #                          "(//input[contains(@data-bind,'value: slug')]//following::a[@class='btn btn-danger' and @data-toggle='modal'][1])[" + str(
                     #                              i + 1) + "]").click()
+                    time.sleep(5)
                     self.wait_to_click(self.confirm_user_field_delete)
                     time.sleep(2)
                     list_profile = self.driver.find_elements(By.XPATH, "//input[contains(@data-bind,'value: slug')]")

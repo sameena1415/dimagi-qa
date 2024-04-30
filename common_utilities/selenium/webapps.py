@@ -62,6 +62,10 @@ class WebApps(BasePage):
         self.data_preview = (By.XPATH, "//span[@class='debugger-title']")
         self.single_row_table = "//thead[1][.//th[{}][.='{}']]//following-sibling::tbody[1]/tr[1]/td[{}][contains(.,'{}')]"
 
+        self.sidebar_open_app_preview = (By.XPATH, "//div[@class='preview-toggler js-preview-toggle']")
+        self.iframe_app_preview = (By.XPATH, "//iframe[@class='preview-phone-window']")
+        self.app_preview_model = (By.XPATH, "//div[@class='preview-phone-container']")
+
     def open_app(self, app_name):
         time.sleep(2)
         self.js_click(self.webapps_home)
@@ -189,7 +193,10 @@ class WebApps(BasePage):
         logdedin_user = self.get_text(self.webapp_working_as)
         assert logdedin_user == username
 
-    def login_as(self, username):
+    def login_as(self, username, url=None):
+        if url!=None:
+            self.driver.get(url)
+            time.sleep(10)
         try:
             self.click(self.webapp_login)
         except NoSuchElementException:

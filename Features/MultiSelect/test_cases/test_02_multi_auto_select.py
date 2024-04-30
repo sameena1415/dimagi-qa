@@ -8,10 +8,10 @@ from Features.CaseSearch.constants import *
 """"Contains all auto-select plus multi-select related test cases"""
 
 
-def test_case_01_max_selected_values_for_auto_selection(driver):
+def test_case_01_max_selected_values_for_auto_selection(driver, settings):
     multiselect = MultiSelectWorkflows(driver)
     webapps = WebApps(driver)
-    webapps.login_as(CaseSearchUserInput.user_1)
+    webapps.login_as(CaseSearchUserInput.user_1, settings['url'])
     webapps.open_app(MultiSelectUserInput.multiselect_app_name)
     webapps.open_menu(MultiSelectUserInput.songs_auto)
     webapps.open_form(MultiSelectUserInput.update_song_normal_form)
@@ -24,10 +24,10 @@ def test_case_01_max_selected_values_for_auto_selection(driver):
     multiselect.check_error_message_shown_for_max_limit_exceed()
 
 
-def test_case_02_max_selected_values_for_manual_selection(driver):
+def test_case_02_max_selected_values_for_manual_selection(driver, settings):
     multiselect = MultiSelectWorkflows(driver)
     webapps = WebApps(driver)
-    webapps.login_as(CaseSearchUserInput.user_1)
+    webapps.login_as(CaseSearchUserInput.user_1, settings['url'])
     webapps.open_app(MultiSelectUserInput.multiselect_app_name)
     webapps.open_menu(MultiSelectUserInput.songs_manual)
     multiselect.multi_select_cases(case_count=6)
@@ -45,18 +45,18 @@ def test_case_02_max_selected_values_for_manual_selection(driver):
     webapps.submit_the_form()
 
 
-def test_case_03_auto_select_display_only_forms(driver):
+def test_case_03_auto_select_display_only_forms(driver, settings):
     webapps = WebApps(driver)
-    webapps.login_as(CaseSearchUserInput.user_1)
+    webapps.login_as(CaseSearchUserInput.user_1, settings['url'])
     webapps.open_app(MultiSelectUserInput.multiselect_app_name)
     webapps.open_menu(MultiSelectUserInput.display_only_forms_auto)
     webapps.submit_the_form()
 
 
-def test_case_04_auto_select_shadow_menus(driver):
+def test_case_04_auto_select_shadow_menus(driver, settings):
     multiselect = MultiSelectWorkflows(driver)
     webapps = WebApps(driver)
-    webapps.login_as(CaseSearchUserInput.user_1)
+    webapps.login_as(CaseSearchUserInput.user_1, settings['url'])
     webapps.open_app(MultiSelectUserInput.multiselect_app_name)
     webapps.open_menu(MultiSelectUserInput.shadow_auto)
     webapps.open_form(MultiSelectUserInput.update_song_normal_form)
