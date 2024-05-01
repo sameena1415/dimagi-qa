@@ -103,7 +103,7 @@ class OrganisationStructurePage(BasePage):
         self.delete_loc_field = (By.XPATH, "(//a[contains(@class,'danger')])[last()]")
         self.delete_org_level = (By.XPATH, "(//a[.='Cancel']//following-sibling::button[contains(@class,'danger')])[last()]")
         self.delete_success = (By.XPATH, "//div[contains(@class,'alert-success')]")
-
+        self.loc_field_input = (By.XPATH, "//input[contains(@data-bind,'value: slug')]")
         self.remove_choice_button = "((//input[contains(@data-bind,'value: slug')]//following::a[contains(@class,'danger')][1])//preceding::*[contains(@data-bind,'removeChoice')][1])[{}]"
         self.delete_user_field = "(//input[contains(@data-bind,'value: slug')]//following::a[contains(@class,'danger')][1])[{}]"
         self.confirm_user_field_delete = (
@@ -345,15 +345,19 @@ class OrganisationStructurePage(BasePage):
 
     def delete_test_user_field(self):
         time.sleep(3)
-        list_profile = self.driver.find_elements(By.XPATH, "//input[contains(@data-bind,'value: slug')]")
+        list_profile = self.find_elements(self.loc_field_input)
+        print(len(list_profile))
         if len(list_profile) > 0:
             for i in range(len(list_profile))[::-1]:
                 time.sleep(3)
                 text = list_profile[i].get_attribute("value")
                 if "field_" in text:
-                    self.js_click((By.XPATH, self.remove_choice_button.format(str(i + 1))))
-                    time.sleep(5)
-                    self.js_click((By.XPATH, self.delete_user_field.format(str(i+1))))
+                    if self.is_present((By.XPATH, self.remove_choice_button.format(str(i + 1)))):
+                        self.wait_for_element((By.XPATH, self.remove_choice_button.format(str(i + 1))))
+                        self.scroll_to_element((By.XPATH, self.remove_choice_button.format(str(i + 1))))
+                        self.js_click((By.XPATH, self.remove_choice_button.format(str(i + 1))))
+                    else:
+                        print("Choice is not present")
                     # self.driver.find_element(By.XPATH,
                     #                          "(//input[contains(@data-bind,'value: slug')]//following::a[@class='btn btn-danger' and @data-toggle='modal'][1])[" + str(
                     #                              i + 1) + "]").click()
