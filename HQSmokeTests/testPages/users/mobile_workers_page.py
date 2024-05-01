@@ -39,7 +39,7 @@ class MobileWorkerPage(BasePage):
         self.username_link = "//a[./i[@class='fa fa-user']][strong[.='{}']]"
         self.remove_choice_button = "((//input[contains(@data-bind,'value: slug')]//following::a[contains(@class,'danger')][1])//preceding::*[contains(@data-bind,'removeChoice')][1])[{}]"
         self.confirm_user_field_delete = (
-        By.XPATH, "(//a[.='Cancel']//following-sibling::button[@class='btn btn-danger'])[last()]")
+        By.XPATH, "(//a[.='Cancel']//following-sibling::button[contains(@class,'danger')])[last()]")
         self.delete_user_field = "(//input[contains(@data-bind,'value: slug')]//following::a[contains(@class,'danger')][1])[{}]"
         self.delete_success_mw = (By.XPATH, "//div[@class='alert alert-margin-top fade in alert-success']")
         self.confirm_delete_mw = (By.ID, "delete-user-icon")
