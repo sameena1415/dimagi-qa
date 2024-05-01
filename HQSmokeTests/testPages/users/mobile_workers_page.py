@@ -276,7 +276,7 @@ class MobileWorkerPage(BasePage):
 
     def save_field(self):
         if self.is_enabled(self.save_field_id):
-            self.wait_to_click(self.save_field_id)
+            self.js_click(self.save_field_id)
             time.sleep(5)
             assert self.is_present(self.user_field_success_msg) or self.is_present(
                 self.duplicate_field_error), "Unable to save userfield/profile."
@@ -465,10 +465,11 @@ class MobileWorkerPage(BasePage):
 
     def add_profile(self, user_field):
         self.wait_to_click(self.add_new_profile)
-        self.wait_to_clear_and_send_keys(self.profile_name, self.profile_name_text)
-        time.sleep(2)
-        self.wait_to_click(self.profile_edit_button)
-        time.sleep(2)
+        self.wait_to_clear_and_send_keys(self.profile_name, self.profile_name_text+Keys.TAB)
+        time.sleep(5)
+        self.js_click(self.profile_edit_button)
+        time.sleep(5)
+        self.wait_for_element(self.add_profile_item)
         self.js_click(self.add_profile_item)
         self.send_keys(self.profile_key, user_field)
         self.send_keys(self.profile_value, user_field)

@@ -39,17 +39,17 @@ def test_case_06_edit_role(driver, settings):
     role.edit_role()
     print("Role Edited Successfully")
 
-
-@pytest.mark.user
-@pytest.mark.webUsers
-@pytest.mark.rolesPermission
-def test_case_12_toggle_option_webapp_permission(driver, settings):
-    menu = HomePage(driver, settings)
-    menu.users_menu()
-    role = RolesPermissionPage(driver, settings)
-    role.roles_menu_click()
-    web = WebAppPermissionPage(driver)
-    web.webapp_permission_option_toggle()
+# commenting this out as the functionality changed
+# @pytest.mark.user
+# @pytest.mark.webUsers
+# @pytest.mark.rolesPermission
+# def test_case_12_toggle_option_webapp_permission(driver, settings):
+#     menu = HomePage(driver, settings)
+#     menu.users_menu()
+#     role = RolesPermissionPage(driver, settings)
+#     role.roles_menu_click()
+#     web = WebAppPermissionPage(driver)
+#     web.webapp_permission_option_toggle()
 
 @pytest.mark.user
 @pytest.mark.groups
