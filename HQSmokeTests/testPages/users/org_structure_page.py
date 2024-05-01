@@ -2,6 +2,8 @@ import os
 import time
 from datetime import date
 
+from selenium.webdriver import Keys
+
 from HQSmokeTests.testPages.home.home_page import HomePage
 from common_utilities.selenium.base_page import BasePage
 from common_utilities.path_settings import PathSettings
@@ -46,7 +48,8 @@ class OrganisationStructurePage(BasePage):
             By.XPATH, "//span[@data-bind='text: new_child_caption' and text()='New location at top level']")
         self.loc_name_xpath = (By.XPATH, "//input[@type='text']")
         self.create_loc_xpath = (By.XPATH, "//button[@type='submit']")
-        self.loc_saved_success_msg = (By.XPATH, "//div[@class ='alert alert-margin-top fade in alert-success']")
+        self.loc_saved_success_msg = (By.XPATH, "//div[contains(@class,'alert-success')]")
+        self.duplicate_field_error = (By.XPATH, "//div[contains(text(), 'was duplicated, key names must be unique')]")
         self.error_1_id = (By.ID, "error_1_id_name")
         self.edit_this_loc = (By.XPATH, "(//span[contains(text(),'updated_on:')])[1]")
         self.edit_loc_button_xpath = (By.XPATH,
@@ -64,7 +67,7 @@ class OrganisationStructurePage(BasePage):
         self.add_choice_btn_xpath = (By.XPATH, "(//button[contains(@data-bind,'click: addChoice')])[last()]")
         self.choice_xpath = (By.XPATH, "(//input[contains(@data-bind,'value: value')])[last()]")
         self.save_btn_id = (By.ID, "save-custom-fields")
-        self.success_msg_xpath = (By.XPATH, "//div[@class='alert alert-margin-top fade in alert-success']")
+        self.success_msg_xpath = (By.XPATH, "//div[contains(@class,'alert-success')]")
         self.additional_info_drop_down = (
             By.XPATH, "//*[@id='select2-id_data-field-" + self.loc_field_name + "-container']")
         self.select_value_drop_down = (By.XPATH, "//li[text()='" + self.loc_field_name + "']")
@@ -72,8 +75,8 @@ class OrganisationStructurePage(BasePage):
         self.org_level_menu_link_text = (By.LINK_TEXT, "Organization Levels")
         self.new_org_level_btn_xpath = (By.XPATH, "//button[@data-bind='click: new_loctype']")
         self.org_level_value_xpath = (By.XPATH, "(//input[@data-bind='value: name'])[last()]")
-        self.save_btn_xpath = (By.XPATH, "//button[@type='submit' and @class='btn btn-default pull-right btn-primary']")
-        self.save_btn_delete = (By.XPATH, "//button[@class='btn btn-default pull-right']")
+        self.save_btn_xpath = (By.XPATH, "//button[@type='submit' and contains(@class,'pull-right')]")
+        self.save_btn_delete = (By.XPATH, "//button[contains(@class,'pull-right')]")
         self.download_loc_btn = (By.LINK_TEXT, "Download Organization Structure")
         self.upload_loc_btn = (By.LINK_TEXT, "Bulk Upload")
         self.upload = (By.XPATH, "//button[@class='btn btn-primary disable-on-submit']")
@@ -97,9 +100,14 @@ class OrganisationStructurePage(BasePage):
         self.delete_confirm = (By.XPATH, '//input[@data-bind ="value: signOff, valueUpdate: \'input\'"]')
         self.delete_confirm_button = (
             By.XPATH, "//button[@data-bind ='click: delete_fn, css: {disabled: !(signOff() == count)}']")
-        self.delete_loc_field = (By.XPATH, "(//a[@class='btn btn-danger'])[last()]")
-        self.delete_org_level = (By.XPATH, "(//a[.='Cancel']//following-sibling::button[@class='btn btn-danger'])[last()]")
-        self.delete_success = (By.XPATH, "//div[@class='alert fade in message-alert alert-success']")
+        self.delete_loc_field = (By.XPATH, "(//a[contains(@class,'danger')])[last()]")
+        self.delete_org_level = (By.XPATH, "(//a[.='Cancel']//following-sibling::button[contains(@class,'danger')])[last()]")
+        self.delete_success = (By.XPATH, "//div[contains(@class,'alert-success')]")
+        self.loc_field_input = (By.XPATH, "//input[contains(@data-bind,'value: slug')]")
+        self.remove_choice_button = "((//input[contains(@data-bind,'value: slug')]//following::a[contains(@class,'danger')][1])//preceding::*[contains(@data-bind,'removeChoice')][1])[{}]"
+        self.delete_user_field = "(//input[contains(@data-bind,'value: slug')]//following::a[contains(@class,'danger')][1])[{}]"
+        self.confirm_user_field_delete = (
+            By.XPATH, "(//a[.='Cancel']//following-sibling::button[contains(@class,'danger')])[last()]")
 
     def organisation_menu_open(self):
         self.wait_to_click(self.org_menu_link_text)
@@ -137,10 +145,13 @@ class OrganisationStructurePage(BasePage):
         self.wait_to_click(self.edit_loc_field_btn_xpath)
         self.wait_to_click(self.add_field_btn_xpath)
         self.wait_to_clear_and_send_keys(self.loc_property_xpath, self.loc_field_name)
-        self.wait_to_clear_and_send_keys(self.loc_label_xpath, self.loc_field_name)
+        self.wait_to_clear_and_send_keys(self.loc_label_xpath, self.loc_field_name+Keys.TAB)
         if self.is_present(self.choices_button_xpath):
-            self.wait_to_click(self.choices_button_xpath)
-        self.click(self.add_choice_btn_xpath)
+            self.js_click(self.choices_button_xpath)
+            time.sleep(5)
+        self.scroll_to_element(self.add_choice_btn_xpath)
+        self.wait_for_element(self.add_choice_btn_xpath)
+        self.wait_to_click(self.add_choice_btn_xpath)
         self.wait_to_clear_and_send_keys(self.choice_xpath, self.loc_field_name)
         self.click(self.save_btn_id)
         assert self.is_displayed(self.success_msg_xpath), "Location field edit not successful!"
@@ -193,8 +204,10 @@ class OrganisationStructurePage(BasePage):
         # Delete User Field
         self.wait_to_click(self.org_menu_link_text)
         self.wait_to_click(self.edit_loc_field_btn_xpath)
-        self.wait_to_click(self.delete_loc_field)
+        self.scroll_to_element(self.delete_loc_field)
+        self.js_click(self.delete_loc_field)
         self.wait_to_click(self.delete_org_level)
+        self.scroll_to_element(self.save_btn_id)
         self.wait_to_click(self.save_btn_id)
         print("Location field deleted successfully")
         self.delete_test_location()
@@ -227,28 +240,29 @@ class OrganisationStructurePage(BasePage):
     def delete_test_location(self):
         # Delete Location
         self.wait_to_click(self.org_menu_link_text)
-        time.sleep(2)
-        list_location = self.driver.find_elements(By.XPATH, "//span[@class='loc_name' and contains(.,'location_')]")
-        print(list_location)
-        print(len(list_location))
-        if len(list_location) > 0:
-            for i in range(len(list_location))[::-1]:
-                text = list_location[i].text
-                print(text)
-                time.sleep(2)
-                self.driver.find_element(By.XPATH,
-                                         "(//div[./span[@class='loc_name' and contains(.,'location_')]]//preceding-sibling::div/button[@class='btn btn-danger'])[" + str(
-                                             i + 1) + "]").click()
-                self.wait_to_clear_and_send_keys(self.delete_confirm, "1")
-                self.click(self.delete_confirm_button)
-                assert self.is_present_and_displayed(self.delete_success), "Location Not Deleted!"
-                print("Location deleted successfully")
-                self.driver.refresh()
+        self.wait_to_click(self.edit_loc_field_btn_xpath)
+        time.sleep(3)
+        list_profile = self.driver.find_elements(By.XPATH, "//input[contains(@data-bind,'value: slug')]")
+        if len(list_profile) > 0:
+            for i in range(len(list_profile))[::-1]:
                 time.sleep(3)
-                list_location = self.driver.find_elements(By.XPATH,
-                                                          "//span[@class='loc_name' and contains(.,'location_')]")
+                text = list_profile[i].get_attribute("value")
+                if "field_" in text:
+                    self.js_click((By.XPATH, self.remove_choice_button.format(str(i + 1))))
+                    time.sleep(5)
+                    self.js_click((By.XPATH, self.delete_user_field.format(str(i + 1))))
+                    # self.driver.find_element(By.XPATH,
+                    #                          "(//input[contains(@data-bind,'value: slug')]//following::a[@class='btn btn-danger' and @data-toggle='modal'][1])[" + str(
+                    #                              i + 1) + "]").click()
+                    time.sleep(5)
+                    self.wait_to_click(self.confirm_user_field_delete)
+                    time.sleep(2)
+                    list_profile = self.driver.find_elements(By.XPATH, "//input[contains(@data-bind,'value: slug')]")
+                else:
+                    print("Its not a test location field")
+            self.save_field()
         else:
-            print("No test locations present")
+            print("No test location field present in the list")
 
     def archive_location(self):
         self.wait_to_click(self.org_menu_link_text)
@@ -329,3 +343,40 @@ class OrganisationStructurePage(BasePage):
         print("unarchived: ",loc_list)
         assert "Test Location [DO NOT DELETE!!!]" in loc_list, "Location not Unarchived successfully"
 
+    def delete_test_user_field(self):
+        time.sleep(3)
+        list_profile = self.find_elements(self.loc_field_input)
+        print(len(list_profile))
+        if len(list_profile) > 0:
+            for i in range(len(list_profile))[::-1]:
+                time.sleep(3)
+                text = list_profile[i].get_attribute("value")
+                if "field_" in text:
+                    if self.is_present((By.XPATH, self.remove_choice_button.format(str(i + 1)))):
+                        self.wait_for_element((By.XPATH, self.remove_choice_button.format(str(i + 1))))
+                        self.scroll_to_element((By.XPATH, self.remove_choice_button.format(str(i + 1))))
+                        self.js_click((By.XPATH, self.remove_choice_button.format(str(i + 1))))
+                    else:
+                        print("Choice is not present")
+                    # self.driver.find_element(By.XPATH,
+                    #                          "(//input[contains(@data-bind,'value: slug')]//following::a[@class='btn btn-danger' and @data-toggle='modal'][1])[" + str(
+                    #                              i + 1) + "]").click()
+                    time.sleep(5)
+                    self.wait_to_click(self.confirm_user_field_delete)
+                    time.sleep(2)
+                    list_profile = self.driver.find_elements(By.XPATH, "//input[contains(@data-bind,'value: slug')]")
+                else:
+                    print("Its not a test user field")
+            self.save_field()
+        else:
+            print("No test user field present in the list")
+
+    def save_field(self):
+        if self.is_enabled(self.save_btn_id):
+            self.wait_to_click(self.save_btn_id)
+            time.sleep(5)
+            assert self.is_present(self.loc_saved_success_msg) or self.is_present(
+                self.duplicate_field_error), "Unable to save location."
+            print("Location Field Added or is already present")
+        else:
+            print("Save Button is not enabled")

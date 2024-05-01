@@ -37,10 +37,11 @@ class MobileWorkerPage(BasePage):
         self.phone_number = UserData.area_code + fetch_phone_number()
 
         self.username_link = "//a[./i[@class='fa fa-user']][strong[.='{}']]"
-        self.remove_choice_button = "(//input[contains(@data-bind,'value: slug')]//following::a[@class='btn btn-danger' and @data-toggle='modal'][1])[{}]//preceding::*[contains(@data-bind,'removeChoice')][1]"
+        self.user_field_input = (By.XPATH, "//input[contains(@data-bind,'value: slug')]")
+        self.remove_choice_button = "((//input[contains(@data-bind,'value: slug')]//following::a[contains(@class,'danger')][1])//preceding::*[contains(@data-bind,'removeChoice')][1])[{}]"
         self.confirm_user_field_delete = (
-        By.XPATH, "(//a[.='Cancel']//following-sibling::button[@class='btn btn-danger'])[last()]")
-        self.delete_user_field = "(//input[contains(@data-bind,'value: slug')]//following::a[@class='btn btn-danger' and @data-toggle='modal'][1])[{}]"
+        By.XPATH, "(//a[.='Cancel']//following-sibling::button[contains(@class,'danger')])[last()]")
+        self.delete_user_field = "(//input[contains(@data-bind,'value: slug')]//following::a[contains(@class,'danger')][1])[{}]"
         self.delete_success_mw = (By.XPATH, "//div[@class='alert alert-margin-top fade in alert-success']")
         self.confirm_delete_mw = (By.ID, "delete-user-icon")
         self.enter_username = (By.XPATH, '//input[@data-bind="value: signOff, valueUpdate: \'textchange\'"]')
@@ -95,11 +96,11 @@ class MobileWorkerPage(BasePage):
         self.user_property_xpath = (By.XPATH, "(//input[contains(@data-bind,'value: slug')])[last()]")
         self.label_xpath = (By.XPATH, "(//input[contains(@data-bind,'value: label')])[last()]")
         self.add_choice_button_xpath = (By.XPATH, "(//*[contains(@data-bind,'addChoice')])[last()]")
-        self.choices_button_xpath = (By.XPATH, "(//*[contains(@data-bind,\"validationMode('choice')\")][contains(.,'Choices')])[last()]")
+        self.choices_button_xpath = (By.XPATH, "(//*[contains(.,'Choices')])[last()]")
         self.choice_xpath = (By.XPATH, "(//input[contains(@data-bind,'value: value')])[last()]")
         self.save_field_id = (By.ID, "save-custom-fields")
         self.duplicate_field_error = (By.XPATH, "//div[contains(text(), 'was duplicated, key names must be unique')]")
-        self.user_field_success_msg = (By.XPATH, "//div[@class='alert alert-margin-top fade in alert-success']")
+        self.user_field_success_msg = (By.XPATH, "//div[contains(@class,'alert-success')]")
         self.mobile_worker_on_left_panel = (By.XPATH, "//a[@data-title='Mobile Workers']")
         self.next_page_button_xpath = (By.XPATH, "//a[contains(@data-bind,'click: nextPage')]")
         self.additional_info_dropdown = (
@@ -130,17 +131,17 @@ class MobileWorkerPage(BasePage):
         self.profile_tab = (By.XPATH, "//a[@href='#tabs-profiles']")
         self.add_new_profile = (By.XPATH, "//button[@data-bind='click: addProfile']")
         self.profile_name = (By.XPATH, "//tr[last()]//input[contains(@data-bind,'value: name')]")
-        self.profile_edit_button = (By.XPATH, "//tr[last()]//a[@class='btn btn-default enum-edit']")
+        self.profile_edit_button = (By.XPATH, "//tr[last()]//a[contains(@class,'enum-edit')]")
         self.profile_delete_button = (
             By.XPATH, "//tbody[@data-bind='foreach: profiles']//tr[last()]//td[last()]//i[@class='fa fa-times']")
         self.add_profile_item = (
-            By.XPATH, "//div[@class='modal fade hq-enum-modal in']//a[@data-enum-action='add']/i[@class='fa fa-plus']")
-        self.delete_profile_item = (By.XPATH, "//div[@class='modal fade hq-enum-modal in']//i[@class='fa fa-remove']")
+            By.XPATH, "//div[contains(@class,'hq-enum-modal ')]//a[@data-enum-action='add']/i[@class='fa fa-plus']")
+        self.delete_profile_item = (By.XPATH, "//div[contains(@class,'hq-enum-modal ')]//i[@class='fa fa-remove']")
         self.profile_key = (
-            By.XPATH, "//div[@class='modal fade hq-enum-modal in']//input[@class='form-control enum-key']")
+            By.XPATH, "//div[contains(@class,'hq-enum-modal ')]//input[@class='form-control enum-key']")
         self.profile_value = (
-            By.XPATH, "//div[@class='modal fade hq-enum-modal in']//input[@class='form-control enum-value']")
-        self.done_button = (By.XPATH, "//div[@class='modal fade hq-enum-modal in']//button[@class='btn btn-primary']")
+            By.XPATH, "//div[contains(@class,'hq-enum-modal ')]//input[@class='form-control enum-value']")
+        self.done_button = (By.XPATH, "//div[contains(@class,'hq-enum-modal ')]//button[@class='btn btn-primary']")
         self.delete_field_choice = (By.XPATH, "//tbody[@data-bind='sortable: data_fields']//tr[last()]//td//*[contains(@data-bind,'removeChoice')]")
         self.field_delete = (
             By.XPATH, "//tbody[@data-bind='sortable: data_fields']//tr[last()]//td[last()]//i[@class='fa fa-times']")
@@ -256,24 +257,30 @@ class MobileWorkerPage(BasePage):
 
     def add_user_property(self, user_pro):
         self.clear(self.user_property_xpath)
-        self.send_keys(self.user_property_xpath, user_pro)
+        self.send_keys(self.user_property_xpath, user_pro+Keys.TAB)
+        time.sleep(2)
 
     def add_label(self, label):
         self.clear(self.label_xpath)
-        self.send_keys(self.label_xpath, label)
+        self.send_keys(self.label_xpath, label+Keys.TAB)
+        time.sleep(2)
 
     def add_choice(self, choice):
         if self.is_present(self.choices_button_xpath):
-            self.wait_to_click(self.choices_button_xpath)
+            self.js_click(self.choices_button_xpath)
+            time.sleep(5)
+        else:
+            print("Choices button not present")
         self.scroll_to_element(self.add_choice_button_xpath)
         self.wait_for_element(self.add_choice_button_xpath)
         self.wait_to_click(self.add_choice_button_xpath)
         self.clear(self.choice_xpath)
-        self.send_keys(self.choice_xpath, choice)
+        self.send_keys(self.choice_xpath, choice+Keys.TAB)
+        time.sleep(3)
 
     def save_field(self):
         if self.is_enabled(self.save_field_id):
-            self.wait_to_click(self.save_field_id)
+            self.js_click(self.save_field_id)
             time.sleep(5)
             assert self.is_present(self.user_field_success_msg) or self.is_present(
                 self.duplicate_field_error), "Unable to save userfield/profile."
@@ -294,6 +301,7 @@ class MobileWorkerPage(BasePage):
         print("Mobile Worker page opened.")
 
     def enter_value_for_created_user_field(self):
+        self.scroll_to_element(self.additional_info_select)
         self.select_by_text(self.additional_info_select, "user_field_" + fetch_random_string())
         assert self.is_displayed(self.user_file_additional_info), "Unable to assign user field to user."
 
@@ -398,17 +406,26 @@ class MobileWorkerPage(BasePage):
 
     def delete_test_user_field(self):
         time.sleep(3)
-        list_profile = self.driver.find_elements(By.XPATH, "//input[contains(@data-bind,'value: slug')]")
+        list_profile = self.find_elements(self.user_field_input)
+        print(len(list_profile))
         if len(list_profile) > 0:
             for i in range(len(list_profile))[::-1]:
                 time.sleep(3)
                 text = list_profile[i].get_attribute("value")
                 if "field_" in text:
-                    self.wait_to_click((By.XPATH, self.remove_choice_button.format(str(i + 1))))
-                    self.wait_to_click((By.XPATH, self.delete_user_field.format(str(i+1))))
+                    if self.is_present((By.XPATH, self.remove_choice_button.format(str(i + 1)))):
+                        self.wait_for_element((By.XPATH, self.remove_choice_button.format(str(i + 1))))
+                        self.scroll_to_element((By.XPATH, self.remove_choice_button.format(str(i + 1))))
+                        self.js_click((By.XPATH, self.remove_choice_button.format(str(i + 1))))
+                    else:
+                        print("Choice is not present")
+                    time.sleep(5)
+                    self.wait_for_element((By.XPATH, self.delete_user_field.format(str(i + 1))))
+                    self.js_click((By.XPATH, self.delete_user_field.format(str(i+1))))
                     # self.driver.find_element(By.XPATH,
                     #                          "(//input[contains(@data-bind,'value: slug')]//following::a[@class='btn btn-danger' and @data-toggle='modal'][1])[" + str(
                     #                              i + 1) + "]").click()
+                    time.sleep(5)
                     self.wait_to_click(self.confirm_user_field_delete)
                     time.sleep(2)
                     list_profile = self.driver.find_elements(By.XPATH, "//input[contains(@data-bind,'value: slug')]")
@@ -460,10 +477,11 @@ class MobileWorkerPage(BasePage):
 
     def add_profile(self, user_field):
         self.wait_to_click(self.add_new_profile)
-        self.wait_to_clear_and_send_keys(self.profile_name, self.profile_name_text)
-        time.sleep(2)
-        self.wait_to_click(self.profile_edit_button)
-        time.sleep(2)
+        self.wait_to_clear_and_send_keys(self.profile_name, self.profile_name_text+Keys.TAB)
+        time.sleep(5)
+        self.js_click(self.profile_edit_button)
+        time.sleep(5)
+        self.wait_for_element(self.add_profile_item)
         self.js_click(self.add_profile_item)
         self.send_keys(self.profile_key, user_field)
         self.send_keys(self.profile_value, user_field)
@@ -495,7 +513,9 @@ class MobileWorkerPage(BasePage):
 
     def remove_profile(self):
         self.wait_to_click(self.profile_edit_button)
-        self.wait_to_click(self.delete_profile_item)
+        self.wait_for_element(self.delete_profile_item)
+        self.js_click(self.delete_profile_item)
+        time.sleep(2)
         self.wait_to_click(self.done_button)
         time.sleep(2)
         self.wait_to_click(self.profile_delete_button)

@@ -27,6 +27,7 @@ class ReassignCasesPage(BasePage):
         self.first_case_name = (By.XPATH, "(//a[contains(@class, 'ajax_dialog')][not(contains(.,'no name'))])[1]")
         self.user_search_dropdown = (By.ID, "select2-reassign_owner_select-container")
         self.user_to_be_reassigned = (By.XPATH, "(//li[contains(.,'Active Mobile Worker')])[1]")
+        self.page_list_dropdown = (By.XPATH, "//select[contains(@name,'_length')]")
 
         self.submit = (By.XPATH, "(//button[text()='Reassign'])[1]")
         self.new_owner_name = (By.XPATH, "((//td)[4])[1]")
@@ -63,6 +64,8 @@ class ReassignCasesPage(BasePage):
         self.wait_to_click(self.apply)
 
     def reassign_case(self):
+        self.select_by_value(self.page_list_dropdown, '100')
+        time.sleep(20)
         copy = CopyCasesPage(self.driver, self.settings)
         copy.sort_for_latest_on_top()
         time.sleep(5)

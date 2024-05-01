@@ -38,7 +38,7 @@ class WebAppsPage(BasePage):
         self.update_value_area = (By.XPATH, "//label[./div[./span[contains(text(),'Update')]]]/following-sibling::div[@data-bind='css: controlWidth']//div/textarea")
         self.form_link = (By.XPATH, "//*[text()='" + UserData.form_name + "']")
         self.form_case_name_input = (By.XPATH, "//textarea[contains(@class,'textfield form-control')]")
-        self.form_submit_button = (By.XPATH, "//div[contains(@data-bind,'css: submitClass')]/button[contains(@class,'submit')]")
+        self.form_submit_button = (By.XPATH, "//div[contains(@id,'submit')]//button[contains(@class,'submit')]")
         self.success_message = (By.XPATH, "//p[contains(text(),'successfully saved')]")
         self.show_full_menu_link = (By.LINK_TEXT, "Show Full Menu")
         self.search_text = (By.XPATH, "//input[@id='searchText']")

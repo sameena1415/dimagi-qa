@@ -27,7 +27,7 @@ class WebApps(BasePage):
         self.answer_format = "(//label[.//span[text()='{}']]/following-sibling::div//{})"
         self.per_answer_format = "(//label[.//span[text()='{}']]/following-sibling::div//{})[{}]"
 
-        self.form_submit = (By.XPATH, "//div[contains(@data-bind,'css: submitClass')]/button[contains(@class,'submit')]")
+        self.form_submit = (By.XPATH, "//div[contains(@id,'submit')]//button[contains(@class,'submit')]")
         self.form_submission_successful = (By.XPATH, "//p[contains(text(), 'successfully saved')]")
         self.form_500_error = (By.XPATH, "//*[contains(text(),'500 :')]")
         self.search_all_cases_button = (By.XPATH,
@@ -61,6 +61,10 @@ class WebApps(BasePage):
         self.value_in_data_preview = "//td[@title='{}']"
         self.data_preview = (By.XPATH, "//span[@class='debugger-title']")
         self.single_row_table = "//thead[1][.//th[{}][.='{}']]//following-sibling::tbody[1]/tr[1]/td[{}][contains(.,'{}')]"
+
+        self.sidebar_open_app_preview = (By.XPATH, "//div[@class='preview-toggler js-preview-toggle']")
+        self.iframe_app_preview = (By.XPATH, "//iframe[@class='preview-phone-window']")
+        self.app_preview_model = (By.XPATH, "//div[@class='preview-phone-container']")
 
     def open_app(self, app_name):
         time.sleep(2)
@@ -189,7 +193,10 @@ class WebApps(BasePage):
         logdedin_user = self.get_text(self.webapp_working_as)
         assert logdedin_user == username
 
-    def login_as(self, username):
+    def login_as(self, username, url=None):
+        if url!=None:
+            self.driver.get(url)
+            time.sleep(10)
         try:
             self.click(self.webapp_login)
         except NoSuchElementException:
