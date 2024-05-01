@@ -512,6 +512,8 @@ class MobileWorkerPage(BasePage):
         self.wait_to_click(self.confirm_user_field_delete)
 
     def remove_profile(self):
+        time.sleep(5)
+        self.scroll_to_element(self.profile_edit_button)
         self.wait_to_click(self.profile_edit_button)
         self.wait_for_element(self.delete_profile_item)
         self.js_click(self.delete_profile_item)
@@ -528,7 +530,7 @@ class MobileWorkerPage(BasePage):
                 text = list_profile[i].get_attribute("value")
                 if "test_profile" in text:
                     self.driver.find_element(By.XPATH,
-                                             "(//input[contains(@data-bind,'value: name')]//following::a[@class='btn btn-danger' and @data-toggle='modal'][1])[" + str(
+                                             "(//input[contains(@data-bind,'value: name')]//following::a[contains(@class,'danger') and contains(@href,'delete')])[" + str(
                                                  i + 1) + "]").click()
                     self.wait_to_click(self.confirm_user_field_delete)
                     time.sleep(2)
