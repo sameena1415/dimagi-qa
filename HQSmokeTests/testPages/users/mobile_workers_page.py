@@ -256,11 +256,13 @@ class MobileWorkerPage(BasePage):
 
     def add_user_property(self, user_pro):
         self.clear(self.user_property_xpath)
-        self.send_keys(self.user_property_xpath, user_pro)
+        self.send_keys(self.user_property_xpath, user_pro+Keys.TAB)
+        time.sleep(2)
 
     def add_label(self, label):
         self.clear(self.label_xpath)
         self.send_keys(self.label_xpath, label+Keys.TAB)
+        time.sleep(2)
 
     def add_choice(self, choice):
         if self.is_present(self.choices_button_xpath):
@@ -272,7 +274,8 @@ class MobileWorkerPage(BasePage):
         self.wait_for_element(self.add_choice_button_xpath)
         self.wait_to_click(self.add_choice_button_xpath)
         self.clear(self.choice_xpath)
-        self.send_keys(self.choice_xpath, choice)
+        self.send_keys(self.choice_xpath, choice+Keys.TAB)
+        time.sleep(3)
 
     def save_field(self):
         if self.is_enabled(self.save_field_id):
@@ -297,6 +300,7 @@ class MobileWorkerPage(BasePage):
         print("Mobile Worker page opened.")
 
     def enter_value_for_created_user_field(self):
+        self.scroll_to_element(self.additional_info_select)
         self.select_by_text(self.additional_info_select, "user_field_" + fetch_random_string())
         assert self.is_displayed(self.user_file_additional_info), "Unable to assign user field to user."
 
