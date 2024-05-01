@@ -135,13 +135,13 @@ class MobileWorkerPage(BasePage):
         self.profile_delete_button = (
             By.XPATH, "//tbody[@data-bind='foreach: profiles']//tr[last()]//td[last()]//i[@class='fa fa-times']")
         self.add_profile_item = (
-            By.XPATH, "//div[@class='modal fade hq-enum-modal in']//a[@data-enum-action='add']/i[@class='fa fa-plus']")
-        self.delete_profile_item = (By.XPATH, "//div[@class='modal fade hq-enum-modal in']//i[@class='fa fa-remove']")
+            By.XPATH, "//div[contains(@class,'hq-enum-modal ')]//a[@data-enum-action='add']/i[@class='fa fa-plus']")
+        self.delete_profile_item = (By.XPATH, "//div[contains(@class,'hq-enum-modal ')]//i[@class='fa fa-remove']")
         self.profile_key = (
-            By.XPATH, "//div[@class='modal fade hq-enum-modal in']//input[@class='form-control enum-key']")
+            By.XPATH, "//div[contains(@class,'hq-enum-modal ')]//input[@class='form-control enum-key']")
         self.profile_value = (
-            By.XPATH, "//div[@class='modal fade hq-enum-modal in']//input[@class='form-control enum-value']")
-        self.done_button = (By.XPATH, "//div[@class='modal fade hq-enum-modal in']//button[@class='btn btn-primary']")
+            By.XPATH, "//div[contains(@class,'hq-enum-modal ')]//input[@class='form-control enum-value']")
+        self.done_button = (By.XPATH, "//div[contains(@class,'hq-enum-modal ')]//button[@class='btn btn-primary']")
         self.delete_field_choice = (By.XPATH, "//tbody[@data-bind='sortable: data_fields']//tr[last()]//td//*[contains(@data-bind,'removeChoice')]")
         self.field_delete = (
             By.XPATH, "//tbody[@data-bind='sortable: data_fields']//tr[last()]//td[last()]//i[@class='fa fa-times']")
