@@ -505,7 +505,7 @@ class ReportPage(BasePage):
         self.clear(self.date_input)
         self.send_keys(self.date_input, date_range + Keys.TAB)
         self.wait_to_click(self.apply_id)
-        time.sleep(15)
+        time.sleep(50)
         self.scroll_to_bottom()
         self.verify_table_not_empty(self.submit_history_table)
         self.is_present_and_displayed(self.view_form_link)
