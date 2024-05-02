@@ -35,7 +35,7 @@ class MobileWorkerPage(BasePage):
         self.login_as_username = "//h3/b[.='{}']"
         self.profile_name_text = "test_profile_" + fetch_random_string()
         self.phone_number = UserData.area_code + fetch_phone_number()
-
+        self.delete_profile_name = "(//input[contains(@data-bind,'value: name')]//following::a[contains(@class,'danger') and contains(@href,'delete')])[{}]"
         self.username_link = "//a[./i[@class='fa fa-user']][strong[.='{}']]"
         self.user_field_input = (By.XPATH, "//input[contains(@data-bind,'value: slug')]")
         self.remove_choice_button = "((//input[contains(@data-bind,'value: slug')]//following::a[contains(@class,'danger')][1])//preceding::*[contains(@data-bind,'removeChoice')][1])[{}]"
@@ -512,7 +512,10 @@ class MobileWorkerPage(BasePage):
         self.wait_to_click(self.confirm_user_field_delete)
 
     def remove_profile(self):
-        self.wait_to_click(self.profile_edit_button)
+        time.sleep(5)
+        self.scroll_to_element(self.profile_edit_button)
+        self.js_click(self.profile_edit_button)
+        time.sleep(5)
         self.wait_for_element(self.delete_profile_item)
         self.js_click(self.delete_profile_item)
         time.sleep(2)
@@ -527,10 +530,11 @@ class MobileWorkerPage(BasePage):
             for i in range(len(list_profile))[::-1]:
                 text = list_profile[i].get_attribute("value")
                 if "test_profile" in text:
-                    self.driver.find_element(By.XPATH,
-                                             "(//input[contains(@data-bind,'value: name')]//following::a[@class='btn btn-danger' and @data-toggle='modal'][1])[" + str(
-                                                 i + 1) + "]").click()
-                    self.wait_to_click(self.confirm_user_field_delete)
+                    self.scroll_to_element((By.XPATH, self.delete_profile_name.format(str(i + 1))))
+                    self.js_click((By.XPATH, self.delete_profile_name.format(str(i+1))))
+                    time.sleep(5)
+                    self.wait_for_element(self.confirm_user_field_delete)
+                    self.click(self.confirm_user_field_delete)
                     time.sleep(2)
                     list_profile = self.driver.find_elements(By.XPATH, "//input[contains(@data-bind,'value: name')]")
                 else:
