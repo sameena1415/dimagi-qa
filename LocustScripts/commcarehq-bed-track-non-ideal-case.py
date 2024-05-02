@@ -142,12 +142,12 @@ class WorkloadNonIdealModelSteps(SequentialTaskSet):
 
     @task
     def stop(self):
+        self.test_number = 0
         logging.info("stopping - mobile worker: %s", self.user.user_detail)
         self.interrupt()
 
 class LoginCommCareHQWithUniqueUsers(BaseLoginCommCareUser):
     tasks = [WorkloadNonIdealModelSteps]
-    wait_time = constant_pacing(5)
 
     def on_start(self):
         super().on_start(
