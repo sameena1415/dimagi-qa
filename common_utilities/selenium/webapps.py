@@ -197,6 +197,9 @@ class WebApps(BasePage):
         if url!=None:
             self.driver.get(url)
             time.sleep(10)
+        else:
+            self.js_click(self.webapps_home)
+            time.sleep(10)
         try:
             self.wait_for_element(self.webapp_login)
             self.js_click(self.webapp_login)
