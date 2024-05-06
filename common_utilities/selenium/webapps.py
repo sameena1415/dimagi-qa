@@ -197,11 +197,16 @@ class WebApps(BasePage):
         if url!=None:
             self.driver.get(url)
             time.sleep(10)
+        else:
+            self.js_click(self.webapps_home)
+            time.sleep(10)
         try:
-            self.click(self.webapp_login)
+            self.wait_for_element(self.webapp_login)
+            self.js_click(self.webapp_login)
         except NoSuchElementException:
             self.wait_to_click(self.webapps_home)
-            self.click(self.webapp_login)
+            self.wait_for_element(self.webapp_login)
+            self.js_click(self.webapp_login)
         self.send_keys(self.search_user_webapps, username)
         self.click(self.search_button_webapps)
         self.select_user(username)
