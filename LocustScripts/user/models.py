@@ -100,7 +100,7 @@ class BaseLoginCommCareUser(HttpUser):
     abstract=True
 
     def on_start(self, domain, host, user_details, app_id):
-        self.user_detail = user_details.pop()
+        self.user_detail = user_details.get()
 
         app_details = AppDetails(
             domain=domain,
