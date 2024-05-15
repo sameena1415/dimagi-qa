@@ -11,6 +11,8 @@ from locust import HttpUser, SequentialTaskSet, between, task, tag, TaskSet
 from lxml import etree
 from datetime import datetime
 
+from common.utils import RandomItems
+
 
 # CASE_IDS = [
 # "cff44c8cde5649c788a1ea2ff12b9235"
@@ -345,13 +347,13 @@ class LoginCommCareHQWithUniqueUsers(HttpUser):
     # get domain user credential and app config info
     with open(domain_user_credential) as json_file:
         data = json.load(json_file)
-        data_user = data['user']
+        data_user = RandomItems(data['user'])
 
     def on_start(self):
         now = datetime.now()
         timestamp = datetime.timestamp(now)
         dt_object = datetime.fromtimestamp(timestamp)
-        user_info = self.data_user.pop()
+        user_info = self.data_user.get()
         self.username = user_info['username']
         self.password = user_info['password']
         self.login_as = user_info['login_as']

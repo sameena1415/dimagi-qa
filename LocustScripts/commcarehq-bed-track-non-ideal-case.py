@@ -4,7 +4,7 @@ from locust import SequentialTaskSet, constant_pacing, events, run_single_user, 
 from locust.exception import InterruptTaskSet
 
 from common.args import file_path
-from common.utils import load_json_data, load_yaml_data
+from common.utils import RandomItems, load_json_data, load_yaml_data
 from user.models import UserDetails, BaseLoginCommCareUser
 
 @events.init_command_line_parser.add_listener
@@ -13,7 +13,7 @@ def _(parser):
 
 CONFIG = {}
 APP_CONFIG = {}
-USERS_DETAILS = []
+USERS_DETAILS = RandomItems()
 
 
 @events.init.add_listener
@@ -37,8 +37,8 @@ def _(environment, **kw):
     try:
         user_path = file_path(CONFIG["domain_user_credential"])
         user_data = load_json_data(user_path)["user"]
-        USERS_DETAILS.extend([UserDetails(**user) for user in user_data])
-        logging.info("Loaded %s users", len(USERS_DETAILS))
+        USERS_DETAILS.set([UserDetails(**user) for user in user_data])
+        logging.info("Loaded %s users", len(USERS_DETAILS.items))
     except Exception as e:
         logging.error("Error loading users: %s", e)
         raise InterruptTaskSet from e
