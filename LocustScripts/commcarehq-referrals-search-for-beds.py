@@ -6,7 +6,7 @@ from locust import SequentialTaskSet, between, events, tag, task
 from locust.exception import InterruptTaskSet
 
 from common.args import file_path
-from common.utils import load_json_data
+from common.utils import RandomItems, load_json_data
 from user.models import UserDetails, BaseLoginCommCareUser
 
 
@@ -19,7 +19,7 @@ def _(parser):
 
 
 APP_CONFIG = {}
-USERS_DETAILS = []
+USERS_DETAILS = RandomItems()
 
 
 class WorkloadModelSteps(SequentialTaskSet):
@@ -203,8 +203,8 @@ def _(environment, **kw):
     try:
         user_path = file_path(environment.parsed_options.user_details)
         user_data = load_json_data(user_path)["user"]
-        USERS_DETAILS.extend([UserDetails(**user) for user in user_data])
-        logging.info("Loaded %s users", len(USERS_DETAILS))
+        USERS_DETAILS.set([UserDetails(**user) for user in user_data])
+        logging.info("Loaded %s users", len(USERS_DETAILS.items))
     except Exception as e:
         logging.error("Error loading users: %s", e)
         raise InterruptTaskSet from e

@@ -8,7 +8,7 @@ from locust.exception import InterruptTaskSet
 
 from user.models import UserDetails, BaseLoginCommCareUser
 from common.args import file_path
-from common.utils import load_json_data
+from common.utils import RandomItems, load_json_data
 
 
 @events.init_command_line_parser.add_listener
@@ -20,7 +20,7 @@ def _(parser):
     parser.add_argument("--cases-to-select", help="Path to file containing cases to use for case search", required=True)
 
 APP_CONFIG = {}
-USERS_DETAILS = []
+USERS_DETAILS = RandomItems()
 CASES_TO_SELECT = {}
 
 class WorkloadModelSteps(SequentialTaskSet):
@@ -121,7 +121,7 @@ def _(environment, **kw):
     try:
         user_path = file_path(environment.parsed_options.user_details)
         user_data = load_json_data(user_path)["user"]
-        USERS_DETAILS.extend([UserDetails(**user) for user in user_data])
+        USERS_DETAILS.set([UserDetails(**user) for user in user_data])
         logging.info("Loaded %s users", len(USERS_DETAILS))
     except Exception as e:
         logging.error("Error loading users: %s", e)
