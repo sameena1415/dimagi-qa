@@ -27,7 +27,7 @@ class GroupPage(BasePage):
         self.edit_settings = (By.LINK_TEXT, "Edit Settings")
         self.group_name_input = (By.ID, "group-name-input")
         self.save_button = (By.XPATH, "//button[@type='submit' and text()='Save']")
-        self.success_alert = (By.ID, "save-alert")
+        self.success_alert = (By.XPATH, "//div[contains(@class,'alert-success')]")
         self.remove_user = (By.XPATH, "//button[@title='Remove item']")
         self.delete_group = (By.XPATH, "//a[@class='btn btn-danger pull-right']")
         self.confirm_delete = (By.XPATH, "//button[@class='btn btn-danger disable-on-submit']")
