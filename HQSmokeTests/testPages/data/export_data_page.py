@@ -75,6 +75,8 @@ class ExportDataPage(BasePage):
         self.web_users_option = (By.XPATH, "//li/span[.='[Web Users]']")
         self.all_data_option = (By.XPATH, "//li/span[.='[All Data]']")
         self.users_field = (By.XPATH, "(//textarea[@class='select2-search__field'])[1]")
+        self.users_list_item = "//ul[@role='listbox']/li[contains(.,'{}')]"
+        self.users_list = (By.XPATH, "//ul[contains(@class,'select2-results__options')]/li")
         self.user_from_list = "//li[contains(.,'{}')]"
         self.prepare_export_button = (By.XPATH, "//button[@data-bind='disable: disablePrepareExport']")
         self.download_button = (By.XPATH, "//a[@class='btn btn-primary btn-full-width']")
@@ -190,6 +192,9 @@ class ExportDataPage(BasePage):
     def prepare_and_download_export(self):
         self.wait_and_sleep_to_click(self.export_form_case_data_button)
         self.date_filter()
+        self.send_keys(self.users_field, UserData.web_user)
+        self.wait_to_click((By.XPATH, self.users_list_item.format(UserData.web_user)))
+        time.sleep(1)
         self.wait_and_sleep_to_click(self.prepare_export_button)
         try:
             self.wait_till_progress_completes("exports")

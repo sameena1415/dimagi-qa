@@ -80,8 +80,6 @@ def test_case_77_create_new_app(driver, settings):
 @pytest.mark.editRepeater
 @pytest.mark.p1p2EscapeDefect
 def test_case_78_create_and_edit_repeaters(driver,settings):
-    if "india" in settings['url']:
-        pytest.skip("Setup is not yet present")
     msg = MessagingPage(driver)
     msg.project_settings_page(values['flag'])
     repeater = RepeatersPage(driver)

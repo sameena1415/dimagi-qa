@@ -33,14 +33,17 @@ class ManageFormsPage(BasePage):
         self.select_archive_restore = (By.XPATH, "//select[@name='archive_or_restore']")
         self.check_data = (By.XPATH, "//tr[@class = 'form-data-question ']")
 
-    def get_normal_forms(self):
+    def get_normal_forms(self, url=None):
         self.wait_and_sleep_to_click(self.manage_forms_link)
 
         # Date Filter
         self.wait_and_sleep_to_click(self.date_range_manage_forms)
         self.select_by_value(self.select_archive_restore, "archive")
         self.clear(self.date_range_manage_forms)
-        self.send_keys(self.date_range_manage_forms, UserData.date_having_submissions)
+        if url == None:
+            self.send_keys(self.date_range_manage_forms, UserData.date_having_submissions)
+        else:
+            self.send_keys(self.date_range_manage_forms, UserData.india_date_having_submission)
         self.wait_and_sleep_to_click(self.apply)
         # Report Apply
         self.wait_and_sleep_to_click(self.apply_button)

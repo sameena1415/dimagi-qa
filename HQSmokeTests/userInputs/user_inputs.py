@@ -27,6 +27,7 @@ class UserData:
     appiumtest_owner_id_prod = "appiumtest@qa-automation-prod.commcarehq.org"
     default_mw_role = "Mobile Worker Default"
     user_group = "automation_user"
+    web_user = "[Web Users]"
 
     # Phone Number
     area_code = "91"
@@ -56,6 +57,7 @@ class UserData:
 
     # Date Filter
     date_having_submissions = "2022-01-18 to 2022-02-18"
+    india_date_having_submission = "2024-05-10 to 2024-05-17"
 
     # Excel column names
     case_id = 'caseid'
