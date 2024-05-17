@@ -21,6 +21,8 @@ class EmailVerification:
     def get_hyperlink_from_latest_email(self, subject, url):
         if 'www' in url:
             from_email = UserData.from_email_prod
+        elif 'india' in url:
+            from_email = UserData.from_email_india
         else:
             from_email = UserData.from_email
 
@@ -40,6 +42,8 @@ class EmailVerification:
     def get_email_body_from_latest_email(self, subject, url):
         if 'www' in url:
             from_email = UserData.from_email_prod
+        elif 'india' in url:
+            from_email = UserData.from_email_india
         else:
             from_email = UserData.from_email
         print(subject)
@@ -76,6 +80,8 @@ class EmailVerification:
     def get_email_body_from_latest_email_proj_perf(self, subject, url):
         if 'www' in url:
             from_email = UserData.from_email_prod
+        elif 'india' in url:
+            from_email = UserData.from_email_india
         else:
             from_email = UserData.from_email
         print(subject)

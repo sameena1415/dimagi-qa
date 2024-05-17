@@ -79,7 +79,9 @@ def test_case_77_create_new_app(driver, settings):
 @pytest.mark.createRepeater
 @pytest.mark.editRepeater
 @pytest.mark.p1p2EscapeDefect
-def test_case_78_create_and_edit_repeaters(driver):
+def test_case_78_create_and_edit_repeaters(driver,settings):
+    if "india" in settings['url']:
+        pytest.skip("Setup is not yet present")
     msg = MessagingPage(driver)
     msg.project_settings_page(values['flag'])
     repeater = RepeatersPage(driver)
@@ -92,6 +94,8 @@ def test_case_78_create_and_edit_repeaters(driver):
 @pytest.mark.exportsFormData
 @pytest.mark.p1p2EscapeDefect
 def test_case_79_form_exports(driver, settings):
+    if "india" in settings['url']:
+        pytest.skip("Not much data present")
     home = HomePage(driver, settings)
     home.data_menu()
     export = ExportDataPage(driver)
@@ -113,7 +117,7 @@ def test_case_80_case_exports(driver, settings):
 @pytest.mark.importFromExcel
 @pytest.mark.p1p2EscapeDefect
 def test_case_81_parent_child_case_imports(driver, settings):
-    if 'www' in settings['url']:
+    if 'www' in settings['url'] or 'india' in settings['url']:
         pytest.skip("Setup not done in Prod yet")
     home = HomePage(driver, settings)
     home.data_menu()

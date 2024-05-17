@@ -84,6 +84,7 @@ class UserData:
     p1p2_profile = "p1p2_testprofile"
     from_email_prod = "commcarehq-noreply-production@dimagi.com"
     from_email = "commcarehq-noreply-staging@dimagi.com"
+    from_email_india = "commcarehq-noreply-india@dimagi.com"
 
     """Report email subjects"""
     daily_form_activity = "Daily Form Activity: Requested export excel data"
