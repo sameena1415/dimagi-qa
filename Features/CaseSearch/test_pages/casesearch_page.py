@@ -28,7 +28,7 @@ class CaseSearchWorkflows(BasePage):
         self.combox_select = "//label[contains(text(), '{}')]//following::select[contains(@class, 'query-field')][1]"
         self.search_for_address = "//*[contains(text(),'{}')]//following::input[contains(@aria-label,'Search')][1]"
         self.include_blanks = self.search_property_name_combobox + "//following::input[contains(@class,'search-for-blank')][1]"
-        self.required_validation_on_top = "//div[@class='alert alert-danger']//following::li[contains(text(),'{}')]"
+        self.required_validation_on_top = "//div[contains(@class,'alert-danger')]//following::li[contains(text(),'{}')]"
         self.required_validation_per_property_text = self.search_against_text_property_format + "//following::div[contains (text(),'{}')][1]"
         self.required_validation_per_property_combox = self.search_property_name_combobox + "//following::div[contains (text(),'{}')][1]"
         self.city_value_home = "//span[@class='caption webapp-markdown-output'][contains(text(), '{}')]"

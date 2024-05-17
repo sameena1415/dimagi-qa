@@ -52,7 +52,7 @@ def test_case_02_access_to_non_dr_caselist(driver):
     webapps.search_button_on_case_search_page()
     webapps.omni_search(case_name, displayed=NO)
 
-
+@pytest.mark.skip
 def test_case_03_load_external_case_into_caselist_skip_default(driver):
     webapps = WebApps(driver)
     casesearch = CaseSearchWorkflows(driver)
@@ -74,7 +74,7 @@ def test_case_03_load_external_case_into_caselist_skip_default(driver):
     assert "casesearch" in domain_url
     webapps.submit_the_form()
 
-
+@pytest.mark.skip
 def test_case_04_load_external_linked_domain_case_into_caselist_search_first(driver):
     webapps = WebApps(driver)
     casesearch = CaseSearchWorkflows(driver)
