@@ -17,6 +17,7 @@ from selenium.webdriver.common.keys import Keys
 
 """"Contains test page elements and functions related to the exports module"""
 
+
 #
 # def latest_download_file():
 #     os.chdir(PathSettings.DOWNLOAD_PATH)
@@ -87,12 +88,15 @@ class ExportDataPage(BasePage):
         self.find_data_by_ID = (By.LINK_TEXT, 'Find Data by ID')
         self.find_data_by_ID_textbox = (By.XPATH, "//input[@placeholder='Form Submission ID']")
         self.find_data_by_case_ID_textbox = (By.XPATH, "//input[@placeholder='Case ID']")
-        self.find_data_by_case_ID_button = (By.XPATH, "//div[./input[@placeholder='Case ID']]//following-sibling::div/button")
-        self.find_data_by_ID_button = (By.XPATH, "//div[./input[@placeholder='Form Submission ID']]//following-sibling::div/button")
+        self.find_data_by_case_ID_button = (
+            By.XPATH, "//div[./input[@placeholder='Case ID']]//following-sibling::div/button")
+        self.find_data_by_ID_button = (
+            By.XPATH, "//div[./input[@placeholder='Form Submission ID']]//following-sibling::div/button")
         self.view_FormID_CaseID = (By.LINK_TEXT, 'View')
         self.case_id_value = "//th[contains(.,'Case ID')]//following-sibling::td[contains(.,'{}')]"
         self.related_cases_tab = (By.LINK_TEXT, "Related Cases")
-        self.related_cases_view = (By.XPATH, "//td[contains(.,'"+UserData.child_name+"')]//following-sibling::div/a[contains(.,'View')]")
+        self.related_cases_view = (
+            By.XPATH, "//td[contains(.,'" + UserData.child_name + "')]//following-sibling::div/a[contains(.,'View')]")
         self.expand_case = (By.XPATH, "//a[@title='Expand']")
         self.woman_form_name_HQ = (By.XPATH, "(//div[@class='form-data-readable form-data-raw'])[1]")
         self.woman_case_name_HQ = (By.XPATH, "//th[@title='name']//following::td[1]")
@@ -138,13 +142,17 @@ class ExportDataPage(BasePage):
         # Power BI / Tableau Integration, Form
         self.powerBI_tab_int = (By.LINK_TEXT, 'PowerBi/Tableau Integration')
         self.copy_odata_link_btn_form = (
-        By.XPATH, "//div[./span[text()='" + UserData.odata_feed_form + "']]/following::div[@class='input-group']//a")
+            By.XPATH,
+            "//div[./span[text()='" + UserData.odata_feed_form + "']]/following::div[@class='input-group']//a")
         self.copy_odata_link_form = (
-        By.XPATH, "//div[./span[text()='" + UserData.odata_feed_form + "']]/following::div[@class='input-group']/input")
+            By.XPATH,
+            "//div[./span[text()='" + UserData.odata_feed_form + "']]/following::div[@class='input-group']/input")
         self.copy_odata_link_btn_case = (
-        By.XPATH, "//div[./span[text()='" + UserData.odata_feed_case + "']]/following::div[@class='input-group']//a")
+            By.XPATH,
+            "//div[./span[text()='" + UserData.odata_feed_case + "']]/following::div[@class='input-group']//a")
         self.copy_odata_link_case = (
-        By.XPATH, "//div[./span[text()='" + UserData.odata_feed_case + "']]/following::div[@class='input-group']/input")
+            By.XPATH,
+            "//div[./span[text()='" + UserData.odata_feed_case + "']]/following::div[@class='input-group']/input")
 
         self.edit_button_case = (By.XPATH,
                                  "(//span[contains(text(), 'Copy & Edit Feed')])")
@@ -173,7 +181,8 @@ class ExportDataPage(BasePage):
 
         # Import From Excel
         self.to_be_edited_file = os.path.abspath(
-            os.path.join(UserData.USER_INPUT_BASE_DIR, "test_data/import_parent_child_case.xlsx"))
+            os.path.join(UserData.USER_INPUT_BASE_DIR, "test_data/import_parent_child_case.xlsx")
+            )
 
     def get_url_paste_browser(self, username, password, item):
         if item == 'cases':
@@ -189,11 +198,12 @@ class ExportDataPage(BasePage):
         self.wait_to_clear_and_send_keys(self.date_range, self.date_having_submissions)
         self.wait_and_sleep_to_click(self.apply)
 
-    def prepare_and_download_export(self):
+    def prepare_and_download_export(self, flag=None):
         self.wait_and_sleep_to_click(self.export_form_case_data_button)
         self.date_filter()
-        self.send_keys(self.users_field, UserData.web_user)
-        self.wait_to_click((By.XPATH, self.users_list_item.format(UserData.web_user)))
+        if flag == None:
+            self.send_keys(self.users_field, UserData.web_user)
+            self.wait_to_click((By.XPATH, self.users_list_item.format(UserData.web_user)))
         time.sleep(1)
         self.wait_and_sleep_to_click(self.prepare_export_button)
         try:
@@ -218,7 +228,7 @@ class ExportDataPage(BasePage):
         data = pd.read_excel((PathSettings.DOWNLOAD_PATH / newest_file))
         df = pd.DataFrame(data, columns=[row, value])
         ID = df[value].values[0]
-        print("ID: ",ID)
+        print("ID: ", ID)
         woman_name_excel = df[row].values[0]
         self.wait_to_clear_and_send_keys(self.find_data_by_ID_textbox, str(ID))
         self.wait_and_sleep_to_click(self.find_data_by_ID_button)
@@ -254,7 +264,8 @@ class ExportDataPage(BasePage):
     def form_exports(self):
         self.prepare_and_download_export()
         self.find_data_by_id_and_verify('form.womans_name', 'formid', UserData.form_export_name,
-                                        self.woman_form_name_HQ)
+                                        self.woman_form_name_HQ
+                                        )
 
     # Test Case 20_b - Verify Export functionality for Cases
 
@@ -285,7 +296,7 @@ class ExportDataPage(BasePage):
 
     def sms_exports(self):
         self.wait_and_sleep_to_click(self.export_sms_link)
-        self.prepare_and_download_export()
+        self.prepare_and_download_export("no")
         newest_file = latest_download_file()
         print("Newest:", newest_file)
         self.assert_downloaded_file(newest_file, "Messages")
@@ -593,11 +604,10 @@ class ExportDataPage(BasePage):
         data = pd.read_html(resp, flavor='html5lib')
         data = (pd.DataFrame(data[0])).reset_index()
         duplicate = data[data.duplicated()]
-        if len(duplicate)>0:
+        if len(duplicate) > 0:
             print(duplicate)
         else:
             print("No duplicate data present")
-
 
     def add_case_exports(self):
         self.wait_to_click(self.export_case_data_link)
@@ -612,7 +622,6 @@ class ExportDataPage(BasePage):
         self.wait_to_clear_and_send_keys(self.export_name, UserData.case_export_name)
         self.wait_to_click(self.export_settings_create)
         print("Export created!!")
-
 
     def add_form_exports_reassign(self):
         self.delete_bulk_exports()
@@ -698,7 +707,6 @@ class ExportDataPage(BasePage):
         self.assert_downloaded_file(newest_file, UserData.p1p2_case_export_name)
         return newest_file
 
-
     def check_for_related_cases(self, parent_id):
         self.wait_for_element(self.find_data_by_ID)
         self.wait_to_click(self.find_data_by_ID)
@@ -714,7 +722,6 @@ class ExportDataPage(BasePage):
             return "assign to parent 2"
         else:
             return "assign to parent 1"
-
 
     def validate_child_case_data(self):
         self.wait_to_click(self.related_cases_tab)
@@ -736,7 +743,10 @@ class ExportDataPage(BasePage):
             sheet["B2"] = UserData.parent_2_id
             sheet.title = "Sheet 1"
             filename = os.path.abspath(
-            os.path.join(UserData.USER_INPUT_BASE_DIR, "test_data/import_to_parent_" + UserData.parent_2_id+".xlsx"))
+                os.path.join(UserData.USER_INPUT_BASE_DIR,
+                             "test_data/import_to_parent_" + UserData.parent_2_id + ".xlsx"
+                             )
+                )
             workbook.save(filename=filename)
             print(filename)
             return filename
@@ -748,7 +758,9 @@ class ExportDataPage(BasePage):
             sheet.title = "Sheet 1"
             filename = os.path.abspath(
                 os.path.join(UserData.USER_INPUT_BASE_DIR,
-                             "test_data/import_to_parent_" + UserData.parent_1_id + ".xlsx"))
+                             "test_data/import_to_parent_" + UserData.parent_1_id + ".xlsx"
+                             )
+                )
             workbook.save(filename=filename)
             return filename
 
@@ -769,4 +781,3 @@ class ExportDataPage(BasePage):
         self.wait_for_element((By.XPATH, self.case_id_value.format(parent_id)))
         assert self.is_present(self.related_cases_tab), "Parent not reassigned"
         self.validate_child_case_data()
-
