@@ -40,7 +40,7 @@ def test_case_31_manage_forms(driver, settings):
     home = HomePage(driver, settings)
     home.data_menu()
     manage = ManageFormsPage(driver)
-    manage.get_normal_forms()
+    manage.get_normal_forms(settings['url'])
     manage.view_normal_form()
     manage.archive_forms()
     manage.get_archived_forms()
