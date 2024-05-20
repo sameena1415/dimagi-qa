@@ -118,6 +118,9 @@ jobs:
           } else if (CC_ENV == 'staging' && JOB_STATUS == 'failure') {
             SLACK_WEBHOOK_URL = '${{ secrets.SLACK_WEBHOOK_URL_SMOKE }}'
             console.log("Staging Failure")
+          } else if (CC_ENV == 'india' && JOB_STATUS == 'failure') {
+            SLACK_WEBHOOK_URL = '${{ secrets.SLACK_WEBHOOK_URL_SMOKE }}'
+            console.log("India Failure")
           } else {
             SLACK_WEBHOOK_URL = ' '
             console.log("No notification sent")

@@ -344,7 +344,7 @@ class ExportDataPage(BasePage):
         self.wait_to_click(self.export_form_data_link)
         try:
             self.click(self.edit_form_case_export)
-        except (NoSuchElementException, StaleElementReferenceException):
+        except (NoSuchElementException, StaleElementReferenceException, TimeoutException):
             self.add_form_exports()
             self.wait_and_sleep_to_click(self.edit_form_case_export)
         self.wait_for_element(self.export_name, 200)
@@ -355,11 +355,12 @@ class ExportDataPage(BasePage):
     # Test Case 24_b - Daily saved export, case
     def daily_saved_exports_case(self):
         self.wait_to_click(self.export_case_data_link)
-        time.sleep(30)
         try:
-            self.wait_for_element(self.edit_form_case_export, 200)
             self.click(self.edit_form_case_export)
         except NoSuchElementException:
+            self.add_case_exports()
+            self.wait_and_sleep_to_click(self.edit_form_case_export)
+        except TimeoutException:
             self.add_case_exports()
             self.wait_and_sleep_to_click(self.edit_form_case_export)
         self.wait_for_element(self.export_name, 200)
