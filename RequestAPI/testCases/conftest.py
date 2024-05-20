@@ -12,7 +12,7 @@ from pathlib import Path
 def settings():
     if os.environ.get("CI") == "true":
         settings = {}
-        for name in ["url", "password", "login_user", "login_pass", "prod_api_key","staging_api_key"]:
+        for name in ["url", "password", "login_user", "login_pass", "prod_api_key","staging_api_key", "india_api_key"]:
             var = f"DIMAGIQA_{name.upper()}"
             if var in os.environ:
                 settings[name] = os.environ[var]
@@ -23,7 +23,7 @@ def settings():
             settings["url"] = f"https://{subdomain}.commcarehq.org/"
             settings['api_key'] = settings['prod_api_key'] if env == "production" else settings[subdomain+'_api_key']
 
-        if any(x not in settings for x in ["url", "password","login_user", "login_pass", "prod_api_key", "staging_api_key"]):
+        if any(x not in settings for x in ["url", "password","login_user", "login_pass", "prod_api_key", "staging_api_key", "india_api_key"]):
             lines = settings.__doc__.splitlines()
             vars_ = "\n  ".join(line.strip() for line in lines if "DIMAGIQA_" in line)
             raise RuntimeError(
