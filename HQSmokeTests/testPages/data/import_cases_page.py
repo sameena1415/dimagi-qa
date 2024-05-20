@@ -34,6 +34,7 @@ class ImportCasesPage(BasePage):
 
     def replace_property_and_upload(self):
         self.wait_to_click(self.import_cases_menu)
+        time.sleep(5)
         self.edit_spreadsheet(self.to_be_edited_file, self.village_name_cell, self.renamed_file, self.sheet_name)
         self.wait_to_clear_and_send_keys(self.choose_file, self.renamed_file)
         self.wait_to_click(self.next_step)
