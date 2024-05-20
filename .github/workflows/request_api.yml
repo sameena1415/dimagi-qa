@@ -20,6 +20,7 @@ on:
         options:
           - staging
           - production
+          - india
 
 jobs:
   set_matrix:
@@ -38,7 +39,7 @@ jobs:
       - id: set-matrix-default
         if: ${{ !contains(github.event_name , 'dispatch') }}
         run: |
-          echo "::set-output name=matrix::{\"environment\": [\"production\", \"staging\"]}"
+          echo "::set-output name=matrix::{\"environment\": [\"production\", \"staging\",\"india\"]}"
   build:
     needs: set_matrix
     strategy:
@@ -71,6 +72,7 @@ jobs:
         DIMAGIQA_LOGIN_PASS: ${{ secrets.DIMAGIQA_APILOGIN_PASSWORD }}
         DIMAGIQA_PROD_API_KEY: ${{secrets.DIMAGIQA_APIPROD_API_KEY}}
         DIMAGIQA_STAGING_API_KEY: ${{secrets.DIMAGIQA_APISTAGING_API_KEY}}
+        DIMAGIQA_INDIA_API_KEY: ${{secrets.DIMAGIQA_INDIA_API_KEY}}
       run: |
         echo "client_payload: ${{ toJson(github.event.client_payload) }}"
         echo "matrix environment: ${{ matrix.environment }}"
@@ -116,6 +118,9 @@ jobs:
           } else if (CC_ENV == 'staging' && JOB_STATUS == 'failure') {
             SLACK_WEBHOOK_URL = '${{ secrets.SLACK_WEBHOOK_URL_SMOKE }}'
             console.log("Staging Failure")
+          } else if (CC_ENV == 'india' && JOB_STATUS == 'failure') {
+            SLACK_WEBHOOK_URL = '${{ secrets.SLACK_WEBHOOK_URL_SMOKE }}'
+            console.log("India Failure")
           } else {
             SLACK_WEBHOOK_URL = ' '
             console.log("No notification sent")
