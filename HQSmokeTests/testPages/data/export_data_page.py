@@ -355,7 +355,9 @@ class ExportDataPage(BasePage):
     # Test Case 24_b - Daily saved export, case
     def daily_saved_exports_case(self):
         self.wait_to_click(self.export_case_data_link)
+        time.sleep(30)
         try:
+            self.wait_for_element(self.edit_form_case_export, 200)
             self.click(self.edit_form_case_export)
         except NoSuchElementException:
             self.add_case_exports()
