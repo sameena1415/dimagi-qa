@@ -166,8 +166,8 @@ jobs:
             } else if (CC_ENV == 'staging' && JOB_STATUS == 'failure') {
               SLACK_WEBHOOK_URL = '${{ secrets.SLACK_WEBHOOK_URL_SMOKE }}'
               console.log("Staging Failure")
-            } else if (CC_ENV == 'india' && JOB_STATUS == 'failure') {
-              SLACK_WEBHOOK_URL = '${{ secrets.SLACK_WEBHOOK_URL_SMOKE }}'
+            } else if (CC_ENV == 'india' && JOB_STATUS == 'always') {
+              SLACK_WEBHOOK_URL = '${{ secrets.SLACK_WEBHOOK_URL_INDIA }}'
               console.log("India Failure")
             } else {
               SLACK_WEBHOOK_URL = ' '
