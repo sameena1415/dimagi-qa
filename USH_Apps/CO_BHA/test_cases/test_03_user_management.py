@@ -6,9 +6,9 @@ from common_utilities.selenium.webapps import WebApps
 from Features.CaseSearch.constants import *
 
 
-def test_case_access_to_module_state(driver):
+def test_case_access_to_module_state(driver, settings):
     """use case: A state level user access the list of users and can enter the form to view their credential."""
-    webapps = WebApps(driver)
+    webapps = WebApps(driver, settings)
     casesearch = CaseSearchWorkflows(driver)
     app = BhaWorkflows(driver)
 

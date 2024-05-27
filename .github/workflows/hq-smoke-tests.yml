@@ -166,11 +166,11 @@ jobs:
             } else if (CC_ENV == 'staging' && JOB_STATUS == 'failure') {
               SLACK_WEBHOOK_URL = '${{ secrets.SLACK_WEBHOOK_URL_SMOKE }}'
               console.log("Staging Failure")
-            } else if (CC_ENV == 'india' && JOB_STATUS == 'failure') {
+            } else if (CC_EVENT == 'repository_dispatch' && CC_ENV == 'india') {
               SLACK_WEBHOOK_URL = '${{ secrets.SLACK_WEBHOOK_URL_INDIA }}'
               console.log("India Failure")
-            } else if (CC_ENV == 'india' && JOB_STATUS == 'success') {
-              SLACK_WEBHOOK_URL = '${{ secrets.SLACK_WEBHOOK_URL_INDIA }}'
+            } else if (CC_EVENT != 'repository_dispatch' && CC_ENV == 'india' && JOB_STATUS == 'failure') {
+              SLACK_WEBHOOK_URL = '${{ secrets.SLACK_WEBHOOK_URL_SMOKE }}'
               console.log("India Success")
             } else {
               SLACK_WEBHOOK_URL = ' '

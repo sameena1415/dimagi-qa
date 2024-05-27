@@ -6,8 +6,8 @@ from Features.CaseSearch.constants import *
 """"Contains all case search workflow related test cases"""
 
 
-def test_case_01_normal_workflow(driver):
-    webapps = WebApps(driver)
+def test_case_01_normal_workflow(driver, settings):
+    webapps = WebApps(driver, settings)
     casesearch = CaseSearchWorkflows(driver)
     """Checks if user can submit a form for normal search"""
     webapps.login_as(CaseSearchUserInput.user_2)
@@ -29,8 +29,8 @@ def test_case_01_normal_workflow(driver):
     webapps.omni_search(case_name)
 
 
-def test_case_02_search_first(driver):
-    webapps = WebApps(driver)
+def test_case_02_search_first(driver, settings):
+    webapps = WebApps(driver, settings)
     casesearch = CaseSearchWorkflows(driver)
     """Checks if user can submit a form for search first"""
     webapps.open_app(CaseSearchUserInput.linked_case_search_app_name)
@@ -46,8 +46,8 @@ def test_case_02_search_first(driver):
     webapps.submit_the_form()
 
 
-def test_case_05_see_more(driver):
-    webapps = WebApps(driver)
+def test_case_05_see_more(driver, settings):
+    webapps = WebApps(driver, settings)
     casesearch = CaseSearchWorkflows(driver)
     """Checks if user can submit a form for see more"""
     webapps.open_app(CaseSearchUserInput.linked_case_search_app_name)
@@ -61,8 +61,8 @@ def test_case_05_see_more(driver):
     webapps.submit_the_form()
 
 
-def test_case_07_skip_to_default_search(driver):
-    webapps = WebApps(driver)
+def test_case_07_skip_to_default_search(driver, settings):
+    webapps = WebApps(driver, settings)
     casesearch = CaseSearchWorkflows(driver)
     """Checks if user can submit a form for skip to default search"""
     webapps.open_app(CaseSearchUserInput.linked_case_search_app_name)

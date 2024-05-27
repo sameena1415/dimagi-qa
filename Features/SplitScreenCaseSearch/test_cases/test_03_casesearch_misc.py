@@ -10,8 +10,8 @@ from common_utilities.selenium.webapps import WebApps
 """"Contains all case search miscellaneous test cases"""
 
 
-def test_case_01_eof_navigations(driver):
-    webapps = WebApps(driver)
+def test_case_01_eof_navigations(driver, settings):
+    webapps = WebApps(driver, settings)
     casesearch = CaseSearchWorkflows(driver)
     """Check eof navs"""
     webapps.login_as(CaseSearchUserInput.user_1)
@@ -52,8 +52,8 @@ def test_case_01_eof_navigations(driver):
     # casesearch.check_eof_navigation(eof_nav=HOME_SCREEN)
 
 
-def test_case_02_related_property_search(driver):
-    webapps = WebApps(driver)
+def test_case_02_related_property_search(driver, settings):
+    webapps = WebApps(driver, settings)
     casesearch = CaseSearchWorkflows(driver)
     """Check related property search"""
     webapps.open_app(CaseSearchUserInput.linked_case_search_app_name)
@@ -78,8 +78,8 @@ def test_case_02_related_property_search(driver):
                                           expected_value=CaseSearchUserInput.automation_artist_1)
 
 
-def test_case_03_auto_advance_menus(driver):
-    webapps = WebApps(driver)
+def test_case_03_auto_advance_menus(driver, settings):
+    webapps = WebApps(driver, settings)
     casesearch = CaseSearchWorkflows(driver)
     """Check auto advance to forms"""
     webapps.open_app(CaseSearchUserInput.linked_case_search_app_name)
@@ -90,8 +90,8 @@ def test_case_03_auto_advance_menus(driver):
                                     menu=case_name)
 
 
-def test_case_04_display_only_forms(driver):
-    webapps = WebApps(driver)
+def test_case_04_display_only_forms(driver, settings):
+    webapps = WebApps(driver, settings)
     base = BasePage(driver)
     """Check display only form modes"""
     webapps.open_app(CaseSearchUserInput.linked_case_search_app_name)
@@ -99,8 +99,8 @@ def test_case_04_display_only_forms(driver):
     assert not base.is_displayed(webapps.search_all_cases_button)
 
 
-def test_case_05_shadow_menu(driver):
-    webapps = WebApps(driver)
+def test_case_05_shadow_menu(driver, settings):
+    webapps = WebApps(driver, settings)
     casesearch = CaseSearchWorkflows(driver)
     """Check forms in normal menu"""
     webapps.open_app(CaseSearchUserInput.linked_case_search_app_name)
@@ -123,8 +123,8 @@ def test_case_05_shadow_menu(driver):
     assert shadow_form_names == search_first_form_names
 
 
-def test_case_06_performance_check(driver):
-    webapps = WebApps(driver)
+def test_case_06_performance_check(driver, settings):
+    webapps = WebApps(driver, settings)
     casesearch = CaseSearchWorkflows(driver)
     """Check performance"""
     webapps.open_app(CaseSearchUserInput.linked_case_search_app_name)
@@ -149,8 +149,8 @@ def test_case_06_performance_check(driver):
     assert run_time <= 4
 
 
-def test_case_07_multi_case_types_and_related_cases(driver):
-    webapps = WebApps(driver)
+def test_case_07_multi_case_types_and_related_cases(driver, settings):
+    webapps = WebApps(driver, settings)
     casesearch = CaseSearchWorkflows(driver)
     webapps.login_as(CaseSearchUserInput.user_1)
     webapps.open_app(CaseSearchUserInput.linked_case_search_app_name)
@@ -190,8 +190,8 @@ def test_case_07_multi_case_types_and_related_cases(driver):
     webapps.submit_the_form()
 
 
-def test_case_08_display_condition(driver):
-    webapps = WebApps(driver)
+def test_case_08_display_condition(driver, settings):
+    webapps = WebApps(driver, settings)
     base = BasePage(driver)
     """Check Display condition for a_user"""
     webapps.login_as(CaseSearchUserInput.a_user)
@@ -205,8 +205,8 @@ def test_case_08_display_condition(driver):
     assert not base.is_displayed(webapps.search_all_cases_button)
 
 
-def test_case_09_search_filter(driver):
-    webapps = WebApps(driver)
+def test_case_09_search_filter(driver, settings):
+    webapps = WebApps(driver, settings)
     casesearch = CaseSearchWorkflows(driver)
     """Check Search Filter"""
     webapps.login_as(CaseSearchUserInput.a_user)
@@ -218,8 +218,8 @@ def test_case_09_search_filter(driver):
                                         expected_value=CaseSearchUserInput.five)
 
 
-def test_case_10_claim_condition(driver):
-    webapps = WebApps(driver)
+def test_case_10_claim_condition(driver, settings):
+    webapps = WebApps(driver, settings)
     casesearch = CaseSearchWorkflows(driver)
     """Check Claim Condition"""
     webapps.login_as(CaseSearchUserInput.a_user)
@@ -235,8 +235,8 @@ def test_case_10_claim_condition(driver):
     assert not bool(form_name)
 
 
-def test_case_11_do_not_search_cases(driver):
-    webapps = WebApps(driver)
+def test_case_11_do_not_search_cases(driver, settings):
+    webapps = WebApps(driver, settings)
     casesearch = CaseSearchWorkflows(driver)
     """Check don't search cases owned by the following ids"""
     webapps.login_as(CaseSearchUserInput.a_user)
@@ -250,8 +250,8 @@ def test_case_11_do_not_search_cases(driver):
     webapps.omni_search(CaseSearchUserInput.song_case_b_users_song, displayed=NO)
 
 
-def test_case_12_sync_cases_on_form_entry(driver):
-    webapps = WebApps(driver)
+def test_case_12_sync_cases_on_form_entry(driver, settings):
+    webapps = WebApps(driver, settings)
     casesearch = CaseSearchWorkflows(driver)
     """Update rating as another user"""
     webapps.login_as(CaseSearchUserInput.user_1)
@@ -282,8 +282,8 @@ def test_case_12_sync_cases_on_form_entry(driver):
     webapps.submit_the_form()
 
 
-def test_case_13_ancestor_exists_query(driver):
-    webapps = WebApps(driver)
+def test_case_13_ancestor_exists_query(driver, settings):
+    webapps = WebApps(driver, settings)
     casesearch = CaseSearchWorkflows(driver)
     webapps.login_as(CaseSearchUserInput.user_1)
     webapps.open_app(CaseSearchUserInput.linked_case_search_app_name)

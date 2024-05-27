@@ -29,11 +29,15 @@ class GroupPage(BasePage):
         self.save_button = (By.XPATH, "//button[@type='submit' and text()='Save']")
         self.success_alert = (By.XPATH, "//div[contains(@class,'alert-success')]")
         self.remove_user = (By.XPATH, "//button[@title='Remove item']")
-        self.delete_group = (By.XPATH, "//a[@class='btn btn-danger pull-right']")
-        self.confirm_delete = (By.XPATH, "//button[@class='btn btn-danger disable-on-submit']")
-        self.delete_success_message = (By.XPATH, "//div[@class='alert alert-margin-top fade in html alert-success']")
+        self.delete_group = (By.XPATH, "//a[contains(@class,'danger')]")
+        self.group_list = (By.XPATH, "//td//a[contains(text(),'group_')]")
+        self.group_name_link = "(//td//a[contains(text(),'{}')])[1]"
+
+        self.confirm_delete = (By.XPATH, "//button[contains(@class,'danger disable-on-submit')]")
+        self.delete_success_message = (By.XPATH, "//div[contains(@class, 'alert-success')]")
         # self.renamed_group_link = (By.LINK_TEXT, self.renamed_group)
         self.group_loading = (By.XPATH, "//div[@id='membership_updating'][@style='display: none;']")
+        self.table_body = (By.XPATH, "//table//tbody")
 
     def click_group_menu(self):
         self.wait_to_click(self.group_menu_xpath)
@@ -93,20 +97,30 @@ class GroupPage(BasePage):
         print("Clean up added group")
 
     def delete_test_groups(self):
-        list_profile = self.driver.find_elements(By.XPATH,"//td//a[contains(text(),'group_')]")
-        print(list_profile)
+        list_profile = self.find_elements(self.group_list)
+        print(len(list_profile))
+        group_names = []
+        if len(list_profile) > 0:
+            for i in range(len(list_profile)):
+                text = list_profile[i].text
+                group_names.append(text)
+        print(group_names)
         try:
-            if len(list_profile) > 0:
-                for i in range(len(list_profile))[::-1]:
-                    text = list_profile[i].text
-                    print(text)
-                    list_profile[i].click()
-                    self.wait_to_click(self.delete_group)
-                    self.wait_to_click(self.confirm_delete)
-                    assert self.is_visible_and_displayed(self.delete_success_message), "Group deletion not successful"
+            if len(group_names) > 0:
+                for i in range(len(group_names)):
                     time.sleep(2)
-                    list_profile = self.driver.find_elements(By.XPATH,"//td//a[contains(text(),'group_')]")
+                    self.scroll_to_element((By.XPATH, self.group_name_link.format(group_names[i])))
+                    self.click((By.XPATH, self.group_name_link.format(group_names[i])))
+                    self.wait_for_element(self.delete_group)
+                    self.click(self.delete_group)
+                    self.wait_for_element(self.confirm_delete)
+                    self.click(self.confirm_delete)
+                    assert self.is_visible_and_displayed(self.delete_success_message), "Group deletion not successful"
+                    print("Deleted group: "+group_names[i])
+                    time.sleep(5)
+                    self.click_group_menu()
+                    self.wait_for_element(self.table_body)
             else:
-                 print("There are no test groups")
+                print("There are no test groups")
         except:
             print("There are no test groups")

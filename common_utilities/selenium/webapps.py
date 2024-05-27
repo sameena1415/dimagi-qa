@@ -13,9 +13,11 @@ from common_utilities.selenium.base_page import BasePage
 
 class WebApps(BasePage):
 
-    def __init__(self, driver):
+    def __init__(self, driver, settings):
         super().__init__(driver)
+        self.settings = settings
 
+        self.url = self.settings['url']
         self.app_name_format = "//*[@aria-label='{}']/div"
         self.app_header_format = "//h1[contains(text(),'{}')]"
         self.menu_name_format = '//*[contains(@aria-label,"{}")]'
@@ -190,18 +192,20 @@ class WebApps(BasePage):
         self.login_as_user = self.get_element(self.login_as_username, username)
         self.click(self.login_as_user)
         self.click(self.webapp_login_confirmation)
-        logdedin_user = self.get_text(self.webapp_working_as)
-        assert logdedin_user == username
+        loggedin_user = self.get_text(self.webapp_working_as)
+        assert loggedin_user == username
 
-    def login_as(self, username, url=None):
-        if url!=None:
-            self.driver.get(url)
+    def login_as(self, username):
+        url = self.get_current_url()
+        if url not in self.url:
+            self.driver.get(self.url)
             time.sleep(10)
         else:
             self.js_click(self.webapps_home)
             time.sleep(10)
         try:
             self.wait_for_element(self.webapp_login)
+            self.scroll_to_element(self.webapp_login)
             self.js_click(self.webapp_login)
         except NoSuchElementException:
             self.wait_to_click(self.webapps_home)
