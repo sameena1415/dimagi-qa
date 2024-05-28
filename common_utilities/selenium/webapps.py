@@ -122,6 +122,7 @@ class WebApps(BasePage):
         else:
             self.scroll_to_element(self.submit_on_case_search_page)
             self.js_click(self.submit_on_case_search_page)
+            time.sleep(10)
             self.wait_for_ajax()
         self.is_visible_and_displayed(self.case_list, timeout=500)
 

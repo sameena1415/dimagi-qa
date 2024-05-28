@@ -31,6 +31,7 @@ class BhaWorkflows(BasePage):
         self.content = "//*[contains(@title,'{}')]/parent::*"
 
     def click_on_admit_new_client(self):
+        self.wait_for_element(self.admit_new_client_on_caselist)
         self.js_click(self.admit_new_client_on_caselist)
 
     def replace_one_char(self, original_string):

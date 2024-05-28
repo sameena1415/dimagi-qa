@@ -85,7 +85,7 @@ class CaseSearchWorkflows(BasePage):
         if property_type == TEXT_INPUT:
             self.search_property = self.get_element(self.search_against_text_property_format, search_property)
             self.wait_to_click(self.search_property)
-            self.wait_to_clear_and_send_keys(self.search_property, input_value)
+            self.wait_to_clear_and_send_keys(self.search_property, input_value+Keys.TAB)
             time.sleep(5)
             self.send_keys(self.search_property, Keys.TAB)
             self.wait_for_ajax()
