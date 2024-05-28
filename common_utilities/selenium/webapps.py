@@ -104,7 +104,7 @@ class WebApps(BasePage):
 
     def search_all_cases(self):
         self.scroll_to_element(self.search_all_cases_button)
-        self.wait_to_click(self.search_all_cases_button)
+        self.click(self.search_all_cases_button)
 
     def search_again_cases(self):
         self.scroll_to_element(self.search_again_button)
