@@ -33,9 +33,9 @@ class WebApps(BasePage):
         self.form_submission_successful = (By.XPATH, "//p[contains(text(), 'successfully saved')]")
         self.form_500_error = (By.XPATH, "//*[contains(text(),'500 :')]")
         self.search_all_cases_button = (By.XPATH,
-                                        "//*[contains(text(),'Search All')]//parent::div[@class='case-list-action-button btn-group formplayer-request']")
+                                        "(//*[contains(text(),'Search All')]//parent::div[@class='case-list-action-button btn-group formplayer-request'])[1]")
         self.search_again_button = (By.XPATH,
-                                    "//*[contains(text(),'Search Again')]//parent::div[@class='case-list-action-button btn-group formplayer-request']")
+                                    "(//*[contains(text(),'Search Again')]//parent::div[@class='case-list-action-button btn-group formplayer-request'])[1]")
         self.clear_case_search_page = (By.XPATH, "//button[@id='query-clear-button']")
         self.submit_on_case_search_page = (By.XPATH, "//button[@type='submit' and @id='query-submit-button']")
         self.case_list = (By.XPATH, "//table")#"//table[@class='table module-table module-table-case-list']")
@@ -57,7 +57,7 @@ class WebApps(BasePage):
         self.last_page = (By.XPATH, "(//a[contains(@aria-label, 'Page')])[last()]")
         self.next_page = (By.XPATH, "//a[contains(@aria-label, 'Next')]")
         self.prev_page = (By.XPATH, "//a[contains(@aria-label, 'Previous')]")
-        self.pagination_select = (By.XPATH, "//select[@class='form-control per-page-limit']")
+        self.pagination_select = (By.XPATH, "//select[contains(@class,'per-page-limit')]")
         self.go_to_page_textarea = (By.ID, "goText")
         self.go_button = (By.ID, "pagination-go-button")
         self.value_in_data_preview = "//td[@title='{}']"
