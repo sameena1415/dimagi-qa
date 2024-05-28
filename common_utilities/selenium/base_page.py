@@ -269,6 +269,11 @@ class BasePage:
         print(self.driver.title)
         print(self.driver.current_window_handle)
 
+    def get_current_url(self):
+        get_url = self.driver.current_url
+        print("Current URL : " + get_url)
+        return get_url
+
     def get_environment(self):
         get_env = self.driver.current_url
         env_name = get_env.split("/")[2]

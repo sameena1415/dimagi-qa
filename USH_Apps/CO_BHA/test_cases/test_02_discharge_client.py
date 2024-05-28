@@ -6,9 +6,9 @@ from common_utilities.selenium.webapps import WebApps
 import names
 
 
-def test_case_discharge_client_1(driver):
+def test_case_discharge_client_1(driver, settings):
     """use case: state level user"""
-    webapps = WebApps(driver)
+    webapps = WebApps(driver, settings)
     casesearch = CaseSearchWorkflows(driver)
     app = BhaWorkflows(driver)
 

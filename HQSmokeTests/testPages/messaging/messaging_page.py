@@ -505,8 +505,10 @@ class MessagingPage(BasePage):
             time.sleep(5)
         else:
             print("Value null")
-        self.wait_to_click(self.settings_bar)
-        self.wait_to_click(self.project_settings_menu)
+        self.wait_for_element(self.settings_bar)
+        self.js_click(self.settings_bar)
+        self.wait_for_element(self.project_settings_menu)
+        self.js_click(self.project_settings_menu)
         assert self.is_visible_and_displayed(
             self.project_settings_elements), "Project Settings page did not load successfully"
         print("Project Settings page loaded successfully!")

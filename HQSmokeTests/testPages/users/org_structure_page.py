@@ -205,15 +205,15 @@ class OrganisationStructurePage(BasePage):
         self.wait_to_click(self.org_menu_link_text)
         self.wait_to_click(self.edit_loc_field_btn_xpath)
         time.sleep(5)
-        if not self.is_present(self.delete_loc_field):
-            print("No location field present")
-        else:
-            self.scroll_to_element(self.delete_loc_field)
-            self.js_click(self.delete_loc_field)
-            self.wait_to_click(self.delete_org_level)
-            self.scroll_to_element(self.save_btn_id)
-            self.wait_to_click(self.save_btn_id)
-        print("Location field deleted successfully")
+        # if not self.is_present(self.delete_loc_field):
+        #     print("No location field present")
+        # else:
+        #     self.scroll_to_element(self.delete_loc_field)
+        #     self.js_click(self.delete_loc_field)
+        #     self.wait_to_click(self.delete_org_level)
+        #     self.scroll_to_element(self.save_btn_id)
+        #     self.wait_to_click(self.save_btn_id)
+        # print("Location field deleted successfully")
         self.delete_test_location()
         self.delete_test_org_level()
 

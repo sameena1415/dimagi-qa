@@ -11,9 +11,9 @@ value = dict()
 value["first_name"]=None
 value["last_name"] = None
 
-def test_case_01_admit_case_1(driver):
+def test_case_01_admit_case_1(driver, settings):
     """use case: Admit the client - case doesn't exist"""
-    webapps = WebApps(driver)
+    webapps = WebApps(driver, settings)
     casesearch = CaseSearchWorkflows(driver)
     app = BhaWorkflows(driver)
 
@@ -53,11 +53,11 @@ def test_case_01_admit_case_1(driver):
     value["last_name"] = last_name
     return value
 
-def test_case_02_admit_case_2(driver):
+def test_case_02_admit_case_2(driver, settings):
     if value["first_name"] == None and value["last_name"] == None:
         pytest.skip("Skipping as name is null")
     """use case: Admit a client - case does exist -> Request pending admission"""
-    webapps = WebApps(driver)
+    webapps = WebApps(driver, settings)
     casesearch = CaseSearchWorkflows(driver)
     app = BhaWorkflows(driver)
 
@@ -101,11 +101,11 @@ def test_case_02_admit_case_2(driver):
                                         expected_value=typo_first_name + " " + typo_last_name)
 
 
-def test_case_03_lock_in_1_1(driver):
+def test_case_03_lock_in_1_1(driver, settings):
     if value["first_name"] == None and value["last_name"] == None:
         pytest.skip("Skipping as name is null")
     """use case: no existing lock status for clinic user"""
-    webapps = WebApps(driver)
+    webapps = WebApps(driver, settings)
     casesearch = CaseSearchWorkflows(driver)
     app = BhaWorkflows(driver)
 
@@ -133,11 +133,11 @@ def test_case_03_lock_in_1_1(driver):
     casesearch.check_eof_navigation(eof_nav=MENU, menu=BhaUserInput.search_my_clients)
 
 
-def test_case_04_lock_in_1_2(driver):
+def test_case_04_lock_in_1_2(driver, settings):
     if value["first_name"] == None and value["last_name"] == None:
         pytest.skip("Skipping as name is null")
     """use case: no existing lock status for state user"""
-    webapps = WebApps(driver)
+    webapps = WebApps(driver, settings)
     casesearch = CaseSearchWorkflows(driver)
     app = BhaWorkflows(driver)
 
@@ -158,11 +158,11 @@ def test_case_04_lock_in_1_2(driver):
                                         expected_value=BhaUserInput.pending_status)
 
 
-def test_case_05_admit_case_7(driver):
+def test_case_05_admit_case_7(driver, settings):
     if value["first_name"] == None and value["last_name"] == None:
         pytest.skip("Skipping as name is null")
     """use case: match on inactive client"""
-    webapps = WebApps(driver)
+    webapps = WebApps(driver, settings)
     casesearch = CaseSearchWorkflows(driver)
     app = BhaWorkflows(driver)
 

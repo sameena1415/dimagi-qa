@@ -13,10 +13,12 @@ from common_utilities.selenium.base_page import BasePage
 
 class WebApps(BasePage):
 
-    def __init__(self, driver):
+    def __init__(self, driver, settings):
         super().__init__(driver)
+        self.settings = settings
 
-        self.app_name_format = "//*[@aria-label='{}']/div"
+        self.url = self.settings['url']
+        self.app_name_format = "//div[@aria-label='{}']/div/h3"
         self.app_header_format = "//h1[contains(text(),'{}')]"
         self.menu_name_format = '//*[contains(@aria-label,"{}")]'
         self.menu_name_header_format = '//*[contains(text(),"{}")]'
@@ -31,9 +33,9 @@ class WebApps(BasePage):
         self.form_submission_successful = (By.XPATH, "//p[contains(text(), 'successfully saved')]")
         self.form_500_error = (By.XPATH, "//*[contains(text(),'500 :')]")
         self.search_all_cases_button = (By.XPATH,
-                                        "//*[contains(text(),'Search All')]//parent::div[@class='case-list-action-button btn-group formplayer-request']")
+                                        "(//*[contains(text(),'Search All')]//parent::div[@class='case-list-action-button btn-group formplayer-request'])[1]")
         self.search_again_button = (By.XPATH,
-                                    "//*[contains(text(),'Search Again')]//parent::div[@class='case-list-action-button btn-group formplayer-request']")
+                                    "(//*[contains(text(),'Search Again')]//parent::div[@class='case-list-action-button btn-group formplayer-request'])[1]")
         self.clear_case_search_page = (By.XPATH, "//button[@id='query-clear-button']")
         self.submit_on_case_search_page = (By.XPATH, "//button[@type='submit' and @id='query-submit-button']")
         self.case_list = (By.XPATH, "//table")#"//table[@class='table module-table module-table-case-list']")
@@ -45,7 +47,7 @@ class WebApps(BasePage):
         self.webapps_home = (By.XPATH, "//i[@class='fcc fcc-flower']")
         self.webapp_login = (By.XPATH, "(//div[@class='js-restore-as-item appicon appicon-restore-as'])")
         self.search_user_webapps = (By.XPATH, "//input[@placeholder='Filter workers']")
-        self.search_button_webapps = (By.XPATH, "//div[@class='input-group-btn']")
+        self.search_button_webapps = (By.XPATH, "//button/i[contains(@class,'search')]")
         self.login_as_username = "//h3/b[.='{}']"
         self.webapp_login_confirmation = (By.ID, 'js-confirmation-confirm')
         self.webapp_working_as = (By.XPATH, "//div[@class='restore-as-banner module-banner']/b")
@@ -55,7 +57,7 @@ class WebApps(BasePage):
         self.last_page = (By.XPATH, "(//a[contains(@aria-label, 'Page')])[last()]")
         self.next_page = (By.XPATH, "//a[contains(@aria-label, 'Next')]")
         self.prev_page = (By.XPATH, "//a[contains(@aria-label, 'Previous')]")
-        self.pagination_select = (By.XPATH, "//select[@class='form-control per-page-limit']")
+        self.pagination_select = (By.XPATH, "//select[contains(@class,'per-page-limit')]")
         self.go_to_page_textarea = (By.ID, "goText")
         self.go_button = (By.ID, "pagination-go-button")
         self.value_in_data_preview = "//td[@title='{}']"
@@ -68,10 +70,12 @@ class WebApps(BasePage):
 
     def open_app(self, app_name):
         time.sleep(2)
-        self.js_click(self.webapps_home)
+        if self.is_present_and_displayed(self.webapps_home, 20):
+            self.js_click(self.webapps_home)
         self.application = self.get_element(self.app_name_format, app_name)
         self.application_header = self.get_element(self.app_header_format, app_name)
-        self.wait_to_click(self.application)
+        self.scroll_to_element(self.application)
+        self.js_click(self.application)
         self.wait_for_ajax()
         self.is_visible_and_displayed(self.application_header, timeout=200)
 
@@ -100,7 +104,7 @@ class WebApps(BasePage):
 
     def search_all_cases(self):
         self.scroll_to_element(self.search_all_cases_button)
-        self.wait_to_click(self.search_all_cases_button)
+        self.click(self.search_all_cases_button)
 
     def search_again_cases(self):
         self.scroll_to_element(self.search_again_button)
@@ -116,7 +120,9 @@ class WebApps(BasePage):
         if enter_key == YES:
             self.send_keys(self.submit_on_case_search_page, Keys.ENTER)
         else:
+            self.scroll_to_element(self.submit_on_case_search_page)
             self.js_click(self.submit_on_case_search_page)
+            time.sleep(10)
             self.wait_for_ajax()
         self.is_visible_and_displayed(self.case_list, timeout=500)
 
@@ -190,24 +196,27 @@ class WebApps(BasePage):
         self.login_as_user = self.get_element(self.login_as_username, username)
         self.click(self.login_as_user)
         self.click(self.webapp_login_confirmation)
-        logdedin_user = self.get_text(self.webapp_working_as)
-        assert logdedin_user == username
+        loggedin_user = self.get_text(self.webapp_working_as)
+        assert loggedin_user == username
 
-    def login_as(self, username, url=None):
-        if url!=None:
-            self.driver.get(url)
+    def login_as(self, username):
+        url = self.get_current_url()
+        if url not in self.url:
+            self.driver.get(self.url)
             time.sleep(10)
         else:
             self.js_click(self.webapps_home)
             time.sleep(10)
         try:
             self.wait_for_element(self.webapp_login)
+            self.scroll_to_element(self.webapp_login)
             self.js_click(self.webapp_login)
         except NoSuchElementException:
             self.wait_to_click(self.webapps_home)
             self.wait_for_element(self.webapp_login)
             self.js_click(self.webapp_login)
         self.send_keys(self.search_user_webapps, username)
+        time.sleep(1)
         self.click(self.search_button_webapps)
         self.select_user(username)
         return username

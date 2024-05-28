@@ -83,8 +83,12 @@ class WebAppsPage(BasePage):
 
     def submit_case_change_register_form(self):
         self.wait_to_click(self.web_app_link)
-        self.wait_to_click(self.update_case_change_link)
-        self.wait_to_click(self.case_register_form)
+        self.wait_for_element(self.web_app_link)
+        self.js_click(self.web_app_link)
+        self.wait_for_element(self.update_case_change_link)
+        self.js_click(self.update_case_change_link)
+        self.wait_for_element(self.case_register_form)
+        self.js_click(self.case_register_form)
         self.wait_to_clear_and_send_keys(self.enter_text_area, self.text_value)
         self.wait_to_clear_and_send_keys(self.enter_value_area, self.text_value+Keys.TAB)
         self.js_click(self.form_submit_button)

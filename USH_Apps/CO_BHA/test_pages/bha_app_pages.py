@@ -14,7 +14,7 @@ class BhaWorkflows(BasePage):
 
         self.admit_new_client_on_caselist = (By.XPATH, "//button[text()='Admit New Client']")
         self.radio_option_value = "//input[contains(@value,'{}')]"
-        self.case_search_properties = (By.XPATH, "//label[@class='control-label']")
+        self.case_search_properties = (By.XPATH, "//label[contains(@class,'label')]")
         self.continue_button = "//span[@id='multi-select-btn-text' and text()='{}']"
         self.client_info = " (//h2[contains(text(), 'Client Information')]/following::strong[contains(text(),'{}')]//ancestor::li[1])[1]"
         self.combobox_select_clinic = (By.XPATH, "//select[@class='form-control select2-hidden-accessible']")
@@ -31,6 +31,7 @@ class BhaWorkflows(BasePage):
         self.content = "//*[contains(@title,'{}')]/parent::*"
 
     def click_on_admit_new_client(self):
+        self.wait_for_element(self.admit_new_client_on_caselist)
         self.js_click(self.admit_new_client_on_caselist)
 
     def replace_one_char(self, original_string):

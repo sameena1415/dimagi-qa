@@ -24,7 +24,7 @@ class CaseSearchWorkflows(BasePage):
         self.search_property_name_combobox = "//label[contains(text(),'{}')]"
         self.combobox_search_property_name_and_value_format = self.search_property_name_combobox + "//following::span[contains(text(),'{}')]"
         self.search_against_text_property_format = "//input[contains (@id, '{}')]"
-        self.help_text_format = '//label[@for="{}"]//following::a[@data-content="{}"]'
+        self.help_text_format = '//label[@for="{}"]//following::a[@data-bs-content="{}" or @data-content="{}"]'
         self.combox_select = "//label[contains(text(), '{}')]//following::select[contains(@class, 'query-field')][1]"
         self.search_for_address = "//*[contains(text(),'{}')]//following::input[contains(@aria-label,'Search')][1]"
         self.include_blanks = self.search_property_name_combobox + "//following::input[contains(@class,'search-for-blank')][1]"
@@ -36,7 +36,7 @@ class CaseSearchWorkflows(BasePage):
         self.search_screen_title = "//h2[contains(text(), '{}')]"
         self.search_screen_title_sscs = "//h1[contains(text(), '{}')]"
         self.search_screen_subtitle = "//strong[contains(text(), '{}')]"
-        self.date_selected = "(//*[contains(text(),'{}')])[1]"
+        self.date_selected = "(//*[contains(text(),'{}') or contains(@value,'{}')])[1]"
         self.dropdown_values = self.combox_select + "/option"
         self.menu_header = "//h1[contains(text(),'{}')]"
         self.menu_breadcrumb = "//li[contains(text(),'{}')]"
@@ -85,7 +85,7 @@ class CaseSearchWorkflows(BasePage):
         if property_type == TEXT_INPUT:
             self.search_property = self.get_element(self.search_against_text_property_format, search_property)
             self.wait_to_click(self.search_property)
-            self.wait_to_clear_and_send_keys(self.search_property, input_value)
+            self.wait_to_clear_and_send_keys(self.search_property, input_value+Keys.TAB)
             time.sleep(5)
             self.send_keys(self.search_property, Keys.TAB)
             self.wait_for_ajax()
@@ -116,12 +116,12 @@ class CaseSearchWorkflows(BasePage):
         return parsed_date
 
     def check_help_text(self, search_property, help_text):
-        help_text = (By.XPATH, self.help_text_format.format(search_property, help_text))
+        help_text = (By.XPATH, self.help_text_format.format(search_property, help_text, help_text))
         assert self.is_visible_and_displayed(help_text)
 
     def check_date_range(self, date_range):
         time.sleep(5)
-        date_element = self.get_element(self.date_selected, date_range)
+        date_element = (By.XPATH, self.date_selected.format(date_range, date_range))
         print(date_element)
         assert self.is_present(date_element)
 
