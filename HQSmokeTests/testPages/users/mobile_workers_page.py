@@ -125,7 +125,7 @@ class MobileWorkerPage(BasePage):
         self.confirm_deactivate = (By.XPATH, "(//button[@class='btn btn-danger'])[1]")
         self.view_all_link_text = (By.LINK_TEXT, "View All")
         self.search_user_web_apps = (By.XPATH, "//input[@placeholder='Filter workers']")
-        self.search_button_we_apps = (By.XPATH, "//div[@class='input-group-btn']")
+        self.search_button_we_apps = (By.XPATH, "//button/i[contains(@class,'search')]")
 
         self.field_tab = (By.XPATH, "//a[@href='#tabs-fields']")
         self.profile_tab = (By.XPATH, "//a[@href='#tabs-profiles']")

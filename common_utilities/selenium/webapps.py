@@ -18,7 +18,7 @@ class WebApps(BasePage):
         self.settings = settings
 
         self.url = self.settings['url']
-        self.app_name_format = "//*[@aria-label='{}']/div"
+        self.app_name_format = "//div[@aria-label='{}']/div/h3"
         self.app_header_format = "//h1[contains(text(),'{}')]"
         self.menu_name_format = '//*[contains(@aria-label,"{}")]'
         self.menu_name_header_format = '//*[contains(text(),"{}")]'
@@ -47,7 +47,7 @@ class WebApps(BasePage):
         self.webapps_home = (By.XPATH, "//i[@class='fcc fcc-flower']")
         self.webapp_login = (By.XPATH, "(//div[@class='js-restore-as-item appicon appicon-restore-as'])")
         self.search_user_webapps = (By.XPATH, "//input[@placeholder='Filter workers']")
-        self.search_button_webapps = (By.XPATH, "//div[@class='input-group-btn']")
+        self.search_button_webapps = (By.XPATH, "//button/i[contains(@class,'search')]")
         self.login_as_username = "//h3/b[.='{}']"
         self.webapp_login_confirmation = (By.ID, 'js-confirmation-confirm')
         self.webapp_working_as = (By.XPATH, "//div[@class='restore-as-banner module-banner']/b")
@@ -70,10 +70,12 @@ class WebApps(BasePage):
 
     def open_app(self, app_name):
         time.sleep(2)
-        self.js_click(self.webapps_home)
+        if self.is_present_and_displayed(self.webapps_home, 20):
+            self.js_click(self.webapps_home)
         self.application = self.get_element(self.app_name_format, app_name)
         self.application_header = self.get_element(self.app_header_format, app_name)
-        self.wait_to_click(self.application)
+        self.scroll_to_element(self.application)
+        self.js_click(self.application)
         self.wait_for_ajax()
         self.is_visible_and_displayed(self.application_header, timeout=200)
 
@@ -118,6 +120,7 @@ class WebApps(BasePage):
         if enter_key == YES:
             self.send_keys(self.submit_on_case_search_page, Keys.ENTER)
         else:
+            self.scroll_to_element(self.submit_on_case_search_page)
             self.js_click(self.submit_on_case_search_page)
             self.wait_for_ajax()
         self.is_visible_and_displayed(self.case_list, timeout=500)
@@ -212,6 +215,7 @@ class WebApps(BasePage):
             self.wait_for_element(self.webapp_login)
             self.js_click(self.webapp_login)
         self.send_keys(self.search_user_webapps, username)
+        time.sleep(1)
         self.click(self.search_button_webapps)
         self.select_user(username)
         return username

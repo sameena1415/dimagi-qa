@@ -471,7 +471,7 @@ class ExportDataPage(BasePage):
         self.wait_and_sleep_to_click(self.add_export_button)
         time.sleep(200)
         self.is_visible_and_displayed(self.model, 200)
-        self.wait_for_element(self.model, 100)
+        self.wait_for_element(self.model, 400)
         self.select_by_value(self.model, UserData.model_type_case)
         try:
             self.select_by_text(self.application, UserData.village_application)
