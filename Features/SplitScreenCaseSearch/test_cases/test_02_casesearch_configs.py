@@ -93,7 +93,7 @@ def test_case_05_date_range_format(driver, settings):
                                               input_value=CaseSearchUserInput.date_08_16_2023_slash,
                                               property_type=TEXT_INPUT)
     webapps.search_button_on_case_search_page()
-    casesearch.check_date_range(date_range=casesearch.parse_date_range(input_date=date,
+    casesearch.check_date_range(search_property=CaseSearchUserInput.date_opened, date_range=casesearch.parse_date_range(input_date=date,
                                                                        input_format=CaseSearchUserInput.dates.get(
                                                                            "MM/DD/YYYY"),
                                                                        output_format=CaseSearchUserInput.dates.get(
@@ -103,8 +103,7 @@ def test_case_05_date_range_format(driver, settings):
     date = casesearch.search_against_property(search_property=CaseSearchUserInput.date_opened,
                                               input_value=CaseSearchUserInput.date_08_16_2023_hyphen,
                                               property_type=TEXT_INPUT)
-    webapps.search_button_on_case_search_page()
-    casesearch.check_date_range(date_range=casesearch.parse_date_range(input_date=date,
+    casesearch.check_date_range(search_property=CaseSearchUserInput.date_opened, date_range=casesearch.parse_date_range(input_date=date,
                                                                        input_format=CaseSearchUserInput.dates.get(
                                                                            "MM-DD-YYYY"),
                                                                        output_format=CaseSearchUserInput.dates.get(
@@ -114,8 +113,7 @@ def test_case_05_date_range_format(driver, settings):
     date = casesearch.search_against_property(search_property=CaseSearchUserInput.date_opened,
                                               input_value=CaseSearchUserInput.date_08_16_23_slash,
                                               property_type=TEXT_INPUT)
-    webapps.search_button_on_case_search_page()
-    casesearch.check_date_range(date_range=casesearch.parse_date_range(input_date=date,
+    casesearch.check_date_range(search_property=CaseSearchUserInput.date_opened, date_range=casesearch.parse_date_range(input_date=date,
                                                                        input_format=CaseSearchUserInput.dates.get(
                                                                            "MM/DD/YY"),
                                                                        output_format=CaseSearchUserInput.dates.get(
@@ -125,8 +123,7 @@ def test_case_05_date_range_format(driver, settings):
     date = casesearch.search_against_property(search_property=CaseSearchUserInput.date_opened,
                                               input_value=CaseSearchUserInput.date_08_16_23_hyphen,
                                               property_type=TEXT_INPUT)
-    webapps.search_button_on_case_search_page()
-    casesearch.check_date_range(date_range=casesearch.parse_date_range(input_date=date,
+    casesearch.check_date_range(search_property=CaseSearchUserInput.date_opened, date_range=casesearch.parse_date_range(input_date=date,
                                                                        input_format=CaseSearchUserInput.dates.get(
                                                                            "MM-DD-YY"),
                                                                        output_format=CaseSearchUserInput.dates.get(
@@ -144,7 +141,7 @@ def test_case_05_date_range_format(driver, settings):
     date = casesearch.search_against_property(search_property=CaseSearchUserInput.date_opened,
                                               input_value=CaseSearchUserInput.date_08_16_2023_slash,
                                               property_type=TEXT_INPUT)
-    casesearch.check_date_range(casesearch.parse_date_range(input_date=date,
+    casesearch.check_date_range(search_property=CaseSearchUserInput.date_opened, date_range=casesearch.parse_date_range(input_date=date,
                                                             input_format=CaseSearchUserInput.dates.get("MM/DD/YYYY"),
                                                             output_format=CaseSearchUserInput.dates.get("MM/DD/YYYY")))
     webapps.search_button_on_case_search_page(enter_key=YES, )

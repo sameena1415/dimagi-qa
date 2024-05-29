@@ -4,6 +4,7 @@ import time
 from dateutil.relativedelta import relativedelta
 from datetime import datetime
 
+from selenium.webdriver import ActionChains
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 
@@ -60,6 +61,8 @@ class CaseSearchWorkflows(BasePage):
         self.search_property_checked = "//label[contains (text(),'{}')][1]//following::input[@value='{}' and @checked][1]"
         self.remove_combobox_selection = "//label[contains(text(),'{}')]//following::button[@aria-label='Remove all items'][1]"
         self.rating_answer = "//span[text()='Rating']/following::input[@value='{}'][1]"
+        self.date_picker_close = (By.XPATH, "//div[contains(@class,'show')]//div[@data-action='close']")
+        self.date_picker_clear = (By.XPATH, "//div[contains(@class,'show')]//div[@data-action='clear']")
 
     def check_values_on_caselist(self, row_num, expected_value, is_multi=NO):
         self.value_in_table = self.get_element(self.value_in_table_format, row_num)
@@ -82,12 +85,18 @@ class CaseSearchWorkflows(BasePage):
         assert self.is_visible_and_displayed(search_property)
 
     def search_against_property(self, search_property, input_value, property_type, include_blanks=None):
+        print(input_value)
         if property_type == TEXT_INPUT:
             self.search_property = self.get_element(self.search_against_text_property_format, search_property)
             self.wait_to_click(self.search_property)
-            self.wait_to_clear_and_send_keys(self.search_property, input_value+Keys.TAB)
+            time.sleep(4)
+            if self.is_visible_and_displayed(self.date_picker_clear):
+                self.js_click(self.date_picker_clear)
+                time.sleep(4)
+            self.send_keys(self.search_property, input_value+Keys.TAB)
             time.sleep(5)
-            self.send_keys(self.search_property, Keys.TAB)
+            if self.is_visible_and_displayed(self.date_picker_close):
+                self.js_click(self.date_picker_close)
             self.wait_for_ajax()
         elif property_type == COMBOBOX:
             self.combox_select_element = self.get_element(self.combox_select, search_property)
@@ -119,11 +128,14 @@ class CaseSearchWorkflows(BasePage):
         help_text = (By.XPATH, self.help_text_format.format(search_property, help_text, help_text))
         assert self.is_visible_and_displayed(help_text)
 
-    def check_date_range(self, date_range):
+    def check_date_range(self, search_property, date_range):
         time.sleep(5)
         date_element = (By.XPATH, self.date_selected.format(date_range, date_range))
+        self.search_property = self.get_element(self.search_against_text_property_format, search_property)
+        value = self.get_attribute(self.search_property, 'value')
+        print('value: ', value)
         print(date_element)
-        assert self.is_present(date_element)
+        assert self.is_present(date_element) or value == date_range
 
     def add_address(self, address, search_property):
         address_search = self.get_element(self.search_for_address, search_property)

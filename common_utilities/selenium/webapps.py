@@ -33,9 +33,9 @@ class WebApps(BasePage):
         self.form_submission_successful = (By.XPATH, "//p[contains(text(), 'successfully saved')]")
         self.form_500_error = (By.XPATH, "//*[contains(text(),'500 :')]")
         self.search_all_cases_button = (By.XPATH,
-                                        "(//*[contains(text(),'Search All')]//parent::div[@class='case-list-action-button btn-group formplayer-request'])[1]")
+                                        "(//*[contains(text(),'Search All')]//parent::div[@class='case-list-action-button btn-group formplayer-request']/button)[1]")
         self.search_again_button = (By.XPATH,
-                                    "(//*[contains(text(),'Search Again')]//parent::div[@class='case-list-action-button btn-group formplayer-request'])[1]")
+                                    "(//*[contains(text(),'Search Again')]//parent::div[@class='case-list-action-button btn-group formplayer-request']/button)[1]")
         self.clear_case_search_page = (By.XPATH, "//button[@id='query-clear-button']")
         self.submit_on_case_search_page = (By.XPATH, "//button[@type='submit' and @id='query-submit-button']")
         self.case_list = (By.XPATH, "//table")#"//table[@class='table module-table module-table-case-list']")
@@ -104,11 +104,12 @@ class WebApps(BasePage):
 
     def search_all_cases(self):
         self.scroll_to_element(self.search_all_cases_button)
-        self.click(self.search_all_cases_button)
+        self.js_click(self.search_all_cases_button)
 
     def search_again_cases(self):
-        self.scroll_to_element(self.search_again_button)
-        self.click(self.search_again_button)
+        self.scroll_to_bottom()
+        self.wait_for_element(self.search_again_button)
+        self.js_click(self.search_again_button)
 
     def clear_selections_on_case_search_page(self):
         self.wait_for_element(self.clear_case_search_page, timeout=500)
