@@ -38,7 +38,7 @@ class WebApps(BasePage):
                                     "(//*[contains(text(),'Search Again')]//parent::div[@class='case-list-action-button btn-group formplayer-request']/button)[1]")
         self.clear_case_search_page = (By.XPATH, "//button[@id='query-clear-button']")
         self.submit_on_case_search_page = (By.XPATH, "//button[@type='submit' and @id='query-submit-button']")
-        self.case_list = (By.XPATH, "//table")#"//table[@class='table module-table module-table-case-list']")
+        self.case_list = (By.XPATH, "//div[contains(@id,'results')][//tbody or //section[contains(@class,'list')]]")#"//table[@class='table module-table module-table-case-list']")
         self.omni_search_input = (By.ID, "searchText")
         self.omni_search_button = (By.ID, "case-list-search-button")
         self.continue_button = (By.ID, "select-case")
