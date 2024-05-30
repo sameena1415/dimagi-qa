@@ -13,7 +13,7 @@ class MultiSelectWorkflows(BasePage):
     def __init__(self, driver):
         super().__init__(driver)
 
-        self.row_checkbox_xpath = "(//section//input[contains(@class,'select-row-checkbox') and @type='checkbox'])[{}]"
+        self.row_checkbox_xpath = "(//input[contains(@class,'select-row-checkbox') and @type='checkbox'])[{}]"
         self.value_in_table_format = "(//td[@class='module-case-list-column-checkbox']//following::td[@class='module-case-list-column'][1])[{}]"
         self.select_all_checkbox = (By.ID, "select-all-checkbox")
         self.case_names = (By.XPATH, "//td[contains(@class,'case-list-column')][3]")
