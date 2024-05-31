@@ -45,7 +45,7 @@ class CaseSearchWorkflows(BasePage):
         self.case_detail_value = "//th[contains(text(), '{}')]//following-sibling::td[contains(text(), '{}')]"
         self.case_detail_tab = "//a[text()='{}']"
         self.close_case_detail_tab = (
-            By.XPATH, "(//div[@id='case-detail-modal']//following:: button[@class='close'])[1]")
+            By.XPATH, "(//div[@id='case-detail-modal']//following:: button[contains(@class,'close')])[1]")
         # Reports
         self.case_type_select = (By.ID, "report_filter_case_type")
         self.report_search = (By.ID, "report_filter_search_query")
