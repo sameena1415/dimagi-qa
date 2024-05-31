@@ -257,6 +257,7 @@ class ApplicationPage(BasePage):
 
     def create_application_with_verifications(self):
         time.sleep(5)
+        self.switch_to_default_content()
         self.wait_for_element(self.applications_menu_id)
         self.click(self.applications_menu_id)
         self.wait_to_click(self.new_application)

@@ -29,7 +29,7 @@ class AppPreviewPage(BasePage):
         self.complete_button = (By.XPATH, "//button[@class='btn btn-success btn-formnav-submit']")
         self.submit = (By.XPATH, "(//button[@class='submit btn btn-primary'])[1]")
         self.submit_success = (By.XPATH, "//p[contains(text(),'successfully saved')]")
-        self.search_users_button = (By.XPATH, "//*[@class='fa fa-search']")
+        self.search_users_button = (By.XPATH, "//input[@placeholder='Filter workers']//following::*[contains(@class,'fa-search')]")
         self.search_worker = (By.XPATH, "//input[@placeholder='Filter workers']")
         self.login_as_button = (
             By.XPATH, "//div[@aria-labelledby='single-app-login-as-heading']/descendant::h3[.='Log in as']")

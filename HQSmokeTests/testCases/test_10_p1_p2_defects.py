@@ -79,7 +79,9 @@ def test_case_77_create_new_app(driver, settings):
 @pytest.mark.createRepeater
 @pytest.mark.editRepeater
 @pytest.mark.p1p2EscapeDefect
-def test_case_78_create_and_edit_repeaters(driver,settings):
+def test_case_78_create_and_edit_repeaters(driver, settings):
+    if not values['flag'] is True:
+        pytest.skip("Skipping as the previous test failed")
     msg = MessagingPage(driver)
     msg.project_settings_page(values['flag'])
     repeater = RepeatersPage(driver)

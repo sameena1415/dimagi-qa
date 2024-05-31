@@ -148,10 +148,9 @@ class MessagingPage(BasePage):
         self.project_settings_menu = (By.LINK_TEXT, "Project Settings")
         self.project_settings_elements = (By.XPATH, "//form[@class='form form-horizontal']")
         self.page_limit = (By.XPATH, "//select[@id='pagination-limit']")
-        self.keywords_list = (By.XPATH, "//td[.//span/a[contains(.,'KEYWORD_')]]//following-sibling::td/button")
-        self.delete_confirm_button = (
-            By.XPATH,
-            "//td[.//span/a[contains(.,'KEYWORD_')]]//following::a[@class='btn btn-danger delete-item-confirm'][1]")
+        self.keywords_list = (By.XPATH, "//td[.//span/a[contains(.,'KEYWORD_')]]")
+        self.keyword_delete_btn = "//td[.//span/a[contains(.,'{}')]]//following-sibling::td/button"
+        self.delete_confirm_button = "//td[.//span/a[contains(.,'{}')]]//following::a[contains(@class,'delete-item-confirm')][1]"
         self.page_empty = (By.ID, "pagination-empty-notification")
 
     def open_dashboard_page(self):
@@ -162,14 +161,18 @@ class MessagingPage(BasePage):
         self.click(self.compose_sms_menu)
         self.send_keys(self.recipients_textarea, "[send to all]")
         self.send_keys(self.message_textarea, "sms_" + fetch_random_string())
-        self.click(self.send_message)
+        time.sleep(2)
+        self.scroll_to_element(self.send_message)
+        self.js_click(self.send_message)
         try:
             assert self.is_present_and_displayed(self.message_sent_success_msg), "Message not sent successfully"
         except TimeoutException:
             self.click(self.compose_sms_menu)
             self.send_keys(self.recipients_textarea, "[send to all]")
             self.send_keys(self.message_textarea, "sms_" + fetch_random_string())
-            self.click(self.send_message)
+            time.sleep(2)
+            self.scroll_to_element(self.send_message)
+            self.js_click(self.send_message)
             assert self.is_visible_and_displayed(self.message_sent_success_msg), "Message not sent successfully"
             print("SMS composed successfully!")
 
@@ -227,6 +230,7 @@ class MessagingPage(BasePage):
         print("Sleeping till the alert processing completes")
         time.sleep(360)
         self.wait_to_clear_and_send_keys(self.search_box, self.cond_alert_name_input)
+        time.sleep(2)
         self.wait_to_click(self.search_box)
         self.wait_for_element(self.delete_cond_alert, 700)
         self.driver.refresh()
@@ -274,7 +278,9 @@ class MessagingPage(BasePage):
         self.send_keys(self.keyword_name, self.keyword_name_input)
         self.send_keys(self.keyword_description, self.keyword_name_input)
         self.send_keys(self.keyword_message, "Test Message: " + self.keyword_name_input)
-        self.click(self.send_message)
+        time.sleep(2)
+        self.scroll_to_element(self.send_message)
+        self.js_click(self.send_message)
         time.sleep(2)
         self.select_by_value(self.page_limit, "50")
         time.sleep(3)
@@ -289,7 +295,9 @@ class MessagingPage(BasePage):
         self.wait_to_click(self.keyword_survey)
         self.wait_to_click(self.survey_option_select)
         self.send_keys(self.keyword_message, "Test Message" + self.struct_keyword_name_input)
-        self.wait_to_click(self.send_message)
+        time.sleep(2)
+        self.scroll_to_element(self.send_message)
+        self.js_click(self.send_message)
         time.sleep(2)
         self.select_by_value(self.page_limit, "50")
         time.sleep(3)
@@ -329,7 +337,9 @@ class MessagingPage(BasePage):
             self.send_keys(self.time_input, "23:59")
         else:
             self.click(self.disable_button)
-        self.click(self.send_message)
+        time.sleep(2)
+        self.scroll_to_element(self.send_message)
+        self.js_click(self.send_message)
         assert self.is_visible_and_displayed(self.message_sent_success_msg), "Settings page not updated successfully!"
         print("Settings page updated successfully!")
 
@@ -410,17 +420,25 @@ class MessagingPage(BasePage):
         elif self.is_present(self.page_limit):
             self.select_by_value(self.page_limit, "50")
             time.sleep(3)
-            list = self.find_elements(self.keywords_list)
-            confirm_button_list = self.find_elements(self.delete_confirm_button)
-            print("List Count: ", len(list))
-            if len(list) > 0:
-                for i in range(len(list))[::-1]:
-                    list[i].click()
-                    time.sleep(1)
-                    confirm_button_list[i].click()
-                    time.sleep(1)
+            list_keyword = self.find_elements(self.keywords_list)
+            confirm_button_list = self.find_elements((By.XPATH, self.delete_confirm_button.format('KEYWORD_')))
+            print("List Count: ", len(list_keyword))
+            keyword_names = []
+            if len(list_keyword) > 0:
+                for i in range(len(list_keyword)):
+                    text = list_keyword[i].text
+                    keyword_names.append(text)
+            print(keyword_names)
+            if len(keyword_names) > 0:
+                for i in range(len(keyword_names))[::-1]:
+                    self.scroll_to_element((By.XPATH, self.keyword_delete_btn.format(keyword_names[i])))
+                    self.js_click((By.XPATH, self.keyword_delete_btn.format(keyword_names[i])))
+                    time.sleep(2)
+                    self.wait_for_element((By.XPATH, self.delete_confirm_button.format(keyword_names[i])))
+                    self.js_click((By.XPATH, self.delete_confirm_button.format(keyword_names[i])))
+                    time.sleep(2)
                     list = self.find_elements(self.keywords_list)
-                    confirm_button_list = self.find_elements(self.delete_confirm_button)
+                    confirm_button_list = self.find_elements((By.XPATH, self.delete_confirm_button.format('KEYWORD_')))
                     print("Updated List Count: ", len(list))
                 self.driver.refresh()
                 time.sleep(5)
