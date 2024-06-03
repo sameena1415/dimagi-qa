@@ -615,7 +615,7 @@ class ExportDataPage(BasePage):
         self.wait_to_click(self.export_case_data_link)
         self.delete_bulk_exports()
         self.wait_and_sleep_to_click(self.add_export_button)
-        time.sleep(200)
+        time.sleep(300)
         self.is_visible_and_displayed(self.case_type, 200)
         self.wait_for_element(self.case_type, 200)
         self.select_by_text(self.case, UserData.case_reassign)
@@ -628,7 +628,7 @@ class ExportDataPage(BasePage):
     def add_form_exports_reassign(self):
         self.delete_bulk_exports()
         self.wait_and_sleep_to_click(self.add_export_button)
-        time.sleep(200)
+        time.sleep(300)
         self.is_visible_and_displayed(self.app_type, 200)
         self.wait_for_element(self.app_type, 200)
         self.select_by_text(self.app_type, UserData.app_type)

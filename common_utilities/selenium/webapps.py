@@ -171,6 +171,7 @@ class WebApps(BasePage):
         return self.case_name_first
 
     def continue_to_forms(self):
+        self.wait_for_element(self.continue_button, 100)
         self.js_click(self.continue_button)
 
     def select_case_and_continue(self, case_name):

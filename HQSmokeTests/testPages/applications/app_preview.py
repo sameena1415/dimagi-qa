@@ -39,7 +39,7 @@ class AppPreviewPage(BasePage):
         self.case_list_menu = "//h3[contains(text(), '{}')]"
         self.start_option = (By.XPATH, "//div[@class= 'js-start-app appicon appicon-start']")
         self.location_field = (By.XPATH, "//input[@class='query form-control']")
-        self.location_search = (By.XPATH, "//span/button[.='Search']")
+        self.location_search = (By.XPATH, "//button[contains(@class,'search')]")
         self.clear_map = (By.XPATH, "//button[.='Clear map']")
         self.longitude = (By.XPATH, "//td[@class='lon coordinate']")
         self.latitude = (By.XPATH, "//td[@class='lat coordinate']")

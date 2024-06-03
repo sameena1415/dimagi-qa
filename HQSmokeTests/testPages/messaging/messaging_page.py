@@ -103,13 +103,13 @@ class MessagingPage(BasePage):
         self.survey_option_select = (
         By.XPATH, "(//li[@class='select2-results__option select2-results__option--selectable'])[1]")
         self.structured_keyword_created = (By.XPATH, "//a[text()='" + self.struct_keyword_name_input + "']")
-        self.delete_keyword = (By.XPATH, self.keyword_created_xpath + "//following::*[@class='btn btn-danger'][1]")
+        self.delete_keyword = (By.XPATH, self.keyword_created_xpath + "//following::button[contains(@class,'danger')][1]")
         self.delete_structured_keyword = (
-        By.XPATH, "//a[text()='" + self.struct_keyword_name_input + "']//following::*[@class='btn btn-danger'][1]")
+        By.XPATH, "//a[text()='" + self.struct_keyword_name_input + "']//following::button[contains(@class,'danger')][1]")
         self.confirm_delete_keyword = (
-        By.XPATH, self.keyword_created_xpath + "//following::*[@class='btn btn-danger delete-item-confirm'][1]")
+        By.XPATH, self.keyword_created_xpath + "//following::*[contains(@class,'confirm')][1]")
         self.confirm_delete_structured_keyword = (By.XPATH,
-                                                  "//a[text()='" + self.struct_keyword_name_input + "']//following::*[@class='btn btn-danger delete-item-confirm'][1]")
+                                                  "//a[text()='" + self.struct_keyword_name_input + "']//following::*[contains(@class,'confirm')][1]")
         # Chat
         self.chat = (By.LINK_TEXT, "Chat")
         self.contact_table = (By.ID, "contact_list")
