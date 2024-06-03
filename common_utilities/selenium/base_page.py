@@ -61,6 +61,7 @@ class BasePage:
             alert.accept()
             element.click()
         except StaleElementReferenceException:
+            time.sleep(5)
             self.js_click(locator)
         except TimeoutException:
             if self.page_403():
@@ -89,9 +90,17 @@ class BasePage:
         return element_text
 
     def wait_for_element(self, locator, timeout=20):
+        try:
+            clickable = ec.element_to_be_clickable(locator)
+            WebDriverWait(self.driver, timeout, poll_frequency=5).until(clickable,
+                                                                    message="Couldn't find locator: " + str(locator))
+        except StaleElementReferenceException:
+            time.sleep(10)
         clickable = ec.element_to_be_clickable(locator)
         WebDriverWait(self.driver, timeout, poll_frequency=5).until(clickable,
-                                                                    message="Couldn't find locator: " + str(locator))
+                                                            message="Couldn't find locator: " + str(locator)
+                                                            )
+
 
     def wait_and_sleep_to_click(self, locator, timeout=90):
         element = None
@@ -111,6 +120,7 @@ class BasePage:
             alert.accept()
             element.click()
         except StaleElementReferenceException:
+            time.sleep(5)
             self.js_click(locator)
         except TimeoutException:
             if self.page_403():
@@ -242,7 +252,7 @@ class BasePage:
             is_displayed = False
         except StaleElementReferenceException:
             self.driver.refresh()
-            time.sleep(2)
+            time.sleep(10)
             visible = ec.presence_of_element_located(locator)
             element = WebDriverWait(self.driver, timeout).until(visible,
                                                                 message="Element" + str(locator) + "not displayed")
