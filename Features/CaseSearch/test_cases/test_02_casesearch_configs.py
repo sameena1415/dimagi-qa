@@ -117,7 +117,6 @@ def test_case_05_date_range_format(driver, settings):
                                                                            "MM/DD/YY"),
                                                                        output_format=CaseSearchUserInput.dates.get(
                                                                            "MM/DD/YYYY")))
-
     # MM-DD-YY
     webapps.clear_selections_on_case_search_page()
     date = casesearch.search_against_property(search_property=CaseSearchUserInput.date_opened,
@@ -129,7 +128,6 @@ def test_case_05_date_range_format(driver, settings):
                                                                            output_format=CaseSearchUserInput.dates.get(
                                                                                "MM/DD/YYYY")))
         # YYYY-MM-DD - DOM doesn't load value , so searching instead of a check
-
     webapps.clear_selections_on_case_search_page()
     casesearch.search_against_property(search_property=CaseSearchUserInput.date_opened,
                                            input_value=CaseSearchUserInput.date_2022_12_30,
