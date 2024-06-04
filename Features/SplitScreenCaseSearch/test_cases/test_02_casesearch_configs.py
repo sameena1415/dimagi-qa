@@ -217,8 +217,8 @@ def test_case_08_mobile_ucr_format(driver, settings):
 
 
 def test_case_09_single_date_format(driver, settings):
-    if 'staging' in settings['url']:
-        pytest.xfail('https://dimagi.atlassian.net/browse/QA-6599')
+    # if 'staging' in settings['url']:
+    #     pytest.xfail('https://dimagi.atlassian.net/browse/QA-6599')
     webapps = WebApps(driver, settings)
     casesearch = CaseSearchWorkflows(driver)
     """Check single date format search property"""
@@ -435,8 +435,8 @@ def test_case_16_sticky_search_with_default_value(driver, settings):
 
 
 def test_case_17_required_property(driver, settings):
-    if 'staging' in settings['url']:
-        pytest.xfail('https://dimagi.atlassian.net/browse/QA-6600')
+    # if 'staging' in settings['url']:
+    #     pytest.xfail('https://dimagi.atlassian.net/browse/QA-6600')
     webapps = WebApps(driver, settings)
     casesearch = CaseSearchWorkflows(driver)
     """Check required property"""
@@ -459,7 +459,7 @@ def test_case_17_required_property(driver, settings):
 
 def test_case_18_conditionally_required_condition_property(driver, settings):
     if 'staging' in settings['url']:
-        pytest.xfail('https://dimagi.atlassian.net/browse/QA-6600')
+        pytest.xfail('https://dimagi.atlassian.net/browse/QA-6631')
     webapps = WebApps(driver, settings)
     casesearch = CaseSearchWorkflows(driver)
     """Check conditionally required condition property"""
@@ -612,8 +612,8 @@ def test_case_23_dependent_dropdowns_value_clear(driver, settings):
 
 
 def test_case_24_case_search_validations(driver, settings):
-    if 'staging' in settings['url']:
-        pytest.xfail('https://dimagi.atlassian.net/browse/QA-6600')
+    # if 'staging' in settings['url']:
+    #     pytest.xfail('https://dimagi.atlassian.net/browse/QA-6600')
     webapps = WebApps(driver, settings)
     casesearch = CaseSearchWorkflows(driver)
     """Case Search Validations"""

@@ -196,8 +196,11 @@ class WebApps(BasePage):
 
     def select_user(self, username):
         self.login_as_user = self.get_element(self.login_as_username, username)
-        self.click(self.login_as_user)
-        self.click(self.webapp_login_confirmation)
+        self.wait_for_element(self.login_as_user)
+        self.js_click(self.login_as_user)
+        time.sleep(2)
+        self.wait_for_element(self.webapp_login_confirmation)
+        self.js_click(self.webapp_login_confirmation)
         loggedin_user = self.get_text(self.webapp_working_as)
         assert loggedin_user == username
 
