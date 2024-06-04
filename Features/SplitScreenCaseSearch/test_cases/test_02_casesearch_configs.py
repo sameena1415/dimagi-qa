@@ -92,8 +92,7 @@ def test_case_05_date_range_format(driver, settings):
     date = casesearch.search_against_property(search_property=CaseSearchUserInput.date_opened,
                                               input_value=CaseSearchUserInput.date_08_16_2023_slash,
                                               property_type=TEXT_INPUT)
-    webapps.search_button_on_case_search_page()
-    casesearch.check_date_range(date_range=casesearch.parse_date_range(input_date=date,
+    casesearch.check_date_range(search_property=CaseSearchUserInput.date_opened, date_range=casesearch.parse_date_range(input_date=date,
                                                                        input_format=CaseSearchUserInput.dates.get(
                                                                            "MM/DD/YYYY"),
                                                                        output_format=CaseSearchUserInput.dates.get(
@@ -103,8 +102,7 @@ def test_case_05_date_range_format(driver, settings):
     date = casesearch.search_against_property(search_property=CaseSearchUserInput.date_opened,
                                               input_value=CaseSearchUserInput.date_08_16_2023_hyphen,
                                               property_type=TEXT_INPUT)
-    webapps.search_button_on_case_search_page()
-    casesearch.check_date_range(date_range=casesearch.parse_date_range(input_date=date,
+    casesearch.check_date_range(search_property=CaseSearchUserInput.date_opened, date_range=casesearch.parse_date_range(input_date=date,
                                                                        input_format=CaseSearchUserInput.dates.get(
                                                                            "MM-DD-YYYY"),
                                                                        output_format=CaseSearchUserInput.dates.get(
@@ -114,8 +112,7 @@ def test_case_05_date_range_format(driver, settings):
     date = casesearch.search_against_property(search_property=CaseSearchUserInput.date_opened,
                                               input_value=CaseSearchUserInput.date_08_16_23_slash,
                                               property_type=TEXT_INPUT)
-    webapps.search_button_on_case_search_page()
-    casesearch.check_date_range(date_range=casesearch.parse_date_range(input_date=date,
+    casesearch.check_date_range(search_property=CaseSearchUserInput.date_opened, date_range=casesearch.parse_date_range(input_date=date,
                                                                        input_format=CaseSearchUserInput.dates.get(
                                                                            "MM/DD/YY"),
                                                                        output_format=CaseSearchUserInput.dates.get(
@@ -125,8 +122,7 @@ def test_case_05_date_range_format(driver, settings):
     date = casesearch.search_against_property(search_property=CaseSearchUserInput.date_opened,
                                               input_value=CaseSearchUserInput.date_08_16_23_hyphen,
                                               property_type=TEXT_INPUT)
-    webapps.search_button_on_case_search_page()
-    casesearch.check_date_range(date_range=casesearch.parse_date_range(input_date=date,
+    casesearch.check_date_range(search_property=CaseSearchUserInput.date_opened, date_range=casesearch.parse_date_range(input_date=date,
                                                                        input_format=CaseSearchUserInput.dates.get(
                                                                            "MM-DD-YY"),
                                                                        output_format=CaseSearchUserInput.dates.get(
@@ -144,10 +140,10 @@ def test_case_05_date_range_format(driver, settings):
     date = casesearch.search_against_property(search_property=CaseSearchUserInput.date_opened,
                                               input_value=CaseSearchUserInput.date_08_16_2023_slash,
                                               property_type=TEXT_INPUT)
-    casesearch.check_date_range(casesearch.parse_date_range(input_date=date,
+    casesearch.check_date_range(search_property=CaseSearchUserInput.date_opened, date_range=casesearch.parse_date_range(input_date=date,
                                                             input_format=CaseSearchUserInput.dates.get("MM/DD/YYYY"),
                                                             output_format=CaseSearchUserInput.dates.get("MM/DD/YYYY")))
-    webapps.search_button_on_case_search_page(enter_key=YES, )
+    webapps.search_button_on_case_search_page(enter_key=YES)
     casesearch.check_values_on_caselist(row_num=CaseSearchUserInput.six,
                                         expected_value=casesearch.parse_date(
                                             input_date=date,
@@ -221,6 +217,8 @@ def test_case_08_mobile_ucr_format(driver, settings):
 
 
 def test_case_09_single_date_format(driver, settings):
+    # if 'staging' in settings['url']:
+    #     pytest.xfail('https://dimagi.atlassian.net/browse/QA-6599')
     webapps = WebApps(driver, settings)
     casesearch = CaseSearchWorkflows(driver)
     """Check single date format search property"""
@@ -437,6 +435,8 @@ def test_case_16_sticky_search_with_default_value(driver, settings):
 
 
 def test_case_17_required_property(driver, settings):
+    # if 'staging' in settings['url']:
+    #     pytest.xfail('https://dimagi.atlassian.net/browse/QA-6600')
     webapps = WebApps(driver, settings)
     casesearch = CaseSearchWorkflows(driver)
     """Check required property"""
@@ -458,6 +458,8 @@ def test_case_17_required_property(driver, settings):
 
 
 def test_case_18_conditionally_required_condition_property(driver, settings):
+    if 'staging' in settings['url']:
+        pytest.xfail('https://dimagi.atlassian.net/browse/QA-6631')
     webapps = WebApps(driver, settings)
     casesearch = CaseSearchWorkflows(driver)
     """Check conditionally required condition property"""
@@ -610,6 +612,8 @@ def test_case_23_dependent_dropdowns_value_clear(driver, settings):
 
 
 def test_case_24_case_search_validations(driver, settings):
+    # if 'staging' in settings['url']:
+    #     pytest.xfail('https://dimagi.atlassian.net/browse/QA-6600')
     webapps = WebApps(driver, settings)
     casesearch = CaseSearchWorkflows(driver)
     """Case Search Validations"""

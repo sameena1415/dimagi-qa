@@ -13,7 +13,7 @@ class MultiSelectWorkflows(BasePage):
     def __init__(self, driver):
         super().__init__(driver)
 
-        self.row_checkbox_xpath = "(//*[@class='select-row-checkbox'])[{}]"
+        self.row_checkbox_xpath = "(//input[contains(@class,'select-row-checkbox') and @type='checkbox'])[{}]"
         self.value_in_table_format = "(//td[@class='module-case-list-column-checkbox']//following::td[@class='module-case-list-column'][1])[{}]"
         self.select_all_checkbox = (By.ID, "select-all-checkbox")
         self.case_names = (By.XPATH, "//td[contains(@class,'case-list-column')][3]")
@@ -33,6 +33,7 @@ class MultiSelectWorkflows(BasePage):
         song_names = []
         for i in range(1, case_count+1):
             row_checkbox = self.get_element(self.row_checkbox_xpath, str(i))
+            time.sleep(2)
             self.js_click(row_checkbox)
             case_name_in_table = self.get_element(self.value_in_table_format, str(i))
             selected_song_names = self.get_text(case_name_in_table)

@@ -58,6 +58,7 @@ def test_case_03_non_fuzzy_search(driver, settings):
     webapps.search_button_on_case_search_page()
     webapps.check_case_list_is_empty(CaseSearchUserInput.list_is_empty)
     driver.back()
+    webapps.clear_selections_on_case_search_page()
     casesearch.search_against_property(search_property=CaseSearchUserInput.instrument_name,
                                        input_value=CaseSearchUserInput.acoustic_bass_guitar,
                                        property_type=TEXT_INPUT)

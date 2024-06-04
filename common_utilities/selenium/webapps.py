@@ -1,6 +1,8 @@
 import logging
 import time
 
+from selenium.webdriver import ActionChains
+
 from Features.CaseSearch.constants import *
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
@@ -33,12 +35,12 @@ class WebApps(BasePage):
         self.form_submission_successful = (By.XPATH, "//p[contains(text(), 'successfully saved')]")
         self.form_500_error = (By.XPATH, "//*[contains(text(),'500 :')]")
         self.search_all_cases_button = (By.XPATH,
-                                        "(//*[contains(text(),'Search All')]//parent::div[@class='case-list-action-button btn-group formplayer-request'])[1]")
+                                        "(//*[contains(text(),'Search All')]//parent::div[@class='case-list-action-button btn-group formplayer-request']/button)[1]")
         self.search_again_button = (By.XPATH,
-                                    "(//*[contains(text(),'Search Again')]//parent::div[@class='case-list-action-button btn-group formplayer-request'])[1]")
+                                    "(//*[contains(text(),'Search Again')]//parent::div[@class='case-list-action-button btn-group formplayer-request']/button)[1]")
         self.clear_case_search_page = (By.XPATH, "//button[@id='query-clear-button']")
         self.submit_on_case_search_page = (By.XPATH, "//button[@type='submit' and @id='query-submit-button']")
-        self.case_list = (By.XPATH, "//table")#"//table[@class='table module-table module-table-case-list']")
+        self.case_list = (By.XPATH, "//div[contains(@id,'results')][//tbody or //section[contains(@class,'list')]]")#"//table[@class='table module-table module-table-case-list']")
         self.omni_search_input = (By.ID, "searchText")
         self.omni_search_button = (By.ID, "case-list-search-button")
         self.continue_button = (By.ID, "select-case")
@@ -104,11 +106,12 @@ class WebApps(BasePage):
 
     def search_all_cases(self):
         self.scroll_to_element(self.search_all_cases_button)
-        self.click(self.search_all_cases_button)
+        self.js_click(self.search_all_cases_button)
 
     def search_again_cases(self):
-        self.scroll_to_element(self.search_again_button)
-        self.click(self.search_again_button)
+        self.scroll_to_bottom()
+        self.wait_for_element(self.search_again_button)
+        self.js_click(self.search_again_button)
 
     def clear_selections_on_case_search_page(self):
         self.wait_for_element(self.clear_case_search_page, timeout=500)
@@ -118,7 +121,8 @@ class WebApps(BasePage):
 
     def search_button_on_case_search_page(self, enter_key=None):
         if enter_key == YES:
-            self.send_keys(self.submit_on_case_search_page, Keys.ENTER)
+            ActionChains(self.driver).send_keys(Keys.ENTER).perform()
+            # self.send_keys(self.submit_on_case_search_page, Keys.ENTER)
         else:
             self.scroll_to_element(self.submit_on_case_search_page)
             self.js_click(self.submit_on_case_search_page)
@@ -170,6 +174,7 @@ class WebApps(BasePage):
         return self.case_name_first
 
     def continue_to_forms(self):
+        self.wait_for_element(self.continue_button, 100)
         self.js_click(self.continue_button)
 
     def select_case_and_continue(self, case_name):
@@ -194,8 +199,11 @@ class WebApps(BasePage):
 
     def select_user(self, username):
         self.login_as_user = self.get_element(self.login_as_username, username)
-        self.click(self.login_as_user)
-        self.click(self.webapp_login_confirmation)
+        self.wait_for_element(self.login_as_user)
+        self.js_click(self.login_as_user)
+        time.sleep(2)
+        self.wait_for_element(self.webapp_login_confirmation)
+        self.js_click(self.webapp_login_confirmation)
         loggedin_user = self.get_text(self.webapp_working_as)
         assert loggedin_user == username
 
