@@ -143,7 +143,7 @@ def test_case_05_date_range_format(driver, settings):
     casesearch.check_date_range(search_property=CaseSearchUserInput.date_opened, date_range=casesearch.parse_date_range(input_date=date,
                                                             input_format=CaseSearchUserInput.dates.get("MM/DD/YYYY"),
                                                             output_format=CaseSearchUserInput.dates.get("MM/DD/YYYY")))
-    webapps.search_button_on_case_search_page(enter_key=YES, )
+    webapps.search_button_on_case_search_page(enter_key=YES)
     casesearch.check_values_on_caselist(row_num=CaseSearchUserInput.six,
                                         expected_value=casesearch.parse_date(
                                             input_date=date,

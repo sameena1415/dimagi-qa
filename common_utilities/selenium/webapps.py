@@ -1,6 +1,8 @@
 import logging
 import time
 
+from selenium.webdriver import ActionChains
+
 from Features.CaseSearch.constants import *
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
@@ -119,7 +121,8 @@ class WebApps(BasePage):
 
     def search_button_on_case_search_page(self, enter_key=None):
         if enter_key == YES:
-            self.send_keys(self.submit_on_case_search_page, Keys.ENTER)
+            ActionChains(self.driver).send_keys(Keys.ENTER).perform()
+            # self.send_keys(self.submit_on_case_search_page, Keys.ENTER)
         else:
             self.scroll_to_element(self.submit_on_case_search_page)
             self.js_click(self.submit_on_case_search_page)
