@@ -85,7 +85,7 @@ class CaseSearchWorkflows(BasePage):
         assert self.is_visible_and_displayed(search_property)
 
     def search_against_property(self, search_property, input_value, property_type, include_blanks=None):
-        print(input_value)
+        print("Providing value: ", input_value)
         if property_type == TEXT_INPUT:
             self.search_property = self.get_element(self.search_against_text_property_format, search_property)
             self.wait_to_click(self.search_property)
@@ -133,6 +133,7 @@ class CaseSearchWorkflows(BasePage):
         date_element = (By.XPATH, self.date_selected.format(date_range, date_range))
         self.search_property = self.get_element(self.search_against_text_property_format, search_property)
         value = self.get_attribute(self.search_property, 'value')
+        print('date range: ', date_range)
         print('value: ', value)
         print(date_element)
         assert self.is_present(date_element) or value == date_range

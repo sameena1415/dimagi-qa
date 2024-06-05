@@ -42,6 +42,7 @@ class BhaWorkflows(BasePage):
     def select_radio(self, value):
         radio_value = self.get_element(self.radio_option_value, value)
         self.js_click(radio_value)
+        time.sleep(4)
 
     def check_search_properties_present(self, properties):
         properties_labels = self.find_elements_texts(self.case_search_properties)
@@ -60,10 +61,12 @@ class BhaWorkflows(BasePage):
     def select_clinic(self, clinic_name):
         if self.is_displayed(self.combobox_select_clinic):
             self.select_by_text(self.combobox_select_clinic, clinic_name)
+        time.sleep(4)
 
     def remove_clinic(self, clinic_name):
         close_xpath = self.get_element(self.clinic_close_button, clinic_name)
         self.js_click(close_xpath)
+        time.sleep(4)
 
     def check_answer_options(self, label, displayed=None):
         answer_label = self.get_element(self.answer_option_label, label)

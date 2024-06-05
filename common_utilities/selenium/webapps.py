@@ -118,6 +118,7 @@ class WebApps(BasePage):
         time.sleep(2)
         self.js_click(self.clear_case_search_page)
         self.wait_for_ajax()
+        time.sleep(5)
 
     def search_button_on_case_search_page(self, enter_key=None):
         if enter_key == YES:
@@ -187,6 +188,7 @@ class WebApps(BasePage):
     def submit_the_form(self):
         self.wait_for_element(self.form_submit)
         self.js_click(self.form_submit)
+        time.sleep(5)
         try:
             assert self.is_visible_and_displayed(self.form_submission_successful, timeout=500)
         except AssertionError:

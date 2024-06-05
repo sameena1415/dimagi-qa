@@ -382,7 +382,7 @@ class BasePage:
         return element
 
     def wait_for_ajax(self):
-        wait = WebDriverWait(self.driver, 700)
+        wait = WebDriverWait(self.driver, 300)
         wait.until(lambda driver: self.driver.execute_script('return jQuery.active') == 0)
         wait.until(lambda driver: self.driver.execute_script('return document.readyState') == 'complete')
 
@@ -415,3 +415,7 @@ class BasePage:
         for value in value_list:
             select_source.select_by_visible_text(value)
         ActionChains(self.driver).key_up(Keys.CONTROL).perform()
+
+    def reload_page(self):
+        self.driver.refresh()
+        time.sleep(5)
