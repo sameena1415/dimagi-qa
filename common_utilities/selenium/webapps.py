@@ -188,6 +188,7 @@ class WebApps(BasePage):
     def submit_the_form(self):
         self.wait_for_element(self.form_submit)
         self.js_click(self.form_submit)
+        time.sleep(5)
         try:
             assert self.is_visible_and_displayed(self.form_submission_successful, timeout=500)
         except AssertionError:

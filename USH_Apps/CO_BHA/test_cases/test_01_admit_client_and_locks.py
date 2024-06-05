@@ -90,6 +90,8 @@ def test_case_02_admit_case_2(driver, settings):
     app.select_clinic(BhaUserInput.aurora_therapy_center)
     webapps.submit_the_form()
     """Check if case present in pending requests menu"""
+    webapps.login_as(BhaUserInput.state_level_user)
+    webapps.open_app(BhaUserInput.bha_app_name)
     webapps.open_menu(BhaUserInput.pending_requests)
     casesearch.search_against_property(search_property=BhaUserInput.name,
                                        input_value=typo_first_name + " " + typo_last_name,

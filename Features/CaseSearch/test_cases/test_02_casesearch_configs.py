@@ -608,8 +608,6 @@ def test_case_23_dependent_dropdowns_value_clear(driver, settings):
 
 
 def test_case_24_case_search_validations(driver, settings):
-    # if 'staging' in settings['url']:
-    #     pytest.xfail('https://dimagi.atlassian.net/browse/QA-6600')
     webapps = WebApps(driver, settings)
     casesearch = CaseSearchWorkflows(driver)
     """Case Search Validations"""
@@ -663,8 +661,6 @@ def test_case_24_case_search_validations(driver, settings):
 
 
 def test_case_25_case_search_validations_dot_notations(driver, settings):
-    # if 'staging' in settings['url']:
-    #     pytest.xfail('https://dimagi.atlassian.net/browse/QA-6600')
     webapps = WebApps(driver, settings)
     casesearch = CaseSearchWorkflows(driver)
     """Case Search Validations"""

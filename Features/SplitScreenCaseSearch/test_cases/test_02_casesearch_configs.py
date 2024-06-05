@@ -173,6 +173,7 @@ def test_case_05_date_range_format(driver, settings):
     casesearch.check_values_on_caselist(row_num=CaseSearchUserInput.six,
                                         expected_value=CaseSearchUserInput.date_16_08_2023
                                         )
+    casesearch.reload_page()
     # Date Range Search Again with Enter on keyboard
     webapps.clear_selections_on_case_search_page()
     date = casesearch.search_against_property(search_property=CaseSearchUserInput.date_opened,
