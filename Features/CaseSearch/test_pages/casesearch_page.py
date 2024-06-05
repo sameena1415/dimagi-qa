@@ -85,7 +85,7 @@ class CaseSearchWorkflows(BasePage):
         assert self.is_visible_and_displayed(search_property)
 
     def search_against_property(self, search_property, input_value, property_type, include_blanks=None):
-        print(input_value)
+        print("Providing value: ", input_value)
         if property_type == TEXT_INPUT:
             self.search_property = self.get_element(self.search_against_text_property_format, search_property)
             self.wait_to_click(self.search_property)

@@ -148,6 +148,7 @@ def test_case_04_lock_in_1_2(driver, settings):
     casesearch.search_against_property(search_property=BhaUserInput.case_name,
                                                    input_value=full_name,
                                                    property_type=TEXT_INPUT)
+    webapps.search_button_on_case_search_page()
     webapps.select_case(full_name)
     app.select_radio(BhaUserInput.approve)
     app.check_answer_options(label=BhaUserInput.lock_out_confirmation, displayed=YES)

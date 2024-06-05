@@ -118,6 +118,7 @@ class WebApps(BasePage):
         time.sleep(2)
         self.js_click(self.clear_case_search_page)
         self.wait_for_ajax()
+        time.sleep(5)
 
     def search_button_on_case_search_page(self, enter_key=None):
         if enter_key == YES:
