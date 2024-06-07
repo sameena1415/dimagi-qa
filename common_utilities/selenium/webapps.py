@@ -229,7 +229,8 @@ class WebApps(BasePage):
             self.js_click(self.webapp_login)
         self.send_keys(self.search_user_webapps, username)
         time.sleep(1)
-        self.click(self.search_button_webapps)
+        self.wait_for_element(self.search_button_webapps)
+        self.js_click(self.search_button_webapps)
         self.select_user(username)
         return username
 
