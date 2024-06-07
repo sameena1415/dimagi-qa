@@ -90,12 +90,12 @@ class CaseSearchWorkflows(BasePage):
             self.search_property = self.get_element(self.search_against_text_property_format, search_property)
             self.wait_to_click(self.search_property)
             time.sleep(4)
-            if self.is_visible_and_displayed(self.date_picker_clear):
+            if self.is_visible_and_displayed(self.date_picker_clear, 10):
                 self.js_click(self.date_picker_clear)
                 time.sleep(4)
             self.send_keys(self.search_property, input_value+Keys.TAB)
             time.sleep(5)
-            if self.is_visible_and_displayed(self.date_picker_close):
+            if self.is_visible_and_displayed(self.date_picker_close, 10):
                 self.js_click(self.date_picker_close)
             self.wait_for_ajax()
         elif property_type == COMBOBOX:

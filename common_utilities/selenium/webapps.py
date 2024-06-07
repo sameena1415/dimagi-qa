@@ -122,9 +122,11 @@ class WebApps(BasePage):
 
     def search_button_on_case_search_page(self, enter_key=None):
         if enter_key == YES:
+            time.sleep(2)
             ActionChains(self.driver).send_keys(Keys.ENTER).perform()
             # self.send_keys(self.submit_on_case_search_page, Keys.ENTER)
         else:
+            time.sleep(2)
             self.scroll_to_element(self.submit_on_case_search_page)
             self.js_click(self.submit_on_case_search_page)
             time.sleep(10)
@@ -160,6 +162,7 @@ class WebApps(BasePage):
         return case_name
 
     def select_case(self, case_name):
+        time.sleep(5)
         self.case = self.get_element(self.case_name_format, case_name)
         self.scroll_to_element(self.case)
         self.js_click(self.case)
@@ -227,7 +230,8 @@ class WebApps(BasePage):
             self.js_click(self.webapp_login)
         self.send_keys(self.search_user_webapps, username)
         time.sleep(1)
-        self.click(self.search_button_webapps)
+        self.wait_for_element(self.search_button_webapps)
+        self.js_click(self.search_button_webapps)
         self.select_user(username)
         return username
 

@@ -57,9 +57,9 @@ jobs:
       - name: BHA Smoke Tests
         env:
           DIMAGIQA_ENV: ${{ matrix.environment }}  #${{ secrets.DIMAGIQA_URL }}
-          DIMAGIQA_USH_LOGIN_USERNAME: ${{ secrets.DIMAGIQA_USH_LOGIN_USERNAME }}
-          DIMAGIQA_USH_LOGIN_PASSWORD: ${{ secrets.DIMAGIQA_USH_LOGIN_PASSWORD }}
-          DIMAGIQA_USH_USER_PROD_AUTH_KEY: ${{ secrets.DIMAGIQA_USH_USER_PROD_AUTH_KEY }}
+          DIMAGIQA_USH_LOGIN_USERNAME: ${{ secrets.DIMAGIQA_LOGIN_USERNAME }}
+          DIMAGIQA_USH_LOGIN_PASSWORD: ${{ secrets.DIMAGIQA_LOGIN_PASSWORD }}
+          DIMAGIQA_USH_USER_PROD_AUTH_KEY: ${{ secrets.DIMAGIQA_PROD_AUTH_KEY }}
           DIMAGIQA_MAIL_USERNAME: ${{ secrets.DIMAGIQA_MAIL_USERNAME }}
           DIMAGIQA_MAIL_PASSWORD: ${{ secrets.DIMAGIQA_MAIL_PASSWORD }}
         run: |

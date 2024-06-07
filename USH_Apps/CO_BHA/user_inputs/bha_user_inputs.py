@@ -5,7 +5,7 @@ class BhaUserInput:
     """Test Data"""
 
     """App Name"""
-    bha_app_name = "BHA Provider Services"  # check for both staging & prod
+    bha_app_name = "Central Registry (Linked)" #"BHA Provider Services"  # check for both staging & prod
 
     """Users"""
     state_level_user = "state.level.user1"

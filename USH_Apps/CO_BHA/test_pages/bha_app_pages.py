@@ -40,7 +40,9 @@ class BhaWorkflows(BasePage):
         return original_string[:index] + new_character + original_string[index + 1:]
 
     def select_radio(self, value):
+        time.sleep(4)
         radio_value = self.get_element(self.radio_option_value, value)
+        self.wait_for_element(radio_value)
         self.js_click(radio_value)
         time.sleep(4)
 
@@ -59,7 +61,9 @@ class BhaWorkflows(BasePage):
         assert search_value in value_on_form
 
     def select_clinic(self, clinic_name):
+        time.sleep(4)
         if self.is_displayed(self.combobox_select_clinic):
+            self.scroll_to_element(self.combobox_select_clinic)
             self.select_by_text(self.combobox_select_clinic, clinic_name)
         time.sleep(4)
 
