@@ -40,7 +40,9 @@ class BhaWorkflows(BasePage):
         return original_string[:index] + new_character + original_string[index + 1:]
 
     def select_radio(self, value):
+        time.sleep(4)
         radio_value = self.get_element(self.radio_option_value, value)
+        self.wait_for_element(radio_value)
         self.js_click(radio_value)
         time.sleep(4)
 

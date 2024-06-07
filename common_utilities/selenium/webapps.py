@@ -122,9 +122,11 @@ class WebApps(BasePage):
 
     def search_button_on_case_search_page(self, enter_key=None):
         if enter_key == YES:
+            time.sleep(2)
             ActionChains(self.driver).send_keys(Keys.ENTER).perform()
             # self.send_keys(self.submit_on_case_search_page, Keys.ENTER)
         else:
+            time.sleep(2)
             self.scroll_to_element(self.submit_on_case_search_page)
             self.js_click(self.submit_on_case_search_page)
             time.sleep(10)
