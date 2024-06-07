@@ -61,7 +61,9 @@ class BhaWorkflows(BasePage):
         assert search_value in value_on_form
 
     def select_clinic(self, clinic_name):
+        time.sleep(4)
         if self.is_displayed(self.combobox_select_clinic):
+            self.scroll_to_element(self.combobox_select_clinic)
             self.select_by_text(self.combobox_select_clinic, clinic_name)
         time.sleep(4)
 

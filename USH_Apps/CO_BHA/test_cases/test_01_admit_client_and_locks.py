@@ -161,10 +161,8 @@ def test_case_04_lock_in_1_2(driver, settings):
     casesearch.check_values_on_caselist(row_num=BhaUserInput.five,
                                         expected_value=BhaUserInput.pending_status)
 
-
+@pytest.mark.xfail("Setup yet to be done for the new domain.")
 def test_case_05_admit_case_7(driver, settings):
-    if value["first_name"] == None and value["last_name"] == None:
-        pytest.skip("Skipping as name is null")
     """use case: match on inactive client"""
     webapps = WebApps(driver, settings)
     casesearch = CaseSearchWorkflows(driver)

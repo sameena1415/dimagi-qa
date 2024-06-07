@@ -162,6 +162,7 @@ class WebApps(BasePage):
         return case_name
 
     def select_case(self, case_name):
+        time.sleep(5)
         self.case = self.get_element(self.case_name_format, case_name)
         self.scroll_to_element(self.case)
         self.js_click(self.case)
