@@ -11,7 +11,7 @@ from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.support.wait import WebDriverWait
 
 connect_id_phn = '+74267611441'
-app_path = os.getcwd() + '\\20240422-app-cccStaging-release.apk'
+app_path = os.getcwd() + '\\MobileTest\\ccc_bulk_submission\\20240422-app-cccStaging-release.apk'
 capabilities = UiAutomator2Options().load_capabilities({
     "platformName": "Android",
     "udid": "emulator-5554",
