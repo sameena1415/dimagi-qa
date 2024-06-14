@@ -32,8 +32,8 @@ class CaseSearchWorkflows(BasePage):
         self.required_validation_on_top = "//div[contains(@class,'alert-danger')]//following::li[contains(text(),'{}')]"
         self.required_validation_per_property_text = self.search_against_text_property_format + "//following::div[contains (text(),'{}')][1]"
         self.required_validation_per_property_combox = self.search_property_name_combobox + "//following::div[contains (text(),'{}')][1]"
-        self.city_value_home = "//span[@class='caption webapp-markdown-output'][contains(text(), '{}')]"
-        self.city_value_work = "//span[@class='caption webapp-markdown-output'][contains(text()[2], '{}')]"
+        self.city_value_home = "//span[contains(@class,'webapp-markdown-output')][contains(text(), '{}')]"
+        self.city_value_work = "//span[contains(@class,'webapp-markdown-output')][contains(text()[2], '{}')]"
         self.search_screen_title = "//h2[contains(text(), '{}')]"
         self.search_screen_title_sscs = "//h1[contains(text(), '{}')]"
         self.search_screen_subtitle = "//strong[contains(text(), '{}')]"
@@ -55,8 +55,8 @@ class CaseSearchWorkflows(BasePage):
         self.select_all_checkbox = (By.ID, "select-all-checkbox")
         self.case_names = (By.XPATH, "//td[contains(@class,'case-list-column')][3]")
         self.multi_select_continue = (By.XPATH, "(//button[contains(@class,'multi-select-continue-btn')])[1]")
-        self.selected_case_names_on_forms = (By.XPATH, "//span[@class='caption webapp-markdown-output']")
-        self.song_label = "//span[@class='caption webapp-markdown-output'][.='song: by {}']"
+        self.selected_case_names_on_forms = (By.XPATH, "//span[contains(@class,'webapp-markdown-output')]")
+        self.song_label = "//span[contains(@class,'webapp-markdown-output')][.='song: by {}']"
         self.checkbox_xpath = "//label[contains (text(),'{}')][1]//following::input[@value='{}'][1]"
         self.search_property_checked = "//label[contains (text(),'{}')][1]//following::input[@value='{}' and @checked][1]"
         self.remove_combobox_selection = "//label[contains(text(),'{}')]//following::button[@aria-label='Remove all items'][1]"
