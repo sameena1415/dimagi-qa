@@ -230,6 +230,8 @@ class WebApps(BasePage):
             self.wait_to_click(self.webapps_home)
             self.wait_for_element(self.webapp_login)
             self.js_click(self.webapp_login)
+        time.sleep(10)
+        self.wait_for_element(self.search_user_webapps)
         self.send_keys(self.search_user_webapps, username)
         time.sleep(1)
         self.wait_for_element(self.search_button_webapps)
