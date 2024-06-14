@@ -141,6 +141,7 @@ class WebApps(BasePage):
         if self.is_displayed(self.omni_search_input):
             self.wait_to_clear_and_send_keys(self.omni_search_input, case_name)
             self.js_click(self.omni_search_button)
+            self.wait_for_ajax(100)
         else:
             print("Split Screen Case Search enabled")
         self.case = self.get_element(self.case_name_format, case_name)
@@ -191,6 +192,7 @@ class WebApps(BasePage):
     def submit_the_form(self):
         self.wait_for_element(self.form_submit)
         self.js_click(self.form_submit)
+        self.wait_for_ajax(100)
         time.sleep(5)
         try:
             assert self.is_visible_and_displayed(self.form_submission_successful, timeout=500)
