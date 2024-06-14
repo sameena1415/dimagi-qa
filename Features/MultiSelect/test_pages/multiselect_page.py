@@ -18,7 +18,7 @@ class MultiSelectWorkflows(BasePage):
         self.select_all_checkbox = (By.ID, "select-all-checkbox")
         self.case_names = (By.XPATH, "//td[contains(@class,'case-list-column')][3]")
         self.multi_select_continue = (By.XPATH, "(//button[contains(@class,'multi-select-continue-btn')])[1]")
-        self.selected_case_names_on_forms = (By.XPATH, "//span[@class='caption webapp-markdown-output']")
+        self.selected_case_names_on_forms = "//span[contains(@class,'webapp-markdown-output')][contains(.,'{}:')]"
         self.select_case_button = (By.ID, "select-case")
         self.checkbox = "(//td[@class='module-case-list-column' and text() = '{}'][1]//preceding::input[1])[1]"
         self.dropdown_menu_value = (By.XPATH, "//*[contains(@data-bind,'moduleOptions, value')]/option")
@@ -63,8 +63,8 @@ class MultiSelectWorkflows(BasePage):
         self.js_click(self.multi_select_continue)
         self.wait_for_ajax()
 
-    def check_no_of_cases_on_form(self, max_size):
-        song_names_on_form = self.find_elements_texts(self.selected_case_names_on_forms)
+    def check_no_of_cases_on_form(self, max_size, type):
+        song_names_on_form = self.find_elements_texts((By.XPATH, self.selected_case_names_on_forms.format(type)))
         size = len(song_names_on_form)
         print(size)
         assert size < max_size
@@ -75,7 +75,7 @@ class MultiSelectWorkflows(BasePage):
     def check_selected_cases_present_on_form(self, items_selected_on_case_list, case_type):
         time.sleep(5)
         stripped_final = None
-        song_names_on_form = self.find_elements_texts(self.selected_case_names_on_forms)
+        song_names_on_form = self.find_elements_texts((By.XPATH, self.selected_case_names_on_forms.format(str(case_type).lower())))
         if case_type == SONG:
             stripped = list(filter(None, [s.partition(" by")[0] for s in song_names_on_form]))
             stripped_final = list(filter(None, [s.replace("song: ", "") for s in stripped]))

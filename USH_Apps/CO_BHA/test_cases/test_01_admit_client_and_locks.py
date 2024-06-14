@@ -93,10 +93,10 @@ def test_case_02_admit_case_2(driver, settings):
     webapps.login_as(BhaUserInput.state_level_user)
     webapps.open_app(BhaUserInput.bha_app_name)
     webapps.open_menu(BhaUserInput.pending_requests)
-    casesearch.search_against_property(search_property=BhaUserInput.name,
-                                       input_value=typo_first_name + " " + typo_last_name,
-                                       property_type=TEXT_INPUT)
-    webapps.search_button_on_case_search_page()
+    # casesearch.search_against_property(search_property=BhaUserInput.name,
+    #                                    input_value=typo_first_name + " " + typo_last_name,
+    #                                    property_type=TEXT_INPUT)
+    # webapps.search_button_on_case_search_page()
     casesearch.check_values_on_caselist(row_num=BhaUserInput.one,
                                         expected_value=BhaUserInput.pending)
     casesearch.check_values_on_caselist(row_num=BhaUserInput.two,

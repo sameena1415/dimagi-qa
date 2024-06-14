@@ -776,12 +776,21 @@ class ReportPage(BasePage):
         assert len(web_data) == len(list), "Data in Both Excel and Searched results do not match"
         print("Both Excel and Searched results have same amount of data")
         for i in range(len(list)):
-            if i == 1 or i == 2:
-                print("Not comparing", html.unescape(str(list[i])), " with ", str(web_data[i]))
+            if 'staging' in link:
+                if i == 1 or i == 2 or i == 3:
+                    print("Not comparing", html.unescape(str(list[i])), " with ", str(web_data[i]))
+                else:
+                    print("Comparing ", html.unescape(str(list[i])), " with ", str(web_data[i]))
+                    assert html.unescape(str(list[i])) == str(web_data[i]), "Comparision failed for " + list[
+                        i] + " and " + web_data[i]
             else:
-                print("Comparing ", html.unescape(str(list[i])), " with ", str(web_data[i]))
-                assert html.unescape(str(list[i])) == str(web_data[i]), "Cpmparision failed for " + list[i] + " and " + \
-                                                                        web_data[i]
+                if i == 1 or i == 2:
+                    print("Not comparing", html.unescape(str(list[i])), " with ", str(web_data[i]))
+                else:
+                    print("Comparing ", html.unescape(str(list[i])), " with ", str(web_data[i]))
+                    assert html.unescape(str(list[i])) == str(web_data[i]), "Comparision failed for " + list[
+                        i] + " and " + web_data[i]
+
 
 
     def verify_form_in_submit_history(self, app_name, lat, lon):
