@@ -17,7 +17,7 @@ class BhaWorkflows(BasePage):
         self.case_search_properties = (By.XPATH, "//label[contains(@class,'label')]")
         self.continue_button = "//span[@id='multi-select-btn-text' and text()='{}']"
         self.client_info = " (//h2[contains(text(), 'Client Information')]/following::strong[contains(text(),'{}')]//ancestor::li[1])[1]"
-        self.combobox_select_clinic = (By.XPATH, "//select[@class='form-control select2-hidden-accessible']")
+        self.combobox_select_clinic = (By.XPATH, "//select[contains(@class,'select2-hidden-accessible')]")
         self.answer_option_label = "//p[text()='{}']"
         self.question_label = "//span[text()='{}']"
         self.clinic_close_button = "//button[@aria-label='Remove item' and contains(@aria-describedby , '{}')]"
