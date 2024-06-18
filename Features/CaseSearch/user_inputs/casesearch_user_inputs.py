@@ -62,7 +62,7 @@ class CaseSearchUserInput:
     # Song-Cases
 
     song_just_babe = "Just5000Babe"
-    song_123 = "123"
+    song_123 = "1"
     song_automation_song = "Automation-Song-"
     song_automation_song_no_space = "AutomationSongNoSpace"
     song_automation_song_1 = "Automation-Song-1"
