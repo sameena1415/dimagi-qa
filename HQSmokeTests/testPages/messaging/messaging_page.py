@@ -151,7 +151,7 @@ class MessagingPage(BasePage):
         self.keywords_list = (By.XPATH, "//td[.//span/a[contains(.,'KEYWORD_')]]")
         self.keyword_delete_btn = "//td[.//span/a[contains(.,'{}')]]//following-sibling::td/button"
         self.delete_confirm_button = "//td[.//span/a[contains(.,'{}')]]//following::a[contains(@class,'delete-item-confirm')][1]"
-        self.page_empty = (By.ID, "pagination-empty-notification")
+        self.page_empty = (By.XPATH, "//*[contains(@data-bind,'ListEmpty')]")
 
     def open_dashboard_page(self):
         assert self.is_displayed(self.dashboard_elements), "Dashboatd  didn't load successfully!"

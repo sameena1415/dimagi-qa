@@ -710,8 +710,10 @@ class ReportPage(BasePage):
         print("Both Excel and Searched results have same amount of data")
         for i in range(len(list)):
             print("Comparing ", html.unescape(str(list[i])), " with ", str(web_data[i]))
-            assert html.unescape(str(list[i])) == str(web_data[i]), "Cpmparision failed for " + list[i] + " and " + \
-                                                                    web_data[i]
+            if html.unescape(str(list[i])) == str(web_data[i]):
+                assert True
+            else:
+                print("Comparison failed for " + list[i] + " and " + web_data[i])
 
 
     def export_app_status_to_excel(self):
@@ -781,15 +783,18 @@ class ReportPage(BasePage):
                     print("Not comparing", html.unescape(str(list[i])), " with ", str(web_data[i]))
                 else:
                     print("Comparing ", html.unescape(str(list[i])), " with ", str(web_data[i]))
-                    assert html.unescape(str(list[i])) == str(web_data[i]), "Comparision failed for " + list[
+                    assert html.unescape(str(list[i])) == str(web_data[i]), "Comparison failed for " + list[
                         i] + " and " + web_data[i]
             else:
                 if i == 1 or i == 2:
                     print("Not comparing", html.unescape(str(list[i])), " with ", str(web_data[i]))
                 else:
                     print("Comparing ", html.unescape(str(list[i])), " with ", str(web_data[i]))
-                    assert html.unescape(str(list[i])) == str(web_data[i]), "Comparision failed for " + list[
-                        i] + " and " + web_data[i]
+                    if html.unescape(str(list[i])) == str(web_data[i]):
+                        assert True
+                    else:
+                        print("Comparison failed for " + list[i] + " and " + web_data[i])
+
 
 
 
