@@ -116,12 +116,27 @@ def test_case_05_shadow_menu(driver, settings):
     webapps.open_app(CaseSearchUserInput.case_search_app_name)
     webapps.open_menu(CaseSearchUserInput.search_first_menu)
     webapps.clear_selections_on_case_search_page()
-    casesearch.search_against_property(search_property=CaseSearchUserInput.song_name,
-                                       input_value=CaseSearchUserInput.song_automation_song,
-                                       property_type=TEXT_INPUT
-                                       )
+    if 'www' in settings['url']:
+        casesearch.search_against_property(search_property=CaseSearchUserInput.song_name,
+                                           input_value=CaseSearchUserInput.song_just_babe,
+                                           property_type=TEXT_INPUT
+                                           )
+    else:
+        casesearch.search_against_property(search_property=CaseSearchUserInput.song_name,
+                                           input_value=CaseSearchUserInput.song_123,
+                                           property_type=TEXT_INPUT
+                                           )
+
+    # casesearch.search_against_property(search_property=CaseSearchUserInput.song_name,
+    #                                    input_value=CaseSearchUserInput.song_automation_song,
+    #                                    property_type=TEXT_INPUT
+    #                                    )
     webapps.search_button_on_case_search_page()
-    search_first_form_names = webapps.select_case_and_continue(CaseSearchUserInput.song_automation_song)
+    if 'www' in settings['url']:
+        search_first_form_names = webapps.select_case_and_continue(CaseSearchUserInput.song_just_babe)
+    else:
+        search_first_form_names = webapps.select_case_and_continue(CaseSearchUserInput.song_123)
+    # search_first_form_names = webapps.select_case_and_continue(CaseSearchUserInput.song_automation_song)
     """Check search and forms in shadow menu"""
     webapps.open_app(CaseSearchUserInput.case_search_app_name)
     webapps.open_menu(CaseSearchUserInput.shadow_menu)
@@ -130,7 +145,12 @@ def test_case_05_shadow_menu(driver, settings):
                                        property_type=COMBOBOX
                                        )
     webapps.search_button_on_case_search_page()
-    case_name = webapps.omni_search(CaseSearchUserInput.song_automation_song)
+    if 'www' in settings['url']:
+        case_name = webapps.omni_search(CaseSearchUserInput.song_just_babe)
+    else:
+        case_name = webapps.omni_search(CaseSearchUserInput.song_123)
+
+    # case_name = webapps.omni_search(CaseSearchUserInput.song_automation_song)
     shadow_form_names = webapps.select_case_and_continue(case_name)
     assert shadow_form_names == search_first_form_names
 
