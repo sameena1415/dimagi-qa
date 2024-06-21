@@ -113,7 +113,7 @@ class LookUpTablePage(BasePage):
         self.start = (By.XPATH, "//*[@class='ff ff-start-fg appicon-icon appicon-icon-fg']")
         self.inapp_case_list = (By.XPATH, "(//*[@class='formplayer-request'])[last()]")
         self.inapp_registration_form = (By.XPATH, "//h3[text()='Registration Form']")
-        self.inapp_select_option = (By.XPATH, "//*[(@class='sel clear')]//div/div[1]/label/span/p")
+        self.inapp_select_option = (By.XPATH, "//*[(@class='sel clear')]//div/div[1]/label//p")
         self.inapp_next = (By.XPATH, "//button[contains(@data-bind,'nextQuestion')]")
         self.inapp_submit = (By.XPATH, "//button[text()='Submit']")
         self.inapp_continue = (By.XPATH, "//button[@class='btn btn-success btn-formnav-submit']")
