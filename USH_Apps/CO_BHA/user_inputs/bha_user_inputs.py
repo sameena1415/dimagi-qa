@@ -8,8 +8,8 @@ class BhaUserInput:
     bha_app_name = "Central Registry (Linked)" #"BHA Provider Services"  # check for both staging & prod
 
     """Users"""
-    state_level_user = "state.level.user1"
-    clinic_level_user = "clinic.level.user1"
+    state_level_user = "bha_test_users+30@dimagi.com"#"state.level.user1"
+    clinic_level_user = "bha_test_users+43@dimagi.com"#"clinic.level.user1"
 
     """Menus"""
     search_central_registry = "Search Central Registry"
