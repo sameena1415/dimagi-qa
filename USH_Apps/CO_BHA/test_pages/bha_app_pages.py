@@ -43,6 +43,7 @@ class BhaWorkflows(BasePage):
         time.sleep(4)
         radio_value = self.get_element(self.radio_option_value, value)
         self.wait_for_element(radio_value)
+        self.scroll_to_element(radio_value)
         self.js_click(radio_value)
         time.sleep(4)
 
