@@ -3,7 +3,7 @@ import re
 import time
 
 from selenium.common.exceptions import TimeoutException
-from selenium.webdriver import ActionChains
+from selenium.webdriver import ActionChains, Keys
 from selenium.webdriver.common.by import By
 
 from HQSmokeTests.userInputs.user_inputs import UserData
@@ -93,9 +93,11 @@ class AppPreviewPage(BasePage):
         time.sleep(1)
         loc = random.choice(UserData.location_list)
         print(loc)
-        self.wait_to_click(self.location_field)
-        self.send_keys(self.location_field, loc)
-        self.wait_to_click(self.location_search)
+        self.scroll_to_element(self.location_field)
+        time.sleep(2)
+        self.send_keys(self.location_field, loc+Keys.ENTER)
+        time.sleep(2)
+        self.js_click(self.location_search)
         time.sleep(1)
         lat = self.get_text(self.latitude)
         lon = self.get_text(self.longitude)

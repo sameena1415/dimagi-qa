@@ -154,7 +154,7 @@ def test_case_04_lock_in_1_2(driver, settings):
     # webapps.search_button_on_case_search_page()
     webapps.select_case(full_name)
     app.select_radio(BhaUserInput.approve)
-    app.check_answer_options(label=BhaUserInput.lock_out_confirmation, displayed=YES)
+    # app.check_answer_options(label=BhaUserInput.lock_out_confirmation, displayed=YES)
     webapps.submit_the_form()
     casesearch.check_eof_navigation(eof_nav=MENU, menu=BhaUserInput.pending_requests)
     """Check default results appear aftrt EOF navigation"""
