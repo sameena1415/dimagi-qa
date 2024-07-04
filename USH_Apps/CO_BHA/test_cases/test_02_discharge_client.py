@@ -7,7 +7,7 @@ from USH_Apps.CO_BHA.user_inputs.bha_user_inputs import BhaUserInput
 from common_utilities.selenium.webapps import WebApps
 import names
 
-# @pytest.mark.xfail
+
 def test_case_discharge_client_1(driver, settings):
     """use case: state level user"""
     webapps = WebApps(driver, settings)
