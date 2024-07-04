@@ -8,6 +8,7 @@ from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 
+from common_utilities.hq_login.login_page import LoginPage
 from common_utilities.selenium.base_page import BasePage
 
 """"Contains common  page elements and functions related to webapps actions"""
@@ -30,6 +31,11 @@ class WebApps(BasePage):
         self.breadcrumb_format = "//li[contains(text(), '{}')]"
         self.answer_format = "(//label[.//span[text()='{}']]/following-sibling::div//{})"
         self.per_answer_format = "(//label[.//span[text()='{}']]/following-sibling::div//{})[{}]"
+
+        self.setting_button = (By.XPATH, "//h3[contains(@id,'setting')]")
+        self.sync_button = (By.XPATH, "//button[contains(@class,'sync')]")
+        self.done_button = (By.XPATH, "//button[contains(@class,'done')]")
+
 
         self.form_submit = (By.XPATH, "//div[contains(@id,'submit')]//button[contains(@class,'submit')]")
         self.form_submission_successful = (By.XPATH, "//p[contains(text(), 'successfully saved')]")
@@ -285,3 +291,35 @@ class WebApps(BasePage):
         for index, header in enumerate(table["headers"]):
             row_value = table["body"][header]
             self.is_visible_and_displayed((By.XPATH,self.single_row_table.format(index+1, header,index+1, row_value)))
+
+    def logout_webapps(self, url):
+        login = LoginPage(self.driver, self.settings['db'])
+        self.get_url(url)
+        login.logout()
+
+    def login_webapps(self, user, password, link):
+        login = LoginPage(self.driver, self.settings['db'])
+        login.login(user, password)
+        self.get_url(link)
+
+    def bha_login_as(self, username, password, url, db):
+        self.logout_webapps(db)
+        self.login_webapps(username, password, url)
+
+    def sync_app(self):
+        url = self.get_current_url()
+        if url not in self.url:
+            self.driver.get(self.url)
+            time.sleep(10)
+        else:
+            self.js_click(self.webapps_home)
+            time.sleep(10)
+        self.wait_for_element(self.setting_button)
+        self.js_click(self.setting_button)
+        self.wait_for_element(self.sync_button)
+        self.js_click(self.sync_button)
+        time.sleep(20)
+        self.wait_for_element(self.done_button)
+        self.js_click(self.done_button)
+        time.sleep(10)
+
