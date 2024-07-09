@@ -419,3 +419,7 @@ class BasePage:
     def reload_page(self):
         self.driver.refresh()
         time.sleep(5)
+
+    def get_url(self, link):
+        self.driver.get(link)
+        time.sleep(10)

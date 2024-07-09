@@ -57,12 +57,11 @@ jobs:
       - name: BHA Smoke Tests
         env:
           DIMAGIQA_ENV: ${{ matrix.environment }}  #${{ secrets.DIMAGIQA_URL }}
-          DIMAGIQA_USH_LOGIN_USERNAME: ${{ secrets.DIMAGIQA_LOGIN_USERNAME }}
-          DIMAGIQA_USH_LOGIN_PASSWORD: ${{ secrets.DIMAGIQA_LOGIN_PASSWORD }}
+          DIMAGIQA_BHA_USERNAME: ${{ secrets.DIMAGIQA_BHA_USERNAME }}
+          DIMAGIQA_BHA_PASSWORD: ${{ secrets.DIMAGIQA_BHA_PASSWORD }}
           DIMAGIQA_USH_USER_PROD_AUTH_KEY: ${{ secrets.DIMAGIQA_PROD_AUTH_KEY }}
           DIMAGIQA_MAIL_USERNAME: ${{ secrets.DIMAGIQA_MAIL_USERNAME }}
           DIMAGIQA_MAIL_PASSWORD: ${{ secrets.DIMAGIQA_MAIL_PASSWORD }}
-          DIMAGIQA_BHA_PASSWORD: ${{ secrets.DIMAGIQA_BHA_PASSWORD }}
         run: |
           echo "client_payload: ${{ toJson(github.event.client_payload) }}"
           echo "matrix environment: ${{ matrix.environment }}"

@@ -15,7 +15,8 @@ def test_case_access_to_module_state(driver, settings):
     casesearch = CaseSearchWorkflows(driver)
     app = BhaWorkflows(driver)
 
-    webapps.login_as(BhaUserInput.state_level_user)
+    # webapps.login_as(BhaUserInput.state_level_user)
+    webapps.bha_login_as(BhaUserInput.state_level_user, settings['bha_password'], settings['url'], settings['db'])
     webapps.open_app(BhaUserInput.bha_app_name)
     """Add Clinic"""
     webapps.open_menu(BhaUserInput.user_management)
