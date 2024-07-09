@@ -52,7 +52,7 @@ def driver(settings, browser):
     else:
         print("Provide valid browser")
     login = LoginPage(web_driver, settings["url"])
-    login.login(settings["bha_login_username"], settings["bha_login_password"], settings["ush_user_prod_auth_key"])
+    login.login(settings["bha_username"], settings["bha_password"], settings["ush_user_prod_auth_key"])
     yield web_driver
     web_driver.quit()
 
@@ -63,8 +63,8 @@ def environment_settings_bha():
 
             Names of environment variables:
                 DIMAGIQA_URL
-                DIMAGIQA_bha_login_username
-                DIMAGIQA_bha_login_password
+                DIMAGIQA_bha_username
+                DIMAGIQA_bha_password
                 DIMAGIQA_USH_USER_PROD_AUTH_KEY
                 DIMAGIQA_BHA_PASSWORD
 
@@ -72,7 +72,7 @@ def environment_settings_bha():
             for instructions on how to set them.
             """
     settings = {}
-    for name in ["url", "bha_login_username", "bha_login_password", "ush_user_prod_auth_key", "db"]:
+    for name in ["url", "bha_username", "bha_password", "ush_user_prod_auth_key", "db"]:
 
         var = f"DIMAGIQA_{name.upper()}"
         if var in os.environ:
@@ -96,7 +96,7 @@ def settings(environment_settings_bha):
     if os.environ.get("CI") == "true":
         settings = environment_settings_bha
         settings["CI"] = "true"
-        if any(x not in settings for x in ["url", "bha_login_username", "bha_login_password", "ush_user_prod_auth_key", "db"]):
+        if any(x not in settings for x in ["url", "bha_username", "bha_password", "ush_user_prod_auth_key", "db"]):
             lines = environment_settings_bha.__doc__.splitlines()
             vars_ = "\n  ".join(line.strip() for line in lines if "DIMAGIQA_" in line)
             raise RuntimeError(
