@@ -10,6 +10,7 @@ class BhaUserInput:
     """Users"""
     state_level_user = "bha_test_users+30@dimagi.com"#"state.level.user1"
     clinic_level_user = "bha_test_users+43@dimagi.com"#"clinic.level.user1"
+    user_31 = "bha_test_users+31@dimagi.com"
 
     """Menus"""
     search_central_registry = "Search Central Registry"

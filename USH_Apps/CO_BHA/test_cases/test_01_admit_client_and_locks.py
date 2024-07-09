@@ -18,10 +18,6 @@ def test_case_01_admit_case_1(driver, settings):
     casesearch = CaseSearchWorkflows(driver)
     app = BhaWorkflows(driver)
 
-    # webapps.logout_webapps(settings['db'])
-    # webapps.login_webapps(BhaUserInput.clinic_level_user, settings['bha_password'], settings['url'])
-    webapps.bha_login_as(BhaUserInput.clinic_level_user, settings['bha_password'], settings['url'], settings['db'])
-    # webapps.login_as(BhaUserInput.clinic_level_user)
     webapps.open_app(BhaUserInput.bha_app_name)
     webapps.open_menu(BhaUserInput.search_and_admit_client)
     app.check_search_properties_present([BhaUserInput.client_id, BhaUserInput.ssn, BhaUserInput.medicaid_id])
@@ -58,15 +54,15 @@ def test_case_01_admit_case_1(driver, settings):
     return value
 
 def test_case_02_admit_case_2(driver, settings):
-    if value["first_name"] == None and value["last_name"] == None:
-        pytest.skip("Skipping as name is null")
+    # if value["first_name"] == None and value["last_name"] == None:
+    #     pytest.skip("Skipping as name is null")
     """use case: Admit a client - case does exist -> Request pending admission"""
+    value["first_name"] = "Melissa"
+    value["last_name"] ="Link"
     webapps = WebApps(driver, settings)
     casesearch = CaseSearchWorkflows(driver)
     app = BhaWorkflows(driver)
 
-    # webapps.login_as(BhaUserInput.clinic_level_user)
-    webapps.bha_login_as(BhaUserInput.clinic_level_user, settings['bha_password'], settings['url'], settings['db'])
     webapps.open_app(BhaUserInput.bha_app_name)
     webapps.open_menu(BhaUserInput.search_and_admit_client)
     typo_first_name = casesearch.search_against_property(search_property=BhaUserInput.first_name_required,
@@ -117,8 +113,7 @@ def test_case_03_lock_in_1_1(driver, settings):
     casesearch = CaseSearchWorkflows(driver)
     app = BhaWorkflows(driver)
 
-    # webapps.login_as(BhaUserInput.clinic_level_user)
-    webapps.bha_login_as(BhaUserInput.clinic_level_user, settings['bha_password'], settings['url'], settings['db'])
+    webapps.bha_login_as(BhaUserInput.user_31, settings['bha_login_password'], settings['url'], settings['db'])
     webapps.open_app(BhaUserInput.bha_app_name)
     webapps.open_menu(BhaUserInput.search_my_clients)
     casesearch.search_against_property(search_property=BhaUserInput.first_name,
@@ -176,8 +171,6 @@ def test_case_05_admit_case_7(driver, settings):
     casesearch = CaseSearchWorkflows(driver)
     app = BhaWorkflows(driver)
 
-    # webapps.login_as(BhaUserInput.clinic_level_user)
-    webapps.bha_login_as(BhaUserInput.clinic_level_user, settings['bha_password'], settings['url'], settings['db'])
     webapps.open_app(BhaUserInput.bha_app_name)
     webapps.open_menu(BhaUserInput.search_and_admit_client)
     domain_url = driver.current_url
