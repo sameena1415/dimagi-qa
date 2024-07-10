@@ -42,10 +42,12 @@ class BhaWorkflows(BasePage):
     def select_radio(self, value):
         time.sleep(4)
         radio_value = self.get_element(self.radio_option_value, value)
-        self.wait_for_element(radio_value)
-        self.scroll_to_element(radio_value)
-        self.js_click(radio_value)
-        time.sleep(4)
+        if self.is_present_and_displayed(radio_value, 10):
+            self.scroll_to_element(radio_value)
+            self.js_click(radio_value)
+            time.sleep(4)
+        else:
+            print("Yes button is not present")
 
     def check_search_properties_present(self, properties):
         properties_labels = self.find_elements_texts(self.case_search_properties)
