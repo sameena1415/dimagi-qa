@@ -88,15 +88,20 @@ class CaseSearchWorkflows(BasePage):
         print("Providing value: ", input_value)
         if property_type == TEXT_INPUT:
             self.search_property = self.get_element(self.search_against_text_property_format, search_property)
+            class_type = self.get_attribute(self.search_property, "class")
             self.wait_to_click(self.search_property)
             time.sleep(4)
-            if self.is_visible_and_displayed(self.date_picker_clear, 10):
-                self.js_click(self.date_picker_clear)
-                time.sleep(4)
-            self.send_keys(self.search_property, input_value+Keys.TAB)
-            time.sleep(5)
-            if self.is_visible_and_displayed(self.date_picker_close, 10):
-                self.js_click(self.date_picker_close)
+            print("class type ", class_type)
+            if "date" in class_type:
+                if self.is_visible_and_displayed(self.date_picker_clear, 10):
+                    self.js_click(self.date_picker_clear)
+                    time.sleep(4)
+                self.send_keys(self.search_property, input_value+Keys.TAB)
+                time.sleep(5)
+                if self.is_visible_and_displayed(self.date_picker_close, 10):
+                    self.js_click(self.date_picker_close)
+            else:
+                self.send_keys(self.search_property, input_value + Keys.TAB)
             self.wait_for_ajax()
         elif property_type == COMBOBOX:
             self.combox_select_element = self.get_element(self.combox_select, search_property)
@@ -279,6 +284,8 @@ class CaseSearchWorkflows(BasePage):
     def select_checkbox(self, search_property, values, select_by_value):
         if select_by_value == text:
             checkbox_xpath = (By.XPATH, self.checkbox_xpath.format(search_property, values))
+            self.wait_for_element(checkbox_xpath)
+            self.scroll_to_element(checkbox_xpath)
             self.js_click(checkbox_xpath)
         elif select_by_value == index:
             for value in values:

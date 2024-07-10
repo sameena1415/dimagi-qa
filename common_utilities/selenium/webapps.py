@@ -126,7 +126,7 @@ class WebApps(BasePage):
         self.wait_for_ajax()
         time.sleep(5)
 
-    def search_button_on_case_search_page(self, enter_key=None):
+    def search_button_on_case_search_page(self, enter_key=None, case_list=None):
         if enter_key == YES:
             time.sleep(2)
             ActionChains(self.driver).send_keys(Keys.ENTER).perform()
@@ -136,8 +136,11 @@ class WebApps(BasePage):
             self.scroll_to_element(self.submit_on_case_search_page)
             self.js_click(self.submit_on_case_search_page)
             time.sleep(10)
-            self.wait_for_ajax()
-        self.is_visible_and_displayed(self.case_list, timeout=500)
+            self.wait_for_ajax(60)
+        if case_list == None:
+            self.is_visible_and_displayed(self.case_list, timeout=500)
+        else:
+            print("Case List is not displayed")
 
     def clear_and_search_all_cases_on_case_search_page(self):
         self.clear_selections_on_case_search_page()
@@ -196,9 +199,9 @@ class WebApps(BasePage):
         return form_names
 
     def submit_the_form(self):
+        time.sleep(3)
         self.wait_for_element(self.form_submit)
         self.js_click(self.form_submit)
-        self.wait_for_ajax(100)
         time.sleep(5)
         try:
             assert self.is_visible_and_displayed(self.form_submission_successful, timeout=500)
