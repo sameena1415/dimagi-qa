@@ -57,6 +57,7 @@ def test_case_02_admit_case_2(driver, settings):
     if value["first_name"] == None and value["last_name"] == None:
         pytest.skip("Skipping as name is null")
     """use case: Admit a client - case does exist -> Request pending admission"""
+
     webapps = WebApps(driver, settings)
     casesearch = CaseSearchWorkflows(driver)
     app = BhaWorkflows(driver)
