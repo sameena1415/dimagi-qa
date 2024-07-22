@@ -42,10 +42,12 @@ class ImportCasesPage(BasePage):
         self.select_by_text(self.case_type, UserData.case_pregnancy)
         self.scroll_to_element(self.create_new_cases)
         self.wait_to_click(self.create_new_cases)
+        time.sleep(2)
         self.wait_to_click(self.next_step)
         time.sleep(5)
         self.scroll_to_element(self.confirm_import)
-        self.js_click(self.confirm_import)
+        time.sleep(2)
+        self.wait_to_click(self.confirm_import)
         print("Imported case!")
         assert self.is_visible_and_displayed((By.XPATH, self.success.format(self.file_new_name))), "Waitinng to start import. Celery might have a high queue."
 
