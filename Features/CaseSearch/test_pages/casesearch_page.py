@@ -1,4 +1,5 @@
 import logging
+import platform
 import time
 
 from dateutil.relativedelta import relativedelta
@@ -103,6 +104,7 @@ class CaseSearchWorkflows(BasePage):
                     self.js_click(self.date_picker_close)
             else:
                 self.send_keys(self.search_property, input_value + Keys.TAB)
+                time.sleep(5)
             self.wait_for_ajax()
         elif property_type == COMBOBOX:
             self.combox_select_element = self.get_element(self.combox_select, search_property)
@@ -118,7 +120,12 @@ class CaseSearchWorkflows(BasePage):
             today_date = (datetime.today()).date()
             sixty_days_ago = today_date - relativedelta(days=no_of_days)
             # below line works on linux
-            date_ranges = str(sixty_days_ago.strftime("%-m/%-d/%Y")) + " to " + str(today_date.strftime("%-m/%-d/%Y"))
+            if platform.system() == 'Windows':
+                print("Current OS is Windows")
+                date_ranges = str(sixty_days_ago.strftime("%#m/%#d/%Y")) + " to " + str(today_date.strftime("%#m/%#d/%Y"))
+            else:
+                print("Current OS is Linux")
+                date_ranges = str(sixty_days_ago.strftime("%-m/%-d/%Y")) + " to " + str(today_date.strftime("%-m/%-d/%Y"))
             # the below line works on windows
             # date_ranges = str(sixty_days_ago.strftime("%#m/%#d/%Y")) + " to " + str(today_date.strftime("%#m/%#d/%Y"))
         else:
