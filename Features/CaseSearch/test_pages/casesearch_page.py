@@ -117,7 +117,10 @@ class CaseSearchWorkflows(BasePage):
         if default:
             today_date = (datetime.today()).date()
             sixty_days_ago = today_date - relativedelta(days=no_of_days)
-            date_ranges = str(sixty_days_ago.strftime("%#m/%#d/%Y")) + " to " + str(today_date.strftime("%#m/%#d/%Y"))
+            # below line works on linux
+            date_ranges = str(sixty_days_ago.strftime("%-m/%-d/%Y")) + " to " + str(today_date.strftime("%-m/%-d/%Y"))
+            # the below line works on windows
+            # date_ranges = str(sixty_days_ago.strftime("%#m/%#d/%Y")) + " to " + str(today_date.strftime("%#m/%#d/%Y"))
         else:
             date_obj = datetime.strptime(input_date, input_format)
             date_ranges = str(date_obj.strftime(output_format)) + " to " + str(date_obj.strftime(output_format))
