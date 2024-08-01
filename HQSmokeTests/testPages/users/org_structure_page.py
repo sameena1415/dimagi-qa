@@ -105,7 +105,7 @@ class OrganisationStructurePage(BasePage):
         self.delete_success = (By.XPATH, "//div[contains(@class,'alert-success')]")
         self.loc_field_input = (By.XPATH, "//input[contains(@data-bind,'value: slug')]")
         self.remove_choice_button = "((//input[contains(@data-bind,'value: slug')]//following::a[contains(@class,'danger')][1])//preceding::*[contains(@data-bind,'removeChoice')][1])[{}]"
-        self.delete_user_field = "(//input[contains(@data-bind,'value: slug')]//following::a[contains(@class,'danger')][1])[{}]"
+        self.delete_user_field = "(//input[contains(@data-bind,'value: slug')]//following::a[contains(@class,'danger')]/i[1])[{}]"
         self.confirm_user_field_delete = (
             By.XPATH, "(//a[.='Cancel']//following-sibling::button[contains(@class,'danger')])[last()]")
 
@@ -252,9 +252,11 @@ class OrganisationStructurePage(BasePage):
                 time.sleep(3)
                 text = list_profile[i].get_attribute("value")
                 if "field_" in text:
-                    self.js_click((By.XPATH, self.remove_choice_button.format(str(i + 1))))
+                    if self.is_present((By.XPATH, self.remove_choice_button.format(str(i + 1)))):
+                        self.js_click((By.XPATH, self.remove_choice_button.format(str(i + 1))))
                     time.sleep(5)
-                    self.js_click((By.XPATH, self.delete_user_field.format(str(i + 1))))
+                    print(str(i + 1))
+                    self.wait_to_click((By.XPATH, self.delete_user_field.format(str(i + 1))))
                     # self.driver.find_element(By.XPATH,
                     #                          "(//input[contains(@data-bind,'value: slug')]//following::a[@class='btn btn-danger' and @data-toggle='modal'][1])[" + str(
                     #                              i + 1) + "]").click()
