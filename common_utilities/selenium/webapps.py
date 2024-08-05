@@ -179,6 +179,7 @@ class WebApps(BasePage):
 
     def select_first_case_on_list(self):
         self.case_name_first = self.get_text(self.first_case_on_list)
+        self.wait_for_element(self.first_case_on_list)
         self.js_click(self.first_case_on_list)
         return self.case_name_first
 
