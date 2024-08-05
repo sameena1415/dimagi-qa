@@ -28,7 +28,7 @@ class WebApps(BasePage):
         self.form_name_format = "//h3[contains(text(), '{}')]"
         self.form_name_header_format = "//h1[contains(text(), '{}')]"
         self.case_name_format = "//div[@id='module-case-list']//*[contains(text(),'{}')]"
-        self.breadcrumb_format = "//li[contains(text(), '{}')]"
+        self.breadcrumb_format = "//li[contains(@class,'breadcrumb')][contains(text(),'{}') or ./a[contains(.,'{}')]]"
         self.answer_format = "(//label[.//span[text()='{}']]/following-sibling::div//{})"
         self.per_answer_format = "(//label[.//span[text()='{}']]/following-sibling::div//{})[{}]"
 
@@ -88,7 +88,8 @@ class WebApps(BasePage):
         self.is_visible_and_displayed(self.application_header, timeout=200)
 
     def navigate_to_breadcrumb(self, breadcrumb_value):
-        self.link = self.get_element(self.breadcrumb_format, breadcrumb_value)
+        self.link = (By.XPATH, self.breadcrumb_format.format(breadcrumb_value, breadcrumb_value))
+        self.wait_for_element(self.link)
         self.js_click(self.link)
 
     def open_menu(self, menu_name):
@@ -213,6 +214,7 @@ class WebApps(BasePage):
                 assert self.is_visible_and_displayed(self.form_submission_successful, timeout=500)
             else:
                 raise AssertionError
+        time.sleep(5)
 
     def select_user(self, username):
         self.login_as_user = self.get_element(self.login_as_username, username)

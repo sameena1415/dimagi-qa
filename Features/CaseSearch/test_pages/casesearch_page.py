@@ -41,7 +41,7 @@ class CaseSearchWorkflows(BasePage):
         self.date_selected = "(//*[contains(text(),'{}') or contains(@value,'{}')])[1]"
         self.dropdown_values = self.combox_select + "/option"
         self.menu_header = "//h1[contains(text(),'{}')]"
-        self.menu_breadcrumb = "//li[contains(text(),'{}') or ./a[contains(text(),'{}')]]"
+        self.menu_breadcrumb = "//li[contains(@class,'breadcrumb')][contains(text(),'{}') or ./a[contains(.,'{}')]]"
         self.webapps_home = (By.XPATH, "//i[@class='fcc fcc-flower']")
         self.case_detail_value = "//th[contains(text(), '{}')]//following-sibling::td[contains(text(), '{}')]"
         self.case_detail_tab = "//a[text()='{}']"
