@@ -54,7 +54,7 @@ class MobileWorkerPage(BasePage):
         self.search_mw = (By.XPATH, "//div[@class='ko-search-box']//input[@type='text']")
         self.search_button_mw = (
             By.XPATH, "//div[@class='ko-search-box']//button[@data-bind='click: clickAction, visible: !immediate']")
-        self.webapp_working_as = (By.XPATH, "//div[@class='restore-as-banner module-banner']/b")
+        self.webapp_working_as = (By.XPATH, "//div[contains(@class,'restore-as-banner')]//b")
         self.webapp_login_confirmation = (By.ID, 'js-confirmation-confirm')
         # self.webapp_login_with_username = (By.XPATH, self.login_as_usernames)
         self.webapp_login = (By.XPATH, "(//div[@class='js-restore-as-item appicon appicon-restore-as'])")
