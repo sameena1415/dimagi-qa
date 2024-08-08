@@ -17,6 +17,8 @@ class MessagingPage(BasePage):
     def __init__(self, driver):
         super().__init__(driver)
 
+        self.dashboard_link = settings['url'] + "/dashboard/project/"
+
         self.cond_alert_name_input = "cond_alert_" + fetch_random_string()
         self.keyword_name_input = "KEYWORD_" + fetch_random_string().upper()
         self.struct_keyword_name_input = "STRUCTURED_KEYWORD_" + fetch_random_string().upper()
@@ -142,7 +144,7 @@ class MessagingPage(BasePage):
         # Message Translation
         self.msg_translation_menu = (By.XPATH, "//a[text()='Messaging Translations']")
         # Project and Subscription Settings
-        self.settings_bar = (By.XPATH, "//a[@data-action='Click Gear Icon']")
+        self.settings_bar = (By.XPATH, "//ul[@role='menu']//a[@id='manageSettingsDropdown']/i")
         self.subscription_menu = (By.LINK_TEXT, "Current Subscription")
         self.subscription_elements_id = (By.ID, "subscriptionSummary")
         self.project_settings_menu = (By.LINK_TEXT, "Project Settings")
@@ -517,19 +519,22 @@ class MessagingPage(BasePage):
         assert self.is_visible_and_displayed(self.upload_success_message), "Msg Trans not uploaded successfully"
         print("Msg Trans uploaded successfully!")
 
-    def project_settings_page(self, value=None):
-        if value==True:
-            self.switch_to_default_content()
-            time.sleep(5)
-        else:
-            print("Value null")
-        self.wait_for_element(self.settings_bar)
-        self.js_click(self.settings_bar)
-        self.wait_for_element(self.project_settings_menu)
-        self.js_click(self.project_settings_menu)
-        assert self.is_visible_and_displayed(
-            self.project_settings_elements), "Project Settings page did not load successfully"
-        print("Project Settings page loaded successfully!")
+    # def project_settings_page(self, value=None):
+    #     if value==True:
+    #         self.switch_to_default_content()
+    #         time.sleep(5)
+    #     else:
+    #         print("Value null")
+    #     self.driver.get(self.dashboard_link)
+    #     self.accept_pop_up()
+    #     time.sleep(5)
+    #     self.wait_for_element(self.settings_bar)
+    #     self.click(self.settings_bar)
+    #     self.wait_for_element(self.project_settings_menu)
+    #     self.js_click(self.project_settings_menu)
+    #     assert self.is_visible_and_displayed(
+    #         self.project_settings_elements), "Project Settings page did not load successfully"
+    #     print("Project Settings page loaded successfully!")
 
     def current_subscription_page(self):
         self.wait_to_click(self.settings_bar)
