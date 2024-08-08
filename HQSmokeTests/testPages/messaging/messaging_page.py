@@ -17,8 +17,6 @@ class MessagingPage(BasePage):
     def __init__(self, driver):
         super().__init__(driver)
 
-        self.dashboard_link = settings['url'] + "/dashboard/project/"
-
         self.cond_alert_name_input = "cond_alert_" + fetch_random_string()
         self.keyword_name_input = "KEYWORD_" + fetch_random_string().upper()
         self.struct_keyword_name_input = "STRUCTURED_KEYWORD_" + fetch_random_string().upper()
