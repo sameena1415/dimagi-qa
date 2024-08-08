@@ -31,7 +31,7 @@ class HomePage(BasePage):
         self.alert_button_accept = (By.ID, "hs-eu-confirmation-button")
         self.mobile_workers_menu_link_text = (By.LINK_TEXT, "Mobile Workers")
         self.show_full_menu_id = (By.ID, "commcare-menu-toggle")
-        self.settings_bar = (By.XPATH, "//ul[@role='menu']//a[@id='manageSettingsDropdown']/i")
+        self.settings_bar = (By.XPATH, "//ul[@role='menu']//a[@data-action='Click Gear Icon']/i")
         self.project_settings_menu = (By.LINK_TEXT, "Project Settings")
         self.project_settings_elements = (By.XPATH, "//form[@class='form form-horizontal']")
 

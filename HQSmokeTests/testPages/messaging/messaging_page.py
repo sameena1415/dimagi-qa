@@ -142,7 +142,7 @@ class MessagingPage(BasePage):
         # Message Translation
         self.msg_translation_menu = (By.XPATH, "//a[text()='Messaging Translations']")
         # Project and Subscription Settings
-        self.settings_bar = (By.XPATH, "//ul[@role='menu']//a[@id='manageSettingsDropdown']/i")
+        self.settings_bar = (By.XPATH, "//ul[@role='menu']//a[@data-action='Click Gear Icon']/i")
         self.subscription_menu = (By.LINK_TEXT, "Current Subscription")
         self.subscription_elements_id = (By.ID, "subscriptionSummary")
         self.project_settings_menu = (By.LINK_TEXT, "Project Settings")
