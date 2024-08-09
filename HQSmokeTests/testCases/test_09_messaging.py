@@ -121,5 +121,6 @@ def test_case_51_translations(driver, settings):
 @pytest.mark.currentSubscription
 def test_case_52_settings_pages(driver, settings):
     msg = MessagingPage(driver)
-    msg.project_settings_page()
+    home = HomePage(driver, settings)
+    home.project_settings_page()
     msg.current_subscription_page()

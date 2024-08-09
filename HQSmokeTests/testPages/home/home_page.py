@@ -1,3 +1,5 @@
+import time
+
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.by import By
 
@@ -29,6 +31,9 @@ class HomePage(BasePage):
         self.alert_button_accept = (By.ID, "hs-eu-confirmation-button")
         self.mobile_workers_menu_link_text = (By.LINK_TEXT, "Mobile Workers")
         self.show_full_menu_id = (By.ID, "commcare-menu-toggle")
+        self.settings_bar = (By.XPATH, "//ul[@role='menu']//a[@data-action='Click Gear Icon']/i")
+        self.project_settings_menu = (By.LINK_TEXT, "Project Settings")
+        self.project_settings_elements = (By.XPATH, "//form[@class='form form-horizontal']")
 
         self.DASHBOARD_TITLE = "CommCare HQ"
         self.REPORTS_TITLE = "My Saved Reports : Project Reports :: - CommCare HQ"
@@ -36,6 +41,7 @@ class HomePage(BasePage):
         self.USERS_TITLE = "Mobile Workers : Users :: - CommCare HQ"
         self.MESSAGING_TITLE = "Dashboard : Messaging :: - CommCare HQ"
         self.WEBAPPS_TITLE = "Web Apps - CommCare HQ"
+        self.PROJECT_SETTINGS = "Basic : Project Settings :: - CommCare HQ"
 
     def dashboard_menu(self):
         self.open_menu(self.dashboard_menu_id)
@@ -116,3 +122,19 @@ class HomePage(BasePage):
                 self.wait_to_click(menu)
             else:
                 print(TimeoutException)
+
+    def project_settings_page(self, value=None):
+        if value==True:
+            self.switch_to_default_content()
+            time.sleep(5)
+        else:
+            print("Value null")
+        self.driver.get(self.dashboard_link)
+        self.accept_pop_up()
+        time.sleep(5)
+        self.wait_for_element(self.settings_bar)
+        self.click(self.settings_bar)
+        self.wait_for_element(self.project_settings_menu)
+        self.js_click(self.project_settings_menu)
+        assert self.PROJECT_SETTINGS == self.driver.title, "This is not the Project Settings page."
+        print("Project Settings page loaded successfully!")

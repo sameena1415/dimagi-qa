@@ -6,7 +6,6 @@ from HQSmokeTests.testPages.data.export_data_page import ExportDataPage
 from HQSmokeTests.testPages.data.import_cases_page import ImportCasesPage
 from HQSmokeTests.testPages.email.email_verification import EmailVerification
 from HQSmokeTests.testPages.home.home_page import HomePage
-from HQSmokeTests.testPages.messaging.messaging_page import MessagingPage
 from HQSmokeTests.testPages.project_settings.repeaters_page import RepeatersPage
 from HQSmokeTests.testPages.reports.report_page import ReportPage
 
@@ -82,8 +81,8 @@ def test_case_77_create_new_app(driver, settings):
 def test_case_78_create_and_edit_repeaters(driver, settings):
     if not values['flag'] is True:
         pytest.skip("Skipping as the previous test failed")
-    msg = MessagingPage(driver)
-    msg.project_settings_page(values['flag'])
+    home = HomePage(driver, settings)
+    home.project_settings_page(values['flag'])
     repeater = RepeatersPage(driver)
     repeater.add_repeater()
     repeater.edit_repeater()
