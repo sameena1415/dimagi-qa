@@ -260,7 +260,7 @@ jobs:
                               "emoji": true
                           },
                           "value": "click_me_123",
-                          "url": "file%3A%2F%2F%2Fhome%2Frunner%2Fwork%2Fdimagi-qa%2Fdimagi-qa%2Freport_api_staging.html",
+                          "url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}",
                           "action_id": "button-action",
                           "style": "primary"
                       }
