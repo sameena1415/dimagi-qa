@@ -73,9 +73,17 @@ def pytest_terminal_summary(terminalreporter, exitstatus, config):
     error = terminalreporter.stats.get('error', [])
     skipped = terminalreporter.stats.get('skipped', [])
     xfail = terminalreporter.stats.get('xfail', [])
-
+    env = config.getoptions("--settings")
     # Write the counts to a file
-    with open('api_test_counts.txt', 'w') as f:
+    settings = config._get_config_var('settings')
+    env_settings = "\n".join(f"{key}={value}" for key, value in settings.items())
+
+    # Determine the environment
+    env = os.environ.get("DIMAGIQA_ENV", "default_env")
+
+    # Define the filename based on the environment
+    filename = f'test_counts_{env}.txt'
+    with open(filename, 'w') as f:
         f.write(f'PASSED={len(passed)}\n')
         f.write(f'FAILED={len(failed)}\n')
         f.write(f'ERROR={len(error)}\n')

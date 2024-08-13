@@ -84,10 +84,10 @@ jobs:
       id: parse_counts
       if: always()
       run: |
-        # Extract variables from the test_counts.txt file
+        # Extract variables from the api_test_counts.txt file
         while IFS= read -r line; do
           echo "::set-output name=${line%=*}::${line#*=}"
-        done < api_test_counts.txt
+        done < test_counts_${{ matrix.environment }}.txt
 
     - name: Display test counts
       run: |
@@ -184,45 +184,16 @@ jobs:
                       ]
                   },
                   {
-                      "type": "context",
-                      "elements": [
-                          {
+                      "type": "section",
+                      "text": {
+
                               "type": "mrkdwn",
-                              "text": "*Passed: *\n ${{ steps.parse_counts.outputs.PASSED }}  \n"
-                          },
-                          {
-                              "type": "mrkdwn",
-                              "text": " "
-                          },
-                          {
-                              "type": "mrkdwn",
-                              "text": "*Failed: *\n ${{ steps.parse_counts.outputs.FAILED }} \n"
-                          },
-                          {
-                              "type": "mrkdwn",
-                              "text": " "
-                          },
-                          {
-                              "type": "mrkdwn",
-                              "text": "*Error: *\n ${{ steps.parse_counts.outputs.ERROR }} \n"
-                          },
-                          {
-                              "type": "mrkdwn",
-                              "text": " "
-                          },
-                          {
-                              "type": "mrkdwn",
-                              "text": "*Skipped: *\n ${{ steps.parse_counts.outputs.SKIPPED }} \n"
-                          },
-                          {
-                              "type": "mrkdwn",
-                              "text": " "
-                          },
-                          {
-                              "type": "mrkdwn",
-                              "text": "*XFail: *\n ${{ steps.parse_counts.outputs.XFAIL }} \n"
-                          }
-                      ]
+                              "text": "*Passed: * ${{ steps.parse_counts.outputs.PASSED }} \n
+                                       *Failed: * ${{ steps.parse_counts.outputs.FAILED }} \n
+                                       *Error: * ${{ steps.parse_counts.outputs.ERROR }} \n
+                                       *Skipped: * ${{ steps.parse_counts.outputs.SKIPPED }} \n
+                                       *XFail: * ${{ steps.parse_counts.outputs.XFAIL }} \n"
+                      }
                   },
                   {
                       "type": "section",
