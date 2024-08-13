@@ -83,6 +83,15 @@ jobs:
           echo ${{env.NOW}}
           pytest -v --rootdir= HQSmokeTests/testCases -n 4 --dist=loadfile --reruns 1 --html=report_${{ matrix.environment }}.html
 
+      - name: Parse test counts
+        id: parse_counts
+        if: always()
+        run: |
+          # Extract variables from the hqsmoke_test_counts.txt file
+          while IFS= read -r line; do
+            echo "::set-output name=${line%=*}::${line#*=}"
+          done < hqsmoke_test_counts_${{ matrix.environment }}.txt
+
       - name: Set email vars
         if: ${{ failure() }}
         id: configure_email
@@ -215,17 +224,24 @@ jobs:
                         "type": "section",
                         "text": {
                             "type": "mrkdwn",
+                            "text": "*Passed:* ${{ steps.parse_counts.outputs.PASSED }}\n*Failed:* ${{ steps.parse_counts.outputs.FAILED }}\n*Error:* ${{ steps.parse_counts.outputs.ERROR }}\n*Skipped:* ${{ steps.parse_counts.outputs.SKIPPED }}\n*XFail:* ${{ steps.parse_counts.outputs.XFAIL }}\n"
+                        }
+                    },
+                    {
+                        "type": "section",
+                        "text": {
+                            "type": "mrkdwn",
                             "text": "Here's the corresponding workflow execution :arrow_right::arrow_right:"
                         },
                         "accessory": {
                             "type": "button",
                             "text": {
                                 "type": "plain_text",
-                                "text": "View on Github",
+                                "text": "View Report",
                                 "emoji": true
                             },
                             "value": "click_me_123",
-                            "url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}",
+                            "url": "file:///home/runner/work/dimagi-qa/dimagi-qa/report_${{ matrix.environment }}.html",
                             "action_id": "button-action",
                             "style": "danger"
                         }
@@ -278,11 +294,11 @@ jobs:
                             "type": "button",
                             "text": {
                                 "type": "plain_text",
-                                "text": "View on Github",
+                                "text": "View Report",
                                 "emoji": true
                             },
                             "value": "click_me_123",
-                            "url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}",
+                            "url": "file:///home/runner/work/dimagi-qa/dimagi-qa/report_${{ matrix.environment }}.html"
                             "action_id": "button-action",
                             "style": "primary"
                         }

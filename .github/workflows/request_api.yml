@@ -89,15 +89,6 @@ jobs:
           echo "::set-output name=${line%=*}::${line#*=}"
         done < test_counts_${{ matrix.environment }}.txt
 
-    - name: Display test counts
-      run: |
-        echo "Passed tests: ${{ steps.parse_counts.outputs.PASSED }}"
-        echo "Failed tests: ${{ steps.parse_counts.outputs.FAILED }}"
-        echo "Error tests: ${{ steps.parse_counts.outputs.ERROR }}"
-        echo "Skipped tests: ${{ steps.parse_counts.outputs.SKIPPED }}"
-        echo "Xfail tests: ${{ steps.parse_counts.outputs.XFAIL }}"
-
-
     - name: Send Failure Email
       uses: dawidd6/action-send-mail@v3
       if: failure()
@@ -200,7 +191,7 @@ jobs:
                           "type": "button",
                           "text": {
                               "type": "plain_text",
-                              "text": "View on Github",
+                              "text": "View Report",
                               "emoji": true
                           },
                           "value": "click_me_123",
@@ -265,7 +256,7 @@ jobs:
                           "type": "button",
                           "text": {
                               "type": "plain_text",
-                              "text": "View on Github",
+                              "text": "View Report",
                               "emoji": true
                           },
                           "value": "click_me_123",
