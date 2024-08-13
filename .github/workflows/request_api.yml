@@ -186,13 +186,12 @@ jobs:
                   {
                       "type": "section",
                       "text": {
-
-                              "type": "mrkdwn",
-                              "text": "*Passed: * ${{ steps.parse_counts.outputs.PASSED }} \n
-                                       *Failed: * ${{ steps.parse_counts.outputs.FAILED }} \n
-                                       *Error: * ${{ steps.parse_counts.outputs.ERROR }} \n
-                                       *Skipped: * ${{ steps.parse_counts.outputs.SKIPPED }} \n
-                                       *XFail: * ${{ steps.parse_counts.outputs.XFAIL }} \n"
+                          "type": "mrkdwn",
+                          "text": "*Passed: * ${{ steps.parse_counts.outputs.PASSED }} \n
+                                  *Failed: * ${{ steps.parse_counts.outputs.FAILED }} \n
+                                  *Error: * ${{ steps.parse_counts.outputs.ERROR }} \n
+                                  *Skipped: * ${{ steps.parse_counts.outputs.SKIPPED }} \n
+                                  *XFail: * ${{ steps.parse_counts.outputs.XFAIL }} \n"
                       }
                   },
                   {

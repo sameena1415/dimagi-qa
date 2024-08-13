@@ -75,9 +75,6 @@ def pytest_terminal_summary(terminalreporter, exitstatus, config):
     xfail = terminalreporter.stats.get('xfail', [])
     env = config.getoptions("--settings")
     # Write the counts to a file
-    settings = config._get_config_var('settings')
-    env_settings = "\n".join(f"{key}={value}" for key, value in settings.items())
-
     # Determine the environment
     env = os.environ.get("DIMAGIQA_ENV", "default_env")
 
