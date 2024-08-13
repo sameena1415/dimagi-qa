@@ -195,7 +195,7 @@ jobs:
                               "emoji": true
                           },
                           "value": "click_me_123",
-                          "url": "${{ github.workspace }}/report_api_${{ matrix.environment }}.html",
+                          "url": "file%3A%2F%2F%2Fhome%2Frunner%2Fwork%2Fdimagi-qa%2Fdimagi-qa%2Freport_api_staging.html",
                           "action_id": "button-action",
                           "style": "danger"
                       }
@@ -260,7 +260,7 @@ jobs:
                               "emoji": true
                           },
                           "value": "click_me_123",
-                          "url": "${{ github.workspace }}/report_api_${{ matrix.environment }}.html",
+                          "url": "file%3A%2F%2F%2Fhome%2Frunner%2Fwork%2Fdimagi-qa%2Fdimagi-qa%2Freport_api_staging.html",
                           "action_id": "button-action",
                           "style": "primary"
                       }
