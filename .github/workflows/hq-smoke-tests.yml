@@ -21,15 +21,21 @@ on:
           - staging
           - production
           - india
+  schedule:
+    - cron: '30 6 * * *'
 
 jobs:
   set_matrix:
     runs-on: ubuntu-latest
     outputs:
-      matrix: ${{ steps.set-matrix-deploy.outputs.matrix || steps.set-matrix-manual.outputs.matrix || steps.set-matrix-default.outputs.matrix }}
+      matrix: ${{ steps.set-matrix-schedule.outputs.matrix || steps.set-matrix-deploy.outputs.matrix || steps.set-matrix-manual.outputs.matrix || steps.set-matrix-default.outputs.matrix }}
     steps:
+      - id: set-matrix-schedule
+        if: ${{ github.event_name  == 'schedule' }}
+        run: |
+          echo "::set-output name=matrix::{\"environment\": [\"staging\"]}"
       - id: set-matrix-deploy
-        if: ${{ github.event_name == 'repository_dispatch' }}
+        if: ${{ github.event_name == 'repository_dispatch' && github.event.client_payload.environment != 'staging' }}
         run: |
           echo "::set-output name=matrix::{\"environment\": [\"${{ github.event.client_payload.environment }}\"]}"
       - id: set-matrix-manual
