@@ -187,11 +187,7 @@ jobs:
                       "type": "section",
                       "text": {
                           "type": "mrkdwn",
-                          "text": "*Passed: * ${{ steps.parse_counts.outputs.PASSED }} \n
-                                  *Failed: * ${{ steps.parse_counts.outputs.FAILED }} \n
-                                  *Error: * ${{ steps.parse_counts.outputs.ERROR }} \n
-                                  *Skipped: * ${{ steps.parse_counts.outputs.SKIPPED }} \n
-                                  *XFail: * ${{ steps.parse_counts.outputs.XFAIL }} \n"
+                          "text": "text": "*Passed:* ${{ steps.parse_counts.outputs.PASSED }}\n*Failed:* ${{ steps.parse_counts.outputs.FAILED }}\n*Error:* ${{ steps.parse_counts.outputs.ERROR }}\n*Skipped:* ${{ steps.parse_counts.outputs.SKIPPED }}\n*XFail:* ${{ steps.parse_counts.outputs.XFAIL }}\n"
                       }
                   },
                   {
@@ -208,7 +204,7 @@ jobs:
                               "emoji": true
                           },
                           "value": "click_me_123",
-                          "url": "/home/runner/work/dimagi-qa/dimagi-qa/report_api_${{ matrix.environment }}.html",
+                          "url": "file:///home/runner/work/dimagi-qa/dimagi-qa/report_api_${{ matrix.environment }}.html",
                           "action_id": "button-action",
                           "style": "danger"
                       }
@@ -266,7 +262,7 @@ jobs:
                               "emoji": true
                           },
                           "value": "click_me_123",
-                          "url": "/home/runner/work/dimagi-qa/dimagi-qa/report_api_${{ matrix.environment }}.html",
+                          "url": "file:///home/runner/work/dimagi-qa/dimagi-qa/report_api_${{ matrix.environment }}.html",
                           "action_id": "button-action",
                           "style": "primary"
                       }
