@@ -66,4 +66,18 @@ def pytest_runtest_makereport(item):
             print("reports skipped or failed")
         report.extra = extra
 
+def pytest_terminal_summary(terminalreporter, exitstatus, config):
+    # Collect test counts
+    passed = terminalreporter.stats.get('passed', [])
+    failed = terminalreporter.stats.get('failed', [])
+    error = terminalreporter.stats.get('error', [])
+    skipped = terminalreporter.stats.get('skipped', [])
+    xfail = terminalreporter.stats.get('xfail', [])
 
+    # Write the counts to a file
+    with open('api_test_counts.txt', 'w') as f:
+        f.write(f'PASSED={len(passed)}\n')
+        f.write(f'FAILED={len(failed)}\n')
+        f.write(f'ERROR={len(error)}\n')
+        f.write(f'SKIPPED={len(skipped)}\n')
+        f.write(f'XFAIL={len(xfail)}\n')

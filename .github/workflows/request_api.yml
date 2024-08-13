@@ -80,6 +80,25 @@ jobs:
         echo ${{env.NOW}}
         pytest -v --tb=short -n auto --dist=loadfile --reruns 1 --html=report_api_${{ matrix.environment }}.html --self-contained-html --rootdir= RequestAPI/testCases
 
+  pytest
+
+  - name: Parse test counts
+    id: parse_counts
+    run: |
+      # Extract variables from the test_counts.txt file
+      while IFS= read -r line; do
+        echo "::set-output name=${line%=*}::${line#*=}"
+      done < api_test_counts.txt
+
+  - name: Display test counts
+    run: |
+      echo "Passed tests: ${{ steps.parse_counts.outputs.PASSED }}"
+      echo "Failed tests: ${{ steps.parse_counts.outputs.FAILED }}"
+      echo "Error tests: ${{ steps.parse_counts.outputs.ERROR }}"
+      echo "Skipped tests: ${{ steps.parse_counts.outputs.SKIPPED }}"
+      echo "Xfail tests: ${{ steps.parse_counts.outputs.XFAIL }}"
+
+
     - name: Send Failure Email
       uses: dawidd6/action-send-mail@v3
       if: failure()
@@ -131,6 +150,8 @@ jobs:
 
           return SLACK_WEBHOOK_URL
 
+
+
     - name: Post to Slack channel on Failure
       id: slack-api-staging-fail
       uses: slackapi/slack-github-action@v1.23.0
@@ -164,10 +185,51 @@ jobs:
                       ]
                   },
                   {
+                      "type": "context",
+                      "elements": [
+                          {
+                              "type": "mrkdwn",
+                              "text": "*Passed: *\n ${{ steps.parse_counts.outputs.PASSED }}  \n"
+                          },
+                          {
+                              "type": "mrkdwn",
+                              "text": " "
+                          },
+                          {
+                              "type": "mrkdwn",
+                              "text": "*Failed: *\n ${{ steps.parse_counts.outputs.FAILED }} \n"
+                          },
+                          {
+                              "type": "mrkdwn",
+                              "text": " "
+                          },
+                          {
+                              "type": "mrkdwn",
+                              "text": "*Error: *\n ${{ steps.parse_counts.outputs.ERROR }} \n"
+                          },
+                          {
+                              "type": "mrkdwn",
+                              "text": " "
+                          },
+                          {
+                              "type": "mrkdwn",
+                              "text": "*Skipped: *\n ${{ steps.parse_counts.outputs.SKIPPED }} \n"
+                          },
+                          {
+                              "type": "mrkdwn",
+                              "text": " "
+                          },
+                        {
+                          "type": "mrkdwn",
+                          "text": "*XFail: *\n ${{ steps.parse_counts.outputs.XFAIL }} \n"
+                        },
+                      ]
+                  },
+                  {
                       "type": "section",
                       "text": {
                           "type": "mrkdwn",
-                          "text": "Here's the corresponding workflow execution :arrow_right::arrow_right:"
+                          "text": "Here's the corresponding report :arrow_right::arrow_right:"
                       },
                       "accessory": {
                           "type": "button",
@@ -177,7 +239,7 @@ jobs:
                               "emoji": true
                           },
                           "value": "click_me_123",
-                          "url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}",
+                          "url": "/home/runner/work/dimagi-qa/dimagi-qa/report_api_${{ matrix.environment }}.html",
                           "action_id": "button-action",
                           "style": "danger"
                       }
@@ -235,7 +297,7 @@ jobs:
                               "emoji": true
                           },
                           "value": "click_me_123",
-                          "url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}",
+                          "url": "/home/runner/work/dimagi-qa/dimagi-qa/report_api_${{ matrix.environment }}.html",
                           "action_id": "button-action",
                           "style": "primary"
                       }
