@@ -73,7 +73,6 @@ def pytest_terminal_summary(terminalreporter, exitstatus, config):
     error = terminalreporter.stats.get('error', [])
     skipped = terminalreporter.stats.get('skipped', [])
     xfail = terminalreporter.stats.get('xfail', [])
-    env = config.getoptions("--settings")
     # Write the counts to a file
     # Determine the environment
     env = os.environ.get("DIMAGIQA_ENV", "default_env")
