@@ -16,15 +16,21 @@ on:
         options:
           - staging
           - production
+schedule:
+    - cron: '0 8 * * 1-5'
 
 jobs:
   set_matrix:
     runs-on: ubuntu-latest
     outputs:
-      matrix: ${{ steps.set-matrix-deploy.outputs.matrix || steps.set-matrix-manual.outputs.matrix }}
+      matrix: ${{ steps.set-matrix-schedule.outputs.matrix || steps.set-matrix-deploy.outputs.matrix || steps.set-matrix-manual.outputs.matrix || steps.set-matrix-default.outputs.matrix }}
     steps:
+      - id: set-matrix-schedule
+        if: ${{ github.event_name  == 'schedule' }}
+        run: |
+          echo "::set-output name=matrix::{\"environment\": [\"staging\"]}"
       - id: set-matrix-deploy
-        if: ${{ github.event_name == 'repository_dispatch' }}
+        if: ${{ github.event_name == 'repository_dispatch' && github.event.client_payload.environment !== 'staging' }}
         run: |
           echo "::set-output name=matrix::{\"environment\": [\"${{ github.event.client_payload.environment }}\"]}"
       - id: set-matrix-manual
@@ -67,6 +73,16 @@ jobs:
           echo "NOW=$(date +'%m-%d %H:%M')" >> $GITHUB_ENV
           echo ${{env.NOW}}
           pytest -v "./Features/CaseSearch/test_cases" --dist=loadfile --html=report_${{ matrix.environment }}.html
+
+      - name: Parse test counts
+        id: parse_counts
+        if: always()
+        run: |
+          # Extract variables from the hqsmoke_test_counts.txt file
+          while IFS= read -r line; do
+            echo "::set-output name=${line%=*}::${line#*=}"
+          done < sscs_test_counts_${{ matrix.environment }}.txt
+
 
       - name: Set email vars
         if: ${{ success() || failure() }}
@@ -171,7 +187,7 @@ jobs:
                         "type": "section",
                         "text": {
                             "type": "mrkdwn",
-                            "text": " Salut 👋 \n*${{ github.workflow }}* were just triggered!"
+                            "text": " Salut 👋 \n*${{ github.workflow }}* were just triggered! \n\n "*Passed:* ${{ steps.parse_counts.outputs.PASSED }}\n*Failed:* ${{ steps.parse_counts.outputs.FAILED }}\n*Error:* ${{ steps.parse_counts.outputs.ERROR }}\n*Skipped:* ${{ steps.parse_counts.outputs.SKIPPED }}\n*XFail:* ${{ steps.parse_counts.outputs.XFAIL }}\n"
                         }
                     },
                     {
@@ -229,7 +245,7 @@ jobs:
                         "type": "section",
                         "text": {
                             "type": "mrkdwn",
-                            "text": " Salut 👋 \n*${{ github.workflow }}* were just triggered!"
+                            "text": " Salut 👋 \n*${{ github.workflow }}* were just triggered!\n\n "*Passed:* ${{ steps.parse_counts.outputs.PASSED }}\n*Failed:* ${{ steps.parse_counts.outputs.FAILED }}\n*Error:* ${{ steps.parse_counts.outputs.ERROR }}\n*Skipped:* ${{ steps.parse_counts.outputs.SKIPPED }}\n*XFail:* ${{ steps.parse_counts.outputs.XFAIL }}\n"
                         }
                     },
                     {
