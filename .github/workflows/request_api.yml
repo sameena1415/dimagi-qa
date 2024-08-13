@@ -154,7 +154,7 @@ jobs:
                       "type": "section",
                       "text": {
                           "type": "mrkdwn",
-                          "text": " Hola  👋 \n*${{ github.workflow }}* were just triggered!"
+                          "text": " Hola  👋 \n*${{ github.workflow }}* were just triggered!\n Here is the link to report: /home/runner/work/dimagi-qa/dimagi-qa/report_api_${{ matrix.environment }}.html"
                       }
                   },
                   {
@@ -178,14 +178,7 @@ jobs:
                       "type": "section",
                       "text": {
                           "type": "mrkdwn",
-                          "text": "*Passed:* ${{ steps.parse_counts.outputs.PASSED }}\n*Failed:* ${{ steps.parse_counts.outputs.FAILED }}\n*Error:* ${{ steps.parse_counts.outputs.ERROR }}\n*Skipped:* ${{ steps.parse_counts.outputs.SKIPPED }}\n*XFail:* ${{ steps.parse_counts.outputs.XFAIL }}\n"
-                      }
-                  },
-                  {
-                      "type": "section",
-                      "text": {
-                          "type": "mrkdwn",
-                          "text": "Here's the corresponding report :arrow_right::arrow_right:"
+                          "text": "*Passed:* ${{ steps.parse_counts.outputs.PASSED }}\n*Failed:* ${{ steps.parse_counts.outputs.FAILED }}\n*Error:* ${{ steps.parse_counts.outputs.ERROR }}\n*Skipped:* ${{ steps.parse_counts.outputs.SKIPPED }}\n*XFail:* ${{ steps.parse_counts.outputs.XFAIL }}\nHere's the corresponding report :arrow_right::arrow_right:"
                       },
                       "accessory": {
                           "type": "button",
@@ -219,7 +212,7 @@ jobs:
                       "type": "section",
                       "text": {
                           "type": "mrkdwn",
-                          "text": " Hola  👋 \n*${{ github.workflow }}* were just triggered!"
+                          "text": " Hola  👋 \n*${{ github.workflow }}* were just triggered! \n Here is the link to report: /home/runner/work/dimagi-qa/dimagi-qa/report_api_${{ matrix.environment }}.html"
                       }
                   },
                   {
@@ -243,14 +236,7 @@ jobs:
                       "type": "section",
                       "text": {
                           "type": "mrkdwn",
-                          "text": "*Passed:* ${{ steps.parse_counts.outputs.PASSED }}\n*Failed:* ${{ steps.parse_counts.outputs.FAILED }}\n*Error:* ${{ steps.parse_counts.outputs.ERROR }}\n*Skipped:* ${{ steps.parse_counts.outputs.SKIPPED }}\n*XFail:* ${{ steps.parse_counts.outputs.XFAIL }}\n"
-                      }
-                  },
-                  {
-                      "type": "section",
-                      "text": {
-                          "type": "mrkdwn",
-                          "text": "Here's the corresponding workflow execution :arrow_right::arrow_right:"
+                          "text": "*Passed:* ${{ steps.parse_counts.outputs.PASSED }}\n*Failed:* ${{ steps.parse_counts.outputs.FAILED }}\n*Error:* ${{ steps.parse_counts.outputs.ERROR }}\n*Skipped:* ${{ steps.parse_counts.outputs.SKIPPED }}\n*XFail:* ${{ steps.parse_counts.outputs.XFAIL }}\nHere's the corresponding workflow execution :arrow_right::arrow_right:"
                       },
                       "accessory": {
                           "type": "button",
