@@ -82,6 +82,7 @@ jobs:
 
     - name: Parse test counts
       id: parse_counts
+      if: always()
       run: |
         # Extract variables from the test_counts.txt file
         while IFS= read -r line; do
@@ -172,7 +173,7 @@ jobs:
                               "type": "mrkdwn",
                               "text": "*Environment: *\n ${{ matrix.environment }}  \n"
                           },
-                        {
+                          {
                               "type": "mrkdwn",
                               "text": " "
                           },
@@ -217,10 +218,10 @@ jobs:
                               "type": "mrkdwn",
                               "text": " "
                           },
-                        {
-                          "type": "mrkdwn",
-                          "text": "*XFail: *\n ${{ steps.parse_counts.outputs.XFAIL }} \n"
-                        },
+                          {
+                              "type": "mrkdwn",
+                              "text": "*XFail: *\n ${{ steps.parse_counts.outputs.XFAIL }} \n"
+                          }
                       ]
                   },
                   {
