@@ -83,6 +83,18 @@ jobs:
             echo "::set-output name=${line%=*}::${line#*=}"
           done < sscs_test_counts_${{ matrix.environment }}.txt
 
+      - name: Archive test results
+        id: artifact-upload-step
+        if: ${{ success() || failure() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-result-reports-${{ github.job }}
+          path: /home/runner/work/dimagi-qa/dimagi-qa/report_api_${{ matrix.environment }}.html
+          retention-days: 2
+
+      - name: Fetch artifact ID
+        run: echo 'Artifact ID is ${{ steps.artifact-upload-step.outputs.artifact-id }}'
+
 
       - name: Set email vars
         if: ${{ success() || failure() }}
@@ -231,7 +243,7 @@ jobs:
             							"emoji": true
             						},
             						"value": "click_me_123",
-            						"url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}",
+            						"url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts/${{ steps.artifact-upload-step.outputs.artifact-id }}",
             						"action_id": "button-action",
             						"style": "danger"
             					}
@@ -301,7 +313,7 @@ jobs:
             							"emoji": true
             						},
             						"value": "click_me_123",
-            						"url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}",
+            						"url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts/${{ steps.artifact-upload-step.outputs.artifact-id }}",
             						"action_id": "button-action",
             						"style": "primary"
             					}
@@ -313,11 +325,3 @@ jobs:
         env:
           SLACK_WEBHOOK_URL: ${{ steps.configure_slack.outputs.result }}
           SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
-
-
-      - name: Archive test results
-        if: ${{ success() || failure() }}
-        uses: actions/upload-artifact@v2
-        with:
-          name: test-result-reports-${{ matrix.environment }}
-          path: ${{ github.workspace }}/report_${{ matrix.environment }}.html
