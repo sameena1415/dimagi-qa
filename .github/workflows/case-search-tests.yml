@@ -182,51 +182,63 @@ jobs:
         with:
           payload: |
             {
-                "blocks": [
-                    {
-                        "type": "section",
-                        "text": {
-                            "type": "mrkdwn",
-                            "text": " Salut 👋 \n*${{ github.workflow }}* were just triggered! \n\n *Passed:* ${{ steps.parse_counts.outputs.PASSED }}\n*Failed:* ${{ steps.parse_counts.outputs.FAILED }}\n*Error:* ${{ steps.parse_counts.outputs.ERROR }}\n*Skipped:* ${{ steps.parse_counts.outputs.SKIPPED }}\n*XFail:* ${{ steps.parse_counts.outputs.XFAIL }}\n"
-                        }
-                    },
-                    {
-                        "type": "context",
-                        "elements": [
-                            {
-                                "type": "mrkdwn",
-                                "text": "*Environment: *\n ${{ matrix.environment }}  \n"
-                            },
-                          {
-                                "type": "mrkdwn",
-                                "text": " "
-                            },
-                            {
-                                "type": "mrkdwn",
-                                "text": "*Status: *\n ${{ job.status }}  :x:"
-                            }
-                        ]
-                    },
-                    {
-                        "type": "section",
-                        "text": {
-                            "type": "mrkdwn",
-                            "text": "Here's the corresponding workflow execution :arrow_right::arrow_right:"
-                        },
-                        "accessory": {
-                            "type": "button",
-                            "text": {
-                                "type": "plain_text",
-                                "text": "View on Github",
-                                "emoji": true
-                            },
-                            "value": "click_me_123",
-                            "url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}",
-                            "action_id": "button-action",
-                            "style": "danger"
-                        }
-                    }
-                ]
+            	"attachments": [
+            		{
+            			"color": "#ff0000",
+            			"blocks": [
+            				{
+            					"type": "section",
+            					"text": {
+            						"type": "mrkdwn",
+            						"text": " Salut 👋 \n*${{ github.workflow }}* were just triggered! \n"
+            					}
+            				},
+            				{
+            					"type": "section",
+            					"text": {
+            						"type": "mrkdwn",
+            						"text": "*Passed:* ${{ steps.parse_counts.outputs.PASSED }} *Failed:* ${{ steps.parse_counts.outputs.FAILED }} *Error:* ${{ steps.parse_counts.outputs.ERROR }} *Skipped:* ${{ steps.parse_counts.outputs.SKIPPED }} *XFail:* ${{ steps.parse_counts.outputs.XFAIL }}\n"
+            					}
+            				},
+            				{
+            					"type": "context",
+            					"elements": [
+            						{
+            							"type": "mrkdwn",
+            							"text": "*Environment: *\n ${{ matrix.environment }}  \n"
+            						},
+            						{
+            							"type": "mrkdwn",
+            							"text": " "
+            						},
+            						{
+            							"type": "mrkdwn",
+            							"text": "*Status: *\n ${{ job.status }}  :x:"
+            						}
+            					]
+            				},
+            				{
+            					"type": "section",
+            					"text": {
+            						"type": "mrkdwn",
+            						"text": "Here's the corresponding workflow execution :arrow_right::arrow_right:"
+            					},
+            					"accessory": {
+            						"type": "button",
+            						"text": {
+            							"type": "plain_text",
+            							"text": "View on Github",
+            							"emoji": true
+            						},
+            						"value": "click_me_123",
+            						"url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}",
+            						"action_id": "button-action",
+            						"style": "danger"
+            					}
+            				}
+            			]
+            		}
+            	]
             }
         env:
           SLACK_WEBHOOK_URL: ${{ steps.configure_slack.outputs.result }}
@@ -240,51 +252,63 @@ jobs:
         with:
           payload: |
             {
-                "blocks": [
-                    {
-                        "type": "section",
-                        "text": {
-                            "type": "mrkdwn",
-                            "text": " Salut 👋 \n*${{ github.workflow }}* were just triggered!\n\n *Passed:* ${{ steps.parse_counts.outputs.PASSED }}\n*Failed:* ${{ steps.parse_counts.outputs.FAILED }}\n*Error:* ${{ steps.parse_counts.outputs.ERROR }}\n*Skipped:* ${{ steps.parse_counts.outputs.SKIPPED }}\n*XFail:* ${{ steps.parse_counts.outputs.XFAIL }}\n"
-                        }
-                    },
-                    {
-                        "type": "context",
-                        "elements": [
-                            {
-                                "type": "mrkdwn",
-                                "text": "*Environment: *\n ${{ matrix.environment }}  \n"
-                            },
-                          {
-                                "type": "mrkdwn",
-                                "text": " "
-                            },
-                            {
-                                "type": "mrkdwn",
-                                "text": "*Status: *\n ${{ job.status }}  :white_check_mark:"
-                            }
-                        ]
-                    },
-                    {
-                        "type": "section",
-                        "text": {
-                            "type": "mrkdwn",
-                            "text": "Here's the corresponding workflow execution :arrow_right::arrow_right:"
-                        },
-                        "accessory": {
-                            "type": "button",
-                            "text": {
-                                "type": "plain_text",
-                                "text": "View on Github",
-                                "emoji": true
-                            },
-                            "value": "click_me_123",
-                            "url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}",
-                            "action_id": "button-action",
-                            "style": "primary"
-                        }
-                    }
-                ]
+            	"attachments": [
+            		{
+            			"color": "#36a64f",
+            			"blocks": [
+            				{
+            					"type": "section",
+            					"text": {
+            						"type": "mrkdwn",
+            						"text": " Salut 👋 \n*${{ github.workflow }}* were just triggered!\n"
+            					}
+            				},
+            				{
+            					"type": "section",
+            					"text": {
+            						"type": "mrkdwn",
+            						"text": "*Passed:* ${{ steps.parse_counts.outputs.PASSED }} *Failed:* ${{ steps.parse_counts.outputs.FAILED }} *Error:* ${{ steps.parse_counts.outputs.ERROR }} *Skipped:* ${{ steps.parse_counts.outputs.SKIPPED }} *XFail:* ${{ steps.parse_counts.outputs.XFAIL }}\n"
+            					}
+            				},
+            				{
+            					"type": "context",
+            					"elements": [
+            						{
+            							"type": "mrkdwn",
+            							"text": "*Environment: *\n ${{ matrix.environment }}  \n"
+            						},
+            						{
+            							"type": "mrkdwn",
+            							"text": " "
+            						},
+            						{
+            							"type": "mrkdwn",
+            							"text": "*Status: *\n ${{ job.status }}  :white_check_mark:"
+            						}
+            					]
+            				},
+            				{
+            					"type": "section",
+            					"text": {
+            						"type": "mrkdwn",
+            						"text": "Here's the corresponding workflow execution :arrow_right::arrow_right:"
+            					},
+            					"accessory": {
+            						"type": "button",
+            						"text": {
+            							"type": "plain_text",
+            							"text": "View on Github",
+            							"emoji": true
+            						},
+            						"value": "click_me_123",
+            						"url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}",
+            						"action_id": "button-action",
+            						"style": "primary"
+            					}
+            				}
+            			]
+            		}
+            	]
             }
         env:
           SLACK_WEBHOOK_URL: ${{ steps.configure_slack.outputs.result }}
