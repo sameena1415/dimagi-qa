@@ -96,12 +96,16 @@ jobs:
         done < test_counts_${{ matrix.environment }}.txt
 
     - name: Archive test results
+      id: artifact-upload-step
       if: always()
       uses: actions/upload-artifact@v4
       with:
         name: test-result-reports
         path: /home/runner/work/dimagi-qa/dimagi-qa/report_api_${{ matrix.environment }}.html
         retention-days: 2
+
+    - name: Fetch artifact URL
+      run: echo 'Artifact ID is ${{ steps.artifact-upload-step.outputs.artifact-id }}'
 
     - name: Send Failure Email
       uses: dawidd6/action-send-mail@v3
@@ -212,7 +216,7 @@ jobs:
           							"emoji": true
           						},
           						"value": "click_me_123",
-          						"url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}",
+          						"url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts/${{ steps.artifact-upload-step.outputs.artifact-id }}",
           						"action_id": "button-action",
           						"style": "danger"
           					}
@@ -282,7 +286,7 @@ jobs:
           							"emoji": true
           						},
           						"value": "click_me_123",
-          						"url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}",
+          						"url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts/${{ steps.artifact-upload-step.outputs.artifact-id }}",
           						"action_id": "button-action",
           						"style": "primary"
           					}
