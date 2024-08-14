@@ -90,7 +90,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: test-result-reports--${{ matrix.environment }}-${{ github.run_id }}
-          path: /home/runner/work/dimagi-qa/dimagi-qa/report_api_${{ matrix.environment }}.html
+          path: /home/runner/work/dimagi-qa/dimagi-qa/report_${{ matrix.environment }}.html
           retention-days: 2
 
       - name: Fetch artifact ID
@@ -302,17 +302,17 @@ jobs:
             					"type": "section",
             					"text": {
             						"type": "mrkdwn",
-            						"text": "Here's the corresponding workflow execution :arrow_right::arrow_right:"
+            						"text": "Here's the corresponding report :arrow_right::arrow_right:"
             					},
             					"accessory": {
             						"type": "button",
             						"text": {
             							"type": "plain_text",
-            							"text": "View Test Summary",
+            							"text": "Click to Download",
             							"emoji": true
             						},
             						"value": "click_me_123",
-            						"url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}",
+            						"url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts/${{ steps.artifact-upload-step.outputs.artifact-id }}",
             						"action_id": "button-action",
             						"style": "primary"
             					}
