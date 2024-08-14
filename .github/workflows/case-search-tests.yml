@@ -81,7 +81,7 @@ jobs:
           # Extract variables from the hqsmoke_test_counts.txt file
           while IFS= read -r line; do
             echo "::set-output name=${line%=*}::${line#*=}"
-          done < sscs_test_counts_${{ matrix.environment }}.txt
+          done < cs_test_counts_${{ matrix.environment }}.txt
 
       - name: Archive test results
         id: artifact-upload-step
