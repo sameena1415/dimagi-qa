@@ -95,6 +95,14 @@ jobs:
           echo "::set-output name=${line%=*}::${line#*=}"
         done < test_counts_${{ matrix.environment }}.txt
 
+    - name: Archive test results
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: test-result-reports
+        path: /home/runner/work/dimagi-qa/dimagi-qa/report_api_${{ matrix.environment }}.html
+        retention-days: 2
+
     - name: Send Failure Email
       uses: dawidd6/action-send-mail@v3
       if: failure()
@@ -287,12 +295,3 @@ jobs:
       env:
         SLACK_WEBHOOK_URL: ${{ steps.configure_slack.outputs.result }}
         SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
-
-
-    - name: Archive test results
-      if: always()
-      uses: actions/upload-artifact@v2
-      with:
-        name: test-result-reports
-        path: /home/runner/work/dimagi-qa/dimagi-qa/report_api_${{ matrix.environment }}.html
-        retention-days: 2
