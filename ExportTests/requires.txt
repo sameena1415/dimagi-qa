@@ -11,6 +11,7 @@ matplotlib >= 3.3.4
 pytest-rerunfailures
 pytest-xdist
 pytest-xdist[psutil]
+pyotp >=2.6.0
 pytest-order
 requests
 imap-tools
