@@ -48,7 +48,7 @@ jobs:
     concurrency:
       group: ${{ github.workflow }}-${{ matrix.environment }}
       cancel-in-progress: true
-    name: Smoke on '${{ matrix.environment }}'
+    name: Escape Defects on '${{ matrix.environment }}'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -75,7 +75,7 @@ jobs:
           echo "matrix environment: ${{ matrix.environment }}"
           echo "NOW=$(date +'%m-%d %H:%M')" >> $GITHUB_ENV
           echo ${{env.NOW}}
-          pytest -v --rootdir= ExportTests/testCases -n 2 --dist=loadfile --reruns 1 --html=report_p1p2_${{ matrix.environment }}.html
+          pytest -v --rootdir= ExportTests/testCases -n 3 --dist=loadfile --reruns 1 --html=report_p1p2_${{ matrix.environment }}.html
 
       - name: Parse test counts
         id: parse_counts
@@ -91,7 +91,7 @@ jobs:
         if: ${{ success() || failure() }}
         uses: actions/upload-artifact@v4
         with:
-          name: test-result-reports-${{ matrix.environment }}-${{ github.run_id }}
+          name: test-result-p1p2-${{ matrix.environment }}-${{ github.run_id }}
           path: /home/runner/work/dimagi-qa/dimagi-qa/report_p1p2_${{ matrix.environment }}.html
           retention-days: 2
 
