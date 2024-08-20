@@ -223,7 +223,11 @@ class WebApps(BasePage):
         time.sleep(2)
         self.wait_for_element(self.webapp_login_confirmation)
         self.js_click(self.webapp_login_confirmation)
+        time.sleep(5)
+        self.wait_for_element(self.webapp_working_as, 50)
         loggedin_user = self.get_text(self.webapp_working_as)
+        print("Logged in User: ", loggedin_user)
+        print("User provided: ", username)
         assert loggedin_user == username
 
     def login_as(self, username):
@@ -248,6 +252,7 @@ class WebApps(BasePage):
         time.sleep(1)
         self.wait_for_element(self.search_button_webapps)
         self.js_click(self.search_button_webapps)
+        time.sleep(2)
         self.select_user(username)
         return username
 
