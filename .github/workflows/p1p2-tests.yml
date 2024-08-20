@@ -60,7 +60,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r ExportTests/requires.txt
+          pip install -r P1P2Tests/requires.txt
 
       - name: CCHQ Priority Escape Defects Test with pytest
         env:
@@ -75,7 +75,7 @@ jobs:
           echo "matrix environment: ${{ matrix.environment }}"
           echo "NOW=$(date +'%m-%d %H:%M')" >> $GITHUB_ENV
           echo ${{env.NOW}}
-          pytest -v --rootdir= ExportTests/testCases -n 3 --dist=loadfile --reruns 1 --html=report_p1p2_${{ matrix.environment }}.html
+          pytest -v --rootdir= P1P2Tests/testCases -n 3 --dist=loadfile --reruns 1 --html=report_p1p2_${{ matrix.environment }}.html
 
       - name: Parse test counts
         id: parse_counts
