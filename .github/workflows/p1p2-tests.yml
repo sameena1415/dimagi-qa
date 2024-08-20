@@ -84,7 +84,7 @@ jobs:
           # Extract variables from the export_test_counts.txt file
           while IFS= read -r line; do
             echo "::set-output name=${line%=*}::${line#*=}"
-          done < p1p2_test_counts_{{ matrix.environment }}.txt
+          done < p1p2_test_counts_${{ matrix.environment }}.txt
 
       - name: Archive test results
         id: artifact-upload-step

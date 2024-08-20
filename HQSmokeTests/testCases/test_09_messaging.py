@@ -103,6 +103,7 @@ def test_case_50_languages(driver, settings):
     menu = HomePage(driver, settings)
     msg = MessagingPage(driver)
     menu.messaging_menu()
+    msg.delete_languages()
     msg.languages_page()
 
 
