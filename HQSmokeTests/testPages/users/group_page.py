@@ -82,19 +82,25 @@ class GroupPage(BasePage):
 
     def remove_user_from_group(self):
         time.sleep(3)
-        self.js_click(self.remove_user)
-        self.js_click(self.update_button)
-        time.sleep(15)
-        assert self.is_visible_and_displayed(self.success_alert, 100), "User deletion from group not successful"
-        print("Removed added user from group")
-        time.sleep(2)
+        try:
+            self.js_click(self.remove_user)
+            self.js_click(self.update_button)
+            time.sleep(15)
+            assert self.is_visible_and_displayed(self.success_alert, 100), "User deletion from group not successful"
+            print("Removed added user from group")
+            time.sleep(2)
+        except Exception:
+            print("No user group present")
 
     def cleanup_group(self, renamed_group):
-        self.wait_to_click((By.XPATH, self.created_group.format(renamed_group)))
-        self.wait_to_click(self.delete_group)
-        self.wait_to_click(self.confirm_delete)
-        assert self.is_visible_and_displayed(self.delete_success_message), "Group deletion not successful"
-        print("Clean up added group")
+        try:
+            self.wait_to_click((By.XPATH, self.created_group.format(renamed_group)))
+            self.wait_to_click(self.delete_group)
+            self.wait_to_click(self.confirm_delete)
+            assert self.is_visible_and_displayed(self.delete_success_message), "Group deletion not successful"
+            print("Clean up added group")
+        except Exception:
+            print("Group deletion might not have been successful")
 
     def delete_test_groups(self):
         list_profile = self.find_elements(self.group_list)

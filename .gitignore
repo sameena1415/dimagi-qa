@@ -241,3 +241,21 @@ ElasticSearchTests/testCases/report.html
 
 .envrc
 .direnv
+
+#Ignoring compliled files of ExportTests
+/ExportTests/testCases/report.html
+ExportTests/report.html
+ExportTests/report_*
+ExportTests/settings.cfg
+/ExportTests/userInputs/test_data/reassign_cases_*
+/ExportTests/userInputs/test_data/mobile_workers_*
+/ExportTests/userInputs/test_data/import_to_parent_*
+
+#Ignoring compliled files of P1P2Tests
+/P1P2Tests/testCases/report.html
+P1P2Tests/report.html
+P1P2Tests/report_*
+P1P2Tests/settings.cfg
+/P1P2Tests/userInputs/test_data/reassign_cases_*
+/P1P2Tests/userInputs/test_data/mobile_workers_*
+/P1P2Tests/userInputs/test_data/import_to_parent_*

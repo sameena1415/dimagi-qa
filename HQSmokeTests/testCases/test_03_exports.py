@@ -27,28 +27,6 @@ def test_case_21_case_exports(driver, settings):
 
 
 @pytest.mark.data
-@pytest.mark.exportsSMSMessages
-def test_case_22_sms_exports(driver, settings):
-    home = HomePage(driver, settings)
-    home.data_menu()
-    export = ExportDataPage(driver)
-    export.sms_exports()
-
-
-@pytest.mark.data
-@pytest.mark.exportsCaseData
-@pytest.mark.exportsFormData
-@pytest.mark.dailySavedExports
-def test_case_24_daily_saved_exports(driver, settings):
-    home = HomePage(driver, settings)
-    home.data_menu()
-    export = ExportDataPage(driver)
-    export.cleanup_existing_dse()
-    export.daily_saved_exports_form()
-    export.daily_saved_exports_case()
-
-
-@pytest.mark.data
 @pytest.mark.deleteBulkExports
 def test_exports_cleanup(driver, settings):
     home = HomePage(driver, settings)

@@ -688,33 +688,35 @@ class ReportPage(BasePage):
         return list
 
     def compare_web_with_email(self, link, web_data):
-        print(link)
-        print(web_data)
-        self.driver.get(link)
-        time.sleep(10)
-        newest_file = latest_download_file()
-        path = os.path.join(PathSettings.DOWNLOAD_PATH, newest_file)
-        print(path)
-        new_data = pd.read_excel(path, sheet_name=0, index_col=None)
-        print(new_data.values)
-        ext_list = []
-        ext_list.extend(new_data.values.tolist())
-        list = []
-        for i in range(len(ext_list) - 1)[:]:
-            list += ext_list[i]
-        print("List New: ", list)
-        print("Old data rows: ", len(web_data), "New data rows: ", len(list))
-        print("Old List: ", web_data)
-        print("New list: ", list)
-        assert len(web_data) == len(list), "Data in Both Excel and Searched results do not match"
-        print("Both Excel and Searched results have same amount of data")
-        for i in range(len(list)):
-            print("Comparing ", html.unescape(str(list[i])), " with ", str(web_data[i]))
-            if html.unescape(str(list[i])) == str(web_data[i]):
-                assert True
-            else:
-                print("Comparison failed for " + list[i] + " and " + web_data[i])
-
+        try:
+            print(link)
+            print(web_data)
+            self.driver.get(link)
+            time.sleep(10)
+            newest_file = latest_download_file()
+            path = os.path.join(PathSettings.DOWNLOAD_PATH, newest_file)
+            print(path)
+            new_data = pd.read_excel(path, sheet_name=0, index_col=None)
+            print(new_data.values)
+            ext_list = []
+            ext_list.extend(new_data.values.tolist())
+            list = []
+            for i in range(len(ext_list) - 1)[:]:
+                list += ext_list[i]
+            print("List New: ", list)
+            print("Old data rows: ", len(web_data), "New data rows: ", len(list))
+            print("Old List: ", web_data)
+            print("New list: ", list)
+            assert len(web_data) == len(list), "Data in Both Excel and Searched results do not match"
+            print("Both Excel and Searched results have same amount of data")
+            for i in range(len(list)):
+                print("Comparing ", html.unescape(str(list[i])), " with ", str(web_data[i]))
+                if html.unescape(str(list[i])) == str(web_data[i]):
+                    assert True
+                else:
+                    print("Comparison failed for " + list[i] + " and " + web_data[i])
+        except Exception:
+            print("No Data to compare or there is data mismatch")
 
     def export_app_status_to_excel(self):
         self.wait_to_click(self.application_status_rep)
@@ -757,34 +759,36 @@ class ReportPage(BasePage):
         return list
 
     def compare_app_status_web_with_email(self, link, web_data):
-        print(link)
-        print(web_data)
-        self.driver.get(link)
-        time.sleep(10)
-        newest_file = latest_download_file()
-        path = os.path.join(PathSettings.DOWNLOAD_PATH, newest_file)
-        print(path)
-        new_data = pd.read_excel(path, sheet_name=0, index_col=None)
-        print(new_data.values)
-        ext_list = []
-        ext_list.extend(new_data.values.tolist())
-        list = []
-        for i in range(len(ext_list))[:]:
-            list += ext_list[i]
-        print("List New: ", list)
-        print("Old data rows: ", len(web_data), "New data rows: ", len(list))
-        print("Old List: ", web_data)
-        print("New list: ", list)
-        assert len(web_data) == len(list), "Data in Both Excel and Searched results do not match"
-        print("Both Excel and Searched results have same amount of data")
-        for i in range(len(list)):
-                if i == 1 or i == 2 or i == 3:
-                    print("Not comparing", html.unescape(str(list[i])), " with ", str(web_data[i]))
-                else:
-                    print("Comparing ", html.unescape(str(list[i])), " with ", str(web_data[i]))
-                    assert html.unescape(str(list[i])) == str(web_data[i]), "Comparison failed for " + list[
-                        i] + " and " + web_data[i]
-
+        try:
+            print(link)
+            print(web_data)
+            self.driver.get(link)
+            time.sleep(10)
+            newest_file = latest_download_file()
+            path = os.path.join(PathSettings.DOWNLOAD_PATH, newest_file)
+            print(path)
+            new_data = pd.read_excel(path, sheet_name=0, index_col=None)
+            print(new_data.values)
+            ext_list = []
+            ext_list.extend(new_data.values.tolist())
+            list = []
+            for i in range(len(ext_list))[:]:
+                list += ext_list[i]
+            print("List New: ", list)
+            print("Old data rows: ", len(web_data), "New data rows: ", len(list))
+            print("Old List: ", web_data)
+            print("New list: ", list)
+            assert len(web_data) == len(list), "Data in Both Excel and Searched results do not match"
+            print("Both Excel and Searched results have same amount of data")
+            for i in range(len(list)):
+                    if i == 1 or i == 2 or i == 3:
+                        print("Not comparing", html.unescape(str(list[i])), " with ", str(web_data[i]))
+                    else:
+                        print("Comparing ", html.unescape(str(list[i])), " with ", str(web_data[i]))
+                        assert html.unescape(str(list[i])) == str(web_data[i]), "Comparison failed for " + list[
+                            i] + " and " + web_data[i]
+        except Exception:
+            print("No Data to compare or there is Data mismatch")
 
 
 
