@@ -58,7 +58,7 @@ class WebApps(BasePage):
         self.search_button_webapps = (By.XPATH, "//button/i[contains(@class,'search')]")
         self.login_as_username = "//h3/b[.='{}']"
         self.webapp_login_confirmation = (By.ID, 'js-confirmation-confirm')
-        self.webapp_working_as = (By.XPATH, "//div[contains(@class,'restore-as-banner')]//b")
+        self.webapp_working_as = (By.XPATH, "//span[contains(.,'Working as')]//b")
         self.form_names = (By.XPATH, "//h3[text()]")
         self.list_is_empty = "//div[contains(text(), '{}')]"
         # Pagination

@@ -111,7 +111,7 @@ jobs:
             const { promises: fs } = require('fs')
 
             const {JOB_STATUS, NOW, CC_ENV, GITHUB_HEAD_REF} = process.env
-            const prefix = `[${CC_ENV}] Smoke Tests - ${JOB_STATUS.toUpperCase()} - Run #${context.runNumber}`
+            const prefix = `[${CC_ENV}] Escape Defects Tests - ${JOB_STATUS.toUpperCase()} - Run #${context.runNumber}`
             const suffix = `at ${NOW}`
 
             let subject = `${prefix} on "deploy_success" ${suffix}`
@@ -125,7 +125,7 @@ jobs:
             }
 
             let actionRunLink = context.payload.repository.html_url + `/actions/runs/${context.runId}`
-            let testSuite = 'CommCare HQ Smoke Test'
+            let testSuite = 'CommCare Escape Defects Test'
             let bodyContent = await fs.readFile(bodyFile, 'utf8')
             bodyContent = bodyContent.replace(/{{actionRunLink}}/g, actionRunLink)
                 .replace(/{{runNumber}}/g, context.runNumber)
@@ -157,7 +157,7 @@ jobs:
           from: <${{secrets.DIMAGIQA_MAIL_USERNAME}}>
           html_body: ${{ fromJSON(steps.configure_email.outputs.result).body }}
           convert_markdown: true
-          attachments: ${{ github.workspace }}/report_${{ matrix.environment }}.html
+          attachments: ${{ github.workspace }}/report_p1p2_${{ matrix.environment }}.html
           in_reply_to: ${{ fromJSON(steps.configure_email.outputs.result).reference }}
 
       - name: Post to Slack channel on Failure
