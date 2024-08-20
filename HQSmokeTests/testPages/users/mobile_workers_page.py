@@ -589,6 +589,7 @@ class MobileWorkerPage(BasePage):
         time.sleep(2)
         self.select_mobile_worker_created(user)
         self.select_by_text(self.additional_info_select2, field)
+        self.wait_to_click(self.update_info_button)
         assert self.is_displayed(self.user_file_additional_info2), "Unable to assign user field to user."
 
     def select_and_delete_mobile_worker(self, user):
