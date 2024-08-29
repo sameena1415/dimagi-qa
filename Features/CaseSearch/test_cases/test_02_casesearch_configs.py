@@ -758,7 +758,7 @@ def test_case_27_checkbox_selection_sticky_search(driver, settings):
 def test_case_28_checkbox_single_selection_dependent_dropdown(driver, settings):
     webapps = WebApps(driver, settings)
     casesearch = CaseSearchWorkflows(driver)
-    webapps.login_as(CaseSearchUserInput.user_1)
+    webapps.login_as(CaseSearchUserInput.user_2)
     webapps.open_app(CaseSearchUserInput.case_search_app_name)
     webapps.open_menu(CaseSearchUserInput.checkbox_selection_menu)
     webapps.clear_selections_on_case_search_page()
