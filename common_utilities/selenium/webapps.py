@@ -150,6 +150,7 @@ class WebApps(BasePage):
     def omni_search(self, case_name, displayed=YES):
         if self.is_displayed(self.omni_search_input):
             self.wait_to_clear_and_send_keys(self.omni_search_input, case_name)
+            self.wait_for_element(self.omni_search_button)
             self.js_click(self.omni_search_button)
             self.wait_for_ajax(100)
         else:
@@ -176,6 +177,7 @@ class WebApps(BasePage):
         time.sleep(5)
         self.case = self.get_element(self.case_name_format, case_name)
         self.scroll_to_element(self.case)
+        self.wait_for_element(self.case)
         self.js_click(self.case)
 
     def select_first_case_on_list(self):
