@@ -259,3 +259,5 @@ P1P2Tests/settings.cfg
 /P1P2Tests/userInputs/test_data/reassign_cases_*
 /P1P2Tests/userInputs/test_data/mobile_workers_*
 /P1P2Tests/userInputs/test_data/import_to_parent_*
+
+LocustScripts/update-scripts/project-config/co-carecoordination-perf/mobile_worker_credentials.json

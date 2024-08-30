@@ -9,7 +9,13 @@ from user.models import UserDetails, BaseLoginCommCareUser
 
 @events.init_command_line_parser.add_listener
 def _(parser):
+#     """
+#     Use below command to execute this test:
+#     locust -f .\LocustScripts\update-scripts\commcarehq-bed-track-non-ideal-case-mw-login.py -
+# -test-config .\LocustScripts\update-scripts\project-config/co-carecoordination-perf/bed_tracking_tool_config_updated_login.yaml
+#     """
     parser.add_argument("--test-config", help="Configuration of test", required=True)
+
 
 CONFIG = {}
 APP_CONFIG = {}

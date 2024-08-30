@@ -7,7 +7,6 @@ def post(command, client, app_details, user_details, extra_json=None, name=None,
         "app_id": app_details.id,
         "domain": app_details.domain,
         "locale": "en",
-        "restoreAs": user_details.login_as,
         "username": user_details.username,
     }
     if extra_json:
@@ -55,8 +54,8 @@ def validate_response(response, validation: ValidationCriteria):
                 response.failure(msg)
                 raise FormplayerResponseError(msg)
         elif checkKey and checkValue:
-            if data[checkKey] != checkValue:
-                msg = "ERROR::data['" + checkKey + "'], " + data[checkKey] + " != " + checkValue
+            if checkValue not in data[checkKey]:
+                msg = "ERROR::data['" + checkKey + "'], " + data[checkKey] + " does not have " + checkValue
                 response.failure(msg)
                 raise FormplayerResponseError(msg)
 

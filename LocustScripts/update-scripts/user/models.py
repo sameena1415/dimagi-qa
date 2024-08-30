@@ -44,12 +44,12 @@ class HQUser:
                 "auth-username": self.user_details.username,
                 "auth-password": self.user_details.password,
                 "cloud_care_login_view-current_step": ['auth'],  # fake out two_factor ManagementForm
-            },
+                },
             headers={
                 "X-CSRFToken": self.client.cookies.get('csrftoken'),
                 "REFERER": f"{host}{login_url}",  # csrf requires this
-            },
-        )
+                },
+            )
         if not response.status_code == 200:
             raise StopUser(f"Login failed for user {self.user_details.username}: {response.status_code}")
         if 'Sign In' in response.text:
@@ -64,7 +64,7 @@ class HQUser:
             "navigate_menu_start",
             name="Home Screen",
             validation=validation
-        )
+            )
 
     def navigate(self, name, data, expected_title=None):
         validation = None
@@ -72,7 +72,7 @@ class HQUser:
             validation = formplayer.ValidationCriteria(key_value_pairs={"title": expected_title})
         return self.post_formplayer(
             "navigate_menu", data, name=name, validation=validation
-        )
+            )
 
     def answer(self, name, data):
         return self.post_formplayer("answer", data, name=name)
@@ -82,22 +82,24 @@ class HQUser:
         if expected_response_message:
             validation = formplayer.ValidationCriteria(key_value_pairs={
                 "submitResponseMessage": expected_response_message
-            })
+                }
+                )
         return self.post_formplayer(
             "submit-all", data, name=name, validation=validation
-        )
+            )
 
     def post_formplayer(self, command, extra_json=None, name=None, validation=None):
         logging.info("User: %s; Request: %s; Name: %s", self.user_details, command, name)
         try:
             return formplayer.post(
                 command, self.client, self.app_details, self.user_details, extra_json, name, validation
-            )
+                )
         except Exception as e:
             logging.error("user: %s; request: %s; exception: %s", self.user_details, command, str(e))
 
+
 class BaseLoginCommCareUser(HttpUser):
-    abstract=True
+    abstract = True
 
     def on_start(self, domain, host, user_details, app_id):
         self.user_detail = user_details.get()
@@ -105,7 +107,7 @@ class BaseLoginCommCareUser(HttpUser):
         app_details = AppDetails(
             domain=domain,
             app_id=app_id
-        )
+            )
         self.hq_user = HQUser(self.client, self.user_detail, app_details)
         self.hq_user.login(domain, host)
         self.hq_user.app_details.build_id = self._get_build_info(app_id, domain)

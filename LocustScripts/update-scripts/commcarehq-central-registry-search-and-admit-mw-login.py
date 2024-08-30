@@ -13,6 +13,13 @@ from common.utils import RandomItems, load_json_data
 
 @events.init_command_line_parser.add_listener
 def _(parser):
+
+    # Use below command to execute these tests:
+# locust -f .\LocustScripts\update-scripts\commcarehq-central-registry-search-and-admit-mw-l
+    # ogin.py --domain co-carecoordination-perf --app-id 5e2b042d077bef1ccb70f06ad27d8812 --app-config .\LocustScripts\update-scripts\project-config\co-careco
+    # ordination-perf\app_config_central-registry.json --user-details .\LocustScripts\update-scripts\project-config\co-carecoordination-perf\mobile_worker_cre
+    # dentials.json --cases-to-select .\LocustScripts\update-scripts\client-cases-import-example.xlsx
+
     parser.add_argument("--domain", help="CommCare domain", required=True, env_var="COMMCARE_DOMAIN")
     parser.add_argument("--app-id", help="CommCare app id", required=True, env_var="COMMCARE_APP_ID")
     parser.add_argument("--app-config", help="Configuration of CommCare app", required=True)
@@ -22,6 +29,31 @@ def _(parser):
 APP_CONFIG = {}
 USERS_DETAILS = RandomItems()
 CASES_TO_SELECT = {}
+
+@events.init.add_listener
+def _(environment, **kw):
+    try:
+        app_config_path = file_path(environment.parsed_options.app_config)
+        APP_CONFIG.update(load_json_data(app_config_path))
+        logging.info("Loaded app config")
+    except Exception as e:
+        logging.error("Error loading app config: %s", e)
+        raise InterruptTaskSet from e
+    try:
+        user_path = file_path(environment.parsed_options.user_details)
+        user_data = load_json_data(user_path)["user"]
+        USERS_DETAILS.set([UserDetails(**user) for user in user_data])
+        logging.info("Loaded %s users", len(USERS_DETAILS.items))
+    except Exception as e:
+        logging.error("Error loading users: %s", e)
+        raise InterruptTaskSet from e
+    try:
+        wb = load_workbook(filename=environment.parsed_options.cases_to_select, read_only=True)
+        CASES_TO_SELECT.update(_extract_data_from_sheet(wb, ["name", "first_name", "last_name", "dob", "medicaid_id"]))
+    except Exception as e:
+        logging.error("Error loading cases to select: %s", e)
+        raise InterruptTaskSet from e
+
 
 class WorkloadModelSteps(SequentialTaskSet):
     wait_time = between(5, 15)
@@ -109,29 +141,6 @@ class WorkloadModelSteps(SequentialTaskSet):
             expected_title=self.FUNC_ADMIT_CLIENT_FORM['title']
         )
 
-@events.init.add_listener
-def _(environment, **kw):
-    try:
-        app_config_path = file_path(environment.parsed_options.app_config)
-        APP_CONFIG.update(load_json_data(app_config_path))
-        logging.info("Loaded app config")
-    except Exception as e:
-        logging.error("Error loading app config: %s", e)
-        raise InterruptTaskSet from e
-    try:
-        user_path = file_path(environment.parsed_options.user_details)
-        user_data = load_json_data(user_path)["user"]
-        USERS_DETAILS.set([UserDetails(**user) for user in user_data])
-        logging.info("Loaded %s users", len(USERS_DETAILS))
-    except Exception as e:
-        logging.error("Error loading users: %s", e)
-        raise InterruptTaskSet from e
-    try:
-        wb = load_workbook(filename=environment.parsed_options.cases_to_select, read_only=True)
-        CASES_TO_SELECT.update(_extract_data_from_sheet(wb, ["name", "first_name", "last_name", "dob", "medicaid_id"]))
-    except Exception as e:
-        logging.error("Error loading cases to select: %s", e)
-        raise InterruptTaskSet from e
 
 class LoginCommCareHQWithUniqueUsers(BaseLoginCommCareUser):
     tasks = [WorkloadModelSteps]

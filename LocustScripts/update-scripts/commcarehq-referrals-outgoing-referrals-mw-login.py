@@ -12,6 +12,16 @@ from common.utils import RandomItems, load_json_data
 
 @events.init_command_line_parser.add_listener
 def _(parser):
+#     """
+#     Use the below command to execute this test:
+# locust -f .\LocustScripts\update-scripts\commcarehq-referrals-outgoing-referrals-mw-login.
+# py --domain co-carecoordination-perf --app-id 3be3260e279b434dace2052a1507262e --app-config .\LocustScripts\update-scripts\project-config\co-carecoordin
+# ation-perf\app_config_referrals_platform.json --user-details .\LocustScripts\update-scripts\project-config\co-carecoordination-perf\mobile_worker_creden
+# tials.json
+
+# """
+
+
     parser.add_argument("--domain", help="CommCare domain", required=True, env_var="COMMCARE_DOMAIN")
     parser.add_argument("--app-id", help="CommCare app id", required=True, env_var="COMMCARE_APP_ID")
     parser.add_argument("--app-config", help="Configuration of CommCare app", required=True)
@@ -19,6 +29,27 @@ def _(parser):
 
 APP_CONFIG = {}
 USERS_DETAILS = RandomItems()
+
+@events.init.add_listener
+def _(environment, **kw):
+    try:
+        app_config_path = file_path(environment.parsed_options.app_config)
+        APP_CONFIG.update(load_json_data(app_config_path))
+        logging.info("Loaded app config")
+    except Exception as e:
+        logging.error("Error loading app config: %s", e)
+        raise InterruptTaskSet from e
+    try:
+        user_path = file_path(environment.parsed_options.user_details)
+        user_data = load_json_data(user_path)["user"]
+        USERS_DETAILS.set([UserDetails(**user) for user in user_data])
+        logging.info("Loaded %s users", len(USERS_DETAILS.items))
+    except Exception as e:
+        logging.error("Error loading users: %s", e)
+        raise InterruptTaskSet from e
+
+
+
 class WorkloadModelSteps(SequentialTaskSet):
     wait_time = between(5, 15)
 
@@ -43,7 +74,7 @@ class WorkloadModelSteps(SequentialTaskSet):
     def perform_a_search(self):
         extra_json = {
             "query_data": {
-                "search_command.m10_results": {
+                "search_command.m12_results": {
                     "inputs": {
                         self.FUNC_ENTER_GENDER['input']: self.FUNC_ENTER_GENDER['inputValue']
                     },
@@ -101,7 +132,7 @@ class WorkloadModelSteps(SequentialTaskSet):
             "A valid case needs to be created first "
         )
         logging.info("selected cases are " + str(
-            self.selected_case_id) + " for mobile worker " + self.user.user_detail.login_as)
+            self.selected_case_id) + " for mobile worker " + self.user.user_detail.username)
 
     @tag('enter_outgoing_referral_details_form')
     @task
@@ -159,35 +190,35 @@ class WorkloadModelSteps(SequentialTaskSet):
                                                        utc_time_tuple.tm_mday)
 
         answers = {
-            "2,0": 1,
-            "3,1,0": 1,
-            "3,1,5": formatted_date,
-            "7,0": "OK",
+            "3,0": 1,
+            "4,1,0": 1,
+            "4,1,5": formatted_date,
             "8,0": "OK",
-            "8,1": "OK",
-            "8,2": None,
-            "8,3,0": "OK",
-            "8,3,1": "OK",
-            "8,3,2": "OK",
-            "8,3,3": "OK",
-            "8,3,4": "OK",
-            "8,3,5": "OK",
-            "8,3,6": "OK",
-            "8,3,7": "OK",
-            "8,3,8": "OK",
-            "8,3,9": "OK",
-            "8,3,10": "OK",
-            "8,3,11": "OK",
-            "8,3,12": "OK",
-            "8,3,13": "OK",
-            "8,3,14": "OK",
-            "8,3,15": "OK",
-            "8,3,16": "OK",
-            "8,3,17": "OK",
-            "8,3,18": "OK",
-            "8,3,19": "OK",
-            "8,3,20": "OK",
-            "8,3,21":"OK",
+            "9,0": "OK",
+            "9,1": "OK",
+            "9,2": None,
+            "9,3,0": "OK",
+            "9,3,1": "OK",
+            "9,3,2": "OK",
+            "9,3,3": "OK",
+            "9,3,4": "OK",
+            "9,3,5": "OK",
+            "9,3,6": "OK",
+            "9,3,7": "OK",
+            "9,3,8": "OK",
+            "9,3,9": "OK",
+            "9,3,10": "OK",
+            "9,3,11": "OK",
+            "9,3,12": "OK",
+            "9,3,13": "OK",
+            "9,3,14": "OK",
+            "9,3,15": "OK",
+            "9,3,16": "OK",
+            "9,3,17": "OK",
+            "9,3,18": "OK",
+            "9,3,19": "OK",
+            "9,3,20": "OK",
+            "9,3,21": "OK"
         }
         answers.update(self.attached_referral_requests_answers)
         input_answers= {d["ix"]: d["answer"] for d in self.FUNC_OUTGOING_REFERRAL_DETAILS_FORM["questions"].values()}
@@ -205,23 +236,6 @@ class WorkloadModelSteps(SequentialTaskSet):
             expected_response_message=self.FUNC_OUTGOING_REFERRAL_DETAILS_FORM_SUBMIT['submitResponseMessage']
         )
 
-@events.init.add_listener
-def _(environment, **kw):
-    try:
-        app_config_path = file_path(environment.parsed_options.app_config)
-        APP_CONFIG.update(load_json_data(app_config_path))
-        logging.info("Loaded app config")
-    except Exception as e:
-        logging.error("Error loading app config: %s", e)
-        raise InterruptTaskSet from e
-    try:
-        user_path = file_path(environment.parsed_options.user_details)
-        user_data = load_json_data(user_path)["user"]
-        USERS_DETAILS.set([UserDetails(**user) for user in user_data])
-        logging.info("Loaded %s users", len(USERS_DETAILS.items))
-    except Exception as e:
-        logging.error("Error loading users: %s", e)
-        raise InterruptTaskSet from e
 
 class LoginCommCareHQWithUniqueUsers(BaseLoginCommCareUser):
     tasks = [WorkloadModelSteps]
