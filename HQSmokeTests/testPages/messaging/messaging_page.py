@@ -137,12 +137,12 @@ class MessagingPage(BasePage):
         self.select_second_lang = (By.XPATH, "(//li[@role='option'])[2]")
         self.language_list = (By.XPATH, "//ul[@role='listbox']")
         self.save_lang = (By.XPATH, "(//div[@class='btn btn-primary'])[1]")
-        self.delete_lang = (By.XPATH, "(//a[@data-bind='click: $root.removeLanguage'])[last()]")
+        self.delete_lang = (By.XPATH, "//td[4][./p[contains(@data-bind,'message')][not(contains(.,'English'))]]//following-sibling::td[2]/a[@data-bind='click: $root.removeLanguage']")
         self.lang_error = (By.XPATH, "//p[text()='Language appears twice']")
         # Message Translation
         self.msg_translation_menu = (By.XPATH, "//a[text()='Messaging Translations']")
         # Project and Subscription Settings
-        self.settings_bar = (By.XPATH, "//a[@data-action='Click Gear Icon']")
+        self.settings_bar = (By.XPATH, "//ul[@role='menu']//a[@data-action='Click Gear Icon']/i")
         self.subscription_menu = (By.LINK_TEXT, "Current Subscription")
         self.subscription_elements_id = (By.ID, "subscriptionSummary")
         self.project_settings_menu = (By.LINK_TEXT, "Project Settings")
@@ -229,8 +229,10 @@ class MessagingPage(BasePage):
         self.wait_to_click(self.save_button_xpath)
         print("Sleeping till the alert processing completes")
         time.sleep(360)
+        self.driver.refresh()
+        time.sleep(140)
         self.wait_to_clear_and_send_keys(self.search_box, self.cond_alert_name_input)
-        time.sleep(2)
+        time.sleep(10)
         self.wait_to_click(self.search_box)
         self.wait_for_element(self.delete_cond_alert, 700)
         self.driver.refresh()
@@ -342,6 +344,19 @@ class MessagingPage(BasePage):
         self.js_click(self.send_message)
         assert self.is_visible_and_displayed(self.message_sent_success_msg), "Settings page not updated successfully!"
         print("Settings page updated successfully!")
+
+    def delete_languages(self):
+        self.wait_to_click(self.languages)
+        time.sleep(1)
+        lang_list = self.find_elements(self.delete_lang)
+        if len(lang_list) > 0:
+            for item in lang_list:
+                item.click()
+                self.wait_to_click(self.save_lang)
+                time.sleep(2)
+        else:
+            print("No Languages present.")
+
 
     def languages_page(self):
         self.wait_to_click(self.languages)
@@ -517,19 +532,22 @@ class MessagingPage(BasePage):
         assert self.is_visible_and_displayed(self.upload_success_message), "Msg Trans not uploaded successfully"
         print("Msg Trans uploaded successfully!")
 
-    def project_settings_page(self, value=None):
-        if value==True:
-            self.switch_to_default_content()
-            time.sleep(5)
-        else:
-            print("Value null")
-        self.wait_for_element(self.settings_bar)
-        self.js_click(self.settings_bar)
-        self.wait_for_element(self.project_settings_menu)
-        self.js_click(self.project_settings_menu)
-        assert self.is_visible_and_displayed(
-            self.project_settings_elements), "Project Settings page did not load successfully"
-        print("Project Settings page loaded successfully!")
+    # def project_settings_page(self, value=None):
+    #     if value==True:
+    #         self.switch_to_default_content()
+    #         time.sleep(5)
+    #     else:
+    #         print("Value null")
+    #     self.driver.get(self.dashboard_link)
+    #     self.accept_pop_up()
+    #     time.sleep(5)
+    #     self.wait_for_element(self.settings_bar)
+    #     self.click(self.settings_bar)
+    #     self.wait_for_element(self.project_settings_menu)
+    #     self.js_click(self.project_settings_menu)
+    #     assert self.is_visible_and_displayed(
+    #         self.project_settings_elements), "Project Settings page did not load successfully"
+    #     print("Project Settings page loaded successfully!")
 
     def current_subscription_page(self):
         self.wait_to_click(self.settings_bar)

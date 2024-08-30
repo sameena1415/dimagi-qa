@@ -79,7 +79,7 @@ class ReassignCasesPage(BasePage):
         self.wait_to_click(self.submit)
         self.is_visible_and_displayed(self.out_of_range)
         print("Sleeping sometime for the case to get updated")
-        time.sleep(10)
+        time.sleep(20)
         self.driver.refresh()
         time.sleep(5)
         self.remove_default_users()

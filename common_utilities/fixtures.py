@@ -111,7 +111,5 @@ def pytest_runtest_makereport(item):
                 extra.append(pytest_html.extras.html(html))
         report.extra = extra
         report.tags = tags
-
-
 def _capture_screenshot(web_driver):
     return web_driver.get_screenshot_as_base64()

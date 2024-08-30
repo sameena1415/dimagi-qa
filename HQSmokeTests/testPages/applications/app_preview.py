@@ -35,7 +35,7 @@ class AppPreviewPage(BasePage):
             By.XPATH, "//div[@aria-labelledby='single-app-login-as-heading']/descendant::h3[.='Log in as']")
         self.username_in_list = "//h3[./b[text() ='{}']]"
         self.webapp_login_confirmation = (By.ID, 'js-confirmation-confirm')
-        self.webapp_working_as = (By.XPATH, "//div[@class='restore-as-banner module-banner']/b")
+        self.webapp_working_as = (By.XPATH, "//div[contains(@class,'restore-as-banner')]/b")
         self.case_list_menu = "//h3[contains(text(), '{}')]"
         self.start_option = (By.XPATH, "//div[@class= 'js-start-app appicon appicon-start']")
         self.location_field = (By.XPATH, "//input[@class='query form-control']")

@@ -347,6 +347,8 @@ class ApplicationPage(BasePage):
         self.click(self.delete_confirm)
         assert self.is_present_and_displayed(self.delete_success, 200), "Application not deleted."
         print("Deleted the application")
+        time.sleep(60)
+        print("Sleeping sometime for the page to load")
 
     def create_application(self, app_name):
         self.wait_to_click(self.applications_menu_id)

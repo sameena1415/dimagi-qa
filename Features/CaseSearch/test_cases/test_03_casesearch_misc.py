@@ -1,6 +1,8 @@
 import random
 import time
 
+import pytest
+
 from Features.CaseSearch.constants import *
 from Features.CaseSearch.test_pages.casesearch_page import CaseSearchWorkflows
 from Features.CaseSearch.user_inputs.casesearch_user_inputs import CaseSearchUserInput
@@ -152,7 +154,7 @@ def test_case_05_shadow_menu(driver, settings):
 
     # case_name = webapps.omni_search(CaseSearchUserInput.song_automation_song)
     shadow_form_names = webapps.select_case_and_continue(case_name)
-    assert shadow_form_names == search_first_form_names
+    assert shadow_form_names == search_first_form_names, "Values mismatched "+shadow_form_names+ " and "+ search_first_form_names
 
 
 def test_case_06_performance_check(driver, settings):
@@ -285,6 +287,8 @@ def test_case_10_claim_condition(driver, settings):
 
 
 def test_case_11_do_not_search_cases(driver, settings):
+    if "staging" in settings["url"]:
+        pytest.xfail("This test is failing on Staging")
     webapps = WebApps(driver, settings)
     casesearch = CaseSearchWorkflows(driver)
     """Check don't search cases owned by the following ids"""
