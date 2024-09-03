@@ -30,7 +30,7 @@ jobs:
         run: |
           echo "::set-output name=matrix::{\"environment\": [\"staging\"]}"
       - id: set-matrix-deploy
-        if: ${{ github.event_name == 'repository_dispatch' && github.event.client_payload.environment != 'staging' }}
+        if: ${{ github.event_name == 'repository_dispatch' && github.event.client_payload.environment == 'production' }}
         run: |
           echo "::set-output name=matrix::{\"environment\": [\"${{ github.event.client_payload.environment }}\"]}"
       - id: set-matrix-manual
