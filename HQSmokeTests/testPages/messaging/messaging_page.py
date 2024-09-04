@@ -135,9 +135,11 @@ class MessagingPage(BasePage):
         self.lang_input_textarea = (By.XPATH, "(//span[@role='combobox'])[last()]")
         self.select_first_lang = (By.XPATH, "(//li[@role='option'])[1]")
         self.select_second_lang = (By.XPATH, "(//li[@role='option'])[2]")
+        self.selected_lang_name = (By.XPATH, "(//td//p[contains(@data-bind,'message')])[last()]")
         self.language_list = (By.XPATH, "//ul[@role='listbox']")
         self.save_lang = (By.XPATH, "(//div[@class='btn btn-primary'])[1]")
-        self.delete_lang = (By.XPATH, "//td[4][./p[contains(@data-bind,'message')][not(contains(.,'English'))]]//following-sibling::td[2]/a[@data-bind='click: $root.removeLanguage']")
+        self.delete_lang = "//td[4][./p[contains(@data-bind,'message')][contains(.,'{}')]]//following-sibling::td[2]/a[@data-bind='click: $root.removeLanguage']"
+        self.languages_present = (By.XPATH, "//td//p[contains(@data-bind,'message')]")
         self.lang_error = (By.XPATH, "//p[text()='Language appears twice']")
         # Message Translation
         self.msg_translation_menu = (By.XPATH, "//a[text()='Messaging Translations']")
@@ -348,14 +350,20 @@ class MessagingPage(BasePage):
     def delete_languages(self):
         self.wait_to_click(self.languages)
         time.sleep(1)
-        lang_list = self.find_elements(self.delete_lang)
-        if len(lang_list) > 0:
+        lang_list = self.find_elements(self.languages_present)
+        if len(lang_list) > 1:
             for item in lang_list:
-                item.click()
-                self.wait_to_click(self.save_lang)
-                time.sleep(2)
+                if item.text == 'English':
+                    print("Not Deleting English")
+                else:
+                    lang = item.text
+                    print("Deleting language: ", lang)
+                    self.wait_to_click((By.XPATH, self.delete_lang.format(lang)))
+                    time.sleep(3)
+                    self.wait_to_click(self.save_lang)
+                    time.sleep(2)
         else:
-            print("No Languages present.")
+            print("Only English is Present and no other languages")
 
 
     def languages_page(self):
@@ -363,33 +371,24 @@ class MessagingPage(BasePage):
         time.sleep(1)
         self.wait_to_click(self.add_lang)
         self.wait_to_click(self.lang_input_textarea)
-        time.sleep(1)
+        time.sleep(2)
         self.wait_for_element(self.language_list)
         self.wait_to_click(self.select_first_lang)
-        try:
-            if self.is_displayed(self.lang_error):
-                self.wait_to_click(self.delete_lang)
-                time.sleep(1)
-                self.wait_to_click(self.delete_lang)
-                time.sleep(1)
-                self.wait_to_click(self.save_lang)
-                time.sleep(1)
-                self.wait_to_click(self.add_lang)
-                self.wait_to_click(self.lang_input_textarea)
-                time.sleep(1)
-                self.wait_for_element(self.language_list)
-                self.wait_to_click(self.select_first_lang)
-        except (NoSuchElementException, TimeoutException):
-            print("One lang only")
+        time.sleep(2)
+        lang = self.get_text(self.selected_lang_name)
+        print("First language selected is: ", lang)
         self.wait_to_click(self.save_lang)
-        time.sleep(1)
+        time.sleep(2)
         self.wait_to_click(self.lang_input_textarea)
-        time.sleep(1)
+        time.sleep(2)
         self.wait_for_element(self.language_list)
         self.wait_to_click(self.select_second_lang)
+        time.sleep(2)
+        lang = self.get_text(self.selected_lang_name)
+        print("Second language selected is: ", lang)
         self.wait_to_click(self.save_lang)
         time.sleep(1)
-        self.wait_to_click(self.delete_lang)
+        self.wait_to_click((By.XPATH, self.delete_lang.format(lang)))
         time.sleep(1)
         self.wait_to_click(self.save_lang)
         time.sleep(2)

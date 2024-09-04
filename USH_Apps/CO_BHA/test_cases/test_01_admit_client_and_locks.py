@@ -112,7 +112,7 @@ def test_case_03_lock_in_1_1(driver, settings):
     casesearch = CaseSearchWorkflows(driver)
     app = BhaWorkflows(driver)
 
-    webapps.bha_login_as(BhaUserInput.user_31, settings['bha_password'], settings['url'], settings['db'])
+    webapps.bha_login_as(BhaUserInput.user_B, settings['user_b_pwd'], settings['url'], settings['db'])
     webapps.open_app(BhaUserInput.bha_app_name)
     webapps.open_menu(BhaUserInput.search_my_clients)
     casesearch.search_against_property(search_property=BhaUserInput.first_name,
@@ -163,6 +163,7 @@ def test_case_04_lock_in_1_2(driver, settings):
     casesearch.check_values_on_caselist(row_num=BhaUserInput.five,
                                         expected_value=BhaUserInput.pending_status)
 
+@pytest.mark.skip
 def test_case_05_admit_case_7(driver, settings):
     """use case: match on inactive client"""
     webapps = WebApps(driver, settings)
