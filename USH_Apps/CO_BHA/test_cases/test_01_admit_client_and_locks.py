@@ -9,10 +9,8 @@ from common_utilities.selenium.webapps import WebApps
 import names
 
 value = dict()
-# value["first_name"]=None
-# value["last_name"] = None
-value["first_name"]= "James"
-value["last_name"] = "Sweezer"
+value["first_name"]=None
+value["last_name"] = None
 
 def test_case_01_admit_case_1(driver, settings):
     """use case: Admit the client - case doesn't exist"""
