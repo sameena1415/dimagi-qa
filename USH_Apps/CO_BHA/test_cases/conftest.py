@@ -73,7 +73,7 @@ def environment_settings_bha():
             """
     settings = {}
 
-    for name in ["url", "bha_username", "bha_password", "ush_user_prod_auth_key", "login_username", "login_password", "db"]:
+    for name in ["url", "bha_username", "bha_password", "ush_user_prod_auth_key", "login_username", "login_password", "db", "user_b_pwd"]:
 
         var = f"DIMAGIQA_{name.upper()}"
         if var in os.environ:
@@ -98,7 +98,7 @@ def settings(environment_settings_bha):
         settings = environment_settings_bha
         settings["CI"] = "true"
 
-        if any(x not in settings for x in ["url", "bha_username", "bha_password", "ush_user_prod_auth_key", "login_username", "login_password", "db"]):
+        if any(x not in settings for x in ["url", "bha_username", "bha_password", "ush_user_prod_auth_key", "login_username", "login_password", "db", "user_b_pwd"]):
 
             lines = environment_settings_bha.__doc__.splitlines()
             vars_ = "\n  ".join(line.strip() for line in lines if "DIMAGIQA_" in line)
