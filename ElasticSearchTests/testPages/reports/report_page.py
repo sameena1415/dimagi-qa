@@ -95,7 +95,7 @@ class ReportPage(BasePage):
                              "(//a[text()='" + self.report_name_saved + "']//following::button[@class='btn btn-danger add-spinner-on-click'])[1]")
         self.delete_saved_report_link = "(//a[text()='{}']//following::button[@class='btn btn-danger add-spinner-on-click'])[1]"
         self.all_saved_reports = (
-        By.XPATH, "//td[a[contains(.,'saved form')]]//following-sibling::td/button[contains(@data-bind,'delete')]")
+        By.XPATH, "//td[a[contains(.,'Saved')]]//following-sibling::td/button[contains(@data-bind,'delete')]")
 
         # Scheduled Reports
         self.scheduled_reports_menu_xpath = (By.XPATH, "//a[@href='#scheduled-reports']")

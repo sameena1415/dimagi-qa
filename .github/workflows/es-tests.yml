@@ -77,6 +77,27 @@ jobs:
           echo ${{env.NOW}}
           pytest -v --rootdir= ElasticSearchTests/testCases -n 4 --dist=loadfile --reruns 1 --html=es_report_${{ matrix.environment }}.html
 
+      - name: Parse test counts
+        id: parse_counts
+        if: always()
+        run: |
+          # Extract variables from the api_test_counts.txt file
+          while IFS= read -r line; do
+            echo "::set-output name=${line%=*}::${line#*=}"
+          done < es_test_counts_${{ matrix.environment }}.txt
+
+      - name: Archive test results
+        id: artifact-upload-step
+        if: ${{ success() || failure() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-result-reports--${{ matrix.environment }}-${{ github.run_id }}
+          path: /home/runner/work/dimagi-qa/dimagi-qa/es_report_${{ matrix.environment }}.html
+          retention-days: 2
+
+      - name: Fetch artifact ID
+        run: echo 'Artifact ID is ${{ steps.artifact-upload-step.outputs.artifact-id }}'
+
       - name: Set email vars
         if: ${{ failure() }}
         id: configure_email
@@ -145,60 +166,64 @@ jobs:
         with:
           payload: |
             {
-                "blocks": [
-                    {
-                        "type": "section",
-                        "text": {
-                            "type": "mrkdwn",
-                            "text": " Konnichiwa :alphabet-yellow-q::alphabet-yellow-a: 👋 \n*${{ github.workflow }}* were just triggered!"
-                        }
-                    },
-                    {
-                        "type": "context",
-                        "elements": [
-                            {
-                                "type": "mrkdwn",
-                                "text": "*Environment: *\n ${{ matrix.environment }}  \n"
-                            },
-                          {
-                                "type": "mrkdwn",
-                                "text": " "
-                            },
-                            {
-                                "type": "mrkdwn",
-                                "text": "*Status: *\n ${{ job.status }}  :x:"
-                            }
-                        ]
-                    },
-                    {
-                        "type": "section",
-                        "text": {
-                            "type": "mrkdwn",
-                            "text": "Here's the corresponding workflow execution :arrow_right::arrow_right:"
-                        },
-                        "accessory": {
-                            "type": "button",
-                            "text": {
-                                "type": "plain_text",
-                                "text": "View on Github",
-                                "emoji": true
-                            },
-                            "value": "click_me_123",
-                            "url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}",
-                            "action_id": "button-action",
-                            "style": "danger"
-                        }
-                    }
-                ]
+            	"attachments": [
+            		{
+            			"color": "#FF0000",
+            			"blocks": [
+            				{
+            					"type": "section",
+            					"text": {
+            						"type": "mrkdwn",
+            						"text": " Hey There!! :bye_boo: \n*${{ github.workflow }}* were just triggered! \n"
+            					}
+            				},
+            				{
+            					"type": "section",
+            					"text": {
+            						"type": "mrkdwn",
+            						"text": "*Passed:* ${{ steps.parse_counts.outputs.PASSED }} *Failed:* ${{ steps.parse_counts.outputs.FAILED }} *Error:* ${{ steps.parse_counts.outputs.ERROR }} *Skipped:* ${{ steps.parse_counts.outputs.SKIPPED }} *XFail:* ${{ steps.parse_counts.outputs.XFAIL }}\n"
+            					}
+            				},
+            				{
+            					"type": "context",
+            					"elements": [
+            						{
+            							"type": "mrkdwn",
+            							"text": "*Environment: *\n ${{ matrix.environment }}  \n"
+            						},
+            						{
+            							"type": "mrkdwn",
+            							"text": " "
+            						},
+            						{
+            							"type": "mrkdwn",
+            							"text": "*Status: *\n ${{ job.status }}  :x:"
+            						}
+            					]
+            				},
+            				{
+            					"type": "section",
+            					"text": {
+            						"type": "mrkdwn",
+            						"text": "Here's the corresponding report :arrow_right::arrow_right:"
+            					},
+            					"accessory": {
+            						"type": "button",
+            						"text": {
+            							"type": "plain_text",
+            							"text": "Click to Downlaod",
+            							"emoji": true
+            						},
+            						"value": "click_me_123",
+            						"url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts/${{ steps.artifact-upload-step.outputs.artifact-id }}",
+            						"action_id": "button-action",
+            						"style": "danger"
+            					}
+            				}
+            			]
+            		}
+            	]
             }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL_SMOKE }}
           SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
-
-      - name: Archive test results
-        if: ${{ success() || failure() }}
-        uses: actions/upload-artifact@v2
-        with:
-          name: test-result-reports-${{ matrix.environment }}
-          path: ${{ github.workspace }}/es_report_${{ matrix.environment }}.html
-          retention-days: 2

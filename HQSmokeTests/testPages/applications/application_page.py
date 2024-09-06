@@ -46,7 +46,7 @@ class ApplicationPage(BasePage):
         self.save_button = (By.XPATH, "//span[text()='Save']")
         self.app_created = "(//span[text()='{}'])[1]"
         self.form_link = "//a//*[contains(.,'{}')]"
-        self.app_list = (By.XPATH, "//a[contains(.,'Applications')]//following-sibling::ul/li/a[contains(.,'App ')]")
+        self.app_list = (By.XPATH, "//a[contains(.,'Applications')]//following-sibling::ul/li/a[contains(.,'App ') or contains(.,'Untitled')]")
 
         # Delete Application
         self.settings = (By.XPATH, "//i[contains(@class,'fa-gear')]")

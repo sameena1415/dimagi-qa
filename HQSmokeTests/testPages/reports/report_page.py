@@ -95,7 +95,7 @@ class ReportPage(BasePage):
                              "(//a[text()='" + self.report_name_saved + "']//following::button[@class='btn btn-danger add-spinner-on-click'])[1]")
         self.delete_saved_report_link = "(//a[text()='{}']//following::button[@class='btn btn-danger add-spinner-on-click'])[1]"
         self.all_saved_reports = (
-        By.XPATH, "//td[a[contains(.,'saved form')]]//following-sibling::td/button[contains(@data-bind,'delete')]")
+        By.XPATH, "//td[a[contains(.,'Saved')]]//following-sibling::td/button[contains(@data-bind,'delete')]")
 
         # Scheduled Reports
         self.scheduled_reports_menu_xpath = (By.XPATH, "//a[@href='#scheduled-reports']")
@@ -347,6 +347,7 @@ class ReportPage(BasePage):
         assert user in recipient_text, "Recipient is not present"
 
     def delete_scheduled_and_saved_reports(self):
+        self.wait_for_element(self.saved_reports_menu_link, 400)
         self.js_click(self.saved_reports_menu_link)
         try:
             self.click(self.delete_saved)
