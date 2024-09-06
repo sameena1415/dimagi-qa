@@ -208,7 +208,7 @@ jobs:
                           "emoji": true
                         },
                         "value": "click_me_123",
-                        "url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}",
+                        "url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts/${{ steps.artifact-upload-step.outputs.artifact-id }}",
                         "action_id": "button-action",
                         "style": "danger"
                       }
