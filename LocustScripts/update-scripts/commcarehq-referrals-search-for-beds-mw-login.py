@@ -24,7 +24,7 @@ def _(parser):
 
 APP_CONFIG = {}
 USERS_DETAILS = RandomItems()
-
+session_id = None
 
 class WorkloadModelSteps(SequentialTaskSet):
     wait_time = between(5, 15)
@@ -35,6 +35,10 @@ class WorkloadModelSteps(SequentialTaskSet):
         self.FUNC_CREATE_PROFILE_AND_REFER_FORM = APP_CONFIG['FUNC_CREATE_PROFILE_AND_REFER_FORM']
         self.FUNC_CREATE_PROFILE_AND_REFER_FORM_QUESTIONS = self.FUNC_CREATE_PROFILE_AND_REFER_FORM["questions"]
         self.FUNC_CREATE_PROFILE_AND_REFER_FORM_SUBMIT = APP_CONFIG['FUNC_CREATE_PROFILE_AND_REFER_FORM_SUBMIT']
+        self.FUNC_OUTGOING_REFERRALS_MENU = APP_CONFIG["FUNC_OUTGOING_REFERRALS_MENU"]
+        self.FUNC_ENTER_GENDER = APP_CONFIG["FUNC_ENTER_GENDER"]
+        self.FUNC_OUTGOING_REFERRAL_DETAILS_FORM = APP_CONFIG["FUNC_OUTGOING_REFERRAL_DETAILS_FORM"]
+        self.FUNC_OUTGOING_REFERRAL_DETAILS_FORM_SUBMIT = APP_CONFIG["FUNC_OUTGOING_REFERRAL_DETAILS_FORM_SUBMIT"]
         self.cases_per_page = 100
 
     @tag('home_screen')
@@ -112,6 +116,7 @@ class WorkloadModelSteps(SequentialTaskSet):
     @tag('enter_create_profile_and_refer_form')
     @task
     def enter_create_profile_and_refer_form(self):
+        global session_id
         logging.info("Entering form - mobile worker:" + self.user.user_detail.username + "; request: navigate_menu")
 
         extra_json = {
@@ -125,7 +130,7 @@ class WorkloadModelSteps(SequentialTaskSet):
             data=extra_json,
             expected_title=self.FUNC_CREATE_PROFILE_AND_REFER_FORM['title']
             )
-        self.session_id = data['session_id']
+        session_id = data['session_id']
 
     @tag('answer_create_profile_and_refer_form_questions')
     @task
@@ -135,7 +140,7 @@ class WorkloadModelSteps(SequentialTaskSet):
             extra_json = {
                 "ix": question["ix"],
                 "answer": question["answer"],
-                "session_id": self.session_id,
+                "session_id": session_id,
                 }
             self.user.hq_user.answer(
                 "Answer 'Create Profile and Refer' Question",
@@ -147,7 +152,7 @@ class WorkloadModelSteps(SequentialTaskSet):
     @tag('submit_create_profile_and_refer_form')
     @task
     def submit_create_profile_and_refer_form(self):
-        logging.info("Submitting form - mobile worker:" + self.user.user_detail.username + "; request: submit_all")
+        logging.info("Submitting form - mobile worker:" + self.user.user_detail.username + " and session id: " + str(session_id) +" ; request: submit_all")
         utc_time_tuple = time.gmtime(time.time())
         formatted_date = "{:04d}-{:02d}-{:02d}".format(utc_time_tuple.tm_year, utc_time_tuple.tm_mon,
                                                        utc_time_tuple.tm_mday
@@ -171,6 +176,7 @@ class WorkloadModelSteps(SequentialTaskSet):
             "1,1,12": None,
             "1,1,13": None,
             "1,1,14": None,
+            "1,3": 2,
             "1,7,0": [1],
             "4_0,4": "OK",
             "4_0,5,0,0": "OK",
@@ -190,14 +196,18 @@ class WorkloadModelSteps(SequentialTaskSet):
             "answers": answers,
             "prevalidated": True,
             "debuggerEnabled": True,
-            "session_id": self.session_id,
+            "restoreAs": None,
+            "session_id": session_id,
             }
 
         self.user.hq_user.submit_all(
             "Submit Create Profile and Refer Form",
             extra_json,
-            expected_response_message=self.FUNC_CREATE_PROFILE_AND_REFER_FORM_SUBMIT['submitResponseMessage']
+            status=self.FUNC_OUTGOING_REFERRAL_DETAILS_FORM_SUBMIT['status']
+            # expected_response_message=self.FUNC_CREATE_PROFILE_AND_REFER_FORM_SUBMIT['submitResponseMessage']
             )
+        logging.info("Create Profile and Refer Form submitted successfully - mobile worker:" + self.user.user_detail.username + " and session id: " + str(session_id) +" ; request: submit_all")
+
 
 
 @events.init.add_listener

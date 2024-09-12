@@ -77,11 +77,16 @@ class HQUser:
     def answer(self, name, data):
         return self.post_formplayer("answer", data, name=name)
 
-    def submit_all(self, name, data, expected_response_message=None):
+    def submit_all(self, name, data, expected_response_message=None, status=None):
         validation = None
         if expected_response_message:
             validation = formplayer.ValidationCriteria(key_value_pairs={
                 "submitResponseMessage": expected_response_message
+                }
+                )
+        elif status:
+            validation = formplayer.ValidationCriteria(key_value_pairs={
+                "status": status
                 }
                 )
         return self.post_formplayer(

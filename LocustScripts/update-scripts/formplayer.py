@@ -1,3 +1,4 @@
+import logging
 from dataclasses import dataclass, field
 from typing import List, Dict, Optional
 
@@ -12,6 +13,7 @@ def post(command, client, app_details, user_details, extra_json=None, name=None,
     if extra_json:
         data.update(extra_json)
     name = name or command
+    logging.info(str(data))
 
     if 'XSRF-TOKEN' not in client.cookies:
         response = client.get(f"{formplayer_host}/serverup")

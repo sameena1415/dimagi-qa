@@ -15,7 +15,7 @@ def _(parser):
 #     """
 #     Use the below command to execute this test:
 # locust -f .\LocustScripts\update-scripts\commcarehq-referrals-outgoing-referrals-mw-login.
-# py --domain co-carecoordination-perf --app-id 3be3260e279b434dace2052a1507262e --app-config .\LocustScripts\update-scripts\project-config\co-carecoordin
+# py --domain co-carecoordination-perf --app-id f83dc516d1e3f382528198375de23adb --app-config .\LocustScripts\update-scripts\project-config\co-carecoordin
 # ation-perf\app_config_referrals_platform.json --user-details .\LocustScripts\update-scripts\project-config\co-carecoordination-perf\mobile_worker_creden
 # tials.json
 
