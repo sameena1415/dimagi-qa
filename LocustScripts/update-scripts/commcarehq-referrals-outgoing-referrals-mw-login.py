@@ -15,24 +15,23 @@ def _(parser):
 #     """
 #     Use the below command to execute this test:
 # locust -f .\LocustScripts\update-scripts\commcarehq-referrals-outgoing-referrals-mw-login.
-# py --domain co-carecoordination-perf --app-id 3271c8c86a5344e59554dfcb3e4628b8 --app-config .\LocustScripts\update-scripts\project-config\co-carecoordin
-# ation-perf\app_config_referrals_platform.json --user-details .\LocustScripts\update-scripts\project-config\co-carecoordination-perf\mobile_worker_creden
-# tials.json
+# py --domain co-carecoordination-perf --build-id b62974969e57051ad70160a798ed79e8 --app-id 3271c8c86a5344e59554dfcb3e4628b8 --app-config .\LocustScripts\
+# update-scripts\project-config\co-carecoordination-perf\app_config_referrals_platform.json --user-details .\LocustScripts\update-scripts\project-config\c
+# o-carecoordination-perf\mobile_worker_credentials.json
+
 
 # """
 
 
     parser.add_argument("--domain", help="CommCare domain", required=True, env_var="COMMCARE_DOMAIN")
+    parser.add_argument("--build-id", help="CommCare build id", required=True, env_var="COMMCARE_APP_ID")
     parser.add_argument("--app-id", help="CommCare app id", required=True, env_var="COMMCARE_APP_ID")
     parser.add_argument("--app-config", help="Configuration of CommCare app", required=True)
     parser.add_argument("--user-details", help="Path to user details file", required=True)
 
 APP_CONFIG = {}
 USERS_DETAILS = RandomItems()
-entities = None
-page_count = None
-session_id = None
-selected_case_ids = None
+
         
 @events.init.add_listener
 def _(environment, **kw):
@@ -85,8 +84,7 @@ class WorkloadModelSteps(SequentialTaskSet):
     @tag('perform_a_search')
     @task
     def perform_a_search(self):
-        global entities
-        global page_count
+        self.selected_case_ids = set()
         
         extra_json = {
             "query_data": {
@@ -109,26 +107,24 @@ class WorkloadModelSteps(SequentialTaskSet):
         )
 
         entities = data["entities"]
-        page_count = data["pageCount"]
         assert len(entities) > 0, "entities is empty"
         logging.info("No of entities in result: " + str(len(entities)))
-        global selected_case_ids
-        selected_case_ids = None
-        selected_case_ids = {entity["id"] for entity in entities}
+        self.selected_case_ids = {entity["id"] for entity in entities}
+        self.selected_case_list = list(self.selected_case_ids)
         logging.info("selected cases are " + str(
-            selected_case_ids
+            self.selected_case_list
             ) + " for mobile worker " + self.user.user_detail.username
                      )
 
     @task
     def submit_outgoing_referrals_form(self):
-        random_ids = random.sample(list(selected_case_ids), random.randrange(3, 7))
+        random_ids = random.sample(self.selected_case_list, random.randrange(3, 7))
         logging.info("Randomly selected ids: " + str(random_ids))
 
-        for id in random_ids:
-            logging.info("Proceeding with id: "+ str(id))
-            self.select_case(str(id))
-            session_id = self.enter_outgoing_referral_details_form(str(id))
+        for ids in random_ids:
+            logging.info("Proceeding with id: "+ str(ids))
+            self.select_case(str(ids))
+            session_id = self.enter_outgoing_referral_details_form(str(ids))
             self.answer_outgoing_referral_details_form_questions(session_id)
             self.submit_outgoing_referral_details_form(session_id)
 
@@ -160,12 +156,12 @@ class WorkloadModelSteps(SequentialTaskSet):
                 },
             expected_title=self.FUNC_OUTGOING_REFERRAL_DETAILS_FORM['title']
         )
-        session_id = data['session_id']
+        self.session_id = data['session_id']
         logging.info("Enter 'Outgoing Referral Details' Form with case id " + str(
             selected_case_id
-            ) + " and session id: "+str(session_id)+ " for mobile worker " + self.user.user_detail.username
+            ) + " and session id: "+str(self.session_id)+ " for mobile worker " + self.user.user_detail.username
                      )
-        return session_id
+        return self.session_id
 
     @tag('answer_outgoing_referral_details_form_questions')
     # @task
@@ -267,5 +263,6 @@ class LoginCommCareHQWithUniqueUsers(BaseLoginCommCareUser):
             domain=self.environment.parsed_options.domain,
             host=self.environment.parsed_options.host,
             user_details=USERS_DETAILS,
+            build_id=self.environment.parsed_options.build_id,
             app_id=self.environment.parsed_options.app_id
         )

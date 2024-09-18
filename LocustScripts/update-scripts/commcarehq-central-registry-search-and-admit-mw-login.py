@@ -21,6 +21,7 @@ def _(parser):
     # dentials.json --cases-to-select .\LocustScripts\update-scripts\client-cases-import-example.xlsx
 
     parser.add_argument("--domain", help="CommCare domain", required=True, env_var="COMMCARE_DOMAIN")
+    parser.add_argument("--build-id", help="CommCare build id", required=True, env_var="COMMCARE_APP_ID")
     parser.add_argument("--app-id", help="CommCare app id", required=True, env_var="COMMCARE_APP_ID")
     parser.add_argument("--app-config", help="Configuration of CommCare app", required=True)
     parser.add_argument("--user-details", help="Path to user details file", required=True)
@@ -151,6 +152,7 @@ class LoginCommCareHQWithUniqueUsers(BaseLoginCommCareUser):
             domain=self.environment.parsed_options.domain,
             host=self.environment.parsed_options.host,
             user_details=USERS_DETAILS,
+            build_id=self.environment.parsed_options.build_id,
             app_id=self.environment.parsed_options.app_id
         )
 

@@ -1,9 +1,9 @@
 {
     "FUNC_HOME_SCREEN": {
-        "title":"Referrals Platform"
+        "title":"Client Care Search"
     },
     "FUNC_SEARCH_FOR_BEDS_MENU": {
-        "selections":"0", "title":"Search Beds"
+        "selections":"0", "title":"Pilot: Submit Referrals"
     },
     "FUNC_ENTER_AGE": {
         "selections":"0", "input":"age", "inputValue": "adults"

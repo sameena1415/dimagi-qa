@@ -17,7 +17,7 @@ def _(parser):
     #     locust -f .\LocustScripts\update-scripts\commcarehq-referrals-search-for-beds-mw-login.py
     # --domain co-carecoordination-perf --build-id b62974969e57051ad70160a798ed79e8 --app-id 3271c8c86a5344e59554dfcb3e4628b8 --app-config .\LocustScripts\upd
     # ate-scripts\project-config\co-carecoordination-perf\app_config_referrals_platform.json --user-details .\LocustScripts\update-scripts\project-config\co-c
-    # arecoordination-perf\mobile_worker_credentials1.json
+    # arecoordination-perf\mobile_worker_credentials.json
 
     parser.add_argument("--domain", help="CommCare domain", required=True, env_var="COMMCARE_DOMAIN")
     parser.add_argument("--build-id", help="CommCare build id", required=True, env_var="COMMCARE_APP_ID")
@@ -28,7 +28,6 @@ def _(parser):
 
 APP_CONFIG = {}
 USERS_DETAILS = RandomItems()
-session_id = None
 
 class WorkloadModelSteps(SequentialTaskSet):
     wait_time = between(5, 15)
@@ -121,7 +120,6 @@ class WorkloadModelSteps(SequentialTaskSet):
     @tag('enter_create_profile_and_refer_form')
     @task
     def enter_create_profile_and_refer_form(self):
-        global session_id
         logging.info("Entering form - mobile worker:" + self.user.user_detail.username + "; request: navigate_menu")
 
         extra_json = {
@@ -135,29 +133,29 @@ class WorkloadModelSteps(SequentialTaskSet):
             data=extra_json,
             expected_title=self.FUNC_CREATE_PROFILE_AND_REFER_FORM['title']
             )
-        session_id = data['session_id']
-    #
-    # @tag('answer_create_profile_and_refer_form_questions')
-    # @task
-    # def answer_create_profile_and_refer_form_questions(self):
-    #     logging.info("Answering Questions - mobile worker:" + self.user.user_detail.username + "; request: answer")
-    #     for question in self.FUNC_CREATE_PROFILE_AND_REFER_FORM_QUESTIONS.values():
-    #         extra_json = {
-    #             "ix": question["ix"],
-    #             "answer": question["answer"],
-    #             "session_id": session_id,
-    #             }
-    #         self.user.hq_user.answer(
-    #             "Answer 'Create Profile and Refer' Question",
-    #             data=extra_json,
-    #             )
-    #         rng = random.randrange(1, 3)
-    #         time.sleep(rng)
+        self.session_id = data['session_id']
+
+    @tag('answer_create_profile_and_refer_form_questions')
+    @task
+    def answer_create_profile_and_refer_form_questions(self):
+        logging.info("Answering Questions - mobile worker:" + self.user.user_detail.username + "; request: answer")
+        for question in self.FUNC_CREATE_PROFILE_AND_REFER_FORM_QUESTIONS.values():
+            extra_json = {
+                "ix": question["ix"],
+                "answer": question["answer"],
+                "session_id": self.session_id,
+                }
+            self.user.hq_user.answer(
+                "Answer 'Create Profile and Refer' Question",
+                data=extra_json,
+                )
+            rng = random.randrange(1, 3)
+            time.sleep(rng)
 
     @tag('submit_create_profile_and_refer_form')
     @task
     def submit_create_profile_and_refer_form(self):
-        logging.info("Submitting form - mobile worker:" + self.user.user_detail.username + " and session id: " + str(session_id) +" ; request: submit_all")
+        logging.info("Submitting form - mobile worker:" + self.user.user_detail.username + " and session id: " + str(self.session_id) +" ; request: submit_all")
         utc_time_tuple = time.gmtime(time.time())
         formatted_date = "{:04d}-{:02d}-{:02d}".format(utc_time_tuple.tm_year, utc_time_tuple.tm_mon,
                                                        utc_time_tuple.tm_mday
@@ -194,12 +192,10 @@ class WorkloadModelSteps(SequentialTaskSet):
         answers.update(input_answers)
 
         extra_json = {
-            "action": "submit-all",
             "answers": answers,
             "prevalidated": True,
             "debuggerEnabled": True,
-            "session_id": session_id,
-            "session-id": session_id,
+            "session_id": self.session_id,
             }
 
         self.user.hq_user.submit_all(
@@ -208,7 +204,7 @@ class WorkloadModelSteps(SequentialTaskSet):
             status="success"
             # expected_response_message=self.FUNC_CREATE_PROFILE_AND_REFER_FORM_SUBMIT['submitResponseMessage']
             )
-        logging.info("Create Profile and Refer Form submitted successfully - mobile worker:" + self.user.user_detail.username + " and session id: " + str(session_id) +" ; request: submit_all")
+        logging.info("Create Profile and Refer Form submitted successfully - mobile worker:" + self.user.user_detail.username + " and session id: " + str(self.session_id) +" ; request: submit_all")
 
 
 @events.init.add_listener
