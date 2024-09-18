@@ -1,12 +1,15 @@
 {
     "FUNC_HOME_SCREEN": {
-        "title":"Referrals Platform"
+        "title":"Client Care Search"
     },
     "FUNC_SEARCH_FOR_BEDS_MENU": {
-        "selections":"0", "title":"Search Beds"
+        "selections":"0", "title":"Pilot: Submit Referrals"
     },
     "FUNC_OUTGOING_REFERRALS_MENU": {
         "selections":"4", "title": "Search Outgoing Referrals"
+    },
+    "FUNC_OUTGOING_REFERRALS": {
+        "selections": "4", "title": "Outgoing Referrals"
     },
     "FUNC_CREATE_PROFILE_AND_REFER_FORM": {
         "selections":"0", "title":"Create Profile and Refer",
@@ -26,8 +29,11 @@
             "FORM_QUESTION_SYMPTOMS": {
                 "ix":"1,1,6", "answer": "Headaches"
             },
-            "FORM_QUESTON_TYPE_OF_CARE": {
+            "FORM_QUESTION_TYPE_OF_CARE": {
                 "ix":"1,1,7", "answer": 3
+            },
+            "FORM_QUESTION_REFERRING_FACILITY": {
+                "ix":"1,3", "answer": 1
             },
             "FORM_QUESTION_CONSENT": {
                 "ix":"1,7,0", "answer": [1]
@@ -44,7 +50,7 @@
                 "ix":"4,1,0", "answer":1
             },
             "QUESTION_DATE_PLACED": {
-                "ix":"4,1,5", "answer":"2024-09-11"
+                "ix":"4,1,5", "answer":"2024-9-17"
             }
         }
     },
@@ -54,6 +60,9 @@
     "FUNC_OUTGOING_REFERRAL_DETAILS_FORM_SUBMIT": {
         "submitResponseMessage":"'Outgoing Referral Details' successfully saved!",
         "status": "success"
+    },
+    "FUNC_ENTER_STATUS": {
+        "input": "client_current_status", "inputValue": "open"
     },
     "FUNC_ENTER_GENDER": {
         "input":"gender", "inputValue":"men"

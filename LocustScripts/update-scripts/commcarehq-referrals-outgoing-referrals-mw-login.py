@@ -15,7 +15,7 @@ def _(parser):
 #     """
 #     Use the below command to execute this test:
 # locust -f .\LocustScripts\update-scripts\commcarehq-referrals-outgoing-referrals-mw-login.
-# py --domain co-carecoordination-perf --app-id f83dc516d1e3f382528198375de23adb --app-config .\LocustScripts\update-scripts\project-config\co-carecoordin
+# py --domain co-carecoordination-perf --app-id 3271c8c86a5344e59554dfcb3e4628b8 --app-config .\LocustScripts\update-scripts\project-config\co-carecoordin
 # ation-perf\app_config_referrals_platform.json --user-details .\LocustScripts\update-scripts\project-config\co-carecoordination-perf\mobile_worker_creden
 # tials.json
 
@@ -29,7 +29,11 @@ def _(parser):
 
 APP_CONFIG = {}
 USERS_DETAILS = RandomItems()
-
+entities = None
+page_count = None
+session_id = None
+selected_case_ids = None
+        
 @events.init.add_listener
 def _(environment, **kw):
     try:
@@ -54,11 +58,20 @@ class WorkloadModelSteps(SequentialTaskSet):
     wait_time = between(5, 15)
 
     def on_start(self):
+        self.FUNC_HOME_SCREEN = APP_CONFIG['FUNC_HOME_SCREEN']
+        self.FUNC_SEARCH_FOR_BEDS_MENU = APP_CONFIG['FUNC_SEARCH_FOR_BEDS_MENU']
         self.FUNC_OUTGOING_REFERRALS_MENU = APP_CONFIG["FUNC_OUTGOING_REFERRALS_MENU"]
+        self.FUNC_ENTER_STATUS = APP_CONFIG["FUNC_ENTER_STATUS"]
         self.FUNC_ENTER_GENDER = APP_CONFIG["FUNC_ENTER_GENDER"]
+        self.FUNC_OUTGOING_REFERRALS = APP_CONFIG["FUNC_OUTGOING_REFERRALS"]
         self.FUNC_OUTGOING_REFERRAL_DETAILS_FORM = APP_CONFIG["FUNC_OUTGOING_REFERRAL_DETAILS_FORM"]
         self.FUNC_OUTGOING_REFERRAL_DETAILS_FORM_SUBMIT = APP_CONFIG["FUNC_OUTGOING_REFERRAL_DETAILS_FORM_SUBMIT"]
         self.cases_per_page = 100
+
+    @tag('home_screen')
+    @task
+    def home_screen(self):
+        self.user.hq_user.navigate_start(expected_title=self.FUNC_HOME_SCREEN['title'])
 
     @tag('outgoing_referrals_menu')
     @task
@@ -72,10 +85,14 @@ class WorkloadModelSteps(SequentialTaskSet):
     @tag('perform_a_search')
     @task
     def perform_a_search(self):
+        global entities
+        global page_count
+        
         extra_json = {
             "query_data": {
                 "search_command.m12_results": {
                     "inputs": {
+                        self.FUNC_ENTER_STATUS['input']: self.FUNC_ENTER_STATUS['inputValue'],
                         self.FUNC_ENTER_GENDER['input']: self.FUNC_ENTER_GENDER['inputValue']
                     },
                     "execute": True,
@@ -91,71 +108,73 @@ class WorkloadModelSteps(SequentialTaskSet):
             expected_title=self.FUNC_OUTGOING_REFERRALS_MENU['title']
         )
 
-        self.entities = data["entities"]
-        self.page_count = data["pageCount"]
-        assert len(self.entities) > 0, "entities is empty"
+        entities = data["entities"]
+        page_count = data["pageCount"]
+        assert len(entities) > 0, "entities is empty"
+        logging.info("No of entities in result: " + str(len(entities)))
+        global selected_case_ids
+        selected_case_ids = None
+        selected_case_ids = {entity["id"] for entity in entities}
+        logging.info("selected cases are " + str(
+            selected_case_ids
+            ) + " for mobile worker " + self.user.user_detail.username
+                     )
+
+    @task
+    def submit_outgoing_referrals_form(self):
+        random_ids = random.sample(list(selected_case_ids), random.randrange(3, 7))
+        logging.info("Randomly selected ids: " + str(random_ids))
+
+        for id in random_ids:
+            logging.info("Proceeding with id: "+ str(id))
+            self.select_case(str(id))
+            session_id = self.enter_outgoing_referral_details_form(str(id))
+            self.answer_outgoing_referral_details_form_questions(session_id)
+            self.submit_outgoing_referral_details_form(session_id)
+
 
     @tag('select_case')
-    @task
-    def select_case(self):
-        self.selected_case_id = None
-
-        page_num = 0
-        while (not self.selected_case_id and page_num < self.page_count):
-            for entity in self.entities:
-                # When a case goes through this entire workflow, its status is changed to "resolved"
-                # or "client_placed". However, it stays in the caselist. The workflow and form defined
-                # in this test is specific to and work only if the case selected has status "open".
-                if "open" in entity["data"]:
-                    self.selected_case_id = entity["id"]
-                    break
-            if self.selected_case_id:
-                break
-
-            page_num+=1
-            offset = page_num * self.cases_per_page
-
-            extra_json={
-                "selections": [self.FUNC_OUTGOING_REFERRALS_MENU['selections']],
-                "cases_per_page": self.cases_per_page,
-                "offset": offset,
-            }
-            data = self.user.hq_user.navigate(
-                "Paginate for Case Selection",
-                data=extra_json,
-                expected_title=self.FUNC_OUTGOING_REFERRALS_MENU['title']
+    def select_case(self, selected_case_id):
+        data = self.user.hq_user.navigate(
+            "Selecting Case",
+            data={"selections": [self.FUNC_OUTGOING_REFERRALS['selections'],
+                                 selected_case_id,
+                                 ]
+                  },
+            expected_title=self.FUNC_OUTGOING_REFERRALS['title']
             )
-            self.entities = data["entities"]
-
-        assert self.selected_case_id != None, (
-            "No case with status 'open' is available to be selected. "
-            "A valid case needs to be created first "
-        )
-        logging.info("selected cases are " + str(
-            self.selected_case_id) + " for mobile worker " + self.user.user_detail.username)
+        logging.info("selecting case " + str(
+            selected_case_id
+            ) + " for outgoing referral for user " + self.user.user_detail.username
+                     )
 
     @tag('enter_outgoing_referral_details_form')
-    @task
-    def enter_create_profile_and_refer_form(self):
+    # @task
+    def enter_outgoing_referral_details_form(self, selected_case_id):
         data = self.user.hq_user.navigate(
             "Enter 'Outgoing Referral Details' Form",
-            data={"selections": [self.FUNC_OUTGOING_REFERRALS_MENU['selections'],
-                                 self.selected_case_id,
-                                 self.FUNC_OUTGOING_REFERRAL_DETAILS_FORM['selections']
+            data={"selections": [self.FUNC_OUTGOING_REFERRAL_DETAILS_FORM['selections'],
+                                 selected_case_id,
+                                 self.FUNC_SEARCH_FOR_BEDS_MENU['selections']
                                 ]
                 },
             expected_title=self.FUNC_OUTGOING_REFERRAL_DETAILS_FORM['title']
         )
-        self.session_id = data['session_id']
+        session_id = data['session_id']
+        logging.info("Enter 'Outgoing Referral Details' Form with case id " + str(
+            selected_case_id
+            ) + " and session id: "+str(session_id)+ " for mobile worker " + self.user.user_detail.username
+                     )
+        return session_id
 
     @tag('answer_outgoing_referral_details_form_questions')
-    @task
-    def answer_outgoing_referral_details_form_questions(self):
+    # @task
+    def answer_outgoing_referral_details_form_questions(self, session_id):
         for question in self.FUNC_OUTGOING_REFERRAL_DETAILS_FORM["questions"].values():
             extra_json = {
                     "ix": question["ix"],
                     "answer": question["answer"],
-                    "session_id": self.session_id,
+                    "session_id": session_id,
                 }
 
             data = self.user.hq_user.answer(
@@ -179,12 +198,12 @@ class WorkloadModelSteps(SequentialTaskSet):
         # Question ix 10 is a count repeat group that varies depending on the case selected. 
         # So the "answer" with the appropriate ix keys need to be dynamically generated to be used in submit
         for item in data["tree"]:
-            if item.get('ix') == "10":
+            if item.get('ix') == "13":
                 self.attached_referral_requests_answers = find_question_ix(item)
 
     @tag('submit_outgoing_referral_details_form')
-    @task
-    def submit_outgoing_referral_details_form(self):
+    # @task
+    def submit_outgoing_referral_details_form(self, session_id):
         utc_time_tuple = time.gmtime(time.time() - 86400) #ensure we're not picking a date that would be tomorrow in local time
         formatted_date = "{:04d}-{:02d}-{:02d}".format(utc_time_tuple.tm_year, utc_time_tuple.tm_mon,
                                                        utc_time_tuple.tm_mday)
@@ -193,48 +212,50 @@ class WorkloadModelSteps(SequentialTaskSet):
             "3,0": 1,
             "4,1,0": 1,
             "4,1,5": formatted_date,
-            "8,0": "OK",
             "9,0": "OK",
-            "9,1": "OK",
-            "9,2": None,
-            "9,3,0": "OK",
-            "9,3,1": "OK",
-            "9,3,2": "OK",
-            "9,3,3": "OK",
-            "9,3,4": "OK",
-            "9,3,5": "OK",
-            "9,3,6": "OK",
-            "9,3,7": "OK",
-            "9,3,8": "OK",
-            "9,3,9": "OK",
-            "9,3,10": "OK",
-            "9,3,11": "OK",
-            "9,3,12": "OK",
-            "9,3,13": "OK",
-            "9,3,14": "OK",
-            "9,3,15": "OK",
-            "9,3,16": "OK",
-            "9,3,17": "OK",
-            "9,3,18": "OK",
-            "9,3,19": "OK",
-            "9,3,20": "OK",
-            "9,3,21": "OK"
+            "10,0": "OK",
+            "10,1": "OK",
+            "10,2": None,
+            "10,3,0": "OK",
+            "10,3,1": "OK",
+            "10,3,2": "OK",
+            "10,3,3": "OK",
+            "10,3,4": "OK",
+            "10,3,5": "OK",
+            "10,3,6": "OK",
+            "10,3,7": "OK",
+            "10,3,8": "OK",
+            "10,3,9": "OK",
+            "10,3,10": "OK",
+            "10,3,11": "OK",
+            "10,3,12": "OK",
+            "10,3,13": "OK",
+            "10,3,14": "OK",
+            "10,3,15": "OK",
+            "10,3,16": "OK",
+            "10,3,17": "OK",
+            "10,3,18": "OK",
+            "10,3,19": "OK"
         }
         answers.update(self.attached_referral_requests_answers)
-        input_answers= {d["ix"]: d["answer"] for d in self.FUNC_OUTGOING_REFERRAL_DETAILS_FORM["questions"].values()}
+        input_answers = {d["ix"]: d["answer"] for d in self.FUNC_OUTGOING_REFERRAL_DETAILS_FORM["questions"].values()}
         answers.update(input_answers)
 
         extra_json = {
             "answers": answers,
             "prevalidated": True,
             "debuggerEnabled": True,
-            "session_id": self.session_id,
+            "session_id": session_id,
         }
         self.user.hq_user.submit_all(
             "Submit Outgoing Referral Details Form",
             extra_json,
             expected_response_message=self.FUNC_OUTGOING_REFERRAL_DETAILS_FORM_SUBMIT['submitResponseMessage']
         )
+        logging.info("Outgoing Referral Details Form submitted successfully - mobile worker:" + self.user.user_detail.username + " and session id: " + str(
+                session_id
+                ) + " ; request: submit_all"
+            )
 
 
 class LoginCommCareHQWithUniqueUsers(BaseLoginCommCareUser):

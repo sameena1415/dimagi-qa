@@ -2,18 +2,18 @@ import logging
 from dataclasses import dataclass, field
 from typing import List, Dict, Optional
 
+
 def post(command, client, app_details, user_details, extra_json=None, name=None, validation=None):
     formplayer_host = "/formplayer"
     data = {
         "app_id": app_details.id,
         "domain": app_details.domain,
         "locale": "en",
-        "username": user_details.username,
-    }
+        "username": user_details.username
+        }
     if extra_json:
         data.update(extra_json)
     name = name or command
-    logging.info(str(data))
 
     if 'XSRF-TOKEN' not in client.cookies:
         response = client.get(f"{formplayer_host}/serverup")
@@ -22,16 +22,23 @@ def post(command, client, app_details, user_details, extra_json=None, name=None,
     xsrf_token = client.cookies['XSRF-TOKEN']
     headers = {'X-XSRF-TOKEN': xsrf_token}
     client.headers.update(headers)
-    with client.post(f"{formplayer_host}/{command}/", json=data, name=name,
-                     catch_response=True) as response:
+    with client.post(f"{formplayer_host}/{command}", json=data, name=name,
+                     catch_response=True
+                     ) as response:
+        if command == 'submit-all':
+            logging.info(f"{formplayer_host}/{command}/")
+            logging.info("json submitted: "+ str(data))
+            logging.info("response"+str(response.json()))
         if validation:
             validate_response(response, validation)
         return response.json()
+
 
 @dataclass
 class ValidationCriteria:
     key_value_pairs: Optional[Dict[str, Optional[str]]] = field(default_factory=dict)
     length_check: Optional[Dict[str, int]] = field(default_factory=dict)
+
 
 def validate_response(response, validation: ValidationCriteria):
     data = response.json()

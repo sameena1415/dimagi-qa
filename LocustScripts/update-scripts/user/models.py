@@ -106,21 +106,23 @@ class HQUser:
 class BaseLoginCommCareUser(HttpUser):
     abstract = True
 
-    def on_start(self, domain, host, user_details, app_id):
+    def on_start(self, domain, host, user_details, build_id, app_id):
         self.user_detail = user_details.get()
 
         app_details = AppDetails(
             domain=domain,
-            app_id=app_id
+            app_id=app_id,
+            build_id=build_id
             )
         self.hq_user = HQUser(self.client, self.user_detail, app_details)
         self.hq_user.login(domain, host)
-        self.hq_user.app_details.build_id = self._get_build_info(app_id, domain)
+        self.hq_user.app_details.build_id, self.hq_user.app_details.app_id = self._get_build_info(build_id, app_id, domain)
 
-    def _get_build_info(self, app_id, domain):
-        build_id = get_app_build_info(self.client, domain, app_id)
+    def _get_build_info(self, build_id, app_id, domain):
+        build_id = get_app_build_info(self.client, domain, build_id)
+        app_id = get_app_build_info(self.client, domain, app_id)
         if build_id:
             logging.info("Using app build: %s", build_id)
         else:
-            logging.warning("No build found for app: %s", app_id)
-        return build_id
+            logging.warning("No build found for app: %s and build: %s", app_id, build_id)
+        return build_id, app_id
