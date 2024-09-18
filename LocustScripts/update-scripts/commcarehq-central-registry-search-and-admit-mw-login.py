@@ -16,7 +16,7 @@ def _(parser):
 
     # Use below command to execute these tests:
 # locust -f .\LocustScripts\update-scripts\commcarehq-central-registry-search-and-admit-mw-l
-    # ogin.py --domain co-carecoordination-perf --app-id 5e2b042d077bef1ccb70f06ad27d8812 --app-config .\LocustScripts\update-scripts\project-config\co-careco
+    # ogin.py --domain co-carecoordination-perf --build-id 5e2b042d077bef1ccb70f06ad27d8812 --app-id f1a302fe4dba4a9e9f5e2d6e2616d2d3 --app-config .\LocustScripts\update-scripts\project-config\co-careco
     # ordination-perf\app_config_central-registry.json --user-details .\LocustScripts\update-scripts\project-config\co-carecoordination-perf\mobile_worker_cre
     # dentials.json --cases-to-select .\LocustScripts\update-scripts\client-cases-import-example.xlsx
 
