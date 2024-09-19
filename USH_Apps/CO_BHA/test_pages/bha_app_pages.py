@@ -53,7 +53,7 @@ class BhaWorkflows(BasePage):
         properties_labels = self.find_elements_texts(self.case_search_properties)
         for search_property in properties:
             assert search_property in properties_labels, "Property should be present"
-            print("Property "+search_property+" present in "+properties_labels)
+            print("Property "+str(search_property)+" present in "+str(properties_labels))
 
     def expected_count_on_continue_button(self, number):
         count_on_continue = self.get_element(self.continue_button, number)

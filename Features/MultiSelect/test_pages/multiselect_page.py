@@ -105,10 +105,10 @@ class MultiSelectWorkflows(BasePage):
         menu_names = self.find_elements_texts(self.dropdown_menu_value)
         if match == NO:
             assert menu_name_input not in menu_names, "Names should not match"
-            print("Input name"+menu_name_input+" not in "+menu_names)
+            print("Input name"+str(menu_name_input)+" not in "+str(menu_names))
         elif match == YES:
             assert menu_name_input in menu_names, "Names should match"
-            print("Input name"+menu_name_input+" present in "+menu_names)
+            print("Input name"+str(menu_name_input)+" present in "+str(menu_names))
 
     def open_menu_settings(self, menu):
         menu_xpath = self.get_element(self.open_app_builder_menu, menu)

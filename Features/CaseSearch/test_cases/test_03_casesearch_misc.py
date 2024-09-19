@@ -155,8 +155,10 @@ def test_case_05_shadow_menu(driver, settings):
 
     # case_name = webapps.omni_search(CaseSearchUserInput.song_automation_song)
     shadow_form_names = webapps.select_case_and_continue(case_name)
-    assert shadow_form_names == search_first_form_names, "Values mismatched "+shadow_form_names+ " and "+ search_first_form_names
-    print("Values matched "+shadow_form_names+ " and "+ search_first_form_names)
+    assert shadow_form_names == search_first_form_names, "Values mismatched " + str(shadow_form_names) + " and " + str(
+        search_first_form_names
+        )
+    print("Values matched " + str(shadow_form_names) + " and " + str(search_first_form_names))
 
 
 def test_case_06_performance_check(driver, settings):

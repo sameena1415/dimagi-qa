@@ -55,7 +55,7 @@ def test_case_02_help_text(driver, settings):
     webapps.open_app(CaseSearchUserInput.linked_case_search_app_name)
     webapps.open_menu(CaseSearchUserInput.search_first_menu)
     casesearch.check_help_text(search_property=CaseSearchUserInput.mood,
-                               help_text=CaseSearchUserInput.mood_help_text
+                               help_text_value=CaseSearchUserInput.mood_help_text
                                )
 
 
