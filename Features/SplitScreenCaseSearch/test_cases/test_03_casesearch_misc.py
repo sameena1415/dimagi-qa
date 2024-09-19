@@ -96,7 +96,8 @@ def test_case_04_display_only_forms(driver, settings):
     """Check display only form modes"""
     webapps.open_app(CaseSearchUserInput.linked_case_search_app_name)
     webapps.open_menu(CaseSearchUserInput.display_only_forms_menu)
-    assert not base.is_displayed(webapps.search_all_cases_button)
+    assert not base.is_displayed(webapps.search_all_cases_button), "Search All Cases button should not be present"
+    print("Search All Cases button not present")
 
 
 def test_case_05_shadow_menu(driver, settings):
@@ -120,7 +121,8 @@ def test_case_05_shadow_menu(driver, settings):
     webapps.search_button_on_case_search_page()
     case_name = webapps.omni_search(CaseSearchUserInput.song_automation_song)
     shadow_form_names = webapps.select_case_and_continue(case_name)
-    assert shadow_form_names == search_first_form_names
+    assert shadow_form_names == search_first_form_names, "Values mismatched "+shadow_form_names+ " and "+ search_first_form_names
+    print("Values matched "+shadow_form_names+ " and "+ search_first_form_names)
 
 
 def test_case_06_performance_check(driver, settings):
@@ -205,12 +207,14 @@ def test_case_08_display_condition(driver, settings):
     webapps.login_as(CaseSearchUserInput.a_user)
     webapps.open_app(CaseSearchUserInput.linked_case_search_app_name)
     webapps.open_menu(CaseSearchUserInput.search_setting_menu)
-    assert base.is_displayed(webapps.search_all_cases_button)
+    assert base.is_displayed(webapps.search_all_cases_button), "Search All Cases button should be present"
+    print("Search All Cases button present")
     """Check Display condition for another user"""
     webapps.login_as(CaseSearchUserInput.user_1)
     webapps.open_app(CaseSearchUserInput.linked_case_search_app_name)
     webapps.open_menu(CaseSearchUserInput.search_setting_menu)
-    assert not base.is_displayed(webapps.search_all_cases_button)
+    assert not base.is_displayed(webapps.search_all_cases_button), "Search All Cases button should not be present"
+    print("Search All Cases button not present")
 
 
 def test_case_09_search_filter(driver, settings):
@@ -240,7 +244,8 @@ def test_case_10_claim_condition(driver, settings):
     webapps.search_button_on_case_search_page()
     case_name = webapps.omni_search(CaseSearchUserInput.song_automation_song_10)
     form_name = webapps.select_case_and_continue(case_name)
-    assert not bool(form_name)
+    assert not bool(form_name), "Form name should not be present"
+    print("Form name not present")
 
 
 def test_case_11_do_not_search_cases(driver, settings):
