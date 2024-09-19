@@ -161,6 +161,7 @@ class LoginCommCareHQWithUniqueUsers(BaseLoginCommCareUser):
             domain=CONFIG["domain"],
             host=CONFIG["host"],
             user_details=USERS_DETAILS,
+            build_id=CONFIG["build_id"],
             app_id=CONFIG["app_id"]
         )
 

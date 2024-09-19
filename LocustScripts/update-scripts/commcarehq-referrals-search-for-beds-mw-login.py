@@ -14,9 +14,13 @@ from user.models import UserDetails, BaseLoginCommCareUser
 def _(parser):
     #     """
     #     Use below command to execute this test:
-    #     locust -f .\LocustScripts\update-scripts\commcarehq-referrals-search-for-beds-mw-login.py --domain co-carecoordination-perf --app-id 3be3260e279b434dace2052a1507262e --app-config .\LocustScripts\update-scripts\project-config\co-carecoordination-perf\app_config_referrals_platform.json --user-details .\LocustScripts\update-scripts\project-config\co-carecoordination-perf\mobile_worker_credentials.json
+    #     locust -f .\LocustScripts\update-scripts\commcarehq-referrals-search-for-beds-mw-login.py
+    # --domain co-carecoordination-perf --build-id b62974969e57051ad70160a798ed79e8 --app-id 3271c8c86a5344e59554dfcb3e4628b8 --app-config .\LocustScripts\upd
+    # ate-scripts\project-config\co-carecoordination-perf\app_config_referrals_platform.json --user-details .\LocustScripts\update-scripts\project-config\co-c
+    # arecoordination-perf\mobile_worker_credentials.json
 
     parser.add_argument("--domain", help="CommCare domain", required=True, env_var="COMMCARE_DOMAIN")
+    parser.add_argument("--build-id", help="CommCare build id", required=True, env_var="COMMCARE_APP_ID")
     parser.add_argument("--app-id", help="CommCare app id", required=True, env_var="COMMCARE_APP_ID")
     parser.add_argument("--app-config", help="Configuration of CommCare app", required=True)
     parser.add_argument("--user-details", help="Path to user details file", required=True)
@@ -24,7 +28,6 @@ def _(parser):
 
 APP_CONFIG = {}
 USERS_DETAILS = RandomItems()
-
 
 class WorkloadModelSteps(SequentialTaskSet):
     wait_time = between(5, 15)
@@ -35,6 +38,11 @@ class WorkloadModelSteps(SequentialTaskSet):
         self.FUNC_CREATE_PROFILE_AND_REFER_FORM = APP_CONFIG['FUNC_CREATE_PROFILE_AND_REFER_FORM']
         self.FUNC_CREATE_PROFILE_AND_REFER_FORM_QUESTIONS = self.FUNC_CREATE_PROFILE_AND_REFER_FORM["questions"]
         self.FUNC_CREATE_PROFILE_AND_REFER_FORM_SUBMIT = APP_CONFIG['FUNC_CREATE_PROFILE_AND_REFER_FORM_SUBMIT']
+        self.FUNC_OUTGOING_REFERRALS_MENU = APP_CONFIG["FUNC_OUTGOING_REFERRALS_MENU"]
+        self.FUNC_ENTER_STATUS = APP_CONFIG["FUNC_ENTER_STATUS"]
+        self.FUNC_ENTER_GENDER = APP_CONFIG["FUNC_ENTER_GENDER"]
+        self.FUNC_OUTGOING_REFERRAL_DETAILS_FORM = APP_CONFIG["FUNC_OUTGOING_REFERRAL_DETAILS_FORM"]
+        self.FUNC_OUTGOING_REFERRAL_DETAILS_FORM_SUBMIT = APP_CONFIG["FUNC_OUTGOING_REFERRAL_DETAILS_FORM_SUBMIT"]
         self.cases_per_page = 100
 
     @tag('home_screen')
@@ -147,7 +155,7 @@ class WorkloadModelSteps(SequentialTaskSet):
     @tag('submit_create_profile_and_refer_form')
     @task
     def submit_create_profile_and_refer_form(self):
-        logging.info("Submitting form - mobile worker:" + self.user.user_detail.username + "; request: submit_all")
+        logging.info("Submitting form - mobile worker:" + self.user.user_detail.username + " and session id: " + str(self.session_id) +" ; request: submit_all")
         utc_time_tuple = time.gmtime(time.time())
         formatted_date = "{:04d}-{:02d}-{:02d}".format(utc_time_tuple.tm_year, utc_time_tuple.tm_mon,
                                                        utc_time_tuple.tm_mday
@@ -170,17 +178,14 @@ class WorkloadModelSteps(SequentialTaskSet):
             "1,1,11": None,
             "1,1,12": None,
             "1,1,13": None,
-            "1,1,14": None,
+            # "1,3": 1,
             "1,7,0": [1],
-            "4_0,4": "OK",
             "4_0,5,0,0": "OK",
             "4_0,5,0,1": "OK",
             "4_0,5,0,2": "OK",
             "4_0,5,0,3": "OK",
             "4_0,5,0,4": "OK",
             "4_0,5,0,5": "OK",
-            "4_0,5,1,0": "OK",
-            "4_0,5,1,3": "OK",
             "4_0,6": None
             }
         input_answers = {d["ix"]: d["answer"] for d in self.FUNC_CREATE_PROFILE_AND_REFER_FORM_QUESTIONS.values()}
@@ -196,8 +201,10 @@ class WorkloadModelSteps(SequentialTaskSet):
         self.user.hq_user.submit_all(
             "Submit Create Profile and Refer Form",
             extra_json,
-            expected_response_message=self.FUNC_CREATE_PROFILE_AND_REFER_FORM_SUBMIT['submitResponseMessage']
+            status="success"
+            # expected_response_message=self.FUNC_CREATE_PROFILE_AND_REFER_FORM_SUBMIT['submitResponseMessage']
             )
+        logging.info("Create Profile and Refer Form submitted successfully - mobile worker:" + self.user.user_detail.username + " and session id: " + str(self.session_id) +" ; request: submit_all")
 
 
 @events.init.add_listener
@@ -228,5 +235,6 @@ class LoginCommCareHQWithUniqueUsers(BaseLoginCommCareUser):
             domain=self.environment.parsed_options.domain,
             host=self.environment.parsed_options.host,
             user_details=USERS_DETAILS,
+            build_id=self.environment.parsed_options.build_id,
             app_id=self.environment.parsed_options.app_id
             )

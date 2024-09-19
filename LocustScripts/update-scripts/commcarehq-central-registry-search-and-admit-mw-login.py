@@ -16,11 +16,12 @@ def _(parser):
 
     # Use below command to execute these tests:
 # locust -f .\LocustScripts\update-scripts\commcarehq-central-registry-search-and-admit-mw-l
-    # ogin.py --domain co-carecoordination-perf --app-id 5e2b042d077bef1ccb70f06ad27d8812 --app-config .\LocustScripts\update-scripts\project-config\co-careco
+    # ogin.py --domain co-carecoordination-perf --build-id 5e2b042d077bef1ccb70f06ad27d8812 --app-id f1a302fe4dba4a9e9f5e2d6e2616d2d3 --app-config .\LocustScripts\update-scripts\project-config\co-careco
     # ordination-perf\app_config_central-registry.json --user-details .\LocustScripts\update-scripts\project-config\co-carecoordination-perf\mobile_worker_cre
     # dentials.json --cases-to-select .\LocustScripts\update-scripts\client-cases-import-example.xlsx
 
     parser.add_argument("--domain", help="CommCare domain", required=True, env_var="COMMCARE_DOMAIN")
+    parser.add_argument("--build-id", help="CommCare build id", required=True, env_var="COMMCARE_APP_ID")
     parser.add_argument("--app-id", help="CommCare app id", required=True, env_var="COMMCARE_APP_ID")
     parser.add_argument("--app-config", help="Configuration of CommCare app", required=True)
     parser.add_argument("--user-details", help="Path to user details file", required=True)
@@ -151,6 +152,7 @@ class LoginCommCareHQWithUniqueUsers(BaseLoginCommCareUser):
             domain=self.environment.parsed_options.domain,
             host=self.environment.parsed_options.host,
             user_details=USERS_DETAILS,
+            build_id=self.environment.parsed_options.build_id,
             app_id=self.environment.parsed_options.app_id
         )
 
