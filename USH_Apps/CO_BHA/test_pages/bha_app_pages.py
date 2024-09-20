@@ -52,16 +52,19 @@ class BhaWorkflows(BasePage):
     def check_search_properties_present(self, properties):
         properties_labels = self.find_elements_texts(self.case_search_properties)
         for search_property in properties:
-            assert search_property in properties_labels
+            assert search_property in properties_labels, "Property should be present"
+            print("Property "+str(search_property)+" present in "+str(properties_labels))
 
     def expected_count_on_continue_button(self, number):
         count_on_continue = self.get_element(self.continue_button, number)
-        assert self.is_displayed(count_on_continue)
+        assert self.is_displayed(count_on_continue), "Continue count not displayed"
+        print("Continue count is displayed")
 
     def check_client_info_on_form(self, search_property, search_value):
         value_on_form_xpath = self.get_element(self.client_info, search_property)
         value_on_form = self.get_text(value_on_form_xpath)
-        assert search_value in value_on_form
+        assert search_value in value_on_form,  "Value "+search_value+" is not present in "+value_on_form
+        print("Value "+search_value+" is present in "+value_on_form)
 
     def select_clinic(self, clinic_name):
         time.sleep(4)
@@ -78,26 +81,32 @@ class BhaWorkflows(BasePage):
     def check_answer_options(self, label, displayed=None):
         answer_label = self.get_element(self.answer_option_label, label)
         if displayed == YES:
-            assert self.is_displayed(answer_label)
+            assert self.is_displayed(answer_label), "Label "+label+" should be displayed"
+            print("Label "+label+" is displayed")
         elif displayed == NO:
-            assert not self.is_displayed(answer_label)
+            assert not self.is_displayed(answer_label), "Label "+label+" should not be displayed"
+            print("Label "+label+" is not displayed")
 
     def check_question_label(self, label, displayed=None):
         question_label = self.get_element(self.question_label, label)
         if displayed == YES:
-            assert self.is_displayed(question_label)
+            assert self.is_displayed(question_label), "Label "+label+" should be displayed"
+            print("Label "+label+" is displayed")
         elif displayed == NO:
-            assert not self.is_displayed(question_label)
+            assert not self.is_displayed(question_label), "Label "+label+" should not be displayed"
+            print("Label "+label+" is not displayed")
 
     def check_headers_on_case_list(self, display_properties):
         for prop in display_properties:
             header = self.get_element(self.case_list_display_properties, prop)
-            assert self.is_displayed(header)
+            assert self.is_displayed(header), f"Navigated to {header}"
+            print(f"Not Navigated to {header}")
 
     def check_property_on_case_list_report(self, case_link, case_property, case_property_value):
         self.driver.get(case_link)
         self.locator = (By.XPATH, self.case_prop_value.format(case_property, case_property_value))
-        assert self.is_present(self.locator)
+        assert self.is_present(self.locator), f"Property {case_property_value} not present"
+        print(f"Property {case_property_value} is present")
 
     def view_message_details(self, alert_type):
         self.js_click(self.get_element(self.view_latest_details_by_type, alert_type))
@@ -106,8 +115,10 @@ class BhaWorkflows(BasePage):
         date_locator = self.get_element(self.content, date)
         content_locator = self.get_element(self.content, content)
         print(date_locator, " ", content_locator)
-        assert self.is_present(content_locator)
-        assert self.is_present(date_locator)
+        assert self.is_present(content_locator), f"Content {content} not present"
+        print(f"Content {content} is present")
+        assert self.is_present(date_locator), f"Date {date} not present"
+        print(f"Date {date} is present")
         self.switch_back_to_prev_tab()
 
     def check_values_on_caselist(self, row_num, expected_value, is_multi=NO):
@@ -116,6 +127,8 @@ class BhaWorkflows(BasePage):
         values_ = self.find_elements_texts(self.value_in_table)
         print(expected_value, values_)  # added for debugging
         if is_multi == YES:
-            assert all(item in values_ for item in expected_value) or any(item in values_ for item in expected_value)
+            assert all(item in values_ for item in expected_value) or any(item in values_ for item in expected_value), "Expected values are not present"
+            print("Expected values are present")
         elif is_multi == NO:
-            assert expected_value in values_
+            assert expected_value in values_, "Expected values are not present"
+            print("Expected values are present")

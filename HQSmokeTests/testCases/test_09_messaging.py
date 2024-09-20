@@ -125,3 +125,13 @@ def test_case_52_settings_pages(driver, settings):
     home = HomePage(driver, settings)
     home.project_settings_page()
     msg.current_subscription_page()
+
+@pytest.mark.messaging
+@pytest.mark.conditionalAlerts
+@pytest.mark.report
+@pytest.mark.reportMessaging
+def test_case_cleanup_cond_alert(driver, settings):
+    menu = HomePage(driver, settings)
+    msg = MessagingPage(driver)
+    menu.messaging_menu()
+    msg.remove_all_cond_alert()

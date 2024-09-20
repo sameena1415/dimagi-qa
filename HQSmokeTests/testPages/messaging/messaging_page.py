@@ -84,7 +84,9 @@ class MessagingPage(BasePage):
         self.search_box = (By.XPATH, "//form[@class='input-group']/input[@class='form-control']")
         self.search_btn = (
         By.XPATH, "//form[@class='input-group']//button[@data-bind='click: clickAction, visible: !immediate']")
-
+        self.value_per_page =(By.XPATH, "//select[contains(@data-bind,'value: perPage')]")
+        self.cond_alerts_name = (By.XPATH, "//td[.//button[contains(@class,'danger')][not(@disabled)]]//following-sibling::td[1]/a[contains(.,'cond_alert')]")
+        self.cond_alert_delete_button = "(//td[contains(.,'{}')]//preceding-sibling::td/button[not(@disabled)])[{}]"
         # Condition Alerts : Download and Upload
         self.bulk_upload_button = (By.LINK_TEXT, "Bulk Upload SMS Alert Content")
         self.download_id = (By.ID, "download_link")
@@ -554,3 +556,29 @@ class MessagingPage(BasePage):
         assert self.is_visible_and_displayed(
             self.subscription_elements_id), "Subscription Page did not load successfully"
         print("Current Subscription page loaded successfully!")
+
+
+    def remove_all_cond_alert(self):
+        self.wait_to_click(self.cond_alerts)
+        self.wait_for_element(self.value_per_page)
+        self.select_by_value(self.value_per_page, "100")
+        time.sleep(10)
+        print("Sleeping till the alert list is displayed completely")
+        alert_presence = self.is_present(self.cond_alerts_name)
+        if alert_presence:
+            while alert_presence:
+                text = self.get_text(self.cond_alerts_name)
+                print("alert name: ", text)
+                self.wait_to_click((By.XPATH, self.cond_alert_delete_button.format(text, 1)))
+                try:
+                    obj = self.driver.switch_to.alert
+                    obj.accept()
+                except NoAlertPresentException:
+                    raise AssertionError("Celery down")
+                time.sleep(5)
+                self.driver.refresh()
+                time.sleep(7)
+                alert_presence = self.is_present(self.cond_alerts_name)
+        else:
+            print("No script created cond alerts present")
+        print("All Cond Alert removed successfully!")

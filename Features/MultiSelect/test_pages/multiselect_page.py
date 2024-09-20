@@ -67,10 +67,12 @@ class MultiSelectWorkflows(BasePage):
         song_names_on_form = self.find_elements_texts((By.XPATH, self.selected_case_names_on_forms.format(type)))
         size = len(song_names_on_form)
         print(size)
-        assert size < max_size
+        assert size < max_size, "Number of forms exceeded the max size "+max_size
+        print("Number of forms within limit")
 
     def check_error_message_shown_for_max_limit_exceed(self):
-        assert self.is_displayed(self.max_limit_error)
+        assert self.is_displayed(self.max_limit_error), "Max limit error not displayed"
+        print("Max limit error displayed as expected")
 
     def check_selected_cases_present_on_form(self, items_selected_on_case_list, case_type):
         time.sleep(5)
@@ -83,25 +85,30 @@ class MultiSelectWorkflows(BasePage):
             stripped = list(filter(None, [s.replace("show:", "") for s in song_names_on_form]))
             stripped_final = list(filter(None, [s.lstrip() for s in stripped]))
         assert items_selected_on_case_list == stripped_final, f"No, list1 {items_selected_on_case_list} doesn't match list2{stripped_final}"
+        print(f"List1 {items_selected_on_case_list} matches List2 {stripped_final}")
 
     def select_case_on_case_detail(self):
         self.js_click(self.select_case_button)
 
     def check_if_checkbox_is_selected(self, case_name):
         checkbox = self.get_element(self.checkbox, case_name)
-        assert self.is_selected(checkbox)
+        assert self.is_selected(checkbox), "Checkbox for "+case_name+" is not selected"
+        print("Checkbox for "+case_name+" is selected")
 
     def check_if_checkbox_are_selected(self, case_names):
         for case in case_names:
             checkbox = self.get_element(self.checkbox, case)
-            assert self.is_selected(checkbox)
+            assert self.is_selected(checkbox), "Checkbox for "+case+" is not selected"
+            print("Checkbox for "+case+" is selected")
 
     def check_if_value_present_in_drop_down(self, menu_name_input, match=None):
         menu_names = self.find_elements_texts(self.dropdown_menu_value)
         if match == NO:
-            assert menu_name_input not in menu_names
+            assert menu_name_input not in menu_names, "Names should not match"
+            print("Input name"+str(menu_name_input)+" not in "+str(menu_names))
         elif match == YES:
-            assert menu_name_input in menu_names
+            assert menu_name_input in menu_names, "Names should match"
+            print("Input name"+str(menu_name_input)+" present in "+str(menu_names))
 
     def open_menu_settings(self, menu):
         menu_xpath = self.get_element(self.open_app_builder_menu, menu)

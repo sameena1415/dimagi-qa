@@ -91,7 +91,8 @@ def test_case_04_load_from_external_domain(driver, settings):
     case_name = webapps.omni_search(CaseSearchUserInput.song_case_on_casesearch_1)
     webapps.select_case_and_continue(case_name)
     domain_url = driver.current_url
-    assert "casesearch" in domain_url
+    assert "casesearch" in domain_url, "casesearch not present in url"
+    print("casesearch present in url")
     webapps.open_form(CaseSearchUserInput.add_show_form)
     webapps.submit_the_form()
     casesearch.check_eof_navigation(eof_nav=MENU,

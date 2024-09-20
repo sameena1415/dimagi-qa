@@ -71,7 +71,8 @@ def test_case_03_load_external_case_into_caselist_skip_default(driver, settings)
     webapps.omni_search(casename)
     webapps.select_case_and_continue(casename)
     domain_url = driver.current_url
-    assert "casesearch" in domain_url
+    assert "casesearch" in domain_url, "casesearch not present in url"
+    print("casesearch present in url")
     webapps.submit_the_form()
 
 @pytest.mark.skip
@@ -94,7 +95,8 @@ def test_case_04_load_external_linked_domain_case_into_caselist_search_first(dri
     webapps.omni_search(casename)
     webapps.select_case_and_continue(casename)
     domain_url = driver.current_url
-    assert "casesearch" in domain_url
+    assert "casesearch" in domain_url, "casesearch not present in url"
+    print("casesearch present in url")
     webapps.open_form(CaseSearchUserInput.play_song_form)
     webapps.submit_the_form()
 
@@ -137,7 +139,8 @@ def test_case_06_smart_link_skip_default(driver, settings):
     webapps.select_case_and_continue(casename)
     webapps.select_user(CaseSearchUserInput.kiran)  # Failing 404! Raise a ticket
     domain_url = driver.current_url
-    assert "casesearch-1" in domain_url
+    assert "casesearch-1" in domain_url, "casesearch-1 not present in url"
+    print("casesearch-1 present in url")
     webapps.submit_the_form()
 
 @pytest.mark.skip
@@ -168,7 +171,8 @@ def test_case_07_smart_link_search_first_linked_domain_case(driver, settings):
         print("Already logged in")
         pass
     domain_url = driver.current_url
-    assert "casesearch-1" in domain_url
+    assert "casesearch-1" in domain_url, "casesearch-1 not present in url"
+    print("casesearch-1 present in url")
     webapps.submit_the_form()
 
 @pytest.mark.skip
@@ -193,7 +197,8 @@ def test_case_08_smart_link_search_first_shadow(driver, settings):
         print("Already logged in")
         pass
     domain_url = driver.current_url
-    assert "casesearch-1" in domain_url
+    assert "casesearch-1" in domain_url, "casesearch-1 not present in url"
+    print("casesearch-1 present in url")
     webapps.submit_the_form()
 
 
@@ -218,7 +223,8 @@ def test_case_09_smart_link_skip_default_shadow(driver, settings):
         print("Already logged in")
         pass
     domain_url = driver.current_url
-    assert "casesearch-1" in domain_url
+    assert "casesearch-1" in domain_url, "casesearch-1 not present in url"
+    print("casesearch-1 present in url")
     webapps.submit_the_form()
 
 

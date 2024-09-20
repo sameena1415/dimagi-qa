@@ -41,7 +41,8 @@ def test_case_02_loose_access_to_case_search(driver, settings):
     """Check access loss to Case Search and Claim functionality"""
     webapps.open_app(CaseSearchUserInput.linked_case_search_app_name)
     webapps.open_menu(CaseSearchUserInput.without_search_setting_menu)
-    assert not base.is_displayed(webapps.search_all_cases_button)
+    assert not base.is_displayed(webapps.search_all_cases_button), "Search All Cases button should not be present"
+    print("Search All Cases button not present")
 
 
 def test_case_03_non_fuzzy_search(driver, settings):
