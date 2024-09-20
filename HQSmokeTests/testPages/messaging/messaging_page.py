@@ -564,7 +564,7 @@ class MessagingPage(BasePage):
         self.select_by_value(self.value_per_page, "100")
         time.sleep(10)
         print("Sleeping till the alert list is displayed completely")
-        alert_presence = self.find_element(self.cond_alerts_name)
+        alert_presence = self.is_present(self.cond_alerts_name)
         if alert_presence:
             while alert_presence:
                 text = self.get_text(self.cond_alerts_name)
@@ -578,7 +578,7 @@ class MessagingPage(BasePage):
                 time.sleep(5)
                 self.driver.refresh()
                 time.sleep(7)
-                alert_presence = self.find_element(self.cond_alerts)
+                alert_presence = self.is_present(self.cond_alerts_name)
         else:
             print("No script created cond alerts present")
         print("All Cond Alert removed successfully!")
