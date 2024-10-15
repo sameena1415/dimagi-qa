@@ -200,7 +200,7 @@ def test_case_11_multiselect_form_linking(driver, settings):
     multiselect = MultiSelectWorkflows(driver)
     webapps = WebApps(driver, settings)
     casesearch = CaseSearchWorkflows(driver)
-    webapps.login_as(CaseSearchUserInput.user_1)
+    webapps.login_as(CaseSearchUserInput.user_2)
     webapps.open_app(MultiSelectUserInput.multiselect_app_name)
     webapps.open_menu(MultiSelectUserInput.songs_MS_SF_IS)
     webapps.search_button_on_case_search_page()

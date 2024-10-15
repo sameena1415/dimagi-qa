@@ -37,6 +37,11 @@ jobs:
         if: ${{ github.event_name == 'workflow_dispatch' }}
         run: |
           echo "::set-output name=matrix::{\"environment\": [\"${{ inputs.environment }}\"]}"
+      - id: set-matrix-default
+        if: ${{ github.event_name != 'repository_dispatch' }}
+        run: |
+          echo "::set-output name=matrix::{\"environment\": [\"production\", \"staging\"]}"
+
 
   build:
     needs: set_matrix
