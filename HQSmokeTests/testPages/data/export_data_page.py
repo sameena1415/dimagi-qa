@@ -122,7 +122,7 @@ class ExportDataPage(BasePage):
 
         # Excel Dashboard Integrations, form, case
         self.export_excel_dash_int = (By.LINK_TEXT, 'Excel Dashboard Integration')
-        self.update_data = (By.XPATH, "//button[@data-toggle='modal'][1]")
+        self.update_data = (By.XPATH, "//button[@data-toggle='modal' or @data-bs-toggle='modal'][1]")
         self.update_data_conf = (By.XPATH, "//button[@data-bind='click: emailedExport.updateData']")
 
         self.update_data_form = (By.XPATH,
@@ -382,7 +382,10 @@ class ExportDataPage(BasePage):
         print("Dashboard Feed added!!")
         self.wait_for_element(self.export_name, 200)
         self.wait_to_clear_and_send_keys(self.export_name, UserData.dashboard_feed_form)
-        self.click(self.export_settings_create)
+        time.sleep(5)
+        # saving export
+        self.scroll_to_bottom()
+        self.js_click(self.export_settings_create)
         print("Dashboard Form Feed created!!")
         self.wait_and_sleep_to_click(self.update_data)
         self.wait_till_progress_completes("integration")
@@ -408,7 +411,10 @@ class ExportDataPage(BasePage):
         print("Dashboard Feed added!!")
         self.wait_for_element(self.export_name, 200)
         self.wait_to_clear_and_send_keys(self.export_name, UserData.dashboard_feed_case)
-        self.click(self.export_settings_create)
+        time.sleep(5)
+        # saving export
+        self.scroll_to_bottom()
+        self.js_click(self.export_settings_create)
         print("Dashboard Form Feed created!!")
         self.wait_and_sleep_to_click(self.update_data)
         self.wait_till_progress_completes("integration")
@@ -455,8 +461,12 @@ class ExportDataPage(BasePage):
         print("Odata form Feed added!!")
         self.wait_for_element(self.export_name, 200)
         self.wait_to_clear_and_send_keys(self.export_name, UserData.odata_feed_form)
-        self.click(self.export_settings_create)
+        time.sleep(5)
+        # saving export
+        self.scroll_to_bottom()
+        self.js_click(self.export_settings_create)
         print("Odata Form Feed created!!")
+        time.sleep(20)
         self.driver.refresh()
         self.wait_and_sleep_to_click(self.copy_odata_link_btn_form)
         self.get_url_paste_browser(username, password, "forms")
