@@ -65,7 +65,7 @@ class ExportDataPage(BasePage):
         self.add_export_button = (By.XPATH, "//a[@href='#createExportOptionsModal']")
         self.add_export_conf = (By.XPATH, "//button[@data-bind='visible: showSubmit, disable: disableSubmit']")
         self.export_name = (By.XPATH, '//*[@id="export-name"]')
-        self.export_settings_create = (By.XPATH, "//button[@class='btn btn-lg btn-primary']")
+        self.export_settings_create = (By.XPATH, "//button[@type='submit'][contains(@data-bind,'save')]")
         self.date_range = (By.ID, "id_date_range")
         self.case_owner = (By.XPATH, "//span[@class='select2-selection select2-selection--multiple']")
 
@@ -114,7 +114,7 @@ class ExportDataPage(BasePage):
         self.download_dse_case = (By.XPATH,
                                   "//h4[.//span[.='" + UserData.case_export_name_dse + "']]/following-sibling::div//*[./i[contains(@class,'fa-cloud')]]")
 
-        self.data_upload_msg = (By.XPATH, "//*[contains(text(),'Data update complete')]")
+        self.data_upload_msg = (By.XPATH, "//div[contains(@class,'success')]")
         self.data_upload_msg_form = (By.XPATH,
                                      "//h4[.//span[.='" + UserData.form_export_name_dse + "']]/following-sibling::div//*[contains(text(),'Data update complete')]")
         self.data_upload_msg_case = (By.XPATH,
@@ -122,7 +122,7 @@ class ExportDataPage(BasePage):
 
         # Excel Dashboard Integrations, form, case
         self.export_excel_dash_int = (By.LINK_TEXT, 'Excel Dashboard Integration')
-        self.update_data = (By.XPATH, "//button[@data-toggle='modal'][1]")
+        self.update_data = (By.XPATH, "//button[@data-toggle='modal' or @data-bs-toggle='modal'][1]")
         self.update_data_conf = (By.XPATH, "//button[@data-bind='click: emailedExport.updateData']")
 
         self.update_data_form = (By.XPATH,
@@ -143,16 +143,15 @@ class ExportDataPage(BasePage):
         self.powerBI_tab_int = (By.LINK_TEXT, 'PowerBi/Tableau Integration')
         self.copy_odata_link_btn_form = (
             By.XPATH,
-            "//div[./span[text()='" + UserData.odata_feed_form + "']]/following::div[@class='input-group']//a")
+            "//*[contains(@data-bind,'hasEmailedExport')][.//span[text()='" + UserData.odata_feed_form + "']]//following-sibling::div/*[contains(@data-bind,'click: copyLinkRequested')]//i")
         self.copy_odata_link_form = (
             By.XPATH,
-            "//div[./span[text()='" + UserData.odata_feed_form + "']]/following::div[@class='input-group']/input")
+            "//*[contains(@data-bind,'hasEmailedExport')][.//span[text()='" + UserData.odata_feed_form + "']]/following-sibling::div[@class='input-group']/input[contains(@data-bind,'showLink')]")
         self.copy_odata_link_btn_case = (
-            By.XPATH,
-            "//div[./span[text()='" + UserData.odata_feed_case + "']]/following::div[@class='input-group']//a")
+            By.XPATH, "//*[contains(@data-bind,'hasEmailedExport')][.//span[text()='" + UserData.odata_feed_case + "']]//following-sibling::div/*[contains(@data-bind,'click: copyLinkRequested')]//i")
         self.copy_odata_link_case = (
             By.XPATH,
-            "//div[./span[text()='" + UserData.odata_feed_case + "']]/following::div[@class='input-group']/input")
+            "//*[contains(@data-bind,'hasEmailedExport')][.//span[text()='" + UserData.odata_feed_case + "']]/following-sibling::div[@class='input-group']/input[contains(@data-bind,'showLink')]")
 
         self.edit_button_case = (By.XPATH,
                                  "(//span[contains(text(), 'Copy & Edit Feed')])")
@@ -383,12 +382,17 @@ class ExportDataPage(BasePage):
         print("Dashboard Feed added!!")
         self.wait_for_element(self.export_name, 200)
         self.wait_to_clear_and_send_keys(self.export_name, UserData.dashboard_feed_form)
-        self.click(self.export_settings_create)
+        time.sleep(5)
+        # saving export
+        self.scroll_to_bottom()
+        self.js_click(self.export_settings_create)
         print("Dashboard Form Feed created!!")
+        time.sleep(10)
         self.wait_and_sleep_to_click(self.update_data)
         self.wait_till_progress_completes("integration")
         self.wait_and_sleep_to_click(self.update_data_conf)
         assert self.is_visible_and_displayed(self.data_upload_msg), "Export not completed!"
+        time.sleep(10)
         self.driver.refresh()
 
     # Test Case - 26 - Excel Dashboard Integration, case
@@ -409,12 +413,17 @@ class ExportDataPage(BasePage):
         print("Dashboard Feed added!!")
         self.wait_for_element(self.export_name, 200)
         self.wait_to_clear_and_send_keys(self.export_name, UserData.dashboard_feed_case)
-        self.click(self.export_settings_create)
+        time.sleep(5)
+        # saving export
+        self.scroll_to_bottom()
+        self.js_click(self.export_settings_create)
         print("Dashboard Form Feed created!!")
+        time.sleep(10)
         self.wait_and_sleep_to_click(self.update_data)
         self.wait_till_progress_completes("integration")
         self.wait_and_sleep_to_click(self.update_data_conf)
         assert self.is_visible_and_displayed(self.data_upload_msg), "Export not completed!"
+        time.sleep(10)
         self.driver.refresh()
 
     def check_feed_link(self):
@@ -455,9 +464,14 @@ class ExportDataPage(BasePage):
         self.wait_and_sleep_to_click(self.add_export_conf)
         print("Odata form Feed added!!")
         self.wait_for_element(self.export_name, 200)
-        self.wait_to_clear_and_send_keys(self.export_name, UserData.odata_feed_form)
-        self.click(self.export_settings_create)
+        self.clear(self.export_name)
+        self.send_keys(self.export_name, UserData.odata_feed_form+Keys.TAB)
+        time.sleep(5)
+        # saving export
+        self.scroll_to_bottom()
+        self.js_click(self.export_settings_create)
         print("Odata Form Feed created!!")
+        time.sleep(20)
         self.driver.refresh()
         self.wait_and_sleep_to_click(self.copy_odata_link_btn_form)
         self.get_url_paste_browser(username, password, "forms")
@@ -483,12 +497,19 @@ class ExportDataPage(BasePage):
         self.wait_for_element(self.export_name, 200)
         self.wait_to_clear_and_send_keys(self.export_name, UserData.odata_feed_case)
         # selcting first three property
-        self.wait_and_sleep_to_click(self.select_none)
-        self.wait_and_sleep_to_click(self.first_checkbox)
-        self.wait_and_sleep_to_click(self.third_checkbox)
+        time.sleep(5)
+        self.scroll_to_element(self.select_none)
+        self.js_click(self.select_none)
+        time.sleep(5)
+        self.wait_to_click(self.first_checkbox)
+        time.sleep(2)
+        self.wait_to_click(self.third_checkbox)
+        time.sleep(5)
         # saving export
-        self.click(self.export_settings_create)
+        self.scroll_to_bottom()
+        self.js_click(self.export_settings_create)
         print("Odata Case Feed created!!")
+        time.sleep(20)
         self.driver.refresh()
         self.wait_and_sleep_to_click(self.copy_odata_link_btn_case)
         self.get_url_paste_browser(username, password, "cases")

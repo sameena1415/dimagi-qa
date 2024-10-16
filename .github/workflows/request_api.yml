@@ -27,6 +27,7 @@ on:
 jobs:
   set_matrix:
     runs-on: ubuntu-latest
+    if: ${{ !(github.event_name == 'repository_dispatch' && github.event.client_payload.environment == 'staging') }}
     outputs:
       matrix: ${{ steps.set-matrix-schedule.outputs.matrix || steps.set-matrix-deploy.outputs.matrix || steps.set-matrix-manual.outputs.matrix || steps.set-matrix-default.outputs.matrix }}
     steps:
