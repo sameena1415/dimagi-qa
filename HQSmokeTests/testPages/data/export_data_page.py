@@ -65,7 +65,7 @@ class ExportDataPage(BasePage):
         self.add_export_button = (By.XPATH, "//a[@href='#createExportOptionsModal']")
         self.add_export_conf = (By.XPATH, "//button[@data-bind='visible: showSubmit, disable: disableSubmit']")
         self.export_name = (By.XPATH, '//*[@id="export-name"]')
-        self.export_settings_create = (By.XPATH, "//button[@class='btn btn-lg btn-primary']")
+        self.export_settings_create = (By.XPATH, "//button[@type='submit']//span[.='Save']")
         self.date_range = (By.ID, "id_date_range")
         self.case_owner = (By.XPATH, "//span[@class='select2-selection select2-selection--multiple']")
 
@@ -148,8 +148,7 @@ class ExportDataPage(BasePage):
             By.XPATH,
             "//div[./span[text()='" + UserData.odata_feed_form + "']]/following::div[@class='input-group']/input")
         self.copy_odata_link_btn_case = (
-            By.XPATH,
-            "//div[./span[text()='" + UserData.odata_feed_case + "']]/following::div[@class='input-group']//a")
+            By.XPATH, "//*[contains(@data-bind,'hasEmailedExport')][.//span[text()='" + UserData.odata_feed_case + "']]//following-sibling::div/*[contains(@data-bind,'click: copyLinkRequested')]//i")
         self.copy_odata_link_case = (
             By.XPATH,
             "//div[./span[text()='" + UserData.odata_feed_case + "']]/following::div[@class='input-group']/input")
@@ -483,12 +482,19 @@ class ExportDataPage(BasePage):
         self.wait_for_element(self.export_name, 200)
         self.wait_to_clear_and_send_keys(self.export_name, UserData.odata_feed_case)
         # selcting first three property
-        self.wait_and_sleep_to_click(self.select_none)
-        self.wait_and_sleep_to_click(self.first_checkbox)
-        self.wait_and_sleep_to_click(self.third_checkbox)
+        time.sleep(5)
+        self.scroll_to_element(self.select_none)
+        self.js_click(self.select_none)
+        time.sleep(5)
+        self.wait_to_click(self.first_checkbox)
+        time.sleep(2)
+        self.wait_to_click(self.third_checkbox)
+        time.sleep(5)
         # saving export
-        self.click(self.export_settings_create)
+        self.scroll_to_bottom()
+        self.js_click(self.export_settings_create)
         print("Odata Case Feed created!!")
+        time.sleep(20)
         self.driver.refresh()
         self.wait_and_sleep_to_click(self.copy_odata_link_btn_case)
         self.get_url_paste_browser(username, password, "cases")
