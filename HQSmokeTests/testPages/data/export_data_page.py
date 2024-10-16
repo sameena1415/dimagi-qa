@@ -65,7 +65,7 @@ class ExportDataPage(BasePage):
         self.add_export_button = (By.XPATH, "//a[@href='#createExportOptionsModal']")
         self.add_export_conf = (By.XPATH, "//button[@data-bind='visible: showSubmit, disable: disableSubmit']")
         self.export_name = (By.XPATH, '//*[@id="export-name"]')
-        self.export_settings_create = (By.XPATH, "//button[@type='submit']//span[.='Save']")
+        self.export_settings_create = (By.XPATH, "//button[@type='submit'][contains(@data-bind,'save')]")
         self.date_range = (By.ID, "id_date_range")
         self.case_owner = (By.XPATH, "//span[@class='select2-selection select2-selection--multiple']")
 
