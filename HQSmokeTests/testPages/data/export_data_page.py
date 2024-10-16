@@ -114,7 +114,7 @@ class ExportDataPage(BasePage):
         self.download_dse_case = (By.XPATH,
                                   "//h4[.//span[.='" + UserData.case_export_name_dse + "']]/following-sibling::div//*[./i[contains(@class,'fa-cloud')]]")
 
-        self.data_upload_msg = (By.XPATH, "//*[contains(text(),'Data update complete')]")
+        self.data_upload_msg = (By.XPATH, "//div[contains(@class,'success')]")
         self.data_upload_msg_form = (By.XPATH,
                                      "//h4[.//span[.='" + UserData.form_export_name_dse + "']]/following-sibling::div//*[contains(text(),'Data update complete')]")
         self.data_upload_msg_case = (By.XPATH,
@@ -143,7 +143,7 @@ class ExportDataPage(BasePage):
         self.powerBI_tab_int = (By.LINK_TEXT, 'PowerBi/Tableau Integration')
         self.copy_odata_link_btn_form = (
             By.XPATH,
-            "//div[./span[text()='" + UserData.odata_feed_form + "']]/following::div[@class='input-group']//a")
+            "//*[contains(@data-bind,'hasEmailedExport')][.//span[text()='" + UserData.odata_feed_form + "']]//following-sibling::div/*[contains(@data-bind,'click: copyLinkRequested')]//i")
         self.copy_odata_link_form = (
             By.XPATH,
             "//div[./span[text()='" + UserData.odata_feed_form + "']]/following::div[@class='input-group']/input")
@@ -387,10 +387,12 @@ class ExportDataPage(BasePage):
         self.scroll_to_bottom()
         self.js_click(self.export_settings_create)
         print("Dashboard Form Feed created!!")
+        time.sleep(10)
         self.wait_and_sleep_to_click(self.update_data)
         self.wait_till_progress_completes("integration")
         self.wait_and_sleep_to_click(self.update_data_conf)
         assert self.is_visible_and_displayed(self.data_upload_msg), "Export not completed!"
+        time.sleep(10)
         self.driver.refresh()
 
     # Test Case - 26 - Excel Dashboard Integration, case
@@ -416,10 +418,12 @@ class ExportDataPage(BasePage):
         self.scroll_to_bottom()
         self.js_click(self.export_settings_create)
         print("Dashboard Form Feed created!!")
+        time.sleep(10)
         self.wait_and_sleep_to_click(self.update_data)
         self.wait_till_progress_completes("integration")
         self.wait_and_sleep_to_click(self.update_data_conf)
         assert self.is_visible_and_displayed(self.data_upload_msg), "Export not completed!"
+        time.sleep(10)
         self.driver.refresh()
 
     def check_feed_link(self):
