@@ -146,12 +146,12 @@ class ExportDataPage(BasePage):
             "//*[contains(@data-bind,'hasEmailedExport')][.//span[text()='" + UserData.odata_feed_form + "']]//following-sibling::div/*[contains(@data-bind,'click: copyLinkRequested')]//i")
         self.copy_odata_link_form = (
             By.XPATH,
-            "//div[./span[text()='" + UserData.odata_feed_form + "']]/following::div[@class='input-group']/input")
+            "//*[contains(@data-bind,'hasEmailedExport')][.//span[text()='" + UserData.odata_feed_form + "']]/following-sibling::div[@class='input-group']/input[contains(@data-bind,'showLink')]")
         self.copy_odata_link_btn_case = (
             By.XPATH, "//*[contains(@data-bind,'hasEmailedExport')][.//span[text()='" + UserData.odata_feed_case + "']]//following-sibling::div/*[contains(@data-bind,'click: copyLinkRequested')]//i")
         self.copy_odata_link_case = (
             By.XPATH,
-            "//div[./span[text()='" + UserData.odata_feed_case + "']]/following::div[@class='input-group']/input")
+            "//*[contains(@data-bind,'hasEmailedExport')][.//span[text()='" + UserData.odata_feed_case + "']]/following-sibling::div[@class='input-group']/input[contains(@data-bind,'showLink')]")
 
         self.edit_button_case = (By.XPATH,
                                  "(//span[contains(text(), 'Copy & Edit Feed')])")
@@ -464,7 +464,8 @@ class ExportDataPage(BasePage):
         self.wait_and_sleep_to_click(self.add_export_conf)
         print("Odata form Feed added!!")
         self.wait_for_element(self.export_name, 200)
-        self.wait_to_clear_and_send_keys(self.export_name, UserData.odata_feed_form)
+        self.clear(self.export_name)
+        self.send_keys(self.export_name, UserData.odata_feed_form+Keys.TAB)
         time.sleep(5)
         # saving export
         self.scroll_to_bottom()
