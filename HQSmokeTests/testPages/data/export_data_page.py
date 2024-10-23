@@ -123,8 +123,8 @@ class ExportDataPage(BasePage):
 
         # Excel Dashboard Integrations, form, case
         self.export_excel_dash_int = (By.LINK_TEXT, 'Excel Dashboard Integration')
-        self.update_data = (By.XPATH, "//button[@data-toggle='modal' or @data-bs-toggle='modal'][1]")
-        self.update_data_conf = (By.XPATH, "//button[@data-bind='click: emailedExport.updateData']")
+        self.update_data = "//*[contains(@data-bind,'hasEmailedExport')][.//span[.='{}']]/following-sibling::div//button[@data-toggle='modal' or @data-bs-toggle='modal']"
+        self.update_data_conf =  "//*[contains(@data-bind,'hasEmailedExport')][.//span[.='{}']]/following-sibling::div//button[@data-bind='click: emailedExport.updateData']"
 
         self.update_data_form = (By.XPATH,
                                  "//h4[.//span[.='" + UserData.form_export_name_dse + "']]/following-sibling::div//button[@data-toggle='modal'][1]")
@@ -135,9 +135,8 @@ class ExportDataPage(BasePage):
         self.update_data_conf_case = (By.XPATH,
                                       "//h4[.//span[.='" + UserData.case_export_name_dse + "']]/following-sibling::div//button[@data-bind='click: emailedExport.updateData']")
 
-        self.copy_dashfeed_link = (By.XPATH, "(//*[contains(@data-bind, 'copyLinkRequested')])[1]")
-        self.dashboard_feed_link = (
-            By.XPATH, "//span[@class='input-group-btn']//preceding::a[@class='btn btn-info btn-xs']")
+        self.copy_dashfeed_link = "//*[contains(@data-bind,'hasEmailedExport')][.//span[.='{}']]//following-sibling::div//*[contains(@data-bind, 'copyLinkRequested')]"
+        self.dashboard_feed_link = "//*[contains(@data-bind,'hasEmailedExport')][.//span[.='{}']]//following-sibling::div//input"
         self.check_data = (By.XPATH, "//*[contains(text(), '@odata.context')]")
 
         # Power BI / Tableau Integration, Form
@@ -385,6 +384,7 @@ class ExportDataPage(BasePage):
     # Test Case - 25 - Excel Dashboard Integration, form
     def excel_dashboard_integration_form(self):
         self.wait_and_sleep_to_click(self.export_excel_dash_int)
+        self.delete_bulk_exports()
         self.wait_and_sleep_to_click(self.add_export_button)
         time.sleep(100)
         self.is_visible_and_displayed(self.model, 200)
@@ -406,17 +406,19 @@ class ExportDataPage(BasePage):
         self.js_click(self.export_settings_create)
         print("Dashboard Form Feed created!!")
         time.sleep(10)
-        self.wait_and_sleep_to_click(self.update_data)
+        self.wait_and_sleep_to_click((By.XPATH, self.update_data.format(UserData.dashboard_feed_form)))
         self.wait_till_progress_completes("integration")
-        self.wait_and_sleep_to_click(self.update_data_conf)
+        self.wait_and_sleep_to_click((By.XPATH, self.update_data_conf.format(UserData.dashboard_feed_form)))
         assert self.is_visible_and_displayed(self.data_upload_msg), "Export not completed!"
         time.sleep(10)
         self.driver.refresh()
+        return UserData.dashboard_feed_form
 
     # Test Case - 26 - Excel Dashboard Integration, case
 
     def excel_dashboard_integration_case(self):
         self.wait_and_sleep_to_click(self.export_excel_dash_int)
+        self.delete_bulk_exports()
         self.wait_and_sleep_to_click(self.add_export_button)
         time.sleep(100)
         self.is_visible_and_displayed(self.model, 200)
@@ -439,17 +441,18 @@ class ExportDataPage(BasePage):
         self.js_click(self.export_settings_create)
         print("Dashboard Form Feed created!!")
         time.sleep(10)
-        self.wait_and_sleep_to_click(self.update_data)
+        self.wait_and_sleep_to_click((By.XPATH, self.update_data.format(UserData.dashboard_feed_case)))
         self.wait_till_progress_completes("integration")
-        self.wait_and_sleep_to_click(self.update_data_conf)
+        self.wait_and_sleep_to_click((By.XPATH, self.update_data_conf.format(UserData.dashboard_feed_case)))
         assert self.is_visible_and_displayed(self.data_upload_msg), "Export not completed!"
         time.sleep(10)
         self.driver.refresh()
+        return UserData.dashboard_feed_case
 
-    def check_feed_link(self):
+    def check_feed_link(self, name):
         try:
-            self.wait_and_sleep_to_click(self.copy_dashfeed_link)
-            dashboard_feed_link = self.get_attribute(self.dashboard_feed_link, "href")
+            self.wait_and_sleep_to_click((By.XPATH, self.copy_dashfeed_link.format(name)))
+            dashboard_feed_link = self.get_attribute((By.XPATH, self.dashboard_feed_link.format(name)), "value")
             print(dashboard_feed_link)
             # self.switch_to_new_tab()
             self.driver.get(dashboard_feed_link)
