@@ -315,7 +315,10 @@ class ExportDataPage(BasePage):
         self.wait_till_progress_completes("integration")
         try:
             assert self.is_present_and_displayed((By.XPATH, self.data_upload_msg_form.format(exported_file))), "Form/Case Export not completed!"
+            time.sleep(5)
             self.driver.refresh()
+            time.sleep(5)
+            self.wait_to_click(self.daily_saved_export_link)
             time.sleep(10)
             self.wait_to_click((By.XPATH, self.download_dse_form.format(exported_file)))
         except:
