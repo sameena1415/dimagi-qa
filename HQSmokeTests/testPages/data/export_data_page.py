@@ -108,33 +108,19 @@ class ExportDataPage(BasePage):
         # Daily Saved Export variables, form, case
         self.daily_saved_export_link = (By.LINK_TEXT, 'Daily Saved Exports')
         self.edit_form_case_export = (By.XPATH, "(//a[contains(@data-bind,'edit')])[1]")
-        self.create_DSE_checkbox = (By.XPATH, '//*[@id="daily-saved-export-checkbox"]')
+        self.create_DSE_checkbox = (By.XPATH, '//input[@id="daily-saved-export-checkbox"]')
         self.download_dse = (By.XPATH, "(//a[@class='btn btn-info btn-xs'])[1]")
-        self.download_dse_form = (By.XPATH,
-                                  "//h4[.//span[.='" + UserData.form_export_name_dse + "']]/following-sibling::div//*[./i[contains(@class,'fa-cloud')]]")
-        self.download_dse_case = (By.XPATH,
-                                  "//h4[.//span[.='" + UserData.case_export_name_dse + "']]/following-sibling::div//*[./i[contains(@class,'fa-cloud')]]")
-
+        self.download_dse_form = "//*[contains(@data-bind,'hasEmailedExport')][.//span[.='{}']]/following-sibling::div//*[./i[contains(@class,'fa-cloud')]]"
         self.data_upload_msg = (By.XPATH, "//div[contains(@class,'success')]")
-        self.data_upload_msg_form = (By.XPATH,
-                                     "//h4[.//span[.='" + UserData.form_export_name_dse + "']]/following-sibling::div//*[contains(text(),'Data update complete')]")
-        self.data_upload_msg_case = (By.XPATH,
-                                     "//h4[.//span[.='" + UserData.case_export_name_dse + "']]/following-sibling::div//*[contains(text(),'Data update complete')]")
+        self.data_upload_msg_form = "//*[contains(@data-bind,'hasEmailedExport')][.//span[.='{}']]/following-sibling::div//*[contains(text(),'Data update complete')]"
 
         # Excel Dashboard Integrations, form, case
         self.export_excel_dash_int = (By.LINK_TEXT, 'Excel Dashboard Integration')
         self.update_data = "//*[contains(@data-bind,'hasEmailedExport')][.//span[.='{}']]/following-sibling::div//button[@data-toggle='modal' or @data-bs-toggle='modal']"
         self.update_data_conf =  "//*[contains(@data-bind,'hasEmailedExport')][.//span[.='{}']]/following-sibling::div//button[@data-bind='click: emailedExport.updateData']"
 
-        self.update_data_form = (By.XPATH,
-                                 "//h4[.//span[.='" + UserData.form_export_name_dse + "']]/following-sibling::div//button[@data-toggle='modal'][1]")
-        self.update_data_conf_form = (By.XPATH,
-                                      "//h4[.//span[.='" + UserData.form_export_name_dse + "']]/following-sibling::div//button[@data-bind='click: emailedExport.updateData']")
-        self.update_data_case = (By.XPATH,
-                                 "//h4[.//span[.='" + UserData.case_export_name_dse + "']]/following-sibling::div//button[@data-toggle='modal'][1]")
-        self.update_data_conf_case = (By.XPATH,
-                                      "//h4[.//span[.='" + UserData.case_export_name_dse + "']]/following-sibling::div//button[@data-bind='click: emailedExport.updateData']")
-
+        self.update_data_form = "//*[contains(@data-bind,'hasEmailedExport')][.//span[.='pregnancy']]/following-sibling::div//button[@data-toggle='modal'][1]"
+        self.update_data_conf_form = "//*[contains(@data-bind,'hasEmailedExport')][.//span[.='pregnancy']]/following-sibling::div//button[@data-bind='click: emailedExport.updateData']"
         self.copy_dashfeed_link = "//*[contains(@data-bind,'hasEmailedExport')][.//span[.='{}']]//following-sibling::div//*[contains(@data-bind, 'copyLinkRequested')]"
         self.dashboard_feed_link = "//*[contains(@data-bind,'hasEmailedExport')][.//span[.='{}']]//following-sibling::div//input"
         self.check_data = (By.XPATH, "//*[contains(text(), '@odata.context')]")
@@ -315,30 +301,19 @@ class ExportDataPage(BasePage):
         print("SMS Export successful")
 
     def create_dse_and_download(self, exported_file, type):
-        self.wait_and_sleep_to_click(self.create_DSE_checkbox)
+        self.scroll_to_element(self.create_DSE_checkbox)
+        self.wait_to_click(self.create_DSE_checkbox)
         self.wait_and_sleep_to_click(self.export_settings_create)
-        if type == "form":
-            self.wait_and_sleep_to_click(self.update_data_form)
-            self.wait_and_sleep_to_click(self.update_data_conf_form)
-            self.wait_till_progress_completes("integration")
-            try:
-                assert self.is_present_and_displayed(self.data_upload_msg_form), "Form Export not completed!"
-                self.driver.refresh()
-                self.wait_to_click(self.download_dse_form)
-            except:
-                self.driver.refresh()
-                self.wait_and_sleep_to_click(self.download_dse_form)
-        elif type == "case":
-            self.wait_till_progress_completes("integration")
-            self.wait_and_sleep_to_click(self.update_data_case)
-            self.wait_and_sleep_to_click(self.update_data_conf_case)
-            try:
-                assert self.is_present_and_displayed(self.data_upload_msg_case), "Case Export not completed!"
-                self.driver.refresh()
-                self.wait_to_click(self.download_dse_case)
-            except:
-                self.driver.refresh()
-                self.wait_and_sleep_to_click(self.download_dse_case)
+        self.wait_and_sleep_to_click((By.XPATH, self.update_data_form.format(exported_file)))
+        self.wait_and_sleep_to_click((By.XPATH, self.update_data_conf_form.format(exported_file)))
+        self.wait_till_progress_completes("integration")
+        try:
+            assert self.is_present_and_displayed((By.XPATH, self.data_upload_msg_form.format(exported_file))), "Form/Case Export not completed!"
+            self.driver.refresh()
+            self.wait_to_click((By.XPATH, self.download_dse_form.format(exported_file)))
+        except:
+            self.driver.refresh()
+            self.wait_and_sleep_to_click((By.XPATH, self.download_dse_form.format(exported_file)))
         time.sleep(5)
         newest_file = latest_download_file()
         print("Newest:", newest_file)
@@ -363,8 +338,10 @@ class ExportDataPage(BasePage):
         self.wait_for_element(self.export_name, 200)
         self.clear(self.export_name)
         self.send_keys(self.export_name, UserData.form_export_name_dse+Keys.TAB)
+        time.sleep(5)
         self.create_dse_and_download(UserData.form_export_name_dse, "form")
         print("DSE Form Export successful")
+        return UserData.form_export_name_dse
 
     # Test Case 24_b - Daily saved export, case
     def daily_saved_exports_case(self):
@@ -378,6 +355,7 @@ class ExportDataPage(BasePage):
         self.wait_for_element(self.export_name, 200)
         self.clear(self.export_name)
         self.send_keys(self.export_name, UserData.case_export_name_dse+Keys.TAB)
+        time.sleep(5)
         self.create_dse_and_download(UserData.case_export_name_dse, "case")
         print("DSE Case Export successful")
 
@@ -412,6 +390,7 @@ class ExportDataPage(BasePage):
         assert self.is_visible_and_displayed(self.data_upload_msg), "Export not completed!"
         time.sleep(10)
         self.driver.refresh()
+        time.sleep(10)
         return UserData.dashboard_feed_form
 
     # Test Case - 26 - Excel Dashboard Integration, case
@@ -447,6 +426,7 @@ class ExportDataPage(BasePage):
         assert self.is_visible_and_displayed(self.data_upload_msg), "Export not completed!"
         time.sleep(10)
         self.driver.refresh()
+        time.sleep(10)
         return UserData.dashboard_feed_case
 
     def check_feed_link(self, name):
