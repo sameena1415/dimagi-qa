@@ -49,6 +49,7 @@ class ImportCasesPage(BasePage):
         time.sleep(5)
         self.wait_for_element(self.next_step)
         self.wait_to_click(self.next_step)
+        time.sleep(5)
         if self.is_present_and_displayed(self.alert_msg, 20):
             print("Error message displayed on importing excel. Repeating process..")
             self.driver.refresh()
@@ -64,9 +65,9 @@ class ImportCasesPage(BasePage):
             time.sleep(5)
             self.wait_for_element(self.next_step)
             self.wait_to_click(self.next_step)
+            time.sleep(5)
         else:
             print("No error present")
-        time.sleep(5)
         self.wait_for_element(self.confirm_import)
         self.scroll_to_element(self.confirm_import)
         time.sleep(2)
