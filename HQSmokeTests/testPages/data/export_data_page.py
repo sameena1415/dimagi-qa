@@ -110,14 +110,14 @@ class ExportDataPage(BasePage):
         self.edit_form_case_export = (By.XPATH, "(//a[contains(@data-bind,'edit')])[1]")
         self.create_DSE_checkbox = (By.XPATH, '//input[@id="daily-saved-export-checkbox"]')
         self.download_dse = (By.XPATH, "(//a[@class='btn btn-info btn-xs'])[1]")
-        self.download_dse_form = "//*[contains(@data-bind,'hasEmailedExport')][.//span[.='{}']]/following-sibling::div//*[./i[contains(@class,'fa-cloud')]]"
+        self.download_dse_form = "(//*[contains(@data-bind,'hasEmailedExport')][.//span[.='{}']]/following-sibling::div//*[./i[contains(@class,'fa-cloud')]])[1]"
         self.data_upload_msg = (By.XPATH, "//div[contains(@class,'success')]")
         self.data_upload_msg_form = "//*[contains(@data-bind,'hasEmailedExport')][.//span[.='{}']]/following-sibling::div//*[contains(text(),'Data update complete')]"
 
         # Excel Dashboard Integrations, form, case
         self.export_excel_dash_int = (By.LINK_TEXT, 'Excel Dashboard Integration')
-        self.update_data = "//*[contains(@data-bind,'hasEmailedExport')][.//span[.='{}']]/following-sibling::div//button[@data-toggle='modal' or @data-bs-toggle='modal']"
-        self.update_data_conf =  "//*[contains(@data-bind,'hasEmailedExport')][.//span[.='{}']]/following-sibling::div//button[@data-bind='click: emailedExport.updateData']"
+        self.update_data = "(//*[contains(@data-bind,'hasEmailedExport')][.//span[.='{}']]/following-sibling::div//button[contains(@data-bind,'emailedExport.canUpdateData')])[1]"
+        self.update_data_conf =  "(//*[contains(@data-bind,'hasEmailedExport')][.//span[.='{}']]/following-sibling::div//button[contains(@data-bind,'click: emailedExport.updateData')])[1]"
 
         self.update_data_form = "//*[contains(@data-bind,'hasEmailedExport')][.//span[.='{}']]/following-sibling::div//button[@data-toggle='modal'][1]"
         self.update_data_conf_form = "//*[contains(@data-bind,'hasEmailedExport')][.//span[.='{}']]/following-sibling::div//button[@data-bind='click: emailedExport.updateData']"
@@ -156,7 +156,7 @@ class ExportDataPage(BasePage):
         self.alert_button_accept = (By.ID, "hs-eu-confirmation-button")
 
         # Export Modal
-        self.app_type = (By.ID, "id_app_type")
+        self.app_type = (By.XPATH, "//select[@name='app_type']")
         self.application = (By.ID, "id_application")
         self.module = (By.ID, "id_module")
         self.form = (By.ID, "id_form")
@@ -315,11 +315,13 @@ class ExportDataPage(BasePage):
         self.wait_till_progress_completes("integration")
         try:
             assert self.is_present_and_displayed((By.XPATH, self.data_upload_msg_form.format(exported_file))), "Form/Case Export not completed!"
+            print("Data Upload message is displayed")
             time.sleep(5)
             self.driver.refresh()
             time.sleep(5)
             self.wait_to_click(self.daily_saved_export_link)
             time.sleep(10)
+            self.wait_for_element((By.XPATH, self.update_data.format(exported_file)),50)
             self.wait_to_click((By.XPATH, self.download_dse_form.format(exported_file)))
         except:
             self.driver.refresh()
