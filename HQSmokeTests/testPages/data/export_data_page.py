@@ -73,7 +73,7 @@ class ExportDataPage(BasePage):
         # Export Form and Case data variables
         self.export_form_data_link = (By.LINK_TEXT, 'Export Form Data')
         self.export_case_data_link = (By.LINK_TEXT, 'Export Case Data')
-        self.export_form_case_data_button = (By.XPATH, "(//a[@class='btn btn-primary'])[2]")
+        self.export_form_case_data_button = "//td[2][//*[contains(@data-bind,'hasEmailedExport')][.//span[.='{}']]]//following-sibling::td//a[contains(.,'Export')]"
         self.web_users_option = (By.XPATH, "//li/span[.='[Web Users]']")
         self.all_data_option = (By.XPATH, "//li/span[.='[All Data]']")
         self.users_field = (By.XPATH, "(//textarea[@class='select2-search__field'])[1]")
@@ -186,8 +186,9 @@ class ExportDataPage(BasePage):
             self.click(self.close_date_picker)
         self.wait_and_sleep_to_click(self.apply, timeout=10)
 
-    def prepare_and_download_export(self, flag=None):
-        self.wait_and_sleep_to_click(self.export_form_case_data_button)
+    def prepare_and_download_export(self, name='', flag=None):
+        if name != '':
+            self.wait_and_sleep_to_click((By.XPATH, self.export_form_case_data_button.format(name)))
         self.date_filter()
         if flag == None:
             self.send_keys(self.users_field, UserData.web_user)
@@ -253,9 +254,11 @@ class ExportDataPage(BasePage):
         self.js_click(self.export_settings_create)
         print("Export created!!")
         time.sleep(10)
+        return UserData.form_export_name
 
-    def form_exports(self):
-        self.prepare_and_download_export()
+
+    def form_exports(self, name):
+        self.prepare_and_download_export(name)
         self.find_data_by_id_and_verify('form.womans_name', 'formid', UserData.form_export_name,
                                         self.woman_form_name_HQ
                                         )
@@ -284,17 +287,18 @@ class ExportDataPage(BasePage):
         self.js_click(self.export_settings_create)
         print("Export created!!")
         time.sleep(10)
+        return UserData.case_export_name
 
-    def case_exports(self):
+    def case_exports(self, name):
         self.wait_and_sleep_to_click(self.export_case_data_link)
-        self.prepare_and_download_export()
+        self.prepare_and_download_export(name)
         self.find_data_by_id_and_verify('name', 'caseid', UserData.case_export_name, self.woman_case_name_HQ)
 
     # Test Case 21 - Export SMS Messages
 
     def sms_exports(self):
         self.wait_and_sleep_to_click(self.export_sms_link)
-        self.prepare_and_download_export("no")
+        self.prepare_and_download_export(flag="no")
         newest_file = latest_download_file()
         print("Newest:", newest_file)
         self.assert_downloaded_file(newest_file, "Messages")
@@ -309,9 +313,13 @@ class ExportDataPage(BasePage):
         time.sleep(5)
         self.js_click(self.export_settings_create)
         time.sleep(10)
-        self.wait_for_element((By.XPATH, self.update_data.format(exported_file)))
-        self.wait_to_click((By.XPATH, self.update_data.format(exported_file)))
-        self.wait_to_click((By.XPATH, self.update_data_conf.format(exported_file)))
+        self.wait_for_element((By.XPATH, self.update_data.format(exported_file)), 50)
+        self.scroll_to_element((By.XPATH, self.update_data.format(exported_file)))
+        self.js_click((By.XPATH, self.update_data.format(exported_file)))
+        time.sleep(5)
+        self.wait_for_element((By.XPATH, self.update_data.format(exported_file)), 50)
+        self.scroll_to_element((By.XPATH, self.update_data.format(exported_file)))
+        self.js_click((By.XPATH, self.update_data_conf.format(exported_file)))
         self.wait_till_progress_completes("integration")
         try:
             assert self.is_present_and_displayed((By.XPATH, self.data_upload_msg_form.format(exported_file))), "Form/Case Export not completed!"
@@ -341,6 +349,7 @@ class ExportDataPage(BasePage):
 
     # Test Case 24_a - Daily saved export, form
     def daily_saved_exports_form(self):
+        time.sleep(5)
         self.wait_to_click(self.export_form_data_link)
         time.sleep(20)
         try:
@@ -358,6 +367,7 @@ class ExportDataPage(BasePage):
 
     # Test Case 24_b - Daily saved export, case
     def daily_saved_exports_case(self):
+        time.sleep(5)
         self.wait_to_click(self.export_case_data_link)
         time.sleep(20)
         try:
@@ -712,8 +722,8 @@ class ExportDataPage(BasePage):
         assert int(rows_count) >= 2000, "Export is not showing all the data"
         print("Export is successfully loading more than 2000 rows of data")
 
-    def download_export_without_condition(self, type):
-        self.wait_and_sleep_to_click(self.export_form_case_data_button)
+    def download_export_without_condition(self, name, type):
+        self.wait_and_sleep_to_click((By.XPATH, self.export_form_case_data_button.format(name)))
         self.wait_for_element(self.prepare_export_button)
         if type == "form":
             if self.is_present(self.web_users_option):
@@ -766,7 +776,7 @@ class ExportDataPage(BasePage):
         self.js_click(self.export_settings_create)
         print("Export created!!")
         time.sleep(10)
-        self.download_export_without_condition("case")
+        self.download_export_without_condition(UserData.p1p2_case_export_name, "case")
         newest_file = latest_download_file()
         print("Newest file:" + newest_file)
         self.assert_downloaded_file(newest_file, UserData.p1p2_case_export_name)

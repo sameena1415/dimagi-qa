@@ -12,8 +12,8 @@ def test_case_21_form_exports(driver, settings):
     home = HomePage(driver, settings)
     home.data_menu()
     export = ExportDataPage(driver)
-    export.add_form_exports()
-    export.form_exports()
+    name = export.add_form_exports()
+    export.form_exports(name)
 
 
 @pytest.mark.data
@@ -22,8 +22,8 @@ def test_case_21_case_exports(driver, settings):
     home = HomePage(driver, settings)
     home.data_menu()
     export = ExportDataPage(driver)
-    export.add_case_exports()
-    export.case_exports()
+    name = export.add_case_exports()
+    export.case_exports(name)
 
 
 @pytest.mark.data
@@ -45,6 +45,7 @@ def test_case_24_daily_saved_exports(driver, settings):
     export = ExportDataPage(driver)
     export.cleanup_existing_dse()
     export.daily_saved_exports_form()
+    home.data_menu()
     export.daily_saved_exports_case()
 
 
