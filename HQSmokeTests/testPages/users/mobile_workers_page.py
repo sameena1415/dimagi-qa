@@ -537,9 +537,13 @@ class MobileWorkerPage(BasePage):
         self.js_click(self.delete_profile_item)
         time.sleep(2)
         self.wait_to_click(self.done_button)
-        time.sleep(2)
-        self.wait_to_click(self.profile_delete_button)
-        self.wait_to_click(self.confirm_user_field_delete)
+        time.sleep(5)
+        self.scroll_to_element(self.profile_delete_button)
+        self.js_click(self.profile_delete_button)
+        time.sleep(3)
+        self.scroll_to_element(self.confirm_user_field_delete)
+        self.js_click(self.confirm_user_field_delete)
+        time.sleep(3)
 
     def delete_profile(self):
         try:
