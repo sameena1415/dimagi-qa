@@ -75,29 +75,29 @@ class OrganisationStructurePage(BasePage):
         self.duplicate_msg_xpath = (By.XPATH, "//div[@class='alert alert-danger']")
         self.org_level_menu_link_text = (By.LINK_TEXT, "Organization Levels")
         self.new_org_level_btn_xpath = (By.XPATH, "//button[@data-bind='click: new_loctype']")
-        self.org_level_value_xpath = (By.XPATH, "(//input[@data-bind='value: name'])[last()]")
-        self.save_btn_xpath = (By.XPATH, "//button[@type='submit' and contains(@class,'pull-right')]")
-        self.save_btn_delete = (By.XPATH, "//button[contains(@class,'pull-right')]")
+        self.org_level_value_xpath = (By.XPATH, "(//input[contains(@data-bind, 'value: name')])[last()]")
+        self.save_btn_xpath = (By.XPATH, "//button[@type='submit' and contains(.,'Save')]")
+        self.delete_loc_level = "(//td[.//input[@class='loctype_name form-control']]/following-sibling::td//i[contains(@class,'trash-can')])[{}]"
         self.download_loc_btn = (By.LINK_TEXT, "Download Organization Structure")
         self.upload_loc_btn = (By.LINK_TEXT, "Bulk Upload")
         self.upload = (By.XPATH, "//button[@class='btn btn-primary disable-on-submit']")
         self.import_complete = (By.XPATH, "//legend[text()='Import complete.']")
         self.download_filter = (By.XPATH, "//button[@data-bind='html: buttonHTML']")
         self.bulk_upload_id = (By.ID, "id_bulk_upload_file")
-        self.test_locations = (By.XPATH, "//span[@class='loc_name']")
+        self.test_locations = (By.XPATH, "//span[contains(@class, 'loc_name')]")
         self.test_location = (By.XPATH, "(//span[contains(text(),'Test Location [DO NOT DELETE!!!')])[1]")
         self.archive_buttton = (By.XPATH,
                                 "//div[.//span[.='Test Location [DO NOT DELETE!!!]']]/preceding-sibling::div/button[normalize-space()= 'Archive']")
         self.archive_button_popup = (By.XPATH, "//button[@data-bind='click: archive_fn']")
         self.archive_success_message = (By.XPATH, "//span[@data-bind='html: message']")
-        self.show_arhcived_locations_button = (By.XPATH, "//a[@class='btn btn-default pull-right'][contains(.,'Archived Locations')]")
-        self.show_active_locations = (By.XPATH, "//a[@class='btn btn-default pull-right'][contains(.,'Active Locations')]")
+        self.show_arhcived_locations_button = (By.XPATH, "//a[@href='?show_inactive=true'][contains(.,'Archived Locations')]")
+        self.show_active_locations = (By.XPATH, "//a[@href='?'][contains(.,'Active Locations')]")
         self.unarchive_button = (By.XPATH,
                                  '''//div[.//span[.='Test Location [DO NOT DELETE!!!]']]/preceding-sibling::div/button[normalize-space()= "Unarchive"]''')
 
         # cleanup
         self.delete_location_created = (
-            By.XPATH, "//span[text ()='" + self.new_location_name + "']//preceding::button[@class='btn btn-danger'][1]")
+            By.XPATH, "//span[text ()='" + self.new_location_name + "']//preceding::button[1]/i[contains(@class, 'trash-can')]")
         self.delete_confirm = (By.XPATH, '//input[@data-bind ="value: signOff, valueUpdate: \'input\'"]')
         self.delete_confirm_button = (
             By.XPATH, "//button[@data-bind ='click: delete_fn, css: {disabled: !(signOff() == count)}']")
@@ -223,14 +223,16 @@ class OrganisationStructurePage(BasePage):
         if len(list_org_level) > 0:
             for i in range(len(list_org_level))[::-1]:
                 text = list_org_level[i].get_attribute("value")
-                print(text)
+                print(text, i)
                 if "loc_level_" in text:
-                    self.driver.find_element(By.XPATH,
-                                             "(//td[.//input[@class='loctype_name form-control']]/following-sibling::td//button[@class='btn btn-danger'])[" + str(
-                                                 i + 1) + "]").click()
-                    self.wait_to_click(self.save_btn_delete)
+                    self.scroll_to_element((By.XPATH, self.delete_loc_level.format(str(i + 1))))
+                    self.js_click((By.XPATH, self.delete_loc_level.format(str(i+1))))
+                    time.sleep(2)
+                    self.scroll_to_element(self.save_btn_xpath)
+                    self.js_click(self.save_btn_xpath)
+                    time.sleep(2)
                     self.driver.refresh()
-                    time.sleep(3)
+                    time.sleep(7)
                     list_org_level = self.driver.find_elements(By.XPATH, "//input[@class='loctype_name form-control']")
                 else:
                     print("Not a text location")

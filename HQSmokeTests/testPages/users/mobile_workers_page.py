@@ -217,7 +217,7 @@ class MobileWorkerPage(BasePage):
     def click_create(self, username):
         self.wait_to_click(self.create_button_xpath)
         time.sleep(5)
-        self.is_present_and_displayed(self.NEW)
+        self.is_present_and_displayed(self.NEW, 200)
         new_user_created = self.get_text(self.new_user_created_xpath)
         print("Username is : " + new_user_created)
         assert username == new_user_created, "Could find the new mobile worker created"
@@ -239,8 +239,8 @@ class MobileWorkerPage(BasePage):
         df = pd.DataFrame(data)
         df = df.drop(columns="phone-number 1")
         df = df.query("username == '" + user + "'")
-        print(df)
         df.loc[(df['username'] == user), 'user_profile'] = UserData.p1p2_profile
+        print(df)
         df.to_excel(path, sheet_name='users', index=False)
 
     def remove_role_in_downloaded_file(self, newest_file, user):
@@ -485,6 +485,7 @@ class MobileWorkerPage(BasePage):
             print("TIMEOUT ERROR: Could not upload file")
         assert self.is_present_and_displayed(self.import_complete), "Upload Not Completed! Taking Longer to process.."
         print("File uploaded successfully")
+        time.sleep(10)
 
     def click_profile(self):
         self.wait_to_click(self.profile_tab)
@@ -537,9 +538,13 @@ class MobileWorkerPage(BasePage):
         self.js_click(self.delete_profile_item)
         time.sleep(2)
         self.wait_to_click(self.done_button)
-        time.sleep(2)
-        self.wait_to_click(self.profile_delete_button)
-        self.wait_to_click(self.confirm_user_field_delete)
+        time.sleep(5)
+        self.scroll_to_element(self.profile_delete_button)
+        self.js_click(self.profile_delete_button)
+        time.sleep(3)
+        self.scroll_to_element(self.confirm_user_field_delete)
+        self.js_click(self.confirm_user_field_delete)
+        time.sleep(3)
 
     def delete_profile(self):
         try:
@@ -571,7 +576,7 @@ class MobileWorkerPage(BasePage):
         self.mobile_worker_enter_password(fetch_random_string())
         self.wait_to_click(self.create_button_xpath)
         time.sleep(4)
-        self.is_present_and_displayed(self.NEW)
+        self.is_present_and_displayed(self.NEW, 100)
         new_user_created = self.get_text(self.new_user_created_xpath)
         print("Username is : " + new_user_created)
         assert user == new_user_created, "Could find the new mobile worker created"
