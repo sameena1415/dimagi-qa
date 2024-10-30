@@ -186,9 +186,12 @@ class ExportDataPage(BasePage):
             self.click(self.close_date_picker)
         self.wait_and_sleep_to_click(self.apply, timeout=10)
 
-    def prepare_and_download_export(self, name='', flag=None):
-        if name != '':
-            self.wait_and_sleep_to_click((By.XPATH, self.export_form_case_data_button.format(name)))
+    def prepare_and_download_export(self, name, flag=None):
+        time.sleep(5)
+        if name != 'sms':
+            self.wait_for_element((By.XPATH, self.export_form_case_data_button.format(name)), 200)
+            self.js_click((By.XPATH, self.export_form_case_data_button.format(name)))
+            time.sleep(10)
         self.date_filter()
         if flag == None:
             self.send_keys(self.users_field, UserData.web_user)
@@ -258,7 +261,7 @@ class ExportDataPage(BasePage):
 
 
     def form_exports(self, name):
-        self.prepare_and_download_export(name)
+        self.prepare_and_download_export(name=name)
         self.find_data_by_id_and_verify('form.womans_name', 'formid', UserData.form_export_name,
                                         self.woman_form_name_HQ
                                         )
@@ -290,15 +293,15 @@ class ExportDataPage(BasePage):
         return UserData.case_export_name
 
     def case_exports(self, name):
-        self.wait_and_sleep_to_click(self.export_case_data_link)
-        self.prepare_and_download_export(name)
+        print(name)
+        self.prepare_and_download_export(name=name, flag=None)
         self.find_data_by_id_and_verify('name', 'caseid', UserData.case_export_name, self.woman_case_name_HQ)
 
     # Test Case 21 - Export SMS Messages
 
     def sms_exports(self):
         self.wait_and_sleep_to_click(self.export_sms_link)
-        self.prepare_and_download_export(flag="no")
+        self.prepare_and_download_export(name='sms', flag="no")
         newest_file = latest_download_file()
         print("Newest:", newest_file)
         self.assert_downloaded_file(newest_file, "Messages")
@@ -306,7 +309,7 @@ class ExportDataPage(BasePage):
 
     def create_dse_and_download(self, exported_file, type):
         self.scroll_to_element(self.create_DSE_checkbox)
-        self.wait_to_click(self.create_DSE_checkbox)
+        self.js_click(self.create_DSE_checkbox)
         time.sleep(5)
         # saving export
         self.scroll_to_bottom()
@@ -317,8 +320,7 @@ class ExportDataPage(BasePage):
         self.scroll_to_element((By.XPATH, self.update_data.format(exported_file)))
         self.js_click((By.XPATH, self.update_data.format(exported_file)))
         time.sleep(5)
-        self.wait_for_element((By.XPATH, self.update_data.format(exported_file)), 50)
-        self.scroll_to_element((By.XPATH, self.update_data.format(exported_file)))
+        self.wait_for_element((By.XPATH, self.update_data_conf.format(exported_file)), 50)
         self.js_click((By.XPATH, self.update_data_conf.format(exported_file)))
         self.wait_till_progress_completes("integration")
         try:
@@ -669,25 +671,6 @@ class ExportDataPage(BasePage):
             print(duplicate)
         else:
             print("No duplicate data present")
-
-    def add_case_exports(self):
-        self.wait_to_click(self.export_case_data_link)
-        self.delete_bulk_exports()
-        self.wait_and_sleep_to_click(self.add_export_button)
-        time.sleep(100)
-        self.is_visible_and_displayed(self.case_type, 200)
-        self.wait_for_element(self.case_type, 200)
-        self.select_by_text(self.case, UserData.case_reassign)
-        self.wait_to_click(self.add_export_conf)
-        self.wait_for_element(self.export_name, 200)
-        self.clear(self.export_name)
-        self.send_keys(self.export_name, UserData.case_export_name+Keys.TAB)
-        time.sleep(5)
-        self.scroll_to_bottom()
-        time.sleep(5)
-        self.js_click(self.export_settings_create)
-        print("Export created!!")
-        time.sleep(10)
 
     def add_form_exports_reassign(self):
         self.delete_bulk_exports()
