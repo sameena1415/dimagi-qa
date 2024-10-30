@@ -322,18 +322,20 @@ class ExportDataPage(BasePage):
         self.js_click((By.XPATH, self.update_data_conf.format(exported_file)))
         self.wait_till_progress_completes("integration")
         try:
-            assert self.is_present_and_displayed((By.XPATH, self.data_upload_msg_form.format(exported_file))), "Form/Case Export not completed!"
-            print("Data Upload message is displayed")
+            assert self.is_present_and_displayed((By.XPATH, self.data_upload_msg_form.format(exported_file)), 150), "Form/Case Export not completed!"
+            text = self.get_text((By.XPATH, self.data_upload_msg_form.format(exported_file)))
+            print("Data Upload message is displayed as: ", text)
             time.sleep(5)
             self.driver.refresh()
             time.sleep(5)
             self.wait_to_click(self.daily_saved_export_link)
             time.sleep(10)
-            self.wait_for_element((By.XPATH, self.update_data.format(exported_file)),50)
+            self.wait_for_element((By.XPATH, self.download_dse_form.format(exported_file)), 50)
             self.wait_to_click((By.XPATH, self.download_dse_form.format(exported_file)))
         except:
             self.driver.refresh()
             time.sleep(10)
+            self.wait_for_element((By.XPATH, self.download_dse_form.format(exported_file)), 50)
             self.wait_to_click((By.XPATH, self.download_dse_form.format(exported_file)))
         time.sleep(5)
         newest_file = latest_download_file()
@@ -363,7 +365,6 @@ class ExportDataPage(BasePage):
         time.sleep(5)
         self.create_dse_and_download(UserData.form_export_name_dse, "form")
         print("DSE Form Export successful")
-        return UserData.form_export_name_dse
 
     # Test Case 24_b - Daily saved export, case
     def daily_saved_exports_case(self):

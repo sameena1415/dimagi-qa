@@ -239,8 +239,8 @@ class MobileWorkerPage(BasePage):
         df = pd.DataFrame(data)
         df = df.drop(columns="phone-number 1")
         df = df.query("username == '" + user + "'")
-        print(df)
         df.loc[(df['username'] == user), 'user_profile'] = UserData.p1p2_profile
+        print(df)
         df.to_excel(path, sheet_name='users', index=False)
 
     def remove_role_in_downloaded_file(self, newest_file, user):
@@ -485,6 +485,7 @@ class MobileWorkerPage(BasePage):
             print("TIMEOUT ERROR: Could not upload file")
         assert self.is_present_and_displayed(self.import_complete), "Upload Not Completed! Taking Longer to process.."
         print("File uploaded successfully")
+        time.sleep(10)
 
     def click_profile(self):
         self.wait_to_click(self.profile_tab)
