@@ -1,3 +1,5 @@
+import time
+
 import pytest
 
 from Features.CaseSearch.test_pages.casesearch_page import CaseSearchWorkflows

@@ -29,7 +29,7 @@ class AndroidScreen:
             "appium:automationName": "UIAutomator2",
 
             # Set URL of the application under test
-            "appium:app": "bs://258a9bc495347f6d31f670e4c25488109d6f4a8f",
+            "appium:app": "bs://69575555b507f2c867243ffee58c5a46badcce8d",
 
             "appium:autoGrantPermissions": "true",
             "appium:newCommandTimeout": 3600,

@@ -267,7 +267,12 @@ class WebApps(BasePage):
         elements = self.driver.find_elements(*answer_locator)
         for position in range(1, len(elements) + 1):
             per_answer_locator = (By.XPATH, self.per_answer_format.format(question_label, input_type, position))
-            self.wait_to_clear_and_send_keys(per_answer_locator, input_value)
+            self.scroll_to_element(per_answer_locator)
+            time.sleep(1)
+            self.clear(per_answer_locator)
+            self.send_keys(per_answer_locator, input_value)
+            time.sleep(2)
+            print(str(per_answer_locator), input_value)
 
     def open_domain(self, current_url, domain_name):
         env = "staging" if "staging" in current_url else "www"
