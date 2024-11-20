@@ -268,6 +268,7 @@ class WebApps(BasePage):
         for position in range(1, len(elements) + 1):
             per_answer_locator = (By.XPATH, self.per_answer_format.format(question_label, input_type, position))
             self.wait_to_clear_and_send_keys(per_answer_locator, input_value)
+            print(str(per_answer_locator), input_value)
 
     def open_domain(self, current_url, domain_name):
         env = "staging" if "staging" in current_url else "www"
