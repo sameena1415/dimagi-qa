@@ -29,7 +29,7 @@ class MessagingPage(BasePage):
         self.dashboard_elements = (By.XPATH, "//div[@id='messaging_dashboard']")
         # Compose SMS
         self.compose_sms_menu = (By.LINK_TEXT, "Compose SMS Message")
-        self.recipients_textarea = (By.XPATH, "//textarea[@name='recipients']")
+        self.recipients_select = (By.XPATH, "//select[@name='recipients']")
         self.select_recipient = (By.XPATH, "(//ul[@role='listbox']/li)[1]")
         self.message_textarea = (By.XPATH, "//textarea[@name='message']")
         self.send_message = (By.XPATH, "(//button[@class='btn btn-primary' and @type='submit'])[1]")
@@ -163,7 +163,9 @@ class MessagingPage(BasePage):
 
     def compose_sms(self):
         self.click(self.compose_sms_menu)
-        self.send_keys(self.recipients_textarea, "[send to all]")
+        self.wait_for_element(self.recipients_select)
+        self.select_by_value(self.recipients_select, "[send to all]")
+        time.sleep(2)
         self.send_keys(self.message_textarea, "sms_" + fetch_random_string())
         time.sleep(2)
         self.scroll_to_element(self.send_message)
@@ -172,7 +174,9 @@ class MessagingPage(BasePage):
             assert self.is_present_and_displayed(self.message_sent_success_msg), "Message not sent successfully"
         except TimeoutException:
             self.click(self.compose_sms_menu)
-            self.send_keys(self.recipients_textarea, "[send to all]")
+            self.wait_for_element(self.recipients_select)
+            self.select_by_value(self.recipients_select, "[send to all]")
+            time.sleep(2)
             self.send_keys(self.message_textarea, "sms_" + fetch_random_string())
             time.sleep(2)
             self.scroll_to_element(self.send_message)
