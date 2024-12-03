@@ -136,6 +136,7 @@ class MessagingPage(BasePage):
         self.add_lang = (By.XPATH, "//button[@data-bind='click: addLanguage, disable: addLanguageDisabled']")
         self.lang_input_textarea = (By.XPATH, "(//span[@role='combobox'])[last()]")
         self.select_first_lang = (By.XPATH, "(//li[@role='option'])[1]")
+        self.select_eng_lang = (By.XPATH, "(//li[@role='option'][contains(.,'en (English)')])[1]")
         self.select_second_lang = (By.XPATH, "(//li[@role='option'])[2]")
         self.selected_lang_name = (By.XPATH, "(//td//p[contains(@data-bind,'message')])[last()]")
         self.language_list = (By.XPATH, "//ul[@role='listbox']")
@@ -357,6 +358,16 @@ class MessagingPage(BasePage):
         self.wait_to_click(self.languages)
         time.sleep(1)
         lang_list = self.find_elements(self.languages_present)
+        if len(lang_list) == 1:
+            for item in lang_list:
+                print(item.text)
+                if item.text == 'English':
+                    print("Default language present as English")
+                else:
+                    self.add_eng_lang()
+                    print("English updated successfully")
+
+        lang_list = self.find_elements(self.languages_present)
         if len(lang_list) > 1:
             for item in lang_list:
                 if item.text == 'English':
@@ -371,6 +382,15 @@ class MessagingPage(BasePage):
         else:
             print("Only English is Present and no other languages")
 
+    def add_eng_lang(self):
+        self.wait_to_click(self.lang_input_textarea)
+        time.sleep(2)
+        self.wait_for_element(self.language_list)
+        self.wait_to_click(self.select_eng_lang)
+        time.sleep(2)
+        lang = self.get_text(self.selected_lang_name)
+        print("Language selected is: ", lang)
+        self.wait_to_click(self.save_lang)
 
     def languages_page(self):
         self.wait_to_click(self.languages)

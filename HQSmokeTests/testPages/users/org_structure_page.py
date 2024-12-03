@@ -68,7 +68,7 @@ class OrganisationStructurePage(BasePage):
         self.choice_xpath = (By.XPATH, "(//input[contains(@data-bind,'value: value')])[last()]")
         self.save_btn_id = (By.ID, "save-custom-fields")
         self.success_msg_xpath = (By.XPATH, "//div[contains(@class,'alert-success')]")
-        self.success_msg_remove = (By.XPATH, "//div[contains(@class,'alert-success')]/a")
+        self.success_msg_remove = (By.XPATH, "//div[contains(@class,'alert-success')]//*[contains(@class,'close')]")
         self.additional_info_drop_down = (
             By.XPATH, "//*[@id='select2-id_data-field-" + self.loc_field_name + "-container']")
         self.select_value_drop_down = (By.XPATH, "//li[text()='" + self.loc_field_name + "']")
@@ -110,9 +110,10 @@ class OrganisationStructurePage(BasePage):
         self.confirm_user_field_delete = (
             By.XPATH, "(//a[.='Cancel']//following-sibling::button[contains(@class,'danger')])[last()]")
         self.sign_off_input = (By.XPATH, "//input[contains(@data-bind,'signOff')]")
-        self.test_location_delete_button = (By.XPATH, "//div/span[@class='loc_name'][contains(.,'location_')]//preceding::div[1]/button[contains(.,'Delete')]")
+        self.test_location_delete_button = (By.XPATH, "//div/span[contains(@class,'loc_name')][contains(.,'location_')]//preceding::div[1]/button[contains(.,'Delete')]")
+        self.test_location_delete_button_last = "(//div/span[contains(@class,'loc_name')][contains(.,'location_')]//preceding::div[1]/button[contains(.,'Delete')])[{}]"
         self.test_location_delete_confirm = (By.XPATH, "//input[contains(@data-bind,'signOff')]//following::button[.='Delete']")
-        self.success_msg_xpath
+
 
     def organisation_menu_open(self):
         self.wait_to_click(self.org_menu_link_text)
@@ -208,8 +209,6 @@ class OrganisationStructurePage(BasePage):
     def cleanup_location(self):
         # Delete User Field
         self.wait_to_click(self.org_menu_link_text)
-        self.wait_to_click(self.edit_loc_field_btn_xpath)
-        time.sleep(5)
         self.delete_test_location_field()
         self.delete_test_locations()
         self.delete_test_org_level()
@@ -279,14 +278,11 @@ class OrganisationStructurePage(BasePage):
             time.sleep(3)
             list_profile = self.find_elements(self.test_location_delete_button)
             print("Number of Test Locations: ", len(list_profile))
-            if len(list_profile) > 0:
-                count = 0
-                for item in list_profile:
+            if len(list_profile) != 0:
+                for i in range(len(list_profile)):
                     time.sleep(3)
-                    item.click()
-                        # self.driver.find_element(By.XPATH,
-                        #                          "(//input[contains(@data-bind,'value: slug')]//following::a[@class='btn btn-danger' and @data-toggle='modal'][1])[" + str(
-                        #                              i + 1) + "]").click()
+                    self.scroll_to_element((By.XPATH, self.test_location_delete_button_last.format(i+1)))
+                    self.js_click((By.XPATH, self.test_location_delete_button_last.format(i+1)))
                     time.sleep(5)
                     self.wait_for_element(self.sign_off_input)
                     self.send_keys(self.sign_off_input, "1"+ Keys.TAB)
@@ -296,8 +292,8 @@ class OrganisationStructurePage(BasePage):
                     self.wait_for_element(self.success_msg_xpath)
                     self.click(self.success_msg_remove)
                     time.sleep(2)
-                    count = count+1
-                    print("Deleted location ", count)
+                    list_profile = self.find_elements(self.test_location_delete_button)
+                    print("Deleted location number: ", str(i+1))
             else:
                 print("No test locations present in the list")
         except Exception:
