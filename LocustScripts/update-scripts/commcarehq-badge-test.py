@@ -1,6 +1,7 @@
 import logging
 
 import time
+from datetime import datetime
 
 from locust import SequentialTaskSet, between, task, tag, events
 from locust.exception import InterruptTaskSet
@@ -112,16 +113,16 @@ class WorkloadModelSteps(SequentialTaskSet):
     @tag('count_menu_again')
     @task
     def count_menu_again(self):
-        start_time = time.time()
+        start_time = datetime.now()
         self.user.hq_user.navigate(
             "Open 'Counts' Menu After Form Submission",
             data={"selections": [self.FUNC_COUNT['selections']]},
             expected_title=self.FUNC_COUNT['title'],
             commands_list=self.FUNC_COUNT['commands']
             )
-        end_time = time.time()
-        total_time = end_time - start_time
-        if total_time <= 0.3:
+        end_time = datetime.now()
+        total_time = (end_time - start_time).total_seconds()
+        if total_time <= 3:
             logger.debug("Open 'Counts' Menu load time for mobile worker " + self.user.user_detail.username +
                          " is : " + str(total_time) + " seconds"
                          )

@@ -101,13 +101,13 @@ class HQUser:
             )
 
     def post_formplayer(self, command, extra_json=None, name=None, validation=None):
-        logger.info("User: %s; Request: %s; Name: %s", self.user_details, command, name)
+        logger.info("User: %s; Request: %s; Name: %s", self.user_details.username, command, name)
         try:
             return formplayer.post(
                 command, self.client, self.app_details, self.user_details, extra_json, name, validation
                 )
         except Exception as e:
-            logger.error(f"user: {self.user_details}; request: {command}; name:{name}; exception: {str(e)}")
+            logger.error(f"user: {self.user_details.username}; request: {command}; name:{name}; exception: {str(e)}")
 
 
 class BaseLoginCommCareUser(HttpUser):
