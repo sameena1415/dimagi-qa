@@ -1,7 +1,10 @@
 import logging
 from dataclasses import dataclass, field
-from typing import List, Dict, Optional
+from typing import List, Dict, Optional, Union
+import coloredlogs
 
+logger = logging.getLogger(__name__)
+coloredlogs.install(isatty=True, logger=logger, level='DEBUG')
 
 def post(command, client, app_details, user_details, extra_json=None, name=None, validation=None):
     formplayer_host = "/formplayer"
@@ -26,9 +29,9 @@ def post(command, client, app_details, user_details, extra_json=None, name=None,
                      catch_response=True
                      ) as response:
         if command == 'submit-all':
-            logging.info(f"{formplayer_host}/{command}/")
-            logging.info("json submitted: "+ str(data))
-            logging.info("response"+str(response.json()))
+            logger.info(f"{formplayer_host}/{command}/")
+            # logger.info("json submitted: "+ str(data))
+            # logger.info("response"+str(response.json()))
         if validation:
             validate_response(response, validation)
         return response.json()
@@ -36,37 +39,47 @@ def post(command, client, app_details, user_details, extra_json=None, name=None,
 
 @dataclass
 class ValidationCriteria:
-    key_value_pairs: Optional[Dict[str, Optional[str]]] = field(default_factory=dict)
+    key_value_pairs:  Optional[Union[Dict[str, Optional[str]], List[Dict[str, Optional[str]]]]] = field(default_factory=dict)
     length_check: Optional[Dict[str, int]] = field(default_factory=dict)
 
 
 def validate_response(response, validation: ValidationCriteria):
     data = response.json()
     for checkKey, checkValue in validation.key_value_pairs.items():
-        checkLen = validation.length_check.get(checkKey, None)
-        if "notification" in data and data["notification"]:
-            if data["notification"]["type"] == "error":
-                msg = "ERROR::-" + data["notification"]["message"]
+        if "commands" in checkKey:
+            if isinstance(checkValue, dict):
+                data_command = data["commands"]
+                for dicts in data_command:
+                    all(item in checkValue for item in dicts)
+            else:
+                msg = "ERROR::- mismatch in values" + checkValue + " and " + data["commands"]
                 response.failure(msg)
-                raise FormplayerResponseError("ERROR::-" + data["notification"]["message"])
-        if "exception" in data:
-            msg = "ERROR::exception error--" + data['exception']
-            response.failure(msg)
-            raise FormplayerResponseError(msg)
-        elif checkKey and checkKey not in data:
-            msg = "error::" + checkKey + " not in data"
-            response.failure(msg)
-            raise FormplayerResponseError(msg)
-        elif checkKey and checkLen:
-            if len(data[checkKey]) != checkLen:
-                msg = "ERROR::len(data['" + checkKey + "']) != " + checkLen
-                response.failure(msg)
-                raise FormplayerResponseError(msg)
-        elif checkKey and checkValue:
-            if checkValue not in data[checkKey]:
-                msg = "ERROR::data['" + checkKey + "'], " + data[checkKey] + " does not have " + checkValue
+                raise FormplayerResponseError("ERROR::- mismatch in values" + checkValue + " and " + data["commands"])
+        else:
+            checkLen = validation.length_check.get(checkKey, None)
+            if "notification" in data and data["notification"]:
+                if data["notification"]["type"] == "error":
+                    msg = "ERROR::-" + data["notification"]["message"]
+                    response.failure(msg)
+                    raise FormplayerResponseError("ERROR::-" + data["notification"]["message"])
+            if "exception" in data:
+                msg = "ERROR::exception error--" + data['exception']
                 response.failure(msg)
                 raise FormplayerResponseError(msg)
+            elif checkKey and checkKey not in data:
+                msg = "error::" + checkKey + " not in data"
+                response.failure(msg)
+                raise FormplayerResponseError(msg)
+            elif checkKey and checkLen:
+                if len(data[checkKey]) != checkLen:
+                    msg = "ERROR::len(data['" + checkKey + "']) != " + checkLen
+                    response.failure(msg)
+                    raise FormplayerResponseError(msg)
+            elif checkKey and checkValue:
+                if checkValue not in data[checkKey]:
+                    msg = "ERROR::data['" + checkKey + "'], " + data[checkKey] + " does not have " + checkValue
+                    response.failure(msg)
+                    raise FormplayerResponseError(msg)
 
 
 class FormplayerResponseError(Exception):
