@@ -1,11 +1,15 @@
 import logging
 
+import coloredlogs
 from common.web_apps import get_app_build_info
 import formplayer
+from flask import json
 from locust import HttpUser
 from locust.exception import StopUser
 import pydantic
 
+logger = logging.getLogger(__name__)
+coloredlogs.install(isatty=True, logger=logger, level='DEBUG')
 
 class UserDetails(pydantic.BaseModel):
     username: str
@@ -54,7 +58,7 @@ class HQUser:
             raise StopUser(f"Login failed for user {self.user_details.username}: {response.status_code}")
         if 'Sign In' in response.text:
             raise StopUser(f"Login failed for user {self.user_details.username}: Sign In failed")
-        logging.info("User logged in: " + self.user_details.username)
+        logger.info("User logged in: " + self.user_details.username)
 
     def navigate_start(self, expected_title=None):
         validation = None
@@ -66,10 +70,13 @@ class HQUser:
             validation=validation
             )
 
-    def navigate(self, name, data, expected_title=None):
+    def navigate(self, name, data, expected_title=None, commands_list=None):
         validation = None
         if expected_title:
             validation = formplayer.ValidationCriteria(key_value_pairs={"title": expected_title})
+        if commands_list:
+            for command in commands_list:
+                validation = formplayer.ValidationCriteria(key_value_pairs={"commands": command})
         return self.post_formplayer(
             "navigate_menu", data, name=name, validation=validation
             )
@@ -94,13 +101,13 @@ class HQUser:
             )
 
     def post_formplayer(self, command, extra_json=None, name=None, validation=None):
-        logging.info("User: %s; Request: %s; Name: %s", self.user_details, command, name)
+        logger.info("User: %s; Request: %s; Name: %s", self.user_details.username, command, name)
         try:
             return formplayer.post(
                 command, self.client, self.app_details, self.user_details, extra_json, name, validation
                 )
         except Exception as e:
-            logging.error("user: %s; request: %s; exception: %s", self.user_details, command, str(e))
+            logger.error(f"user: {self.user_details.username}; request: {command}; name:{name}; exception: {str(e)}")
 
 
 class BaseLoginCommCareUser(HttpUser):
@@ -122,7 +129,7 @@ class BaseLoginCommCareUser(HttpUser):
         build_id = get_app_build_info(self.client, domain, build_id)
         app_id = get_app_build_info(self.client, domain, app_id)
         if build_id:
-            logging.info("Using app build: %s", build_id)
+            logger.info("Using app build: %s", build_id)
         else:
-            logging.warning("No build found for app: %s and build: %s", app_id, build_id)
+            logger.warning("No build found for app: %s and build: %s", app_id, build_id)
         return build_id, app_id
