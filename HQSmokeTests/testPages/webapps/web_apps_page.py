@@ -75,6 +75,7 @@ class WebAppsPage(BasePage):
         print("Form successfully submitted")
         time.sleep(10)
         self.js_click(self.home_button)
+        time.sleep(5)
         self.wait_for_element(self.sync_button)
         self.js_click(self.sync_button)
         time.sleep(5)
