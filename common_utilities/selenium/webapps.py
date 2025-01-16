@@ -38,7 +38,7 @@ class WebApps(BasePage):
 
 
         self.form_submit = (By.XPATH, "//div[contains(@id,'submit')]//button[contains(@class,'submit')]")
-        self.form_submission_successful = (By.XPATH, "//p[contains(text(), 'successfully saved')]")
+        self.form_submission_successful = (By.XPATH, "//*[contains(@class='alert-success')][contains(text(), 'successfully saved')]")
         self.form_500_error = (By.XPATH, "//*[contains(text(),'500 :')]")
         self.search_all_cases_button = (By.XPATH,
                                         "(//*[contains(text(),'Search All')]//parent::div[@class='case-list-action-button btn-group formplayer-request']/button)[1]")
@@ -75,6 +75,8 @@ class WebApps(BasePage):
         self.sidebar_open_app_preview = (By.XPATH, "//div[@class='preview-toggler js-preview-toggle']")
         self.iframe_app_preview = (By.XPATH, "//iframe[@class='preview-phone-window']")
         self.app_preview_model = (By.XPATH, "//div[@class='preview-phone-container']")
+
+        self.async_restore_error = (By.XPATH, "//div[contains(@class,'alert-danger') and contains(.,'Asynchronous restore')]/button[contains(@class,'close')]")
 
     def open_app(self, app_name):
         time.sleep(2)
@@ -202,11 +204,24 @@ class WebApps(BasePage):
         form_names = self.find_elements_texts(self.form_names)
         return form_names
 
+    def async_restore_resubmit(self):
+        time.sleep(10)
+        if self.is_present_and_displayed(self.async_restore_error, 20):
+            self.js_click(self.async_restore_error)
+            time.sleep(5)
+            self.scroll_to_element(self.form_submit)
+            self.wait_to_click(self.form_submit)
+        else:
+            print("No Asynchronous restore error present")
+
+
+
     def submit_the_form(self):
         time.sleep(3)
         self.wait_for_element(self.form_submit)
         self.js_click(self.form_submit)
-        time.sleep(5)
+        self.async_restore_resubmit()
+        time.sleep(10)
         try:
             assert self.is_visible_and_displayed(self.form_submission_successful, timeout=500)
         except AssertionError:
