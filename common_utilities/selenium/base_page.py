@@ -4,7 +4,7 @@ import datetime
 from dateutil.parser import parse
 from selenium.webdriver.support.select import Select
 from selenium.common.exceptions import TimeoutException, ElementClickInterceptedException, \
-    UnexpectedAlertPresentException, StaleElementReferenceException, NoSuchElementException
+    UnexpectedAlertPresentException, StaleElementReferenceException, NoSuchElementException, JavascriptException
 from selenium.webdriver import ActionChains, Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as ec
@@ -382,9 +382,13 @@ class BasePage:
         return element
 
     def wait_for_ajax(self, value=300):
-        wait = WebDriverWait(self.driver, value)
-        wait.until(lambda driver: self.driver.execute_script('return jQuery.active') == 0)
-        wait.until(lambda driver: self.driver.execute_script('return document.readyState') == 'complete')
+        try:
+            wait = WebDriverWait(self.driver, value)
+            wait.until(lambda driver: self.driver.execute_script('return jQuery.active') == 0)
+            wait.until(lambda driver: self.driver.execute_script('return document.readyState') == 'complete')
+        except JavascriptException:
+            print("Undefined JQuery")
+            time.sleep(20)
 
     def is_date(self, string, fuzzy=False):
         """

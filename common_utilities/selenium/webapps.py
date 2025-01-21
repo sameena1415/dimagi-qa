@@ -38,7 +38,7 @@ class WebApps(BasePage):
 
 
         self.form_submit = (By.XPATH, "//div[contains(@id,'submit')]//button[contains(@class,'submit')]")
-        self.form_submission_successful = (By.XPATH, "//*[contains(@class='alert-success')][contains(text(), 'successfully saved')]")
+        self.form_submission_successful = (By.XPATH, "//div[contains(@class,'alert-success')][contains(text(), 'successfully saved') or .//p[contains(text(), 'successfully saved')]]")
         self.form_500_error = (By.XPATH, "//*[contains(text(),'500 :')]")
         self.search_all_cases_button = (By.XPATH,
                                         "(//*[contains(text(),'Search All')]//parent::div[@class='case-list-action-button btn-group formplayer-request']/button)[1]")
@@ -86,6 +86,7 @@ class WebApps(BasePage):
         self.application_header = self.get_element(self.app_header_format, app_name)
         self.scroll_to_element(self.application)
         self.js_click(self.application)
+        time.sleep(10)
         self.wait_for_ajax()
         self.is_visible_and_displayed(self.application_header, timeout=200)
 
@@ -93,12 +94,14 @@ class WebApps(BasePage):
         self.link = (By.XPATH, self.breadcrumb_format.format(breadcrumb_value, breadcrumb_value))
         self.wait_for_element(self.link)
         self.js_click(self.link)
+        time.sleep(5)
 
     def open_menu(self, menu_name):
         self.caselist_menu = self.get_element(self.menu_name_format, menu_name)
         self.caselist_header = self.get_element(self.menu_name_header_format, menu_name)
         self.scroll_to_element(self.caselist_menu)
         self.js_click(self.caselist_menu)
+        time.sleep(5)
         self.wait_for_ajax()
         assert self.is_visible_and_displayed(self.caselist_header)
 
@@ -207,10 +210,10 @@ class WebApps(BasePage):
     def async_restore_resubmit(self):
         time.sleep(10)
         if self.is_present_and_displayed(self.async_restore_error, 20):
-            self.js_click(self.async_restore_error)
-            time.sleep(5)
+            self.click(self.async_restore_error)
+            time.sleep(10)
             self.scroll_to_element(self.form_submit)
-            self.wait_to_click(self.form_submit)
+            self.js_click(self.form_submit)
         else:
             print("No Asynchronous restore error present")
 
