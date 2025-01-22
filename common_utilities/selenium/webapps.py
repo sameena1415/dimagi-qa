@@ -106,7 +106,8 @@ class WebApps(BasePage):
         self.scroll_to_element(self.caselist_menu)
         self.js_click(self.caselist_menu)
         time.sleep(5)
-        assert self.wait_for_element_on_page(self.caselist_header)
+        self.wait_for_element_on_page(self.caselist_header)
+        assert self.is_visible_and_displayed(self.caselist_header)
 
     def open_form(self, form_name):
         self.form_header = self.get_element(self.form_name_header_format, form_name)
