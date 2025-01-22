@@ -78,6 +78,10 @@ class WebApps(BasePage):
 
         self.async_restore_error = (By.XPATH, "//div[contains(@class,'alert-danger') and contains(.,'Asynchronous restore')]/button[contains(@class,'close')]")
 
+    def wait_for_element(self, locator, timeout=20):
+        self.wait_for_ajax()
+        super().wait_for_element(locator,timeout)
+
     def open_app(self, app_name):
         time.sleep(2)
         if self.is_present_and_displayed(self.webapps_home, 20):
