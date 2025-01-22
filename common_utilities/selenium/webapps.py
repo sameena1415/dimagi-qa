@@ -78,9 +78,9 @@ class WebApps(BasePage):
 
         self.async_restore_error = (By.XPATH, "//div[contains(@class,'alert-danger') and contains(.,'Asynchronous restore')]/button[contains(@class,'close')]")
 
-    def wait_for_element(self, locator, timeout=20):
+    def wait_for_element_on_page(self, locator, timeout=20):
         self.wait_for_ajax()
-        super().wait_for_element(locator,timeout)
+        self.wait_for_element(locator, timeout)
 
     def open_app(self, app_name):
         time.sleep(2)
@@ -91,14 +91,14 @@ class WebApps(BasePage):
         self.scroll_to_element(self.application)
         self.js_click(self.application)
         time.sleep(10)
-        self.wait_for_ajax()
-        self.is_visible_and_displayed(self.application_header, timeout=200)
+        self.wait_for_element_on_page(self.application_header, timeout=200)
 
     def navigate_to_breadcrumb(self, breadcrumb_value):
         self.link = (By.XPATH, self.breadcrumb_format.format(breadcrumb_value, breadcrumb_value))
         self.wait_for_element(self.link)
         self.js_click(self.link)
         time.sleep(5)
+        self.wait_for_ajax()
 
     def open_menu(self, menu_name):
         self.caselist_menu = self.get_element(self.menu_name_format, menu_name)
@@ -106,8 +106,7 @@ class WebApps(BasePage):
         self.scroll_to_element(self.caselist_menu)
         self.js_click(self.caselist_menu)
         time.sleep(5)
-        self.wait_for_ajax()
-        assert self.is_visible_and_displayed(self.caselist_header)
+        assert self.wait_for_element_on_page(self.caselist_header)
 
     def open_form(self, form_name):
         self.form_header = self.get_element(self.form_name_header_format, form_name)
@@ -118,6 +117,7 @@ class WebApps(BasePage):
             self.wait_for_element(self.form_name, timeout=500)
             self.scroll_to_element(self.form_name)
             self.js_click(self.form_name)
+            time.sleep(5)
             self.wait_for_ajax()
 
     def search_all_cases(self):
@@ -230,12 +230,14 @@ class WebApps(BasePage):
         self.async_restore_resubmit()
         time.sleep(10)
         try:
-            assert self.is_visible_and_displayed(self.form_submission_successful, timeout=500)
+            self.wait_for_element_on_page(self.form_submission_successful, timeout=500)
+            assert self.is_visible_and_displayed(self.form_submission_successful, timeout=50)
         except AssertionError:
             if self.is_displayed(self.form_500_error):
                 time.sleep(60)
                 self.js_click(self.form_submit)
-                assert self.is_visible_and_displayed(self.form_submission_successful, timeout=500)
+                self.wait_for_element_on_page(self.form_submission_successful, timeout=500)
+                assert self.is_visible_and_displayed(self.form_submission_successful, timeout=50)
             else:
                 raise AssertionError
         time.sleep(5)
@@ -271,6 +273,7 @@ class WebApps(BasePage):
             self.wait_for_element(self.webapp_login)
             self.js_click(self.webapp_login)
         time.sleep(10)
+        self.wait_for_element_on_page(self.search_user_webapps)
         self.wait_for_element(self.search_user_webapps)
         self.send_keys(self.search_user_webapps, username)
         time.sleep(1)
