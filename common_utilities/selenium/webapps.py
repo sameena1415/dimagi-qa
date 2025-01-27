@@ -97,7 +97,7 @@ class WebApps(BasePage):
         self.wait_for_element(self.link)
         self.js_click(self.link)
         time.sleep(5)
-        self.wait_for_element((By.XPATH, self.title.format(breadcrumb_value)), timeout=300)
+        self.wait_for_element((By.XPATH, self.current_page.format(breadcrumb_value)), timeout=300)
 
     def open_menu(self, menu_name):
         self.caselist_menu = self.get_element(self.menu_name_format, menu_name)
