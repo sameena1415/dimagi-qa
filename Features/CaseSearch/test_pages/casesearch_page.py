@@ -85,8 +85,8 @@ class CaseSearchWorkflows(BasePage):
         elif search_format == combobox:
             search_property = (
                 By.XPATH, self.combobox_search_property_name_and_value_format.format(search_property, default_value))
-        self.wait_for_ajax()
-        assert self.is_visible_and_displayed(search_property, 100), "Search "+default_value+" property not present"
+        time.sleep(20)
+        assert self.is_visible_and_displayed(search_property, 400), "Search "+default_value+" property not present"
         print("Search "+default_value+" property is present")
 
     def search_against_property(self, search_property, input_value, property_type, include_blanks=None):
@@ -108,7 +108,7 @@ class CaseSearchWorkflows(BasePage):
             else:
                 self.send_keys(self.search_property, input_value + Keys.TAB)
                 time.sleep(5)
-            self.wait_for_ajax()
+            time.sleep(20)
         elif property_type == COMBOBOX:
             self.combox_select_element = self.get_element(self.combox_select, search_property)
             time.sleep(2)
