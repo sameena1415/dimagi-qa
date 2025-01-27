@@ -51,7 +51,7 @@ class WebApps(BasePage):
         self.case_list = (By.XPATH, "//div[contains(@id,'results')][//tbody or //section[contains(@class,'list')]]")#"//table[@class='table module-table module-table-case-list']")
         self.omni_search_input = (By.ID, "searchText")
         self.omni_search_button = (By.ID, "case-list-search-button")
-        self.continue_button = (By.ID, "select-case")
+        self.continue_button = (By.XPATH, "//button[@id='select-case']")
         self.first_case_on_list = (By.XPATH, "(//*[@class='module-case-list-column'])[1]")
 
         self.webapps_home = (By.XPATH, "//i[@class='fcc fcc-flower']")
