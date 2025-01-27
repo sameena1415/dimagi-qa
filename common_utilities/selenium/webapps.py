@@ -22,6 +22,7 @@ class WebApps(BasePage):
 
         self.title = "//title[text()='{}']"
         self.current_page = "//a[@aria-current='page' and contains(.,'{}')]"
+        self.content_container = (By.XPATH, "//div[@id='content-container']")
         self.url = self.settings['url']
         self.app_name_format = "//div[@aria-label='{}']/div/h3"
         self.app_header_format = "//h1[contains(text(),'{}')]"
@@ -203,12 +204,13 @@ class WebApps(BasePage):
     def continue_to_forms(self):
         self.wait_for_element(self.continue_button, 100)
         self.js_click(self.continue_button)
+        time.sleep(10)
 
     def select_case_and_continue(self, case_name):
         self.select_case(case_name)
         self.continue_to_forms()
         # self.wait_for_ajax()
-        self.wait_for_element((By.XPATH, self.current_page.format(case_name)), timeout=200)
+        self.wait_for_element(self.content_container, timeout=200)
         form_names = self.find_elements_texts(self.form_names)
         return form_names
 

@@ -28,6 +28,7 @@ class CaseSearchWorkflows(BasePage):
         self.search_against_text_property_format = "//input[contains (@id, '{}')]"
         self.help_text_format = '//label[@for="{}"]//following::a[@data-bs-content="{}" or @data-content="{}"]'
         self.combox_select = "//label[contains(text(), '{}')]//following::select[contains(@class, 'query-field')][1]"
+        self.combox_select2 = "//label[contains(text(), '{}')]//following::div/select[contains(@class, 'query-field')][1]"
         self.search_for_address = "//*[contains(text(),'{}')]//following::input[contains(@aria-label,'Search')][1]"
         self.include_blanks = self.search_property_name_combobox + "//following::input[contains(@class,'search-for-blank')][1]"
         self.required_validation_on_top = "//div[contains(@class,'alert-danger')]//following::li[contains(text(),'{}')]"
@@ -111,6 +112,11 @@ class CaseSearchWorkflows(BasePage):
             time.sleep(20)
         elif property_type == COMBOBOX:
             self.combox_select_element = self.get_element(self.combox_select, search_property)
+            time.sleep(2)
+            self.select_by_text(self.combox_select_element, input_value)
+            time.sleep(4)
+        elif property_type == COMBOBOX2:
+            self.combox_select_element = self.get_element(self.combox_select2, search_property)
             time.sleep(2)
             self.select_by_text(self.combox_select_element, input_value)
             time.sleep(4)
@@ -321,12 +327,15 @@ class CaseSearchWorkflows(BasePage):
         if select_by_value == text:
             checkbox_xpath = (By.XPATH, self.checkbox_xpath.format(search_property, values))
             self.wait_for_element(checkbox_xpath)
-            self.scroll_to_element(checkbox_xpath)
+            # self.scroll_to_element(checkbox_xpath)
+            time.sleep(3)
             self.js_click(checkbox_xpath)
+            time.sleep(3)
         elif select_by_value == index:
             for value in values:
                 checkbox_xpath = (By.XPATH, self.checkbox_xpath.format(search_property, value - 1))
                 self.js_click(checkbox_xpath)
+                time.sleep(3)
             list_string = map(str, values)
             return list(list_string)
 
