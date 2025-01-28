@@ -384,8 +384,13 @@ class BasePage:
     def wait_for_ajax(self, value=300):
         try:
             wait = WebDriverWait(self.driver, value)
-            wait.until(lambda driver: self.driver.execute_script('return jQuery.active') == 0)
-            wait.until(lambda driver: self.driver.execute_script('return document.readyState') == 'complete')
+            if self.driver.execute_script('return jQuery.active') != 'undefined':
+                wait.until(lambda driver: self.driver.execute_script('return jQuery.active') == 0)
+            elif self.driver.execute_script('return document.readyState') != 'complete':
+                wait.until(lambda driver: self.driver.execute_script('return document.readyState') == 'complete')
+            else:
+                print("Undefined JQuery, waiting for sometime")
+                time.sleep(10)
         except JavascriptException:
             print("Undefined JQuery")
             time.sleep(20)

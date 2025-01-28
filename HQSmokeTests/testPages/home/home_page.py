@@ -34,6 +34,7 @@ class HomePage(BasePage):
         self.settings_bar = (By.XPATH, "//ul[@role='menu']//a[@data-action='Click Gear Icon']/i")
         self.project_settings_menu = (By.LINK_TEXT, "Project Settings")
         self.project_settings_elements = (By.XPATH, "//form[@class='form form-horizontal']")
+        self.application_names = "//li[@class='nav-header dropdown-header' and contains(.,'My Applications')]//following-sibling::li[contains(.,'{}')]"
 
         self.DASHBOARD_TITLE = "CommCare HQ"
         self.REPORTS_TITLE = "My Saved Reports : Project Reports :: - CommCare HQ"
@@ -74,7 +75,7 @@ class HomePage(BasePage):
                 self.open_menu(self.applications_menu_id)
             else:
                 raise TimeoutException
-        self.wait_to_click((By.LINK_TEXT, str(app_name)))
+        self.wait_to_click((By.XPATH, self.application_names.format(app_name)))
         self.APP_TITLE = "Releases - " + str(app_name) + " - CommCare HQ"
         assert self.APP_TITLE in self.driver.title, "This is not the Applications page."
 

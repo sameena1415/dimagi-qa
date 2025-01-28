@@ -238,6 +238,7 @@ class CaseSearchWorkflows(BasePage):
             time.sleep(4)
             assert not self.is_displayed(validation_message_per_prop),  f"validation present {validation_message_per_prop}"
             print(f"validation not present {validation_message_per_prop}")
+        time.sleep(5)
 
     def check_dropdown_value(self, search_property, value, present):
         dropdown_values_ = self.get_element(self.dropdown_values, search_property)

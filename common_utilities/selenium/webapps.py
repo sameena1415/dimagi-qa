@@ -80,6 +80,7 @@ class WebApps(BasePage):
         self.app_preview_model = (By.XPATH, "//div[@class='preview-phone-container']")
 
         self.async_restore_error = (By.XPATH, "//div[contains(@class,'alert-danger') and contains(.,'Asynchronous restore')]/button[contains(@class,'close')]")
+        self.error_message = (By.XPATH, "//div[contains(@class,'alert-danger')]/button[contains(@class,'close')]")
 
 
     def open_app(self, app_name):
@@ -91,14 +92,14 @@ class WebApps(BasePage):
         self.scroll_to_element(self.application)
         self.js_click(self.application)
         time.sleep(10)
-        self.wait_for_element(self.application_header, timeout=200)
+        self.wait_for_element(self.application_header, timeout=300)
 
     def navigate_to_breadcrumb(self, breadcrumb_value):
         self.link = (By.XPATH, self.breadcrumb_format.format(breadcrumb_value, breadcrumb_value))
         self.wait_for_element(self.link)
         self.js_click(self.link)
         time.sleep(5)
-        self.wait_for_element((By.XPATH, self.current_page.format(breadcrumb_value)), timeout=300)
+        self.wait_for_element((By.XPATH, self.current_page.format(breadcrumb_value)), timeout=100)
 
     def open_menu(self, menu_name):
         self.caselist_menu = self.get_element(self.menu_name_format, menu_name)
@@ -106,7 +107,7 @@ class WebApps(BasePage):
         self.scroll_to_element(self.caselist_menu)
         self.js_click(self.caselist_menu)
         time.sleep(5)
-        self.wait_for_element((By.XPATH, self.current_page.format(menu_name)), timeout=300)
+        self.wait_for_element((By.XPATH, self.current_page.format(menu_name)), timeout=100)
         assert self.is_visible_and_displayed(self.caselist_header)
 
     def open_form(self, form_name):
@@ -115,11 +116,11 @@ class WebApps(BasePage):
             logging.info("Auto advance enabled")
         else:
             self.form_name = self.get_element(self.form_name_format, form_name)
-            self.wait_for_element(self.form_name, timeout=500)
+            self.wait_for_element(self.form_name, timeout=100)
             self.scroll_to_element(self.form_name)
             self.js_click(self.form_name)
             time.sleep(5)
-            self.wait_for_element((By.XPATH, self.current_page.format(form_name)), timeout=300)
+            self.wait_for_element((By.XPATH, self.current_page.format(form_name)), timeout=100)
 
     def search_all_cases(self):
         self.scroll_to_element(self.search_all_cases_button)
@@ -131,10 +132,17 @@ class WebApps(BasePage):
         self.js_click(self.search_again_button)
 
     def clear_selections_on_case_search_page(self):
-        self.wait_for_element(self.clear_case_search_page, timeout=500)
+        if self.is_present_and_displayed(self.error_message):
+            self.js_click(self.error_message)
+            time.sleep(3)
+        else:
+            print("No banners present")
+        self.scroll_to_bottom()
+        self.wait_for_element(self.clear_case_search_page, timeout=100)
+        self.scroll_to_element(self.clear_case_search_page)
         time.sleep(2)
         self.js_click(self.clear_case_search_page)
-        # self.wait_for_ajax()
+        self.wait_for_ajax()
         time.sleep(10)
 
     def search_button_on_case_search_page(self, enter_key=None, case_list=None):
@@ -146,10 +154,10 @@ class WebApps(BasePage):
             time.sleep(2)
             self.scroll_to_element(self.submit_on_case_search_page)
             self.js_click(self.submit_on_case_search_page)
-            time.sleep(60)
-            # self.wait_for_ajax(60)
+            time.sleep(20)
+            self.wait_for_ajax()
         if case_list == None:
-            self.is_visible_and_displayed(self.case_list, timeout=500)
+            self.is_visible_and_displayed(self.case_list, timeout=100)
         else:
             print("Case List is not displayed")
 
@@ -162,7 +170,7 @@ class WebApps(BasePage):
             self.wait_to_clear_and_send_keys(self.omni_search_input, case_name)
             self.wait_for_element(self.omni_search_button)
             self.js_click(self.omni_search_button)
-            time.sleep(100)
+            time.sleep(50)
         else:
             print("Split Screen Case Search enabled")
         self.case = self.get_element(self.case_name_format, case_name)
@@ -233,13 +241,13 @@ class WebApps(BasePage):
         self.async_restore_resubmit()
         time.sleep(10)
         try:
-            self.wait_for_element(self.form_submission_successful, timeout=500)
+            self.wait_for_element(self.form_submission_successful, timeout=100)
             assert self.is_visible_and_displayed(self.form_submission_successful, timeout=50)
         except AssertionError:
             if self.is_displayed(self.form_500_error):
                 time.sleep(60)
                 self.js_click(self.form_submit)
-                self.wait_for_element(self.form_submission_successful, timeout=500)
+                self.wait_for_element(self.form_submission_successful, timeout=100)
                 assert self.is_visible_and_displayed(self.form_submission_successful, timeout=50)
             else:
                 raise AssertionError
@@ -276,7 +284,7 @@ class WebApps(BasePage):
             self.wait_for_element(self.webapp_login)
             self.js_click(self.webapp_login)
         time.sleep(10)
-        self.wait_for_element(self.search_user_webapps, timeout=300)
+        self.wait_for_element(self.search_user_webapps, timeout=200)
         self.send_keys(self.search_user_webapps, username)
         time.sleep(1)
         self.wait_for_element(self.search_button_webapps)
@@ -312,10 +320,10 @@ class WebApps(BasePage):
 
     def switch_bw_pages(self):
         self.js_click(self.next_page)
-        time.sleep(50)
+        time.sleep(30)
         self.wait_for_element(self.prev_page)
         self.js_click(self.prev_page)
-        time.sleep(50)
+        time.sleep(30)
 
     def go_to_page(self, page_number):
         self.send_keys(self.go_to_page_textarea, page_number)

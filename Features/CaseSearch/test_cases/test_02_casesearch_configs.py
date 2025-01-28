@@ -479,6 +479,7 @@ def test_case_18_conditionally_required_condition_property(driver, settings):
                                              message=CaseSearchUserInput.required_msg_if_rating_two,
                                              required_or_validated=YES,
                                              property_type=COMBOBOX)
+    webapps.clear_selections_on_case_search_page()
     """Check disabled"""
     casesearch.search_against_property(search_property=CaseSearchUserInput.rating,
                                        input_value=CaseSearchUserInput.three_star,

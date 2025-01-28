@@ -112,7 +112,10 @@ class MultiSelectWorkflows(BasePage):
 
     def open_menu_settings(self, menu):
         menu_xpath = self.get_element(self.open_app_builder_menu, menu)
+        self.wait_for_element(menu_xpath)
         self.js_click(menu_xpath)
+        time.sleep(2)
+        self.wait_for_element(self.case_list_settings)
         self.js_click(self.case_list_settings)
 
 
