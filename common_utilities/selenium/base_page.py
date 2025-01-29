@@ -381,7 +381,7 @@ class BasePage:
         element = (By.XPATH, xpath_format.format(insert_value))
         return element
 
-    def wait_for_ajax(self, value=300):
+    def wait_for_ajax(self, value=200):
         try:
             wait = WebDriverWait(self.driver, value)
             if self.driver.execute_script('return jQuery.active') != 'undefined':
