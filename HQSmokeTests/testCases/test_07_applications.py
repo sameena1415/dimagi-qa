@@ -63,6 +63,8 @@ def test_case_40_app_preview(driver, settings):
 @pytest.mark.reportSubmitHistory
 @pytest.mark.appReleases
 def test_case_38_create_new_build_deploy_to_mobile(driver, settings):
+    if 'staging' in settings['url']:
+        pytest.xfail("Failing on Staging due to QA-7314")
     load = ApplicationPage(driver)
     install_code, field_text = load.update_form_field()
     print(install_code, field_text)

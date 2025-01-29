@@ -4,7 +4,7 @@ import datetime
 from dateutil.parser import parse
 from selenium.webdriver.support.select import Select
 from selenium.common.exceptions import TimeoutException, ElementClickInterceptedException, \
-    UnexpectedAlertPresentException, StaleElementReferenceException, NoSuchElementException
+    UnexpectedAlertPresentException, StaleElementReferenceException, NoSuchElementException, JavascriptException
 from selenium.webdriver import ActionChains, Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as ec
@@ -381,10 +381,19 @@ class BasePage:
         element = (By.XPATH, xpath_format.format(insert_value))
         return element
 
-    def wait_for_ajax(self, value=300):
-        wait = WebDriverWait(self.driver, value)
-        wait.until(lambda driver: self.driver.execute_script('return jQuery.active') == 0)
-        wait.until(lambda driver: self.driver.execute_script('return document.readyState') == 'complete')
+    def wait_for_ajax(self, value=200):
+        try:
+            wait = WebDriverWait(self.driver, value)
+            if self.driver.execute_script('return jQuery.active') != 'undefined':
+                wait.until(lambda driver: self.driver.execute_script('return jQuery.active') == 0)
+            elif self.driver.execute_script('return document.readyState') != 'complete':
+                wait.until(lambda driver: self.driver.execute_script('return document.readyState') == 'complete')
+            else:
+                print("Undefined JQuery, waiting for sometime")
+                time.sleep(10)
+        except JavascriptException:
+            print("Undefined JQuery")
+            time.sleep(20)
 
     def is_date(self, string, fuzzy=False):
         """

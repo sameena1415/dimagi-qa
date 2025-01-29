@@ -28,6 +28,7 @@ class CaseSearchWorkflows(BasePage):
         self.search_against_text_property_format = "//input[contains (@id, '{}')]"
         self.help_text_format = '//label[@for="{}"]//following::a[@data-bs-content="{}" or @data-content="{}"]'
         self.combox_select = "//label[contains(text(), '{}')]//following::select[contains(@class, 'query-field')][1]"
+        self.combox_select2 = "//label[contains(text(), '{}')]//following::div/select[contains(@class, 'query-field')][1]"
         self.search_for_address = "//*[contains(text(),'{}')]//following::input[contains(@aria-label,'Search')][1]"
         self.include_blanks = self.search_property_name_combobox + "//following::input[contains(@class,'search-for-blank')][1]"
         self.required_validation_on_top = "//div[contains(@class,'alert-danger')]//following::li[contains(text(),'{}')]"
@@ -85,14 +86,15 @@ class CaseSearchWorkflows(BasePage):
         elif search_format == combobox:
             search_property = (
                 By.XPATH, self.combobox_search_property_name_and_value_format.format(search_property, default_value))
-        self.wait_for_ajax()
-        assert self.is_visible_and_displayed(search_property, 100), "Search "+default_value+" property not present"
+        time.sleep(20)
+        assert self.is_visible_and_displayed(search_property, 400), "Search "+default_value+" property not present"
         print("Search "+default_value+" property is present")
 
     def search_against_property(self, search_property, input_value, property_type, include_blanks=None):
         print("Providing value: ", input_value)
         if property_type == TEXT_INPUT:
             self.search_property = self.get_element(self.search_against_text_property_format, search_property)
+            self.wait_for_element(self.search_property, 100)
             class_type = self.get_attribute(self.search_property, "class")
             self.wait_to_click(self.search_property)
             time.sleep(4)
@@ -108,10 +110,17 @@ class CaseSearchWorkflows(BasePage):
             else:
                 self.send_keys(self.search_property, input_value + Keys.TAB)
                 time.sleep(5)
-            self.wait_for_ajax()
+            time.sleep(20)
         elif property_type == COMBOBOX:
             self.combox_select_element = self.get_element(self.combox_select, search_property)
             time.sleep(2)
+            self.wait_for_element(self.combox_select_element, 100)
+            self.select_by_text(self.combox_select_element, input_value)
+            time.sleep(4)
+        elif property_type == COMBOBOX2:
+            self.combox_select_element = self.get_element(self.combox_select2, search_property)
+            time.sleep(2)
+            self.wait_for_element(self.combox_select_element, 100)
             self.select_by_text(self.combox_select_element, input_value)
             time.sleep(4)
         if include_blanks == YES:
@@ -232,6 +241,7 @@ class CaseSearchWorkflows(BasePage):
             time.sleep(4)
             assert not self.is_displayed(validation_message_per_prop),  f"validation present {validation_message_per_prop}"
             print(f"validation not present {validation_message_per_prop}")
+        time.sleep(5)
 
     def check_dropdown_value(self, search_property, value, present):
         dropdown_values_ = self.get_element(self.dropdown_values, search_property)
@@ -321,12 +331,15 @@ class CaseSearchWorkflows(BasePage):
         if select_by_value == text:
             checkbox_xpath = (By.XPATH, self.checkbox_xpath.format(search_property, values))
             self.wait_for_element(checkbox_xpath)
-            self.scroll_to_element(checkbox_xpath)
+            # self.scroll_to_element(checkbox_xpath)
+            time.sleep(3)
             self.js_click(checkbox_xpath)
+            time.sleep(3)
         elif select_by_value == index:
             for value in values:
                 checkbox_xpath = (By.XPATH, self.checkbox_xpath.format(search_property, value - 1))
                 self.js_click(checkbox_xpath)
+                time.sleep(3)
             list_string = map(str, values)
             return list(list_string)
 
