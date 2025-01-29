@@ -94,6 +94,7 @@ class CaseSearchWorkflows(BasePage):
         print("Providing value: ", input_value)
         if property_type == TEXT_INPUT:
             self.search_property = self.get_element(self.search_against_text_property_format, search_property)
+            self.wait_for_element(self.search_property, 100)
             class_type = self.get_attribute(self.search_property, "class")
             self.wait_to_click(self.search_property)
             time.sleep(4)
@@ -113,11 +114,13 @@ class CaseSearchWorkflows(BasePage):
         elif property_type == COMBOBOX:
             self.combox_select_element = self.get_element(self.combox_select, search_property)
             time.sleep(2)
+            self.wait_for_element(self.combox_select_element, 100)
             self.select_by_text(self.combox_select_element, input_value)
             time.sleep(4)
         elif property_type == COMBOBOX2:
             self.combox_select_element = self.get_element(self.combox_select2, search_property)
             time.sleep(2)
+            self.wait_for_element(self.combox_select_element, 100)
             self.select_by_text(self.combox_select_element, input_value)
             time.sleep(4)
         if include_blanks == YES:

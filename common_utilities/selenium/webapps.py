@@ -132,7 +132,9 @@ class WebApps(BasePage):
         self.js_click(self.search_again_button)
 
     def clear_selections_on_case_search_page(self):
+        time.sleep(10)
         if self.is_present_and_displayed(self.error_message):
+            print("Error present")
             self.js_click(self.error_message)
             time.sleep(3)
         else:
@@ -221,7 +223,7 @@ class WebApps(BasePage):
 
     def async_restore_resubmit(self):
         time.sleep(10)
-        if self.is_present_and_displayed(self.async_restore_error, 20):
+        if self.is_present_and_displayed(self.async_restore_error, 30):
             self.click(self.async_restore_error)
             time.sleep(10)
             self.scroll_to_element(self.form_submit)
@@ -235,6 +237,7 @@ class WebApps(BasePage):
         time.sleep(3)
         self.wait_for_element(self.form_submit)
         self.js_click(self.form_submit)
+        time.sleep(10)
         self.async_restore_resubmit()
         time.sleep(10)
         try:
