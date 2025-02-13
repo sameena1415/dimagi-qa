@@ -142,8 +142,8 @@ class WorkloadModelSteps(SequentialTaskSet):
                 "6,0": "OK",
                 "6,6": "OK"
                 }
-            input_answers = {d["ix"]: d["answer"] for d in self.FUNC_HOUSEHOLD_FORM["questions"].values()}
-            answers.update(input_answers)
+            # input_answers = {d["ix"]: d["answer"] for d in self.FUNC_HOUSEHOLD_FORM["questions"].values()}
+            # answers.update(input_answers)
 
             extra_json = {
                 "answers": answers,

@@ -81,9 +81,9 @@ class WorkloadModelSteps(SequentialTaskSet):
     def answer_and_submit_reassign_household_form(self):
         logging.info("Generating names")
         if "kb_test_1" in self.user.user_detail.username:
-            n = 3
+            n = 2
         else:
-            n = 4001
+            n = 3
         for i in range(1, n):
             rc_list = list(range(1, i + 1))
             session_id = self.reaf_men(str(i))
@@ -128,8 +128,8 @@ class WorkloadModelSteps(SequentialTaskSet):
                 "5,2": "OK",
                 "5,3": 1
         }
-            input_answers = {d["ix"]: d["answer"] for d in self.FUNC_REASSIGN_HOUSEHOLD_FORM["questions"].values()}
-            answers.update(input_answers)
+            # input_answers = {d["ix"]: d["answer"] for d in self.FUNC_REASSIGN_HOUSEHOLD_FORM["questions"].values()}
+            # answers.update(input_answers)
 
             extra_json = {
                 "answers": answers,
