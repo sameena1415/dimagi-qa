@@ -35,7 +35,7 @@ class WebUsersPage(BasePage):
         self.verify_user = (By.XPATH,
                             "//td[.//text()[contains(.,'" + UserData.yahoo_user_name + "')]]/following-sibling::td[.//text()[contains(.,'Delivered')]]")
         self.remove_user_invite = (By.XPATH,
-                                   "//td[.//text()[contains(.,'" + UserData.yahoo_user_name + "')]]/following-sibling::td//i[@class='fa fa-trash']")
+                                   "//td[.//text()[contains(.,'" + UserData.yahoo_user_name + "')]]/following-sibling::td//i[contains(@class,'fa-trash')]")
         self.login_username = (By.ID, "login-username")
         self.next_button = (By.ID, "login-signin")
         self.login_password = (By.NAME, "password")
@@ -65,7 +65,7 @@ class WebUsersPage(BasePage):
         self.search_user = (By.XPATH, "//input[contains(@placeholder,'Search Users')]")
         self.search_user_btn = (By.XPATH, "//form[.//input[contains(@placeholder,'Search Users')]]//button/i[@class='fa fa-search']")
         self.user_link = (By.LINK_TEXT,UserData.p1p2_user)
-        self.update_role_btn = (By.XPATH, "//button[.='Update Role']")
+        self.update_role_btn = (By.XPATH, "//button[@class='btn btn-primary'][.='Update Information']")
         self.location_field = (By.XPATH, "//textarea[@class='select2-search__field']")
         self.remove_location = (By.XPATH, "//button[@aria-label='Remove item']")
         self.location_value = (By.XPATH, "//li[contains(@class,'select2-results__option')][.='Test Location [DO NOT DELETE!!!]']")

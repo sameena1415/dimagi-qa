@@ -46,13 +46,14 @@ class ApplicationPage(BasePage):
         self.save_button = (By.XPATH, "//span[text()='Save']")
         self.app_created = "(//span[text()='{}'])[1]"
         self.form_link = "//a//*[contains(.,'{}')]"
-
+        self.app_list = (By.XPATH, "//a[contains(.,'Applications')]//following-sibling::ul/li/a[contains(.,'App ') or contains(.,'Untitled')]")
 
         # Delete Application
-        self.settings = (By.XPATH, "//i[@class='fa fa-gear']")
+        self.settings = (By.XPATH, "//i[contains(@class,'fa-gear')]")
         self.delete_app = (By.XPATH, "//a[@href='#delete-app-modal']")
         self.delete_confirm = (By.XPATH, "(//button[@class='disable-on-submit btn btn-danger'])[last()]")
         self.delete_success = (By.XPATH, "//div[contains(@class,'alert-success')][contains(.,'You have deleted an application.')]")
+        self.app_link = "(//li/a[contains(., '{}')])[1]"
 
         # Application Contents
         self.menu_settings = (By.XPATH, "//a[@class='appnav-title appnav-title-secondary appnav-responsive']")
@@ -90,7 +91,7 @@ class ApplicationPage(BasePage):
         self.form_edit_app = (By.XPATH,"//a[contains(text(),'"+ UserData.reassign_cases_application+"')]")
         self.form_name_save_button = (By.XPATH, "//button[text()='Save']")
         self.reg_form_head_text = (By.XPATH, "//span[@class='fd-head-text']")
-        self.form_settings_btn = "//a[.//span[contains(.,'{}')]]//following-sibling::a//i[@class='fa fa-gear appnav-show-on-hover']"
+        self.form_settings_btn = "//a[.//span[contains(.,'{}')]]//following-sibling::a//i[contains(@class,'fa-gear appnav-show-on-hover')]"
         self.reg_form_variable_name = (By.XPATH, "//span[@class='variable-form_name']")
         self.add_form_question = (By.XPATH, "//*[@class='fd-add-question dropdown-toggle btn btn-purple']")
         self.field_edit_app_name =  "//span[text()='{}']"
@@ -151,13 +152,14 @@ class ApplicationPage(BasePage):
 
     def delete_application(self):
         time.sleep(2)
-        self.js_click(self.settings)
-        self.wait_for_element(self.actions_tab)
-        self.js_click(self.actions_tab)
-        self.wait_for_element(self.delete_app)
-        self.js_click(self.delete_app)
+        self.wait_for_element(self.settings, 50)
+        self.click(self.settings)
+        self.wait_for_element(self.actions_tab, 50)
+        self.click(self.actions_tab)
+        self.wait_for_element(self.delete_app, 50)
+        self.click(self.delete_app)
         self.wait_for_element(self.delete_confirm)
-        self.js_click(self.delete_confirm)
+        self.click(self.delete_confirm)
         assert self.is_present_and_displayed(self.delete_success, 200), "Application not deleted."
         print("Deleted the application")
 
@@ -254,7 +256,10 @@ class ApplicationPage(BasePage):
 
 
     def create_application_with_verifications(self):
-        self.wait_to_click(self.applications_menu_id)
+        time.sleep(5)
+        self.switch_to_default_content()
+        self.wait_for_element(self.applications_menu_id)
+        self.click(self.applications_menu_id)
         self.wait_to_click(self.new_application)
         self.wait_to_click(self.edit_app_name)
         self.clear(self.app_name_textbox)
@@ -332,15 +337,18 @@ class ApplicationPage(BasePage):
         self.wait_to_click(self.applications_menu_id)
         self.wait_to_click((By.LINK_TEXT, app_name))
         time.sleep(2)
-        self.js_click(self.settings)
-        self.wait_for_element(self.actions_tab)
-        self.js_click(self.actions_tab)
-        self.wait_for_element(self.delete_app)
-        self.js_click(self.delete_app)
+        self.wait_for_element(self.settings, 50)
+        self.click(self.settings)
+        self.wait_for_element(self.actions_tab, 50)
+        self.click(self.actions_tab)
+        self.wait_for_element(self.delete_app, 50)
+        self.click(self.delete_app)
         self.wait_for_element(self.delete_confirm)
-        self.js_click(self.delete_confirm)
+        self.click(self.delete_confirm)
         assert self.is_present_and_displayed(self.delete_success, 200), "Application not deleted."
         print("Deleted the application")
+        time.sleep(60)
+        print("Sleeping sometime for the page to load")
 
     def create_application(self, app_name):
         self.wait_to_click(self.applications_menu_id)
@@ -390,3 +398,33 @@ class ApplicationPage(BasePage):
             time.sleep(2)
             self.wait_to_click(self.save_language)
 
+
+    def get_all_application_name(self):
+        self.wait_to_click(self.applications_menu_id)
+        app_list = self.find_elements(self.app_list)
+        app_names = list()
+        if len(app_list)>0:
+            for items in app_list:
+                app_names.append(items.text)
+        else:
+            print("No test app present")
+        print(app_names)
+        self.driver.refresh()
+        time.sleep(5)
+        return app_names
+
+    def delete_all_application(self, apps):
+        for app in apps:
+            self.wait_to_click(self.applications_menu_id)
+            self.wait_to_click((By.XPATH, self.app_link.format(app)))
+            time.sleep(2)
+            self.wait_for_element(self.settings, 50)
+            self.click(self.settings)
+            self.wait_for_element(self.actions_tab, 50)
+            self.click(self.actions_tab)
+            self.wait_for_element(self.delete_app, 50)
+            self.click(self.delete_app)
+            self.wait_for_element(self.delete_confirm)
+            self.click(self.delete_confirm)
+            assert self.is_present_and_displayed(self.delete_success, 200), "Application "+app+" not deleted."
+            print("Deleted the application", app)

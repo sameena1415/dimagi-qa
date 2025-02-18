@@ -8,7 +8,7 @@ class CaseSearchUserInput:
     casesearch = "casesearch"
     casesearch_1 = "casesearch-1"
     casesearch_2 = "casesearch-2"
-    casesearch_split_screen = "casesearch-split_screen"
+    casesearch_split_screen = "casesearch-split-screen"
 
     """App Names"""
     case_search_app_name = "[Master] Music App (Case Search & Claim)"
@@ -61,6 +61,8 @@ class CaseSearchUserInput:
     """Pre=Configured Cases"""
     # Song-Cases
 
+    song_just_babe = "Just5000Babe"
+    song_123 = "1"
     song_automation_song = "Automation-Song-"
     song_automation_song_no_space = "AutomationSongNoSpace"
     song_automation_song_1 = "Automation-Song-1"
@@ -119,7 +121,8 @@ class CaseSearchUserInput:
 
     dates = {"MM/DD/YYYY": '%m/%d/%Y', "MM-DD-YYYY": "%m-%d-%Y",
              "MM/DD/YY": "%m/%d/%y", "MM-DD-YY": "%m-%d-%y",
-             "YYYY-MM-DD": '%Y-%m-%d', "DD/MM/YYYY": "%d/%m/%Y"}
+             "YYYY-MM-DD": '%Y-%m-%d', "DD/MM/YYYY": "%d/%m/%Y",
+             "DD-MM-YYYY": '%d-%m-%Y'}
     full_home_address = "New Canada St., 3855 Brienz, Switzerland"
     full_work_address = "Avenida Benito Juárez, 77560 Alfredo V. Bonfil, Quintana Roo, Mexico"
     home_street_value = "New Canada St."

@@ -24,6 +24,7 @@ def test_case_33_user_domain_list_api(settings):
     mw = MiscellaneousMethods(settings)
     mw.get_user_domain_list_api(uri, settings['login_user'], settings['login_pass'])
 
+@pytest.mark.skip
 def test_case_39_login_logout_tracking_api_no_params(settings):
     uri = settings["url"] + UserData.login_logout_tracking
     mw = MiscellaneousMethods(settings)

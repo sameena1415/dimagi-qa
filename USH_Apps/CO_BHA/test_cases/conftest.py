@@ -52,7 +52,7 @@ def driver(settings, browser):
     else:
         print("Provide valid browser")
     login = LoginPage(web_driver, settings["url"])
-    login.login(settings["ush_login_username"], settings["ush_login_password"], settings["ush_user_prod_auth_key"])
+    login.login(settings["bha_username"], settings["bha_password"], settings["ush_user_prod_auth_key"])
     yield web_driver
     web_driver.quit()
 
@@ -63,15 +63,17 @@ def environment_settings_bha():
 
             Names of environment variables:
                 DIMAGIQA_URL
-                DIMAGIQA_USH_LOGIN_USERNAME
-                DIMAGIQA_USH_LOGIN_PASSWORD
+                DIMAGIQA_bha_username
+                DIMAGIQA_bha_password
                 DIMAGIQA_USH_USER_PROD_AUTH_KEY
+                DIMAGIQA_BHA_PASSWORD
 
             See https://docs.github.com/en/actions/reference/encrypted-secrets
             for instructions on how to set them.
             """
     settings = {}
-    for name in ["url", "ush_login_username", "ush_login_password", "ush_user_prod_auth_key"]:
+
+    for name in ["url", "bha_username", "bha_password", "ush_user_prod_auth_key", "login_username", "login_password", "db", "user_b_pwd"]:
 
         var = f"DIMAGIQA_{name.upper()}"
         if var in os.environ:
@@ -80,7 +82,13 @@ def environment_settings_bha():
         env = os.environ.get("DIMAGIQA_ENV") or "staging"
         subdomain = "www" if env == "production" else env
         # updates the url with the project domain while testing in CI
-        settings["url"] = f"https://{subdomain}.commcarehq.org/a/bha-auto-tests/cloudcare/apps/v2/#apps"
+        settings["url"] = f"https://{subdomain}.commcarehq.org/a/co-carecoordination-test/cloudcare/apps/v2/#apps"
+        settings["db"] = f"https://{subdomain}.commcarehq.org/a/co-carecoordination-test/dashboard/"
+    if "db" not in settings:
+        env = os.environ.get("DIMAGIQA_ENV") or "staging"
+        subdomain = "www" if env == "production" else env
+        # updates the url with the project domain while testing in CI
+        settings["db"] = f"https://{subdomain}.commcarehq.org/a/co-carecoordination-test/dashboard/"
     return settings
 
 
@@ -89,7 +97,9 @@ def settings(environment_settings_bha):
     if os.environ.get("CI") == "true":
         settings = environment_settings_bha
         settings["CI"] = "true"
-        if any(x not in settings for x in ["url", "ush_login_username", "ush_login_password", "ush_user_prod_auth_key"]):
+
+        if any(x not in settings for x in ["url", "bha_username", "bha_password", "ush_user_prod_auth_key", "login_username", "login_password", "db", "user_b_pwd"]):
+
             lines = environment_settings_bha.__doc__.splitlines()
             vars_ = "\n  ".join(line.strip() for line in lines if "DIMAGIQA_" in line)
             raise RuntimeError(
@@ -108,3 +118,23 @@ def settings(environment_settings_bha):
     settings = ConfigParser()
     settings.read(path)
     return settings["default"]
+
+def pytest_terminal_summary(terminalreporter, exitstatus, config):
+    # Collect test counts
+    passed = terminalreporter.stats.get('passed', [])
+    failed = terminalreporter.stats.get('failed', [])
+    error = terminalreporter.stats.get('error', [])
+    skipped = terminalreporter.stats.get('skipped', [])
+    xfail = terminalreporter.stats.get('xfail', [])
+    # Write the counts to a file
+    # Determine the environment
+    env = os.environ.get("DIMAGIQA_ENV", "default_env")
+
+    # Define the filename based on the environment
+    filename = f'bha_test_counts_{env}.txt'
+    with open(filename, 'w') as f:
+        f.write(f'PASSED={len(passed)}\n')
+        f.write(f'FAILED={len(failed)}\n')
+        f.write(f'ERROR={len(error)}\n')
+        f.write(f'SKIPPED={len(skipped)}\n')
+        f.write(f'XFAIL={len(xfail)}\n')

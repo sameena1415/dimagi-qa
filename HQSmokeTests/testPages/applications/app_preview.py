@@ -3,7 +3,7 @@ import re
 import time
 
 from selenium.common.exceptions import TimeoutException
-from selenium.webdriver import ActionChains
+from selenium.webdriver import ActionChains, Keys
 from selenium.webdriver.common.by import By
 
 from HQSmokeTests.userInputs.user_inputs import UserData
@@ -29,17 +29,17 @@ class AppPreviewPage(BasePage):
         self.complete_button = (By.XPATH, "//button[@class='btn btn-success btn-formnav-submit']")
         self.submit = (By.XPATH, "(//button[@class='submit btn btn-primary'])[1]")
         self.submit_success = (By.XPATH, "//p[contains(text(),'successfully saved')]")
-        self.search_users_button = (By.XPATH, "//*[@class='fa fa-search']")
+        self.search_users_button = (By.XPATH, "//input[@placeholder='Filter workers']//following::*[contains(@class,'fa-search')]")
         self.search_worker = (By.XPATH, "//input[@placeholder='Filter workers']")
         self.login_as_button = (
             By.XPATH, "//div[@aria-labelledby='single-app-login-as-heading']/descendant::h3[.='Log in as']")
         self.username_in_list = "//h3[./b[text() ='{}']]"
         self.webapp_login_confirmation = (By.ID, 'js-confirmation-confirm')
-        self.webapp_working_as = (By.XPATH, "//div[@class='restore-as-banner module-banner']/b")
+        self.webapp_working_as = (By.XPATH, "//div[contains(@class,'restore-as-banner')]/b")
         self.case_list_menu = "//h3[contains(text(), '{}')]"
         self.start_option = (By.XPATH, "//div[@class= 'js-start-app appicon appicon-start']")
         self.location_field = (By.XPATH, "//input[@class='query form-control']")
-        self.location_search = (By.XPATH, "//span/button[.='Search']")
+        self.location_search = (By.XPATH, "//button[contains(@class,'search')]")
         self.clear_map = (By.XPATH, "//button[.='Clear map']")
         self.longitude = (By.XPATH, "//td[@class='lon coordinate']")
         self.latitude = (By.XPATH, "//td[@class='lat coordinate']")
@@ -66,7 +66,8 @@ class AppPreviewPage(BasePage):
         self.wait_to_click(self.followup_form)
         self.wait_to_click(self.first_case_on_case_list)
         time.sleep(2)
-        self.wait_to_click(self.continue_button)
+        if self.is_present(self.continue_button):
+            self.wait_to_click(self.continue_button)
         time.sleep(2)
         if self.is_displayed(self.next_button):
             self.wait_to_click(self.next_button)
@@ -92,9 +93,11 @@ class AppPreviewPage(BasePage):
         time.sleep(1)
         loc = random.choice(UserData.location_list)
         print(loc)
-        self.wait_to_click(self.location_field)
-        self.send_keys(self.location_field, loc)
-        self.wait_to_click(self.location_search)
+        self.scroll_to_element(self.location_field)
+        time.sleep(2)
+        self.send_keys(self.location_field, loc+Keys.ENTER)
+        time.sleep(2)
+        self.js_click(self.location_search)
         time.sleep(1)
         lat = self.get_text(self.latitude)
         lon = self.get_text(self.longitude)
@@ -112,14 +115,14 @@ class AppPreviewPage(BasePage):
         time.sleep(2)
         self.switch_to_default_content()
         print("Sleeping for sometime so the form data is updated")
-        time.sleep(30)
+        time.sleep(100)
         print("Latitude: ", lat, "Longitude: ", lon)
         return lat, lon
 
     def login_as_app_preview(self, username = UserData.app_login):
         self.wait_to_click(self.login_as_button)
-        time.sleep(2)
-        self.wait_for_element(self.search_worker)
+        time.sleep(5)
+        self.wait_for_element(self.search_worker, 100)
         self.wait_to_clear_and_send_keys(self.search_worker, username)
         self.wait_for_element(self.search_users_button)
         self.js_click(self.search_users_button)

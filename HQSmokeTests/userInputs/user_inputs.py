@@ -27,6 +27,7 @@ class UserData:
     appiumtest_owner_id_prod = "appiumtest@qa-automation-prod.commcarehq.org"
     default_mw_role = "Mobile Worker Default"
     user_group = "automation_user"
+    web_user = "[Web Users]"
 
     # Phone Number
     area_code = "91"
@@ -56,6 +57,7 @@ class UserData:
 
     # Date Filter
     date_having_submissions = "2022-01-18 to 2022-02-18"
+    india_date_having_submission = "2024-05-10 to 2024-05-30"
 
     # Excel column names
     case_id = 'caseid'
@@ -64,7 +66,7 @@ class UserData:
 
     """New web user invitation"""
     yahoo_url = "https://login.yahoo.com/"
-    yahoo_user_name = 'automation_webuser@yahoo.com'
+    yahoo_user_name = 'automation_webuser_test@yahoo.com'
 
     """Deduplicate Case Module """
     case_property = 'village_name'
@@ -84,6 +86,7 @@ class UserData:
     p1p2_profile = "p1p2_testprofile"
     from_email_prod = "commcarehq-noreply-production@dimagi.com"
     from_email = "commcarehq-noreply-staging@dimagi.com"
+    from_email_india = "commcarehq-noreply-india@dimagi.com"
 
     """Report email subjects"""
     daily_form_activity = "Daily Form Activity: Requested export excel data"
