@@ -197,7 +197,7 @@ jobs:
 
       - name: Archive test results
         if: ${{ success() || failure() }}
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: test-result-reports-${{ matrix.environment }}
           path: ${{ github.workspace }}/formplayer_${{ matrix.environment }}.html
