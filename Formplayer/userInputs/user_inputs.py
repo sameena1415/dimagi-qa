@@ -104,3 +104,8 @@ class UserData:
     sms_survey_list = ["SMS Tests > Case List > Registration Form",
                        "SMS Tests > Case List > Followup Form",
                        "SMS Tests > Case List > Close"]
+
+    domain_staging = "qa-automation"
+    multimedia_app = {
+        "tests_app": "Multimedia"}
+    map_input = "New Delhi"

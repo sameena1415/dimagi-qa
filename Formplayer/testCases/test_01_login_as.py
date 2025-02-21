@@ -2,17 +2,18 @@ from Formplayer.testPages.app_preview.login_as_app_preview_page import LoginAsAp
 from Formplayer.testPages.webapps.login_as_page import LoginAsPage
 from Formplayer.testPages.webapps.webapps_basics import WebAppsBasics
 from Formplayer.userInputs.user_inputs import UserData
+from common_utilities.selenium.webapps import WebApps
 
 
 def test_case_01_login_as_web_apps(driver, settings):
-    loginPage = LoginAsPage(driver, settings)
+    login = LoginAsPage(driver, settings)
     app_preview = LoginAsAppPreviewPage(driver, settings)
-    loginPage.open_webapps_menu()
-    loginPage.login_as_form_submssion(loginPage.form_input_no_login)
+    login.open_webapps_menu()
+    login.login_as_form_submssion(login.form_input_no_login)
     app_preview.submit_history_verification("no login", UserData.web_user)
-    loginPage.login_as_presence()
-    loginPage.login_as_content()
-    loginPage.login_as_form_submssion(loginPage.form_input)
+    login.login_as_presence()
+    login.login_as_content()
+    login.login_as_form_submssion(login.form_input)
     app_preview.submit_history_verification("login", UserData.app_preview_mobile_worker)
 
 def test_case_01_login_as_app_preview(driver, settings):

@@ -2,6 +2,9 @@ import time
 from random import randint
 from datetime import datetime
 
+from selenium.common import TimeoutException
+from selenium.webdriver import ActionChains
+
 from common_utilities.generate_random_string import fetch_random_string, fetch_random_digit_with_range, \
     fetch_phone_number
 from common_utilities.selenium.base_page import BasePage
@@ -38,7 +41,7 @@ class WebAppsBasics(BasePage):
         self.name_question = (By.XPATH, "//label[.//span[text()='Name']]/following-sibling::div//textarea")
         self.dob_question = (By.XPATH, "//label[.//span[text()='DOB']]/following-sibling::div//input")
         self.sync = (By.XPATH, "//h3[contains(text(), 'Sync')]")
-        self.home_icon = (By.XPATH, "//i[@class='fa fa-home']")
+        self.home_icon = (By.XPATH, "//i[@class='fcc fcc-flower']")
         self.mobileno_question = (By.XPATH, "//label[.//span[text()='Mobile No.']]/following-sibling::div//input")
         self.submit_form_button = (By.XPATH, "//button[@type= 'submit']")
         self.success_message = (By.XPATH, "//p[contains(text(),'successfully saved')]")
@@ -72,13 +75,16 @@ class WebAppsBasics(BasePage):
         self.apply_id = (By.ID, "apply-filters")
         self.this_form = (By.XPATH, "//a[.='this form']")
         self.this_case = (By.XPATH, "//a[.='this case']")
-        self.breadcrumbs = "//li[@class='breadcrumb-text'][contains(text(),'{}')]"
+        self.breadcrumbs = "//li[contains(@class,'breadcrumb')][contains(text(),'{}') or ./a[contains(.,'{}')]]"
 
         # Submit History
         self.users_box = (By.XPATH, "//span[@class='select2-selection select2-selection--multiple']")
         self.selected_users = (By.XPATH, "//li[contains(@class,'select2-selection')]")
         self.deselect_user = "(//button[contains(@class,'select2-selection')])[{}]"
         self.search_user = (By.XPATH, "//textarea[@class='select2-search__field']")
+        self.users_field = (By.XPATH, "(//textarea[@class='select2-search__field'])[1]")
+        self.remove_buttons = (By.XPATH, "//ul//button")
+        self.users_list_item = "//ul[@role='listbox']/li[contains(.,'{}')]"
         self.app_user_select = "(//li[contains(text(),'{}')])[1]"
         self.select_user = (By.XPATH, "//li[contains(text(),'[All Data]')]")
         self.application_select = (By.XPATH, "//select[@id='report_filter_form_app_id']")
@@ -129,11 +135,11 @@ class WebAppsBasics(BasePage):
         time.sleep(2)
         assert self.is_present(self.name_question)
         print("We are inside the form")
-        self.wait_to_click((By.XPATH, self.breadcrumbs.format(application['case_list'])))
+        self.wait_to_click((By.XPATH, self.breadcrumbs.format(application['case_list'], application['case_list'])))
         time.sleep(2)
         assert self.is_present(self.registration_form)
         print("We are in the case list screen")
-        self.wait_to_click((By.XPATH, self.breadcrumbs.format(application['tests_app'])))
+        self.wait_to_click((By.XPATH, self.breadcrumbs.format(application['tests_app'], application['tests_app'])))
         time.sleep(2)
         assert self.is_present(self.case_list_menu)
         print("We are in the application screen")
@@ -243,16 +249,14 @@ class WebAppsBasics(BasePage):
         self.click(self.submit_history_rep)
         print("Sleeping for some time for the form/case data to be updated in reports")
         time.sleep(40)
-        self.wait_to_click(self.users_box)
-        list = self.find_elements(self.selected_users)
-        print(len(list))
-        if len(list) > 0:
-            for i in range(len(list)):
-                self.wait_to_click((By.XPATH, self.deselect_user.format(1)))
-                list = self.find_elements(self.selected_users)
-
-        self.send_keys(self.search_user, username)
-        self.wait_to_click((By.XPATH, self.app_user_select.format(username)))
+        self.remove_default_users()
+        self.clear(self.users_field)
+        self.send_keys(self.users_field, username)
+        self.wait_to_click((By.XPATH, self.users_list_item.format(username)))
+        time.sleep(1)
+        #
+        # self.send_keys(self.search_user, username)
+        # self.wait_to_click((By.XPATH, self.app_user_select.format(username)))
         self.select_by_text(self.application_select, application['tests_app'])
         self.select_by_text(self.module_select, application['case_list'])
         self.select_by_text(self.form_select, application['form_name'])
@@ -278,14 +282,7 @@ class WebAppsBasics(BasePage):
         print("Sleeping for some time for the case data to be updated in reports")
         time.sleep(60)
         self.wait_to_click(self.case_list_rep)
-        self.wait_to_click(self.users_box)
-        list = self.find_elements(self.selected_users)
-        print(len(list))
-        if len(list) > 0:
-            for i in range(len(list)):
-                self.wait_to_click((By.XPATH, self.deselect_user.format(1)))
-                list = self.find_elements(self.selected_users)
-
+        self.remove_default_users()
         self.send_keys(self.search_user, username)
         self.wait_to_click((By.XPATH, self.app_user_select.format(username)))
         time.sleep(2)
@@ -331,6 +328,22 @@ class WebAppsBasics(BasePage):
         assert self.is_present_and_displayed(self.question_display_text)
 
     def wait_to_click(self, locator, timeout=50):
-        self.wait_for_element(locator, timeout)
-        time.sleep(2)
-        self.js_click(locator)
+        try:
+            self.wait_for_element(locator, timeout)
+            time.sleep(2)
+            self.js_click(locator)
+        except (TimeoutException):
+            print("locator not present")
+
+    def remove_default_users(self):
+        self.wait_for_element(self.users_field)
+        count = self.find_elements(self.remove_buttons)
+        print(len(count))
+        for i in range(len(count)):
+             count[0].click()
+             time.sleep(2)
+             if len(count) != 1:
+                ActionChains(self.driver).send_keys(Keys.TAB).perform()
+                time.sleep(2)
+             count = self.find_elements(self.remove_buttons)
+

@@ -42,9 +42,9 @@ class LoginAsAppPreviewPage(BasePage):
         self.clear_user = (By.XPATH, "//a[@class='js-clear-user']")
         self.search_user_input_area = (By.XPATH, "//input[@placeholder='Filter workers']")
         self.username_in_list =  "//h3[./b[text() ='{}']]"
-        self.search_users_button = (By.XPATH, "//*[@class='fa fa-search']")
+        self.search_users_button = (By.XPATH, "//i[contains(@class,'fa-search align-top')]")
         self.webapp_login_confirmation = (By.ID, 'js-confirmation-confirm')
-        self.webapp_working_as = (By.XPATH, "//div[@class='restore-as-banner module-banner']/b")
+        self.webapp_working_as = (By.XPATH, "//div[contains(@class,'restore-as-banner')]/b")
         self.basic_tests_case = (By.XPATH, "//tr[@aria-label='" + UserData.basic_tests["case_list"] + "']")
         self.basic_tests_form = (By.XPATH, "//tr[@aria-label='" + UserData.basic_tests["form_name"] + "']")
         self.basic_tests_answer_input = (
@@ -75,7 +75,11 @@ class LoginAsAppPreviewPage(BasePage):
         self.switch_to_frame(self.iframe)
         time.sleep(2)
         assert self.is_visible_and_displayed(self.title_bar), "This is not the Webaspps menu page."
-        self.webapp.wait_to_click(self.login_as_button)
+        # self.webapp.wait_to_click(self.login_as_button)
+        self.wait_for_element(self.login_as_button, 200)
+        self.scroll_to_element(self.login_as_button)
+        self.js_click(self.login_as_button)
+        time.sleep(3)
 
 
     def login_as_app_preview_content(self):
@@ -116,8 +120,13 @@ class LoginAsAppPreviewPage(BasePage):
 
     def login_as_user(self, username):
         self.switch_to_frame(self.iframe)
+        time.sleep(2)
         self.webapp.wait_to_click(self.login_as_button)
-        self.wait_to_clear_and_send_keys(self.search_worker, username)
+        time.sleep(2)
+        self.wait_for_element(self.search_worker, 120)
+        time.sleep(2)
+        self.send_keys(self.search_worker, username)
+        time.sleep(3)
         self.js_click(self.search_users_button)
         time.sleep(2)
         self.js_click((By.XPATH, self.username_in_list.format(self.username)))
