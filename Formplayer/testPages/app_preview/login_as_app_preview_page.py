@@ -32,12 +32,12 @@ class LoginAsAppPreviewPage(BasePage):
         self.login_as_button = (
         By.XPATH, "//div[@aria-labelledby='single-app-login-as-heading']/descendant::h3[.='Log in as']")
         self.app_icon_container = (By.XPATH, "//div[@class='container container-appicons']")
-        self.title_bar = (By.XPATH, "//li[.='" + UserData.basic_tests['tests_app'] + "']")
+        self.title_bar = (By.XPATH, "//li[.='" + UserData.basic_tests_app['tests_app'] + "']")
         self.searh_user_field = (By.XPATH, "//input[@class='js-user-query form-control']")
         self.search_worker = (By.XPATH, "//input[@placeholder='Filter workers']")
         self.username = UserData.app_preview_mobile_worker
         self.start_option = (By.XPATH, "//div[@class= 'js-start-app appicon appicon-start']")
-        self.basic_tests_app = (By.ID, "//ol//li[contains(.," + UserData.basic_tests["tests_app"] + ")]")
+        self.basic_tests_app = (By.ID, "//ol//li[contains(.," + UserData.basic_tests_app["tests_app"] + ")]")
         self.login_as = (By.XPATH, "//h3[text()='Login as']")
         self.clear_user = (By.XPATH, "//a[@class='js-clear-user']")
         self.search_user_input_area = (By.XPATH, "//input[@placeholder='Filter workers']")
