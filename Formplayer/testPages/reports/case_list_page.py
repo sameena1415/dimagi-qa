@@ -84,6 +84,8 @@ class CaseListPage(BasePage):
         time.sleep(40)
         self.webapp.remove_default_users()
         self.send_keys(self.users_field, UserData.automation_user)
+        time.sleep(1)
+        self.wait_for_element((By.XPATH, self.users_list_item.format(UserData.automation_user)))
         self.wait_to_click((By.XPATH, self.users_list_item.format(UserData.automation_user)))
         time.sleep(1)
         self.select_by_text(self.case_type_select, UserData.case_type_formplayer)
