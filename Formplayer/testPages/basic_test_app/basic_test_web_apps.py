@@ -1999,7 +1999,7 @@ class BasicTestWebApps(BasePage):
         self.js_click(self.submit_form_button)
         time.sleep(3)
         if cond == "no":
-            assert self.is_present_and_displayed((By.XPATH, self.form_title_name.format(UserData.basic_tests_app['tests_app2']))), "This is not the "+UserData.basic_tests_app['tests_app2']+" page."
+            assert self.is_present_and_displayed((By.XPATH, self.form_title_name.format(UserData.basic_tests_app['tests_app']))), "This is not the "+UserData.basic_tests_app['tests_app']+" page."
         else:
             assert self.is_present_and_displayed(
                 (By.XPATH, self.form_title_name.format(UserData.basic_test_app_forms['hin_basic_form']))), "This is not the " + \

@@ -44,8 +44,7 @@ class UserData:
         "form_name": "Registration Form"}
 
     basic_tests_app = {
-        "tests_app": "Basic Tests",
-        "tests_app2": "Basic Tests [Linked]",
+        "tests_app": "Basic Tests [Linked]",
         "case_list": "Basic Form Tests",
         "form_name": "Basic Form"}
 

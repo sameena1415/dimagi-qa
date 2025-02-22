@@ -54,7 +54,7 @@ class LoginAsAppPreviewPage(BasePage):
         self.submit_success = (By.XPATH, "//p[contains(text(),'successfully saved')]")
         self.full_menu = (By.LINK_TEXT, "Show Full Menu")
 
-    def open_view_app_preview(self, test_app=UserData.basic_tests['tests_app']):
+    def open_view_app_preview(self, test_app=UserData.basic_tests_app['tests_app']):
         self.switch_to_default_content()
         self.driver.get(self.dashboard_link)
         self.wait_for_element(self.application_menu_id)
@@ -112,7 +112,7 @@ class LoginAsAppPreviewPage(BasePage):
 
     def submit_history_verification(self, type, username):
         web_app = WebAppsBasics(self.driver)
-        web_app.open_submit_history_form_link(UserData.basic_tests, username)
+        web_app.open_submit_history_form_link(UserData.basic_tests_app, username)
         if type == "no login":
             assert self.is_displayed(self.submitted_by), "Submission verification failed"
         elif type == "login":

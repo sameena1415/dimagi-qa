@@ -1831,7 +1831,7 @@ class BasicTestAppPreview(BasePage):
         time.sleep(5)
         self.wait_for_element(self.success_message)
         if cond == "no":
-            assert self.is_present_and_displayed((By.XPATH, self.form_title_name.format(UserData.basic_tests_app['tests_app2']))), "This is not the "+UserData.basic_tests_app['tests_app2']+" page."
+            assert self.is_present_and_displayed((By.XPATH, self.form_title_name.format(UserData.basic_tests_app['tests_app']))), "This is not the "+UserData.basic_tests_app['tests_app']+" page."
         else:
             assert self.is_present_and_displayed(
                 (By.XPATH, self.form_title_name.format(UserData.basic_tests_app['form_name']))), "This is not the " + \

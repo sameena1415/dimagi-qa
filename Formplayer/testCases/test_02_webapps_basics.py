@@ -19,7 +19,6 @@ def test_case_03_run_through_the_app(driver):
 
 
 def test_case_04_locate_forms_and_cases(driver):
-
     forms = WebAppsBasics(driver)
     forms.verify_form_data_case_list(forms.name_input, UserData.app_preview_mobile_worker)
     forms.verify_form_data_submit_history(forms.name_input, UserData.test_application)

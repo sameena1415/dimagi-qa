@@ -10,7 +10,7 @@ def test_case_20_maps_web_apps(driver, settings):
     login.open_webapps_menu()
     login.login_as_user(UserData.app_preview_mobile_worker)
     basic = BasicTestWebApps(driver)
-    login.open_basic_tests_app(UserData.basic_tests_app['tests_app2'])
+    login.open_basic_tests_app(UserData.basic_tests_app['tests_app'])
     basic.open_form(UserData.form_specific_tests_app['case_list'], UserData.form_specific_tests_app['form_name'])
     basic.maps_record_location()
 
@@ -19,7 +19,7 @@ def test_case_21_maps_app_preview(driver, settings):
     app_preview = LoginAsAppPreviewPage(driver, settings)
     basic = BasicTestAppPreview(driver)
     login = LoginAsAppPreviewPage(driver, settings)
-    app_preview.open_view_app_preview(UserData.basic_tests_app['tests_app2'])
+    app_preview.open_view_app_preview(UserData.basic_tests_app['tests_app'])
     login.login_as_user(UserData.app_preview_mobile_worker)
     basic.turn_off_one_question_per_screen()
     basic.open_form(UserData.form_specific_tests_app['case_list'], UserData.form_specific_tests_app['form_name'])
@@ -31,7 +31,7 @@ def test_case_26_sub_menu_web_apps(driver, settings):
     login.open_webapps_menu()
     login.login_as_user(UserData.app_preview_mobile_worker)
     basic = BasicTestWebApps(driver)
-    login.open_basic_tests_app(UserData.basic_tests_app['tests_app2'])
+    login.open_basic_tests_app(UserData.basic_tests_app['tests_app'])
     basic.sub_menus()
 
 
@@ -39,7 +39,7 @@ def test_case_27_sub_menu_app_preview(driver, settings):
     app_preview = LoginAsAppPreviewPage(driver, settings)
     basic = BasicTestAppPreview(driver)
     login = LoginAsAppPreviewPage(driver, settings)
-    app_preview.open_view_app_preview(UserData.basic_tests_app['tests_app2'])
+    app_preview.open_view_app_preview(UserData.basic_tests_app['tests_app'])
     login.login_as_user(UserData.app_preview_mobile_worker)
     basic.turn_off_one_question_per_screen()
     basic.sub_menus()
@@ -84,12 +84,12 @@ def test_case_32_custom_badge_web_apps(driver, settings):
     login.open_webapps_menu()
     login.login_as_user(UserData.app_preview_mobile_worker)
     basic = BasicTestWebApps(driver)
-    login.open_basic_tests_app(UserData.basic_tests_app['tests_app2'])
+    login.open_basic_tests_app(UserData.basic_tests_app['tests_app'])
     basic.custom_badge()
 
 
 def test_case_33_custom_badge_app_preview(driver, settings):
     app_preview = LoginAsAppPreviewPage(driver, settings)
     basic = BasicTestAppPreview(driver)
-    app_preview.open_view_app_preview(UserData.basic_tests_app['tests_app2'])
+    app_preview.open_view_app_preview(UserData.basic_tests_app['tests_app'])
     basic.custom_badge()

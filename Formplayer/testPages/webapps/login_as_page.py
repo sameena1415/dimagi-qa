@@ -41,7 +41,7 @@ class LoginAsPage(BasePage):
         self.submit_success = (By.XPATH, "//p[contains(text(),'successfully saved')]")
         self.login_as_webuser= (By.XPATH, "//a[@class='js-clear-user']")
 
-    def open_basic_tests_app(self, application=UserData.basic_tests["tests_app"]):
+    def open_basic_tests_app(self, application=UserData.basic_tests_app["tests_app"]):
         print("Open App")
         self.wait_for_element((By.XPATH, self.basic_tests_app.format(application, application)), 120)
         self.js_click((By.XPATH, self.basic_tests_app.format(application, application)))
