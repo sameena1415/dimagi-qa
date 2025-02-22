@@ -44,7 +44,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix: ${{ fromJSON(needs.set_matrix.outputs.matrix) }}
-    name: Lookup tests on '${{ matrix.environment }}'
+    name: Formplayer tests on '${{ matrix.environment }}'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -106,7 +106,7 @@ jobs:
           script: |
             const { promises: fs } = require('fs')
             const {JOB_STATUS, NOW, CC_ENV, GITHUB_HEAD_REF} = process.env
-            const prefix = `[${CC_ENV}] Lookuptable Tests - ${JOB_STATUS.toUpperCase()} - Run #${context.runNumber}`
+            const prefix = `[${CC_ENV}] Formplayer Tests - ${JOB_STATUS.toUpperCase()} - Run #${context.runNumber}`
             const suffix = `at ${NOW}`
             let subject = `${prefix} on branch "${GITHUB_HEAD_REF}" ${suffix}`
 
