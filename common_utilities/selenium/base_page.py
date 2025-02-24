@@ -432,3 +432,16 @@ class BasePage:
     def get_url(self, link):
         self.driver.get(link)
         time.sleep(10)
+
+    def switch_to_frame(self, frame_name):
+        frame = self.driver.find_element(*frame_name)
+        self.driver.switch_to.frame(frame)
+        print("Switched to frame.")
+
+    def js_send_keys(self, locator, value, timeout=20):
+        clickable = ec.element_to_be_clickable(locator)
+        element = WebDriverWait(self.driver, timeout).until(clickable,
+                                                            message="Couldn't find locator: "
+                                                                    + str(locator))
+        self.driver.execute_script("arguments[0].value='"+value+"';", element)
+        time.sleep(2)
