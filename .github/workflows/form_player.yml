@@ -9,7 +9,7 @@ on:
   pull_request:
     branches: [ master ]
   schedule:
-    - cron: '0 0 * * 6'
+    - cron: '0 0 * * 0'
 
   workflow_dispatch:
     inputs:
@@ -81,7 +81,7 @@ jobs:
           # Extract variables from the api_test_counts.txt file
           while IFS= read -r line; do
             echo "::set-output name=${line%=*}::${line#*=}"
-          done < formplayer_counts_{{ matrix.environment }}.txt
+          done < formplayer_counts_${{ matrix.environment }}.txt
 
       - name: Archive test results
         id: artifact-upload-step

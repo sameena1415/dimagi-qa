@@ -1694,19 +1694,28 @@ class BasicTestAppPreview(BasePage):
         self.switch_to_frame(self.iframe)
         self.webapp.wait_to_click(self.incomplete_form)
         self.wait_for_element(self.incomplete_form_title)
-        if self.is_present(self.page_navigation):
+        while self.is_present(self.page_navigation):
+            if self.is_present(self.page_navigation):
+                self.switch_to_default_content()
+                time.sleep(3)
+                self.verify_page_navigation()
+                time.sleep(3)
+                self.verify_goto_page_button()
+                time.sleep(3)
+                self.verify_list_per_page()
+                self.switch_to_frame(self.iframe)
+            elif self.is_present(self.page_navigation) == False and len(self.find_elements(self.incomplete_list_count)) > 0:
+                self.switch_to_default_content()
+                self.verify_list_per_page()
+                self.switch_to_frame(self.iframe)
+            else:
+                print("No incomplete form present")
+            self.driver.back()
+        self.webapp.wait_to_click(self.incomplete_form)
+        self.wait_for_element(self.incomplete_form_title)
+        if self.is_present(self.page_navigation) == False and len(self.find_elements(self.incomplete_list_count)) > 0:
             self.switch_to_default_content()
-            time.sleep(3)
-            self.verify_page_navigation()
-            time.sleep(3)
-            self.verify_goto_page_button()
-            time.sleep(3)
             self.verify_list_per_page()
-            self.switch_to_frame(self.iframe)
-        elif self.is_present(self.page_navigation) == False and len(self.find_elements(self.incomplete_list_count)) > 0:
-            self.switch_to_default_content()
-            self.verify_list_per_page()
-            self.switch_to_frame(self.iframe)
         else:
             print("No incomplete form present")
         self.driver.back()

@@ -142,7 +142,7 @@ class BasicTestWebApps(BasePage):
         self.text_area_field = "//label[.//span[contains(.,'{}')]]//following-sibling::div//textarea"
         self.text_area_field2 = "(//label[.//span[contains(.,'{}')]]//following-sibling::div//textarea)[2]"
         self.input_field = "(//label[.//span[contains(.,'{}')]]//following-sibling::div//input)[1]"
-        self.date_input_field = "//label[.//span[contains(.,'{}')]]//following-sibling::div//input[@placeholder='MM/DD/YYYY']"
+        self.date_input_field = "//label[.//span[contains(.,'{}')]]//following-sibling::div//input[@placeholder='M/D/YYYY']"
         self.breadcrumbs = "//h1[@class='page-title'][.='{}']"
         self.search_input = (By.XPATH, "//input[@id='searchText']")
         self.search_button = (By.XPATH, "//button[@id='case-list-search-button']")
@@ -1029,7 +1029,7 @@ class BasicTestWebApps(BasePage):
             "This answer must be greater than 20 and smaller than 8000. The question is required.")),
                        "11" + Keys.TAB)
         self.scroll_to_element((By.XPATH, self.danger_warning.format("greater than 20 and smaller than 8000")))
-        self.scroll_to_element((By.XPATH, self.text_area_field.format(
+        self.scroll_to_element((By.XPATH, self.input_field.format(
             "This answer must be greater than 20 and smaller than 8000. The question is required."
             )))
 
@@ -1050,49 +1050,49 @@ class BasicTestWebApps(BasePage):
                        )
         assert not self.is_present_and_displayed((By.XPATH, self.text_success.format("greater than 20 and smaller than 8000")), 5)
         time.sleep(5)
-        # print(self.is_clickable((By.XPATH, self.date_input_field.format(
+        # print(self.is_clickable((By.XPATH, self.input_field.format(
         #     "This date must be after today.")), 50))
-        # self.js_click((By.XPATH, self.date_input_field.format("This date must be after today.")))
+        # self.js_click((By.XPATH, self.input_field.format("This date must be after today.")))
         # self.webapp.wait_to_click(self.click_today_date)
         # # self.webapp.wait_to_click(self.close_date_picker)
-        self.send_keys((By.XPATH, self.date_input_field.format(
+        self.send_keys((By.XPATH, self.input_field.format(
             "This date must be after today.")), self.input_date_add(0) + Keys.TAB)
-        self.js_click(self.close_date_picker)
+        self.webapp.wait_to_click(self.click_today_date)
         time.sleep(2)
         self.scroll_to_element(
             (By.XPATH, self.danger_warning.format("This date must be after today.")))
-        self.scroll_to_element((By.XPATH, self.text_area_field.format(
+        self.scroll_to_element((By.XPATH, self.input_field.format(
             "This date must be after today."
             ))
                                )
-        self.wait_to_clear_and_send_keys((By.XPATH, self.date_input_field.format(
+        self.wait_to_clear_and_send_keys((By.XPATH, self.input_field.format(
             "This date must be after today.")), self.input_date_add(1) + Keys.TAB)
-        self.js_click(self.close_date_picker)
+        self.webapp.wait_to_click(self.click_today_date)
         time.sleep(2)
         assert not self.is_present_and_displayed((By.XPATH, self.text_success.format("This date must be after today.")), 5)
         time.sleep(10)
-        self.send_keys((By.XPATH, self.date_input_field.format(
+        self.send_keys((By.XPATH, self.input_field.format(
             "This date has to be today or in the past.")), self.input_date_add(2) + Keys.TAB)
-        self.js_click(self.close_date_picker)
+        self.webapp.wait_to_click(self.click_today_date)
         time.sleep(2)
         self.wait_for_element(
             (By.XPATH, self.danger_warning.format("This date has to be today or in the past.")))
-        self.click((By.XPATH, self.date_input_field.format(
+        self.click((By.XPATH, self.input_field.format(
             "This date has to be today or in the past.")))
         self.scroll_to_element(self.click_today_date)
         self.js_click(self.click_today_date)
         self.webapp.wait_to_click(self.close_date_picker)
         time.sleep(2)
         assert not self.is_present_and_displayed((By.XPATH, self.text_success.format("This date has to be today or in the past.")), 5)
-        self.wait_to_clear_and_send_keys((By.XPATH, self.date_input_field.format(
+        self.wait_to_clear_and_send_keys((By.XPATH, self.input_field.format(
             "This date has to be today or in the past.")), self.input_date_subtract(1) + Keys.TAB)
         self.webapp.wait_to_click(self.close_date_picker)
         assert not self.is_present_and_displayed((By.XPATH, self.text_success.format("This date has to be today or in the past.")), 5)
-        self.send_keys((By.XPATH, self.date_input_field.format(
+        self.send_keys((By.XPATH, self.input_field.format(
             "The date entered must be within the last 10 months.")), self.input_date_subtract(340) + Keys.TAB)
         self.wait_for_element(
             (By.XPATH, self.danger_warning.format("The date entered must be within the last 10 months.")))
-        self.wait_to_clear_and_send_keys((By.XPATH, self.date_input_field.format(
+        self.wait_to_clear_and_send_keys((By.XPATH, self.input_field.format(
             "The date entered must be within the last 10 months.")), self.input_date_subtract(100) + Keys.TAB)
         assert not self.is_present_and_displayed((By.XPATH, self.text_success.format("The date entered must be within the last 10 months.")), 5)
         self.scroll_to_element((By.XPATH, self.input_field.format(
@@ -1131,8 +1131,7 @@ class BasicTestWebApps(BasePage):
         self.wait_to_clear_and_send_keys((By.XPATH, self.input_field.format(
             "This question should only let you submit an answer greater than 50 but less than 80.")),
                                          "60" + Keys.TAB)
-        self.wait_for_element(
-            (By.XPATH, self.text_success.format("greater than 50 but less than 80")))
+        assert not self.is_present_and_displayed((By.XPATH, self.text_success.format("greater than 50 but less than 80")), 5)
         self.scroll_to_element(
             (By.XPATH, self.div_span.format("You should only see this question if you left the previous one blank.")))
         self.wait_to_clear_and_send_keys((By.XPATH, self.text_area_field.format(
@@ -1218,8 +1217,7 @@ class BasicTestWebApps(BasePage):
         self.js_click((By.XPATH, self.choose_radio_button.format(
             "You should not be able to choose all of the options here.", "Four"
         )))
-        self.wait_for_element(
-            (By.XPATH, self.text_success.format("You should not be able to choose all of the options here.")))
+        assert not self.is_present_and_displayed((By.XPATH, self.text_success.format("You should not be able to choose all of the options here.")))
 
         self.scroll_to_element((By.XPATH, self.choose_radio_button.format(
             "You should not be able to select \"None\" and another choice.", "One"
@@ -1244,8 +1242,7 @@ class BasicTestWebApps(BasePage):
         self.js_click((By.XPATH, self.choose_radio_button.format(
             "You should not be able to select \"None\" and another choice.", "One"
         )))
-        self.wait_for_element(
-            (By.XPATH, self.text_success.format("You should not be able to select \"None\" and another choice.")))
+        assert not self.is_present_and_displayed((By.XPATH, self.text_success.format("You should not be able to select \"None\" and another choice.")))
 
         self.scroll_to_element(
             (By.XPATH, self.input_field.format("If you capture your location, you should not see the message.")))
@@ -1308,8 +1305,7 @@ class BasicTestWebApps(BasePage):
             "You should be able to choose one or more answers here.", "Two")))
         self.js_click((By.XPATH, self.choose_radio_button.format(
             "You should be able to choose one or more answers here.", "Three")))
-        self.wait_for_element(
-            (By.XPATH, self.text_success.format("You should be able to choose one or more answers here.")))
+        assert not self.is_present_and_displayed((By.XPATH, self.text_success.format("You should be able to choose one or more answers here.")))
 
     def click_update_later(self):
         print("waiting for pop up")
@@ -1333,18 +1329,27 @@ class BasicTestWebApps(BasePage):
     def verify_pagination(self):
         self.webapp.wait_to_click(self.incomplete_form)
         self.wait_for_element(self.incomplete_form_title)
-        if self.is_present(self.page_navigation):
-            time.sleep(3)
-            self.verify_page_navigation()
-            time.sleep(3)
-            self.verify_goto_page_button()
-            time.sleep(3)
-            self.verify_list_per_page()
-        elif self.is_present(self.page_navigation) == False and len(self.find_elements(self.incomplete_list_count)) > 0:
+        while self.is_present(self.page_navigation):
+            if self.is_present(self.page_navigation):
+                time.sleep(3)
+                self.verify_page_navigation()
+                time.sleep(3)
+                self.verify_goto_page_button()
+                time.sleep(3)
+                self.verify_list_per_page()
+            elif self.is_present(self.page_navigation) == False and len(self.find_elements(self.incomplete_list_count)) > 0:
+                self.verify_list_per_page()
+            else:
+                print("No incomplete form present")
+            self.driver.back()
+        self.webapp.wait_to_click(self.incomplete_form)
+        self.wait_for_element(self.incomplete_form_title)
+        if self.is_present(self.page_navigation) == False and len(self.find_elements(self.incomplete_list_count)) > 0:
             self.verify_list_per_page()
         else:
             print("No incomplete form present")
         self.driver.back()
+
 
     def verify_list_per_page(self):
         if self.is_present(self.page_navigation):
@@ -1384,7 +1389,7 @@ class BasicTestWebApps(BasePage):
         print(n)
         self.webapp.wait_to_click(self.last_list_page)
         time.sleep(3)
-        classname = self.get_attribute((By.XPATH, self.page_number.format(n)),"class")
+        classname = self.get_attribute((By.XPATH, self.page_number.format(n)), "class")
         print(classname)
         # assert classname == "js-page active", "Click is not successful on last page"
 
@@ -1809,8 +1814,7 @@ class BasicTestWebApps(BasePage):
             "You should be able to choose one or more answers here.", "Two")))
         self.js_click((By.XPATH, self.choose_radio_button.format(
             "You should be able to choose one or more answers here.", "Three")))
-        self.wait_for_element(
-            (By.XPATH, self.text_success.format("You should be able to choose one or more answers here.")))
+        assert not self.is_present_and_displayed((By.XPATH, self.text_success.format("You should be able to choose one or more answers here.")))
 
         self.scroll_to_element((By.XPATH, self.choose_radio_button.format(
             "You should be able to choose only one answer here.", "One")))
