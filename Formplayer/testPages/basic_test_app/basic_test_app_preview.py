@@ -68,7 +68,7 @@ class BasicTestAppPreview(BasePage):
         self.registration_form = "//h3[contains(text(), '{}')]"
         self.followup_form = (By.XPATH, "//h3[contains(text(), 'Followup Form')]")
         self.name_question = (By.XPATH,
-                              "//label[.//span[.='Enter a Name']]/following-sibling::div//textarea[contains(@class,'textfield form-control')]")
+                              "//label[.//span[contains(.,'Enter a Name')]]/following-sibling::div//textarea[contains(@class,'textfield form-control')]")
         self.incomplete_form_list = (By.XPATH, "//tr[@class='formplayer-request']")
         self.custom_incomplete_form_list = "//tr[@class='formplayer-request']/td[2][contains(.,'{}')]"
         self.incomplete_form_title = (By.XPATH, "//li[contains(@class,'breadcrumb')][contains(.,'Incomplete Forms')]")
