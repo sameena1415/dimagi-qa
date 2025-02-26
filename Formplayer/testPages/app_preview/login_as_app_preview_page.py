@@ -48,7 +48,7 @@ class LoginAsAppPreviewPage(BasePage):
         self.basic_tests_case = (By.XPATH, "//tr[@aria-label='" + UserData.basic_tests["case_list"] + "']")
         self.basic_tests_form = (By.XPATH, "//tr[@aria-label='" + UserData.basic_tests["form_name"] + "']")
         self.basic_tests_answer_input = (
-        By.XPATH, "//label[.//span[text()='Enter a Name']]//following-sibling::div//textarea")
+        By.XPATH, "//label[.//span[contains(text(),'Enter a Name')]]//following-sibling::div//textarea")
         self.next_button = (By.XPATH, "//button[contains(@data-bind,'click: nextQuestion')]")
         self.submit = (By.XPATH, "//button[contains(@data-bind,'click: submitForm')]")
         self.submit_success = (By.XPATH, "//p[contains(text(),'successfully saved')]")

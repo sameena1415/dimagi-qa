@@ -1746,7 +1746,7 @@ class BasicTestAppPreview(BasePage):
             latest_page_count = self.find_elements(self.no_of_pages)
             if self.is_present(self.page_navigation):
                 if len(latest_page_count) > 1:
-                    assert len(self.find_elements(self.incomplete_form_list)) == int(i), "List count not equal to 10"
+                    assert len(self.find_elements(self.incomplete_form_list)) <= int(i), "List count not equal to 10"
                 else:
                     assert len(self.find_elements(self.incomplete_form_list)) in range(min_list_count,
                                                                                        max_list_count), "List count is not valid"

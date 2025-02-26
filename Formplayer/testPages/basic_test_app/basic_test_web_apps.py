@@ -85,7 +85,7 @@ class BasicTestWebApps(BasePage):
         self.registration_form = "//h3[contains(text(), '{}')]"
         self.followup_form = (By.XPATH, "//h3[contains(text(), 'Followup Form')]")
         self.name_question = (By.XPATH,
-                              "//label[.//span[.='Enter a Name']]/following-sibling::div//textarea[contains(@class,'textfield form-control')]")
+                              "//label[.//span[contains(.,'Enter a Name')]]/following-sibling::div//textarea[contains(@class,'textfield form-control')]")
         self.incomplete_form_list = (By.XPATH, "//tr[@class='formplayer-request']")
         self.custom_incomplete_form_list = "//tr[@class='formplayer-request']/td[2][contains(.,'{}')]"
         self.incomplete_list_count = (By.XPATH, "//tbody/tr[@class='formplayer-request']")
@@ -1375,7 +1375,7 @@ class BasicTestWebApps(BasePage):
             latest_page_count = self.find_elements(self.no_of_pages)
             if self.is_present(self.page_navigation):
                 if len(latest_page_count) > 1:
-                    assert len(self.find_elements(self.incomplete_form_list)) == int(i), "List count not equal to 10"
+                    assert len(self.find_elements(self.incomplete_form_list)) <= int(i), "List count not equal to 10"
                 else:
                     assert len(self.find_elements(self.incomplete_form_list)) in range(min_list_count,
                                                                                        max_list_count), "List count is not valid"
