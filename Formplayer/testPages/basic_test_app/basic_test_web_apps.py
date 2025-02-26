@@ -72,7 +72,7 @@ class BasicTestWebApps(BasePage):
         self.incomplete_form = (By.XPATH, "//div[@class='js-incomplete-sessions-item appicon appicon-incomplete']")
         self.incomplete_form_title = (By.XPATH, "//h1[@class='page-title'][.='Incomplete Forms']")
         self.no_of_pages = (By.XPATH, "//li[contains(@class,'js-page')]")
-        self.page_number = "(//li[contains(@class,'js-page')])[{}]"
+        self.page_number = "(//li[contains(@class,'js-page')]/a)[{}]"
         self.page_navigation = (By.XPATH, "//div[contains(@class,'module-per-page-container')]")
         self.list_drop_down = (By.XPATH, "//select[contains(@class,'per-page-limit')]")
         self.next_list_button = (By.XPATH, "//a[@aria-label='Next']")
@@ -1389,42 +1389,49 @@ class BasicTestWebApps(BasePage):
         print(n)
         self.webapp.wait_to_click(self.last_list_page)
         time.sleep(3)
-        classname = self.get_attribute((By.XPATH, self.page_number.format(n)), "class")
+        # classname = self.get_attribute((By.XPATH, self.page_number.format(n)), "class")
+        # print(classname)
+        # assert "js-page active" in classname, "Click is not successful on last page"
+        classname = self.get_attribute((By.XPATH, self.page_number.format(n)), "aria-current")
         print(classname)
-        # assert classname == "js-page active", "Click is not successful on last page"
+        assert classname == 'page', "Click is not successful on last page"
 
         self.webapp.wait_to_click(self.first_list_page)
         time.sleep(3)
-        classname = self.get_attribute((By.XPATH, self.page_number.format(1)), "class")
+        # classname = self.get_attribute((By.XPATH, self.page_number.format(1)), "class")
+        classname = self.get_attribute((By.XPATH, self.page_number.format(1)), "aria-current")
         print(classname)
-        # assert classname == "js-page active", "Click is not successful on first page"
+        assert classname == 'page', "Click is not successful on first page"
+
+        # assert "js-page active" in classname, "Click is not successful on first page"
 
         print("navigating forward")
         for i in range(len(page_count)-1)[::]:
             self.webapp.wait_to_click(self.next_list_button)
             time.sleep(3)
-            classname = self.get_attribute((By.XPATH, self.page_number.format(i+2)), "class")
+            classname = self.get_attribute((By.XPATH, self.page_number.format(i+2)), "aria-current")
             print(classname)
-            # assert classname == "js-page active", "Click is not successful"
+            assert classname == 'page', "Click is not successful"
 
         print("navigating backward")
         for i in range(len(page_count)-1)[::]:
             self.webapp.wait_to_click(self.prev_list_button)
             time.sleep(3)
-            classname = self.get_attribute((By.XPATH, self.page_number.format(len(page_count)-i-1)), "class")
+            classname = self.get_attribute((By.XPATH, self.page_number.format(len(page_count)-i-1)), "aria-current")
             print(classname)
-            # assert classname == "js-page active", "Click is not successful"
+            assert classname == 'page', "Click is not successful"
 
     def verify_goto_page_button(self):
         page_count = self.find_elements(self.no_of_pages)
         n = len(page_count)
+        print(n)
         for i in range(len(page_count))[::-1]:
-            self.wait_to_clear_and_send_keys(self.go_to_page_input,i+1)
+            self.wait_to_clear_and_send_keys(self.go_to_page_input, i+1)
             self.webapp.wait_to_click(self.go_button)
             time.sleep(4)
-            classname = self.get_attribute((By.XPATH, self.page_number.format(i+1)), "class")
+            classname = self.get_attribute((By.XPATH, self.page_number.format(i+1)), "aria-current")
             print(classname)
-            # assert classname == "js-page active", "Click is not successful"
+            assert classname == 'page', "Click is not successful"
 
     def minimize_duplicate_create_case_subcase(self):
         self.wait_for_element(self.create_a_case_button)
@@ -2107,3 +2114,6 @@ class BasicTestWebApps(BasePage):
     def custom_badge(self):
         self.is_present_and_displayed(self.formplayer_badge)
         self.is_present_and_displayed(self.case_tests_badge)
+
+
+

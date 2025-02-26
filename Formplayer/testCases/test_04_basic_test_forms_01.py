@@ -295,6 +295,7 @@ def test_case_27_webapps_forced_refresh(driver, settings):
 def test_case_28_pagination_web_apps(driver, settings):
     login = LoginAsPage(driver, settings)
     login.open_webapps_menu()
+    login.login_as_user(UserData.app_preview_mobile_worker)
     basic = BasicTestWebApps(driver)
     basic.verify_pagination()
 
@@ -303,6 +304,7 @@ def test_case_28_pagination_app_preview(driver, settings):
     app_preview = LoginAsAppPreviewPage(driver, settings)
     basic = BasicTestAppPreview(driver)
     app_preview.open_view_app_preview(UserData.basic_tests_app['tests_app'])
+    app_preview.login_as_user(UserData.app_preview_mobile_worker)
     basic.verify_pagination()
 
 
