@@ -36,7 +36,7 @@ class LoginAsPage(BasePage):
         self.webapp_working_as = (By.XPATH, "//span[contains(.,'Working as')]//b")
         self.basic_tests_menu = (By.XPATH,"//h3[text()='Basic Form Tests']")
         self.basic_tests_form = (By.XPATH, "//h3[contains(text(), 'Basic Form')]")
-        self.basic_tests_answer_input = (By.XPATH,  "//label[.//span[text()= 'Enter a Name']]//following-sibling::div//textarea")
+        self.basic_tests_answer_input = (By.XPATH,  "//label[.//span[contains(text(), 'Enter a Name')]]//following-sibling::div//textarea")
         self.submit = (By.XPATH, "(//button[@class='submit btn btn-primary'])[1]")
         self.submit_success = (By.XPATH, "//p[contains(text(),'successfully saved')]")
         self.login_as_webuser= (By.XPATH, "//a[@class='js-clear-user']")
