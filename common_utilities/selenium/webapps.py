@@ -101,19 +101,22 @@ class WebApps(BasePage):
         time.sleep(5)
         self.wait_for_element((By.XPATH, self.current_page.format(breadcrumb_value)), timeout=60)
 
-    def open_menu(self, menu_name):
+    def open_menu(self, menu_name, assertion='Yes'):
         self.caselist_menu = self.get_element(self.menu_name_format, menu_name)
         self.caselist_header = self.get_element(self.menu_name_header_format, menu_name)
         self.scroll_to_element(self.caselist_menu)
         self.js_click(self.caselist_menu)
         time.sleep(5)
-        self.wait_for_element((By.XPATH, self.current_page.format(menu_name)), timeout=60)
-        assert self.is_visible_and_displayed(self.caselist_header)
+        if assertion == 'No':
+            print("No assertion needed")
+        else:
+            self.wait_for_element((By.XPATH, self.current_page.format(menu_name)), timeout=60)
+            assert self.is_visible_and_displayed(self.caselist_header)
 
     def open_form(self, form_name):
         self.form_header = self.get_element(self.form_name_header_format, form_name)
-        if self.is_displayed(self.form_header):
-            logging.info("Auto advance enabled")
+        if self.is_present_and_displayed(self.form_header):
+            print("Auto advance enabled")
         else:
             self.form_name = self.get_element(self.form_name_format, form_name)
             self.wait_for_element(self.form_name, timeout=50)
