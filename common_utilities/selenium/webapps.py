@@ -158,10 +158,10 @@ class WebApps(BasePage):
             time.sleep(2)
             self.scroll_to_element(self.submit_on_case_search_page)
             self.js_click(self.submit_on_case_search_page)
-            time.sleep(10)
+            time.sleep(7)
             self.wait_for_ajax()
         if case_list == None:
-            self.is_visible_and_displayed(self.case_list, timeout=100)
+            self.is_visible_and_displayed(self.case_list, timeout=80)
         else:
             print("Case List is not displayed")
 
@@ -228,9 +228,10 @@ class WebApps(BasePage):
         time.sleep(10)
         if self.is_present_and_displayed(self.async_restore_error, 30):
             self.click(self.async_restore_error)
-            time.sleep(10)
+            time.sleep(5)
             self.scroll_to_element(self.form_submit)
             self.js_click(self.form_submit)
+            time.sleep(2)
         else:
             print("No Asynchronous restore error present")
 
@@ -240,15 +241,15 @@ class WebApps(BasePage):
         time.sleep(3)
         self.wait_for_element(self.form_submit)
         self.js_click(self.form_submit)
-        time.sleep(10)
+        time.sleep(7)
         self.async_restore_resubmit()
-        time.sleep(10)
+        time.sleep(5)
         try:
             self.wait_for_element(self.form_submission_successful, timeout=50)
             assert self.is_visible_and_displayed(self.form_submission_successful, timeout=50)
         except AssertionError:
             if self.is_displayed(self.form_500_error):
-                time.sleep(60)
+                time.sleep(40)
                 self.js_click(self.form_submit)
                 self.wait_for_element(self.form_submission_successful, timeout=50)
                 assert self.is_visible_and_displayed(self.form_submission_successful, timeout=50)
@@ -323,10 +324,10 @@ class WebApps(BasePage):
 
     def switch_bw_pages(self):
         self.js_click(self.next_page)
-        time.sleep(30)
+        time.sleep(20)
         self.wait_for_element(self.prev_page)
         self.js_click(self.prev_page)
-        time.sleep(30)
+        time.sleep(20)
 
     def go_to_page(self, page_number):
         self.send_keys(self.go_to_page_textarea, page_number)
@@ -374,7 +375,7 @@ class WebApps(BasePage):
         self.js_click(self.setting_button)
         self.wait_for_element(self.sync_button)
         self.js_click(self.sync_button)
-        time.sleep(20)
+        time.sleep(15)
         self.wait_for_element(self.done_button)
         self.js_click(self.done_button)
         time.sleep(10)
