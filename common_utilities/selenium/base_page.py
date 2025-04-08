@@ -52,6 +52,13 @@ class BasePage:
                                                             )
         try:
             element.click()
+        except UnexpectedAlertPresentException:
+            alert = self.driver.switch_to.alert
+            alert.accept()
+            element.click()
+        except StaleElementReferenceException:
+            time.sleep(2)
+            self.wait_to_click(locator)
         except Exception:
             self.driver.execute_script("arguments[0].click();", element)
         # try:
@@ -64,13 +71,6 @@ class BasePage:
         #     if self.cookie_alert():
         #         self.click(self.alert_button_accept)
         #         element.click()
-        # except UnexpectedAlertPresentException:
-        #     alert = self.driver.switch_to.alert
-        #     alert.accept()
-        #     element.click()
-        # except StaleElementReferenceException:
-        #     time.sleep(2)
-        #     self.wait_to_click(locator)
         # except TimeoutException:
         #     if self.page_403():
         #         self.driver.back()

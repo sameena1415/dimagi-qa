@@ -261,7 +261,6 @@ class WebApps(BasePage):
         self.login_as_user = self.get_element(self.login_as_username, username)
         self.wait_for_element(self.login_as_user)
         self.wait_to_click(self.login_as_user)
-        
         self.wait_for_element(self.webapp_login_confirmation)
         self.wait_to_click(self.webapp_login_confirmation)
         time.sleep(2)
@@ -290,10 +289,8 @@ class WebApps(BasePage):
         time.sleep(2)
         self.wait_for_element(self.search_user_webapps, timeout=100)
         self.send_keys(self.search_user_webapps, username)
-        
         self.wait_for_element(self.search_button_webapps)
         self.wait_to_click(self.search_button_webapps)
-        
         self.select_user(username)
         return username
 
