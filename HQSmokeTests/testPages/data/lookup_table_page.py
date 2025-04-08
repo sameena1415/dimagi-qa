@@ -42,7 +42,7 @@ class LookUpTablePage(BasePage):
         self.send_keys(self.field_name, self.table_id_name)
         print(self.table_id_name)
         self.wait_to_click(self.save_table)
-        time.sleep(2)
+        
         assert self.is_present_and_displayed(self.table_created_path)
         print("LookUp Table created successfully!")
 
@@ -53,7 +53,7 @@ class LookUpTablePage(BasePage):
         self.select_by_text(self.select_table, self.table_id_name)
         # self.wait_to_click(self.select_table_drop_down)
         # self.wait_to_click(self.select_table_from_dropdown)
-        self.js_click(self.view_table)
+        self.wait_to_click(self.view_table)
         assert self.is_present_and_displayed(self.column_name)
         print("LookUp Table can be viewed successfully!")
 

@@ -29,7 +29,7 @@ class AndroidScreen:
             "appium:automationName": "UIAutomator2",
 
             # Set URL of the application under test
-            "appium:app": "bs://0757644cf40b7773ae6e763340af6863675b5772",
+            "appium:app": "bs://3ab59253a9f31505cce6bb09cc0b23f512c333ed",
 
             "appium:autoGrantPermissions": "true",
             "appium:newCommandTimeout": 3600,
@@ -106,7 +106,7 @@ class AndroidScreen:
         assert self.driver.find_element(AppiumBy.XPATH, "//android.widget.TextView[@text='Add Text "+random_text+"']").is_displayed()
         self.driver.find_element(AppiumBy.XPATH, self.text_field).send_keys(random_text)
         self.driver.find_element(AppiumBy.XPATH, self.submit_button).click()
-        time.sleep(10)
+        time.sleep(2)
         assert self.driver.find_element(AppiumBy.XPATH, "//android.widget.TextView[@text='1 form sent to server!']").is_displayed()
         self.driver.find_element(AppiumBy.XPATH, self.sync_button).click()
         time.sleep(3)

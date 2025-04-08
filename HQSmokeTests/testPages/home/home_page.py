@@ -109,7 +109,7 @@ class HomePage(BasePage):
         login = LoginPage(self.driver, self.settings["url"])
         try:
             if self.is_present(self.show_full_menu):
-                self.js_click(self.show_full_menu)
+                self.wait_to_click(self.show_full_menu)
             self.driver.get(self.dashboard_link)
             self.accept_pop_up()
             self.wait_for_element(menu)
@@ -127,15 +127,15 @@ class HomePage(BasePage):
     def project_settings_page(self, value=None):
         if value==True:
             self.switch_to_default_content()
-            time.sleep(5)
+            time.sleep(2)
         else:
             print("Value null")
         self.driver.get(self.dashboard_link)
         self.accept_pop_up()
-        time.sleep(5)
+        time.sleep(2)
         self.wait_for_element(self.settings_bar)
         self.click(self.settings_bar)
         self.wait_for_element(self.project_settings_menu)
-        self.js_click(self.project_settings_menu)
+        self.wait_to_click(self.project_settings_menu)
         assert self.PROJECT_SETTINGS == self.driver.title, "This is not the Project Settings page."
         print("Project Settings page loaded successfully!")

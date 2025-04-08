@@ -82,7 +82,7 @@ class HomePage(BasePage):
             self.wait_to_click(self.login_as)
             self.wait_to_clear_and_send_keys(self.search_user, username)
             self.wait_to_click(self.search_confirm)
-            time.sleep(2)
+            
         except TimeoutException:
             try:
                 self.wait_to_clear_and_send_keys(self.search_user, username)
@@ -95,11 +95,11 @@ class HomePage(BasePage):
         try:
             self.wait_to_click(self.ci_ct_user)
         except TimeoutException:
-            self.js_click(self.ci_ct_user)
+            self.wait_to_click(self.ci_ct_user)
         try:
             self.wait_to_click(self.confirm_user_login)
         except TimeoutException:
-            self.js_click(self.confirm_user_login)
+            self.wait_to_click(self.confirm_user_login)
         assert self.is_visible_and_displayed(self.ci_ct_user, timeout=240)
 
     @timer
@@ -124,14 +124,14 @@ class HomePage(BasePage):
                                "' and @class='module-case-list-column']])[1]")
         self.wait_to_clear_and_send_keys(self.search_case_list, pre_configured_case)
         self.wait_to_click(self.search_button)
-        time.sleep(20)
+        time.sleep(10)
         assert self.is_visible_and_displayed(self.preconfig_case, timeout=240)
 
     @timer
     def open_case_detail(self, application_name, username, pre_configured_case):
         self.preconfig_case = (By.XPATH, "(//tr[.//td[text()='" + pre_configured_case +
                                "' and @class='module-case-list-column']])[1]")
-        self.js_click(self.preconfig_case)
+        self.wait_to_click(self.preconfig_case)
         assert self.is_visible_and_displayed(self.case_detail_modal, timeout=240)
 
     @timer
@@ -163,7 +163,7 @@ class HomePage(BasePage):
 
     @timer
     def ci_form_submission(self, application_name, username):
-        self.js_click(self.submit_form)
+        self.wait_to_click(self.submit_form)
         assert self.is_visible_and_displayed(self.form_submission_success, timeout=240)
 
     def app_home_screen(self, app_in_test):
@@ -172,7 +172,7 @@ class HomePage(BasePage):
 
     @timer
     def all_contacts_menu_load(self, application_name, username):
-        self.js_click(self.all_contacts_menu)
+        self.wait_to_click(self.all_contacts_menu)
         assert self.is_visible_and_displayed(self.case_list_table, timeout=240)
 
     def search_contact_in_test(self, application_name, username, pre_configured_contact):
@@ -180,7 +180,7 @@ class HomePage(BasePage):
                                   "' and @class='module-case-list-column']])[1]")
         self.wait_to_clear_and_send_keys(self.search_case_list, pre_configured_contact)
         self.wait_to_click(self.search_button)
-        time.sleep(20)
+        time.sleep(10)
         assert self.is_visible_and_displayed(self.preconfig_contact, timeout=240)
 
     @timer
@@ -220,16 +220,16 @@ class HomePage(BasePage):
 
     @timer
     def cm_form_submission(self, application_name, username):
-        self.js_click(self.submit_form)
+        self.wait_to_click(self.submit_form)
         assert self.is_visible_and_displayed(self.form_submission_success, timeout=240)
 
     @timer
     def cn_form_submission(self, application_name, username):
-        self.js_click(self.submit_form)
+        self.wait_to_click(self.submit_form)
         assert self.is_visible_and_displayed(self.form_submission_success, timeout=240)
 
     def back_to_webapps_home(self):
         self.wait_to_click(self.webapps_home)
         self.wait_for_element(self.use_web_user)
-        self.js_click(self.use_web_user)
+        self.wait_to_click(self.use_web_user)
         assert not self.is_displayed(self.use_web_user)

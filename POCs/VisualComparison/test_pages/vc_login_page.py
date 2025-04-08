@@ -56,7 +56,7 @@ class VCLoginPage(BasePage):
         try:
             self.driver.switch_to.frame(self.find_element(self.iframe))
             self.wait_for_element(self.view_latest_updates)
-            self.js_click(self.close_notification)
+            self.wait_to_click(self.close_notification)
             self.driver.switch_to.default_content()
         except TimeoutException:
             pass  # ignore if notification  not on page

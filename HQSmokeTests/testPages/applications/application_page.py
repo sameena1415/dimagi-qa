@@ -36,7 +36,7 @@ class ApplicationPage(BasePage):
         self.edit_app_name = (By.XPATH, '//span[@class="inline-edit-icon h3 app-title"]')
         self.app_name_textbox = (By.XPATH, "(//input[@type='text'])[1]")
         self.confirm_change = (By.XPATH, "(//button[@data-bind=\"click: save, hasFocus: saveHasFocus, visible: !isSaving()\"])[1]")
-        self.add_module = (By.XPATH, "//a[@class='appnav-add js-add-new-item']")
+        self.add_module = (By.XPATH, "//a[contains(@class,'new-module')]/i")
         self.add_case_list = (By.XPATH, "//button[@data-type='case']")
         self.add_questions = (By.XPATH, "//div[@class='dropdown fd-add-question-dropdown']")
         self.text_question = (By.XPATH, "//a[@data-qtype='Text']")
@@ -62,8 +62,8 @@ class ApplicationPage(BasePage):
         self.form_settings_content = (By.XPATH, "//div[@class='tabbable appmanager-tabs-container']")
 
         # Form XML
-        self.download_xml = (By.XPATH, "//a[contains(i/following-sibling::text(), 'Download')]")
-        self.upload_xml = (By.XPATH, "//a[@href='#upload-xform']")
+        self.download_xml = (By.XPATH, "//a[contains(i/following-sibling::text(), 'Download')]/i")
+        self.upload_xml = (By.XPATH, "//a[@href='#upload-xform']/i")
         self.add_form_button = (By.XPATH, "(//i[@class='fa fa-plus'])[1]")
         self.register_form = (By.XPATH, "//button[@data-case-action='open']/i")
         self.new_form_settings = (By.XPATH, "(//a[@data-action='View Form'])[3]")
@@ -125,22 +125,18 @@ class ApplicationPage(BasePage):
         self.send_keys(self.app_name_textbox, self.app_name)
         self.wait_to_click(self.confirm_change)
         self.wait_to_click(self.add_module)
-        time.sleep(1)
         self.wait_to_click(self.add_case_list)
-        time.sleep(2)
         self.wait_to_click(self.add_questions)
-        time.sleep(2)
         self.wait_to_click(self.text_question)
+        self.clear(self.question_display_text)
         self.send_keys(self.question_display_text, self.question_display_text_name)
         self.wait_to_click(self.save_button)
-        assert self.is_present_and_displayed((By.XPATH,self.app_created.format(self.app_name)))
+        assert self.is_present_and_displayed((By.XPATH, self.app_created.format(self.app_name)))
         print("New App created successfully!")
 
 
     def form_builder_exploration(self):
-        time.sleep(2)
         self.wait_to_click(self.menu_settings)
-        time.sleep(2)
         self.wait_for_element(self.menu_settings_content)
         assert self.is_displayed(self.menu_settings_content)
         print("Menu Settings loaded successfully!")
@@ -151,7 +147,6 @@ class ApplicationPage(BasePage):
         print("Form Settings loaded successfully!")
 
     def delete_application(self):
-        time.sleep(2)
         self.wait_for_element(self.settings, 50)
         self.click(self.settings)
         self.wait_for_element(self.actions_tab, 50)
@@ -169,21 +164,19 @@ class ApplicationPage(BasePage):
         except TimeoutException:
             self.wait_to_click(self.form_settings)
             self.wait_to_click(self.actions_tab)
-        self.wait_and_sleep_to_click(self.download_xml)
-        self.wait_and_sleep_to_click(self.add_form_button)
+        self.wait_to_click(self.download_xml)
+        self.wait_to_click(self.add_form_button)
         try:
-            self.wait_and_sleep_to_click(self.register_form)
+            self.wait_to_click(self.register_form)
         except TimeoutException:
             self.driver.refresh()
-        self.wait_and_sleep_to_click(self.new_form_settings)
-        self.wait_and_sleep_to_click(self.actions_tab)
-        self.wait_and_sleep_to_click(self.upload_xml)
+        self.wait_to_click(self.new_form_settings)
+        self.wait_to_click(self.actions_tab)
+        self.wait_to_click(self.upload_xml)
         newest_file = latest_download_file(".xml")
         file_that_was_downloaded = PathSettings.DOWNLOAD_PATH / newest_file
         self.send_keys(self.choose_file, str(file_that_was_downloaded))
-        time.sleep(1)
         self.click(self.upload)
-        time.sleep(5)
         assert self.is_present_and_displayed(self.same_question_present)
         print("XML copied successfully!")
 
@@ -200,7 +193,7 @@ class ApplicationPage(BasePage):
         assert self.is_present_and_displayed(self.actions_tab_content)
         self.wait_to_click(self.add_ons_tab)
         assert self.is_present_and_displayed(self.add_ons_tab_content)
-        time.sleep(2)
+        
         self.wait_to_click(self.advanced_settings_tab)
         assert self.is_present_and_displayed(self.advanced_settings_tab_content)
         print("App Settings loading successfully!")
@@ -209,7 +202,7 @@ class ApplicationPage(BasePage):
     def update_form_field(self):
         self.wait_to_click(self.applications_menu_id)
         self.wait_to_click(self.form_edit_app)
-        time.sleep(2)
+        
         # self.wait_to_click(self.add_form_button)
         # self.wait_to_click(self.register_form)
         # time.sleep(30)
@@ -217,7 +210,7 @@ class ApplicationPage(BasePage):
         # self.wait_to_clear_and_send_keys(self.edit_form_name_text, UserData.new_form_name)
         # self.wait_to_click(self.form_name_save_button)
         # self.wait_to_click(self.add_questions)
-        # time.sleep(2)
+        # 
         # self.wait_to_click(self.text_question)
         # self.send_keys(self.question_display_text, self.field_name)
         # assert self.is_present_and_displayed(self.app_created)
@@ -225,22 +218,22 @@ class ApplicationPage(BasePage):
         # self.wait_to_click(self.add_new_form)
         # self.wait_to_click(self.field_edit_app_name)
         self.wait_to_click(self.field_edit_form_name)
-        time.sleep(5)
+        time.sleep(2)
         self.wait_to_clear_and_send_keys(self.edit_field,self.field_name)
         self.wait_to_clear_and_send_keys(self.question_ID_field,self.question_ID)
         self.wait_to_click(self.save_button)
-        time.sleep(5)
+        time.sleep(2)
         assert self.is_displayed(self.updates_text), "Fields not updated"
         print("Fields successfully updated")
         self.wait_to_click((By.XPATH, self.field_edit_app_name.format(UserData.reassign_cases_application)))
-        time.sleep(2)
+        
         self.wait_to_click(self.make_new_version_button)
-        time.sleep(5)
+        time.sleep(2)
         self.driver.refresh()
         self.wait_for_element(self.release_button)
-        self.js_click(self.release_button)
+        self.wait_to_click(self.release_button)
         print("Sleeping for the installation code to generate")
-        time.sleep(10)
+        time.sleep(2)
         self.wait_to_click(self.publish_button)
         if self.is_present_and_displayed(self.enter_app_code_link):
             self.wait_to_click(self.enter_app_code_link)
@@ -256,7 +249,7 @@ class ApplicationPage(BasePage):
 
 
     def create_application_with_verifications(self):
-        time.sleep(5)
+        time.sleep(2)
         self.switch_to_default_content()
         self.wait_for_element(self.applications_menu_id)
         self.click(self.applications_menu_id)
@@ -266,13 +259,13 @@ class ApplicationPage(BasePage):
         self.send_keys(self.app_name_textbox, self.app_p1p2_name)
         self.wait_to_click(self.confirm_change)
         self.wait_to_click(self.add_module)
-        time.sleep(1)
+        
         self.wait_to_click(self.add_case_list)
-        time.sleep(2)
+        
         self.wait_to_click(self.edit_form_name_icon)
         self.wait_to_clear_and_send_keys(self.edit_form_name_text, self.reg_form_name)
         self.wait_to_click(self.form_name_save_button)
-        time.sleep(2)
+        
         assert self.check_for_html_char(self.get_text(self.reg_form_head_text)), "html characters are present"
         assert self.check_for_html_char(self.get_text(self.reg_form_variable_name)), "html characters are present"
         assert self.get_text(self.reg_form_head_text) == self.get_text(self.reg_form_variable_name)
@@ -283,24 +276,24 @@ class ApplicationPage(BasePage):
         self.send_keys(self.question_display_text, "Location")
         self.wait_to_clear_and_send_keys(self.question_ID_field, "location_id")
         self.wait_to_click(self.save_button)
-        time.sleep(2)
+        
         if self.is_present(self.override_btn):
             self.wait_to_click(self.override_btn)
         time.sleep(3)
         self.hover_on_element((By.XPATH, self.form_link.format("Reg Form")))
         self.wait_to_click((By.XPATH, self.form_settings_btn.format("Reg Form")))
-        time.sleep(5)
+        time.sleep(2)
         assert self.is_present_and_displayed(self.form_settings_tab)
         self.wait_to_click((By.XPATH, self.form_link.format("Followup Form")))
         self.wait_to_click(self.edit_form_name_icon)
         self.wait_to_clear_and_send_keys(self.edit_form_name_text, self.followup_form_name)
         self.wait_to_click(self.form_name_save_button)
-        time.sleep(2)
+        
         assert self.check_for_html_char(self.get_text(self.reg_form_head_text)), "html characters are present"
         assert self.check_for_html_char(self.get_text(self.reg_form_variable_name)), "html characters are present"
         assert self.get_text(self.reg_form_head_text) == self.get_text(self.reg_form_variable_name)
         self.wait_to_click(self.add_questions)
-        time.sleep(2)
+        
         self.wait_to_click(self.text_question)
         self.wait_for_element(self.question_display_text)
         self.send_keys(self.question_display_text, "Text")
@@ -311,19 +304,19 @@ class ApplicationPage(BasePage):
         self.hover_on_element((By.XPATH, self.form_link.format("Followup Form")))
         self.wait_to_click((By.XPATH, self.form_settings_btn.format("Followup Form")))
 
-        time.sleep(5)
+        time.sleep(2)
         assert self.is_present_and_displayed(self.form_settings_tab)
         assert self.is_present_and_displayed((By.XPATH, self.app_created.format(self.app_p1p2_name)))
         print("New App created successfully!")
         self.wait_to_click((By.XPATH, self.field_edit_app_name.format(self.app_p1p2_name)))
-        time.sleep(2)
+        
         self.wait_to_click(self.make_new_version_button)
-        time.sleep(5)
+        time.sleep(2)
         self.driver.refresh()
         self.wait_for_element(self.release_button)
-        self.js_click(self.release_button)
+        self.wait_to_click(self.release_button)
         print("Sleeping for the installation code to generate")
-        time.sleep(10)
+        time.sleep(2)
         return self.app_p1p2_name
 
     def check_for_html_char(self, text):
@@ -336,7 +329,7 @@ class ApplicationPage(BasePage):
     def delete_p1p2_application(self, app_name):
         self.wait_to_click(self.applications_menu_id)
         self.wait_to_click((By.LINK_TEXT, app_name))
-        time.sleep(2)
+        
         self.wait_for_element(self.settings, 50)
         self.click(self.settings)
         self.wait_for_element(self.actions_tab, 50)
@@ -366,36 +359,36 @@ class ApplicationPage(BasePage):
 
     def delete_and_add_app(self, app):
         self.wait_to_click(self.applications_menu_id)
-        time.sleep(2)
+        
         if self.is_present((By.LINK_TEXT, app)):
             print("App is already pesent so deleting it")
             self.wait_to_click((By.LINK_TEXT, app))
             self.delete_application()
-            time.sleep(2)
+            
             print("Creating the app")
             self.wait_to_click(self.dashboard_tab)
-            time.sleep(2)
+            
             self.create_application(app)
         else:
             print("App is not present so creating it")
             self.wait_to_click(self.dashboard_tab)
-            time.sleep(2)
+            
             self.create_application(app)
 
     def add_language(self, lang):
         self.wait_for_element(self.settings)
-        self.js_click(self.settings)
-        time.sleep(2)
+        self.wait_to_click(self.settings)
+        
         self.wait_for_element(self.languages_tab)
         if self.is_present((By.XPATH, self.language_option.format(lang))):
             print("Language is already present")
         else:
             self.wait_to_click(self.add_language_button)
             self.wait_to_click(self.language_selector)
-            time.sleep(1)
+            
             self.scroll_to_element((By.XPATH, self.language_option_select.format(lang)))
             self.wait_to_click((By.XPATH, self.language_option_select.format(lang)))
-            time.sleep(2)
+            
             self.wait_to_click(self.save_language)
 
 
@@ -410,14 +403,14 @@ class ApplicationPage(BasePage):
             print("No test app present")
         print(app_names)
         self.driver.refresh()
-        time.sleep(5)
+        time.sleep(2)
         return app_names
 
     def delete_all_application(self, apps):
         for app in apps:
             self.wait_to_click(self.applications_menu_id)
             self.wait_to_click((By.XPATH, self.app_link.format(app)))
-            time.sleep(2)
+            
             self.wait_for_element(self.settings, 50)
             self.click(self.settings)
             self.wait_for_element(self.actions_tab, 50)

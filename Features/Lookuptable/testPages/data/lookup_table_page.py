@@ -152,7 +152,7 @@ class LookUpTablePage(BasePage):
         self.selected_caselist = (By.XPATH, "(//*[@class='appnav-item ']/a[@class='appnav-delete'])[1]")
 
     def create_lookup_table(self):
-        self.js_click(self.manage_tables_link)
+        self.wait_to_click(self.manage_tables_link)
         self.wait_for_element(self.add_table)
         if self.is_present_and_displayed(self.table_created_path, 15):
             print("Lookup table is already present!")
@@ -163,13 +163,13 @@ class LookUpTablePage(BasePage):
             self.wait_to_click(self.add_field)
             self.send_keys(self.field_name, self.table_id_name)
             self.wait_to_click(self.save_table)
-            time.sleep(2)
+            
             assert self.is_present_and_displayed(self.table_created_path)
             print("LookUp Table created successfully!")
         return self.table_id_name
 
     def create_download_lookup_table_without_field(self):
-        self.js_click(self.manage_tables_link)
+        self.wait_to_click(self.manage_tables_link)
         self.wait_for_element(self.add_table)
         if self.is_present_and_displayed(self.table_created_path, 15):
             print("Lookup table is already present!")
@@ -178,7 +178,7 @@ class LookUpTablePage(BasePage):
             self.wait_to_clear_and_send_keys(self.table_id, self.table_id_name)
             self.wait_to_clear_and_send_keys(self.table_id_description, self.table_id_name)
             self.wait_to_click(self.save_table)
-            time.sleep(2)
+            
             assert self.is_present_and_displayed(self.table_created_path)
             print("LookUp Table created successfully! ", self.table_id_name )
             self.download1(self.table_id_name)
@@ -189,13 +189,13 @@ class LookUpTablePage(BasePage):
         self.wait_to_click(self.view_tables_link)
         self.wait_for_element(self.select_table)
         self.select_by_text(self.select_table, table_id_name)
-        time.sleep(1)
-        self.js_click(self.view_table)
+        
+        self.wait_to_click(self.view_table)
         self.wait_for_element(self.panel_title, 20)
         print("LookUp Table can be viewed successfully!")
 
     def delete_lookup_table(self, table):
-        self.js_click(self.manage_tables_link)
+        self.wait_to_click(self.manage_tables_link)
         self.wait_to_click((By.XPATH, self.delete_table.format(table)))
         self.accept_pop_up()
         print("LookUp Table deleted successfully!")
@@ -203,7 +203,7 @@ class LookUpTablePage(BasePage):
     def upload_1(self, filepath, table_count):
         filepath = str(PathSettings.DOWNLOAD_PATH / filepath)
         print("File Path: ", filepath)
-        self.js_click(self.manage_tables_link)
+        self.wait_to_click(self.manage_tables_link)
         self.scroll_to_bottom()
         self.send_keys(self.upload_table, filepath)
         self.wait_to_click(self.upload)
@@ -211,12 +211,12 @@ class LookUpTablePage(BasePage):
         success = self.get_text(self.success_msg)
         success_msg = "Successfully uploaded " + table_count + " tables."
         assert success == success_msg
-        self.js_click(self.manage_tables_link)
+        self.wait_to_click(self.manage_tables_link)
 
     def upload_2(self, filepath, table_count):
         filepath = str(UserData.user_input_base_dir + "//" + filepath)
         print("File Path: ", filepath)
-        self.js_click(self.manage_tables_link)
+        self.wait_to_click(self.manage_tables_link)
         self.scroll_to_bottom()
         self.send_keys(self.upload_table, filepath)
         self.wait_to_click(self.upload)
@@ -224,19 +224,19 @@ class LookUpTablePage(BasePage):
         success = self.get_text(self.success_msg)
         success_msg = "Successfully uploaded " + table_count + " tables."
         assert success == success_msg
-        self.js_click(self.manage_tables_link)
+        self.wait_to_click(self.manage_tables_link)
 
     def create_new_lookuptable(self):
         self.table_id_name = "lookuptable_" + ''.join(random.choices(string.ascii_lowercase + string.digits, k=6))
         print("new id:", self.table_id_name)
-        self.js_click(self.manage_tables_link)
+        self.wait_to_click(self.manage_tables_link)
         self.wait_to_click(self.add_table)
         self.send_keys(self.table_id, self.table_id_name)
         self.send_keys(self.table_id_description, self.table_id_name)
         self.wait_to_click(self.add_field)
         self.send_keys(self.field_name, self.table_id_name)
         self.wait_to_click(self.save_table)
-        time.sleep(2)
+        
         assert self.is_present_and_displayed(self.table_created_path)
         print("LookUp Table created successfully!")
         return self.table_id_name
@@ -247,18 +247,18 @@ class LookUpTablePage(BasePage):
         else:
             filepath = str(PathSettings.DOWNLOAD_PATH / filepath)
             print("File path: ", filepath)
-        self.js_click(self.manage_tables_link)
+        self.wait_to_click(self.manage_tables_link)
         self.wait_for_element(self.upload_table)
         self.scroll_to_bottom()
-        time.sleep(1)
+        
         self.send_keys(self.upload_table, str(filepath))
-        time.sleep(2)
+        
         self.wait_for_element(self.replace_table)
+        
+        self.wait_to_click(self.replace_table)
+        
+        self.wait_to_click(self.upload)
         time.sleep(2)
-        self.js_click(self.replace_table)
-        time.sleep(2)
-        self.js_click(self.upload)
-        time.sleep(5)
         print("Upload successful")
 
     def invalid_data_assert(self):
@@ -271,44 +271,44 @@ class LookUpTablePage(BasePage):
         assert UserData.missing_data_assert in missing_data
 
     def selects_deselects(self):
-        self.js_click(self.manage_tables_link)
+        self.wait_to_click(self.manage_tables_link)
         self.wait_to_click(self.all)
         self.wait_to_click(self.none)
 
     def edit_table(self):
-        self.js_click(self.manage_tables_link)
+        self.wait_to_click(self.manage_tables_link)
         self.wait_to_click(self.edit)
         self.wait_to_clear_and_send_keys(self.edit_field, 'testing')
         self.wait_to_click(self.edit_save)
 
     def create_dummyid(self):
-        self.js_click(self.manage_tables_link)
-        time.sleep(2)
+        self.wait_to_click(self.manage_tables_link)
+        
         self.wait_to_click(self.add_table)
-        time.sleep(2)
+        
         self.wait_for_element(self.table_id)
         self.send_keys(self.table_id, self.dummy_id)
         self.send_keys(self.table_id_description, self.dummy_id)
         self.wait_to_click(self.add_field)
         self.wait_to_clear_and_send_keys(self.field_name, self.dummy_id)
         self.wait_to_click(self.save_table)
-        time.sleep(5)
+        time.sleep(2)
         self.wait_for_element(self.error_msg)
         fail = self.get_text(self.error_msg)
         print(fail)
         assert "Could not update table because field names were not correctly formatted" in fail
         print("error message displayed")
-        self.js_click(self.manage_tables_link)
+        self.wait_to_click(self.manage_tables_link)
 
     def edit_dummy_data(self):
-        self.js_click(self.manage_tables_link)
+        self.wait_to_click(self.manage_tables_link)
         self.wait_to_click(self.edit)
-        time.sleep(2)
+        
         self.wait_to_click(self.new_field)
-        time.sleep(1)
+        
         self.send_keys(self.new_value, '@!@$#%$^%&^*')
         self.wait_to_click(self.edit_save)
-        time.sleep(5)
+        time.sleep(2)
         fail = self.get_text(self.error_msg)
         assert "Could not update table because field names were not correctly formatted" in fail
         print("error message displayed")
@@ -318,7 +318,7 @@ class LookUpTablePage(BasePage):
         self.wait_to_click((By.XPATH, self.select_checkbox.format(tablename)))
 
     def select_multiple_tables_download(self, tablenames, n):
-        self.js_click(self.manage_tables_link)
+        self.wait_to_click(self.manage_tables_link)
         tablename = str.split(tablenames, ":")
         for i in range(0, n):
             print("tablename : ", str(tablename[i]))
@@ -328,56 +328,56 @@ class LookUpTablePage(BasePage):
     def click_download_button(self):
         self.wait_to_click(self.click_download)
         self.wait_for_element(self.close_download_popup, 40)
-        time.sleep(2)
+        
         if self.is_present(self.please_complete):
             self.wait_to_click(self.close_download_popup)
-            time.sleep(2)
-            self.js_click(self.click_download)
+            
+            self.wait_to_click(self.click_download)
             time.sleep(4)
             self.wait_for_element(self.close_download_popup, 40)
-            time.sleep(2)
+            
         self.wait_for_element(self.download_file, 60)
-        self.js_click(self.download_file)
+        self.wait_to_click(self.download_file)
         time.sleep(3)
         self.wait_to_click(self.close_download_popup)
 
     def download1(self, tablename):
-        self.js_click(self.manage_tables_link)
+        self.wait_to_click(self.manage_tables_link)
         self.wait_for_element((By.XPATH, self.select_checkbox.format(tablename)))
         self.wait_to_click((By.XPATH, self.select_checkbox.format(tablename)))
-        time.sleep(2)
-        self.js_click(self.click_download)
+        
+        self.wait_to_click(self.click_download)
         self.wait_for_element(self.close_download_popup)
-        time.sleep(2)
+        
         if self.is_present(self.please_complete):
             self.wait_to_click(self.close_download_popup)
             self.driver.refresh()
             self.wait_for_element((By.XPATH, self.select_checkbox.format(tablename)))
             self.wait_to_click((By.XPATH, self.select_checkbox.format(tablename)))
-            time.sleep(2)
-            self.js_click(self.click_download)
-        time.sleep(5)
+            
+            self.wait_to_click(self.click_download)
+        time.sleep(2)
         self.wait_for_element(self.download_file, 100)
-        self.js_click(self.download_file)
+        self.wait_to_click(self.download_file)
         time.sleep(3)
         self.wait_to_click(self.close_download_popup)
         print("file downloaded")
 
     def download1_specific_table(self):
-        self.js_click(self.manage_tables_link)
+        self.wait_to_click(self.manage_tables_link)
         self.wait_to_click(self.select_hypertension_checkbox)
         self.wait_to_click(self.click_download)
         self.wait_for_element(self.close_download_popup, 40)
-        time.sleep(2)
+        
         if self.is_present(self.please_complete):
             self.wait_to_click(self.close_download_popup)
-            time.sleep(2)
-            self.js_click(self.click_download)
+            
+            self.wait_to_click(self.click_download)
             time.sleep(4)
             self.wait_for_element(self.close_download_popup, 40)
-            time.sleep(2)
+            
         self.wait_for_element(self.download_file, 60)
-        self.js_click(self.download_file)
+        self.wait_to_click(self.download_file)
         time.sleep(3)
         self.wait_to_click(self.close_download_popup)
 
@@ -397,16 +397,16 @@ class LookUpTablePage(BasePage):
 
     def update_excel_user_value(self, table_id, path):
         path = str(PathSettings.DOWNLOAD_PATH / path)
-        time.sleep(5)
+        time.sleep(2)
         excel = ExcelManager()
         excel.upload_to_path(table_id, UserData.data_list, "user 1", path)
 
     def update_excel_group_value(self, table_id, path):
         path = str(PathSettings.DOWNLOAD_PATH / path)
-        time.sleep(5)
+        time.sleep(2)
         excel = ExcelManager()
         excel.upload_to_path(table_id, UserData.data_list, "group 1", path)
-        time.sleep(2)
+        
 
     def compare_excel(self, df1, df2, compare_flag):
         if (compare_flag == 0):
@@ -418,32 +418,32 @@ class LookUpTablePage(BasePage):
 
     def download_update_7(self, tableid, path):
         path = str(PathSettings.DOWNLOAD_PATH / path)
-        time.sleep(5)
+        time.sleep(2)
         excel = ExcelManager()
         df1 = excel.read_excel(tableid, path)
-        time.sleep(1)
+        
         self.err_upload(path)
         df2 = excel.read_excel(tableid, path)
-        time.sleep(1)
+        
         return df1, df2
 
     def download_update_8(self, path, table_id):
         path = str(PathSettings.DOWNLOAD_PATH / path)
-        time.sleep(5)
+        time.sleep(2)
         excel = ExcelManager()
         col = excel.col_size(table_id, path)
         excel.write_excel_data(table_id, 1, col + 1, "user 1", path)
-        time.sleep(1)
+        
         excel.write_excel_data(table_id, 1, col + 2, "group 1", path)
         excel.write_data(table_id, UserData.data_list1, path)
-        time.sleep(1)
+        
         self.err_upload(path)
         d1 = excel.read_excel(table_id, path)
         print("data1", d1)
         excel.write_excel_data(table_id, 2, 4, 'kiran', path)
-        time.sleep(1)
+        
         excel.write_excel_data(table_id, 2, 5, '123', path)
-        time.sleep(1)
+        
         self.err_upload(path)
         d2 = excel.read_excel(table_id, path)
         print("data2", d2)
@@ -452,16 +452,16 @@ class LookUpTablePage(BasePage):
     def replace_existing_table(self, filepath):
         self.err_upload(filepath)
         print("Upload successful")
-        self.js_click(self.manage_tables_link)
+        self.wait_to_click(self.manage_tables_link)
 
     def delete_row_from_table(self, download_path, tablename):
         download_path = str(PathSettings.DOWNLOAD_PATH / download_path)
-        time.sleep(5)
+        time.sleep(2)
         excel = ExcelManager()
         excel.write_data(tablename, UserData.data_list1, download_path)
-        time.sleep(2)
+        
         self.err_upload(download_path)
-        time.sleep(2)
+        
         self.download1(tablename)
         row_count_before = self.row_count_table(tablename)
         print("Row count before: ", row_count_before)
@@ -470,9 +470,9 @@ class LookUpTablePage(BasePage):
         time.sleep(3)
         print("Download path: ", download_path)
         excel.delete_row(tablename, 2, download_path)
-        time.sleep(2)
+        
         self.replace_existing_table(download_path)
-        time.sleep(5)
+        time.sleep(2)
         row_count_after = self.row_count_table(tablename)
         print("Row count after: ", row_count_after)
         assert row_count_before > row_count_after
@@ -487,16 +487,16 @@ class LookUpTablePage(BasePage):
 
     def update_delete_field(self, download_path, tablename):
         download_path = str(PathSettings.DOWNLOAD_PATH / download_path)
-        time.sleep(5)
+        time.sleep(2)
         excel = ExcelManager()
         excel.upload_to_path(tablename, UserData.data_list, "user 1", download_path)
-        time.sleep(2)
+        
         self.err_upload(download_path)
         # self.view_lookup_table(tablename)
         row_count_before = self.row_count_table(tablename)
         download_path = latest_download_file()
         download_path = str(PathSettings.DOWNLOAD_PATH / download_path)
-        time.sleep(5)
+        time.sleep(2)
         excel = ExcelManager()
         excel.write_excel_data(tablename, 3, 2, 'Y', download_path)
         self.replace_existing_table(download_path)
@@ -507,7 +507,7 @@ class LookUpTablePage(BasePage):
 
     def attribute_2(self, download_path, tablename):
         download_path = str(PathSettings.DOWNLOAD_PATH / download_path)
-        time.sleep(5)
+        time.sleep(2)
         excel = ExcelManager()
         excel.write_excel_data("types", 1, 4, 'field 1', download_path)
         excel.write_excel_data("types", 2, 4, 'C1', download_path)
@@ -515,24 +515,24 @@ class LookUpTablePage(BasePage):
         excel.write_excel_data("types", 2, 5, 'C2', download_path)
         excel.write_excel_data(tablename, 1, 3, 'field:C1', download_path)
         excel.write_excel_data(tablename, 1, 4, 'field:C2', download_path)
-        time.sleep(1)
+        
         excel.write_data(tablename, UserData.new_datalist, download_path)
-        time.sleep(2)
+        
         self.err_upload(download_path)
         print("sleeping for some time")
-        time.sleep(10)
+        time.sleep(2)
         ui_rows = self.row_count_table(tablename)
         self.download1(tablename)
         download_path = latest_download_file()
         download_path = str(PathSettings.DOWNLOAD_PATH / download_path)
-        time.sleep(5)
+        time.sleep(2)
         excel_rows = excel.row_size(tablename, download_path)
         print(str(ui_rows) + " and " + str(excel_rows - 1))
         assert int(ui_rows) == (excel_rows - 1)
 
     def bulkupload_1(self, tablenames, n, upload_path):
         upload_path = str(PathSettings.DOWNLOAD_PATH / upload_path)
-        time.sleep(5)
+        time.sleep(2)
         before = ""
         after = ""
         tablename = str.split(tablenames, ":")
@@ -544,7 +544,7 @@ class LookUpTablePage(BasePage):
         excel = ExcelManager()
         excel.write_data(str(tablename[0]), UserData.data_list1, upload_path)
         excel.write_data(str(tablename[1]), UserData.data_list1, upload_path)
-        time.sleep(2)
+        
         self.err_upload(upload_path)
         tablename = str.split(tablenames, ":")
         for i in range(0, n):
@@ -559,21 +559,21 @@ class LookUpTablePage(BasePage):
 
     def delete_field_columns(self, downloadpath, tablename):
         downloadpath = str(PathSettings.DOWNLOAD_PATH / downloadpath)
-        time.sleep(5)
+        time.sleep(2)
         excel = ExcelManager()
         col_type_sheet_before = excel.col_size("types", downloadpath)
         col1 = excel.col_size(tablename, downloadpath)
         print(col_type_sheet_before, col1)
         excel.delete_column('types', 4, downloadpath)
-        time.sleep(2)
+        
         excel.delete_column(tablename, 3, downloadpath)
-        time.sleep(2)
+        
         self.err_upload(downloadpath)
         time.sleep(3)
         self.view_lookup_table(tablename)
         col_type_sheet = excel.col_size("types", downloadpath)
         col2 = excel.col_size(tablename, downloadpath)
-        time.sleep(2)
+        
         print(col_type_sheet, col2)
         assert col_type_sheet_before > col_type_sheet
         assert col1 > col2
@@ -586,7 +586,7 @@ class LookUpTablePage(BasePage):
             url = url + UserData.restore_url_staging
         print("URL: ", url)
         self.driver.get(url)
-        time.sleep(20)
+        time.sleep(10)
         self.is_present_and_displayed(self.restore_id, 10)
         a = self.get_text(self.restore_id)
         print(a)
@@ -595,7 +595,7 @@ class LookUpTablePage(BasePage):
     def restore_attribute_default(self, url):
         print("URL: ", url)
         self.driver.get(url)
-        time.sleep(20)
+        time.sleep(10)
         self.is_present_and_displayed(self.restore_id, 10)
         a = self.get_text(self.restore_id)
         print(a)
@@ -604,23 +604,23 @@ class LookUpTablePage(BasePage):
 
     def test_13(self, download_path, tablename):
         download_path = str(PathSettings.DOWNLOAD_PATH / download_path)
-        time.sleep(5)
-        self.write_data_excel(tablename, download_path)
         time.sleep(2)
+        self.write_data_excel(tablename, download_path)
+        
         self.err_upload(download_path)
         time.sleep(3)
         self.download1(tablename)
         time.sleep(3)
         download_path = latest_download_file()
         download_path = str(PathSettings.DOWNLOAD_PATH / download_path)
-        time.sleep(5)
+        time.sleep(2)
         excel = ExcelManager()
         e1 = excel.get_cell_value(tablename, 1, 2, download_path)
         self.download1(tablename)
         time.sleep(3)
         download_path_2 = latest_download_file()
         download_path_2 = str(PathSettings.DOWNLOAD_PATH / download_path_2)
-        time.sleep(5)
+        time.sleep(2)
         excel = ExcelManager()
         e2 = excel.get_cell_value(tablename, 1, 2, download_path_2)
         print(e1, e2)
@@ -629,10 +629,10 @@ class LookUpTablePage(BasePage):
 
     def test_15(self, download_path, tablename):
         download_path = str(PathSettings.DOWNLOAD_PATH / download_path)
-        time.sleep(5)
+        time.sleep(2)
         excel = ExcelManager()
         excel.write_data(tablename, UserData.data_list1, download_path)
-        time.sleep(2)
+        
         self.err_upload(download_path)
         time.sleep(3)
         self.download1(tablename)
@@ -644,21 +644,21 @@ class LookUpTablePage(BasePage):
         UID1 = excel.get_cell_value(tablename, 1, 2, download_path)
         print("Before UID is:" + UID_before, UID1)
         excel.write_excel_data(tablename, 2, 3, "dnckse", download_path)
-        time.sleep(2)
+        
         download_path = latest_download_file()
         download_path = str(PathSettings.DOWNLOAD_PATH / download_path)
-        time.sleep(5)
+        time.sleep(2)
         self.replace_existing_table(download_path)
         time.sleep(3)
         self.download1(tablename)
         time.sleep(3)
         download_path = latest_download_file()
         download_path = str(PathSettings.DOWNLOAD_PATH / download_path)
-        time.sleep(5)
+        time.sleep(2)
         UID_after = excel.get_cell_value(tablename, 3, 2, download_path)
         UID2 = excel.get_cell_value(tablename, 1, 2, download_path)
         print("After UID 2 is:" + UID_after, UID2)
-        time.sleep(2)
+        
         assert UID1 != UID2
         print("UID for updated row has changed")
 
@@ -666,26 +666,26 @@ class LookUpTablePage(BasePage):
         self.wait_to_click(self.selected_caselist)
         self.wait_to_click(self.delete_popup)
         self.accept_pop_up()
-        time.sleep(5)
+        time.sleep(2)
         self.wait_for_element(self.delete_success, 100)
 
     def test_application(self):
         self.wait_to_click(self.add_module)
-        time.sleep(1)
+        
         self.wait_to_click(self.add_case_list)
-        time.sleep(2)
+        
         self.wait_for_element(self.add_questions, 50)
-        self.js_click(self.add_questions)
-        time.sleep(2)
+        self.wait_to_click(self.add_questions)
+        
         self.wait_to_click(self.lookup_question)
-        time.sleep(2)
+        
         # self.wait_to_click(self.multiplechoice)
-        time.sleep(2)
+        
         self.send_keys(self.question_display_text, self.question_display_text_name)
         self.wait_to_click(self.save_button)
         self.wait_for_element(self.saved_button, 50)
         self.wait_for_element(self.lookup_table_data)
-        self.js_click(self.lookup_table_data)
+        self.wait_to_click(self.lookup_table_data)
         # self.wait_to_click(self.grid)
         self.wait_to_click(self.select_lookup_table)
         self.wait_to_click(self.value_field)
@@ -694,7 +694,7 @@ class LookUpTablePage(BasePage):
         time.sleep(3)
         self.wait_to_click(self.select_logic)
         self.wait_to_click(self.add_logic)
-        time.sleep(10)
+        time.sleep(2)
         self.send_keys(self.filter, UserData.filter_value)
         self.wait_to_click(self.edit_filter)
         assert self.is_present_and_displayed(self.expression_editor)
@@ -703,15 +703,15 @@ class LookUpTablePage(BasePage):
     def specific_table_upload(self, tablename):
         self.wait_for_element(self.add_module)
         self.wait_to_click(self.add_module)
-        time.sleep(1)
+        
         self.wait_to_click(self.add_case_list)
-        time.sleep(2)
+        
         self.wait_to_click(self.add_questions)
-        time.sleep(2)
+        
         self.wait_to_click(self.lookup_question)
         self.send_keys(self.question_display_text, self.question_display_text_name)
         self.wait_for_element(self.lookup_table_data)
-        self.js_click(self.lookup_table_data)
+        self.wait_to_click(self.lookup_table_data)
         # self.wait_to_click(self.grid)
         self.wait_to_click(self.select_lookup_table)
         dd = Select(self.find_element(self.select_lookup_table))
@@ -722,30 +722,30 @@ class LookUpTablePage(BasePage):
 
     def create_new_form(self):
         self.wait_to_click(self.add_module)
-        time.sleep(1)
+        
         self.wait_to_click(self.add_case_list)
-        time.sleep(2)
+        
         self.wait_to_click(self.add_questions)
-        time.sleep(2)
+        
         self.wait_to_click(self.lookup_question)
         self.send_keys(self.question_display_text, self.question_display_text_name)
         self.wait_for_element(self.lookup_table_data)
-        self.js_click(self.lookup_table_data)
+        self.wait_to_click(self.lookup_table_data)
         # self.wait_to_click(self.grid)
         self.wait_to_click(self.select_lookup_table)
-        time.sleep(5)
-        self.wait_to_click(self.save_button)
         time.sleep(2)
+        self.wait_to_click(self.save_button)
+        
         self.wait_for_element(self.saved_button, 50)
 
     def adding_questions(self):
         time.sleep(3)
         self.wait_for_element(self.add_questions)
-        self.js_click(self.add_questions)
+        self.wait_to_click(self.add_questions)
         time.sleep(3)
         self.wait_for_element(self.lookup_question)
         self.hover_and_click(self.lookup_question, self.checkbox_question)
-        time.sleep(10)
+        time.sleep(2)
         self.wait_to_click(self.save_button)
         self.wait_for_element(self.saved_button, 50)
         self.find_elements(self.number_of_questions)
@@ -799,7 +799,7 @@ class LookUpTablePage(BasePage):
         self.wait_for_element(self.saved_button, 50)
 
     def edit_state(self):
-        self.js_click(self.manage_tables_link)
+        self.wait_to_click(self.manage_tables_link)
         self.wait_to_click(self.edit_state_table)
         self.wait_for_element(self.select_column)
         self.click(self.select_column)
@@ -810,10 +810,10 @@ class LookUpTablePage(BasePage):
         self.wait_to_click(self.application)
         self.wait_to_click(self.e_case_list)
         self.wait_for_element(self.lookup_table_data)
-        self.js_click(self.lookup_table_data)
+        self.wait_to_click(self.lookup_table_data)
         # self.wait_to_click(self.grid)
         self.wait_to_click(self.saved_button)
-        time.sleep(5)
+        time.sleep(2)
         assert self.is_present_and_displayed(self.error_message)
         print("warning message is displayed")
 
@@ -829,30 +829,30 @@ class LookUpTablePage(BasePage):
         self.language_selection(lang)
         self.wait_for_element(self.sync)
         self.wait_to_click(self.sync)
-        time.sleep(20)
+        time.sleep(10)
         self.wait_for_element(self.start)
         self.wait_to_click(self.start)
         self.wait_for_element(self.inapp_case_list)
         self.scroll_to_element(self.inapp_case_list)
-        self.js_click(self.inapp_case_list)
+        self.wait_to_click(self.inapp_case_list)
         self.wait_for_element(self.inapp_registration_form)
         self.wait_to_click(self.inapp_registration_form)
         time.sleep(3)
         if user != UserData.user_ids_list[-1]:
             self.wait_for_element(self.inapp_select_option)
-            self.js_click(self.inapp_select_option)
+            self.wait_to_click(self.inapp_select_option)
             time.sleep(3)
             value = self.get_text(self.inapp_select_option)
             time.sleep(3)
             if self.is_present(self.inapp_next):
                 self.wait_for_element(self.inapp_next)
-                self.js_click(self.inapp_next)
+                self.wait_to_click(self.inapp_next)
                 time.sleep(3)
                 self.wait_for_element(self.inapp_continue)
-                self.js_click(self.inapp_continue)
+                self.wait_to_click(self.inapp_continue)
             else:
-                self.js_click(self.inapp_submit)
-            time.sleep(5)
+                self.wait_to_click(self.inapp_submit)
+            time.sleep(2)
             assert self.is_present_and_displayed(self.success_msg)
             print("form submitted succesfully:", value)
             if type == 'state':
@@ -877,7 +877,7 @@ class LookUpTablePage(BasePage):
         self.wait_to_click(self.display_field)
         self.send_keys(self.display_field, self.name_lang_value)
         self.wait_to_click(self.add_questions)
-        time.sleep(2)
+        
         self.wait_to_click(self.label)
         self.wait_to_click(self.dropdown_logic)
         self.wait_for_element(self.logic)
@@ -897,40 +897,40 @@ class LookUpTablePage(BasePage):
 
     def multiple_groups(self, path, table_id):
         path = str(PathSettings.DOWNLOAD_PATH / path)
-        time.sleep(5)
+        time.sleep(2)
         excel = ExcelManager()
         col = excel.col_size(table_id, path)
         excel.write_excel_data(table_id, 1, col + 1, "user 1", path)
-        time.sleep(1)
+        
         excel.write_excel_data(table_id, 1, col + 2, "group 1", path)
-        time.sleep(1)
+        
         excel.write_excel_data(table_id, 1, col + 3, "group 2", path)
-        time.sleep(1)
+        
         excel.write_data(table_id, UserData.multiple_values, path)
-        time.sleep(2)
+        
         self.err_upload(path)
 
     def download_bulk_tables(self):
-        self.js_click(self.manage_tables_link)
+        self.wait_to_click(self.manage_tables_link)
         self.wait_to_click(self.all)
         self.wait_to_click(self.click_download)
         self.wait_for_element(self.close_download_popup, 40)
-        time.sleep(2)
+        
         if self.is_present(self.please_complete):
             self.wait_to_click(self.close_download_popup)
-            time.sleep(2)
-            self.js_click(self.click_download)
+            
+            self.wait_to_click(self.click_download)
             time.sleep(4)
             self.wait_for_element(self.close_download_popup, 40)
-            time.sleep(2)
+            
         self.wait_for_element(self.download_file, 60)
-        self.js_click(self.download_file)
+        self.wait_to_click(self.download_file)
         time.sleep(15)
         self.wait_to_click(self.close_download_popup)
 
     def compare_and_delete(self, download_path):
         download_path = str(PathSettings.DOWNLOAD_PATH / download_path)
-        time.sleep(5)
+        time.sleep(2)
         excel = ExcelManager()
         i = excel.row_size("types", download_path)
         for val in range(1, i):
@@ -940,7 +940,7 @@ class LookUpTablePage(BasePage):
             if (str(j).startswith("lookuptable")):
                 print("Value to be updated")
                 excel.write_excel_data("types", val, 1, "Y", download_path)
-        time.sleep(2)
+        
         self.replace_existing_table(download_path)
 
     def loop_submit_form_on_registration(self):
@@ -957,7 +957,7 @@ class LookUpTablePage(BasePage):
         app_preview.check_access_to_app_preview()
         self.driver.switch_to.default_content()
         self.wait_for_element(self.refresh)
-        self.js_click(self.refresh)
+        self.wait_to_click(self.refresh)
         self.driver.switch_to.frame(self.find_element(app_preview.iframe_app_preview))
         if self.is_present(self.home):
             self.wait_for_element(self.home)
@@ -969,17 +969,17 @@ class LookUpTablePage(BasePage):
 
     def bulk_upload_verification(self, download_path, value):
         download_path = str(PathSettings.DOWNLOAD_PATH / download_path)
-        time.sleep(5)
+        time.sleep(2)
         excel = ExcelManager()
         excel.write_data(value, UserData.duplicate_values, download_path)
-        time.sleep(2)
+        
         self.err_upload(download_path)
         time.sleep(3)
         self.download1(value)
         time.sleep(3)
         download_path = latest_download_file()
         download_path = str(PathSettings.DOWNLOAD_PATH / download_path)
-        time.sleep(5)
+        time.sleep(2)
         self.row_count_table(value)
         row_value = self.row_count_table(value)
         excel = ExcelManager()
@@ -988,47 +988,47 @@ class LookUpTablePage(BasePage):
     def verify_missing_data_alert(self, download_path):
         print("Sleeping for some time")
         time.sleep(40)
-        self.js_click(self.manage_tables_link)
+        self.wait_to_click(self.manage_tables_link)
         self.wait_for_element(self.click_download)
         self.err_upload(download_path)
         self.missing_data_assert()
 
     def delete_test_lookup_tables(self):
         self.wait_for_element(self.manage_tables_link)
-        self.js_click(self.manage_tables_link)
+        self.wait_to_click(self.manage_tables_link)
         self.wait_for_element(self.click_download)
         list = self.find_elements((By.XPATH, self.lookup_table_checkbox_lists.format("table")))
         if len(list) > 0:
             for item in list:
-                self.js_click(item)
+                self.wait_to_click(item)
         else:
             print("No table name starts with table")
 
         list = self.find_elements((By.XPATH, self.lookup_table_checkbox_lists.format("lookuptable_")))
         if len(list) > 0:
             for item in list:
-                self.js_click(item)
+                self.wait_to_click(item)
         else:
             print("No table name starts with lookuptable_")
-        time.sleep(2)
-        self.js_click(self.click_download)
+        
+        self.wait_to_click(self.click_download)
         time.sleep(4)
         self.wait_for_element(self.close_download_popup, 40)
-        time.sleep(2)
+        
         if self.is_present(self.please_complete):
             self.wait_to_click(self.close_download_popup)
-            time.sleep(2)
-            self.js_click(self.click_download)
+            
+            self.wait_to_click(self.click_download)
             time.sleep(4)
             self.wait_for_element(self.close_download_popup, 40)
-            time.sleep(2)
+            
         self.wait_for_element(self.download_file, 60)
-        self.js_click(self.download_file)
+        self.wait_to_click(self.download_file)
         time.sleep(3)
         self.wait_to_click(self.close_download_popup)
         download_path_1 = latest_download_file()
         download_path_1 = str(PathSettings.DOWNLOAD_PATH / download_path_1)
-        time.sleep(5)
+        time.sleep(2)
         excel = ExcelManager()
         i = excel.row_size("types", download_path_1)
         for val in range(2, i):
@@ -1038,12 +1038,12 @@ class LookUpTablePage(BasePage):
             if (str(j).startswith("lookuptable")) or (str(j).startswith("table")):
                 print("Value to be updated")
                 excel.write_excel_data("types", val, 1, "Y", download_path_1)
-        time.sleep(1)
+        
         self.replace_existing_table(download_path_1)
 
     def upload_1_update_excel(self, download_path):
         download_path = str(PathSettings.DOWNLOAD_PATH / download_path)
-        time.sleep(5)
+        time.sleep(2)
         excel = ExcelManager()
         excel.write_data('types', UserData.type_data_list, download_path)
         excel.create_sheet(UserData.field_val, download_path)
@@ -1052,12 +1052,12 @@ class LookUpTablePage(BasePage):
 
     def delete_excel_sheet(self, download_path):
         download_path = str(PathSettings.DOWNLOAD_PATH / download_path)
-        time.sleep(5)
+        time.sleep(2)
         excel = ExcelManager()
         excel.delete_sheet("types", download_path)
 
     def error_upload_update_excel(self, download_path, values):
         download_path = str(PathSettings.DOWNLOAD_PATH / download_path)
-        time.sleep(5)
+        time.sleep(2)
         self.write_data_excel(values, download_path)
         self.upload_1(download_path, '1')

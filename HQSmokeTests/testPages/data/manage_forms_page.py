@@ -47,7 +47,7 @@ class ManageFormsPage(BasePage):
         self.wait_and_sleep_to_click(self.apply)
         # Report Apply
         self.wait_and_sleep_to_click(self.apply_button)
-        time.sleep(5)
+        time.sleep(2)
 
     def assert_normal_form_view(self):
         link=self.get_attribute(self.view_form_link,"href")

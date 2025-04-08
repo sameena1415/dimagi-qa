@@ -166,22 +166,22 @@ class MessagingPage(BasePage):
         self.click(self.compose_sms_menu)
         self.wait_for_element(self.recipients_select)
         self.select_by_value(self.recipients_select, "[send to all]")
-        time.sleep(2)
+        
         self.send_keys(self.message_textarea, "sms_" + fetch_random_string())
-        time.sleep(2)
+        
         self.scroll_to_element(self.send_message)
-        self.js_click(self.send_message)
+        self.wait_to_click(self.send_message)
         try:
             assert self.is_present_and_displayed(self.message_sent_success_msg), "Message not sent successfully"
         except TimeoutException:
             self.click(self.compose_sms_menu)
             self.wait_for_element(self.recipients_select)
             self.select_by_value(self.recipients_select, "[send to all]")
-            time.sleep(2)
+            
             self.send_keys(self.message_textarea, "sms_" + fetch_random_string())
-            time.sleep(2)
+            
             self.scroll_to_element(self.send_message)
-            self.js_click(self.send_message)
+            self.wait_to_click(self.send_message)
             assert self.is_visible_and_displayed(self.message_sent_success_msg), "Message not sent successfully"
             print("SMS composed successfully!")
 
@@ -192,18 +192,18 @@ class MessagingPage(BasePage):
         self.click(self.recipients)
         self.wait_to_click(self.select_recipient_type)
         self.wait_to_click(self.user_recipient)
-        time.sleep(1)
+        
         self.wait_to_click(self.select_value_dropdown)
         self.send_keys(self.broadcast_message, "Test Broadcast:" + self.broadcast_input)
         self.wait_to_click(self.send_broadcast)
         self.driver.refresh()
         self.select_by_value(self.broadcast_select, '100')
-        time.sleep(5)
+        time.sleep(2)
         try:
             while False:
                 if not self.is_displayed(self.broadcast_created):
                     self.wait_to_click(self.next_btn)
-                    time.sleep(5)
+                    time.sleep(2)
                     continue
                 else:
                     assert True
@@ -217,12 +217,12 @@ class MessagingPage(BasePage):
         self.wait_to_click(self.add_cond_alert)
         self.send_keys(self.cond_alert_name, self.cond_alert_name_input)
         self.wait_to_click(self.continue_button_basic_tab)
-        time.sleep(2)
+        
         self.wait_to_click(self.case_type)
         self.wait_to_click(self.case_type_option_value)
         self.wait_to_click(self.select_filter)
         self.wait_to_click(self.case_property_filter)
-        time.sleep(2)
+        
         self.wait_to_click(self.case_property_textbox)
         self.send_keys(self.case_property_input, UserData.alert_case_property)
         self.select_by_text(self.select_case_property, UserData.alert_case_property)
@@ -241,7 +241,7 @@ class MessagingPage(BasePage):
         self.driver.refresh()
         time.sleep(140)
         self.wait_to_clear_and_send_keys(self.search_box, self.cond_alert_name_input)
-        time.sleep(10)
+        time.sleep(2)
         self.wait_to_click(self.search_box)
         self.wait_for_element(self.delete_cond_alert, 700)
         self.driver.refresh()
@@ -249,9 +249,9 @@ class MessagingPage(BasePage):
             print("Restart is not required.")
         else:
             try:
-                self.js_click(self.restart_rule_button)
+                self.wait_to_click(self.restart_rule_button)
                 self.accept_pop_up()
-                time.sleep(5)
+                time.sleep(2)
                 self.accept_pop_up()
                 print("Sleeping till the alert processing completes")
                 time.sleep(360)
@@ -272,7 +272,7 @@ class MessagingPage(BasePage):
         self.wait_to_click(self.cond_alerts)
         self.wait_to_click(self.bulk_upload_button)
         self.wait_to_click(self.download_id)
-        time.sleep(2)
+        
         print("Conditional Alert downloaded successfully!")
 
     def cond_alert_upload(self):
@@ -289,10 +289,10 @@ class MessagingPage(BasePage):
         self.send_keys(self.keyword_name, self.keyword_name_input)
         self.send_keys(self.keyword_description, self.keyword_name_input)
         self.send_keys(self.keyword_message, "Test Message: " + self.keyword_name_input)
-        time.sleep(2)
+        
         self.scroll_to_element(self.send_message)
-        self.js_click(self.send_message)
-        time.sleep(2)
+        self.wait_to_click(self.send_message)
+        
         self.select_by_value(self.page_limit, "50")
         time.sleep(3)
         assert self.is_visible_and_displayed(self.keyword_created), "Keyword not created successfully!"
@@ -306,10 +306,10 @@ class MessagingPage(BasePage):
         self.wait_to_click(self.keyword_survey)
         self.wait_to_click(self.survey_option_select)
         self.send_keys(self.keyword_message, "Test Message" + self.struct_keyword_name_input)
-        time.sleep(2)
+        
         self.scroll_to_element(self.send_message)
-        self.js_click(self.send_message)
-        time.sleep(2)
+        self.wait_to_click(self.send_message)
+        
         self.select_by_value(self.page_limit, "50")
         time.sleep(3)
         assert self.is_visible_and_displayed(
@@ -323,9 +323,9 @@ class MessagingPage(BasePage):
 
     # def sms_connectivity_gateway(self):
     #     self.driver.find_element(By.LINK_TEXT, self.sms_connectivity).click()
-    #     time.sleep(2)
+    #     
     #     self.driver.find_element(By.XPATH, "//select[@name='hq_api_id']").click()
-    #     time.sleep(2)
+    #     
     #     self.driver.find_element(By.XPATH, "//select[@name='hq_api_id']/option[text(
     #     )='Airtel (through TCL)']").click()
     #     self.driver.find_element(By.XPATH, self.add_gateway).click()
@@ -336,27 +336,27 @@ class MessagingPage(BasePage):
     #     self.driver.find_element(By.XPATH, self.sender_id).send_keys("gateway_" + fetch_random_string())
     #     self.driver.find_element(By.XPATH, self.client_name).send_keys("gateway_" + fetch_random_string())
     #     self.driver.find_element(By.XPATH, self.campaign_name).send_keys("gateway_" + fetch_random_string())
-    #     time.sleep(2)
+    #     
     #     assert True == self.driver.find_element(By.XPATH, self.gateway_created).is_displayed()
     #     print("Gateway created successfully!")
 
     def general_settings_page(self):
         self.click(self.general_settings)
-        time.sleep(2)
+        
         if self.is_enabled(self.disable_button):
             self.click(self.enable_button)
             self.send_keys(self.time_input, "23:59")
         else:
             self.click(self.disable_button)
-        time.sleep(2)
+        
         self.scroll_to_element(self.send_message)
-        self.js_click(self.send_message)
+        self.wait_to_click(self.send_message)
         assert self.is_visible_and_displayed(self.message_sent_success_msg), "Settings page not updated successfully!"
         print("Settings page updated successfully!")
 
     def delete_languages(self):
         self.wait_to_click(self.languages)
-        time.sleep(1)
+        
         lang_list = self.find_elements(self.languages_present)
         if len(lang_list) == 1:
             for item in lang_list:
@@ -378,53 +378,53 @@ class MessagingPage(BasePage):
                     self.wait_to_click((By.XPATH, self.delete_lang.format(lang)))
                     time.sleep(3)
                     self.wait_to_click(self.save_lang)
-                    time.sleep(2)
+                    
         else:
             print("Only English is Present and no other languages")
 
     def add_eng_lang(self):
         self.wait_to_click(self.lang_input_textarea)
-        time.sleep(2)
+        
         self.wait_for_element(self.language_list)
         self.wait_to_click(self.select_eng_lang)
-        time.sleep(2)
+        
         lang = self.get_text(self.selected_lang_name)
         print("Language selected is: ", lang)
         self.wait_to_click(self.save_lang)
 
     def languages_page(self):
         self.wait_to_click(self.languages)
-        time.sleep(1)
+        
         self.wait_to_click(self.add_lang)
         self.wait_to_click(self.lang_input_textarea)
-        time.sleep(2)
+        
         self.wait_for_element(self.language_list)
         self.wait_to_click(self.select_first_lang)
-        time.sleep(2)
+        
         lang = self.get_text(self.selected_lang_name)
         print("First language selected is: ", lang)
         self.wait_to_click(self.save_lang)
-        time.sleep(2)
+        
         self.wait_to_click(self.lang_input_textarea)
-        time.sleep(2)
+        
         self.wait_for_element(self.language_list)
         self.wait_to_click(self.select_second_lang)
-        time.sleep(2)
+        
         lang = self.get_text(self.selected_lang_name)
         print("Second language selected is: ", lang)
         self.wait_to_click(self.save_lang)
-        time.sleep(1)
+        
         self.wait_to_click((By.XPATH, self.delete_lang.format(lang)))
-        time.sleep(1)
+        
         self.wait_to_click(self.save_lang)
-        time.sleep(2)
+        
         print("Languages added and deleted successfully!")
 
     def remove_keyword(self):
         self.wait_to_click(self.keywords)
         self.wait_for_element(self.page_limit)
         self.select_by_value(self.page_limit, "50")
-        time.sleep(10)
+        time.sleep(2)
         self.wait_to_click(self.delete_keyword)
         self.wait_to_click(self.confirm_delete_keyword)
         self.driver.refresh()
@@ -440,7 +440,7 @@ class MessagingPage(BasePage):
         self.wait_to_click(self.keywords)
         self.wait_for_element(self.page_limit)
         self.select_by_value(self.page_limit, "50")
-        time.sleep(10)
+        time.sleep(2)
         self.wait_to_click(self.delete_structured_keyword)
         self.wait_to_click(self.confirm_delete_structured_keyword)
         self.driver.refresh()
@@ -472,16 +472,16 @@ class MessagingPage(BasePage):
             if len(keyword_names) > 0:
                 for i in range(len(keyword_names))[::-1]:
                     self.scroll_to_element((By.XPATH, self.keyword_delete_btn.format(keyword_names[i])))
-                    self.js_click((By.XPATH, self.keyword_delete_btn.format(keyword_names[i])))
-                    time.sleep(2)
+                    self.wait_to_click((By.XPATH, self.keyword_delete_btn.format(keyword_names[i])))
+                    
                     self.wait_for_element((By.XPATH, self.delete_confirm_button.format(keyword_names[i])))
-                    self.js_click((By.XPATH, self.delete_confirm_button.format(keyword_names[i])))
-                    time.sleep(2)
+                    self.wait_to_click((By.XPATH, self.delete_confirm_button.format(keyword_names[i])))
+                    
                     list = self.find_elements(self.keywords_list)
                     confirm_button_list = self.find_elements((By.XPATH, self.delete_confirm_button.format('KEYWORD_')))
                     print("Updated List Count: ", len(list))
                 self.driver.refresh()
-                time.sleep(5)
+                time.sleep(2)
                 list = self.find_elements(self.keywords_list)
                 if len(list) == 0:
                     print("All test keywords deleted")
@@ -499,7 +499,7 @@ class MessagingPage(BasePage):
         self.wait_to_clear_and_send_keys(self.search_box, self.cond_alert_name_input)
         self.wait_and_sleep_to_click(self.search_box)
         self.wait_for_element(self.delete_cond_alert, 300)
-        time.sleep(5)
+        time.sleep(2)
         self.wait_to_click(self.delete_cond_alert)
         try:
             obj = self.driver.switch_to.alert
@@ -507,7 +507,7 @@ class MessagingPage(BasePage):
         except NoAlertPresentException:
             raise AssertionError("Celery down")
         try:
-            time.sleep(2)
+            
             self.driver.refresh()
             self.wait_to_clear_and_send_keys(self.search_box, self.cond_alert_name_input)
             self.wait_and_sleep_to_click(self.search_box)
@@ -520,7 +520,7 @@ class MessagingPage(BasePage):
     def remove_alert_with_same_name(self, alert_name):
         self.wait_to_clear_and_send_keys(self.search_box, alert_name)
         self.wait_and_sleep_to_click(self.search_box)
-        time.sleep(5)
+        time.sleep(2)
         if self.is_present_and_displayed(self.empty_table_alert):
             print("No alert created with the same name")
         else:
@@ -531,7 +531,7 @@ class MessagingPage(BasePage):
             except NoAlertPresentException:
                 raise AssertionError("Celery down")
             try:
-                time.sleep(2)
+                
                 self.driver.refresh()
                 self.wait_to_clear_and_send_keys(self.search_box, self.cond_alert_name_input)
                 self.wait_and_sleep_to_click(self.search_box)
@@ -543,33 +543,33 @@ class MessagingPage(BasePage):
 
     def msg_trans_download(self):
         self.wait_to_click(self.languages)
-        time.sleep(1)
+        
         self.wait_to_click(self.msg_translation_menu)
         self.wait_to_click(self.download_id)
-        time.sleep(2)
+        
         print("Msg Trans downloaded successfully!")
 
     def msg_trans_upload(self):
         newest_file = latest_download_file()
         file_that_was_downloaded = PathSettings.DOWNLOAD_PATH / newest_file
         self.send_keys(self.choose_file, str(file_that_was_downloaded))
-        self.js_click(self.upload)
+        self.wait_to_click(self.upload)
         assert self.is_visible_and_displayed(self.upload_success_message), "Msg Trans not uploaded successfully"
         print("Msg Trans uploaded successfully!")
 
     # def project_settings_page(self, value=None):
     #     if value==True:
     #         self.switch_to_default_content()
-    #         time.sleep(5)
+    #         time.sleep(2)
     #     else:
     #         print("Value null")
     #     self.driver.get(self.dashboard_link)
     #     self.accept_pop_up()
-    #     time.sleep(5)
+    #     time.sleep(2)
     #     self.wait_for_element(self.settings_bar)
     #     self.click(self.settings_bar)
     #     self.wait_for_element(self.project_settings_menu)
-    #     self.js_click(self.project_settings_menu)
+    #     self.wait_to_click(self.project_settings_menu)
     #     assert self.is_visible_and_displayed(
     #         self.project_settings_elements), "Project Settings page did not load successfully"
     #     print("Project Settings page loaded successfully!")
@@ -586,7 +586,7 @@ class MessagingPage(BasePage):
         self.wait_to_click(self.cond_alerts)
         self.wait_for_element(self.value_per_page)
         self.select_by_value(self.value_per_page, "100")
-        time.sleep(10)
+        time.sleep(2)
         print("Sleeping till the alert list is displayed completely")
         alert_presence = self.is_present(self.cond_alerts_name)
         if alert_presence:
@@ -599,7 +599,7 @@ class MessagingPage(BasePage):
                     obj.accept()
                 except NoAlertPresentException:
                     raise AssertionError("Celery down")
-                time.sleep(5)
+                time.sleep(2)
                 self.driver.refresh()
                 time.sleep(7)
                 alert_presence = self.is_present(self.cond_alerts_name)

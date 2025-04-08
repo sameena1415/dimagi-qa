@@ -58,7 +58,7 @@ class CaseListPage(BasePage):
 
     def open_reports_menu(self):
         if self.is_present(self.show_full_menu):
-            self.js_click(self.show_full_menu)
+            self.wait_to_click(self.show_full_menu)
         self.driver.get(self.dashboard_link)
         self.wait_for_element(self.reports_menu_id)
         self.click(self.reports_menu_id)
@@ -84,17 +84,17 @@ class CaseListPage(BasePage):
         time.sleep(40)
         self.webapp.remove_default_users()
         self.send_keys(self.users_field, UserData.automation_user)
-        time.sleep(1)
+        
         self.wait_for_element((By.XPATH, self.users_list_item.format(UserData.automation_user)))
         self.click((By.XPATH, self.users_list_item.format(UserData.automation_user)))
-        time.sleep(1)
+        
         self.select_by_text(self.case_type_select, UserData.case_type_formplayer)
-        time.sleep(1)
+        
         self.send_keys(self.search_input, test_data['sub_case_name'])
-        time.sleep(1)
+        
         self.wait_to_click(self.apply_id)
         assert self.is_present(self.report_loading), "Loading Report block is not present"
-        time.sleep(10)
+        time.sleep(2)
         self.wait_for_element(self.result_table, 300)
         assert self.is_visible_and_displayed(self.report_content_id, 120), "Report not loaded"
         print("Report loaded successfully!")
@@ -102,10 +102,10 @@ class CaseListPage(BasePage):
         self.scroll_to_element((By.XPATH, self.case_list_data.format(test_data['sub_case_name'])))
         url = self.get_attribute((By.XPATH, self.case_list_data.format(test_data['sub_case_name'])), 'href')
         print(url)
-        self.js_click((By.XPATH, self.case_list_data.format(test_data['sub_case_name'])))
-        time.sleep(5)
+        self.wait_to_click((By.XPATH, self.case_list_data.format(test_data['sub_case_name'])))
+        time.sleep(2)
         self.switch_to_next_tab()
-        time.sleep(10)
+        time.sleep(2)
         self.wait_for_element(self.case_properties_tab, 100)
         self.page_source_contains(test_data['sub_case_name'])
         assert True, "Sub Case name is present in Case List"
@@ -114,7 +114,7 @@ class CaseListPage(BasePage):
         self.wait_to_click(self.related_cases_tab)
         assert self.is_visible_and_displayed((By.XPATH, self.view_button.format(test_data['parent case name'])))
         self.wait_to_click((By.XPATH, self.view_button.format(test_data['parent case name'])))
-        time.sleep(1)
+        
         assert self.is_present_and_displayed(
             (By.XPATH, self.table_data.format('name', test_data['parent case name'])))
         assert self.is_present_and_displayed(

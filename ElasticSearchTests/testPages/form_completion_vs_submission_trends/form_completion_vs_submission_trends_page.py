@@ -180,7 +180,7 @@ class FormCompletionVsSubmissionTrends(BasePage):
         self.wait_to_click(self.form_comp_sub_trends_rep)
         self.wait_for_element(self.hide_filters_options)
         self.click(self.hide_filters_options)
-        time.sleep(2)
+        
         assert not self.is_visible_and_displayed(self.users_field, 10), "User field is still present"
         assert not self.is_visible_and_displayed(self.application_dropdown, 10), "Application dropdown is still present"
         assert not self.is_visible_and_displayed(self.show_adv_options,
@@ -192,7 +192,7 @@ class FormCompletionVsSubmissionTrends(BasePage):
     def show_filters(self):
         self.wait_for_element(self.show_filters_options)
         self.click(self.show_filters_options)
-        time.sleep(2)
+        
         assert self.is_present(self.users_field), "User field is not present"
         assert self.is_present(self.date_input), "Date Range field is not present"
         assert self.is_present(self.application_dropdown), "Application dropdown is not present"
@@ -228,7 +228,7 @@ class FormCompletionVsSubmissionTrends(BasePage):
         self.remove_default_users()
         self.send_keys(self.users_field, UserData.user_group)
         self.wait_to_click((By.XPATH, self.users_list_item.format(UserData.user_group)))
-        time.sleep(1)
+        
         self.select_application_and_forms(UserData.reassign_cases_application,
                                           list(UserData.reasign_modules_forms.keys())[1],
                                           UserData.reasign_modules_forms[
@@ -238,20 +238,20 @@ class FormCompletionVsSubmissionTrends(BasePage):
         self.wait_to_click((By.XPATH, self.date_range_type.format(UserData.date_range[0])))
         text = self.get_attribute(self.date_input, "value")
         print(text)
-        time.sleep(2)
+        
         self.wait_to_click(self.apply_id)
-        time.sleep(10)
+        time.sleep(2)
         self.wait_for_element(self.result_table, 300)
         assert self.is_visible_and_displayed(self.report_content_id, 120), "Report not loaded"
         print("Report loaded successfully!")
         self.scroll_to_element(self.result_table)
-        time.sleep(5)
+        time.sleep(2)
         assert self.is_present(self.view_column), "View Column not present"
         for item in UserData.fcst_column_names:
             assert self.is_present((By.XPATH, self.column_names.format(item))), "Column not present: " + item
             print("Column present: ", item)
         self.wait_to_click(self.view_form_page)
-        time.sleep(10)
+        time.sleep(2)
         assert self.is_visible_and_displayed(self.form_data_table, 200), "data Table for user is not present"
         for items in UserData.view_form_tabs:
             assert self.is_present((By.XPATH, self.view_form_tabs.format(items))), "Tab " +items+ " is not present"
@@ -291,7 +291,7 @@ class FormCompletionVsSubmissionTrends(BasePage):
 
     def verify_user_lookup_table(self):
         self.wait_to_click(self.users_field)
-        time.sleep(2)
+        
         assert not self.is_visible_and_displayed(self.users_list_empty, 10), "User List is not empty"
         list = self.find_elements(self.users_list)
         print(len(list))
@@ -317,10 +317,10 @@ class FormCompletionVsSubmissionTrends(BasePage):
         print(len(count))
         for i in range(len(count)):
             count[0].click()
-            time.sleep(2)
+            
             if len(count) != 1:
                 ActionChains(self.driver).send_keys(Keys.TAB).perform()
-                time.sleep(2)
+                
             count = self.find_elements(self.remove_buttons)
 
     def verify_users_in_the_group(self):
@@ -346,9 +346,9 @@ class FormCompletionVsSubmissionTrends(BasePage):
         print(text)
         date_string, start_date, end_date = self.value_date_range_7_days()
         assert text == date_string
-        time.sleep(2)
+        
         self.wait_to_click(self.apply_id)
-        time.sleep(10)
+        time.sleep(2)
         self.wait_for_element(self.result_table, 300)
         assert self.is_visible_and_displayed(self.report_content_id, 120), "Report not loaded"
         print("Report loaded successfully!")
@@ -366,7 +366,7 @@ class FormCompletionVsSubmissionTrends(BasePage):
             time.sleep(15)
             assert self.is_present(self.next_page_button_disabled), "Next button is not disabled."
             print("Next button disabled correctly")
-            time.sleep(5)
+            time.sleep(2)
             print("Clicking on page " + first_page)
             self.wait_to_click((By.XPATH, self.page_button.format(first_page)))
             time.sleep(15)
@@ -375,7 +375,7 @@ class FormCompletionVsSubmissionTrends(BasePage):
             for item in list1:
                 list1_names.append(item.text)
             self.wait_to_click(self.next_page_button)
-            time.sleep(5)
+            time.sleep(2)
             list2 = self.find_elements(self.completion_column_list)
             list2_names = list()
             for item in list2:
@@ -384,7 +384,7 @@ class FormCompletionVsSubmissionTrends(BasePage):
             assert list1_names != list2_names, "Both Pages have same values"
             print("Next button functioning correctly.")
             self.wait_to_click(self.prev_page_button)
-            time.sleep(5)
+            time.sleep(2)
             list3 = self.find_elements(self.completion_column_list)
             list3_names = list()
             for item in list3:
@@ -405,7 +405,7 @@ class FormCompletionVsSubmissionTrends(BasePage):
 
         for item in UserData.pagination:
             self.select_by_value(self.page_list_dropdown, item)
-            time.sleep(10)
+            time.sleep(2)
             list = self.find_elements(self.completion_column_list)
             print(len(list))
             if int(info[-2]) < int(item):
@@ -419,7 +419,7 @@ class FormCompletionVsSubmissionTrends(BasePage):
 
     def verify_sorted_list(self, col_name):
         self.select_by_value(self.page_list_dropdown, UserData.pagination[3])
-        time.sleep(10)
+        time.sleep(2)
         self.wait_to_click((By.XPATH, self.user_sort.format(col_name)))
         time.sleep(15)
         if "User" in col_name:
@@ -524,14 +524,14 @@ class FormCompletionVsSubmissionTrends(BasePage):
         elif date_range == UserData.date_range[2]:
             date_string, start_date, end_date = self.value_date_range_30_days()
         assert text == date_string
-        time.sleep(2)
+        
         self.wait_to_click(self.apply_id)
-        time.sleep(10)
+        time.sleep(2)
         self.wait_for_element(self.result_table, 300)
         assert self.is_visible_and_displayed(self.report_content_id, 120), "Report not loaded"
         print("Report loaded successfully!")
         self.scroll_to_element(self.result_table)
-        time.sleep(5)
+        time.sleep(2)
         list_of_columns = self.date_generator(start_date, end_date)
         self.verify_date_column_name_headers(list_of_columns)
         print("Dates are with in range for " + date_range)
@@ -559,12 +559,12 @@ class FormCompletionVsSubmissionTrends(BasePage):
         text = self.get_attribute(self.date_input, "value")
         print(text)
         self.wait_to_click(self.apply_id)
-        time.sleep(10)
+        time.sleep(2)
         self.wait_for_element(self.result_table, 300)
         assert self.is_visible_and_displayed(self.report_content_id, 120), "Report not loaded"
         print("Report loaded successfully!")
         self.scroll_to_element(self.result_table)
-        time.sleep(5)
+        time.sleep(2)
         assert self.is_present_and_displayed(self.date_range_error), "Date Range Error not displayed"
         print("Date Range error correctly displayed")
         self.wait_to_click(self.form_comp_sub_trends_rep)
@@ -574,17 +574,17 @@ class FormCompletionVsSubmissionTrends(BasePage):
         self.wait_to_click((By.XPATH, self.date_range_type.format(UserData.date_range[3])))
         date_string, start_date, end_date = self.get_custom_dates_past(20, 0, 0)
         self.select_date_from_picker(start_date, end_date)
-        time.sleep(2)
+        
         text = self.get_attribute(self.date_input, "value")
         print(text)
         assert text == date_string
         self.wait_to_click(self.apply_id)
-        time.sleep(10)
+        time.sleep(2)
         self.wait_for_element(self.result_table, 300)
         assert self.is_visible_and_displayed(self.report_content_id, 120), "Report not loaded"
         print("Report loaded successfully!")
         self.scroll_to_element(self.result_table)
-        time.sleep(5)
+        time.sleep(2)
         list_of_columns = self.date_generator(start_date, end_date)
         self.verify_date_column_name_headers(list_of_columns)
         print("Dates are with in range for " + UserData.date_range[3])
@@ -612,18 +612,18 @@ class FormCompletionVsSubmissionTrends(BasePage):
         end_year = str(end_date.year)
         self.wait_for_element(self.from_month)
         self.select_by_value(self.from_year, start_year)
-        time.sleep(2)
+        
         self.select_by_value(self.from_month, start_month)
-        time.sleep(2)
+        
         self.wait_to_click((By.XPATH, self.from_date.format(start_day)))
-        time.sleep(2)
+        
         self.wait_for_element(self.to_month)
         self.select_by_value(self.to_year, end_year)
-        time.sleep(2)
+        
         self.select_by_value(self.to_month, end_month)
-        time.sleep(2)
+        
         self.wait_to_click((By.XPATH, self.to_date.format(end_day)))
-        time.sleep(2)
+        
         self.wait_to_click(self.apply_date)
 
     def form_comp_sub_trends_save_report(self):
@@ -634,7 +634,7 @@ class FormCompletionVsSubmissionTrends(BasePage):
         self.remove_default_users()
         self.send_keys(self.users_field, UserData.user_group)
         self.wait_to_click((By.XPATH, self.users_list_item.format(UserData.user_group)))
-        time.sleep(1)
+        
         self.select_application_and_forms(UserData.reassign_cases_application,
                                           list(UserData.reasign_modules_forms.keys())[1],
                                           UserData.reasign_modules_forms[
@@ -645,21 +645,21 @@ class FormCompletionVsSubmissionTrends(BasePage):
         text = self.get_attribute(self.date_input, "value")
         print(text)
         date_string, start_date, end_date = self.value_date_range_7_days()
-        time.sleep(2)
+        
         self.wait_to_click(self.apply_id)
-        time.sleep(10)
+        time.sleep(2)
         self.wait_for_element(self.result_table, 300)
         assert self.is_visible_and_displayed(self.report_content_id, 120), "Report not loaded"
         print("Report loaded successfully!")
         self.verify_users_in_the_group()
-        time.sleep(10)
+        time.sleep(2)
         report_name = "Saved Form Completion Submission Trends Report " + fetch_random_string()
         self.verify_favorite_empty(report_name)
         report = self.save_report(report_name)
         self.wait_to_click(self.form_comp_sub_trends_rep)
         self.wait_for_element(self.apply_id, 100)
         self.verify_favorite_created(report)
-        time.sleep(10)
+        time.sleep(2)
         self.verify_users_in_the_group()
         self.delete_saved_report(report)
         self.wait_to_click(self.form_comp_sub_trends_rep)
@@ -687,7 +687,7 @@ class FormCompletionVsSubmissionTrends(BasePage):
         print("Report Present!")
         self.click((By.XPATH, self.delete_saved.format(report)))
         print("Deleted Saved Report")
-        time.sleep(5)
+        time.sleep(2)
         self.driver.refresh()
         assert not self.is_visible_and_displayed((By.XPATH, self.saved_report_created.format(report)), 20)
         print("Deleted Report Successfully")
@@ -700,7 +700,7 @@ class FormCompletionVsSubmissionTrends(BasePage):
         self.remove_default_users()
         self.send_keys(self.users_field, UserData.user_group)
         self.wait_to_click((By.XPATH, self.users_list_item.format(UserData.user_group)))
-        time.sleep(1)
+        
         self.select_application_and_forms(UserData.reassign_cases_application,
                                           list(UserData.reasign_modules_forms.keys())[1],
                                           UserData.reasign_modules_forms[
@@ -711,14 +711,14 @@ class FormCompletionVsSubmissionTrends(BasePage):
         text = self.get_attribute(self.date_input, "value")
         print(text)
         date_string, start_date, end_date = self.value_date_range_7_days()
-        time.sleep(2)
+        
         self.wait_to_click(self.apply_id)
-        time.sleep(10)
+        time.sleep(2)
         self.wait_for_element(self.result_table, 300)
         assert self.is_visible_and_displayed(self.report_content_id, 120), "Report not loaded"
         print("Report loaded successfully!")
         self.verify_users_in_the_group()
-        time.sleep(10)
+        time.sleep(2)
         report_name = "Saved Form Completion vs. Submission Trends Report Unsave" + fetch_random_string()
         self.wait_for_element(self.save_config_button)
         self.wait_to_click(self.save_config_button)
@@ -727,8 +727,8 @@ class FormCompletionVsSubmissionTrends(BasePage):
         time.sleep(3)
         assert self.is_present(self.report_save_error), "Error not displayed"
         print("Error is correctly displayed")
-        self.js_click(self.cancel_report_button, 10)
-        time.sleep(5)
+        self.wait_to_click(self.cancel_report_button, 10)
+        time.sleep(2)
         assert not self.is_visible_and_displayed(self.name_field, 10), "Save Report Form not closed"
         print("Save Report Form is closed")
 
@@ -741,12 +741,12 @@ class FormCompletionVsSubmissionTrends(BasePage):
         print(text)
         assert UserData.date_range[0].casefold() == text.casefold(), "Date Range does not match"
         print("Date range is matching")
-        time.sleep(2)
+        
         print("Cancel Button")
-        self.js_click(self.cancel_report_button)
-        time.sleep(5)
+        self.wait_to_click(self.cancel_report_button)
+        time.sleep(2)
         if self.is_present(self.save_report_button):
-            self.js_click(self.save_report_button)
+            self.wait_to_click(self.save_report_button)
             print("Button is still present")
         else:
             print("report is canceled")
@@ -759,12 +759,12 @@ class FormCompletionVsSubmissionTrends(BasePage):
             print("save Button")
         else:
             self.wait_to_clear_and_send_keys(self.name_field, report_name+Keys.TAB)
-            self.js_click(self.save_report_button)
+            self.wait_to_click(self.save_report_button)
             print("save Button")
         assert not self.is_visible_and_displayed(self.save_report_button), "Save report name field is still present"
         print("Save Report popup closed")
         # self.driver.refresh()
-        time.sleep(5)
+        time.sleep(2)
         self.wait_for_element(self.saved_reports_menu_link)
         self.wait_to_click(self.saved_reports_menu_link)
         assert self.is_visible_and_displayed((By.XPATH, self.saved_report_created.format(report_name)), 120)
@@ -783,7 +783,7 @@ class FormCompletionVsSubmissionTrends(BasePage):
                 else:
                     self.wait_to_click(item)
                     self.switch_to_next_tab()
-                    time.sleep(10)
+                    time.sleep(2)
                     self.wait_for_element(self.case_list_table_title, 200)
                     self.scroll_to_bottom()
                     info = self.get_text(self.case_list_table_info)
@@ -792,16 +792,16 @@ class FormCompletionVsSubmissionTrends(BasePage):
                     assert info[-2] == text, "Case created count mismatch"
                     print("Cases created count matched")
                     self.select_by_value(self.case_list_page_dropdown, '100')
-                    time.sleep(10)
+                    time.sleep(2)
                     cases = self.find_elements(self.case_list_table)
                     if len(cases) > 0:
                         for case in cases:
                             name = case.text
                             assert name == UserData.case_reassign, "Case Type mismatch"
                             print("Case Type matching")
-                    time.sleep(2)
+                    
                     self.driver.close()
-                    time.sleep(2)
+                    
                     self.switch_back_to_prev_tab()
 
     def export_form_comp_sub_trends_to_excel(self):
@@ -812,7 +812,7 @@ class FormCompletionVsSubmissionTrends(BasePage):
         self.remove_default_users()
         self.send_keys(self.users_field, UserData.user_group)
         self.wait_to_click((By.XPATH, self.users_list_item.format(UserData.user_group)))
-        time.sleep(1)
+        
         self.select_application_and_forms(UserData.reassign_cases_application,
                                           list(UserData.reasign_modules_forms.keys())[1],
                                           UserData.reasign_modules_forms[
@@ -820,9 +820,9 @@ class FormCompletionVsSubmissionTrends(BasePage):
         
         self.wait_to_click(self.date_input)
         self.wait_to_click((By.XPATH, self.date_range_type.format(UserData.date_range[0])))
-        time.sleep(2)
+        
         self.wait_to_click(self.apply_id)
-        time.sleep(10)
+        time.sleep(2)
         self.wait_for_element(self.result_table, 300)
         assert self.is_visible_and_displayed(self.report_content_id, 120), "Report not loaded"
         print("Report loaded successfully!")
@@ -879,7 +879,7 @@ class FormCompletionVsSubmissionTrends(BasePage):
         self.remove_default_users()
         self.send_keys(self.users_field, UserData.user_group)
         self.wait_to_click((By.XPATH, self.users_list_item.format(UserData.user_group)))
-        time.sleep(1)
+        
         self.select_application_and_forms(UserData.reassign_cases_application,
                                           list(UserData.reasign_modules_forms.keys())[1],
                                           UserData.reasign_modules_forms[
@@ -887,9 +887,9 @@ class FormCompletionVsSubmissionTrends(BasePage):
         
         self.wait_to_click(self.date_input)
         self.wait_to_click((By.XPATH, self.date_range_type.format(UserData.date_range[0])))
-        time.sleep(2)
+        
         self.wait_to_click(self.apply_id)
-        time.sleep(10)
+        time.sleep(2)
         self.wait_for_element(self.result_table, 300)
         assert self.is_visible_and_displayed(self.report_content_id, 120), "Report not loaded"
         print("Report loaded successfully!")
@@ -954,7 +954,7 @@ class FormCompletionVsSubmissionTrends(BasePage):
         self.remove_default_users()
         self.send_keys(self.users_field, UserData.app_login)
         self.wait_to_click((By.XPATH, self.users_list_item.format(UserData.app_login)))
-        time.sleep(1)
+        
         self.select_application_and_forms(UserData.reassign_cases_application,
                                           list(UserData.reasign_modules_forms.keys())[1],
                                           UserData.reasign_modules_forms[
@@ -963,14 +963,14 @@ class FormCompletionVsSubmissionTrends(BasePage):
         
         self.wait_to_click(self.date_input)
         self.wait_to_click((By.XPATH, self.date_range_type.format(UserData.date_range[0])))
-        time.sleep(2)
+        
         self.wait_to_click(self.apply_id)
-        time.sleep(10)
+        time.sleep(2)
         self.wait_for_element(self.result_table, 300)
         assert self.is_visible_and_displayed(self.report_content_id, 120), "Report not loaded"
         print("Report loaded successfully!")
         self.select_by_value(self.page_list_dropdown, UserData.pagination[3])
-        time.sleep(10)
+        time.sleep(2)
         list_user = self.find_elements((By.XPATH, self.result_rows_names.format(UserData.deactivated_user)))
         for item in list_user:
             text = item.text
@@ -992,21 +992,21 @@ class FormCompletionVsSubmissionTrends(BasePage):
         self.remove_default_users()
         self.send_keys(self.users_field, UserData.mobile_testuser)
         self.wait_to_click((By.XPATH, self.users_list_item.format(UserData.deactivated_user)))
-        time.sleep(1)
+        
         self.select_application_and_forms(UserData.reassign_cases_application,
                                           list(UserData.reasign_modules_forms.keys())[1],
                                           UserData.reasign_modules_forms[
                                               list(UserData.reasign_modules_forms.keys())[1]][0])
         self.wait_to_click(self.date_input)
         self.wait_to_click((By.XPATH, self.date_range_type.format(UserData.date_range[0])))
-        time.sleep(2)
+        
         self.wait_to_click(self.apply_id)
-        time.sleep(10)
+        time.sleep(2)
         self.wait_for_element(self.result_table, 300)
         assert self.is_visible_and_displayed(self.report_content_id, 120), "Report not loaded"
         print("Report loaded successfully!")
         self.select_by_value(self.page_list_dropdown, UserData.pagination[3])
-        time.sleep(10)
+        time.sleep(2)
         assert self.is_present((By.XPATH, self.result_rows_names.format(
             UserData.deactivated_user))), "Deactivated user " + UserData.deactivated_user + " is not present in the Deactivated worker list."
         print("All Deactivated users are present")
@@ -1019,12 +1019,12 @@ class FormCompletionVsSubmissionTrends(BasePage):
         assert self.form_comp_sub_trends_TITLE in self.driver.title, "This is not the Worker Activity page."
         self.send_keys(self.users_field, UserData.user_group)
         self.wait_to_click((By.XPATH, self.user_from_list.format(UserData.user_group)))
-        time.sleep(1)
+        
         self.select_by_text(self.view_by_dropdown, UserData.view_by[0])
         self.wait_to_click(self.date_input)
         self.wait_to_click((By.XPATH, self.date_range_type.format(UserData.date_range[2])))
         self.wait_to_click(self.apply_id)
-        time.sleep(10)
+        time.sleep(2)
         self.wait_for_element(self.result_table, 300)
         assert self.is_visible_and_displayed(self.report_content_id, 120), "Report not loaded"
         print("Report loaded successfully!")
@@ -1056,7 +1056,7 @@ class FormCompletionVsSubmissionTrends(BasePage):
         self.remove_default_users()
         self.send_keys(self.users_field, UserData.user_group)
         self.wait_to_click((By.XPATH, self.users_list_item.format(UserData.user_group)))
-        time.sleep(1)
+        
         self.select_application_and_forms(UserData.reassign_cases_application,
                                           list(UserData.reasign_modules_forms.keys())[1],
                                           UserData.reasign_modules_forms[
@@ -1067,9 +1067,9 @@ class FormCompletionVsSubmissionTrends(BasePage):
         self.send_keys(self.date_input, date_string + Keys.TAB)
         text = self.get_attribute(self.date_input, "value")
         print(text)
-        time.sleep(2)
+        
         self.wait_to_click(self.apply_id)
-        time.sleep(10)
+        time.sleep(2)
         self.wait_for_element(self.result_table, 300)
         assert self.is_visible_and_displayed(self.report_content_id, 120), "Report not loaded"
         print("Report loaded successfully!")
@@ -1078,8 +1078,8 @@ class FormCompletionVsSubmissionTrends(BasePage):
         for items in UserData.automation_group_users:
             count = self.get_text((By.XPATH, self.total_form_counts.format(items)))
             print(count)
-            time.sleep(1)
-            self.js_click((By.XPATH, self.result_rows_names.format(items)))
+            
+            self.wait_to_click((By.XPATH, self.result_rows_names.format(items)))
             time.sleep(15)
             self.wait_for_element(self.submit_history_table_title)
             self.wait_for_element(self.result_table, 300)
@@ -1100,7 +1100,7 @@ class FormCompletionVsSubmissionTrends(BasePage):
             assert self.is_present((By.XPATH, self.filter_column_name.format(filter))), "Incorrect column present"
             print("Correct Column present")
             self.scroll_to_bottom()
-            time.sleep(2)
+            
             # info = self.get_text(self.submit_history_table_info)
             # print(info)
             # info = str(info).split(" ")
@@ -1110,7 +1110,7 @@ class FormCompletionVsSubmissionTrends(BasePage):
             # if count == '0':
             #     assert self.is_present(self.empty_table)
             #     print("Correct value displayed")
-            time.sleep(5)
+            time.sleep(2)
             self.driver.back()
 
     def advanced_options(self):
@@ -1122,11 +1122,11 @@ class FormCompletionVsSubmissionTrends(BasePage):
         self.remove_default_users()
         self.send_keys(self.users_field, UserData.daily_form_groups[0])
         self.wait_to_click((By.XPATH, self.users_list_item.format(UserData.daily_form_groups[0])))
-        time.sleep(1)
+        
         self.wait_to_click(self.show_adv_options)
         assert self.is_selected(self.show_adv_options), "Show Advanced Options is not selected"
         print("Show Advanced Option is successfully selected")
-        time.sleep(2)
+        
         assert self.is_present(self.known_forms), "Known Forms option not present"
         assert self.is_present(self.unknown_forms), "Unknown Forms option not present"
         assert self.is_present(self.application_type_dropdown), "Application Type dropdown not present"
@@ -1134,7 +1134,7 @@ class FormCompletionVsSubmissionTrends(BasePage):
         self.unknown_forms_options(active_apps, deleted_apps)
         self.wait_to_click(self.show_adv_options)
         assert not self.is_selected(self.show_adv_options), "Show Advanced Options is still selected"
-        time.sleep(2)
+        
         assert not self.is_visible_and_displayed(self.known_forms, 10), "Known Forms option still present"
         assert not self.is_visible_and_displayed(self.unknown_forms, 10), "Unknown Forms option still present"
         print("All Show Advanced Options are working correctly")
@@ -1148,19 +1148,19 @@ class FormCompletionVsSubmissionTrends(BasePage):
 
         self.verify_dropdown_options(self.application_type_dropdown, UserData.app_type_list)
         self.select_by_text(self.application_type_dropdown, UserData.app_type_list[0])
-        time.sleep(2)
+        
         assert not self.is_visible_and_displayed(self.application_dropdown, 10), "Application dropdown is still present"
         print("Application dropdown successfully disappeared after selecting option ", UserData.app_type_list[0])
         self.select_by_text(self.application_type_dropdown, UserData.app_type_list[2])
-        time.sleep(2)
+        
         assert self.is_present(self.application_dropdown), "Application dropdown is not present"
         list_app_active = self.get_all_dropdown_options(self.application_dropdown)
         for items in list_app_active[1:]:
             assert "[Deleted Application]" in items, "Not a Deleted Application option"
         print("All Deleted Application present")
-        time.sleep(2)
+        
         self.wait_to_click(self.apply_id)
-        time.sleep(10)
+        time.sleep(2)
         self.wait_for_element(self.result_table, 300)
         assert self.is_visible_and_displayed(self.report_content_id, 120), "Report not loaded"
         print("Report loaded successfully!")
@@ -1169,11 +1169,11 @@ class FormCompletionVsSubmissionTrends(BasePage):
             for items in list_value:
                 assert "Deleted" in items.text, "This is not a deleted form"
                 print("Deleted form name displayed")
-        time.sleep(2)
+        
         self.scroll_to_element(self.application_type_dropdown)
-        time.sleep(1)
+        
         self.select_by_text(self.application_type_dropdown, UserData.app_type_list[1])
-        time.sleep(2)
+        
         assert self.is_present(self.application_dropdown), "Application dropdown is not present"
         list_app_deleted = self.get_all_dropdown_options(self.application_dropdown)
         for items in list_app_deleted[1:]:
@@ -1226,7 +1226,7 @@ class FormCompletionVsSubmissionTrends(BasePage):
         self.remove_default_users()
         self.send_keys(self.users_field, UserData.user_group)
         self.wait_to_click((By.XPATH, self.users_list_item.format(UserData.user_group)))
-        time.sleep(1)
+        
         self.select_by_text(self.application_dropdown, app)
         if mod == None and form == None:
             column_list = self.generate_form_column_names(app)
@@ -1244,9 +1244,9 @@ class FormCompletionVsSubmissionTrends(BasePage):
         self.wait_to_click((By.XPATH, self.date_range_type.format(UserData.date_range[0])))
         text = self.get_attribute(self.date_input, "value")
         print(text)
-        time.sleep(2)
+        
         self.wait_to_click(self.apply_id)
-        time.sleep(10)
+        time.sleep(2)
         self.wait_for_element(self.result_table, 300)
         assert self.is_visible_and_displayed(self.report_content_id, 120), "Report not loaded"
         print("Report loaded successfully!")
@@ -1262,7 +1262,7 @@ class FormCompletionVsSubmissionTrends(BasePage):
                 print("Valid form name")
             # for items in column_list:
             #     assert self.is_present((By.XPATH, self.column_names.format(items))), "Form Name Column not present: " + items
-            self.js_click(self.user_names_column_first)
+            self.wait_to_click(self.user_names_column_first)
             time.sleep(15)
             self.wait_for_element(self.submit_history_table_title)
             print("Successfully redirected to Submit History Page")
@@ -1291,7 +1291,7 @@ class FormCompletionVsSubmissionTrends(BasePage):
             assert text == self.get_attribute(self.date_input, "value"), "Date Range mismatched"
             print("Date Range matched")
             self.scroll_to_bottom()
-            time.sleep(2)
+            
 
     def no_form_selected(self):
         self.wait_to_click(self.form_comp_sub_trends_rep)
@@ -1301,15 +1301,15 @@ class FormCompletionVsSubmissionTrends(BasePage):
         self.remove_default_users()
         self.send_keys(self.users_field, UserData.user_group)
         self.wait_to_click((By.XPATH, self.users_list_item.format(UserData.user_group)))
-        time.sleep(1)
+        
         
         self.wait_to_click(self.date_input)
         self.wait_to_click((By.XPATH, self.date_range_type.format(UserData.date_range[0])))
         text = self.get_attribute(self.date_input, "value")
         print(text)
-        time.sleep(2)
+        
         self.wait_to_click(self.apply_id)
-        time.sleep(10)
+        time.sleep(2)
         self.wait_for_element(self.result_table, 300)
         assert self.is_visible_and_displayed(self.report_content_id, 120), "Report not loaded"
         print("Report loaded successfully!")

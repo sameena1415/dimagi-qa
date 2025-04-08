@@ -58,19 +58,19 @@ class BhaWorkflows(BasePage):
         self.content = "//*[contains(@title,'{}')]/parent::*"
 
     def open_app(self, app_name):
-        time.sleep(2)
+        
         if self.is_present_and_displayed(self.webapps_home, 20):
-            self.js_click(self.webapps_home)
+            self.wait_to_click(self.webapps_home)
         self.application = self.get_element(self.app_name_format, app_name)
         self.application_header = self.get_element(self.app_header_format, app_name)
         self.scroll_to_element(self.application)
-        self.js_click(self.application)
-        time.sleep(10)
+        self.wait_to_click(self.application)
+        time.sleep(2)
         self.wait_for_element(self.application_header, timeout=200)
 
     def open_menu(self, menu_name):
         self.scroll_to_element((By.XPATH, self.menu_name_format.format(menu_name)))
-        self.js_click((By.XPATH, self.menu_name_format.format(menu_name)))
+        self.wait_to_click((By.XPATH, self.menu_name_format.format(menu_name)))
 
     def open_form(self, form_name):
         self.form_header = self.get_element(self.form_name_header_format, form_name)
@@ -80,7 +80,7 @@ class BhaWorkflows(BasePage):
             self.form_name = self.get_element(self.form_name_format, form_name)
             self.wait_for_element(self.form_name, timeout=50)
             self.scroll_to_element(self.form_name)
-            self.js_click(self.form_name)
+            self.wait_to_click(self.form_name)
             self.wait_for_element((By.XPATH, self.current_page.format(form_name)), timeout=50)
 
     def stress_load_files(self, app, menu, form, input_file, output_file):
@@ -106,7 +106,7 @@ class BhaWorkflows(BasePage):
                            )
         self.scroll_to_element(self.form_submit)
         start_time = time.time()
-        self.js_click(self.form_submit)
+        self.wait_to_click(self.form_submit)
         wait.until(EC.presence_of_element_located(
             (By.XPATH, "//*[contains(text(), 'successfully') or contains(text(), 'submitted')]")
             )

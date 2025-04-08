@@ -86,7 +86,7 @@ class WebUsersPage(BasePage):
             self.wait_to_click(self.send_invite)
 
     def assert_invitation_sent(self):
-        time.sleep(10)
+        time.sleep(2)
         self.wait_to_click(self.users_menu_id)
         self.wait_to_click(self.web_users_menu)
         assert self.is_visible_and_displayed(self.verify_user), "Unable to find delivered invite."
@@ -140,22 +140,22 @@ class WebUsersPage(BasePage):
         self.wait_to_click(self.web_users_menu)
         self.wait_to_click(self.remove_user_invite)
         try:
-            time.sleep(2)
-            self.js_click(self.delete_confirm_invitation)
+            
+            self.wait_to_click(self.delete_confirm_invitation)
         except TimeoutException:
-            time.sleep(2)
-            self.js_click(self.delete_confirm_webuser)
+            
+            self.wait_to_click(self.delete_confirm_webuser)
         print("Invitation deleted")
 
     def download_web_users(self):
-        time.sleep(1)
+        
         self.wait_to_click(self.users_menu_id)
         self.wait_to_click(self.web_users_menu)
         self.wait_to_click(self.download_worker_btn)
         self.wait_to_click(self.download_filter)
         try:
             self.wait_and_sleep_to_click(self.download_users_btn)
-            time.sleep(5)
+            time.sleep(2)
         except TimeoutException:
             print("TIMEOUT ERROR: Still preparing for download..Celery might be down..")
             assert False
@@ -171,7 +171,7 @@ class WebUsersPage(BasePage):
             self.click(self.bulk_upload_btn)
             newest_file = latest_download_file()
             file_that_was_downloaded = PathSettings.DOWNLOAD_PATH / newest_file
-            time.sleep(5)
+            time.sleep(2)
             self.send_keys(self.choose_file, str(file_that_was_downloaded))
             self.wait_and_sleep_to_click(self.upload)
         except (TimeoutException, NoSuchElementException):
@@ -183,23 +183,23 @@ class WebUsersPage(BasePage):
         self.wait_to_click(self.web_users_menu)
         self.wait_for_element(self.search_user)
         self.wait_to_clear_and_send_keys(self.search_user, UserData.p1p2_user)
-        time.sleep(1)
+        
         self.wait_to_click(self.search_user_btn)
-        time.sleep(2)
+        
         self.wait_for_element(self.user_link)
         self.wait_to_click(self.user_link)
         self.wait_for_element(self.select_project_role_id)
         self.select_by_text(self.select_project_role_id, rolename)
         self.wait_to_click(self.update_role_btn)
-        time.sleep(2)
+        
         self.scroll_to_element(self.location_field)
         if self.is_present(self.remove_location):
             self.wait_to_click(self.remove_location)
-        time.sleep(2)
+        
         self.wait_to_click(self.location_field)
         self.send_keys(self.location_field, "Test Location")
         self.wait_to_click(self.location_value)
         self.wait_to_click(self.update_location_btn)
-        time.sleep(2)
+        
 
 

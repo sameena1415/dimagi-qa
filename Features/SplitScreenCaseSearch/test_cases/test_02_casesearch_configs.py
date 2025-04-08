@@ -741,7 +741,7 @@ def test_case_24_case_search_validations(driver, settings):
                                        input_value=CaseSearchUserInput.three,
                                        property_type=TEXT_INPUT
                                        )
-    time.sleep(2)
+    
     casesearch.search_against_property(search_property=CaseSearchUserInput.song_name,
                                        input_value=CaseSearchUserInput.value_with_space,
                                        property_type=TEXT_INPUT

@@ -44,34 +44,42 @@ class BasePage:
             self.cookie_alert_displayed = False
         return self.cookie_alert_displayed
 
-    def wait_to_click(self, locator, timeout=12):
-        element = None
+    def wait_to_click(self, locator, timeout=30):
+        # element = None
+        clickable = ec.element_to_be_clickable(locator)
+        element = WebDriverWait(self.driver, timeout, poll_frequency=1).until(clickable, message="Couldn't find locator: "
+                                                                               + str(locator)
+                                                            )
         try:
-            clickable = ec.element_to_be_clickable(locator)
-            element = WebDriverWait(self.driver, timeout).until(clickable,
-                                                                message="Couldn't find locator: "
-                                                                        + str(locator))
             element.click()
-        except ElementClickInterceptedException:
-            if self.cookie_alert():
-                self.click(self.alert_button_accept)
-                element.click()
-        except UnexpectedAlertPresentException:
-            alert = self.driver.switch_to.alert
-            alert.accept()
-            element.click()
-        except StaleElementReferenceException:
-            time.sleep(5)
-            self.js_click(locator)
-        except TimeoutException:
-            if self.page_403():
-                self.driver.back()
-                element.click()
-            elif self.page_404():
-                self.driver.back()
-                element.click()
-            else:
-                raise TimeoutException()
+        except Exception:
+            self.driver.execute_script("arguments[0].click();", element)
+        # try:
+        #     clickable = ec.element_to_be_clickable(locator)
+        #     element = WebDriverWait(self.driver, timeout).until(clickable,
+        #                                                         message="Couldn't find locator: "
+        #                                                                 + str(locator))
+        #     element.click()
+        # except ElementClickInterceptedException:
+        #     if self.cookie_alert():
+        #         self.click(self.alert_button_accept)
+        #         element.click()
+        # except UnexpectedAlertPresentException:
+        #     alert = self.driver.switch_to.alert
+        #     alert.accept()
+        #     element.click()
+        # except StaleElementReferenceException:
+        #     time.sleep(2)
+        #     self.wait_to_click(locator)
+        # except TimeoutException:
+        #     if self.page_403():
+        #         self.driver.back()
+        #         element.click()
+        #     elif self.page_404():
+        #         self.driver.back()
+        #         element.click()
+        #     else:
+        #         raise TimeoutException()
 
     def wait_to_clear_and_send_keys(self, locator, user_input):
         clickable = ec.visibility_of_element_located(locator)
@@ -92,24 +100,25 @@ class BasePage:
     def wait_for_element(self, locator, timeout=20):
         try:
             clickable = ec.element_to_be_clickable(locator)
-            WebDriverWait(self.driver, timeout, poll_frequency=5).until(clickable,
-                                                                    message="Couldn't find locator: " + str(locator))
+            WebDriverWait(self.driver, timeout, poll_frequency=1).until(clickable,
+                                                                        message="Couldn't find locator: " + str(locator)
+                                                                        )
         except StaleElementReferenceException:
-            time.sleep(10)
+            time.sleep(2)
         clickable = ec.element_to_be_clickable(locator)
-        WebDriverWait(self.driver, timeout, poll_frequency=5).until(clickable,
-                                                            message="Couldn't find locator: " + str(locator)
-                                                            )
-
+        WebDriverWait(self.driver, timeout, poll_frequency=1).until(clickable,
+                                                                    message="Couldn't find locator: " + str(locator)
+                                                                    )
 
     def wait_and_sleep_to_click(self, locator, timeout=90):
         element = None
         try:
-            time.sleep(10)
+            time.sleep(2)
             clickable = ec.element_to_be_clickable(locator)
             element = WebDriverWait(self.driver, timeout).until(clickable,
                                                                 message="Couldn't find locator: "
-                                                                        + str(locator))
+                                                                        + str(locator)
+                                                                )
             element.click()
         except ElementClickInterceptedException:
             if self.cookie_alert():
@@ -120,8 +129,8 @@ class BasePage:
             alert.accept()
             element.click()
         except StaleElementReferenceException:
-            time.sleep(5)
-            self.js_click(locator)
+            time.sleep(2)
+            self.wait_to_click(locator)
         except TimeoutException:
             if self.page_403():
                 self.driver.back()
@@ -235,7 +244,9 @@ class BasePage:
             visible = ec.visibility_of_element_located(locator)
             element = WebDriverWait(self.driver, timeout, poll_frequency=10).until(visible,
                                                                                    message="Element" + str(
-                                                                                       locator) + "not displayed")
+                                                                                       locator
+                                                                                       ) + "not displayed"
+                                                                                   )
             is_displayed = element.is_displayed()
         except TimeoutException:
             is_displayed = False
@@ -246,16 +257,19 @@ class BasePage:
             visible = ec.presence_of_element_located(locator)
             element = WebDriverWait(self.driver, timeout, poll_frequency=10).until(visible,
                                                                                    message="Element" + str(
-                                                                                       locator) + "not displayed")
+                                                                                       locator
+                                                                                       ) + "not displayed"
+                                                                                   )
             is_displayed = element.is_displayed()
         except TimeoutException:
             is_displayed = False
         except StaleElementReferenceException:
             self.driver.refresh()
-            time.sleep(10)
+            time.sleep(2)
             visible = ec.presence_of_element_located(locator)
             element = WebDriverWait(self.driver, timeout).until(visible,
-                                                                message="Element" + str(locator) + "not displayed")
+                                                                message="Element" + str(locator) + "not displayed"
+                                                                )
             is_displayed = element.is_displayed()
         return bool(is_displayed)
 
@@ -302,7 +316,8 @@ class BasePage:
         timeNow = datetime.datetime.now()
         diff_seconds = round((timeNow - modificationTime).total_seconds())
         print("Last Modified Time : ", str(modificationTime) + 'Current Time : ', str(timeNow),
-              "Diff: " + str(diff_seconds))
+              "Diff: " + str(diff_seconds)
+              )
         assert file_name in newest_file and diff_seconds in range(0, 600), "Export not completed"
 
     def accept_pop_up(self):
@@ -333,19 +348,21 @@ class BasePage:
         clickable = ec.element_to_be_clickable(locator)
         element = WebDriverWait(self.driver, timeout).until(clickable,
                                                             message="Couldn't find locator: "
-                                                                    + str(locator))
+                                                                    + str(locator)
+                                                            )
         # action chain object
         action = ActionChains(self.driver)
         # double click operation
         action.double_click(element)
 
-    def js_click(self, locator, timeout=20):
-        clickable = ec.element_to_be_clickable(locator)
-        element = WebDriverWait(self.driver, timeout).until(clickable,
-                                                            message="Couldn't find locator: "
-                                                                    + str(locator))
-        self.driver.execute_script("arguments[0].click();", element)
-        time.sleep(3)
+    # def js_click(self, locator, timeout=20):
+    #     clickable = ec.element_to_be_clickable(locator)
+    #     element = WebDriverWait(self.driver, timeout).until(clickable,
+    #                                                         message="Couldn't find locator: "
+    #                                                                 + str(locator)
+    #                                                         )
+    #     self.driver.execute_script("arguments[0].click();", element)
+    #     time.sleep(3)
 
     def scroll_to_element(self, locator):
         element = self.driver.find_element(*locator)
@@ -353,7 +370,8 @@ class BasePage:
 
     def wait_and_find_elements(self, locator, cols, timeout=500):
         elements = WebDriverWait(self.driver, timeout, poll_frequency=10).until(
-            lambda driver: len(driver.find_elements(*locator)) >= int(cols))
+            lambda driver: len(driver.find_elements(*locator)) >= int(cols)
+            )
         return elements
 
     def wait_till_progress_completes(self, type="export"):
@@ -361,17 +379,22 @@ class BasePage:
             if self.is_present((By.XPATH, "//div[contains(@class,'progress-bar')]")):
                 WebDriverWait(self.driver, 600, poll_frequency=10).until(
                     ec.visibility_of_element_located((By.XPATH,
-                                                      "//div[contains(@class,'progress-bar')][.//span[@data-bind='text: progress'][.='100']]")))
+                                                      "//div[contains(@class,'progress-bar')][.//span[@data-bind='text: progress'][.='100']]")
+                                                     )
+                    )
         elif type == "integration":
             WebDriverWait(self.driver, 600, poll_frequency=10).until(
-                ec.invisibility_of_element_located((By.XPATH, "//div[contains(@class,'progress-bar')]")))
+                ec.invisibility_of_element_located((By.XPATH, "//div[contains(@class,'progress-bar')]"))
+                )
 
     def is_clickable(self, locator, timeout=50):
         try:
             clickable = ec.element_to_be_clickable(locator)
             element = WebDriverWait(self.driver, timeout, poll_frequency=10).until(clickable,
                                                                                    message="Element" + str(
-                                                                                       locator) + "not displayed")
+                                                                                       locator
+                                                                                       ) + "not displayed"
+                                                                                   )
             is_clickable = element.is_enabled()
         except TimeoutException:
             is_clickable = False
@@ -390,10 +413,10 @@ class BasePage:
                 wait.until(lambda driver: self.driver.execute_script('return document.readyState') == 'complete')
             else:
                 print("Undefined JQuery, waiting for sometime")
-                time.sleep(10)
+                time.sleep(2)
         except JavascriptException:
             print("Undefined JQuery")
-            time.sleep(20)
+            time.sleep(10)
 
     def is_date(self, string, fuzzy=False):
         """
@@ -427,11 +450,11 @@ class BasePage:
 
     def reload_page(self):
         self.driver.refresh()
-        time.sleep(5)
+        time.sleep(2)
 
     def get_url(self, link):
         self.driver.get(link)
-        time.sleep(10)
+        time.sleep(2)
 
     def switch_to_frame(self, frame_name):
         frame = self.driver.find_element(*frame_name)
@@ -442,6 +465,7 @@ class BasePage:
         clickable = ec.element_to_be_clickable(locator)
         element = WebDriverWait(self.driver, timeout).until(clickable,
                                                             message="Couldn't find locator: "
-                                                                    + str(locator))
-        self.driver.execute_script("arguments[0].value='"+value+"';", element)
-        time.sleep(2)
+                                                                    + str(locator)
+                                                            )
+        self.driver.execute_script("arguments[0].value='" + value + "';", element)
+        
