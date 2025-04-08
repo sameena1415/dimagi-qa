@@ -82,13 +82,13 @@ def environment_settings_bha():
         env = os.environ.get("DIMAGIQA_ENV") or "staging"
         subdomain = "www" if env == "production" else env
         # updates the url with the project domain while testing in CI
-        settings["url"] = f"https://{subdomain}.commcarehq.org/a/co-carecoordination-perf/cloudcare/apps/v2/#apps"
+        settings["url"] = f"https://{subdomain}.commcarehq.org/a/co-carecoordination-perf/cloudcare/apps/v2/#%7B%22appId%22%3A%2233b6171beff5e252f30bb576d5f6e416%22%2C%22selections%22%3A%5B%5D%2C%22queryData%22%3A%7B%7D%7D"
         settings["db"] = f"https://{subdomain}.commcarehq.org/a/co-carecoordination-perf/dashboard/"
     if "db" not in settings:
         env = os.environ.get("DIMAGIQA_ENV") or "staging"
         subdomain = "www" if env == "production" else env
         # updates the url with the project domain while testing in CI
-        settings["db"] = f"https://{subdomain}.commcarehq.org/a/co-carecoordination-test/dashboard/"
+        settings["db"] = f"https://{subdomain}.commcarehq.org/a/co-carecoordination-perf/cloudcare/apps/v2/#%7B%22appId%22%3A%2233b6171beff5e252f30bb576d5f6e416%22%2C%22selections%22%3A%5B%5D%2C%22queryData%22%3A%7B%7D%7D"
     return settings
 
 
