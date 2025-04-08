@@ -15,7 +15,7 @@ def test_case_01_max_selected_values_for_auto_selection(driver, settings):
     webapps.open_app(MultiSelectUserInput.multiselect_app_name)
     webapps.open_menu(MultiSelectUserInput.songs_auto)
     webapps.open_form(MultiSelectUserInput.update_song_normal_form)
-    multiselect.check_no_of_cases_on_form(100, str(SONG).lower())
+    multiselect.check_no_of_cases_on_form(100,  str(SONG).lower())
     driver.back()
     webapps.open_form(MultiSelectUserInput.does_nothing_form)
     webapps.submit_the_form()
