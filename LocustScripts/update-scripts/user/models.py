@@ -41,24 +41,24 @@ class HQUser:
 
     def login(self, domain, host):
         login_url = f"/a/{domain}/login/"
-        self.client.get(login_url)  # get CSRF token
-        response = self.client.post(
-            login_url,
-            {
-                "auth-username": self.user_details.username,
-                "auth-password": self.user_details.password,
-                "cloud_care_login_view-current_step": ['auth'],  # fake out two_factor ManagementForm
-                },
-            headers={
-                "X-CSRFToken": self.client.cookies.get('csrftoken'),
-                "REFERER": f"{host}{login_url}",  # csrf requires this
-                },
-            )
-        if not response.status_code == 200:
-            raise StopUser(f"Login failed for user {self.user_details.username}: {response.status_code}")
-        if 'Sign In' in response.text:
-            raise StopUser(f"Login failed for user {self.user_details.username}: Sign In failed")
-        logger.info("User logged in: " + self.user_details.username)
+        # self.client.get(login_url)  # get CSRF token
+        # response = self.client.post(
+        #     login_url,
+        #     {
+        #         "auth-username": self.user_details.username,
+        #         "auth-password": self.user_details.password,
+        #         "cloud_care_login_view-current_step": ['auth'],  # fake out two_factor ManagementForm
+        #         },
+        #     headers={
+        #         "X-CSRFToken": self.client.cookies.get('csrftoken'),
+        #         "REFERER": f"{host}{login_url}",  # csrf requires this
+        #         },
+        #     )
+        # if not response.status_code == 200:
+        #     raise StopUser(f"Login failed for user {self.user_details.username}: {response.status_code}")
+        # if 'Sign In' in response.text:
+        #     raise StopUser(f"Login failed for user {self.user_details.username}: Sign In failed")
+        # logger.info("User logged in: " + self.user_details.username)
 
     def navigate_start(self, expected_title=None):
         validation = None
@@ -122,7 +122,7 @@ class BaseLoginCommCareUser(HttpUser):
             build_id=build_id
             )
         self.hq_user = HQUser(self.client, self.user_detail, app_details)
-        self.hq_user.login(domain, host)
+        # self.hq_user.login(domain, host)
         self.hq_user.app_details.build_id, self.hq_user.app_details.app_id = self._get_build_info(build_id, app_id, domain)
 
     def _get_build_info(self, build_id, app_id, domain):
