@@ -273,8 +273,11 @@ class MessagingPage(BasePage):
 
     def cond_alert_download(self):
         self.wait_to_click(self.cond_alerts)
-        self.wait_to_click(self.bulk_upload_button)
-        self.wait_to_click(self.download_id)
+        self.wait_for_element(self.bulk_upload_button)
+        self.click(self.bulk_upload_button)
+        self.wait_for_element(self.download_id)
+        self.click(self.download_id)
+        time.sleep(3)
         print("Conditional Alert downloaded successfully!")
 
     def cond_alert_upload(self):

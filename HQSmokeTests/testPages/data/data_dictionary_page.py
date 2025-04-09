@@ -22,8 +22,8 @@ class DataDictionaryPage(BasePage):
         self.dictionary_description = "Test dictionary"
 
         self.data_dictionary_link = (By.LINK_TEXT, "Data Dictionary")
-        self.export_button = (By.XPATH, "//a[contains(@href,'export')]/i[contains(@class,'fa-cloud')]/i")
-        self.import_button = (By.XPATH, "//a[contains(@href,'import')]/i[contains(@class,'fa-cloud')]/i")
+        self.export_button = (By.XPATH, "//a[contains(@id,'download-dict')]/i")
+        self.import_button = (By.XPATH, "//a[contains(@id,'upload-dict')]/i")
         self.choose_file = (By.XPATH, "//input[@data-bind ='value: file']")
         self.upload = (By.XPATH, "//button[@data-bind ='disable: !file()']")
         self.success_message = (By.XPATH , "//div[@class= 'alert alert-margin-top fade in alert-success']")
@@ -37,7 +37,7 @@ class DataDictionaryPage(BasePage):
     def export_data_dictionary(self):
         try:
             self.wait_for_element(self.export_button)
-            self.wait_to_click(self.export_button)
+            self.click(self.export_button)
             time.sleep(2)
             newest_file = latest_download_file()
             self.assert_downloaded_file(newest_file, "data_dictionary"), "Download Not Completed!"
@@ -50,7 +50,7 @@ class DataDictionaryPage(BasePage):
     def import_data_dictionary(self):
         try:
             self.wait_for_element(self.import_button)
-            self.wait_to_click(self.import_button)
+            self.click(self.import_button)
             newest_file = latest_download_file()
             file_that_was_downloaded = PathSettings.DOWNLOAD_PATH / newest_file
             time.sleep(2)

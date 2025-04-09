@@ -54,8 +54,10 @@ class MobileWorkerPage(BasePage):
         self.show_full_menu_id = (By.ID, "commcare-menu-toggle")
         self.user_name_span = (By.CLASS_NAME, "user_username")
         self.search_mw = (By.XPATH, "//div[@class='ko-search-box']//input[@type='text']")
+        self.clear_button_mw = (
+            By.XPATH, "//div[@class='ko-search-box']//button[@data-bind='click: clearQuery']/i")
         self.search_button_mw = (
-            By.XPATH, "//div[@class='ko-search-box']//button[@data-bind='click: clickAction, visible: !immediate']")
+            By.XPATH, "//div[@class='ko-search-box']//button[@data-bind='click: clickAction, visible: !immediate']/i")
         self.webapp_working_as = (By.XPATH, "//span[contains(.,'Working as')]//b")
         self.webapp_login_confirmation = (By.ID, 'js-confirmation-confirm')
         # self.webapp_login_with_username = (By.XPATH, self.login_as_usernames)
@@ -180,8 +182,8 @@ class MobileWorkerPage(BasePage):
         self.role_dropdown = (By.XPATH, "//select[@id='id_role']")
 
     def search_user(self, username):
-        self.wait_to_clear_and_send_keys(self.search_mw, username)
-        
+        self.wait_to_click(self.clear_button_mw)
+        self.send_keys(self.search_mw, username)
         self.wait_to_click(self.search_button_mw)
 
     def search_webapps_user(self, username):
@@ -191,7 +193,6 @@ class MobileWorkerPage(BasePage):
         time.sleep(2)
         self.wait_for_element(self.search_user_web_apps, 20)
         self.send_keys(self.search_user_web_apps, username)
-        
         self.wait_to_click(self.search_button_we_apps)
         time.sleep(2)
 
@@ -294,9 +295,7 @@ class MobileWorkerPage(BasePage):
             print("Save Button is not enabled")
 
     def select_mobile_worker_created(self, username):
-        
         self.wait_to_click(self.mobile_worker_on_left_panel)
-        
         self.search_user(username)
         time.sleep(3)
         if not self.is_present((By.XPATH, self.username_link.format(username))):
@@ -311,7 +310,6 @@ class MobileWorkerPage(BasePage):
         assert self.is_displayed(self.user_file_additional_info), "Unable to assign user field to user."
 
     def update_information(self):
-        
         self.wait_to_click(self.update_info_button)
         time.sleep(4)
         assert self.is_displayed(self.user_field_success_msg), "Unable to update user."
@@ -321,7 +319,6 @@ class MobileWorkerPage(BasePage):
     def deactivate_user(self, username):
         try:
             self.search_user(username)
-            
             self.wait_for_element((By.XPATH, self.username_link.format(username)), 50)
             self.wait_to_click(self.deactivate_buttons_list)
             self.wait_for_element(self.confirm_deactivate_xpath_list)
@@ -351,11 +348,10 @@ class MobileWorkerPage(BasePage):
 
     def reactivate_user(self, username):
         try:
-            
             self.mobile_worker_menu()
-            self.wait_to_click(self.show_deactivated_users_btn)
             self.search_user(username)
-            
+            time.sleep(2)
+            self.click(self.show_deactivated_users_btn)
             if not self.is_present_and_displayed((By.XPATH, self.username_link.format(username)), 10):
                 print("This is a rerun so skipping this steps")
                 print("User is already activated")
