@@ -34,7 +34,7 @@ class MobileUserPage(BasePage):
 
     def open_users_menu(self):
         if self.is_present(self.show_full_menu):
-            self.js_click(self.show_full_menu)
+            self.wait_to_click(self.show_full_menu)
         self.driver.get(self.dashboard_link)
         self.wait_for_element(self.users_menu_id)
         self.click(self.users_menu_id)
@@ -43,11 +43,11 @@ class MobileUserPage(BasePage):
 
     def add_mobile_number_mobile_user(self, username):
         self.wait_to_clear_and_send_keys(self.search_mw, username)#UserData.app_preview_mobile_worker)
-        time.sleep(2)
+        
         self.webapp.wait_to_click(self.search_button_mw)
         self.wait_for_element((By.XPATH, self.searched_user.format(username)))
         self.webapp.wait_to_click((By.XPATH, self.searched_user.format(username)))
-        time.sleep(5)
+        time.sleep(2)
         self.scroll_to_bottom()
         if self.is_present(self.phone_verify_button):
             self.webapp.wait_to_click(self.phone_number_delete)

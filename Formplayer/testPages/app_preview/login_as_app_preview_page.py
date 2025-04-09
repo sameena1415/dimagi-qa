@@ -73,23 +73,23 @@ class LoginAsAppPreviewPage(BasePage):
 
     def login_as_app_preview_presence(self):
         self.switch_to_frame(self.iframe)
-        time.sleep(2)
+        
         assert self.is_visible_and_displayed(self.title_bar), "This is not the Webaspps menu page."
         # self.webapp.wait_to_click(self.login_as_button)
         self.wait_for_element(self.login_as_button, 200)
         self.scroll_to_element(self.login_as_button)
-        self.js_click(self.login_as_button)
+        self.wait_to_click(self.login_as_button)
         time.sleep(3)
 
 
     def login_as_app_preview_content(self):
         self.wait_to_clear_and_send_keys(self.search_worker, self.username)
-        self.js_click(self.search_users_button)
-        time.sleep(2)
-        self.js_click((By.XPATH, self.username_in_list.format(self.username)))
-        time.sleep(2)
-        self.js_click(self.webapp_login_confirmation)
-        time.sleep(2)
+        self.wait_to_click(self.search_users_button)
+        
+        self.wait_to_click((By.XPATH, self.username_in_list.format(self.username)))
+        
+        self.wait_to_click(self.webapp_login_confirmation)
+        
         logged_in_username = self.get_text(self.webapp_working_as)
         assert logged_in_username == self.username, "Logged in"
         self.switch_to_default_content()
@@ -98,14 +98,14 @@ class LoginAsAppPreviewPage(BasePage):
         self.switch_to_frame(self.iframe)
         self.webapp.wait_to_click(self.start_option)
         self.wait_for_element(self.basic_tests_case)
-        self.js_click(self.basic_tests_case)
+        self.wait_to_click(self.basic_tests_case)
         self.wait_for_element(self.basic_tests_form)
-        self.js_click(self.basic_tests_form)
+        self.wait_to_click(self.basic_tests_form)
         self.wait_to_clear_and_send_keys(self.basic_tests_answer_input, text+Keys.TAB)
-        self.js_click(self.next_button)
-        time.sleep(2)
-        self.js_click(self.submit)
-        time.sleep(2)
+        self.wait_to_click(self.next_button)
+        
+        self.wait_to_click(self.submit)
+        
         assert self.is_visible_and_displayed(self.submit_success)
         self.switch_to_default_content()
 
@@ -120,19 +120,19 @@ class LoginAsAppPreviewPage(BasePage):
 
     def login_as_user(self, username):
         self.switch_to_frame(self.iframe)
-        time.sleep(2)
+        
         self.webapp.wait_to_click(self.login_as_button)
-        time.sleep(2)
+        
         self.wait_for_element(self.search_worker, 120)
-        time.sleep(2)
+        
         self.send_keys(self.search_worker, username)
         time.sleep(3)
-        self.js_click(self.search_users_button)
-        time.sleep(2)
-        self.js_click((By.XPATH, self.username_in_list.format(self.username)))
-        time.sleep(2)
-        self.js_click(self.webapp_login_confirmation)
-        time.sleep(2)
+        self.wait_to_click(self.search_users_button)
+        
+        self.wait_to_click((By.XPATH, self.username_in_list.format(self.username)))
+        
+        self.wait_to_click(self.webapp_login_confirmation)
+        
         logged_in_username = self.get_text(self.webapp_working_as)
         assert logged_in_username == self.username, "Logged in"
         self.switch_to_default_content()

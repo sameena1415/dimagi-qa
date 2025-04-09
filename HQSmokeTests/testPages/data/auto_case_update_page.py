@@ -73,7 +73,7 @@ class AutoCaseUpdatePage(BasePage):
                 print(list_rule[i].text)
                 self.wait_to_click((By.XPATH,self.all_test_rules_delete.format(list_rule[i].text)))
                 self.wait_to_click((By.XPATH, self.all_delete_confirm.format(list_rule[i].text)))
-                time.sleep(2)
+                
                 self.driver.refresh()
                 list_rule = self.find_elements(self.all_test_rules)
         else:

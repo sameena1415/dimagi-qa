@@ -35,7 +35,7 @@ class MessagingPage(BasePage):
 
     def open_reports_menu(self):
         if self.is_present(self.show_full_menu):
-            self.js_click(self.show_full_menu)
+            self.wait_to_click(self.show_full_menu)
         self.driver.get(self.dashboard_link)
         self.wait_for_element(self.messaging_menu_id)
         self.click(self.messaging_menu_id)
@@ -59,9 +59,9 @@ class MessagingPage(BasePage):
             self.select_by_text(self.survey, surveys)
             self.scroll_to_element(self.save_button)
             self.webapp.wait_to_click(self.save_button)
-            time.sleep(2)
+            
             self.driver.refresh()
-            time.sleep(5)
+            time.sleep(2)
 
 
 
@@ -71,7 +71,7 @@ class MessagingPage(BasePage):
             if self.is_present_and_displayed((By.LINK_TEXT, items),10):
                 self.webapp.wait_to_click((By.XPATH, self.keyword_delete_button.format(items)))
                 self.webapp.wait_to_click((By.XPATH,self.confirm_delete.format(items)))
-                time.sleep(2)
+                
                 self.driver.refresh()
             else:
                 print("Keyword "+items+" is not present")

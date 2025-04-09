@@ -97,6 +97,7 @@ def test_case_05_date_range_format(driver, settings):
     webapps = WebApps(driver, settings)
     casesearch = CaseSearchWorkflows(driver)
     """Check date range format search property"""
+    webapps.login_as(CaseSearchUserInput.user_1)
     webapps.open_app(CaseSearchUserInput.linked_case_search_app_name)
     webapps.open_menu(CaseSearchUserInput.search_first_menu)
     # MM/DD/YYYY
@@ -741,7 +742,7 @@ def test_case_24_case_search_validations(driver, settings):
                                        input_value=CaseSearchUserInput.three,
                                        property_type=TEXT_INPUT
                                        )
-    time.sleep(2)
+    
     casesearch.search_against_property(search_property=CaseSearchUserInput.song_name,
                                        input_value=CaseSearchUserInput.value_with_space,
                                        property_type=TEXT_INPUT

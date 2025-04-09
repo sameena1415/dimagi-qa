@@ -623,7 +623,7 @@ def test_case_24_case_search_validations(driver, settings):
     casesearch.search_against_property(search_property=CaseSearchUserInput.energy,
                                        input_value=CaseSearchUserInput.three,
                                        property_type=TEXT_INPUT)
-    time.sleep(2)
+    
     casesearch.search_against_property(search_property=CaseSearchUserInput.song_name,
                                        input_value=CaseSearchUserInput.value_with_space,
                                        property_type=TEXT_INPUT)
@@ -656,7 +656,7 @@ def test_case_24_case_search_validations(driver, settings):
     webapps.omni_search(casename)
     """Check including blanks"""
     driver.back()
-    time.sleep(2)
+    
     driver.back()
     webapps.clear_selections_on_case_search_page()
     casesearch.select_include_blanks(CaseSearchUserInput.rating)
@@ -676,7 +676,7 @@ def test_case_25_case_search_validations_dot_notations(driver, settings):
     casesearch.search_against_property(search_property=CaseSearchUserInput.energy,
                                        input_value=CaseSearchUserInput.three,
                                        property_type=TEXT_INPUT)
-    time.sleep(2)
+    
     casesearch.search_against_property(search_property=CaseSearchUserInput.song_name,
                                        input_value=CaseSearchUserInput.value_with_space,
                                        property_type=TEXT_INPUT)
@@ -709,7 +709,7 @@ def test_case_25_case_search_validations_dot_notations(driver, settings):
     webapps.omni_search(casename)
     """Check including blanks"""
     driver.back()
-    time.sleep(2)
+    
     driver.back()
     webapps.clear_selections_on_case_search_page()
     casesearch.select_include_blanks(CaseSearchUserInput.rating)

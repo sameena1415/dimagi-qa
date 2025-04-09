@@ -30,7 +30,7 @@ class ProjectSettingsPage(BasePage):
         self.webapp.wait_to_click(self.privacy_security)
         self.wait_for_element(self.inactivity_timeout)
         self.webapp.wait_to_click(self.shortened_inactivity)
-        time.sleep(2)
+        
         assert self.is_selected(self.shortened_inactivity)
         self.send_keys(self.inactivity_timeout, "5")
         self.scroll_to_element(self.update_button)
@@ -45,9 +45,9 @@ class ProjectSettingsPage(BasePage):
         self.wait_for_element(self.inactivity_timeout)
         if self.is_selected(self.shortened_inactivity):
             self.webapp.wait_to_click(self.shortened_inactivity)
-            time.sleep(2)
+            
             assert not self.is_selected(self.shortened_inactivity)
-            time.sleep(2)
+            
             self.clear(self.inactivity_timeout)
             self.scroll_to_element(self.update_button)
             self.webapp.wait_to_click(self.update_button)

@@ -74,7 +74,7 @@ class BenchmarkPage(BasePage):
         try:
             self.driver.switch_to.frame(self.find_element(self.iframe))
             self.wait_for_element(self.view_latest_updates)
-            self.js_click(self.close_notification)
+            self.wait_to_click(self.close_notification)
             self.driver.switch_to.default_content()
         except TimeoutException:
             pass  # ignore if alert not on page
@@ -119,7 +119,7 @@ class BenchmarkPage(BasePage):
             self.wait_to_click(self.select_all_btn)
             self.wait_to_click(self.delete_selected_exports)
             self.wait_to_click(self.bulk_delete_confirmation_btn)
-            time.sleep(5)
+            time.sleep(2)
             # assert self.is_visible_and_displayed(self.success_message), "Cases upload not completed!"
             # print("Cases uploaded successfully!")
         except TimeoutException:
@@ -180,7 +180,7 @@ class BenchmarkPage(BasePage):
         WebDriverWait(self.driver, 10000).until(
             lambda driver: driver.execute_script('return document.readyState') == 'complete')
         self.wait_and_sleep_to_click(self.export_case_data_link)
-        time.sleep(5)
+        time.sleep(2)
         self.wait_to_click(self.edit_form_case_export)
         start_time = time.time()
         WebDriverWait(self.driver, 100000).until(

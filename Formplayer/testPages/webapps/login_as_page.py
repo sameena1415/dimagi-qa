@@ -44,7 +44,7 @@ class LoginAsPage(BasePage):
     def open_basic_tests_app(self, application=UserData.basic_tests_app["tests_app"]):
         print("Open App")
         self.wait_for_element((By.XPATH, self.basic_tests_app.format(application, application)), 120)
-        self.js_click((By.XPATH, self.basic_tests_app.format(application, application)))
+        self.wait_to_click((By.XPATH, self.basic_tests_app.format(application, application)))
 
     def open_webapps_menu(self):
         self.switch_to_default_content()
@@ -58,30 +58,30 @@ class LoginAsPage(BasePage):
         assert self.WEBAPPS_TITLE in self.driver.title, "This is not the Webaspps menu page."
         self.wait_for_element(self.login_as, 200)
         self.scroll_to_element(self.login_as)
-        self.js_click(self.login_as)
+        self.wait_to_click(self.login_as)
         time.sleep(3)
 
     def login_as_content(self):
         self.wait_for_element(self.search_user_input_area, 120)
         self.wait_to_clear_and_send_keys(self.search_user_input_area, self.username)
-        time.sleep(2)
-        self.js_click(self.search_users_button)
-        time.sleep(2)
-        self.js_click((By.XPATH, self.username_in_list.format(self.username)))
-        time.sleep(2)
+        
+        self.wait_to_click(self.search_users_button)
+        
+        self.wait_to_click((By.XPATH, self.username_in_list.format(self.username)))
+        
         self.webapp.wait_to_click(self.webapp_login_confirmation)
-        time.sleep(5)
+        time.sleep(2)
         logged_in_username = self.get_text(self.webapp_working_as)
         print(logged_in_username)
         assert logged_in_username == self.username, "Logged in"
 
     def login_as_form_submssion(self, input_text):
         self.open_basic_tests_app()
-        time.sleep(2)
-        self.js_click(self.basic_tests_menu)
-        time.sleep(2)
-        self.js_click(self.basic_tests_form)
-        time.sleep(2)
+        
+        self.wait_to_click(self.basic_tests_menu)
+        
+        self.wait_to_click(self.basic_tests_form)
+        
         self.wait_for_element(self.basic_tests_answer_input, 120)
         self.wait_to_clear_and_send_keys(self.basic_tests_answer_input, input_text)
         self.webapp.wait_to_click(self.submit)
@@ -96,14 +96,14 @@ class LoginAsPage(BasePage):
         self.webapp.wait_to_click(self.login_as)
         time.sleep(3)
         self.wait_for_element(self.search_user_input_area, 120)
-        time.sleep(2)
+        
         self.send_keys(self.search_user_input_area, username)
         time.sleep(3)
-        self.js_click(self.search_users_button)
-        time.sleep(2)
-        self.js_click((By.XPATH, self.username_in_list.format(username)))
-        time.sleep(2)
-        self.js_click(self.webapp_login_confirmation)
-        time.sleep(2)
+        self.wait_to_click(self.search_users_button)
+        
+        self.wait_to_click((By.XPATH, self.username_in_list.format(username)))
+        
+        self.wait_to_click(self.webapp_login_confirmation)
+        
         logged_in_username = self.get_text(self.webapp_working_as)
         assert logged_in_username == self.username, "Logged in"

@@ -54,8 +54,10 @@ class MobileWorkerPage(BasePage):
         self.show_full_menu_id = (By.ID, "commcare-menu-toggle")
         self.user_name_span = (By.CLASS_NAME, "user_username")
         self.search_mw = (By.XPATH, "//div[@class='ko-search-box']//input[@type='text']")
+        self.clear_button_mw = (
+            By.XPATH, "//div[@class='ko-search-box']//button[@data-bind='click: clearQuery']/i")
         self.search_button_mw = (
-            By.XPATH, "//div[@class='ko-search-box']//button[@data-bind='click: clickAction, visible: !immediate']")
+            By.XPATH, "//div[@class='ko-search-box']//button[@data-bind='click: clickAction, visible: !immediate']/i")
         self.webapp_working_as = (By.XPATH, "//span[contains(.,'Working as')]//b")
         self.webapp_login_confirmation = (By.ID, 'js-confirmation-confirm')
         # self.webapp_login_with_username = (By.XPATH, self.login_as_usernames)
@@ -180,20 +182,19 @@ class MobileWorkerPage(BasePage):
         self.role_dropdown = (By.XPATH, "//select[@id='id_role']")
 
     def search_user(self, username):
-        self.wait_to_clear_and_send_keys(self.search_mw, username)
-        time.sleep(2)
+        self.wait_to_click(self.clear_button_mw)
+        self.send_keys(self.search_mw, username)
         self.wait_to_click(self.search_button_mw)
 
     def search_webapps_user(self, username):
         self.wait_to_click(self.web_apps_menu_id)
         self.wait_to_click(self.webapp_login)
         print("Waiting for the login page to load.....")
-        time.sleep(10)
+        time.sleep(2)
         self.wait_for_element(self.search_user_web_apps, 20)
         self.send_keys(self.search_user_web_apps, username)
-        time.sleep(1)
         self.wait_to_click(self.search_button_we_apps)
-        time.sleep(5)
+        time.sleep(2)
 
     def mobile_worker_menu(self):
         self.wait_to_click(self.mobile_workers_menu_link_text)
@@ -202,7 +203,7 @@ class MobileWorkerPage(BasePage):
     def create_mobile_worker(self):
         try:
             self.wait_to_click(self.create_mobile_worker_id)
-            time.sleep(1)
+            self.wait_for_element(self.mobile_worker_username_id)
         except (TimeoutException, NoSuchElementException):
             print("TIMEOUT ERROR: Couldn't find create mobile worker button. ")
 
@@ -216,7 +217,7 @@ class MobileWorkerPage(BasePage):
 
     def click_create(self, username):
         self.wait_to_click(self.create_button_xpath)
-        time.sleep(5)
+        time.sleep(2)
         self.is_present_and_displayed(self.NEW, 200)
         new_user_created = self.get_text(self.new_user_created_xpath)
         print("Username is : " + new_user_created)
@@ -226,7 +227,7 @@ class MobileWorkerPage(BasePage):
     def check_for_group_in_downloaded_file(self, newest_file, group_id_value):
         path = os.path.join(PathSettings.DOWNLOAD_PATH, newest_file)
         print(path)
-        time.sleep(5)
+        time.sleep(2)
         data = pd.read_excel(path, sheet_name='groups')
         df = pd.DataFrame(data, columns=['id'])
         assert group_id_value in df['id'].values, "Group is not present"
@@ -234,7 +235,7 @@ class MobileWorkerPage(BasePage):
     def edit_profile_in_downloaded_file(self, newest_file, user):
         path = os.path.join(PathSettings.DOWNLOAD_PATH, newest_file)
         print(path)
-        time.sleep(5)
+        time.sleep(2)
         data = pd.read_excel(path, sheet_name='users')
         df = pd.DataFrame(data)
         df = df.drop(columns="phone-number 1")
@@ -246,7 +247,7 @@ class MobileWorkerPage(BasePage):
     def remove_role_in_downloaded_file(self, newest_file, user):
         path = os.path.join(PathSettings.DOWNLOAD_PATH, newest_file)
         print(path)
-        time.sleep(5)
+        time.sleep(2)
         data = pd.read_excel(path, sheet_name='users')
         df = pd.DataFrame(data)
         df = df.query("username == '" + user + "'")
@@ -262,17 +263,17 @@ class MobileWorkerPage(BasePage):
     def add_user_property(self, user_pro):
         self.clear(self.user_property_xpath)
         self.send_keys(self.user_property_xpath, user_pro + Keys.TAB)
-        time.sleep(2)
+        
 
     def add_label(self, label):
         self.clear(self.label_xpath)
         self.send_keys(self.label_xpath, label + Keys.TAB)
-        time.sleep(2)
+        
 
     def add_choice(self, choice):
         if self.is_present(self.choices_button_xpath):
-            self.js_click(self.choices_button_xpath)
-            time.sleep(5)
+            self.wait_to_click(self.choices_button_xpath)
+            time.sleep(2)
         else:
             print("Choices button not present")
         self.scroll_to_element(self.add_choice_button_xpath)
@@ -284,8 +285,8 @@ class MobileWorkerPage(BasePage):
 
     def save_field(self):
         if self.is_enabled(self.save_field_id):
-            self.js_click(self.save_field_id)
-            time.sleep(5)
+            self.wait_to_click(self.save_field_id)
+            time.sleep(2)
             assert self.is_present(self.user_field_success_msg) or self.is_present(
                 self.duplicate_field_error
                 ), "Unable to save userfield/profile."
@@ -294,9 +295,7 @@ class MobileWorkerPage(BasePage):
             print("Save Button is not enabled")
 
     def select_mobile_worker_created(self, username):
-        time.sleep(2)
         self.wait_to_click(self.mobile_worker_on_left_panel)
-        time.sleep(2)
         self.search_user(username)
         time.sleep(3)
         if not self.is_present((By.XPATH, self.username_link.format(username))):
@@ -311,22 +310,20 @@ class MobileWorkerPage(BasePage):
         assert self.is_displayed(self.user_file_additional_info), "Unable to assign user field to user."
 
     def update_information(self):
-        time.sleep(2)
         self.wait_to_click(self.update_info_button)
         time.sleep(4)
         assert self.is_displayed(self.user_field_success_msg), "Unable to update user."
         print("User Field Visible and Added for User")
-        time.sleep(2)
+        
 
     def deactivate_user(self, username):
         try:
             self.search_user(username)
-            time.sleep(1)
             self.wait_for_element((By.XPATH, self.username_link.format(username)), 50)
             self.wait_to_click(self.deactivate_buttons_list)
             self.wait_for_element(self.confirm_deactivate_xpath_list)
             self.wait_to_click(self.confirm_deactivate_xpath_list)
-            time.sleep(5)
+            time.sleep(2)
             assert self.is_present_and_displayed((By.XPATH, self.reactivate_buttons_list.format(username)), 20)
             self.mobile_worker_menu()
             self.wait_for_element(self.show_deactivated_users_btn)
@@ -351,29 +348,28 @@ class MobileWorkerPage(BasePage):
 
     def reactivate_user(self, username):
         try:
-            time.sleep(1)
             self.mobile_worker_menu()
-            self.wait_to_click(self.show_deactivated_users_btn)
             self.search_user(username)
-            time.sleep(1)
+            time.sleep(2)
+            self.click(self.show_deactivated_users_btn)
             if not self.is_present_and_displayed((By.XPATH, self.username_link.format(username)), 10):
                 print("This is a rerun so skipping this steps")
                 print("User is already activated")
                 self.mobile_worker_menu()
                 self.search_user(username)
                 assert self.is_present_and_displayed((By.XPATH, self.deactivate_button.format(username)), 20)
-                time.sleep(10)
+                time.sleep(2)
             else:
                 self.wait_for_element((By.XPATH, self.username_link.format(username)), 50)
                 self.wait_to_click((By.XPATH, self.reactivate_buttons_list.format(username)))
                 self.wait_for_element(self.confirm_reactivate_xpath_list)
                 self.wait_to_click(self.confirm_reactivate_xpath_list)
-                time.sleep(5)
+                time.sleep(2)
                 self.mobile_worker_menu()
                 self.search_user(username)
                 assert self.is_present_and_displayed((By.XPATH, self.deactivate_button.format(username)), 20)
                 print("Reactivation successful")
-                time.sleep(10)
+                time.sleep(2)
             return "Success"
         except (TimeoutException, NoSuchElementException):
             print("TIMEOUT ERROR: Reactivation unsuccessful.")
@@ -410,7 +406,7 @@ class MobileWorkerPage(BasePage):
             self.is_present_and_displayed(self.delete_success_mw), "Mobile User Deletion Unsuccessful"
 
     def cleanup_user_field(self):
-        time.sleep(1)
+        
         self.wait_to_click(self.delete_user_field)
         self.wait_to_click(self.confirm_user_field_delete)
         self.wait_to_click(self.done_button)
@@ -428,18 +424,18 @@ class MobileWorkerPage(BasePage):
                         if self.is_present((By.XPATH, self.remove_choice_button.format(str(i + 1)))):
                             self.wait_for_element((By.XPATH, self.remove_choice_button.format(str(i + 1))))
                             self.scroll_to_element((By.XPATH, self.remove_choice_button.format(str(i + 1))))
-                            self.js_click((By.XPATH, self.remove_choice_button.format(str(i + 1))))
+                            self.wait_to_click((By.XPATH, self.remove_choice_button.format(str(i + 1))))
                         else:
                             print("Choice is not present")
-                        time.sleep(5)
+                        time.sleep(2)
                         self.wait_for_element((By.XPATH, self.delete_user_field.format(str(i + 1))))
-                        self.js_click((By.XPATH, self.delete_user_field.format(str(i + 1))))
+                        self.wait_to_click((By.XPATH, self.delete_user_field.format(str(i + 1))))
                         # self.driver.find_element(By.XPATH,
                         #                          "(//input[contains(@data-bind,'value: slug')]//following::a[@class='btn btn-danger' and @data-toggle='modal'][1])[" + str(
                         #                              i + 1) + "]").click()
-                        time.sleep(5)
-                        self.wait_to_click(self.confirm_user_field_delete)
                         time.sleep(2)
+                        self.wait_to_click(self.confirm_user_field_delete)
+                        
                         list_profile = self.driver.find_elements(By.XPATH,
                                                                  "//input[contains(@data-bind,'value: slug')]"
                                                                  )
@@ -452,15 +448,15 @@ class MobileWorkerPage(BasePage):
             print("All user fields might not have been deleted")
 
     def download_mobile_worker(self):
-        time.sleep(1)
+        
         self.mobile_worker_menu()
         self.wait_to_click(self.download_worker_btn)
         self.wait_for_element(self.download_filter)
         self.click(self.download_filter)
-        time.sleep(5)
+        time.sleep(2)
         try:
             self.wait_and_sleep_to_click(self.download_users_btn, 150)
-            time.sleep(5)
+            time.sleep(2)
         except TimeoutException:
             print("TIMEOUT ERROR: Still preparing for download..Celery might be down..")
             assert False
@@ -477,7 +473,7 @@ class MobileWorkerPage(BasePage):
             self.click(self.bulk_upload_btn)
             newest_file = latest_download_file()
             file_that_was_downloaded = PathSettings.DOWNLOAD_PATH / newest_file
-            time.sleep(5)
+            time.sleep(2)
             self.send_keys(self.choose_file, str(file_that_was_downloaded))
             self.wait_and_sleep_to_click(self.upload)
             self.wait_for_element(self.successfully_uploaded, 150)
@@ -485,7 +481,7 @@ class MobileWorkerPage(BasePage):
             print("TIMEOUT ERROR: Could not upload file")
         assert self.is_present_and_displayed(self.import_complete), "Upload Not Completed! Taking Longer to process.."
         print("File uploaded successfully")
-        time.sleep(10)
+        time.sleep(2)
 
     def click_profile(self):
         self.wait_to_click(self.profile_tab)
@@ -496,24 +492,24 @@ class MobileWorkerPage(BasePage):
     def add_profile(self, user_field):
         self.wait_to_click(self.add_new_profile)
         self.wait_to_clear_and_send_keys(self.profile_name, self.profile_name_text + Keys.TAB)
-        time.sleep(5)
-        self.js_click(self.profile_edit_button)
-        time.sleep(5)
+        time.sleep(2)
+        self.wait_to_click(self.profile_edit_button)
+        time.sleep(2)
         self.wait_for_element(self.add_profile_item)
-        self.js_click(self.add_profile_item)
+        self.wait_to_click(self.add_profile_item)
         self.send_keys(self.profile_key, user_field)
         self.send_keys(self.profile_value, user_field)
         self.wait_to_click(self.done_button)
 
     def select_profile(self):
         self.wait_to_click(self.profile_combobox)
-        time.sleep(1)
+        
         self.wait_to_click(self.profile_selection)
 
     def add_phone_number(self):
         self.wait_to_clear_and_send_keys(self.phone_number_field, self.phone_number)
-        time.sleep(1)
-        self.js_click(self.add_number_button)
+        
+        self.wait_to_click(self.add_number_button)
         time.sleep(3)
         assert self.is_present_and_displayed(self.registered_phone_number), "Phone Number not registered."
         print("Phone Number registered successfully")
@@ -530,20 +526,20 @@ class MobileWorkerPage(BasePage):
         self.wait_to_click(self.confirm_user_field_delete)
 
     def remove_profile(self):
-        time.sleep(5)
-        self.scroll_to_element(self.profile_edit_button)
-        self.js_click(self.profile_edit_button)
-        time.sleep(5)
-        self.wait_for_element(self.delete_profile_item)
-        self.js_click(self.delete_profile_item)
         time.sleep(2)
+        self.scroll_to_element(self.profile_edit_button)
+        self.wait_to_click(self.profile_edit_button)
+        time.sleep(2)
+        self.wait_for_element(self.delete_profile_item)
+        self.wait_to_click(self.delete_profile_item)
+        
         self.wait_to_click(self.done_button)
-        time.sleep(5)
+        time.sleep(2)
         self.scroll_to_element(self.profile_delete_button)
-        self.js_click(self.profile_delete_button)
+        self.wait_to_click(self.profile_delete_button)
         time.sleep(3)
         self.scroll_to_element(self.confirm_user_field_delete)
-        self.js_click(self.confirm_user_field_delete)
+        self.wait_to_click(self.confirm_user_field_delete)
         time.sleep(3)
 
     def delete_profile(self):
@@ -554,11 +550,11 @@ class MobileWorkerPage(BasePage):
                     text = list_profile[i].get_attribute("value")
                     if "test_profile" in text:
                         self.scroll_to_element((By.XPATH, self.delete_profile_name.format(str(i + 1))))
-                        self.js_click((By.XPATH, self.delete_profile_name.format(str(i + 1))))
-                        time.sleep(5)
+                        self.wait_to_click((By.XPATH, self.delete_profile_name.format(str(i + 1))))
+                        time.sleep(2)
                         self.wait_for_element(self.confirm_user_field_delete)
                         self.click(self.confirm_user_field_delete)
-                        time.sleep(2)
+                        
                         list_profile = self.driver.find_elements(By.XPATH,
                                                                  "//input[contains(@data-bind,'value: name')]"
                                                                  )
@@ -591,18 +587,18 @@ class MobileWorkerPage(BasePage):
         self.save_field()
 
     def select_user_and_update_fields(self, user, field):
-        time.sleep(2)
+        
         self.select_mobile_worker_created(user)
         self.select_by_text(self.additional_info_select2, field)
         self.wait_to_click(self.update_info_button)
         assert self.is_displayed(self.user_file_additional_info2), "Unable to assign user field to user."
 
     def select_and_delete_mobile_worker(self, user):
-        time.sleep(2)
+        
         self.wait_to_click(self.mobile_worker_on_left_panel)
-        time.sleep(2)
+        
         self.wait_to_clear_and_send_keys(self.search_mw, user)
-        time.sleep(2)
+        
         self.wait_to_click(self.search_button_mw)
         time.sleep(3)
         self.click((By.LINK_TEXT, user))
@@ -645,10 +641,10 @@ class MobileWorkerPage(BasePage):
         self.mobile_worker_menu()
         try:
             self.click(self.bulk_user_delete_button)
-            time.sleep(5)
+            time.sleep(2)
             self.send_keys(self.choose_file, str(file_path))
             self.wait_and_sleep_to_click(self.upload)
-            time.sleep(2)
+            
             self.wait_for_element(self.successfully_deleted, 70)
             # if self.is_present_and_displayed(self.successfully_deleted, 50):
             print("User(s) deleted successfully")
@@ -663,7 +659,7 @@ class MobileWorkerPage(BasePage):
         try:
             self.click(self.bulk_upload_btn)
             self.edit_username_in_excel(self.to_be_edited_file, self.username_cell, self.renamed_file)
-            time.sleep(2)
+            
             self.wait_to_clear_and_send_keys(self.choose_file, self.renamed_file)
             self.wait_and_sleep_to_click(self.upload)
             self.wait_for_element(self.successfully_uploaded, 150)

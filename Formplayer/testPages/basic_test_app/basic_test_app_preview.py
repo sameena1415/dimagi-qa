@@ -236,22 +236,22 @@ class BasicTestAppPreview(BasePage):
     def open_form(self, case_list, form_name):
         self.switch_to_frame(self.iframe)
         self.webapp.wait_to_click(self.start_option)
-        time.sleep(2)
+        
         self.wait_for_element((By.XPATH, self.case_list_menu.format(case_list)), 100)
-        self.js_click((By.XPATH, self.case_list_menu.format(case_list)))
-        time.sleep(2)
+        self.wait_to_click((By.XPATH, self.case_list_menu.format(case_list)))
+        
         self.wait_for_element((By.XPATH, self.registration_form.format(form_name)), 100)
-        self.js_click((By.XPATH, self.registration_form.format(form_name)))
+        self.wait_to_click((By.XPATH, self.registration_form.format(form_name)))
         self.switch_to_default_content()
-        time.sleep(2)
+        
 
     def open_case_list(self, case_list):
         self.switch_to_frame(self.iframe)
         self.webapp.wait_to_click(self.start_option)
         self.wait_for_element((By.XPATH, self.case_list_menu.format(case_list)), 100)
-        self.js_click((By.XPATH, self.case_list_menu.format(case_list)))
+        self.wait_to_click((By.XPATH, self.case_list_menu.format(case_list)))
         self.switch_to_default_content()
-        time.sleep(2)
+        
 
     def open_module(self, module):
         self.switch_to_frame(self.iframe)
@@ -263,14 +263,14 @@ class BasicTestAppPreview(BasePage):
         self.wait_for_element(self.name_question)
         print("typing value: ", value)
         self.send_keys(self.name_question, value+Keys.TAB)
-        time.sleep(2)
+        
         self.webapp.wait_to_click(self.next_question)
-        time.sleep(2)
-        self.js_click(self.home_button)
-        time.sleep(2)
+        
+        self.wait_to_click(self.home_button)
+        
         self.accept_pop_up()
         self.switch_to_default_content()
-        time.sleep(2)
+        
 
     def delete_all_incomplete_forms(self):
         self.switch_to_frame(self.iframe)
@@ -281,16 +281,16 @@ class BasicTestAppPreview(BasePage):
             print(page_list)
             # page_list=page_list-4
             for page in range(len(page_list)):
-                time.sleep(2)
+                
                 list = self.find_elements(self.incomplete_form_list)
                 print(len(list))
                 if len(list) != 0:
                     for i in range(len(list)):
-                        time.sleep(2)
-                        self.js_click((By.XPATH, self.delete_incomplete_form.format(1)))
-                        time.sleep(2)
+                        
+                        self.wait_to_click((By.XPATH, self.delete_incomplete_form.format(1)))
+                        
                         self.webapp.wait_to_click(self.delete_confirm)
-                        time.sleep(2)
+                        
                         list = self.find_elements(self.incomplete_form_list)
                         print(len(list))
                 else:
@@ -301,16 +301,16 @@ class BasicTestAppPreview(BasePage):
                 self.webapp.wait_to_click(self.incomplete_form)
                 self.wait_for_element(self.incomplete_form_title)
         else:
-            time.sleep(2)
+            
             list = self.find_elements(self.incomplete_form_list)
             print(len(list))
             if len(list) != 0:
                 for i in range(len(list)):
-                    time.sleep(2)
-                    self.js_click((By.XPATH, self.delete_incomplete_form.format(1)))
-                    time.sleep(2)
+                    
+                    self.wait_to_click((By.XPATH, self.delete_incomplete_form.format(1)))
+                    
                     self.webapp.wait_to_click(self.delete_confirm)
-                    time.sleep(2)
+                    
                     list = self.find_elements(self.incomplete_form_list)
                     print(len(list))
             else:
@@ -334,7 +334,7 @@ class BasicTestAppPreview(BasePage):
         list = self.find_elements((By.XPATH, self.custom_incomplete_form_list.format(form_name)))
         print(len(list))
         if len(list) != 0:
-            self.js_click((By.XPATH, self.custom_delete_incomplete_form.format(form_name, 1)))
+            self.wait_to_click((By.XPATH, self.custom_delete_incomplete_form.format(form_name, 1)))
             self.webapp.wait_to_click(self.delete_confirm)
         else:
             print("There are no incomplete forms")
@@ -351,27 +351,27 @@ class BasicTestAppPreview(BasePage):
         list = self.find_elements((By.XPATH, self.custom_incomplete_form_list.format(form_name)))
         print(len(list))
         if len(list) != 0:
-            self.js_click((By.XPATH, self.edit_incomplete_form.format(form_name)))
+            self.wait_to_click((By.XPATH, self.edit_incomplete_form.format(form_name)))
             time.sleep(3)
             self.wait_for_element(self.name_question)
             text = self.get_attribute(self.name_question, "value")
             assert text == value
             self.webapp.wait_to_click(self.next_question)
-            time.sleep(2)
-            self.js_click(self.submit_form_button)
-            time.sleep(2)
+            
+            self.wait_to_click(self.submit_form_button)
+            
             self.wait_for_element(self.success_message)
             print("Form submitted with unchanged value")
-            time.sleep(2)
+            
             self.webapp.wait_to_click(self.home_button)
-            time.sleep(2)
+            
         else:
             print("There are no incomplete forms")
             self.switch_to_default_content()
             self.webapp.wait_to_click(self.back_button)
             self.switch_to_frame(self.iframe)
         self.webapp.wait_to_click(self.sync_button)
-        time.sleep(2)
+        
         self.switch_to_default_content()
         return text
 
@@ -381,28 +381,28 @@ class BasicTestAppPreview(BasePage):
         list = self.find_elements((By.XPATH, self.custom_incomplete_form_list.format(form_name)))
         print(len(list))
         if len(list) != 0:
-            self.js_click((By.XPATH, self.edit_incomplete_form.format(form_name)))
+            self.wait_to_click((By.XPATH, self.edit_incomplete_form.format(form_name)))
             time.sleep(3)
             self.wait_for_element(self.name_question)
             text = self.get_attribute(self.name_question, "value")
             assert text == value
             self.wait_to_clear_and_send_keys(self.name_question, self.changed_name_input)
             self.webapp.wait_to_click(self.next_question)
-            time.sleep(2)
-            self.js_click(self.submit_form_button)
-            time.sleep(2)
+            
+            self.wait_to_click(self.submit_form_button)
+            
             self.wait_for_element(self.success_message)
             print("Form submitted with changed value")
-            time.sleep(2)
+            
             self.webapp.wait_to_click(self.home_button)
-            time.sleep(2)
+            
         else:
             print("There are no incomplete forms")
             self.switch_to_default_content()
             self.webapp.wait_to_click(self.back_button)
             self.switch_to_frame(self.iframe)
         self.webapp.wait_to_click(self.sync_button)
-        time.sleep(2)
+        
         self.switch_to_default_content()
         return self.changed_name_input
 
@@ -428,7 +428,7 @@ class BasicTestAppPreview(BasePage):
         assert self.is_present(self.no_queries)
         self.wait_to_clear_and_send_keys(self.xpath_textarea, expression)
         self.click(self.evaluate_button)
-        time.sleep(1)
+        
         assert self.is_present((By.XPATH, self.recent_query.format(expression)))
         self.webapp.wait_to_click(self.data_preview)
         self.switch_to_default_content()
@@ -447,7 +447,7 @@ class BasicTestAppPreview(BasePage):
         self.webapp.wait_to_click((By.XPATH, self.clear_button.format('If multiple questions per screen are supported, you should see a new question on the same screen after you make a selection:')))
         self.webapp.wait_to_click(self.display_new_multiple_choice_question)
         self.webapp.wait_to_click(self.multiple_choice_response)
-        time.sleep(2)
+        
         assert self.is_present_and_displayed((By.XPATH, self.pop_up_message.format("Please continue.")))
         self.webapp.wait_to_click(self.next_question)
         self.verify_choice_selection((By.XPATH, self.choose_radio_button.format(
@@ -497,20 +497,20 @@ class BasicTestAppPreview(BasePage):
         self.webapp.wait_to_click((By.XPATH, self.choose_radio_button.format(
             "Pick one of the following.", "One")))
         self.webapp.wait_to_click(self.next_question)
-        time.sleep(1)
-        self.js_click(self.submit_form_button)
+        
+        self.wait_to_click(self.submit_form_button)
         print("Group Form submitted successfully")
-        time.sleep(2)
-        self.js_click(self.home_button)
-        time.sleep(2)
+        
+        self.wait_to_click(self.home_button)
+        
         self.webapp.wait_to_click(self.sync_button)
-        time.sleep(2)
+        
         self.switch_to_default_content()
 
     def verify_choice_selection(self, locator, value):
         self.scroll_to_element(locator)
         self.click(locator)
-        time.sleep(1)
+        
         self.scroll_to_element((By.XPATH, self.pop_up_message.format(value)))
         assert self.is_present_and_displayed((By.XPATH, self.pop_up_message.format(value)))
 
@@ -520,14 +520,14 @@ class BasicTestAppPreview(BasePage):
             (By.XPATH, self.text_area_field.format("Submitting this will take you to the home screen.")),
             "home" + fetch_random_string())
         self.webapp.wait_to_click(self.next_question)
-        time.sleep(2)
-        self.js_click(self.submit_form_button)
-        time.sleep(2)
+        
+        self.wait_to_click(self.submit_form_button)
+        
         self.wait_for_element(self.success_message)
         assert self.is_present((By.XPATH, self.case_list_menu.format(case)))
-        time.sleep(2)
+        
         self.webapp.wait_to_click(self.home_button)
-        time.sleep(2)
+        
         self.switch_to_default_content()
         self.open_form(case, UserData.basic_test_app_forms["module"])
         self.switch_to_frame(self.iframe)
@@ -535,14 +535,14 @@ class BasicTestAppPreview(BasePage):
             (By.XPATH, self.text_area_field.format("Submitting this will take you to the Module Menu.")),
             "module" + fetch_random_string())
         self.webapp.wait_to_click(self.next_question)
-        time.sleep(2)
-        self.js_click(self.submit_form_button)
-        time.sleep(2)
+        
+        self.wait_to_click(self.submit_form_button)
+        
         self.wait_for_element(self.success_message)
         assert self.is_present((By.XPATH, self.case_list_menu.format(case)))
-        time.sleep(2)
+        
         self.webapp.wait_to_click(self.home_button)
-        time.sleep(2)
+        
         self.switch_to_default_content()
         self.open_form(case, UserData.basic_test_app_forms["prev"])
         self.switch_to_frame(self.iframe)
@@ -551,15 +551,15 @@ class BasicTestAppPreview(BasePage):
         assert self.is_present_and_displayed((By.XPATH, self.module_search.format("home" + fetch_random_string())))
         self.webapp.wait_to_click((By.XPATH, self.module_search.format("home" + fetch_random_string())))
         self.webapp.wait_to_click(self.continue_button)
-        time.sleep(1)
+        
         self.webapp.wait_to_click(self.next_question)
-        time.sleep(1)
-        self.js_click(self.submit_form_button)
-        time.sleep(2)
+        
+        self.wait_to_click(self.submit_form_button)
+        
         self.wait_for_element(self.success_message)
-        time.sleep(2)
-        self.js_click(self.home_button)
-        time.sleep(2)
+        
+        self.wait_to_click(self.home_button)
+        
         self.switch_to_default_content()
         self.open_form(case, UserData.basic_test_app_forms["current"])
         self.switch_to_frame(self.iframe)
@@ -567,36 +567,36 @@ class BasicTestAppPreview(BasePage):
             (By.XPATH, self.text_area_field.format("Submitting this form will take you to the current module.")),
             "current" + fetch_random_string())
         self.webapp.wait_to_click(self.next_question)
-        time.sleep(1)
-        self.js_click(self.submit_form_button)
-        time.sleep(2)
+        
+        self.wait_to_click(self.submit_form_button)
+        
         self.wait_for_element(self.success_message)
-        time.sleep(2)
+        
         assert self.is_present_and_displayed(
             (By.XPATH, self.case_list_menu.format(UserData.basic_test_app_forms["current"])))
-        time.sleep(2)
-        self.js_click(self.home_button)
-        time.sleep(2)
+        
+        self.wait_to_click(self.home_button)
+        
         self.switch_to_default_content()
         self.open_form(case, UserData.basic_test_app_forms["close"])
         self.switch_to_frame(self.iframe)
         self.wait_to_clear_and_send_keys(self.search_input, "home" + fetch_random_string())
         self.webapp.wait_to_click(self.search_button)
-        time.sleep(2)
+        
         assert self.is_present_and_displayed((By.XPATH, self.module_search.format("home" + fetch_random_string())))
         self.webapp.wait_to_click((By.XPATH, self.module_search.format("home" + fetch_random_string())))
         self.webapp.wait_to_click(self.continue_button)
         self.webapp.wait_to_click(self.next_question)
-        time.sleep(1)
-        self.js_click(self.submit_form_button)
-        time.sleep(2)
+        
+        self.wait_to_click(self.submit_form_button)
+        
         self.wait_for_element(self.success_message)
         time.sleep(3)
         assert self.is_present_and_displayed(
             (By.XPATH, self.text_area_field.format("Submitting this will take you to the home screen.")))
-        time.sleep(2)
-        self.js_click(self.home_button)
-        time.sleep(2)
+        
+        self.wait_to_click(self.home_button)
+        
         self.switch_to_default_content()
         self.open_form(case, UserData.basic_test_app_forms["another"])
         self.switch_to_frame(self.iframe)
@@ -604,15 +604,15 @@ class BasicTestAppPreview(BasePage):
             (By.XPATH, self.text_area_field.format("Submitting this will take you to the Module Badge Check Menu.")),
             "badge" + fetch_random_string())
         self.webapp.wait_to_click(self.next_question)
-        time.sleep(1)
-        self.js_click(self.submit_form_button)
-        time.sleep(2)
+        
+        self.wait_to_click(self.submit_form_button)
+        
         self.wait_for_element(self.success_message)
         time.sleep(4)
         assert self.is_present_and_displayed(self.module_badge_table)
-        time.sleep(2)
-        self.js_click(self.home_button)
-        time.sleep(2)
+        
+        self.wait_to_click(self.home_button)
+        
         self.switch_to_default_content()
 
     def submit_basic_test_form(self):
@@ -620,15 +620,15 @@ class BasicTestAppPreview(BasePage):
         self.switch_to_frame(self.iframe)
         self.wait_to_clear_and_send_keys(self.name_question, fetch_random_string())
         self.webapp.wait_to_click(self.next_question)
-        time.sleep(1)
-        self.js_click(self.submit_form_button)
-        time.sleep(2)
+        
+        self.wait_to_click(self.submit_form_button)
+        
         self.wait_for_element(self.success_message)
-        self.js_click(self.home_button)
-        time.sleep(2)
+        self.wait_to_click(self.home_button)
+        
         self.wait_for_element(self.sync_button)
-        self.js_click(self.sync_button)
-        time.sleep(10)
+        self.wait_to_click(self.sync_button)
+        time.sleep(2)
         print("Waiting for the sync to complete")
         self.switch_to_default_content()
 
@@ -641,13 +641,13 @@ class BasicTestAppPreview(BasePage):
         self.webapp.wait_to_click((By.XPATH, self.choose_radio_button.format(
             "Are you sure you want to create a new case?", "Cancel - Please do not create this case.")))
         self.webapp.wait_to_click(self.next_question)
-        time.sleep(1)
-        self.js_click(self.submit_form_button)
-        time.sleep(2)
+        
+        self.wait_to_click(self.submit_form_button)
+        
         self.wait_for_element(self.success_message)
-        time.sleep(2)
+        
         self.webapp.wait_to_click(self.home_button)
-        time.sleep(2)
+        
         self.switch_to_default_content()
 
     def register_positive_case(self):
@@ -659,13 +659,13 @@ class BasicTestAppPreview(BasePage):
         self.webapp.wait_to_click((By.XPATH, self.choose_radio_button.format(
             "Are you sure you want to create a new case?", "Confirm - Please create this case.")))
         self.webapp.wait_to_click(self.next_question)
-        time.sleep(1)
-        self.js_click(self.submit_form_button)
-        time.sleep(2)
+        
+        self.wait_to_click(self.submit_form_button)
+        
         self.wait_for_element(self.success_message)
-        time.sleep(2)
+        
         self.webapp.wait_to_click(self.home_button)
-        time.sleep(2)
+        
         self.switch_to_default_content()
 
     # def deny_location_permission(self):
@@ -679,7 +679,7 @@ class BasicTestAppPreview(BasePage):
         self.wait_for_element(self.search_input)
         self.wait_to_clear_and_send_keys(self.search_input, self.case_reg_pos)
         self.webapp.wait_to_click(self.search_button)
-        time.sleep(2)
+        
         assert self.is_present_and_displayed((By.XPATH, self.module_search.format(self.case_reg_pos)))
         print("case search working properly")
         self.webapp.wait_to_click((By.XPATH, self.module_search.format(self.case_reg_pos)))
@@ -690,10 +690,10 @@ class BasicTestAppPreview(BasePage):
         assert not self.is_present(self.case_detail_table_list)
         assert self.is_present(self.continue_button)
         self.webapp.wait_to_click(self.continue_button)
-        time.sleep(2)
+        
         self.wait_for_element(self.home_button)
         self.webapp.wait_to_click(self.home_button)
-        time.sleep(2)
+        
         self.switch_to_default_content()
 
     def updated_case_detail_verification(self, new_data):
@@ -701,7 +701,7 @@ class BasicTestAppPreview(BasePage):
         self.wait_for_element(self.search_input)
         self.wait_to_clear_and_send_keys(self.search_input, self.case_reg_pos)
         self.webapp.wait_to_click(self.search_button)
-        time.sleep(2)
+        
         assert self.is_present_and_displayed((By.XPATH, self.module_search.format(self.case_reg_pos)))
         print("case search working properly")
         self.webapp.wait_to_click((By.XPATH, self.module_search.format(self.case_reg_pos)))
@@ -726,10 +726,10 @@ class BasicTestAppPreview(BasePage):
             print("Singleselect and Multiselect details are not present in the screen")
         assert self.is_present(self.continue_button)
         self.webapp.wait_to_click(self.continue_button)
-        time.sleep(2)
+        
         self.wait_for_element(self.home_button)
         self.webapp.wait_to_click(self.home_button)
-        time.sleep(2)
+        
         self.switch_to_default_content()
 
     def update_a_case(self):
@@ -737,7 +737,7 @@ class BasicTestAppPreview(BasePage):
         self.wait_for_element(self.search_input)
         self.wait_to_clear_and_send_keys(self.search_input, self.case_reg_pos)
         self.webapp.wait_to_click(self.search_button)
-        time.sleep(2)
+        
         assert self.is_present_and_displayed((By.XPATH, self.module_search.format(self.case_reg_pos)))
         print("case search working properly")
         self.webapp.wait_to_click((By.XPATH, self.module_search.format(self.case_reg_pos)))
@@ -753,28 +753,28 @@ class BasicTestAppPreview(BasePage):
         self.webapp.wait_to_click(self.next_question)
         self.webapp.wait_to_click((By.XPATH, self.choose_radio_button.format(
             "Select one or more of the following:", self.input_dict['Multiselect'][0])))
-        time.sleep(1)
+        
         self.webapp.wait_to_click((By.XPATH, self.choose_radio_button.format(
             "Select one or more of the following:", self.input_dict['Multiselect'][1])))
         self.webapp.wait_to_click(self.next_question)
         self.wait_to_clear_and_send_keys((By.XPATH, self.input_field.format(
             "Enter a phone number:")), self.input_dict['phone'])
         self.webapp.wait_to_click(self.next_question)
-        time.sleep(2)
+        
         self.wait_to_clear_and_send_keys((By.XPATH, self.input_field.format(
             "Enter an integer:")), self.input_dict['intval'] + Keys.TAB)
-        time.sleep(1)
+        
         self.webapp.wait_to_click(self.next_question)
-        time.sleep(2)
+        
         self.scroll_to_element((By.XPATH, self.input_field.format(
             "Capture your location here:")))
         self.send_keys((By.XPATH, self.input_field.format(
             "Capture your location here:")), "Delhi" + Keys.TAB)
-        self.js_click(self.search_location_button)
-        time.sleep(2)
+        self.wait_to_click(self.search_location_button)
+        
         assert not self.is_present_and_displayed(self.blank_latitude, 5)
-        self.js_click(self.next_question)
-        time.sleep(2)
+        self.wait_to_click(self.next_question)
+        
         self.wait_for_element((By.XPATH, self.input_field.format(
             "Enter a date:")))
         self.click((By.XPATH, self.input_field.format(
@@ -782,18 +782,18 @@ class BasicTestAppPreview(BasePage):
         self.webapp.wait_to_click(self.click_today_date)
         # self.webapp.wait_to_click(self.close_date_picker)
         self.webapp.wait_to_click(self.next_question)
-        time.sleep(2)
+        
         text = self.get_text(self.output)
         number = text.split(".")
         print(str(re.findall(r'\b\d+\b', number[1])[0]))
-        time.sleep(2)
+        
         self.webapp.wait_to_click(self.next_question)
-        time.sleep(1)
-        self.js_click(self.submit_form_button)
-        time.sleep(1)
+        
+        self.wait_to_click(self.submit_form_button)
+        
         self.wait_for_element(self.success_message)
         self.webapp.wait_to_click(self.home_button)
-        time.sleep(2)
+        
         self.switch_to_default_content()
         return str(re.findall(r'\b\d+\b', number[1])[0])
 
@@ -802,43 +802,43 @@ class BasicTestAppPreview(BasePage):
         self.wait_for_element(self.search_input)
         self.wait_to_clear_and_send_keys(self.search_input, self.case_reg_pos)
         self.webapp.wait_to_click(self.search_button)
-        time.sleep(2)
+        
         assert self.is_present_and_displayed((By.XPATH, self.module_search.format(self.case_reg_pos)))
         print("case search working properly")
         self.webapp.wait_to_click((By.XPATH, self.module_search.format(self.case_reg_pos)))
         assert self.is_present(self.continue_button)
-        self.js_click(self.continue_button)
-        time.sleep(1)
+        self.wait_to_click(self.continue_button)
+        
         self.webapp.wait_to_click(self.next_question)
         self.wait_to_clear_and_send_keys((By.XPATH, self.text_area_field.format(
             "Enter a name for your sub case:")),
                                          self.subcase_pos)
         self.webapp.wait_to_click(self.next_question)
-        time.sleep(1)
+        
         self.wait_to_clear_and_send_keys((By.XPATH, self.input_field.format(
             "Enter a number for " + self.subcase_pos + ":")), fetch_random_digit_with_range(1, 20))
         self.webapp.wait_to_click(self.next_question)
-        time.sleep(1)
+        
         self.webapp.wait_to_click((By.XPATH, self.choose_radio_button.format(
             "Do you want to create the sub case?", "Confirm - Please create " + self.subcase_pos + ".")))
         self.webapp.wait_to_click(self.next_question)
-        time.sleep(1)
-        self.js_click(self.submit_form_button)
-        time.sleep(2)
+        
+        self.wait_to_click(self.submit_form_button)
+        
         self.wait_for_element(self.success_message)
         self.webapp.wait_to_click(self.home_button)
-        time.sleep(2)
+        
         self.switch_to_default_content()
         self.open_case_list(UserData.basic_test_app_forms['subcaseone'])
         self.switch_to_frame(self.iframe)
         self.wait_for_element(self.search_input)
         self.wait_to_clear_and_send_keys(self.search_input, self.subcase_pos)
         self.webapp.wait_to_click(self.search_button)
-        time.sleep(2)
+        
         assert self.is_present_and_displayed((By.XPATH, self.module_search.format(self.subcase_pos)))
         print("case search working properly")
         self.webapp.wait_to_click((By.XPATH, self.module_search.format(self.subcase_pos)))
-        time.sleep(2)
+        
         assert self.is_present_and_displayed((By.XPATH, self.case_detail_table.format("Name", self.subcase_pos)))
         assert self.is_present_and_displayed(
             (By.XPATH, self.case_detail_table.format("Parent Case Name", self.case_reg_pos)))
@@ -848,9 +848,9 @@ class BasicTestAppPreview(BasePage):
         self.webapp.wait_to_click((By.XPATH, self.choose_radio_button.format(
             "Do you want to close the case?", "Yes")))
         self.webapp.wait_to_click(self.next_question)
-        time.sleep(1)
-        self.js_click(self.submit_form_button)
-        time.sleep(2)
+        
+        self.wait_to_click(self.submit_form_button)
+        
         self.wait_for_element(self.success_message)
         self.webapp.wait_to_click(self.home_button)
         self.switch_to_default_content()
@@ -860,7 +860,7 @@ class BasicTestAppPreview(BasePage):
         self.wait_for_element(self.search_input)
         self.wait_to_clear_and_send_keys(self.search_input, self.case_reg_pos)
         self.webapp.wait_to_click(self.search_button)
-        time.sleep(2)
+        
         assert self.is_present_and_displayed((By.XPATH, self.module_search.format(self.case_reg_pos)))
         print("case search working properly")
         self.webapp.wait_to_click((By.XPATH, self.module_search.format(self.case_reg_pos)))
@@ -869,9 +869,9 @@ class BasicTestAppPreview(BasePage):
         self.webapp.wait_to_click((By.XPATH, self.choose_radio_button.format(
             "Are you sure you want to close this case?", "Confirm - Please close this case.")))
         self.webapp.wait_to_click(self.next_question)
-        time.sleep(1)
-        self.js_click(self.submit_form_button)
-        time.sleep(2)
+        
+        self.wait_to_click(self.submit_form_button)
+        
         self.wait_for_element(self.success_message)
         self.webapp.wait_to_click(self.home_button)
         self.switch_to_default_content()
@@ -880,7 +880,7 @@ class BasicTestAppPreview(BasePage):
         self.wait_for_element(self.search_input)
         self.wait_to_clear_and_send_keys(self.search_input, self.case_reg_pos)
         self.webapp.wait_to_click(self.search_button)
-        time.sleep(2)
+        
         assert self.is_present_and_displayed(self.empty_list)
         print("case search working properly")
 
@@ -893,19 +893,19 @@ class BasicTestAppPreview(BasePage):
         self.webapp.wait_to_click((By.XPATH, self.choose_radio_button.format(
             "Are you sure you want to create a new case?", "Confirm - Please create this case.")))
         self.webapp.wait_to_click(self.next_question)
-        time.sleep(1)
-        self.js_click(self.submit_form_button)
-        time.sleep(2)
+        
+        self.wait_to_click(self.submit_form_button)
+        
         self.wait_for_element(self.success_message)
         self.webapp.wait_to_click(self.home_button)
-        time.sleep(2)
+        
         self.switch_to_default_content()
         self.open_form(UserData.basic_test_app_forms['case_test'], UserData.basic_test_app_forms['update_case'])
         self.switch_to_frame(self.iframe)
         self.wait_for_element(self.search_input)
         self.wait_to_clear_and_send_keys(self.search_input, self.unicode_text)
         self.webapp.wait_to_click(self.search_button)
-        time.sleep(2)
+        
         assert self.is_present_and_displayed((By.XPATH, self.module_search.format(self.unicode_text)))
         print("case search working properly")
         self.webapp.wait_to_click((By.XPATH, self.module_search.format(self.unicode_text)))
@@ -921,26 +921,26 @@ class BasicTestAppPreview(BasePage):
         self.webapp.wait_to_click(self.next_question)
         self.webapp.wait_to_click((By.XPATH, self.choose_radio_button.format(
             "Select one or more of the following:", self.input_dict['Multiselect'][0])))
-        time.sleep(1)
+        
         self.webapp.wait_to_click(self.next_question)
         self.wait_to_clear_and_send_keys((By.XPATH, self.input_field.format(
             "Enter a phone number:")), self.input_dict['phone'])
         self.webapp.wait_to_click(self.next_question)
-        time.sleep(2)
+        
         self.wait_to_clear_and_send_keys((By.XPATH, self.input_field.format(
             "Enter an integer:")), self.input_dict['intval'] + Keys.TAB)
-        time.sleep(1)
+        
         self.webapp.wait_to_click(self.next_question)
-        time.sleep(2)
+        
         self.scroll_to_element((By.XPATH, self.input_field.format(
             "Capture your location here:")))
         self.send_keys((By.XPATH, self.input_field.format(
             "Capture your location here:")), "Delhi" + Keys.TAB)
-        self.js_click(self.search_location_button)
-        time.sleep(2)
+        self.wait_to_click(self.search_location_button)
+        
         assert not self.is_present_and_displayed(self.blank_latitude, 5)
-        self.js_click(self.next_question)
-        time.sleep(2)
+        self.wait_to_click(self.next_question)
+        
         self.wait_for_element((By.XPATH, self.input_field.format(
             "Enter a date:")))
         self.click((By.XPATH, self.input_field.format(
@@ -948,14 +948,14 @@ class BasicTestAppPreview(BasePage):
         self.webapp.wait_to_click(self.click_today_date)
         self.webapp.wait_to_click(self.close_date_picker)
         self.webapp.wait_to_click(self.next_question)
-        time.sleep(2)
+        
         self.webapp.wait_to_click(self.next_question)
-        time.sleep(1)
-        self.js_click(self.submit_form_button)
-        time.sleep(2)
+        
+        self.wait_to_click(self.submit_form_button)
+        
         self.wait_for_element(self.success_message)
         self.webapp.wait_to_click(self.home_button)
-        time.sleep(2)
+        
         self.switch_to_default_content()
 
     def verify_updated_unicode(self):
@@ -963,7 +963,7 @@ class BasicTestAppPreview(BasePage):
         self.wait_for_element(self.search_input)
         self.wait_to_clear_and_send_keys(self.search_input, self.unicode_text)
         self.webapp.wait_to_click(self.search_button)
-        time.sleep(2)
+        
         assert self.is_present_and_displayed((By.XPATH, self.module_search.format(self.unicode_text)))
         print("case search working properly")
         self.webapp.wait_to_click((By.XPATH, self.module_search.format(self.unicode_text)))
@@ -973,10 +973,10 @@ class BasicTestAppPreview(BasePage):
         assert self.is_present_and_displayed((By.XPATH, self.case_detail_table.format("Text", self.update_unicode)))
         assert self.is_present(self.continue_button)
         self.webapp.wait_to_click(self.continue_button)
-        time.sleep(2)
+        
         self.wait_for_element(self.home_button)
         self.webapp.wait_to_click(self.home_button)
-        time.sleep(2)
+        
         self.switch_to_default_content()
 
     def fixtures_form(self):
@@ -987,30 +987,30 @@ class BasicTestAppPreview(BasePage):
         self.wait_for_element(
             (By.XPATH, self.danger_warning.format("Select at least 2!")), 100)
         self.webapp.wait_to_click((By.XPATH, self.choose_radio_button.format('Select at least 2!', '2')))
-        time.sleep(2)
+        
         assert not self.is_present_and_displayed((By.XPATH, self.text_success.format("Select at least 2!")), 5)
-        time.sleep(1)
-        self.js_click(self.next_question)
-        time.sleep(1)
+        
+        self.wait_to_click(self.next_question)
+        
         self.wait_for_element((By.XPATH, self.radio_option_list.format('Pick a county!')))
         self.webapp.wait_to_click(self.next_question)
-        time.sleep(2)
+        
         assert not self.is_present_and_displayed((By.XPATH, self.radio_option_list.format('Select a city!')), 10)
-        time.sleep(1)
+        
         self.webapp.wait_to_click(self.prev_question)
         self.wait_for_element((By.XPATH, self.radio_option_list.format('Pick a county!')))
         self.webapp.wait_to_click((By.XPATH, self.choose_radio_button.format('Pick a county!', 'Essex')))
-        time.sleep(1)
-        self.js_click(self.next_question)
+        
+        self.wait_to_click(self.next_question)
         assert self.is_present_and_displayed((By.XPATH, self.radio_option_list.format('Select a city!')),10)
         self.webapp.wait_to_click((By.XPATH, self.choose_radio_button.format('Select a city!', 'Andover')))
         self.webapp.wait_to_click(self.next_question)
-        time.sleep(1)
-        self.js_click(self.submit_form_button)
-        time.sleep(2)
+        
+        self.wait_to_click(self.submit_form_button)
+        
         self.wait_for_element(self.success_message)
         self.webapp.wait_to_click(self.home_button)
-        time.sleep(2)
+        
         self.switch_to_default_content()
 
     def functions_form(self):
@@ -1036,19 +1036,19 @@ class BasicTestAppPreview(BasePage):
         self.send_keys((By.XPATH, self.input_field.format("Return to this question, enter 0")),
                        fetch_random_digit() + Keys.TAB)
         time.sleep(3)
-        self.js_click(self.next_question)
+        self.wait_to_click(self.next_question)
         self.wait_for_element((By.XPATH, self.div_span.format(
             "This should only display if you entered any number other than \"0\" in the previous question."
         )))
         assert self.is_present_and_displayed((By.XPATH, self.div_span.format(
             "This should only display if you entered any number other than \"0\" in the previous question."
         )))
-        self.js_click(self.prev_question)
+        self.wait_to_click(self.prev_question)
         self.wait_for_element((By.XPATH, self.input_field.format("Return to this question, enter 0")))
         self.wait_to_clear_and_send_keys((By.XPATH, self.input_field.format("Return to this question, enter 0")),
                                          "0" + Keys.TAB)
         time.sleep(3)
-        self.js_click(self.next_question)
+        self.wait_to_click(self.next_question)
         self.wait_for_element((By.XPATH, self.div_span.format(
             "This should display the word, \"number\": number"
         )))
@@ -1070,14 +1070,14 @@ class BasicTestAppPreview(BasePage):
         self.wait_for_element((By.XPATH, self.div_span.format("displayed here: 64")))
         self.validate_text("The answer displayed here: 64, should equal this: 64", 64,",",64)
         self.webapp.wait_to_click(self.next_question)
-        time.sleep(2)
+        
         self.webapp.wait_to_click(self.next_question)
-        time.sleep(2)
-        self.js_click(self.submit_form_button)
-        time.sleep(2)
+        
+        self.wait_to_click(self.submit_form_button)
+        
         self.wait_for_element(self.success_message)
         self.webapp.wait_to_click(self.home_button)
-        time.sleep(2)
+        
         self.switch_to_default_content()
 
     def validate_text(self, div_text, value, split_value=None, value2=None):
@@ -1108,7 +1108,7 @@ class BasicTestAppPreview(BasePage):
         self.click(self.next_question)
         self.wait_for_element((By.XPATH, self.text_area_field.format(
             "This question is required. You should not be allowed to proceed with a blank answer.")))
-        self.js_click(self.next_question_force)
+        self.wait_to_click(self.next_question_force)
         time.sleep(3)
         assert self.is_present(self.warning)
         self.send_keys((By.XPATH, self.text_area_field.format(
@@ -1137,7 +1137,7 @@ class BasicTestAppPreview(BasePage):
         self.clear((By.XPATH, self.text_area_field.format(
             "This answer cannot be less than 3 characters, or greater than 6 characters long. Leaving the field blank should be valid."
             )))
-        time.sleep(1)
+        
         self.send_keys((By.XPATH, self.text_area_field.format(
             "This answer cannot be less than 3 characters, or greater than 6 characters long. Leaving the field blank should be valid.")),
                                          "aabbcc" + Keys.TAB)
@@ -1158,7 +1158,7 @@ class BasicTestAppPreview(BasePage):
             "This answer must be greater than 20 and smaller than 8000. The question is required."
             ))
                    )
-        time.sleep(2)
+        
         self.send_keys((By.XPATH, self.input_field.format(
             "This answer must be greater than 20 and smaller than 8000. The question is required.")),
                        "811" + Keys.TAB)
@@ -1171,7 +1171,7 @@ class BasicTestAppPreview(BasePage):
             "This date must be after today.")))
         self.webapp.wait_to_click(self.click_today_date)
         # self.webapp.wait_to_click(self.close_date_picker)
-        time.sleep(2)
+        
         self.wait_for_element(
             (By.XPATH, self.danger_warning.format("This date must be after today.")))
         self.wait_to_clear_and_send_keys((By.XPATH, self.input_field.format(
@@ -1191,7 +1191,7 @@ class BasicTestAppPreview(BasePage):
             "This date has to be today or in the past.")))
         self.webapp.wait_to_click(self.click_today_date)
         # self.webapp.wait_to_click(self.close_date_picker)
-        time.sleep(2)
+        
         assert not self.is_present_and_displayed((By.XPATH, self.text_success.format("This date has to be today or in the past.")), 5)
         self.wait_to_clear_and_send_keys((By.XPATH, self.input_field.format(
             "This date has to be today or in the past.")), self.input_date_subtract(1) + Keys.TAB)
@@ -1264,7 +1264,7 @@ class BasicTestAppPreview(BasePage):
         )),"value") == "Yes", "Default value is not Yes"
         self.webapp.wait_to_click(self.next_question)
         self.wait_for_element((By.XPATH, self.choose_radio_button.format("Choose an answer.","Yes")))
-        self.js_click((By.XPATH, self.choose_radio_button.format("Choose an answer.", "Yes")))
+        self.wait_to_click((By.XPATH, self.choose_radio_button.format("Choose an answer.", "Yes")))
         self.webapp.wait_to_click(self.next_question)
         self.wait_for_element((By.XPATH, self.div_span.format("This should only appear if you selected \"Yes\" to the previous question.")))
         self.webapp.wait_to_click(self.next_question)
@@ -1283,18 +1283,18 @@ class BasicTestAppPreview(BasePage):
         self.webapp.wait_to_click(self.next_question)
         self.wait_for_element((By.XPATH,self.input_field.format("Enter a score of 80.")))
         self.send_keys((By.XPATH, self.input_field.format("Enter a score of 80.")),"80"+Keys.TAB)
-        time.sleep(2)
+        
         self.webapp.wait_to_click(self.next_question)
         assert self.is_present_and_displayed((By.XPATH, self.div_span.format("GOOD - This should only appear if the score was greater than 75.")))
         self.webapp.wait_to_click(self.prev_question)
         self.wait_to_clear_and_send_keys((By.XPATH, self.input_field.format("Enter a score of 80.")), "60"+Keys.TAB)
-        time.sleep(2)
+        
         self.webapp.wait_to_click(self.next_question)
         assert self.is_present_and_displayed(
             (By.XPATH, self.div_span.format("FAIR - This should only appear if the score is greater than 50 and less than or equal to 75.")))
         self.webapp.wait_to_click(self.prev_question)
         self.wait_to_clear_and_send_keys((By.XPATH, self.input_field.format("Enter a score of 80.")), "10" + Keys.TAB)
-        time.sleep(2)
+        
         self.webapp.wait_to_click(self.next_question)
         assert self.is_present_and_displayed(
             (By.XPATH, self.div_span.format(
@@ -1303,11 +1303,11 @@ class BasicTestAppPreview(BasePage):
         self.wait_for_element((By.XPATH, self.choose_radio_button.format(
             "Please select 1 or 2 options and proceed.","One"
         )))
-        self.js_click((By.XPATH, self.choose_radio_button.format(
+        self.wait_to_click((By.XPATH, self.choose_radio_button.format(
             "Please select 1 or 2 options and proceed.", "One"
         )))
 
-        self.js_click((By.XPATH, self.choose_radio_button.format(
+        self.wait_to_click((By.XPATH, self.choose_radio_button.format(
             "Please select 1 or 2 options and proceed.", "Two"
         )))
         time.sleep(3)
@@ -1317,7 +1317,7 @@ class BasicTestAppPreview(BasePage):
         self.wait_for_element((By.XPATH, self.choose_radio_button.format(
             "Please select 1 or 2 options and proceed.", "One"
         )))
-        self.js_click((By.XPATH, self.choose_radio_button.format(
+        self.wait_to_click((By.XPATH, self.choose_radio_button.format(
             "Please select 1 or 2 options and proceed.", "Three"
         )))
         time.sleep(3)
@@ -1330,20 +1330,20 @@ class BasicTestAppPreview(BasePage):
             "You should not be able to choose all of the options here.", "One"
         )))
 
-        self.js_click((By.XPATH, self.choose_radio_button.format(
+        self.wait_to_click((By.XPATH, self.choose_radio_button.format(
             "You should not be able to choose all of the options here.", "One"
         )))
-        self.js_click((By.XPATH, self.choose_radio_button.format(
+        self.wait_to_click((By.XPATH, self.choose_radio_button.format(
             "You should not be able to choose all of the options here.", "Two"
         )))
-        self.js_click((By.XPATH, self.choose_radio_button.format(
+        self.wait_to_click((By.XPATH, self.choose_radio_button.format(
             "You should not be able to choose all of the options here.", "Three"
         )))
-        self.js_click((By.XPATH, self.choose_radio_button.format(
+        self.wait_to_click((By.XPATH, self.choose_radio_button.format(
             "You should not be able to choose all of the options here.", "Four"
         )))
         self.wait_for_element((By.XPATH, self.danger_warning.format("You should not be able to choose all of the options here.")))
-        self.js_click((By.XPATH, self.choose_radio_button.format(
+        self.wait_to_click((By.XPATH, self.choose_radio_button.format(
             "You should not be able to choose all of the options here.", "Four"
         )))
 
@@ -1353,23 +1353,23 @@ class BasicTestAppPreview(BasePage):
             "You should not be able to select \"None\" and another choice.", "One"
         )))
 
-        self.js_click((By.XPATH, self.choose_radio_button.format(
+        self.wait_to_click((By.XPATH, self.choose_radio_button.format(
             "You should not be able to select \"None\" and another choice.", "One"
         )))
-        self.js_click((By.XPATH, self.choose_radio_button.format(
+        self.wait_to_click((By.XPATH, self.choose_radio_button.format(
             "You should not be able to select \"None\" and another choice.", "Two"
         )))
-        self.js_click((By.XPATH, self.choose_radio_button.format(
+        self.wait_to_click((By.XPATH, self.choose_radio_button.format(
             "You should not be able to select \"None\" and another choice.", "None"
         )))
         self.wait_for_element(
             (By.XPATH, self.danger_warning.format("You should not be able to select \"None\" and another choice.")))
-        self.js_click((By.XPATH, self.choose_radio_button.format(
+        self.wait_to_click((By.XPATH, self.choose_radio_button.format(
             "You should not be able to select \"None\" and another choice.", "Two"
         )))
         self.wait_for_element(
             (By.XPATH, self.danger_warning.format("You should not be able to select \"None\" and another choice.")))
-        self.js_click((By.XPATH, self.choose_radio_button.format(
+        self.wait_to_click((By.XPATH, self.choose_radio_button.format(
             "You should not be able to select \"None\" and another choice.", "One"
         )))
         assert not self.is_present_and_displayed((By.XPATH, self.text_success.format("You should not be able to select \"None\" and another choice.")), 5)
@@ -1384,27 +1384,27 @@ class BasicTestAppPreview(BasePage):
             (By.XPATH, self.input_field.format("If you capture your location, you should not see the message.")))
         self.scroll_to_element(
             (By.XPATH, self.input_field.format("If you capture your location, you should not see the message.")))
-        time.sleep(2)
+        
         self.wait_to_clear_and_send_keys(
             (By.XPATH, self.input_field.format("If you capture your location, you should not see the message.")), "Delhi"+Keys.ENTER)
-        time.sleep(5)
-        self.webapp.wait_to_click(self.next_question)
         time.sleep(2)
+        self.webapp.wait_to_click(self.next_question)
+        
         assert not self.is_present((By.XPATH, self.div_span.format(
             "You should only see this message if the previous question was left empty.")))
         self.wait_for_element((By.XPATH, self.choose_radio_button.format(
             "The form should not crash.", "Continue to complete the form."
         )))
-        self.js_click((By.XPATH, self.choose_radio_button.format(
+        self.wait_to_click((By.XPATH, self.choose_radio_button.format(
             "The form should not crash.", "Continue to complete the form."
         )))
         self.webapp.wait_to_click(self.next_question)
-        time.sleep(1)
-        self.js_click(self.submit_form_button)
-        time.sleep(2)
+        
+        self.wait_to_click(self.submit_form_button)
+        
         self.wait_for_element(self.success_message)
         self.webapp.wait_to_click(self.home_button)
-        time.sleep(2)
+        
         self.switch_to_default_content()
 
     def input_date_add(self, number_of_days):
@@ -1434,7 +1434,7 @@ class BasicTestAppPreview(BasePage):
             "This question should only let you enter an integer."))))
         self.wait_to_clear_and_send_keys((By.XPATH, self.input_field.format(
             "This question should only let you enter an integer.")), fetch_random_digit() + Keys.TAB)
-        time.sleep(1)
+        
 
         self.webapp.wait_to_click(self.next_question)
         self.wait_for_element((By.XPATH, self.input_field.format(
@@ -1453,31 +1453,31 @@ class BasicTestAppPreview(BasePage):
         self.webapp.wait_to_click(self.next_question)
         self.wait_for_element((By.XPATH, self.choose_radio_button.format(
             "You should be able to choose one or more answers here.","One")))
-        self.js_click((By.XPATH, self.choose_radio_button.format(
+        self.wait_to_click((By.XPATH, self.choose_radio_button.format(
             "You should be able to choose one or more answers here.", "One")))
-        self.js_click((By.XPATH, self.choose_radio_button.format(
+        self.wait_to_click((By.XPATH, self.choose_radio_button.format(
             "You should be able to choose one or more answers here.", "Two")))
-        self.js_click((By.XPATH, self.choose_radio_button.format(
+        self.wait_to_click((By.XPATH, self.choose_radio_button.format(
             "You should be able to choose one or more answers here.", "Three")))
         # self.wait_for_element((By.XPATH, self.text_success.format("You should be able to choose one or more answers here.")))
 
         self.webapp.wait_to_click(self.next_question)
         self.wait_for_element((By.XPATH, self.choose_radio_button.format(
             "You should be able to choose only one answer here.", "One")))
-        self.js_click((By.XPATH, self.choose_radio_button.format(
+        self.wait_to_click((By.XPATH, self.choose_radio_button.format(
             "You should be able to choose only one answer here.", "One")))
-        time.sleep(2)
+        
         assert self.is_selected((By.XPATH, self.choose_radio_button.format(
             "You should be able to choose only one answer here.", "One"))), "The option is not selected."
         self.wait_for_element((By.XPATH, self.clear_select.format("You should be able to choose only one answer here.")))
         self.webapp.wait_to_click(
             (By.XPATH, self.clear_select.format("You should be able to choose only one answer here.")))
-        time.sleep(2)
+        
         assert not self.is_selected((By.XPATH, self.choose_radio_button.format(
             "You should be able to choose only one answer here.", "One"))), "The option is still selected."
-        self.js_click((By.XPATH, self.choose_radio_button.format(
+        self.wait_to_click((By.XPATH, self.choose_radio_button.format(
             "You should be able to choose only one answer here.", "Two")))
-        time.sleep(2)
+        
         assert self.is_selected((By.XPATH, self.choose_radio_button.format(
             "You should be able to choose only one answer here.", "Two"))), "The option is not selected."
 
@@ -1492,7 +1492,7 @@ class BasicTestAppPreview(BasePage):
             "The value of this question should be hidden, but anything can be entered.")))
         self.send_keys((By.XPATH, self.input_field.format(
             "The value of this question should be hidden, but anything can be entered.")), self.test_question + Keys.TAB)
-        time.sleep(2)
+        
         assert self.get_attribute(
             (By.XPATH, self.input_field.format(
                 "The value of this question should be hidden, but anything can be entered.")), "type"
@@ -1506,7 +1506,7 @@ class BasicTestAppPreview(BasePage):
                        self.test_question + Keys.TAB)
         self.wait_for_element((By.XPATH, self.danger_warning.format(
             "The value of this question should be hidden and only numbers are allowed.")))
-        time.sleep(2)
+        
         assert self.get_attribute(
             (By.XPATH, self.input_field.format(
                 "The value of this question should be hidden and only numbers are allowed.")), "type"
@@ -1545,7 +1545,7 @@ class BasicTestAppPreview(BasePage):
         self.js_send_keys((By.XPATH, self.input_field.format(
             "If using an Android device, this question should allow you to capture a GPS location. Try it out")), "Delhi")
         self.webapp.wait_to_click(self.search_location_button)
-        time.sleep(2)
+        
         assert not self.is_present_and_displayed(self.blank_latitude, 10)
 
         self.webapp.wait_to_click(self.next_question)
@@ -1565,55 +1565,55 @@ class BasicTestAppPreview(BasePage):
         self.send_keys((By.XPATH, self.text_area_field.format(
             "This question should let you enter any form of text or special characters. Try different values.")),
                        self.test_question + " " + self.special_character)
-        time.sleep(2)
+        
         self.webapp.wait_to_click(self.next_question)
         self.wait_for_element((By.XPATH, self.choose_radio_button.format(
             "You should be able to choose one or more answers here.", "One")))
-        self.js_click((By.XPATH, self.choose_radio_button.format(
+        self.wait_to_click((By.XPATH, self.choose_radio_button.format(
             "You should be able to choose one or more answers here.", "One")))
-        self.js_click((By.XPATH, self.choose_radio_button.format(
+        self.wait_to_click((By.XPATH, self.choose_radio_button.format(
             "You should be able to choose one or more answers here.", "Two")))
-        self.js_click((By.XPATH, self.choose_radio_button.format(
+        self.wait_to_click((By.XPATH, self.choose_radio_button.format(
             "You should be able to choose one or more answers here.", "Three")))
         assert not self.is_present_and_displayed((By.XPATH, self.text_success.format("You should be able to choose one or more answers here.")), 5)
-        time.sleep(2)
+        
         self.webapp.wait_to_click(self.next_question)
         self.wait_for_element((By.XPATH, self.choose_radio_button.format(
             "You should be able to choose only one answer here.", "One")))
-        self.js_click((By.XPATH, self.choose_radio_button.format(
+        self.wait_to_click((By.XPATH, self.choose_radio_button.format(
             "You should be able to choose only one answer here.", "One")))
-        time.sleep(2)
+        
         assert self.is_selected((By.XPATH, self.choose_radio_button.format(
             "You should be able to choose only one answer here.", "One"))), "The option is not selected."
         self.wait_for_element(
             (By.XPATH, self.clear_select.format("You should be able to choose only one answer here.")))
         self.webapp.wait_to_click(
             (By.XPATH, self.clear_select.format("You should be able to choose only one answer here.")))
-        time.sleep(2)
+        
         assert not self.is_selected((By.XPATH, self.choose_radio_button.format(
             "You should be able to choose only one answer here.", "One"))), "The option is still selected."
-        self.js_click((By.XPATH, self.choose_radio_button.format(
+        self.wait_to_click((By.XPATH, self.choose_radio_button.format(
             "You should be able to choose only one answer here.", "Two")))
-        time.sleep(2)
+        
         assert self.is_selected((By.XPATH, self.choose_radio_button.format(
             "You should be able to choose only one answer here.", "Two"))), "The option is not selected."
 
         self.webapp.wait_to_click(self.next_question)
         self.wait_for_element((By.XPATH, self.choose_radio_button.format(
             "This is a single select lookup. You should be able to choose only one answer.", "Radhe Sham")))
-        self.js_click((By.XPATH, self.choose_radio_button.format(
+        self.wait_to_click((By.XPATH, self.choose_radio_button.format(
             "This is a single select lookup. You should be able to choose only one answer.", "Radhe Sham")))
-        time.sleep(2)
+        
         assert self.is_selected((By.XPATH, self.choose_radio_button.format(
             "This is a single select lookup. You should be able to choose only one answer.", "Radhe Sham"))), "The option is not selected."
         self.webapp.wait_to_click((By.XPATH, self.clear_select.format(
             "This is a single select lookup. You should be able to choose only one answer.")))
-        time.sleep(2)
+        
         assert not self.is_selected((By.XPATH, self.choose_radio_button.format(
             "This is a single select lookup. You should be able to choose only one answer.", "Radhe Sham"))), "The option is still selected."
-        self.js_click((By.XPATH, self.choose_radio_button.format(
+        self.wait_to_click((By.XPATH, self.choose_radio_button.format(
             "This is a single select lookup. You should be able to choose only one answer.", "Art of War")))
-        time.sleep(2)
+        
         assert self.is_selected((By.XPATH, self.choose_radio_button.format(
             "This is a single select lookup. You should be able to choose only one answer.", "Art of War"))), "The option is not selected."
 
@@ -1622,20 +1622,20 @@ class BasicTestAppPreview(BasePage):
 
         self.webapp.wait_to_click((By.XPATH, self.choose_radio_button.format(
             "This is a checkbox lookup table and you should be able to choose more than one option.", "150")))
-        time.sleep(1)
+        
         self.webapp.wait_to_click((By.XPATH, self.choose_radio_button.format(
             "This is a checkbox lookup table and you should be able to choose more than one option.", "200")))
         self.webapp.wait_to_click((By.XPATH, self.choose_radio_button.format(
             "This is a checkbox lookup table and you should be able to choose more than one option.", "200"
             )))
-        time.sleep(2)
+        
         # self.wait_for_element(
         #     (By.XPATH,
         #      self.text_success.format("This is a checkbox lookup table and you should be able to choose more than one option.")))
 
         self.webapp.wait_to_click(self.next_question)
         # self.scroll_to_element(self.add_new_repeat)
-        # self.js_click(self.add_new_repeat)
+        # self.wait_to_click(self.add_new_repeat)
         # self.wait_for_element((By.XPATH, self.repeat_input_field.format("1/1","Enter a number")))
         # self.send_keys((By.XPATH, self.repeat_input_field.format("1/1", "Enter a number")), "abc"+Keys.TAB)
         # self.wait_for_element((By.XPATH, self.danger_warning_repeat.format("1/1", "Enter a number")))
@@ -1644,7 +1644,7 @@ class BasicTestAppPreview(BasePage):
         #
         #
         # self.scroll_to_element(self.add_new_repeat)
-        # self.js_click(self.add_new_repeat)
+        # self.wait_to_click(self.add_new_repeat)
         # self.wait_for_element((By.XPATH, self.repeat_input_field.format("2/2","Enter a number")))
         # self.send_keys((By.XPATH, self.repeat_input_field.format("2/2", "Enter a number")), "abc"+Keys.TAB)
         # self.wait_for_element((By.XPATH, self.danger_warning_repeat.format("2/2", "Enter a number")))
@@ -1656,25 +1656,25 @@ class BasicTestAppPreview(BasePage):
         # self.webapp.wait_to_click((By.XPATH, self.delete_repeat.format("1/1")))
         # time.sleep(3)
         # assert not self.is_present((By.XPATH, self.repeat_input_field.format("1/1","Enter a number")))
-        time.sleep(2)
+        
         self.webapp.wait_to_click(self.next_question)
-        time.sleep(1)
-        self.js_click(self.submit_form_button)
-        time.sleep(2)
+        
+        self.wait_to_click(self.submit_form_button)
+        
         self.wait_for_element(self.success_message)
         self.webapp.wait_to_click(self.home_button)
-        time.sleep(2)
+        
         self.switch_to_default_content()
 
 
     def update_description(self, settings):
         self.wait_for_element(self.description_field_edit)
-        self.js_click(self.description_field_edit)
+        self.wait_to_click(self.description_field_edit)
         self.wait_to_clear_and_send_keys(self.description_field,
                                          "Basic Tests Description - automation test inactivity "+datetime.now().strftime("%d-%m-%Y %H:%M")
                                          )
-        self.js_click(self.save_description)
-        time.sleep(2)
+        self.wait_to_click(self.save_description)
+        
         project = ProjectSettingsPage(self.driver, settings)
         project.set_inactivity_timeout()
         app_preview = LoginAsAppPreviewPage(self.driver, settings)
@@ -1683,11 +1683,11 @@ class BasicTestAppPreview(BasePage):
         self.webapp.wait_to_click(self.make_new_version_button)
         print("Sleeping for the new version to be ready to release")
         time.sleep(40)
-        self.js_click(self.release_button)
-        time.sleep(5)
+        self.wait_to_click(self.release_button)
+        time.sleep(2)
         assert self.is_present(self.release_button_pressed), "Release button is not successfully pressed."
         print("Sleeping for the installation code to generate")
-        time.sleep(5)
+        time.sleep(2)
         self.switch_back_to_prev_tab()
 
     def verify_pagination(self):
@@ -1742,7 +1742,7 @@ class BasicTestAppPreview(BasePage):
                 self.select_by_value(self.list_drop_down, i)
             else:
                 print("Page dropdown not present")
-            time.sleep(5)
+            time.sleep(2)
             latest_page_count = self.find_elements(self.no_of_pages)
             if self.is_present(self.page_navigation):
                 if len(latest_page_count) > 1:
@@ -1796,8 +1796,8 @@ class BasicTestAppPreview(BasePage):
         print(n)
         for i in range(len(page_count)):
             self.wait_to_clear_and_send_keys(self.go_to_page_input, str(i+1))
-            time.sleep(1)
-            self.js_click(self.go_button)
+            
+            self.wait_to_click(self.go_button)
             time.sleep(4)
             classname = self.get_attribute((By.XPATH, self.page_number.format(i+1)), "aria-current")
             print(str(i+1), classname)
@@ -1811,19 +1811,19 @@ class BasicTestAppPreview(BasePage):
         self.wait_for_element((By.XPATH, self.text_area_field.format("Name")))
         self.wait_to_clear_and_send_keys((By.XPATH, self.text_area_field.format("Name")), self.parent_case)
         self.webapp.wait_to_click(self.next_question)
-        time.sleep(1)
+        
         cond = random.choice(["yes", "no"])
-        self.js_click((By.XPATH, self.choose_radio_button.format(
+        self.wait_to_click((By.XPATH, self.choose_radio_button.format(
             "Link Form", cond)))
         self.webapp.wait_to_click(self.next_question)
-        time.sleep(1)
+        
         self.wait_to_clear_and_send_keys((By.XPATH, self.text_area_field.format("Child Case")), self.child_case)
         self.webapp.wait_to_click(self.next_question)
-        time.sleep(1)
-        self.js_click(self.submit_form_button)
+        
+        self.wait_to_click(self.submit_form_button)
         self.wait_for_element(self.success_message)
-        self.js_click(self.home_button)
-        time.sleep(2)
+        self.wait_to_click(self.home_button)
+        
         self.switch_to_default_content()
         return self.parent_case, cond, self.child_case
 
@@ -1832,14 +1832,14 @@ class BasicTestAppPreview(BasePage):
         self.wait_to_clear_and_send_keys(self.search_input,case)
         self.webapp.wait_to_click(self.search_button)
         assert self.is_present_and_displayed((By.XPATH, self.form_link_case.format(case, cond)))
-        self.js_click((By.XPATH, self.form_link_case.format(case, cond)))
+        self.wait_to_click((By.XPATH, self.form_link_case.format(case, cond)))
         self.webapp.wait_to_click(self.continue_button)
         self.wait_for_element(self.next_question)
         assert self.is_present((By.XPATH, self.div_span.format("This form submission should take you to Basic Form Tests > Basic Form only if \"link_form=yes\" for the case, otherwise it should take you to the Home Screen")))
         self.webapp.wait_to_click(self.next_question)
-        time.sleep(1)
-        self.js_click(self.submit_form_button)
-        time.sleep(5)
+        
+        self.wait_to_click(self.submit_form_button)
+        time.sleep(2)
         self.wait_for_element(self.success_message)
         if cond == "no":
             assert self.is_present_and_displayed((By.XPATH, self.form_title_name.format(UserData.basic_tests_app['tests_app']))), "This is not the "+UserData.basic_tests_app['tests_app']+" page."
@@ -1849,7 +1849,7 @@ class BasicTestAppPreview(BasePage):
                                                                                                   UserData.basic_tests_app[
                                                                                                       'form_name'] + " page."
         self.webapp.wait_to_click(self.home_button)
-        time.sleep(2)
+        
         self.switch_to_default_content()
 
     def no_conditional_expression_form(self, case, cond):
@@ -1857,20 +1857,20 @@ class BasicTestAppPreview(BasePage):
         self.wait_to_clear_and_send_keys(self.search_input,case)
         self.webapp.wait_to_click(self.search_button)
         assert self.is_present_and_displayed((By.XPATH, self.form_link_case.format(case, cond)))
-        self.js_click((By.XPATH, self.form_link_case.format(case, cond)))
+        self.wait_to_click((By.XPATH, self.form_link_case.format(case, cond)))
         self.webapp.wait_to_click(self.continue_button)
         self.wait_for_element(self.next_question)
         assert self.is_present((By.XPATH, self.div_span.format("This form submission should always take you to Basic Form Tests > Basic Form")))
         self.webapp.wait_to_click(self.next_question)
-        time.sleep(1)
-        self.js_click(self.submit_form_button)
-        time.sleep(5)
+        
+        self.wait_to_click(self.submit_form_button)
+        time.sleep(2)
         assert self.is_present_and_displayed(
                 (By.XPATH, self.form_title_name.format(UserData.basic_tests_app['form_name']))), "This is not the " + \
                                                                                                   UserData.basic_tests_app[
                                                                                                       'form_name'] + " page."
         self.webapp.wait_to_click(self.home_button)
-        time.sleep(2)
+        
         self.switch_to_default_content()
 
     def form_linking_child(self, case, child):
@@ -1878,7 +1878,7 @@ class BasicTestAppPreview(BasePage):
         self.wait_to_clear_and_send_keys(self.search_input, child)
         self.webapp.wait_to_click(self.search_button)
         assert self.is_present_and_displayed((By.XPATH, self.module_search.format(child)))
-        self.js_click((By.XPATH, self.module_search.format(child)))
+        self.wait_to_click((By.XPATH, self.module_search.format(child)))
         self.webapp.wait_to_click(self.continue_button)
         self.wait_for_element((By.XPATH, self.case_list_menu.format(UserData.basic_test_app_forms['linking_data'])))
         self.switch_to_default_content()
@@ -1888,27 +1888,27 @@ class BasicTestAppPreview(BasePage):
         assert self.is_present((By.XPATH, self.div_span.format(
             "This form submission should take you to Form Linking Parent -> Conditional expression form.")))
         self.webapp.wait_to_click(self.next_question)
-        time.sleep(1)
+        
         self.webapp.wait_to_click(self.submit_form_button)
         time.sleep(3)
         assert self.is_present_and_displayed(
             (By.XPATH,
              self.form_title_name.format(case))), "This is not the " + case + " page."
         self.webapp.wait_to_click(self.home_button)
-        time.sleep(2)
+        
         self.switch_to_default_content()
 
     def turn_off_one_question_per_screen(self):
         self.switch_to_frame(self.iframe)
         self.webapp.wait_to_click(self.settings_option)
-        time.sleep(2)
+        
         isChecked = self.is_selected(self.toggle_button_one_question)
         print(isChecked)
-        time.sleep(2)
+        
         if isChecked is True:
             # self.driver.execute_script("arguments[0].click();", self.driver.find_element(By.XPATH, "//th[(text()='Use one question per screen')]/following-sibling::td//input"))
-            self.js_click(self.toggle_button_one_question)
-            time.sleep(2)
+            self.wait_to_click(self.toggle_button_one_question)
+            
             print("Toggled OFF")
         # self.webapp.wait_to_click((By.XPATH, "//th[(text()='Use one question per screen')]/following-sibling::td//input"))
         assert self.is_selected(self.toggle_button_one_question) is False
@@ -1917,34 +1917,34 @@ class BasicTestAppPreview(BasePage):
 
     def maps_record_location(self):
         self.switch_to_frame(self.iframe)
-        time.sleep(5)
+        time.sleep(2)
         self.wait_to_clear_and_send_keys(self.location_input, UserData.map_input)
         self.wait_to_click(self.location_search_button)
-        time.sleep(5)
-        self.js_click((By.XPATH,self.clear_button.format('This question will allow you to record your location on a Mapbox widget.')))
+        time.sleep(2)
+        self.wait_to_click((By.XPATH,self.clear_button.format('This question will allow you to record your location on a Mapbox widget.')))
         time.sleep(3)
         assert self.is_present(self.blank_latitude), "Coordinates not cleared"
         time.sleep(3)
-        self.js_click(self.multi_question_submit_button)
-        time.sleep(10)
+        self.wait_to_click(self.multi_question_submit_button)
+        time.sleep(2)
         self.switch_to_default_content()
 
     def sub_menus(self):
         self.switch_to_frame(self.iframe)
-        time.sleep(5)
+        time.sleep(2)
         self.wait_to_click(self.start_option)
-        self.js_click(self.parent_menu)
+        self.wait_to_click(self.parent_menu)
         self.is_present_and_displayed(self.parent_survey)
         self.is_present_and_displayed(self.child_menu)
         self.is_present_and_displayed(self.visible_child_survey)
         self.wait_to_click(self.parent_survey)
         self.wait_to_click(self.submit_survey_button)
-        self.js_click(self.parent_menu)
+        self.wait_to_click(self.parent_menu)
         self.wait_to_click(self.child_menu)
         self.is_present_and_displayed(self.child_survey_under_child_menu)
         self.wait_to_click(self.child_survey_under_child_menu)
         self.wait_to_click(self.submit_survey_button)
-        self.js_click(self.parent_menu)
+        self.wait_to_click(self.parent_menu)
         self.is_present_and_displayed(self.visible_child_survey)
         self.wait_to_click(self.visible_child_survey)
         self.wait_to_click(self.submit_survey_button)
@@ -1955,7 +1955,7 @@ class BasicTestAppPreview(BasePage):
         self.wait_to_click(self.start_option)
         self.is_displayed(self.formplayer_tests_audio_icon)
         self.is_displayed(self.formplayer_tests_menu_icon)
-        self.js_click(self.formplayer_tests_menu)
+        self.wait_to_click(self.formplayer_tests_menu)
         self.is_displayed(self.formplayer_multimedia_audio_icon)
         self.is_displayed(self.formplayer_multimedia_menu_icon)
         self.switch_to_default_content()
@@ -1963,8 +1963,8 @@ class BasicTestAppPreview(BasePage):
     def multimedia_form_navigation(self):
         self.switch_to_frame(self.iframe)
         self.wait_to_click(self.start_option)
-        self.js_click(self.formplayer_tests_menu)
-        self.js_click(self.formplayer_multimedia_form)
+        self.wait_to_click(self.formplayer_tests_menu)
+        self.wait_to_click(self.formplayer_multimedia_form)
         self.is_displayed(self.multimedia_gif)
         print('entered the form')
         image_present = self.is_displayed(self.multimedia_image)

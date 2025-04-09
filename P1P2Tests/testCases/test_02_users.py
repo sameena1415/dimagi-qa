@@ -39,7 +39,7 @@ def test_case_54_add_custom_user_data_profile_to_mobile_worker(driver, settings)
     create.select_profile()
     create.update_information()
     create.select_location()
-    time.sleep(2)
+    
     menu.users_menu()
     newest_file = create.download_mobile_worker()
     create.edit_profile_in_downloaded_file(newest_file, group_id["user_new"])

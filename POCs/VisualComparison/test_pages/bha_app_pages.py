@@ -32,7 +32,7 @@ class BhaWorkflows(BasePage):
 
     def click_on_admit_new_client(self):
         self.wait_for_element(self.admit_new_client_on_caselist)
-        self.js_click(self.admit_new_client_on_caselist)
+        self.wait_to_click(self.admit_new_client_on_caselist)
 
     def replace_one_char(self, original_string):
         index = 2
@@ -44,7 +44,7 @@ class BhaWorkflows(BasePage):
         radio_value = self.get_element(self.radio_option_value, value)
         if self.is_present_and_displayed(radio_value, 10):
             self.scroll_to_element(radio_value)
-            self.js_click(radio_value)
+            self.wait_to_click(radio_value)
             time.sleep(4)
         else:
             print("Yes button is not present")
@@ -75,7 +75,7 @@ class BhaWorkflows(BasePage):
 
     def remove_clinic(self, clinic_name):
         close_xpath = self.get_element(self.clinic_close_button, clinic_name)
-        self.js_click(close_xpath)
+        self.wait_to_click(close_xpath)
         time.sleep(4)
 
     def check_answer_options(self, label, displayed=None):
@@ -109,7 +109,7 @@ class BhaWorkflows(BasePage):
         print(f"Property {case_property_value} is present")
 
     def view_message_details(self, alert_type):
-        self.js_click(self.get_element(self.view_latest_details_by_type, alert_type))
+        self.wait_to_click(self.get_element(self.view_latest_details_by_type, alert_type))
 
     def check_if_alert_triggered(self, content, date):
         date_locator = self.get_element(self.content, date)

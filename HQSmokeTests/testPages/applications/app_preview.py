@@ -65,13 +65,13 @@ class AppPreviewPage(BasePage):
         self.wait_to_click(self.case_list)
         self.wait_to_click(self.followup_form)
         self.wait_to_click(self.first_case_on_case_list)
-        time.sleep(2)
+        
         if self.is_present(self.continue_button):
             self.wait_to_click(self.continue_button)
-        time.sleep(2)
+        
         if self.is_displayed(self.next_button):
             self.wait_to_click(self.next_button)
-            self.js_click(self.complete_button)
+            self.wait_to_click(self.complete_button)
         self.is_visible_and_displayed(self.submit_success)
         self.driver.switch_to.default_content()
 
@@ -82,37 +82,37 @@ class AppPreviewPage(BasePage):
         self.driver.switch_to.frame(self.find_element(self.iframe_app_preview))
         self.login_as_app_preview()
         self.wait_to_click(self.start_option)
-        time.sleep(2)
+        
         self.wait_for_element((By.XPATH, self.case_list_menu.format(UserData.case_list_name)))
         self.wait_to_click((By.XPATH, self.case_list_menu.format(UserData.case_list_name)))
-        time.sleep(2)
+        
         self.wait_for_element((By.XPATH, self.case_list_menu.format("Reg Form")))
         self.wait_to_click((By.XPATH, self.case_list_menu.format("Reg Form")))
         self.wait_for_element(self.clear_map)
         self.wait_to_click(self.clear_map)
-        time.sleep(1)
+        
         loc = random.choice(UserData.location_list)
         print(loc)
         self.scroll_to_element(self.location_field)
-        time.sleep(2)
+        
         self.send_keys(self.location_field, loc+Keys.ENTER)
-        time.sleep(2)
-        self.js_click(self.location_search)
-        time.sleep(1)
+        
+        self.wait_to_click(self.location_search)
+        
         lat = self.get_text(self.latitude)
         lon = self.get_text(self.longitude)
-        self.js_click(self.next_question)
-        time.sleep(2)
-        self.js_click(self.complete_form)
-        time.sleep(2)
+        self.wait_to_click(self.next_question)
+        
+        self.wait_to_click(self.complete_form)
+        
         self.wait_for_element(self.success_message)
         print("Form submitted")
-        time.sleep(2)
+        
         self.wait_to_click(self.home_button)
-        time.sleep(2)
+        
         self.wait_for_element(self.sync_button)
-        self.js_click(self.sync_button)
-        time.sleep(2)
+        self.wait_to_click(self.sync_button)
+        
         self.switch_to_default_content()
         print("Sleeping for sometime so the form data is updated")
         time.sleep(100)
@@ -121,18 +121,18 @@ class AppPreviewPage(BasePage):
 
     def login_as_app_preview(self, username = UserData.app_login):
         self.wait_to_click(self.login_as_button)
-        time.sleep(5)
+        time.sleep(2)
         self.wait_for_element(self.search_worker, 100)
         self.wait_to_clear_and_send_keys(self.search_worker, username)
         self.wait_for_element(self.search_users_button)
-        self.js_click(self.search_users_button)
-        time.sleep(2)
+        self.wait_to_click(self.search_users_button)
+        
         self.wait_for_element((By.XPATH, self.username_in_list.format(username)))
-        self.js_click((By.XPATH, self.username_in_list.format(username)))
-        time.sleep(2)
+        self.wait_to_click((By.XPATH, self.username_in_list.format(username)))
+        
         self.wait_for_element(self.webapp_login_confirmation)
-        self.js_click(self.webapp_login_confirmation)
-        time.sleep(2)
+        self.wait_to_click(self.webapp_login_confirmation)
+        
         logged_in_username = self.get_text(self.webapp_working_as)
         assert logged_in_username == username, "Logged in"
 

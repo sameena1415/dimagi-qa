@@ -33,8 +33,8 @@ class MultiSelectWorkflows(BasePage):
         song_names = []
         for i in range(1, case_count+1):
             row_checkbox = self.get_element(self.row_checkbox_xpath, str(i))
-            time.sleep(2)
-            self.js_click(row_checkbox)
+            
+            self.wait_to_click(row_checkbox)
             case_name_in_table = self.get_element(self.value_in_table_format, str(i))
             selected_song_names = self.get_text(case_name_in_table)
             song_names.append(selected_song_names)
@@ -44,7 +44,7 @@ class MultiSelectWorkflows(BasePage):
         song_names = []
         for i in range(1, case_count+1):
             row_checkbox = self.get_element(self.row_checkbox_xpath, str(i))
-            self.js_click(row_checkbox)
+            self.wait_to_click(row_checkbox)
             case_name_in_table = self.get_element(self.case_tile_grid_one, str(i))
             song_on_case_tiles = self.get_text(case_name_in_table)
             stripped_song = song_on_case_tiles.split("</b>")
@@ -54,13 +54,13 @@ class MultiSelectWorkflows(BasePage):
         return song_names
 
     def click_select_all_checkbox(self):
-        self.js_click(self.select_all_checkbox)
+        self.wait_to_click(self.select_all_checkbox)
 
     def click_select_all_tile_checkbox(self):
-        self.js_click(self.select_all_tile_checkbox)
+        self.wait_to_click(self.select_all_tile_checkbox)
 
     def continue_to_proceed_multiselect(self):
-        self.js_click(self.multi_select_continue)
+        self.wait_to_click(self.multi_select_continue)
         self.wait_for_ajax()
 
     def check_no_of_cases_on_form(self, max_size, type):
@@ -75,7 +75,7 @@ class MultiSelectWorkflows(BasePage):
         print("Max limit error displayed as expected")
 
     def check_selected_cases_present_on_form(self, items_selected_on_case_list, case_type):
-        time.sleep(5)
+        time.sleep(2)
         stripped_final = None
         song_names_on_form = self.find_elements_texts((By.XPATH, self.selected_case_names_on_forms.format(str(case_type).lower())))
         if case_type == SONG:
@@ -88,7 +88,7 @@ class MultiSelectWorkflows(BasePage):
         print(f"List1 {items_selected_on_case_list} matches List2 {stripped_final}")
 
     def select_case_on_case_detail(self):
-        self.js_click(self.select_case_button)
+        self.wait_to_click(self.select_case_button)
 
     def check_if_checkbox_is_selected(self, case_name):
         checkbox = self.get_element(self.checkbox, case_name)
@@ -113,10 +113,10 @@ class MultiSelectWorkflows(BasePage):
     def open_menu_settings(self, menu):
         menu_xpath = self.get_element(self.open_app_builder_menu, menu)
         self.wait_for_element(menu_xpath)
-        self.js_click(menu_xpath)
-        time.sleep(2)
+        self.wait_to_click(menu_xpath)
+        
         self.wait_for_element(self.case_list_settings)
-        self.js_click(self.case_list_settings)
+        self.wait_to_click(self.case_list_settings)
 
 
 
