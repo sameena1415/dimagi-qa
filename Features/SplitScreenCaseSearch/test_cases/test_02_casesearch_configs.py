@@ -97,6 +97,7 @@ def test_case_05_date_range_format(driver, settings):
     webapps = WebApps(driver, settings)
     casesearch = CaseSearchWorkflows(driver)
     """Check date range format search property"""
+    webapps.login_as(CaseSearchUserInput.user_1)
     webapps.open_app(CaseSearchUserInput.linked_case_search_app_name)
     webapps.open_menu(CaseSearchUserInput.search_first_menu)
     # MM/DD/YYYY

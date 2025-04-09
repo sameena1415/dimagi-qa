@@ -36,7 +36,7 @@ class ApplicationPage(BasePage):
         self.edit_app_name = (By.XPATH, '//span[@class="inline-edit-icon h3 app-title"]')
         self.app_name_textbox = (By.XPATH, "(//input[@type='text'])[1]")
         self.confirm_change = (By.XPATH, "(//button[@data-bind=\"click: save, hasFocus: saveHasFocus, visible: !isSaving()\"])[1]")
-        self.add_module = (By.XPATH, "//a[contains(@class,'new-module')]/i")
+        self.add_module = (By.XPATH, "//a[contains(@class,'new-module') or contains(@class,'appnav-add js-add-new-item')]/i")
         self.add_case_list = (By.XPATH, "//button[@data-type='case']")
         self.add_questions = (By.XPATH, "//div[@class='dropdown fd-add-question-dropdown']")
         self.text_question = (By.XPATH, "//a[@data-qtype='Text']")

@@ -142,20 +142,16 @@ class WebApps(BasePage):
             time.sleep(3)
         else:
             print("No banners present")
-        self.scroll_to_bottom()
         self.wait_for_element(self.clear_case_search_page)
         self.scroll_to_element(self.clear_case_search_page)
-        
         self.wait_to_click(self.clear_case_search_page)
         time.sleep(2)
 
     def search_button_on_case_search_page(self, enter_key=None, case_list=None):
         if enter_key == YES:
-            
             ActionChains(self.driver).send_keys(Keys.ENTER).perform()
             # self.send_keys(self.submit_on_case_search_page, Keys.ENTER)
         else:
-            
             self.scroll_to_element(self.submit_on_case_search_page)
             self.wait_to_click(self.submit_on_case_search_page)
             time.sleep(7)
@@ -228,7 +224,7 @@ class WebApps(BasePage):
         time.sleep(2)
         if self.is_present_and_displayed(self.async_restore_error, 30):
             self.click(self.async_restore_error)
-            time.sleep(2)
+            time.sleep(10)
             self.scroll_to_element(self.form_submit)
             self.wait_to_click(self.form_submit)
             

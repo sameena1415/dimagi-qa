@@ -81,17 +81,19 @@ class MessagingPage(BasePage):
         self.save_button_xpath = (By.XPATH, "//button[@type='submit'and text()='Save']")
         self.delete_cond_alert = (By.XPATH, "//a[text()='" + str(
             self.cond_alert_name_input) + "']//preceding::button[@class='btn btn-danger'][1]")
+        self.alert_process_none = (By.XPATH, "//td[.//a[text()='" + str(
+            self.cond_alert_name_input) + "']]//following::span[contains(@data-bind,'locked_for_editing')  and @style='display: none;']")
         self.search_box = (By.XPATH, "//form[@class='input-group']/input[@class='form-control']")
         self.search_btn = (
-        By.XPATH, "//form[@class='input-group']//button[@data-bind='click: clickAction, visible: !immediate']")
+        By.XPATH, "//form[@class='input-group']//button[@data-bind='click: clickAction, visible: !immediate']/i")
         self.value_per_page =(By.XPATH, "//select[contains(@data-bind,'value: perPage')]")
         self.cond_alerts_name = (By.XPATH, "//td[.//button[contains(@class,'danger')][not(@disabled)]]//following-sibling::td[1]/a[contains(.,'cond_alert')]")
         self.cond_alert_delete_button = "(//td[contains(.,'{}')]//preceding-sibling::td/button[not(@disabled)])[{}]"
         # Condition Alerts : Download and Upload
         self.bulk_upload_button = (By.LINK_TEXT, "Bulk Upload SMS Alert Content")
-        self.download_id = (By.ID, "download_link")
+        self.download_id = (By.XPATH, "//a[@id='download_link']//i")
         self.choose_file = (By.XPATH, "//input[@name='bulk_upload_file']")
-        self.upload = (By.XPATH, "//button[@class='btn btn-primary disable-on-submit']")
+        self.upload = (By.XPATH, "//button[@class='btn btn-primary disable-on-submit']/i")
         self.upload_success_message = (By.XPATH, "//div[@class='alert alert-margin-top fade in alert-success']")
         # Keywords
         self.keywords = (By.LINK_TEXT, "Keywords")
@@ -133,7 +135,7 @@ class MessagingPage(BasePage):
         self.time_input = (By.XPATH, "(//input[@data-bind='value: end_time'])[2]")
         # Languages
         self.languages = (By.LINK_TEXT, "Languages")
-        self.add_lang = (By.XPATH, "//button[@data-bind='click: addLanguage, disable: addLanguageDisabled']")
+        self.add_lang = (By.XPATH, "//button[@data-bind='click: addLanguage, disable: addLanguageDisabled']/i")
         self.lang_input_textarea = (By.XPATH, "(//span[@role='combobox'])[last()]")
         self.select_first_lang = (By.XPATH, "(//li[@role='option'])[1]")
         self.select_eng_lang = (By.XPATH, "(//li[@role='option'][contains(.,'en (English)')])[1]")
@@ -217,12 +219,10 @@ class MessagingPage(BasePage):
         self.wait_to_click(self.add_cond_alert)
         self.send_keys(self.cond_alert_name, self.cond_alert_name_input)
         self.wait_to_click(self.continue_button_basic_tab)
-        
         self.wait_to_click(self.case_type)
         self.wait_to_click(self.case_type_option_value)
         self.wait_to_click(self.select_filter)
         self.wait_to_click(self.case_property_filter)
-        
         self.wait_to_click(self.case_property_textbox)
         self.send_keys(self.case_property_input, UserData.alert_case_property)
         self.select_by_text(self.select_case_property, UserData.alert_case_property)
@@ -237,11 +237,14 @@ class MessagingPage(BasePage):
         self.send_keys(self.broadcast_message, "Test Alert:" + self.cond_alert_name_input)
         self.wait_to_click(self.save_button_xpath)
         print("Sleeping till the alert processing completes")
-        time.sleep(360)
-        self.driver.refresh()
-        time.sleep(140)
+        time.sleep(1)
         self.wait_to_clear_and_send_keys(self.search_box, self.cond_alert_name_input)
-        time.sleep(2)
+        self.wait_for_element(self.alert_process_none, 500)
+        # time.sleep(260)
+        self.driver.refresh()
+        # time.sleep(140)
+        self.clear(self.search_box)
+        self.send_keys(self.search_box, self.cond_alert_name_input)
         self.wait_to_click(self.search_box)
         self.wait_for_element(self.delete_cond_alert, 700)
         self.driver.refresh()
@@ -272,7 +275,6 @@ class MessagingPage(BasePage):
         self.wait_to_click(self.cond_alerts)
         self.wait_to_click(self.bulk_upload_button)
         self.wait_to_click(self.download_id)
-        
         print("Conditional Alert downloaded successfully!")
 
     def cond_alert_upload(self):
@@ -394,30 +396,25 @@ class MessagingPage(BasePage):
 
     def languages_page(self):
         self.wait_to_click(self.languages)
-        
         self.wait_to_click(self.add_lang)
         self.wait_to_click(self.lang_input_textarea)
-        
+        time.sleep(0.5)
         self.wait_for_element(self.language_list)
         self.wait_to_click(self.select_first_lang)
-        
         lang = self.get_text(self.selected_lang_name)
         print("First language selected is: ", lang)
         self.wait_to_click(self.save_lang)
-        
+        time.sleep(2)
         self.wait_to_click(self.lang_input_textarea)
-        
+        time.sleep(0.5)
         self.wait_for_element(self.language_list)
         self.wait_to_click(self.select_second_lang)
-        
         lang = self.get_text(self.selected_lang_name)
         print("Second language selected is: ", lang)
         self.wait_to_click(self.save_lang)
-        
+        time.sleep(2)
         self.wait_to_click((By.XPATH, self.delete_lang.format(lang)))
-        
         self.wait_to_click(self.save_lang)
-        
         print("Languages added and deleted successfully!")
 
     def remove_keyword(self):
@@ -518,10 +515,12 @@ class MessagingPage(BasePage):
         print("Cond Alert removed successfully!")
 
     def remove_alert_with_same_name(self, alert_name):
-        self.wait_to_clear_and_send_keys(self.search_box, alert_name)
-        self.wait_and_sleep_to_click(self.search_box)
+        self.wait_for_element(self.search_box)
+        self.clear(self.search_box)
+        self.send_keys(self.search_box, alert_name)
+        self.click(self.search_box)
         time.sleep(2)
-        if self.is_present_and_displayed(self.empty_table_alert):
+        if self.is_present(self.empty_table_alert):
             print("No alert created with the same name")
         else:
             self.wait_to_click(self.delete_cond_alert)

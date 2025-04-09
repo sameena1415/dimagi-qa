@@ -22,8 +22,8 @@ class DataDictionaryPage(BasePage):
         self.dictionary_description = "Test dictionary"
 
         self.data_dictionary_link = (By.LINK_TEXT, "Data Dictionary")
-        self.export_button = (By.XPATH, "//a[contains(@href,'export')]/i[contains(@class,'fa-cloud')]")
-        self.import_button = (By.XPATH, "//a[contains(@href,'import')]/i[contains(@class,'fa-cloud')]")
+        self.export_button = (By.XPATH, "//a[contains(@href,'export')]/i[contains(@class,'fa-cloud')]/i")
+        self.import_button = (By.XPATH, "//a[contains(@href,'import')]/i[contains(@class,'fa-cloud')]/i")
         self.choose_file = (By.XPATH, "//input[@data-bind ='value: file']")
         self.upload = (By.XPATH, "//button[@data-bind ='disable: !file()']")
         self.success_message = (By.XPATH , "//div[@class= 'alert alert-margin-top fade in alert-success']")

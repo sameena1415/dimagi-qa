@@ -59,6 +59,17 @@ class BasePage:
         except StaleElementReferenceException:
             time.sleep(2)
             self.wait_to_click(locator)
+        except TimeoutException:
+            self.wait_for_element(locator)
+            self.wait_to_click(locator)
+            if self.page_403():
+                self.driver.back()
+                element.click()
+            elif self.page_404():
+                self.driver.back()
+                element.click()
+            else:
+                raise TimeoutException()
         except Exception:
             self.driver.execute_script("arguments[0].click();", element)
         # try:
@@ -71,15 +82,7 @@ class BasePage:
         #     if self.cookie_alert():
         #         self.click(self.alert_button_accept)
         #         element.click()
-        # except TimeoutException:
-        #     if self.page_403():
-        #         self.driver.back()
-        #         element.click()
-        #     elif self.page_404():
-        #         self.driver.back()
-        #         element.click()
-        #     else:
-        #         raise TimeoutException()
+
 
     def wait_to_clear_and_send_keys(self, locator, user_input):
         clickable = ec.visibility_of_element_located(locator)
@@ -99,13 +102,13 @@ class BasePage:
 
     def wait_for_element(self, locator, timeout=20):
         try:
-            clickable = ec.element_to_be_clickable(locator)
+            clickable = ec.presence_of_element_located(locator)
             WebDriverWait(self.driver, timeout, poll_frequency=1).until(clickable,
                                                                         message="Couldn't find locator: " + str(locator)
                                                                         )
         except StaleElementReferenceException:
             time.sleep(2)
-        clickable = ec.element_to_be_clickable(locator)
+        clickable = ec.presence_of_element_located(locator)
         WebDriverWait(self.driver, timeout, poll_frequency=1).until(clickable,
                                                                     message="Couldn't find locator: " + str(locator)
                                                                     )
@@ -191,9 +194,17 @@ class BasePage:
         element = self.driver.find_element(*locator)
         element.clear()
 
-    def send_keys(self, locator, user_input):
-        element = self.driver.find_element(*locator)
-        element.send_keys(user_input)
+    def send_keys(self, locator, user_input, timeout=20):
+        # element = self.driver.find_element(*locator)
+        clickable = ec.element_to_be_clickable(locator)
+        element = WebDriverWait(self.driver, timeout, poll_frequency=1).until(clickable,
+                                                            message="Couldn't find locator: "
+                                                                    + str(locator)
+                                                            )
+        try:
+            element.send_keys(user_input)
+        except Exception:
+            self.driver.execute_script("arguments[0].value='" + user_input + "';", element)
 
     def get_text(self, locator):
         element = self.driver.find_element(*locator)
@@ -255,7 +266,7 @@ class BasePage:
     def is_present_and_displayed(self, locator, timeout=50):
         try:
             visible = ec.presence_of_element_located(locator)
-            element = WebDriverWait(self.driver, timeout, poll_frequency=10).until(visible,
+            element = WebDriverWait(self.driver, timeout, poll_frequency=2).until(visible,
                                                                                    message="Element" + str(
                                                                                        locator
                                                                                        ) + "not displayed"

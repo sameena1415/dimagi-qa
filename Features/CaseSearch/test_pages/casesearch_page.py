@@ -63,8 +63,8 @@ class CaseSearchWorkflows(BasePage):
         self.search_property_checked = "//label[contains (text(),'{}')][1]//following::input[@value='{}' and @checked][1]"
         self.remove_combobox_selection = "//label[contains(text(),'{}')]//following::button[@aria-label='Remove all items'][1]"
         self.rating_answer = "//span[text()='Rating']/following::input[@value='{}'][1]"
-        self.date_picker_close = (By.XPATH, "//div[contains(@class,'show')]//div[@data-action='close']")
-        self.date_picker_clear = (By.XPATH, "//div[contains(@class,'show')]//div[@data-action='clear']")
+        self.date_picker_close = (By.XPATH, "//div[contains(@class,'show')]//div[@data-action='close']/i")
+        self.date_picker_clear = (By.XPATH, "//div[contains(@class,'show')]//div[@data-action='clear']/i")
 
     def check_values_on_caselist(self, row_num, expected_value, is_multi=NO):
         self.value_in_table = self.get_element(self.value_in_table_format, row_num)
@@ -96,33 +96,31 @@ class CaseSearchWorkflows(BasePage):
             self.search_property = self.get_element(self.search_against_text_property_format, search_property)
             self.wait_for_element(self.search_property, 100)
             class_type = self.get_attribute(self.search_property, "class")
+            self.scroll_to_element(self.search_property)
             self.wait_to_click(self.search_property)
-            time.sleep(4)
+            time.sleep(0.5)
             print("class type ", class_type)
             if "date" in class_type:
                 if self.is_visible_and_displayed(self.date_picker_clear, 10):
                     self.wait_to_click(self.date_picker_clear)
-                    time.sleep(4)
-                self.send_keys(self.search_property, input_value+Keys.TAB)
+                time.sleep(0.5)
+                self.send_keys(self.search_property, input_value+Keys.ENTER)
                 time.sleep(2)
-                if self.is_visible_and_displayed(self.date_picker_close, 10):
+                if self.is_present(self.date_picker_close):
                     self.wait_to_click(self.date_picker_close)
             else:
                 self.send_keys(self.search_property, input_value + Keys.TAB)
                 time.sleep(2)
-            time.sleep(10)
         elif property_type == COMBOBOX:
             self.combox_select_element = self.get_element(self.combox_select, search_property)
-            
             self.wait_for_element(self.combox_select_element, 100)
             self.select_by_text(self.combox_select_element, input_value)
-            time.sleep(4)
+            time.sleep(2)
         elif property_type == COMBOBOX2:
             self.combox_select_element = self.get_element(self.combox_select2, search_property)
-            
             self.wait_for_element(self.combox_select_element, 100)
             self.select_by_text(self.combox_select_element, input_value)
-            time.sleep(4)
+            time.sleep(2)
         if include_blanks == YES:
             self.select_include_blanks(search_property)
         return input_value
