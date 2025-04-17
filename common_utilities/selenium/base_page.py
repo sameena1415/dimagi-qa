@@ -213,18 +213,26 @@ class BasePage:
         element.clear()
 
     def send_keys(self, locator, user_input, timeout=20):
-        # element = self.driver.find_element(*locator)
-        clickable = ec.element_to_be_clickable(locator)
-        element = WebDriverWait(self.driver, timeout, poll_frequency=1).until(clickable,
-                                                            message="Couldn't find locator: "
-                                                                    + str(locator)
-                                                            )
         try:
+            # Wait until the element is clickable
+            element = WebDriverWait(self.driver, timeout, poll_frequency=1).until(
+                ec.element_to_be_clickable(locator),
+                message=f"Couldn't find or click locator: {locator}"
+                )
+
+            # Clear the field before typing
+            element.clear()
             element.send_keys(user_input)
-            self.wait_after_interaction()
-        except Exception:
-            self.driver.execute_script("arguments[0].value='" + user_input + "';", element)
-            self.wait_after_interaction()
+
+        except Exception as e:
+            print(f"[Fallback] send_keys failed using normal method. Reason: {e}")
+            try:
+                self.driver.execute_script(
+                    "arguments[0].value = arguments[1];", element, user_input
+                    )
+            except Exception as js_err:
+                print(f"[ERROR] JS fallback also failed: {js_err}")
+                raise
 
     def get_text(self, locator):
         element = self.driver.find_element(*locator)
@@ -535,7 +543,24 @@ class BasePage:
         except Exception:
             pass
 
+    def wait_for_ajax_and_progress(self, timeout=10):
+        WebDriverWait(self.driver, timeout, poll_frequency=1).until(
+            lambda d: d.execute_script("return window.jQuery ? jQuery.active == 0 : true")
+            )
+        WebDriverWait(self.driver, timeout, poll_frequency=1).until(
+            lambda d: d.execute_script("""
+                const el = document.querySelector('#formplayer-progress-container');
+                return el && el.children.length === 0;
+            """
+                                       )
+            )
+
+    def wait_until_progress_removed(self, timeout=10):
+        WebDriverWait(self.driver, timeout, poll_frequency=1).until(
+            lambda d: d.find_elements(By.ID, "formplayer-progress") == []
+            )
+
     def wait_after_interaction(self):
-        self.wait_for_ajax()
-        self.wait_for_loading_spinner()
+        self.wait_until_progress_removed()
+        self.wait_for_ajax_and_progress()
 

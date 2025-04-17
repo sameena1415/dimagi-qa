@@ -69,8 +69,9 @@ class WebApps(BasePage):
         self.next_page = (By.XPATH, "//a[contains(@aria-label, 'Next')]")
         self.prev_page = (By.XPATH, "//a[contains(@aria-label, 'Previous')]")
         self.pagination_select = (By.XPATH, "//select[contains(@class,'per-page-limit')]")
-        self.go_to_page_textarea = (By.ID, "goText")
+        self.go_to_page_textarea = (By.XPATH, "//input[@id='goText']")
         self.go_button = (By.ID, "pagination-go-button")
+        self.selected_page = "//li[contains(@class,'js-page active')]/a[.='{}']"
         self.value_in_data_preview = "//td[@title='{}']"
         self.data_preview = (By.XPATH, "//span[@class='debugger-title']")
         self.single_row_table = "//thead[1][.//th[{}][.='{}']]//following-sibling::tbody[1]/tr[1]/td[{}][contains(.,'{}')]"
@@ -134,8 +135,7 @@ class WebApps(BasePage):
         self.wait_to_click(self.search_again_button)
 
     def clear_selections_on_case_search_page(self):
-        time.sleep(2)
-        if self.is_present_and_displayed(self.error_message):
+        if self.is_present_and_displayed(self.error_message, 10):
             print("Error present")
             self.wait_to_click(self.error_message)
             time.sleep(3)
@@ -153,8 +153,8 @@ class WebApps(BasePage):
         else:
             self.scroll_to_element(self.submit_on_case_search_page)
             self.wait_to_click(self.submit_on_case_search_page)
-            time.sleep(7)
-            self.wait_for_ajax()
+            time.sleep(5)
+            self.wait_after_interaction()
         if case_list == None:
             self.is_visible_and_displayed(self.case_list, timeout=80)
         else:
@@ -326,8 +326,12 @@ class WebApps(BasePage):
         time.sleep(10)
 
     def go_to_page(self, page_number):
+        self.scroll_to_element(self.go_to_page_textarea)
         self.send_keys(self.go_to_page_textarea, page_number)
         self.wait_to_click(self.go_button)
+        self.wait_for_element((By.XPATH, self.selected_page.format(page_number)))
+        print("Selected page: ", page_number)
+
 
     def open_data_preview(self):
         self.wait_to_click(self.data_preview)

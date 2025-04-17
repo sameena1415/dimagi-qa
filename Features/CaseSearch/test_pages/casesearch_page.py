@@ -226,7 +226,7 @@ class CaseSearchWorkflows(BasePage):
             validation_message_per_prop = (
                 By.XPATH, self.required_validation_per_property_combox.format(search_property, message))
         if required_or_validated == YES:
-            self.wait_for_ajax()
+            self.wait_after_interaction()
             time.sleep(4)
             assert self.is_displayed(
                 validation_message_per_prop), f"Required validation missing {validation_message_per_prop}"
@@ -235,7 +235,7 @@ class CaseSearchWorkflows(BasePage):
                 validation_message_on_top), f"Required validation missing {validation_message_on_top}"
             print(f"Required validation present {validation_message_on_top}")
         elif required_or_validated == NO:
-            self.wait_for_ajax()
+            self.wait_after_interaction()
             time.sleep(4)
             assert not self.is_displayed(validation_message_per_prop),  f"validation present {validation_message_per_prop}"
             print(f"validation not present {validation_message_per_prop}")
