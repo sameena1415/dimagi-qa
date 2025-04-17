@@ -84,7 +84,6 @@ class WebApps(BasePage):
 
 
     def open_app(self, app_name):
-        
         if self.is_present_and_displayed(self.webapps_home, 20):
             self.wait_to_click(self.webapps_home)
         self.application = self.get_element(self.app_name_format, app_name)

@@ -59,9 +59,11 @@ class BasePage:
         except StaleElementReferenceException:
             time.sleep(2)
             self.wait_to_click(locator)
+            self.wait_after_interaction()
         except TimeoutException:
             self.wait_for_element(locator)
             self.wait_to_click(locator)
+            self.wait_after_interaction()
             if self.page_403():
                 self.driver.back()
                 element.click()
@@ -72,6 +74,7 @@ class BasePage:
                 raise TimeoutException()
         except Exception:
             self.driver.execute_script("arguments[0].click();", element)
+            self.wait_after_interaction()
         # try:
         #     clickable = ec.element_to_be_clickable(locator)
         #     element = WebDriverWait(self.driver, timeout).until(clickable,
@@ -106,12 +109,15 @@ class BasePage:
             WebDriverWait(self.driver, timeout, poll_frequency=1).until(clickable,
                                                                         message="Couldn't find locator: " + str(locator)
                                                                         )
+            self.wait_after_interaction()
         except StaleElementReferenceException:
             time.sleep(2)
         clickable = ec.presence_of_element_located(locator)
         WebDriverWait(self.driver, timeout, poll_frequency=1).until(clickable,
                                                                     message="Couldn't find locator: " + str(locator)
                                                                     )
+        self.wait_after_interaction()
+
 
     def wait_and_sleep_to_click(self, locator, timeout=90):
         element = None
@@ -123,28 +129,35 @@ class BasePage:
                                                                         + str(locator)
                                                                 )
             element.click()
+            self.wait_after_interaction()
         except ElementClickInterceptedException:
             if self.cookie_alert():
                 self.click(self.alert_button_accept)
                 element.click()
+                self.wait_after_interaction()
         except UnexpectedAlertPresentException:
             alert = self.driver.switch_to.alert
             alert.accept()
             element.click()
+            self.wait_after_interaction()
         except StaleElementReferenceException:
             time.sleep(2)
             self.wait_to_click(locator)
+            self.wait_after_interaction()
         except TimeoutException:
             if self.page_403():
                 self.driver.back()
                 element.click()
+                self.wait_after_interaction()
             elif self.page_404():
                 self.driver.back()
                 element.click()
+                self.wait_after_interaction()
 
     def find_elements(self, locator):
         elements = self.driver.find_elements(*locator)
         return elements
+        # return [WrappedWebElement(e, self.driver, base_page=self) for e in elements]
 
     def find_elements_texts(self, locator):
         elements = self.driver.find_elements(*locator)
@@ -156,10 +169,12 @@ class BasePage:
     def find_element(self, locator):
         element = self.driver.find_element(*locator)
         return element
+        # return WrappedWebElement(element, self.driver, base_page=self)
 
     def click(self, locator):
         element = self.driver.find_element(*locator)
         element.click()
+        self.wait_after_interaction()
         time.sleep(3)
 
     def select_by_text(self, source_locator, value):
@@ -203,8 +218,10 @@ class BasePage:
                                                             )
         try:
             element.send_keys(user_input)
+            self.wait_after_interaction()
         except Exception:
             self.driver.execute_script("arguments[0].value='" + user_input + "';", element)
+            self.wait_after_interaction()
 
     def get_text(self, locator):
         element = self.driver.find_element(*locator)
@@ -415,19 +432,45 @@ class BasePage:
         element = (By.XPATH, xpath_format.format(insert_value))
         return element
 
-    def wait_for_ajax(self, value=200):
+    def wait_for_ajax(self, timeout=10):
+        """
+        Waits for jQuery AJAX calls to complete.
+        Automatically detects jQuery even if it's namespaced or suffixed.
+        Skips wait if jQuery is not used or no AJAX is active.
+        """
         try:
-            wait = WebDriverWait(self.driver, value)
-            if self.driver.execute_script('return jQuery.active') != 'undefined':
-                wait.until(lambda driver: self.driver.execute_script('return jQuery.active') == 0)
-            elif self.driver.execute_script('return document.readyState') != 'complete':
-                wait.until(lambda driver: self.driver.execute_script('return document.readyState') == 'complete')
+            # Find the actual jQuery object (handles cases like jQuery1234567890)
+            jquery_object = self.driver.execute_script("""
+                for (var key in window) {
+                    if (key.startsWith("jQuery") && window[key] && window[key].active !== undefined) {
+                        return key;
+                    }
+                }
+                return null;
+            """
+                                                       )
+
+            if jquery_object:
+                # Check if AJAX is active
+                is_ajax_active = self.driver.execute_script(f"return window['{jquery_object}'].active != 0;")
+                if is_ajax_active:
+                    print(f"Waiting for AJAX (using {jquery_object}) to complete...")
+                    WebDriverWait(self.driver, timeout).until(
+                        lambda driver: driver.execute_script(f"return window['{jquery_object}'].active") == 0
+                        )
+                else:
+                    print("No active jQuery AJAX requests — skipping wait.")
             else:
-                print("Undefined JQuery, waiting for sometime")
-                time.sleep(2)
-        except JavascriptException:
-            print("Undefined JQuery")
-            time.sleep(10)
+                # Fallback: wait for document readyState
+                print("No jQuery object detected — waiting for document.readyState == 'complete'")
+                ready_state = self.driver.execute_script("return document.readyState")
+                if ready_state != "complete":
+                    WebDriverWait(self.driver, timeout).until(
+                        lambda driver: driver.execute_script("return document.readyState") == "complete"
+                        )
+
+        except (JavascriptException, TimeoutException) as e:
+            print(f"[wait_for_ajax] Skipped or timed out: {e}")
 
     def is_date(self, string, fuzzy=False):
         """
@@ -479,4 +522,17 @@ class BasePage:
                                                                     + str(locator)
                                                             )
         self.driver.execute_script("arguments[0].value='" + value + "';", element)
-        
+        self.wait_after_interaction()
+
+    def wait_for_loading_spinner(self, timeout=10):
+        try:
+            WebDriverWait(self.driver, timeout).until_not(
+                ec.presence_of_element_located(("css selector", ".spinner"))
+                )
+        except Exception:
+            pass
+
+    def wait_after_interaction(self):
+        self.wait_for_ajax()
+        self.wait_for_loading_spinner()
+

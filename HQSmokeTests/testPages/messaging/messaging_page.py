@@ -545,10 +545,9 @@ class MessagingPage(BasePage):
 
     def msg_trans_download(self):
         self.wait_to_click(self.languages)
-        
         self.wait_to_click(self.msg_translation_menu)
+        self.wait_for_element(self.download_id)
         self.wait_to_click(self.download_id)
-        
         print("Msg Trans downloaded successfully!")
 
     def msg_trans_upload(self):
