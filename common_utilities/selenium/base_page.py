@@ -155,11 +155,13 @@ class BasePage:
                 self.wait_after_interaction()
 
     def find_elements(self, locator):
+        self.wait_after_interaction()
         elements = self.driver.find_elements(*locator)
         return elements
         # return [WrappedWebElement(e, self.driver, base_page=self) for e in elements]
 
     def find_elements_texts(self, locator):
+        self.wait_after_interaction()
         elements = self.driver.find_elements(*locator)
         value_list = []
         for element in elements:
@@ -167,6 +169,7 @@ class BasePage:
         return value_list
 
     def find_element(self, locator):
+        self.wait_after_interaction()
         element = self.driver.find_element(*locator)
         return element
         # return WrappedWebElement(element, self.driver, base_page=self)

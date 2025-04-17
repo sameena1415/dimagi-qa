@@ -266,13 +266,17 @@ class WebApps(BasePage):
         assert loggedin_user == username
 
     def login_as(self, username):
-        url = self.get_current_url()
-        if url not in self.url:
-            self.driver.get(self.url)
-            time.sleep(2)
-        else:
-            self.wait_to_click(self.webapps_home)
-            time.sleep(2)
+        url = str(self.settings['url']).replace('#apps', '#restore_as')
+        print(url)
+        # url = self.get_current_url()
+        # if url not in self.url:
+        #     self.driver.get(self.url)
+        #     time.sleep(2)
+        # else:
+        #     self.wait_to_click(self.webapps_home)
+        #     time.sleep(2)
+        self.driver.get(self.url)
+        self.wait_after_interaction()
         try:
             self.wait_for_element(self.webapp_login)
             self.scroll_to_element(self.webapp_login)
