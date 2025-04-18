@@ -104,15 +104,14 @@ class BasePage:
         return element_text
 
     def wait_for_element(self, locator, timeout=10):
-        self.wait_after_interaction()
         try:
             clickable = ec.presence_of_element_located(locator)
             WebDriverWait(self.driver, timeout, poll_frequency=1).until(clickable,
                                                                         message="Couldn't find locator: " + str(locator)
                                                                         )
             self.wait_after_interaction()
-        except StaleElementReferenceException:
-            time.sleep(2)
+        except (StaleElementReferenceException, TimeoutException):
+            self.wait_after_interaction()
             clickable = ec.presence_of_element_located(locator)
             WebDriverWait(self.driver, timeout, poll_frequency=1).until(clickable,
                                                                         message="Couldn't find locator: " + str(locator)
@@ -171,7 +170,10 @@ class BasePage:
 
     def click(self, locator):
         element = self.driver.find_element(*locator)
-        element.click()
+        try:
+            element.click()
+        except Exception:
+            self.driver.execute_script("arguments[0].click();", element)
         self.wait_after_interaction()
         time.sleep(1)
 
@@ -208,13 +210,12 @@ class BasePage:
         element.clear()
 
     def send_keys(self, locator, user_input, timeout=10):
+        # Wait until the element is clickable
+        element = WebDriverWait(self.driver, timeout, poll_frequency=1).until(
+            ec.element_to_be_clickable(locator),
+            message=f"Couldn't find or click locator: {locator}"
+            )
         try:
-            # Wait until the element is clickable
-            element = WebDriverWait(self.driver, timeout, poll_frequency=1).until(
-                ec.element_to_be_clickable(locator),
-                message=f"Couldn't find or click locator: {locator}"
-                )
-
             # Clear the field before typing
             element.clear()
             element.send_keys(user_input)
