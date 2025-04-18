@@ -266,6 +266,7 @@ class WebApps(BasePage):
         assert loggedin_user == username
 
     def login_as(self, username):
+        time.sleep(2)
         url = str(self.settings['url']).replace('#apps', '#restore_as')
         print(url)
         # url = self.get_current_url()

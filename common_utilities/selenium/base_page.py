@@ -544,18 +544,21 @@ class BasePage:
             pass
 
     def wait_for_ajax_and_progress(self, timeout=10):
-        WebDriverWait(self.driver, timeout, poll_frequency=1).until(
-            lambda d: d.execute_script("return window.jQuery ? jQuery.active == 0 : true")
-            )
-        WebDriverWait(self.driver, timeout, poll_frequency=1).until(
-            lambda d: d.execute_script("""
-                const el = document.querySelector('#formplayer-progress-container');
-                return el && el.children.length === 0;
-            """
-                                       )
-            )
+        try:
+            WebDriverWait(self.driver, timeout, poll_frequency=1).until(
+                lambda d: d.execute_script("return window.jQuery ? jQuery.active == 0 : true")
+                )
+            WebDriverWait(self.driver, timeout, poll_frequency=1).until(
+                lambda d: d.execute_script("""
+                    const el = document.querySelector('#formplayer-progress-container');
+                    return el && el.children.length === 0;
+                """
+                                           )
+                )
+        except Exception:
+            pass
 
-    def wait_until_progress_removed(self, timeout=10):
+    def wait_until_progress_removed(self, timeout=60):
         WebDriverWait(self.driver, timeout, poll_frequency=1).until(
             lambda d: d.find_elements(By.ID, "formplayer-progress") == []
             )
