@@ -102,12 +102,12 @@ class CaseSearchWorkflows(BasePage):
             print("class type ", class_type)
             if "date" in class_type:
                 if self.is_visible_and_displayed(self.date_picker_clear, 10):
-                    self.wait_to_click(self.date_picker_clear)
-                time.sleep(0.5)
-                self.send_keys(self.search_property, input_value+Keys.ENTER)
+                    self.click(self.date_picker_clear)
+                time.sleep(1)
+                self.send_keys(self.search_property, input_value+Keys.TAB)
                 time.sleep(2)
                 if self.is_present(self.date_picker_close):
-                    self.wait_to_click(self.date_picker_close)
+                    self.click(self.date_picker_close)
             else:
                 self.send_keys(self.search_property, input_value + Keys.TAB)
                 time.sleep(2)
