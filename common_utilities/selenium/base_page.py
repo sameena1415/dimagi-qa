@@ -104,6 +104,7 @@ class BasePage:
         return element_text
 
     def wait_for_element(self, locator, timeout=10):
+        self.wait_after_interaction()
         try:
             clickable = ec.presence_of_element_located(locator)
             WebDriverWait(self.driver, timeout, poll_frequency=1).until(clickable,

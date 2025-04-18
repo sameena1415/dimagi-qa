@@ -51,6 +51,7 @@ class GroupPage(BasePage):
         return self.created_group
 
     def add_user_to_group(self, username, group_name):
+        self.wait_for_element(self.users_drop_down)
         self.send_keys(self.users_drop_down, username)
         self.wait_to_click((By.XPATH, self.select_user.format(username)))
         time.sleep(10)
