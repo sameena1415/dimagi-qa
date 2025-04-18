@@ -92,6 +92,7 @@ class WebApps(BasePage):
         self.scroll_to_element(self.application)
         self.wait_to_click(self.application)
         time.sleep(2)
+        self.wait_after_interaction()
         self.wait_for_element(self.application_header, timeout=200)
 
     def navigate_to_breadcrumb(self, breadcrumb_value):
@@ -107,6 +108,7 @@ class WebApps(BasePage):
         self.scroll_to_element(self.caselist_menu)
         self.wait_to_click(self.caselist_menu)
         time.sleep(2)
+        self.wait_after_interaction()
         if assertion == 'No':
             print("No assertion needed")
         else:
@@ -123,6 +125,7 @@ class WebApps(BasePage):
             self.scroll_to_element(self.form_name)
             self.wait_to_click(self.form_name)
             time.sleep(2)
+            self.wait_after_interaction()
             self.wait_for_element((By.XPATH, self.current_page.format(form_name)), timeout=50)
 
     def search_all_cases(self):
@@ -266,7 +269,6 @@ class WebApps(BasePage):
         assert loggedin_user == username
 
     def login_as(self, username):
-        time.sleep(2)
         url = str(self.settings['url']).replace('#apps', '#restore_as')
         print(url)
         # url = self.get_current_url()
@@ -286,8 +288,8 @@ class WebApps(BasePage):
             self.wait_to_click(self.webapps_home)
             self.wait_for_element(self.webapp_login)
             self.wait_to_click(self.webapp_login)
-        time.sleep(2)
-        self.wait_for_element(self.search_user_webapps, timeout=100)
+        time.sleep(1)
+        self.wait_for_element(self.search_user_webapps, timeout=40)
         self.send_keys(self.search_user_webapps, username)
         self.wait_for_element(self.search_button_webapps)
         self.wait_to_click(self.search_button_webapps)
