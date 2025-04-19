@@ -23,17 +23,18 @@ class CaseSearchWorkflows(BasePage):
         self.value_in_table_format = "//td[@class='module-case-list-column'][{}]"
         self.case_name_format = "//tr[.//td[contains(text(),'{}')]]"
         self.text_search_property_name_and_value_format = "//input[contains (@id, '{}') and @value='{}']"
-        self.search_property_name_combobox = "//label[contains(text(),'{}')]"
+        self.search_property_name_combobox = "(//label[contains(text(),'{}')])[1]"
         self.combobox_search_property_name_and_value_format = self.search_property_name_combobox + "//following::span[contains(text(),'{}')]"
         self.search_against_text_property_format = "//input[contains (@id, '{}')]"
         self.help_text_format = '//label[@for="{}"]//following::a[@data-bs-content="{}" or @data-content="{}"]'
-        self.combox_select = "//label[contains(text(), '{}')]//following::select[contains(@class, 'query-field')][1]"
-        self.combox_select2 = "//label[contains(text(), '{}')]//following::div/select[contains(@class, 'query-field')][1]"
+        self.combox_select = "(//label[contains(text(), '{}')])[1]//following::select[contains(@class, 'query-field')][1]"
+        self.combox_select2 = "(//label[contains(text(), '{}')])[1]//following::div/select[contains(@class, 'query-field')][1]"
         self.search_for_address = "//*[contains(text(),'{}')]//following::input[contains(@aria-label,'Search')][1]"
         self.include_blanks = self.search_property_name_combobox + "//following::input[contains(@class,'search-for-blank')][1]"
         self.required_validation_on_top = "//div[contains(@class,'alert-danger')]//following::li[contains(text(),'{}')]"
         self.required_validation_per_property_text = self.search_against_text_property_format + "//following::div[contains (text(),'{}')][1]"
         self.required_validation_per_property_combox = self.search_property_name_combobox + "//following::div[contains (text(),'{}')][1]"
+        self.required_validation_per_property_combox2 = self.search_property_name_combobox +"//parent::div//parent::td[contains(@class,'required')]"
         self.city_value_home = "//span[contains(@class,'webapp-markdown-output')][contains(text(), '{}')]"
         self.city_value_work = "//span[contains(@class,'webapp-markdown-output')][contains(text()[2], '{}')]"
         self.search_screen_title = "//h2[contains(text(), '{}')]"
@@ -219,17 +220,20 @@ class CaseSearchWorkflows(BasePage):
     def check_validations_on_property(self, search_property, property_type, message=None, required_or_validated=YES):
         validation_message_on_top = self.get_element(self.required_validation_on_top, search_property)
         validation_message_per_prop = None
+        validation_message_per_prop2 = None
         if property_type == TEXT_INPUT:
             validation_message_per_prop = (
                 By.XPATH, self.required_validation_per_property_text.format(search_property, message))
         elif property_type == COMBOBOX:
             validation_message_per_prop = (
                 By.XPATH, self.required_validation_per_property_combox.format(search_property, message))
+            validation_message_per_prop2 = (
+                By.XPATH, self.required_validation_per_property_combox2.format(search_property, message))
         if required_or_validated == YES:
             self.wait_after_interaction()
             time.sleep(4)
             assert self.is_displayed(
-                validation_message_per_prop), f"Required validation missing {validation_message_per_prop}"
+                validation_message_per_prop) or self.is_displayed(validation_message_per_prop2), f"Required validation missing {validation_message_per_prop2}"
             print(f"Required validation present {validation_message_per_prop}")
             assert self.is_displayed(
                 validation_message_on_top), f"Required validation missing {validation_message_on_top}"

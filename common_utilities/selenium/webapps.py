@@ -238,7 +238,7 @@ class WebApps(BasePage):
     def submit_the_form(self):
         time.sleep(3)
         self.wait_for_element(self.form_submit)
-        self.wait_to_click(self.form_submit)
+        self.click(self.form_submit)
         time.sleep(7)
         self.async_restore_resubmit()
         time.sleep(2)
