@@ -172,7 +172,7 @@ class WebApps(BasePage):
             self.wait_to_clear_and_send_keys(self.omni_search_input, case_name)
             self.wait_for_element(self.omni_search_button)
             self.wait_to_click(self.omni_search_button)
-            time.sleep(50)
+            time.sleep(20)
         else:
             print("Split Screen Case Search enabled")
         self.case = self.get_element(self.case_name_format, case_name)
@@ -226,7 +226,7 @@ class WebApps(BasePage):
         time.sleep(2)
         if self.is_present_and_displayed(self.async_restore_error, 30):
             self.click(self.async_restore_error)
-            time.sleep(10)
+            time.sleep(7)
             self.scroll_to_element(self.form_submit)
             self.wait_to_click(self.form_submit)
             

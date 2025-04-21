@@ -5,6 +5,7 @@ import pytest
 from Features.CaseSearch.constants import *
 from Features.CaseSearch.test_pages.casesearch_page import CaseSearchWorkflows
 from Features.CaseSearch.user_inputs.casesearch_user_inputs import CaseSearchUserInput
+from common_utilities.selenium.base_page import BasePage
 from common_utilities.selenium.webapps import WebApps
 
 """"Contains all case search configurations related test cases"""
@@ -172,9 +173,10 @@ def test_case_06_lookup_table_format(driver, settings):
 def test_case_07_address_geocoder_format(driver, settings):
     webapps = WebApps(driver, settings)
     casesearch = CaseSearchWorkflows(driver)
+    base = BasePage(driver)
+    webapps.login_as(CaseSearchUserInput.user_1)
     webapps.open_app(CaseSearchUserInput.case_search_app_name)
     """Check receivers in form get autopoulated after bradcast value is provided"""
-    webapps.login_as(CaseSearchUserInput.user_1)
     webapps.open_menu(CaseSearchUserInput.artist_menu)
     webapps.select_first_case_on_list_and_continue()
     webapps.open_form(CaseSearchUserInput.add_address_form)
@@ -186,9 +188,9 @@ def test_case_07_address_geocoder_format(driver, settings):
     webapps.present_in_data_preview(CaseSearchUserInput.home_country_value)
     webapps.present_in_data_preview(CaseSearchUserInput.home_zipcode_value)
     """Check geocoder format search property"""
-    driver.back()
+    base.back()
     time.sleep(4)
-    driver.back()
+    base.back()
     webapps.search_all_cases()
     webapps.clear_selections_on_case_search_page()
     casesearch.assert_address_is_hidden(CaseSearchUserInput.home_street)
@@ -394,6 +396,7 @@ def test_case_14_exclude_property_from_case_search(driver, settings):
 def test_case_15_sticky_search_without_default_value(driver, settings):
     webapps = WebApps(driver, settings)
     casesearch = CaseSearchWorkflows(driver)
+    base = BasePage(driver)
     """Check sticky search without default value"""
     webapps.open_app(CaseSearchUserInput.case_search_app_name)
     webapps.open_menu(CaseSearchUserInput.normal_menu)
@@ -406,7 +409,7 @@ def test_case_15_sticky_search_without_default_value(driver, settings):
                                        input_value=CaseSearchUserInput.three_star,
                                        property_type=COMBOBOX)
     webapps.search_button_on_case_search_page()
-    driver.back()
+    base.back()
     casesearch.check_default_values_displayed(search_property=CaseSearchUserInput.mood,
                                               default_value=CaseSearchUserInput.four,
                                               search_format=text)
@@ -500,7 +503,7 @@ def test_case_18_conditionally_required_condition_property(driver, settings):
                                        property_type=COMBOBOX)
     casesearch.search_against_property(search_property=CaseSearchUserInput.subgenre,
                                        input_value=CaseSearchUserInput.latin_jazz,
-                                       property_type=COMBOBOX)
+                                       property_type=COMBOBOX3)
     webapps.search_button_on_case_search_page()
     webapps.select_case_and_continue(CaseSearchUserInput.song_automation_song_24)
     webapps.open_form(CaseSearchUserInput.update_song_form)
@@ -577,7 +580,7 @@ def test_case_22_dependent_dropdowns_single_select_combobox(driver, settings):
                                        property_type=COMBOBOX)
     casesearch.search_against_property(search_property=CaseSearchUserInput.subgenre,
                                        input_value=CaseSearchUserInput.latin_jazz,
-                                       property_type=COMBOBOX)
+                                       property_type=COMBOBOX3)
     """Check other values do not appear in dropdown"""
     casesearch.check_dropdown_value(search_property=CaseSearchUserInput.subgenre,
                                     value=CaseSearchUserInput.funk_metal,
@@ -600,7 +603,7 @@ def test_case_23_dependent_dropdowns_value_clear(driver, settings):
                                        property_type=COMBOBOX)
     casesearch.search_against_property(search_property=CaseSearchUserInput.subgenre,
                                        input_value=CaseSearchUserInput.latin_jazz,
-                                       property_type=COMBOBOX)
+                                       property_type=COMBOBOX3)
     """Change genre and check if subgenre dropdown is reset"""
     casesearch.search_against_property(search_property=CaseSearchUserInput.genre,
                                        input_value=CaseSearchUserInput.hiphop,
@@ -617,6 +620,7 @@ def test_case_23_dependent_dropdowns_value_clear(driver, settings):
 def test_case_24_case_search_validations(driver, settings):
     webapps = WebApps(driver, settings)
     casesearch = CaseSearchWorkflows(driver)
+    base = BasePage(driver)
     """Case Search Validations"""
     webapps.login_as(CaseSearchUserInput.user_1)
     webapps.open_app(CaseSearchUserInput.case_search_app_name)
@@ -657,9 +661,8 @@ def test_case_24_case_search_validations(driver, settings):
     webapps.search_button_on_case_search_page()
     webapps.omni_search(casename)
     """Check including blanks"""
-    driver.back()
-    
-    driver.back()
+    base.back()
+    base.back()
     webapps.clear_selections_on_case_search_page()
     casesearch.select_include_blanks(CaseSearchUserInput.rating)
     webapps.search_button_on_case_search_page()
@@ -670,6 +673,7 @@ def test_case_24_case_search_validations(driver, settings):
 def test_case_25_case_search_validations_dot_notations(driver, settings):
     webapps = WebApps(driver, settings)
     casesearch = CaseSearchWorkflows(driver)
+    base = BasePage(driver)
     """Case Search Validations"""
     webapps.login_as(CaseSearchUserInput.user_1)
     webapps.open_app(CaseSearchUserInput.case_search_app_name)
@@ -710,9 +714,9 @@ def test_case_25_case_search_validations_dot_notations(driver, settings):
     webapps.search_button_on_case_search_page()
     webapps.omni_search(casename)
     """Check including blanks"""
-    driver.back()
+    base.back()
     
-    driver.back()
+    base.back()
     webapps.clear_selections_on_case_search_page()
     casesearch.select_include_blanks(CaseSearchUserInput.rating)
     webapps.search_button_on_case_search_page()
@@ -723,6 +727,7 @@ def test_case_25_case_search_validations_dot_notations(driver, settings):
 def test_case_26_checkbox_selection(driver, settings):
     webapps = WebApps(driver, settings)
     casesearch = CaseSearchWorkflows(driver)
+    base = BasePage(driver)
     webapps.login_as(CaseSearchUserInput.user_1)
     webapps.open_app(CaseSearchUserInput.case_search_app_name)
     webapps.open_menu(CaseSearchUserInput.checkbox_selection_menu)
@@ -749,13 +754,14 @@ def test_case_26_checkbox_selection(driver, settings):
 def test_case_27_checkbox_selection_sticky_search(driver, settings):
     webapps = WebApps(driver, settings)
     casesearch = CaseSearchWorkflows(driver)
+    base = BasePage(driver)
     webapps.login_as(CaseSearchUserInput.user_1)
     webapps.open_app(CaseSearchUserInput.case_search_app_name)
     webapps.open_menu(CaseSearchUserInput.checkbox_selection_menu)
     driver.refresh()
     casesearch.check_if_checkbox_selected(CaseSearchUserInput.mood, [3, 4])
     webapps.search_button_on_case_search_page()
-    driver.back()
+    base.back()
     casesearch.check_if_checkbox_selected(CaseSearchUserInput.mood, [3, 4])
 
 
@@ -771,7 +777,7 @@ def test_case_28_checkbox_single_selection_dependent_dropdown(driver, settings):
     """Check related values appear in dropdown"""
     casesearch.search_against_property(search_property=CaseSearchUserInput.subgenre,
                                        input_value=CaseSearchUserInput.latin_jazz,
-                                       property_type=COMBOBOX)
+                                       property_type=COMBOBOX3)
     """Check other values do not appear in dropdown"""
     casesearch.check_dropdown_value(search_property=CaseSearchUserInput.subgenre,
                                     value=CaseSearchUserInput.funk_metal,
@@ -800,7 +806,7 @@ def test_case_29_checkbox_multiple_selection_dependent_dropdown(driver, settings
                                     present=YES)
     casesearch.search_against_property(search_property=CaseSearchUserInput.subgenre,
                                        input_value=CaseSearchUserInput.latin_jazz,
-                                       property_type=COMBOBOX)
+                                       property_type=COMBOBOX3)
     webapps.search_button_on_case_search_page()
     webapps.select_first_case_on_list_and_continue()
     webapps.submit_the_form()

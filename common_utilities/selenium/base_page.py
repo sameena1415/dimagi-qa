@@ -4,7 +4,8 @@ import datetime
 from dateutil.parser import parse
 from selenium.webdriver.support.select import Select
 from selenium.common.exceptions import TimeoutException, ElementClickInterceptedException, \
-    UnexpectedAlertPresentException, StaleElementReferenceException, NoSuchElementException, JavascriptException
+    UnexpectedAlertPresentException, StaleElementReferenceException, NoSuchElementException, JavascriptException, \
+    ElementNotInteractableException, WebDriverException
 from selenium.webdriver import ActionChains, Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as ec
@@ -47,9 +48,10 @@ class BasePage:
     def wait_to_click(self, locator, timeout=30):
         # element = None
         clickable = ec.element_to_be_clickable(locator)
-        element = WebDriverWait(self.driver, timeout, poll_frequency=1).until(clickable, message="Couldn't find locator: "
-                                                                               + str(locator)
-                                                            )
+        element = WebDriverWait(self.driver, timeout, poll_frequency=1).until(clickable,
+                                                                              message="Couldn't find locator: "
+                                                                                      + str(locator)
+                                                                              )
         try:
             element.click()
         except UnexpectedAlertPresentException:
@@ -86,10 +88,13 @@ class BasePage:
         #         self.click(self.alert_button_accept)
         #         element.click()
 
-
     def wait_to_clear_and_send_keys(self, locator, user_input):
         clickable = ec.visibility_of_element_located(locator)
-        element = WebDriverWait(self.driver, timeout=5, poll_frequency=1).until(clickable, message="Couldn't find locator: " + str(locator))
+        element = WebDriverWait(self.driver, timeout=5, poll_frequency=1).until(clickable,
+                                                                                message="Couldn't find locator: " + str(
+                                                                                    locator
+                                                                                    )
+                                                                                )
         element.clear()
         element.send_keys(user_input)
 
@@ -118,16 +123,15 @@ class BasePage:
                                                                         )
             self.wait_after_interaction()
 
-
     def wait_and_sleep_to_click(self, locator, timeout=40):
         element = None
         try:
             time.sleep(2)
             clickable = ec.element_to_be_clickable(locator)
             element = WebDriverWait(self.driver, timeout, poll_frequency=1).until(clickable,
-                                                                message="Couldn't find locator: "
-                                                                        + str(locator)
-                                                                )
+                                                                                  message="Couldn't find locator: "
+                                                                                          + str(locator)
+                                                                                  )
             element.click()
         except ElementClickInterceptedException:
             if self.cookie_alert():
@@ -177,6 +181,19 @@ class BasePage:
         self.wait_after_interaction()
         time.sleep(1)
 
+    def select_by_partial_text(self, locator, partial_text):
+        select_element = self.driver.find_element(*locator)
+        options = select_element.find_elements(By.TAG_NAME, "option")
+
+        for option in options:
+            text = option.text.strip().replace('\u200e', '')  # Remove LRM or other hidden chars
+            if partial_text in text:
+                option.click()
+                print(f"[INFO] Selected: '{text}'")
+                return
+
+        raise Exception(f"[ERROR] Option with partial text '{partial_text}' not found.")
+
     def select_by_text(self, source_locator, value):
         select_source = Select(self.driver.find_element(*source_locator))
         select_source.select_by_visible_text(value)
@@ -210,23 +227,40 @@ class BasePage:
         element.clear()
 
     def send_keys(self, locator, user_input, timeout=10):
-        # Wait until the element is clickable
-        element = WebDriverWait(self.driver, timeout, poll_frequency=1).until(
-            ec.element_to_be_clickable(locator),
-            message=f"Couldn't find or click locator: {locator}"
-            )
         try:
-            # Clear the field before typing
+            # Wait until the element is clickable
+            element = WebDriverWait(self.driver, timeout, poll_frequency=1).until(
+                ec.element_to_be_clickable(locator),
+                message=f"Couldn't find or click locator: {locator}"
+                )
+
+            # Try clearing and sending keys normally
             element.clear()
             element.send_keys(user_input)
-        except Exception as e:
-            print(f"[Fallback] send_keys failed using normal method. Reason: {e}")
+
+        except ElementNotInteractableException:
+            print("[WARNING] Element not interactable. Trying JavaScript fallback...")
+
             try:
-                self.driver.execute_script(
-                    "arguments[0].value = arguments[1];", element, user_input
-                    )
+                element = self.driver.find_element(*locator)
+                self.driver.execute_script("arguments[0].scrollIntoView(true);", element)
+                self.driver.execute_script("arguments[0].value = arguments[1];", element, user_input)
+
+            except JavascriptException as js_e:
+                print(f"[ERROR] JavaScript fallback failed: {js_e}")
+                raise
+
+        except TimeoutException as e:
+            print(f"[ERROR] Timeout waiting for element to be clickable: {e}")
+            raise
+
+        except Exception as e:
+            print(f"[ERROR] send_keys failed: {e}")
+            try:
+                element = self.driver.find_element(*locator)
+                self.driver.execute_script("arguments[0].value = arguments[1];", element, user_input)
             except Exception as js_err:
-                print(f"[ERROR] JS fallback also failed: {js_err}")
+                print(f"[ERROR] Final JS fallback also failed: {js_err}")
                 raise
 
     def get_text(self, locator):
@@ -290,10 +324,10 @@ class BasePage:
         try:
             visible = ec.presence_of_element_located(locator)
             element = WebDriverWait(self.driver, timeout, poll_frequency=2).until(visible,
-                                                                                   message="Element" + str(
-                                                                                       locator
-                                                                                       ) + "not displayed"
-                                                                                   )
+                                                                                  message="Element" + str(
+                                                                                      locator
+                                                                                      ) + "not displayed"
+                                                                                  )
             is_displayed = element.is_displayed()
         except TimeoutException:
             is_displayed = False
@@ -302,8 +336,9 @@ class BasePage:
             time.sleep(2)
             visible = ec.presence_of_element_located(locator)
             element = WebDriverWait(self.driver, timeout, poll_frequency=1).until(visible,
-                                                                message="Element" + str(locator) + "not displayed"
-                                                                )
+                                                                                  message="Element" + str(locator
+                                                                                                          ) + "not displayed"
+                                                                                  )
             is_displayed = element.is_displayed()
         return bool(is_displayed)
 
@@ -381,9 +416,9 @@ class BasePage:
     def double_click(self, locator, timeout=10):
         clickable = ec.element_to_be_clickable(locator)
         element = WebDriverWait(self.driver, timeout, poll_frequency=1).until(clickable,
-                                                            message="Couldn't find locator: "
-                                                                    + str(locator)
-                                                            )
+                                                                              message="Couldn't find locator: "
+                                                                                      + str(locator)
+                                                                              )
         # action chain object
         action = ActionChains(self.driver)
         # double click operation
@@ -425,10 +460,10 @@ class BasePage:
         try:
             clickable = ec.element_to_be_clickable(locator)
             element = WebDriverWait(self.driver, timeout, poll_frequency=1).until(clickable,
-                                                                                   message="Element" + str(
-                                                                                       locator
-                                                                                       ) + "not displayed"
-                                                                                   )
+                                                                                  message="Element" + str(
+                                                                                      locator
+                                                                                      ) + "not displayed"
+                                                                                  )
             is_clickable = element.is_enabled()
         except TimeoutException:
             is_clickable = False
@@ -524,9 +559,9 @@ class BasePage:
     def js_send_keys(self, locator, value, timeout=10):
         clickable = ec.element_to_be_clickable(locator)
         element = WebDriverWait(self.driver, timeout, poll_frequency=1).until(clickable,
-                                                            message="Couldn't find locator: "
-                                                                    + str(locator)
-                                                            )
+                                                                              message="Couldn't find locator: "
+                                                                                      + str(locator)
+                                                                              )
         self.driver.execute_script("arguments[0].value='" + value + "';", element)
         self.wait_after_interaction()
 
@@ -572,3 +607,15 @@ class BasePage:
         self.wait_until_progress_removed()
         self.wait_for_ajax_and_progress()
 
+    def back(self):
+        try:
+            self.driver.back()
+            print("[INFO] Navigated back using driver.back()")
+        except WebDriverException as e:
+            print(f"[WARNING] driver.back() failed: {e}. Trying JavaScript fallback...")
+            try:
+                self.driver.execute_script("window.history.back();")
+                print("[INFO] Navigated back using JavaScript")
+            except Exception as js_e:
+                print(f"[ERROR] JavaScript fallback also failed: {js_e}")
+                raise

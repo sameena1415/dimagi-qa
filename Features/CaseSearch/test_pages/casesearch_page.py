@@ -122,6 +122,11 @@ class CaseSearchWorkflows(BasePage):
             self.wait_for_element(self.combox_select_element, 100)
             self.select_by_text(self.combox_select_element, input_value)
             time.sleep(2)
+        elif property_type == COMBOBOX3:
+            self.combox_select_element = self.get_element(self.combox_select, search_property)
+            self.wait_for_element(self.combox_select_element, 100)
+            self.select_by_partial_text(self.combox_select_element, input_value)
+            time.sleep(2)
         if include_blanks == YES:
             self.select_include_blanks(search_property)
         return input_value
@@ -214,7 +219,6 @@ class CaseSearchWorkflows(BasePage):
 
     def select_include_blanks(self, search_property):
         checkbox = self.get_element(self.include_blanks, search_property)
-        
         self.wait_to_click(checkbox)
 
     def check_validations_on_property(self, search_property, property_type, message=None, required_or_validated=YES):
@@ -231,7 +235,7 @@ class CaseSearchWorkflows(BasePage):
                 By.XPATH, self.required_validation_per_property_combox2.format(search_property, message))
         if required_or_validated == YES:
             self.wait_after_interaction()
-            time.sleep(4)
+            time.sleep(1)
             assert self.is_displayed(
                 validation_message_per_prop) or self.is_displayed(validation_message_per_prop2), f"Required validation missing {validation_message_per_prop2}"
             print(f"Required validation present {validation_message_per_prop}")
@@ -240,7 +244,7 @@ class CaseSearchWorkflows(BasePage):
             print(f"Required validation present {validation_message_on_top}")
         elif required_or_validated == NO:
             self.wait_after_interaction()
-            time.sleep(4)
+            time.sleep(1)
             assert not self.is_displayed(validation_message_per_prop),  f"validation present {validation_message_per_prop}"
             print(f"validation not present {validation_message_per_prop}")
         time.sleep(2)
