@@ -23,17 +23,18 @@ class CaseSearchWorkflows(BasePage):
         self.value_in_table_format = "//td[@class='module-case-list-column'][{}]"
         self.case_name_format = "//tr[.//td[contains(text(),'{}')]]"
         self.text_search_property_name_and_value_format = "//input[contains (@id, '{}') and @value='{}']"
-        self.search_property_name_combobox = "//label[contains(text(),'{}')]"
+        self.search_property_name_combobox = "(//label[contains(text(),'{}')])[1]"
         self.combobox_search_property_name_and_value_format = self.search_property_name_combobox + "//following::span[contains(text(),'{}')]"
         self.search_against_text_property_format = "//input[contains (@id, '{}')]"
         self.help_text_format = '//label[@for="{}"]//following::a[@data-bs-content="{}" or @data-content="{}"]'
-        self.combox_select = "//label[contains(text(), '{}')]//following::select[contains(@class, 'query-field')][1]"
-        self.combox_select2 = "//label[contains(text(), '{}')]//following::div/select[contains(@class, 'query-field')][1]"
+        self.combox_select = "(//label[contains(text(), '{}')])[1]//following::select[contains(@class, 'query-field')][1]"
+        self.combox_select2 = "(//label[contains(text(), '{}')])[1]//following::div/select[contains(@class, 'query-field')][1]"
         self.search_for_address = "//*[contains(text(),'{}')]//following::input[contains(@aria-label,'Search')][1]"
         self.include_blanks = self.search_property_name_combobox + "//following::input[contains(@class,'search-for-blank')][1]"
         self.required_validation_on_top = "//div[contains(@class,'alert-danger')]//following::li[contains(text(),'{}')]"
         self.required_validation_per_property_text = self.search_against_text_property_format + "//following::div[contains (text(),'{}')][1]"
         self.required_validation_per_property_combox = self.search_property_name_combobox + "//following::div[contains (text(),'{}')][1]"
+        self.required_validation_per_property_combox2 = self.search_property_name_combobox +"//parent::div//parent::td[contains(@class,'required')]"
         self.city_value_home = "//span[contains(@class,'webapp-markdown-output')][contains(text(), '{}')]"
         self.city_value_work = "//span[contains(@class,'webapp-markdown-output')][contains(text()[2], '{}')]"
         self.search_screen_title = "//h2[contains(text(), '{}')]"
@@ -102,12 +103,12 @@ class CaseSearchWorkflows(BasePage):
             print("class type ", class_type)
             if "date" in class_type:
                 if self.is_visible_and_displayed(self.date_picker_clear, 10):
-                    self.wait_to_click(self.date_picker_clear)
-                time.sleep(0.5)
-                self.send_keys(self.search_property, input_value+Keys.ENTER)
+                    self.click(self.date_picker_clear)
+                time.sleep(1)
+                self.send_keys(self.search_property, input_value+Keys.TAB)
                 time.sleep(2)
                 if self.is_present(self.date_picker_close):
-                    self.wait_to_click(self.date_picker_close)
+                    self.click(self.date_picker_close)
             else:
                 self.send_keys(self.search_property, input_value + Keys.TAB)
                 time.sleep(2)
@@ -120,6 +121,11 @@ class CaseSearchWorkflows(BasePage):
             self.combox_select_element = self.get_element(self.combox_select2, search_property)
             self.wait_for_element(self.combox_select_element, 100)
             self.select_by_text(self.combox_select_element, input_value)
+            time.sleep(2)
+        elif property_type == COMBOBOX3:
+            self.combox_select_element = self.get_element(self.combox_select, search_property)
+            self.wait_for_element(self.combox_select_element, 100)
+            self.select_by_partial_text(self.combox_select_element, input_value)
             time.sleep(2)
         if include_blanks == YES:
             self.select_include_blanks(search_property)
@@ -213,30 +219,32 @@ class CaseSearchWorkflows(BasePage):
 
     def select_include_blanks(self, search_property):
         checkbox = self.get_element(self.include_blanks, search_property)
-        
         self.wait_to_click(checkbox)
 
     def check_validations_on_property(self, search_property, property_type, message=None, required_or_validated=YES):
         validation_message_on_top = self.get_element(self.required_validation_on_top, search_property)
         validation_message_per_prop = None
+        validation_message_per_prop2 = None
         if property_type == TEXT_INPUT:
             validation_message_per_prop = (
                 By.XPATH, self.required_validation_per_property_text.format(search_property, message))
         elif property_type == COMBOBOX:
             validation_message_per_prop = (
                 By.XPATH, self.required_validation_per_property_combox.format(search_property, message))
+            validation_message_per_prop2 = (
+                By.XPATH, self.required_validation_per_property_combox2.format(search_property, message))
         if required_or_validated == YES:
-            self.wait_for_ajax()
-            time.sleep(4)
+            self.wait_after_interaction()
+            time.sleep(1)
             assert self.is_displayed(
-                validation_message_per_prop), f"Required validation missing {validation_message_per_prop}"
+                validation_message_per_prop) or self.is_displayed(validation_message_per_prop2), f"Required validation missing {validation_message_per_prop2}"
             print(f"Required validation present {validation_message_per_prop}")
             assert self.is_displayed(
                 validation_message_on_top), f"Required validation missing {validation_message_on_top}"
             print(f"Required validation present {validation_message_on_top}")
         elif required_or_validated == NO:
-            self.wait_for_ajax()
-            time.sleep(4)
+            self.wait_after_interaction()
+            time.sleep(1)
             assert not self.is_displayed(validation_message_per_prop),  f"validation present {validation_message_per_prop}"
             print(f"validation not present {validation_message_per_prop}")
         time.sleep(2)
