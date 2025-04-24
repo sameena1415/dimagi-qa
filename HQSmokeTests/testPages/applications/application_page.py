@@ -119,7 +119,7 @@ class ApplicationPage(BasePage):
 
         #Case List feature
         self.caselist_span = (By.XPATH, "//span[contains(@id, 'new_case_type-container')]")
-        self.caselist_dropdown = (By.XPATH, "//select[@id= 'new_case_type']")
+        self.caselist_dropdown = (By.XPATH, "//select[@id= 'new_case_type' or @id='new-case-type-dropdown']")
         self.caselist_dropdown_input = (By.XPATH, "//input[@aria-label='Search' or contains(@class,'search')]")
         self.create_case_list_btn = (By.XPATH, "//button[@id='case-type-create-btn']")
 
