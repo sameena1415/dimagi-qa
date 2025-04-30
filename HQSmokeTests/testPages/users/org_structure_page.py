@@ -14,6 +14,7 @@ from selenium.webdriver.common.by import By
 """"Contains test page elements and functions related to the User's Organization structure module"""
 
 def wait_for_download_to_finish(timeout=60, file_extension=".xlsx"):
+    timeout = float(timeout)
     download_dir = PathSettings.DOWNLOAD_PATH
     start_time = time.time()
     downloaded_file = None

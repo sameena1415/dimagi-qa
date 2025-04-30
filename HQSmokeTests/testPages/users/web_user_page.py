@@ -153,7 +153,8 @@ class WebUsersPage(BasePage):
         self.wait_to_click(self.download_worker_btn)
         self.wait_to_click(self.download_filter)
         try:
-            self.wait_and_sleep_to_click(self.download_users_btn)
+            self.wait_for_element(self.download_users_btn)
+            self.click(self.download_users_btn)
             wait_for_download_to_finish()
         except TimeoutException:
             print("TIMEOUT ERROR: Still preparing for download..Celery might be down..")

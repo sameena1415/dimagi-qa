@@ -202,15 +202,16 @@ class ExportDataPage(BasePage):
         try:
             self.wait_till_progress_completes("exports")
             self.wait_for_element(self.download_button, 300)
-            self.wait_to_click(self.download_button)
+            self.click(self.download_button)
+            wait_for_download_to_finish()
         except TimeoutException:
             if self.is_visible_and_displayed(self.failed_to_export):
                 self.driver.refresh()
                 self.wait_and_sleep_to_click(self.prepare_export_button, timeout=10)
                 self.wait_till_progress_completes("exports")
                 self.wait_for_element(self.download_button, 300)
-                self.wait_to_click(self.download_button)
-        wait_for_download_to_finish()
+                self.click(self.download_button)
+                wait_for_download_to_finish()
         print("Download form button clicked")
 
     def find_data_by_id_and_verify(self, row, value, export_name, name_on_hq):
@@ -631,15 +632,16 @@ class ExportDataPage(BasePage):
         try:
             self.wait_till_progress_completes("exports")
             self.wait_for_element(self.download_button, 300)
-            self.wait_to_click(self.download_button)
+            self.click(self.download_button)
+            wait_for_download_to_finish()
         except TimeoutException:
             if self.is_visible_and_displayed(self.failed_to_export):
                 self.driver.refresh()
                 self.wait_and_sleep_to_click(self.prepare_export_button, timeout=10)
                 self.wait_till_progress_completes("exports")
                 self.wait_for_element(self.download_button, 300)
-                self.wait_to_click(self.download_button)
-        wait_for_download_to_finish()
+                self.click(self.download_button)
+                wait_for_download_to_finish()
         print("Download form button clicked")
 
     def verify_export_has_updated_case_data(self, case_id, case_name, value):
@@ -731,15 +733,16 @@ class ExportDataPage(BasePage):
         try:
             self.wait_till_progress_completes("exports")
             self.wait_for_element(self.download_button, 300)
-            self.wait_to_click(self.download_button)
+            self.click(self.download_button)
+            wait_for_download_to_finish()
         except TimeoutException:
             if self.is_visible_and_displayed(self.failed_to_export):
                 self.driver.refresh()
                 self.wait_and_sleep_to_click(self.prepare_export_button, timeout=10)
                 self.wait_till_progress_completes("exports")
                 self.wait_for_element(self.download_button, 300)
-                self.wait_to_click(self.download_button)
-        wait_for_download_to_finish()
+                self.click(self.download_button)
+                wait_for_download_to_finish()
         print("Download form button clicked")
 
     def add_case_exports_reassign(self):
