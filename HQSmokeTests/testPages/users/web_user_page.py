@@ -148,7 +148,6 @@ class WebUsersPage(BasePage):
         print("Invitation deleted")
 
     def download_web_users(self):
-        
         self.wait_to_click(self.users_menu_id)
         self.wait_to_click(self.web_users_menu)
         self.wait_to_click(self.download_worker_btn)
@@ -161,6 +160,7 @@ class WebUsersPage(BasePage):
             assert False
         # verify_downloaded_workers
         newest_file = latest_download_file()
+        print(newest_file)
         self.assert_downloaded_file(newest_file, "_users_"), "Download Not Completed!"
         print("File download successful")
 

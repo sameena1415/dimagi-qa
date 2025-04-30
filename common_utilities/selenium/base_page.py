@@ -385,7 +385,7 @@ class BasePage:
         print("Last Modified Time : ", str(modificationTime) + 'Current Time : ', str(timeNow),
               "Diff: " + str(diff_seconds)
               )
-        assert file_name in newest_file and diff_seconds in range(0, 600), "Export not completed"
+        assert file_name in newest_file and diff_seconds in range(0, 600), f"Export not completed, {file_name} not in {newest_file}"
 
     def accept_pop_up(self):
         try:

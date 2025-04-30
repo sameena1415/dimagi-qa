@@ -13,18 +13,28 @@ from selenium.webdriver.common.by import By
 
 """"Contains test page elements and functions related to the User's Organization structure module"""
 
-def wait_for_download_to_finish(timeout=60):
+def wait_for_download_to_finish(timeout=60, file_extension=".xlsx"):
     download_dir = PathSettings.DOWNLOAD_PATH
     start_time = time.time()
+    downloaded_file = None
     while time.time() - start_time < timeout:
-        downloading = [
+        files = [
             f for f in os.listdir(download_dir)
-            if f.endswith('.crdownload') or f.endswith('.part')
+            if f.endswith(file_extension)
         ]
-        if not downloading:
-            return
+        if files:
+            files = sorted(files, key=lambda f: os.path.getctime(os.path.join(download_dir, f)))
+            newest = files[-1]
+            downloading = any(
+                f.endswith('.crdownload') or f.endswith('.part')
+                for f in os.listdir(download_dir)
+            )
+            if not downloading:
+                downloaded_file = newest
+                print(f"Download complete: {downloaded_file}")
+                return downloaded_file
         time.sleep(1)
-    raise TimeoutError("Download did not finish within timeout.")
+    raise TimeoutError(f"Download of '{file_extension}' file did not finish within {timeout} seconds.")
 
 def latest_download_file(type=".xlsx"):
     cwd = os.getcwd()
