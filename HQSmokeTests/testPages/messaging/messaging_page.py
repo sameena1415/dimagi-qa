@@ -277,8 +277,9 @@ class MessagingPage(BasePage):
         self.click(self.bulk_upload_button)
         self.wait_for_element(self.download_id)
         self.click(self.download_id)
-        time.sleep(3)
+        wait_for_download_to_finish()
         print("Conditional Alert downloaded successfully!")
+
 
     def cond_alert_upload(self):
         newest_file = latest_download_file()

@@ -180,8 +180,9 @@ class ApplicationPage(BasePage):
         except TimeoutException:
             self.wait_to_click(self.form_settings)
             self.wait_to_click(self.actions_tab)
-        self.wait_to_click(self.download_xml)
-        wait_for_download_to_finish()
+        self.wait_for_element(self.download_xml, 40)
+        self.click(self.download_xml)
+        wait_for_download_to_finish(".xml")
         self.wait_to_click(self.add_form_button)
         try:
             self.wait_to_click(self.register_form)

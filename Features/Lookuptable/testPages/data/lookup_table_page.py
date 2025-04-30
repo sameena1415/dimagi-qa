@@ -83,7 +83,7 @@ class LookUpTablePage(BasePage):
         self.lookup_question = (By.XPATH,
                                 "//ul[@class='dropdown-menu multi-level']/li[@class='dropdown-submenu']/a[contains(.,'Lookup Tables')]")
         self.checkbox_question = (By.XPATH, "//a[@data-qtype='MSelectDynamic']")
-        self.question_display_text = (By.XPATH, "(//div[@role='textbox'])[1]")
+        self.question_display_text = (By.XPATH, "(//div[contains(@class,'textarea')])[1]")
         self.question_display_text_en = (By.XPATH, "//*[@name='itext-en-label']")
         self.question_display_text_hin = (By.XPATH, "//*[@name='itext-hin-label']")
         self.dropdown_logic = (By.XPATH, "//*[@class='btn btn-default dropdown-toggle']")
@@ -676,6 +676,7 @@ class LookUpTablePage(BasePage):
         self.wait_to_click(self.add_module)
         self.wait_to_click(self.add_case_list)
         if self.is_present(self.create_case_list_btn):
+            self.wait_for_element(self.caselist_span)
             self.click(self.caselist_span)
             self.wait_for_element(self.caselist_dropdown_input)
             self.send_keys(self.caselist_dropdown_input, "Case List")
@@ -714,6 +715,7 @@ class LookUpTablePage(BasePage):
         
         self.wait_to_click(self.add_case_list)
         if self.is_present(self.create_case_list_btn):
+            self.wait_for_element(self.caselist_span)
             self.click(self.caselist_span)
             self.wait_for_element(self.caselist_dropdown_input)
             self.send_keys(self.caselist_dropdown_input, "Case List")
@@ -738,6 +740,7 @@ class LookUpTablePage(BasePage):
         self.wait_to_click(self.add_module)
         self.wait_to_click(self.add_case_list)
         if self.is_present(self.create_case_list_btn):
+            self.wait_for_element(self.caselist_span)
             self.click(self.caselist_span)
             self.wait_for_element(self.caselist_dropdown_input)
             self.send_keys(self.caselist_dropdown_input, "Case List")
