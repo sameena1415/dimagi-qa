@@ -9,7 +9,7 @@ from common_utilities.selenium.base_page import BasePage
 from common_utilities.generate_random_string import fetch_random_string
 from HQSmokeTests.userInputs.user_inputs import UserData
 from common_utilities.path_settings import PathSettings
-from HQSmokeTests.testPages.users.org_structure_page import latest_download_file
+from HQSmokeTests.testPages.users.org_structure_page import latest_download_file, wait_for_download_to_finish
 
 """"Contains test page elements and functions related to the applications on Commcare"""
 
@@ -42,7 +42,7 @@ class ApplicationPage(BasePage):
         self.text_question = (By.XPATH, "//a[@data-qtype='Text']")
         self.advanced_question = (By.XPATH, "//a[@data-qtype='Geopoint'][contains(.,'Advanced')]")
         self.location_question = (By.XPATH, "//a[@data-qtype='Geopoint'][contains(.,'GPS')]")
-        self.question_display_text = (By.XPATH, "(//div[@role='textbox'])[1]")
+        self.question_display_text = (By.XPATH, "(//div[contains(@class,'textarea')])[1]")
         self.save_button = (By.XPATH, "//span[text()='Save']")
         self.app_created = "(//span[text()='{}'])[1]"
         self.form_link = "//a//*[contains(.,'{}')]"
@@ -139,7 +139,7 @@ class ApplicationPage(BasePage):
             self.wait_for_element(self.caselist_dropdown_input)
             self.send_keys(self.caselist_dropdown_input, "Case List")
             time.sleep(1)
-            self.select_by_value(self.caselist_dropdown, "Case List")
+            self.select_by_value(self.caselist_dropdown, "Case_List")
             self.click(self.create_case_list_btn)
         self.wait_for_element(self.add_questions)
         self.wait_to_click(self.add_questions)
@@ -181,6 +181,7 @@ class ApplicationPage(BasePage):
             self.wait_to_click(self.form_settings)
             self.wait_to_click(self.actions_tab)
         self.wait_to_click(self.download_xml)
+        wait_for_download_to_finish()
         self.wait_to_click(self.add_form_button)
         try:
             self.wait_to_click(self.register_form)
@@ -282,7 +283,7 @@ class ApplicationPage(BasePage):
             self.wait_for_element(self.caselist_dropdown_input)
             self.send_keys(self.caselist_dropdown_input, "Case List")
             time.sleep(1)
-            self.select_by_value(self.caselist_dropdown, "Case List")
+            self.select_by_value(self.caselist_dropdown, "Case_List")
             self.click(self.create_case_list_btn)
         self.wait_for_element(self.add_questions)
         self.wait_to_click(self.edit_form_name_icon)

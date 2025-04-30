@@ -13,6 +13,18 @@ from selenium.webdriver.common.by import By
 
 """"Contains test page elements and functions related to the User's Organization structure module"""
 
+def wait_for_download_to_finish(timeout=60):
+    download_dir = PathSettings.DOWNLOAD_PATH
+    start_time = time.time()
+    while time.time() - start_time < timeout:
+        downloading = [
+            f for f in os.listdir(download_dir)
+            if f.endswith('.crdownload') or f.endswith('.part')
+        ]
+        if not downloading:
+            return
+        time.sleep(1)
+    raise TimeoutError("Download did not finish within timeout.")
 
 def latest_download_file(type=".xlsx"):
     cwd = os.getcwd()
@@ -186,7 +198,7 @@ class OrganisationStructurePage(BasePage):
         self.wait_to_click(self.download_filter)
         try:
             self.wait_and_sleep_to_click(self.download_loc_btn)
-            time.sleep(2)
+            wait_for_download_to_finish()
         except TimeoutException:
             print("Still preparing for download..")
             assert False

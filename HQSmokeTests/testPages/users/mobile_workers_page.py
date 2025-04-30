@@ -10,7 +10,7 @@ from common_utilities.selenium.base_page import BasePage
 from common_utilities.path_settings import PathSettings
 from common_utilities.generate_random_string import fetch_random_string, fetch_phone_number
 from HQSmokeTests.userInputs.user_inputs import UserData
-from HQSmokeTests.testPages.users.org_structure_page import latest_download_file
+from HQSmokeTests.testPages.users.org_structure_page import latest_download_file, wait_for_download_to_finish
 from selenium.common.exceptions import TimeoutException, NoSuchElementException
 from selenium.webdriver.common.by import By
 
@@ -448,7 +448,6 @@ class MobileWorkerPage(BasePage):
             print("All user fields might not have been deleted")
 
     def download_mobile_worker(self):
-        
         self.mobile_worker_menu()
         self.wait_to_click(self.download_worker_btn)
         self.wait_for_element(self.download_filter)
@@ -456,7 +455,7 @@ class MobileWorkerPage(BasePage):
         time.sleep(2)
         try:
             self.wait_and_sleep_to_click(self.download_users_btn, 150)
-            time.sleep(2)
+            wait_for_download_to_finish()
         except TimeoutException:
             print("TIMEOUT ERROR: Still preparing for download..Celery might be down..")
             assert False

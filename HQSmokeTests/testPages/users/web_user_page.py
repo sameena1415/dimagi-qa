@@ -10,7 +10,7 @@ from selenium.webdriver.support.select import Select
 from common_utilities.selenium.base_page import BasePage
 from common_utilities.path_settings import PathSettings
 from HQSmokeTests.userInputs.user_inputs import UserData
-from HQSmokeTests.testPages.users.org_structure_page import latest_download_file
+from HQSmokeTests.testPages.users.org_structure_page import latest_download_file, wait_for_download_to_finish
 from selenium.common.exceptions import NoSuchElementException
 
 """"Contains test page elements and functions related to the User's Web Users module"""
@@ -155,7 +155,7 @@ class WebUsersPage(BasePage):
         self.wait_to_click(self.download_filter)
         try:
             self.wait_and_sleep_to_click(self.download_users_btn)
-            time.sleep(2)
+            wait_for_download_to_finish()
         except TimeoutException:
             print("TIMEOUT ERROR: Still preparing for download..Celery might be down..")
             assert False

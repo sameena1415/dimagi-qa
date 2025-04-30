@@ -7,6 +7,7 @@ import requests
 from openpyxl import load_workbook
 from selenium.webdriver import ActionChains
 
+from HQSmokeTests.testPages.users.org_structure_page import wait_for_download_to_finish
 from common_utilities.selenium.base_page import BasePage
 from common_utilities.path_settings import PathSettings
 from HQSmokeTests.userInputs.user_inputs import UserData
@@ -209,7 +210,7 @@ class ExportDataPage(BasePage):
                 self.wait_till_progress_completes("exports")
                 self.wait_for_element(self.download_button, 300)
                 self.wait_to_click(self.download_button)
-        time.sleep(2)
+        wait_for_download_to_finish()
         print("Download form button clicked")
 
     def find_data_by_id_and_verify(self, row, value, export_name, name_on_hq):
@@ -631,7 +632,6 @@ class ExportDataPage(BasePage):
             self.wait_till_progress_completes("exports")
             self.wait_for_element(self.download_button, 300)
             self.wait_to_click(self.download_button)
-            time.sleep(2)
         except TimeoutException:
             if self.is_visible_and_displayed(self.failed_to_export):
                 self.driver.refresh()
@@ -639,7 +639,7 @@ class ExportDataPage(BasePage):
                 self.wait_till_progress_completes("exports")
                 self.wait_for_element(self.download_button, 300)
                 self.wait_to_click(self.download_button)
-                time.sleep(2)
+        wait_for_download_to_finish()
         print("Download form button clicked")
 
     def verify_export_has_updated_case_data(self, case_id, case_name, value):
@@ -739,7 +739,7 @@ class ExportDataPage(BasePage):
                 self.wait_till_progress_completes("exports")
                 self.wait_for_element(self.download_button, 300)
                 self.wait_to_click(self.download_button)
-        time.sleep(2)
+        wait_for_download_to_finish()
         print("Download form button clicked")
 
     def add_case_exports_reassign(self):

@@ -680,7 +680,7 @@ class LookUpTablePage(BasePage):
             self.wait_for_element(self.caselist_dropdown_input)
             self.send_keys(self.caselist_dropdown_input, "Case List")
             time.sleep(1)
-            self.select_by_value(self.caselist_dropdown, "Case List")
+            self.select_by_value(self.caselist_dropdown, "Case_List")
             self.click(self.create_case_list_btn)
         self.wait_for_element(self.add_questions, 50)
         self.wait_to_click(self.add_questions)
@@ -718,7 +718,7 @@ class LookUpTablePage(BasePage):
             self.wait_for_element(self.caselist_dropdown_input)
             self.send_keys(self.caselist_dropdown_input, "Case List")
             time.sleep(1)
-            self.select_by_value(self.caselist_dropdown, "Case List")
+            self.select_by_value(self.caselist_dropdown, "Case_List")
             self.click(self.create_case_list_btn)
         self.wait_to_click(self.add_questions)
         
@@ -742,7 +742,7 @@ class LookUpTablePage(BasePage):
             self.wait_for_element(self.caselist_dropdown_input)
             self.send_keys(self.caselist_dropdown_input, "Case List")
             time.sleep(1)
-            self.select_by_value(self.caselist_dropdown, "Case List")
+            self.select_by_value(self.caselist_dropdown, "Case_List")
             self.click(self.create_case_list_btn)
         self.wait_to_click(self.add_questions)
         

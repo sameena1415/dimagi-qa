@@ -90,7 +90,7 @@ class WebApps(BasePage):
         self.application = self.get_element(self.app_name_format, app_name)
         self.application_header = self.get_element(self.app_header_format, app_name)
         self.scroll_to_element(self.application)
-        self.wait_to_click(self.application)
+        self.click(self.application)
         time.sleep(2)
         self.wait_after_interaction()
         self.wait_for_element(self.application_header, timeout=200)
@@ -106,7 +106,7 @@ class WebApps(BasePage):
         self.caselist_menu = self.get_element(self.menu_name_format, menu_name)
         self.caselist_header = self.get_element(self.menu_name_header_format, menu_name)
         self.scroll_to_element(self.caselist_menu)
-        self.wait_to_click(self.caselist_menu)
+        self.click(self.caselist_menu)
         time.sleep(2)
         self.wait_after_interaction()
         if assertion == 'No':

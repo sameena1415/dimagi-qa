@@ -184,14 +184,12 @@ class BasePage:
     def select_by_partial_text(self, locator, partial_text):
         select_element = self.driver.find_element(*locator)
         options = select_element.find_elements(By.TAG_NAME, "option")
-
         for option in options:
             text = option.text.strip().replace('\u200e', '')  # Remove LRM or other hidden chars
             if partial_text in text:
                 option.click()
                 print(f"[INFO] Selected: '{text}'")
                 return
-
         raise Exception(f"[ERROR] Option with partial text '{partial_text}' not found.")
 
     def select_by_text(self, source_locator, value):
@@ -403,6 +401,9 @@ class BasePage:
 
     def scroll_to_bottom(self):
         self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight)")
+
+    def scroll_to_top(self):
+        self.driver.execute_script("window.scrollTo(0, 0)")
 
     def hover_and_click(self, locator1, locator2):
         action = ActionChains(self.driver)
