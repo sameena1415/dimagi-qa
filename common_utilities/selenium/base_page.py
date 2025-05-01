@@ -425,14 +425,20 @@ class BasePage:
         # double click operation
         action.double_click(element)
 
-    # def js_click(self, locator, timeout=10):
-    #     clickable = ec.element_to_be_clickable(locator)
-    #     element = WebDriverWait(self.driver, timeout).until(clickable,
-    #                                                         message="Couldn't find locator: "
-    #                                                                 + str(locator)
-    #                                                         )
-    #     self.driver.execute_script("arguments[0].click();", element)
-    #     time.sleep(3)
+    def js_click(self, locator, timeout=10):
+        try:
+            element = self.driver.find_element(*locator)
+            self.driver.execute_script("arguments[0].click();", element)
+            time.sleep(3)
+        except Exception as e:
+            print(f"Exception({e}. Trying again...)")
+            clickable = ec.element_to_be_clickable(locator)
+            element = WebDriverWait(self.driver, timeout, poll_frequency=1).until(clickable,
+                                                                message="Couldn't find locator: "
+                                                                        + str(locator)
+                                                                )
+            self.driver.execute_script("arguments[0].click();", element)
+            time.sleep(3)
 
     def scroll_to_element(self, locator):
         element = self.driver.find_element(*locator)
