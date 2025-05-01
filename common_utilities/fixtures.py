@@ -32,7 +32,8 @@ def driver(settings, browser):
                 "download.default_directory": str(PathSettings.DOWNLOAD_PATH),
                 "download.prompt_for_download": False,
                 "download.directory_upgrade": True,
-                "safebrowsing.enabled": True})
+                "safebrowsing.enabled": True,
+                "safebrowsing.disable_download_protection": True})
         elif browser == "firefox":
             firefox_options.add_argument('--headless')
             firefox_options.add_argument('--no-sandbox')
@@ -46,6 +47,13 @@ def driver(settings, browser):
             firefox_options.add_argument('--headless')
             firefox_options.add_argument("--disable-notifications")
             firefox_options.set_preference("browser.download.dir", str(PathSettings.DOWNLOAD_PATH))
+            firefox_options.set_preference("browser.helperApps.neverAsk.saveToDisk",
+                                           "application/vnd.ms-excel,application/octet-stream,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                                           )
+            firefox_options.set_preference("pdfjs.disabled", True)
+            firefox_options.set_preference("browser.download.manager.showWhenStarting", False)
+            firefox_options.set_preference("browser.download.panel.shown", False)
+            firefox_options.set_preference("security.mixed_content.block_active_content", False)  # allow mixed content if needed
     if browser == "chrome":
         web_driver = webdriver.Chrome(options=chrome_options)
         print("Chrome version:", web_driver.capabilities['browserVersion'])

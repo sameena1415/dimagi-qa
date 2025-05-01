@@ -176,11 +176,13 @@ class ApplicationPage(BasePage):
 
     def form_xml_download_upload(self):
         try:
-            self.wait_to_click(self.actions_tab)
+            self.wait_for_element(self.actions_tab)
+            self.click(self.actions_tab)
         except TimeoutException:
             self.wait_to_click(self.form_settings)
-            self.wait_to_click(self.actions_tab)
-        self.wait_for_element(self.download_xml, 40)
+            self.wait_for_element(self.actions_tab)
+            self.click(self.actions_tab)
+        self.wait_for_element(self.download_xml)
         self.click(self.download_xml)
         wait_for_download_to_finish(file_extension=".xml")
         self.wait_to_click(self.add_form_button)

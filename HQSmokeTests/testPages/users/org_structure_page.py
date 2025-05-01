@@ -1,6 +1,7 @@
 import os
 import time
 from datetime import date
+from pathlib import Path
 
 from selenium.webdriver import Keys
 
@@ -15,27 +16,32 @@ from selenium.webdriver.common.by import By
 
 def wait_for_download_to_finish(timeout=60, file_extension=".xlsx"):
     timeout = float(timeout)
-    download_dir = PathSettings.DOWNLOAD_PATH
+    download_dir = Path(PathSettings.DOWNLOAD_PATH)
     start_time = time.time()
     downloaded_file = None
+
     while time.time() - start_time < timeout:
-        files = [
-            f for f in os.listdir(download_dir)
-            if f.endswith(file_extension)
-        ]
-        if files:
-            files = sorted(files, key=lambda f: os.path.getctime(os.path.join(download_dir, f)))
-            newest = files[-1]
-            downloading = any(
-                f.endswith('.crdownload') or f.endswith('.part')
-                for f in os.listdir(download_dir)
-            )
-            if not downloading:
-                downloaded_file = newest
+        all_files = list(download_dir.glob("*"))
+
+        # Files that match the desired extension (e.g., .xml, .xlsx)
+        completed_files = [f for f in all_files if f.name.endswith(file_extension)]
+
+        # Chrome creates temp files ending with .crdownload while downloading
+        downloading_files = [f for f in all_files if f.name.endswith('.crdownload')]
+
+        if completed_files:
+            # Sort by newest
+            completed_files.sort(key=lambda f: f.stat().st_ctime, reverse=True)
+            newest = completed_files[0]
+
+            # Check if this file is still being downloaded
+            if not any(f.name.startswith(newest.name) for f in downloading_files):
+                downloaded_file = newest.name
                 print(f"Download complete: {downloaded_file}")
                 return downloaded_file
         time.sleep(1)
     raise TimeoutError(f"Download of '{file_extension}' file did not finish within {timeout} seconds.")
+
 
 def latest_download_file(type=".xlsx"):
     cwd = os.getcwd()
