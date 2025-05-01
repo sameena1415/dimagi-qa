@@ -455,7 +455,7 @@ class MobileWorkerPage(BasePage):
         time.sleep(2)
         try:
             self.wait_for_element(self.download_users_btn, 150)
-            self.click(self.download_users_btn, 150)
+            self.click(self.download_users_btn)
             wait_for_download_to_finish()
         except TimeoutException:
             print("TIMEOUT ERROR: Still preparing for download..Celery might be down..")

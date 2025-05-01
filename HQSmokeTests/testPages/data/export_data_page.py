@@ -118,7 +118,7 @@ class ExportDataPage(BasePage):
         # Excel Dashboard Integrations, form, case
         self.export_excel_dash_int = (By.LINK_TEXT, 'Excel Dashboard Integration')
         self.update_data = "(//*[contains(@data-bind,'hasEmailedExport')][.//span[.='{}']]/following-sibling::div//button[contains(@data-bind,'emailedExport.canUpdateData')])[1]"
-        self.update_data_conf =  "(//*[contains(@data-bind,'hasEmailedExport')][.//span[.='{}']]/following-sibling::div//button[contains(@data-bind,'click: emailedExport.updateData')])[1]"
+        self.update_data_conf =  "(//*[contains(@data-bind,'hasEmailedExport')][.//span[.='{}']]/following-sibling::div//button[contains(@data-bind,'visible: emailedExport.canUpdateData')])[1]"
 
         self.update_data_form = "//*[contains(@data-bind,'hasEmailedExport')][.//span[.='{}']]/following-sibling::div//button[@data-toggle='modal'][1]"
         self.update_data_conf_form = "//*[contains(@data-bind,'hasEmailedExport')][.//span[.='{}']]/following-sibling::div//button[@data-bind='click: emailedExport.updateData']"
@@ -241,7 +241,7 @@ class ExportDataPage(BasePage):
         self.wait_for_element(self.add_export_button, 100)
         self.delete_bulk_exports()
         self.wait_and_sleep_to_click(self.add_export_button)
-        time.sleep(100)
+        time.sleep(30)
         self.is_visible_and_displayed(self.app_type, 200)
         self.wait_for_element(self.app_type, 200)
         self.is_clickable(self.app_type)
@@ -275,7 +275,7 @@ class ExportDataPage(BasePage):
         self.wait_for_element(self.add_export_button, 100)
         self.delete_bulk_exports()
         self.wait_and_sleep_to_click(self.add_export_button)
-        time.sleep(100)
+        time.sleep(30)
         self.is_visible_and_displayed(self.case_type, 200)
         self.wait_for_element(self.case_type, 200)
         # self.is_clickable(self.application)
@@ -392,7 +392,7 @@ class ExportDataPage(BasePage):
         self.wait_and_sleep_to_click(self.export_excel_dash_int)
         self.delete_bulk_exports()
         self.wait_and_sleep_to_click(self.add_export_button)
-        time.sleep(100)
+        time.sleep(30)
         self.is_visible_and_displayed(self.model, 200)
         self.wait_for_element(self.model, 100)
         self.select_by_value(self.model, UserData.model_type_form)
@@ -427,7 +427,7 @@ class ExportDataPage(BasePage):
         self.wait_and_sleep_to_click(self.export_excel_dash_int)
         self.delete_bulk_exports()
         self.wait_and_sleep_to_click(self.add_export_button)
-        time.sleep(100)
+        time.sleep(30)
         self.is_visible_and_displayed(self.model, 200)
         self.wait_for_element(self.model, 200)
         self.select_by_value(self.model, UserData.model_type_case)
@@ -448,9 +448,11 @@ class ExportDataPage(BasePage):
         self.wait_to_click(self.export_settings_create)
         print("Dashboard Form Feed created!!")
         time.sleep(2)
-        self.wait_and_sleep_to_click((By.XPATH, self.update_data.format(UserData.dashboard_feed_case)))
+        self.wait_for_element((By.XPATH, self.update_data.format(UserData.dashboard_feed_case)))
+        self.click((By.XPATH, self.update_data.format(UserData.dashboard_feed_case)))
         self.wait_till_progress_completes("integration")
-        self.wait_and_sleep_to_click((By.XPATH, self.update_data_conf.format(UserData.dashboard_feed_case)))
+        self.wait_for_element((By.XPATH, self.update_data_conf.format(UserData.dashboard_feed_case)))
+        self.click((By.XPATH, self.update_data_conf.format(UserData.dashboard_feed_case)))
         assert self.is_visible_and_displayed(self.data_upload_msg), "Export not completed!"
         time.sleep(2)
         self.driver.refresh()
@@ -487,7 +489,7 @@ class ExportDataPage(BasePage):
             self.wait_to_click(self.powerBI_tab_int)
         self.delete_bulk_exports()
         self.wait_and_sleep_to_click(self.add_export_button)
-        time.sleep(100)
+        time.sleep(30)
         self.is_visible_and_displayed(self.model, 200)
         self.wait_for_element(self.model, 100)
         self.select_by_value(self.model, UserData.model_type_form)
@@ -518,7 +520,7 @@ class ExportDataPage(BasePage):
         self.wait_to_click(self.powerBI_tab_int)
         self.delete_bulk_exports()
         self.wait_and_sleep_to_click(self.add_export_button)
-        time.sleep(100)
+        time.sleep(30)
         self.is_visible_and_displayed(self.model, 200)
         self.wait_for_element(self.model, 400)
         self.select_by_value(self.model, UserData.model_type_case)
@@ -593,7 +595,7 @@ class ExportDataPage(BasePage):
         self.delete_bulk_exports()
         time.sleep(2)
         self.wait_and_sleep_to_click(self.add_export_button)
-        time.sleep(100)
+        time.sleep(30)
         self.is_visible_and_displayed(self.case_type, 200)
         self.wait_for_element(self.case_type, 200)
         self.select_by_text(self.case, UserData.case_update_name)
@@ -677,7 +679,7 @@ class ExportDataPage(BasePage):
     def add_form_exports_reassign(self):
         self.delete_bulk_exports()
         self.wait_and_sleep_to_click(self.add_export_button)
-        time.sleep(100)
+        time.sleep(30)
         self.is_visible_and_displayed(self.app_type, 200)
         self.wait_for_element(self.app_type, 200)
         self.select_by_text(self.app_type, UserData.app_type)
@@ -749,7 +751,7 @@ class ExportDataPage(BasePage):
         self.wait_to_click(self.export_case_data_link)
         self.delete_bulk_exports()
         self.wait_and_sleep_to_click(self.add_export_button)
-        time.sleep(100)
+        time.sleep(30)
         self.is_visible_and_displayed(self.case_type, 200)
         self.wait_for_element(self.case_type, 200)
         self.select_by_text(self.case, UserData.case_reassign)

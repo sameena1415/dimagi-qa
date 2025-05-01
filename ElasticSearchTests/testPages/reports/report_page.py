@@ -43,7 +43,7 @@ class ReportPage(BasePage):
         self.project_performance_rep = (By.LINK_TEXT, "Project Performance")
 
         # Inspect Data Reports
-        self.submit_history_rep = (By.LINK_TEXT, "Submit History")
+        self.submit_history_rep = (By.LINK_TEXT, "Submission History")
         self.case_list_rep = (By.LINK_TEXT, "Case List")
         self.case_list_explorer = (By.LINK_TEXT, "Case List Explorer")
 

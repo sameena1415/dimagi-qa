@@ -42,6 +42,11 @@ jobs:
         if: ${{ github.event_name != 'repository_dispatch' }}
         run: |
           echo "::set-output name=matrix::{\"environment\": [\"production\", \"staging\"]}"
+      - id: invalid-deploy
+        if: ${{ github.event_name == 'repository_dispatch' && github.event.client_payload.environment != 'production' }}
+        run: |
+          echo "Invalid environment: ${{ github.event.client_payload.environment }}"
+          exit 1
 
 
   build:

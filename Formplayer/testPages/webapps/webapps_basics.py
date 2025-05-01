@@ -70,7 +70,7 @@ class WebAppsBasics(BasePage):
         self.reports_menu_id = (By.LINK_TEXT, "Reports")
         self.full_menu = (By.LINK_TEXT, "Show Full Menu")
         self.ribbon_logo = (By.XPATH, "//a[@class='navbar-brand'][@href='/homepage/']")
-        self.submit_history_rep = (By.LINK_TEXT, "Submit History")
+        self.submit_history_rep = (By.LINK_TEXT, "Submission History")
         self.case_list_rep = (By.LINK_TEXT, "Case List")
         self.apply_id = (By.ID, "apply-filters")
         self.this_form = (By.XPATH, "//a[.='this form']")
