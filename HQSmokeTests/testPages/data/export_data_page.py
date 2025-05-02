@@ -118,9 +118,8 @@ class ExportDataPage(BasePage):
 
         # Excel Dashboard Integrations, form, case
         self.export_excel_dash_int = (By.LINK_TEXT, 'Excel Dashboard Integration')
-        self.update_data = "(//*[contains(@data-bind,'hasEmailedExport')][.//span[.='{}']]/following-sibling::div//button[contains(.,'Update Data')])[1]"
+        self.update_data = "(//*[contains(@data-bind,'hasEmailedExport')][.//span[.='{}']]/following-sibling::div//button[contains(@data-bind,'emailedExport.canUpdateData')])[1]"
         self.update_data_conf =  "(//*[contains(@data-bind,'hasEmailedExport')][.//span[.='{}']]/following-sibling::div//button[contains(@data-bind,'click: emailedExport.updateData')])[1]"
-
         self.update_data_form = "//*[contains(@data-bind,'hasEmailedExport')][.//span[.='{}']]/following-sibling::div//button[@data-toggle='modal'][1]"
         self.update_data_conf_form = "//*[contains(@data-bind,'hasEmailedExport')][.//span[.='{}']]/following-sibling::div//button[@data-bind='click: emailedExport.updateData']"
         self.copy_dashfeed_link = "//*[contains(@data-bind,'hasEmailedExport')][.//span[.='{}']]//following-sibling::div//*[contains(@data-bind, 'copyLinkRequested')]"
@@ -325,7 +324,7 @@ class ExportDataPage(BasePage):
         time.sleep(2)
         self.wait_for_element((By.XPATH, self.update_data.format(exported_file)), 50)
         self.scroll_to_element((By.XPATH, self.update_data.format(exported_file)))
-        self.double_click((By.XPATH, self.update_data.format(exported_file)))
+        self.click((By.XPATH, self.update_data.format(exported_file)))
         time.sleep(2)
         self.wait_for_element((By.XPATH, self.update_data_conf.format(exported_file)), 50)
         self.click((By.XPATH, self.update_data_conf.format(exported_file)))
@@ -421,7 +420,7 @@ class ExportDataPage(BasePage):
         time.sleep(1)
         self.driver.refresh()
         self.wait_for_element((By.XPATH, self.update_data.format(UserData.dashboard_feed_form)))
-        self.double_click((By.XPATH, self.update_data.format(UserData.dashboard_feed_form)))
+        self.click((By.XPATH, self.update_data.format(UserData.dashboard_feed_form)))
         self.wait_for_element((By.XPATH, self.update_data_conf.format(UserData.dashboard_feed_form)))
         self.click((By.XPATH, self.update_data_conf.format(UserData.dashboard_feed_form)))
         assert self.is_visible_and_displayed(self.data_upload_msg), "Export not completed!"
@@ -461,7 +460,7 @@ class ExportDataPage(BasePage):
         time.sleep(1)
         self.driver.refresh()
         self.wait_for_element((By.XPATH, self.update_data.format(UserData.dashboard_feed_case)))
-        self.double_click((By.XPATH, self.update_data.format(UserData.dashboard_feed_case)))
+        self.click((By.XPATH, self.update_data.format(UserData.dashboard_feed_case)))
         # self.wait_till_progress_completes("integration")
         self.wait_for_element((By.XPATH, self.update_data_conf.format(UserData.dashboard_feed_case)))
         self.click((By.XPATH, self.update_data_conf.format(UserData.dashboard_feed_case)))
