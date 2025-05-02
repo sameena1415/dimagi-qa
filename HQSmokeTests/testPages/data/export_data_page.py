@@ -325,10 +325,10 @@ class ExportDataPage(BasePage):
         time.sleep(2)
         self.wait_for_element((By.XPATH, self.update_data.format(exported_file)), 50)
         self.scroll_to_element((By.XPATH, self.update_data.format(exported_file)))
-        self.wait_to_click((By.XPATH, self.update_data.format(exported_file)))
+        self.double_click((By.XPATH, self.update_data.format(exported_file)))
         time.sleep(2)
         self.wait_for_element((By.XPATH, self.update_data_conf.format(exported_file)), 50)
-        self.wait_to_click((By.XPATH, self.update_data_conf.format(exported_file)))
+        self.click((By.XPATH, self.update_data_conf.format(exported_file)))
         self.wait_till_progress_completes("integration")
         try:
             assert self.is_present_and_displayed((By.XPATH, self.data_upload_msg_form.format(exported_file)), 150), "Form/Case Export not completed!"
@@ -421,8 +421,9 @@ class ExportDataPage(BasePage):
         time.sleep(1)
         self.driver.refresh()
         self.wait_for_element((By.XPATH, self.update_data.format(UserData.dashboard_feed_form)))
-        self.js_click((By.XPATH, self.update_data.format(UserData.dashboard_feed_form)))
-        self.wait_to_click((By.XPATH, self.update_data_conf.format(UserData.dashboard_feed_form)))
+        self.double_click((By.XPATH, self.update_data.format(UserData.dashboard_feed_form)))
+        self.wait_for_element((By.XPATH, self.update_data_conf.format(UserData.dashboard_feed_form)))
+        self.click((By.XPATH, self.update_data_conf.format(UserData.dashboard_feed_form)))
         assert self.is_visible_and_displayed(self.data_upload_msg), "Export not completed!"
         time.sleep(2)
         self.driver.refresh()
@@ -460,9 +461,10 @@ class ExportDataPage(BasePage):
         time.sleep(1)
         self.driver.refresh()
         self.wait_for_element((By.XPATH, self.update_data.format(UserData.dashboard_feed_case)))
-        self.js_click((By.XPATH, self.update_data.format(UserData.dashboard_feed_case)))
+        self.double_click((By.XPATH, self.update_data.format(UserData.dashboard_feed_case)))
         # self.wait_till_progress_completes("integration")
-        self.wait_to_click((By.XPATH, self.update_data_conf.format(UserData.dashboard_feed_case)))
+        self.wait_for_element((By.XPATH, self.update_data_conf.format(UserData.dashboard_feed_case)))
+        self.click((By.XPATH, self.update_data_conf.format(UserData.dashboard_feed_case)))
         time.sleep(2)
         assert self.is_visible_and_displayed(self.data_upload_msg), "Export not completed!"
         time.sleep(2)
