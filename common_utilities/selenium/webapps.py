@@ -172,7 +172,8 @@ class WebApps(BasePage):
             self.wait_to_clear_and_send_keys(self.omni_search_input, case_name)
             self.wait_for_element(self.omni_search_button)
             self.wait_to_click(self.omni_search_button)
-            time.sleep(20)
+            time.sleep(10)
+            self.wait_after_interaction()
         else:
             print("Split Screen Case Search enabled")
         self.case = self.get_element(self.case_name_format, case_name)
@@ -247,7 +248,8 @@ class WebApps(BasePage):
             assert self.is_visible_and_displayed(self.form_submission_successful, timeout=50)
         except AssertionError:
             if self.is_displayed(self.form_500_error):
-                time.sleep(40)
+                time.sleep(10)
+                self.wait_after_interaction()
                 self.wait_to_click(self.form_submit)
                 self.wait_for_element(self.form_submission_successful, timeout=50)
                 assert self.is_visible_and_displayed(self.form_submission_successful, timeout=50)
@@ -323,10 +325,11 @@ class WebApps(BasePage):
 
     def switch_bw_pages(self):
         self.wait_to_click(self.next_page)
-        time.sleep(10)
+        time.sleep(6)
         self.wait_for_element(self.prev_page)
         self.wait_to_click(self.prev_page)
-        time.sleep(10)
+        time.sleep(6)
+        self.wait_after_interaction()
 
     def go_to_page(self, page_number):
         self.scroll_to_element(self.go_to_page_textarea)
@@ -378,7 +381,8 @@ class WebApps(BasePage):
         self.wait_to_click(self.setting_button)
         self.wait_for_element(self.sync_button)
         self.wait_to_click(self.sync_button)
-        time.sleep(15)
+        time.sleep(10)
+        self.wait_after_interaction()
         self.wait_for_element(self.done_button)
         self.wait_to_click(self.done_button)
         time.sleep(2)
