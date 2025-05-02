@@ -119,7 +119,7 @@ class ExportDataPage(BasePage):
         # Excel Dashboard Integrations, form, case
         self.export_excel_dash_int = (By.LINK_TEXT, 'Excel Dashboard Integration')
         self.update_data = "(//*[contains(@data-bind,'hasEmailedExport')][.//span[.='{}']]/following-sibling::div//button[contains(@data-bind,'emailedExport.canUpdateData')])[1]"
-        self.update_data_conf =  "(//*[contains(@data-bind,'hasEmailedExport')][.//span[.='{}']]/following-sibling::div//button[contains(@data-bind,'click: emailedExport.updateData')])[1]"
+        self.update_data_conf = "(//*[contains(@data-bind,'hasEmailedExport')][.//span[.='{}']]/following-sibling::div//button[contains(@data-bind,'click: emailedExport.updateData')])[1]"
         self.update_data_form = "//*[contains(@data-bind,'hasEmailedExport')][.//span[.='{}']]/following-sibling::div//button[@data-toggle='modal'][1]"
         self.update_data_conf_form = "//*[contains(@data-bind,'hasEmailedExport')][.//span[.='{}']]/following-sibling::div//button[@data-bind='click: emailedExport.updateData']"
         self.copy_dashfeed_link = "//*[contains(@data-bind,'hasEmailedExport')][.//span[.='{}']]//following-sibling::div//*[contains(@data-bind, 'copyLinkRequested')]"
@@ -135,7 +135,8 @@ class ExportDataPage(BasePage):
             By.XPATH,
             "//*[contains(@data-bind,'hasEmailedExport')][.//span[text()='" + UserData.odata_feed_form + "']]/following-sibling::div[@class='input-group']/input[contains(@data-bind,'showLink')]")
         self.copy_odata_link_btn_case = (
-            By.XPATH, "//*[contains(@data-bind,'hasEmailedExport')][.//span[text()='" + UserData.odata_feed_case + "']]//following-sibling::div/*[contains(@data-bind,'click: copyLinkRequested')]//i")
+            By.XPATH,
+            "//*[contains(@data-bind,'hasEmailedExport')][.//span[text()='" + UserData.odata_feed_case + "']]//following-sibling::div/*[contains(@data-bind,'click: copyLinkRequested')]//i")
         self.copy_odata_link_case = (
             By.XPATH,
             "//*[contains(@data-bind,'hasEmailedExport')][.//span[text()='" + UserData.odata_feed_case + "']]/following-sibling::div[@class='input-group']/input[contains(@data-bind,'showLink')]")
@@ -182,7 +183,7 @@ class ExportDataPage(BasePage):
         self.wait_and_sleep_to_click(self.date_range)
         print(self.date_having_submissions)
         self.wait_to_clear_and_send_keys(self.date_range, self.date_having_submissions)
-        
+
         if self.is_present(self.close_date_picker):
             self.click(self.close_date_picker)
         self.wait_and_sleep_to_click(self.apply, timeout=10)
@@ -197,7 +198,7 @@ class ExportDataPage(BasePage):
         if flag == None:
             self.send_keys(self.users_field, UserData.web_user)
             self.wait_to_click((By.XPATH, self.users_list_item.format(UserData.web_user)))
-        
+
         self.wait_and_sleep_to_click(self.prepare_export_button, timeout=10)
         try:
             self.wait_till_progress_completes("exports")
@@ -252,7 +253,7 @@ class ExportDataPage(BasePage):
         self.wait_to_click(self.add_export_conf)
         self.wait_for_element(self.export_name, 200)
         self.clear(self.export_name)
-        self.send_keys(self.export_name, UserData.form_export_name+Keys.TAB)
+        self.send_keys(self.export_name, UserData.form_export_name + Keys.TAB)
         time.sleep(2)
         self.scroll_to_bottom()
         time.sleep(2)
@@ -262,7 +263,6 @@ class ExportDataPage(BasePage):
         self.click(self.cancel_alert)
         time.sleep(2)
         return UserData.form_export_name
-
 
     def form_exports(self, name):
         self.prepare_and_download_export(name=name)
@@ -287,7 +287,7 @@ class ExportDataPage(BasePage):
         self.wait_to_click(self.add_export_conf)
         self.wait_for_element(self.export_name, 200)
         self.clear(self.export_name)
-        self.send_keys(self.export_name, UserData.case_export_name+Keys.TAB)
+        self.send_keys(self.export_name, UserData.case_export_name + Keys.TAB)
         time.sleep(2)
         self.scroll_to_bottom()
         time.sleep(2)
@@ -324,13 +324,14 @@ class ExportDataPage(BasePage):
         time.sleep(2)
         self.wait_for_element((By.XPATH, self.update_data.format(exported_file)), 50)
         self.scroll_to_element((By.XPATH, self.update_data.format(exported_file)))
-        self.click((By.XPATH, self.update_data.format(exported_file)))
+        self.wait_to_click((By.XPATH, self.update_data.format(exported_file)))
         time.sleep(2)
         self.wait_for_element((By.XPATH, self.update_data_conf.format(exported_file)), 50)
-        self.click((By.XPATH, self.update_data_conf.format(exported_file)))
+        self.wait_to_click((By.XPATH, self.update_data_conf.format(exported_file)))
         self.wait_till_progress_completes("integration")
         try:
-            assert self.is_present_and_displayed((By.XPATH, self.data_upload_msg_form.format(exported_file)), 150), "Form/Case Export not completed!"
+            assert self.is_present_and_displayed((By.XPATH, self.data_upload_msg_form.format(exported_file)), 150
+                                                 ), "Form/Case Export not completed!"
             text = self.get_text((By.XPATH, self.data_upload_msg_form.format(exported_file)))
             print("Data Upload message is displayed as: ", text)
             time.sleep(2)
@@ -369,7 +370,7 @@ class ExportDataPage(BasePage):
             self.wait_and_sleep_to_click(self.edit_form_case_export)
         self.wait_for_element(self.export_name, 200)
         self.clear(self.export_name)
-        self.send_keys(self.export_name, UserData.form_export_name_dse+Keys.TAB)
+        self.send_keys(self.export_name, UserData.form_export_name_dse + Keys.TAB)
         time.sleep(2)
         self.create_dse_and_download(UserData.form_export_name_dse, "form")
         print("DSE Form Export successful")
@@ -386,7 +387,7 @@ class ExportDataPage(BasePage):
             self.wait_and_sleep_to_click(self.edit_form_case_export)
         self.wait_for_element(self.export_name, 200)
         self.clear(self.export_name)
-        self.send_keys(self.export_name, UserData.case_export_name_dse+Keys.TAB)
+        self.send_keys(self.export_name, UserData.case_export_name_dse + Keys.TAB)
         time.sleep(2)
         self.create_dse_and_download(UserData.case_export_name_dse, "case")
         print("DSE Case Export successful")
@@ -408,21 +409,17 @@ class ExportDataPage(BasePage):
         print("Dashboard Feed added!!")
         self.wait_for_element(self.export_name, 200)
         self.clear(self.export_name)
-        self.send_keys(self.export_name, UserData.dashboard_feed_form+Keys.TAB)
+        self.send_keys(self.export_name, UserData.dashboard_feed_form + Keys.TAB)
         time.sleep(2)
         # saving export
         self.scroll_to_bottom()
         time.sleep(2)
         self.wait_to_click(self.export_settings_create)
-        self.wait_for_element(self.cancel_alert)
         print("Dashboard Form Feed created!!")
-        self.click(self.cancel_alert)
-        time.sleep(1)
-        self.driver.refresh()
-        self.wait_for_element((By.XPATH, self.update_data.format(UserData.dashboard_feed_form)))
-        self.click((By.XPATH, self.update_data.format(UserData.dashboard_feed_form)))
-        self.wait_for_element((By.XPATH, self.update_data_conf.format(UserData.dashboard_feed_form)))
-        self.click((By.XPATH, self.update_data_conf.format(UserData.dashboard_feed_form)))
+        time.sleep(2)
+        self.wait_and_sleep_to_click((By.XPATH, self.update_data.format(UserData.dashboard_feed_form)))
+        self.wait_till_progress_completes("integration")
+        self.wait_and_sleep_to_click((By.XPATH, self.update_data_conf.format(UserData.dashboard_feed_form)))
         assert self.is_visible_and_displayed(self.data_upload_msg), "Export not completed!"
         time.sleep(2)
         self.driver.refresh()
@@ -448,23 +445,17 @@ class ExportDataPage(BasePage):
         print("Dashboard Feed added!!")
         self.wait_for_element(self.export_name, 200)
         self.clear(self.export_name)
-        self.send_keys(self.export_name, UserData.dashboard_feed_case+Keys.TAB)
+        self.send_keys(self.export_name, UserData.dashboard_feed_case + Keys.TAB)
         time.sleep(2)
         # saving export
         self.scroll_to_bottom()
         time.sleep(2)
         self.wait_to_click(self.export_settings_create)
-        self.wait_for_element(self.cancel_alert)
-        print("Dashboard Case Feed created!!")
-        self.click(self.cancel_alert)
-        time.sleep(1)
-        self.driver.refresh()
-        self.wait_for_element((By.XPATH, self.update_data.format(UserData.dashboard_feed_case)))
-        self.click((By.XPATH, self.update_data.format(UserData.dashboard_feed_case)))
-        # self.wait_till_progress_completes("integration")
-        self.wait_for_element((By.XPATH, self.update_data_conf.format(UserData.dashboard_feed_case)))
-        self.click((By.XPATH, self.update_data_conf.format(UserData.dashboard_feed_case)))
+        print("Dashboard Form Feed created!!")
         time.sleep(2)
+        self.wait_and_sleep_to_click((By.XPATH, self.update_data.format(UserData.dashboard_feed_case)))
+        self.wait_till_progress_completes("integration")
+        self.wait_and_sleep_to_click((By.XPATH, self.update_data_conf.format(UserData.dashboard_feed_case)))
         assert self.is_visible_and_displayed(self.data_upload_msg), "Export not completed!"
         time.sleep(2)
         self.driver.refresh()
@@ -513,7 +504,7 @@ class ExportDataPage(BasePage):
         print("Odata form Feed added!!")
         self.wait_for_element(self.export_name, 200)
         self.clear(self.export_name)
-        self.send_keys(self.export_name, UserData.odata_feed_form+Keys.TAB)
+        self.send_keys(self.export_name, UserData.odata_feed_form + Keys.TAB)
         time.sleep(2)
         # saving export
         self.scroll_to_bottom()
@@ -545,7 +536,7 @@ class ExportDataPage(BasePage):
         print("Odata Case Feed added!!")
         self.wait_for_element(self.export_name, 200)
         self.clear(self.export_name)
-        self.send_keys(self.export_name, UserData.odata_feed_case+Keys.TAB)
+        self.send_keys(self.export_name, UserData.odata_feed_case + Keys.TAB)
         # selcting first three property
         time.sleep(2)
         self.scroll_to_element(self.select_none)
@@ -613,7 +604,7 @@ class ExportDataPage(BasePage):
         self.wait_to_click(self.add_export_conf)
         self.wait_for_element(self.export_name, 200)
         self.clear(self.export_name)
-        self.send_keys(self.export_name, UserData.case_updated_export_name+Keys.TAB)
+        self.send_keys(self.export_name, UserData.case_updated_export_name + Keys.TAB)
         time.sleep(2)
         self.scroll_to_bottom()
         time.sleep(2)
@@ -629,7 +620,7 @@ class ExportDataPage(BasePage):
             self.send_keys(self.users_field, UserData.web_user)
             self.wait_to_click((By.XPATH, self.user_from_list.format(UserData.web_user)))
             print("Selecting Web Users")
-            
+
             ActionChains(self.driver).send_keys(Keys.TAB).perform()
         if self.is_present(self.all_data_option):
             print("Web Users is already selected")
@@ -637,7 +628,7 @@ class ExportDataPage(BasePage):
             self.send_keys(self.users_field, UserData.all_data)
             self.wait_to_click((By.XPATH, self.user_from_list.format(UserData.all_data)))
             print("Selecting Web Users")
-            
+
             ActionChains(self.driver).send_keys(Keys.TAB).perform()
         self.wait_to_clear_and_send_keys(self.date_range, self.next_date_range + Keys.TAB)
         self.wait_and_sleep_to_click(self.prepare_export_button, timeout=10)
@@ -700,7 +691,7 @@ class ExportDataPage(BasePage):
         self.wait_to_click(self.add_export_conf)
         self.wait_for_element(self.export_name, 200)
         self.clear(self.export_name)
-        self.send_keys(self.export_name, UserData.p1p2_form_export_name+Keys.TAB)
+        self.send_keys(self.export_name, UserData.p1p2_form_export_name + Keys.TAB)
         time.sleep(2)
         self.scroll_to_bottom()
         time.sleep(2)
@@ -733,7 +724,7 @@ class ExportDataPage(BasePage):
                 self.send_keys(self.users_field, UserData.web_user)
                 self.wait_to_click((By.XPATH, self.user_from_list.format(UserData.web_user)))
                 print("Selecting Web Users")
-                
+
                 ActionChains(self.driver).send_keys(Keys.TAB).perform()
         else:
             if self.is_present(self.all_data_option):
@@ -742,7 +733,7 @@ class ExportDataPage(BasePage):
                 self.send_keys(self.users_field, UserData.all_data)
                 self.wait_to_click((By.XPATH, self.user_from_list.format(UserData.all_data)))
                 print("Selecting Web Users")
-                
+
                 ActionChains(self.driver).send_keys(Keys.TAB).perform()
         self.wait_and_sleep_to_click(self.prepare_export_button, timeout=10)
         try:
@@ -771,7 +762,7 @@ class ExportDataPage(BasePage):
         self.wait_to_click(self.add_export_conf)
         self.wait_for_element(self.export_name, 200)
         self.clear(self.export_name)
-        self.send_keys(self.export_name, UserData.p1p2_case_export_name+Keys.TAB)
+        self.send_keys(self.export_name, UserData.p1p2_case_export_name + Keys.TAB)
         time.sleep(2)
         self.scroll_to_bottom()
         time.sleep(2)
@@ -802,7 +793,7 @@ class ExportDataPage(BasePage):
 
     def validate_child_case_data(self):
         self.wait_to_click(self.related_cases_tab)
-        
+
         if self.is_visible_and_displayed(self.related_cases_view, 20):
             self.wait_for_element(self.related_cases_view)
         else:
