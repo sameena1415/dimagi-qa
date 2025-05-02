@@ -31,7 +31,7 @@ class CaseSearchWorkflows(BasePage):
         self.combox_select2 = "(//label[contains(text(), '{}')])[1]//following::div/select[contains(@class, 'query-field')][1]"
         self.search_for_address = "//*[contains(text(),'{}')]//following::input[contains(@aria-label,'Search')][1]"
         self.include_blanks = self.search_property_name_combobox + "//following::input[contains(@class,'search-for-blank')][1]"
-        self.required_validation_on_top = "//div[contains(@class,'alert-danger')]//following::li[contains(text(),'{}')]"
+        self.required_validation_on_top = "//div[contains(@class,'alert-danger')]//following::*[contains(text(),'{}')]"
         self.required_validation_per_property_text = self.search_against_text_property_format + "//following::div[contains (text(),'{}')][1]"
         self.required_validation_per_property_combox = self.search_property_name_combobox + "//following::div[contains (text(),'{}')][1]"
         self.required_validation_per_property_combox2 = self.search_property_name_combobox +"//parent::div//parent::td[contains(@class,'required')]"
@@ -116,16 +116,19 @@ class CaseSearchWorkflows(BasePage):
             self.combox_select_element = self.get_element(self.combox_select, search_property)
             self.wait_for_element(self.combox_select_element, 100)
             self.select_by_text(self.combox_select_element, input_value)
+            print("Selected text: ", input_value)
             time.sleep(2)
         elif property_type == COMBOBOX2:
             self.combox_select_element = self.get_element(self.combox_select2, search_property)
             self.wait_for_element(self.combox_select_element, 100)
             self.select_by_text(self.combox_select_element, input_value)
+            print("Selected text: ", input_value)
             time.sleep(2)
         elif property_type == COMBOBOX3:
             self.combox_select_element = self.get_element(self.combox_select, search_property)
             self.wait_for_element(self.combox_select_element, 100)
             self.select_by_partial_text(self.combox_select_element, input_value)
+            print("Selected text: ", input_value)
             time.sleep(2)
         if include_blanks == YES:
             self.select_include_blanks(search_property)
@@ -239,6 +242,8 @@ class CaseSearchWorkflows(BasePage):
             assert self.is_displayed(
                 validation_message_per_prop) or self.is_displayed(validation_message_per_prop2), f"Required validation missing {validation_message_per_prop2}"
             print(f"Required validation present {validation_message_per_prop}")
+            self.scroll_to_top()
+            time.sleep(1)
             assert self.is_displayed(
                 validation_message_on_top), f"Required validation missing {validation_message_on_top}"
             print(f"Required validation present {validation_message_on_top}")
@@ -306,7 +311,7 @@ class CaseSearchWorkflows(BasePage):
         print("Selected cases: ", song_names_on_case_list)
         self.wait_to_click(self.multi_select_continue)
         print("Waiting for the form to load")
-        time.sleep(10)
+        self.wait_after_interaction()
         self.wait_for_element((By.XPATH, self.song_label.format(song_names_on_case_list[0])))
         for item in song_names_on_case_list:
             self.scroll_to_element((By.XPATH, self.song_label.format(item)))

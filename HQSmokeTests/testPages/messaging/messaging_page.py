@@ -4,7 +4,7 @@ from common_utilities.selenium.base_page import BasePage
 from common_utilities.path_settings import PathSettings
 from HQSmokeTests.userInputs.user_inputs import UserData
 from common_utilities.generate_random_string import fetch_random_string
-from HQSmokeTests.testPages.users.org_structure_page import latest_download_file
+from HQSmokeTests.testPages.users.org_structure_page import latest_download_file, wait_for_download_to_finish
 
 from selenium.common.exceptions import NoSuchElementException, StaleElementReferenceException, TimeoutException, \
     NoAlertPresentException
@@ -277,8 +277,9 @@ class MessagingPage(BasePage):
         self.click(self.bulk_upload_button)
         self.wait_for_element(self.download_id)
         self.click(self.download_id)
-        time.sleep(3)
+        wait_for_download_to_finish()
         print("Conditional Alert downloaded successfully!")
+
 
     def cond_alert_upload(self):
         newest_file = latest_download_file()
@@ -550,6 +551,7 @@ class MessagingPage(BasePage):
         self.click(self.msg_translation_menu)
         self.wait_for_element(self.download_id)
         self.click(self.download_id)
+        wait_for_download_to_finish()
         print("Msg Trans downloaded successfully!")
 
     def msg_trans_upload(self):

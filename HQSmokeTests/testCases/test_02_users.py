@@ -112,7 +112,7 @@ def test_case_05_create_group_and_assign_user(driver, settings):
 @pytest.mark.userImport
 @pytest.mark.userExport
 def test_case_10_download_and_upload_users(driver, settings):
-    if group_id["user"]==None:
+    if group_id["user"]==None and group_id["group_name"] == None:
         pytest.skip("Skipping as user name is null")
     user = MobileWorkerPage(driver)
     home = HomePage(driver, settings)

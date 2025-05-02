@@ -9,7 +9,7 @@ from common_utilities.selenium.base_page import BasePage
 from common_utilities.generate_random_string import fetch_random_string
 from HQSmokeTests.userInputs.user_inputs import UserData
 from common_utilities.path_settings import PathSettings
-from HQSmokeTests.testPages.users.org_structure_page import latest_download_file
+from HQSmokeTests.testPages.users.org_structure_page import latest_download_file, wait_for_download_to_finish
 
 """"Contains test page elements and functions related to the applications on Commcare"""
 
@@ -42,7 +42,7 @@ class ApplicationPage(BasePage):
         self.text_question = (By.XPATH, "//a[@data-qtype='Text']")
         self.advanced_question = (By.XPATH, "//a[@data-qtype='Geopoint'][contains(.,'Advanced')]")
         self.location_question = (By.XPATH, "//a[@data-qtype='Geopoint'][contains(.,'GPS')]")
-        self.question_display_text = (By.XPATH, "(//div[@role='textbox'])[1]")
+        self.question_display_text = (By.XPATH, "(//div[contains(@class,'textarea')])[1]")
         self.save_button = (By.XPATH, "//span[text()='Save']")
         self.app_created = "(//span[text()='{}'])[1]"
         self.form_link = "//a//*[contains(.,'{}')]"
@@ -66,7 +66,7 @@ class ApplicationPage(BasePage):
         self.upload_xml = (By.XPATH, "//a[@href='#upload-xform']/i")
         self.add_form_button = (By.XPATH, "(//i[@class='fa fa-plus'])[1]")
         self.register_form = (By.XPATH, "//button[@data-case-action='open']/i")
-        self.new_form_settings = (By.XPATH, "(//a[@data-action='View Form'])[3]")
+        self.new_form_settings = (By.XPATH, "(//a[@data-action='View Form'])[last()]")
         self.choose_file = (By.ID, "xform_file_input")
         self.upload = (By.ID, 'xform_file_submit')
         self.same_question_present = (By.XPATH, "//a[contains(i/following-sibling::text(), 'Name')]")
@@ -144,6 +144,7 @@ class ApplicationPage(BasePage):
         self.wait_for_element(self.add_questions)
         self.wait_to_click(self.add_questions)
         self.wait_to_click(self.text_question)
+        self.wait_for_element(self.question_display_text)
         self.clear(self.question_display_text)
         self.send_keys(self.question_display_text, self.question_display_text_name)
         self.wait_to_click(self.save_button)
@@ -176,21 +177,29 @@ class ApplicationPage(BasePage):
 
     def form_xml_download_upload(self):
         try:
-            self.wait_to_click(self.actions_tab)
+            self.wait_for_element(self.actions_tab)
+            self.click(self.actions_tab)
         except TimeoutException:
             self.wait_to_click(self.form_settings)
-            self.wait_to_click(self.actions_tab)
-        self.wait_to_click(self.download_xml)
+            self.wait_for_element(self.actions_tab)
+            self.click(self.actions_tab)
+        self.wait_for_element(self.download_xml)
+        self.click(self.download_xml)
+        wait_for_download_to_finish(file_extension=".xml")
         self.wait_to_click(self.add_form_button)
         try:
             self.wait_to_click(self.register_form)
         except TimeoutException:
             self.driver.refresh()
-        self.wait_to_click(self.new_form_settings)
-        self.wait_to_click(self.actions_tab)
-        self.wait_to_click(self.upload_xml)
+        self.wait_for_element(self.new_form_settings)
+        self.click(self.new_form_settings)
+        self.wait_for_element(self.actions_tab)
+        self.click(self.actions_tab)
+        self.wait_for_element(self.upload_xml)
+        self.click(self.upload_xml)
         newest_file = latest_download_file(".xml")
         file_that_was_downloaded = PathSettings.DOWNLOAD_PATH / newest_file
+        print(f"file_that_was_downloaded: {file_that_was_downloaded}")
         self.send_keys(self.choose_file, str(file_that_was_downloaded))
         self.click(self.upload)
         assert self.is_present_and_displayed(self.same_question_present)

@@ -579,6 +579,7 @@ def test_case_18_conditionally_required_condition_property(driver, settings):
                                              property_type=COMBOBOX
                                              )
     """Check disabled"""
+    webapps.clear_selections_on_case_search_page()
     casesearch.search_against_property(search_property=CaseSearchUserInput.rating,
                                        input_value=CaseSearchUserInput.three_star,
                                        property_type=COMBOBOX

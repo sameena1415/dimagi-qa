@@ -10,7 +10,7 @@ from selenium.webdriver.support.select import Select
 from common_utilities.selenium.base_page import BasePage
 from common_utilities.path_settings import PathSettings
 from HQSmokeTests.userInputs.user_inputs import UserData
-from HQSmokeTests.testPages.users.org_structure_page import latest_download_file
+from HQSmokeTests.testPages.users.org_structure_page import latest_download_file, wait_for_download_to_finish
 from selenium.common.exceptions import NoSuchElementException
 
 """"Contains test page elements and functions related to the User's Web Users module"""
@@ -148,19 +148,20 @@ class WebUsersPage(BasePage):
         print("Invitation deleted")
 
     def download_web_users(self):
-        
         self.wait_to_click(self.users_menu_id)
         self.wait_to_click(self.web_users_menu)
         self.wait_to_click(self.download_worker_btn)
         self.wait_to_click(self.download_filter)
         try:
-            self.wait_and_sleep_to_click(self.download_users_btn)
-            time.sleep(2)
+            self.wait_for_element(self.download_users_btn)
+            self.click(self.download_users_btn)
+            wait_for_download_to_finish()
         except TimeoutException:
             print("TIMEOUT ERROR: Still preparing for download..Celery might be down..")
             assert False
         # verify_downloaded_workers
         newest_file = latest_download_file()
+        print(newest_file)
         self.assert_downloaded_file(newest_file, "_users_"), "Download Not Completed!"
         print("File download successful")
 

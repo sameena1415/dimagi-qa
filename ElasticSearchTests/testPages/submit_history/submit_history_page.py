@@ -34,8 +34,8 @@ class SubmitHistoryPage(BasePage):
 
         # Mobile Worker Reports
         self.reports_menu_id = (By.ID, "ProjectReportsTab")
-        self.submit_history_rep = (By.LINK_TEXT, "Submit History")
-        self.SUBMIT_HISTORY_TITLE = "Submit History - CommCare HQ"
+        self.submit_history_rep = (By.LINK_TEXT, "Submission History")
+        self.SUBMIT_HISTORY_TITLE = "Submission History - CommCare HQ"
 
         # Report Elements
         self.apply_id = (By.ID, "apply-filters")

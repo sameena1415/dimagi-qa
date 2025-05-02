@@ -83,7 +83,6 @@ class WebAppsPage(BasePage):
         return self.case_name_created
 
     def submit_case_change_register_form(self):
-        self.wait_to_click(self.web_app_link)
         self.wait_for_element(self.web_app_link)
         self.wait_to_click(self.web_app_link)
         self.wait_for_element(self.update_case_change_link)

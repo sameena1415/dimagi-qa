@@ -184,14 +184,12 @@ class BasePage:
     def select_by_partial_text(self, locator, partial_text):
         select_element = self.driver.find_element(*locator)
         options = select_element.find_elements(By.TAG_NAME, "option")
-
         for option in options:
             text = option.text.strip().replace('\u200e', '')  # Remove LRM or other hidden chars
             if partial_text in text:
                 option.click()
                 print(f"[INFO] Selected: '{text}'")
                 return
-
         raise Exception(f"[ERROR] Option with partial text '{partial_text}' not found.")
 
     def select_by_text(self, source_locator, value):
@@ -387,7 +385,7 @@ class BasePage:
         print("Last Modified Time : ", str(modificationTime) + 'Current Time : ', str(timeNow),
               "Diff: " + str(diff_seconds)
               )
-        assert file_name in newest_file and diff_seconds in range(0, 600), "Export not completed"
+        assert file_name in newest_file and diff_seconds in range(0, 600), f"Export not completed, {file_name} not in {newest_file}"
 
     def accept_pop_up(self):
         try:
@@ -403,6 +401,9 @@ class BasePage:
 
     def scroll_to_bottom(self):
         self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight)")
+
+    def scroll_to_top(self):
+        self.driver.execute_script("window.scrollTo(0, 0)")
 
     def hover_and_click(self, locator1, locator2):
         action = ActionChains(self.driver)
@@ -424,14 +425,20 @@ class BasePage:
         # double click operation
         action.double_click(element)
 
-    # def js_click(self, locator, timeout=10):
-    #     clickable = ec.element_to_be_clickable(locator)
-    #     element = WebDriverWait(self.driver, timeout).until(clickable,
-    #                                                         message="Couldn't find locator: "
-    #                                                                 + str(locator)
-    #                                                         )
-    #     self.driver.execute_script("arguments[0].click();", element)
-    #     time.sleep(3)
+    def js_click(self, locator, timeout=10):
+        try:
+            element = self.driver.find_element(*locator)
+            self.driver.execute_script("arguments[0].click();", element)
+            time.sleep(3)
+        except Exception as e:
+            print(f"Exception({e}. Trying again...)")
+            clickable = ec.element_to_be_clickable(locator)
+            element = WebDriverWait(self.driver, timeout, poll_frequency=1).until(clickable,
+                                                                message="Couldn't find locator: "
+                                                                        + str(locator)
+                                                                )
+            self.driver.execute_script("arguments[0].click();", element)
+            time.sleep(3)
 
     def scroll_to_element(self, locator):
         element = self.driver.find_element(*locator)

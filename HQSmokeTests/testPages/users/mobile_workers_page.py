@@ -10,7 +10,7 @@ from common_utilities.selenium.base_page import BasePage
 from common_utilities.path_settings import PathSettings
 from common_utilities.generate_random_string import fetch_random_string, fetch_phone_number
 from HQSmokeTests.userInputs.user_inputs import UserData
-from HQSmokeTests.testPages.users.org_structure_page import latest_download_file
+from HQSmokeTests.testPages.users.org_structure_page import latest_download_file, wait_for_download_to_finish
 from selenium.common.exceptions import TimeoutException, NoSuchElementException
 from selenium.webdriver.common.by import By
 
@@ -320,14 +320,14 @@ class MobileWorkerPage(BasePage):
         try:
             self.search_user(username)
             self.wait_for_element((By.XPATH, self.username_link.format(username)), 50)
-            self.wait_to_click(self.deactivate_buttons_list)
+            self.js_click(self.deactivate_buttons_list)
             self.wait_for_element(self.confirm_deactivate_xpath_list)
-            self.wait_to_click(self.confirm_deactivate_xpath_list)
+            self.js_click(self.confirm_deactivate_xpath_list)
             time.sleep(2)
             assert self.is_present_and_displayed((By.XPATH, self.reactivate_buttons_list.format(username)), 20)
             self.mobile_worker_menu()
             self.wait_for_element(self.show_deactivated_users_btn)
-            self.click(self.show_deactivated_users_btn)
+            self.js_click(self.show_deactivated_users_btn)
             self.search_user(username)
             assert self.is_present_and_displayed((By.XPATH, self.reactivate_buttons_list.format(username)), 20)
             print("Deactivation successful")
@@ -351,7 +351,7 @@ class MobileWorkerPage(BasePage):
             self.mobile_worker_menu()
             self.search_user(username)
             time.sleep(2)
-            self.click(self.show_deactivated_users_btn)
+            self.js_click(self.show_deactivated_users_btn)
             if not self.is_present_and_displayed((By.XPATH, self.username_link.format(username)), 10):
                 print("This is a rerun so skipping this steps")
                 print("User is already activated")
@@ -361,9 +361,9 @@ class MobileWorkerPage(BasePage):
                 time.sleep(2)
             else:
                 self.wait_for_element((By.XPATH, self.username_link.format(username)), 50)
-                self.wait_to_click((By.XPATH, self.reactivate_buttons_list.format(username)))
+                self.js_click((By.XPATH, self.reactivate_buttons_list.format(username)))
                 self.wait_for_element(self.confirm_reactivate_xpath_list)
-                self.wait_to_click(self.confirm_reactivate_xpath_list)
+                self.js_click(self.confirm_reactivate_xpath_list)
                 time.sleep(2)
                 self.mobile_worker_menu()
                 self.search_user(username)
@@ -448,15 +448,15 @@ class MobileWorkerPage(BasePage):
             print("All user fields might not have been deleted")
 
     def download_mobile_worker(self):
-        
         self.mobile_worker_menu()
         self.wait_to_click(self.download_worker_btn)
         self.wait_for_element(self.download_filter)
         self.click(self.download_filter)
         time.sleep(2)
         try:
-            self.wait_and_sleep_to_click(self.download_users_btn, 150)
-            time.sleep(2)
+            self.wait_for_element(self.download_users_btn, 150)
+            self.click(self.download_users_btn)
+            wait_for_download_to_finish()
         except TimeoutException:
             print("TIMEOUT ERROR: Still preparing for download..Celery might be down..")
             assert False

@@ -76,14 +76,14 @@ class LookUpTablePage(BasePage):
         # in-app effect
         self.applications_menu_id = (By.ID, "ApplicationsTab")
         self.application = (By.LINK_TEXT, UserData.application)
-        self.add_module = (By.XPATH, "//a[@class='appnav-add js-add-new-item']")
+        self.add_module = (By.XPATH, "//a[contains(@class,'new-module') or contains(@class,'appnav-add js-add-new-item')]/i")
         self.add_case_list = (By.XPATH, "//button[@data-type='case']")
         self.delete_popup = (By.XPATH, "(//*[@class='disable-on-submit btn btn-danger'])[1]")
-        self.add_questions = (By.XPATH, "//a[contains(@class,'fd-add-question')]")
+        self.add_questions = (By.XPATH, "//div[@class='dropdown fd-add-question-dropdown']")
         self.lookup_question = (By.XPATH,
                                 "//ul[@class='dropdown-menu multi-level']/li[@class='dropdown-submenu']/a[contains(.,'Lookup Tables')]")
         self.checkbox_question = (By.XPATH, "//a[@data-qtype='MSelectDynamic']")
-        self.question_display_text = (By.XPATH, "(//div[@role='textbox'])[1]")
+        self.question_display_text = (By.XPATH, "(//div[contains(@class,'textarea')])[1]")
         self.question_display_text_en = (By.XPATH, "//*[@name='itext-en-label']")
         self.question_display_text_hin = (By.XPATH, "//*[@name='itext-hin-label']")
         self.dropdown_logic = (By.XPATH, "//*[@class='btn btn-default dropdown-toggle']")
@@ -150,6 +150,12 @@ class LookUpTablePage(BasePage):
         self.app_language = (By.XPATH, "//*[contains(@class,'js-lang')]")
         self.done = (By.XPATH, "//*[@class='btn btn-primary js-done']")
         self.selected_caselist = (By.XPATH, "(//*[@class='appnav-item ']/a[@class='appnav-delete'])[1]")
+
+        # Case List feature
+        self.caselist_span = (By.XPATH, "//span[contains(@id, 'new-case-type-dropdown-container')]")
+        self.caselist_dropdown = (By.XPATH, "//select[@id='new-case-type-dropdown']")
+        self.caselist_dropdown_input = (By.XPATH, "//input[@aria-label='Search' or contains(@class,'search')]")
+        self.create_case_list_btn = (By.XPATH, "//button[@id='case-type-create-btn']")
 
     def create_lookup_table(self):
         self.wait_to_click(self.manage_tables_link)
@@ -459,9 +465,7 @@ class LookUpTablePage(BasePage):
         time.sleep(2)
         excel = ExcelManager()
         excel.write_data(tablename, UserData.data_list1, download_path)
-        
         self.err_upload(download_path)
-        
         self.download1(tablename)
         row_count_before = self.row_count_table(tablename)
         print("Row count before: ", row_count_before)
@@ -470,7 +474,6 @@ class LookUpTablePage(BasePage):
         time.sleep(3)
         print("Download path: ", download_path)
         excel.delete_row(tablename, 2, download_path)
-        
         self.replace_existing_table(download_path)
         time.sleep(2)
         row_count_after = self.row_count_table(tablename)
@@ -671,9 +674,15 @@ class LookUpTablePage(BasePage):
 
     def test_application(self):
         self.wait_to_click(self.add_module)
-        
         self.wait_to_click(self.add_case_list)
-        
+        if self.is_present(self.create_case_list_btn):
+            self.wait_for_element(self.caselist_span)
+            self.click(self.caselist_span)
+            self.wait_for_element(self.caselist_dropdown_input)
+            self.send_keys(self.caselist_dropdown_input, "Case List")
+            time.sleep(1)
+            self.select_by_value(self.caselist_dropdown, "Case_List")
+            self.click(self.create_case_list_btn)
         self.wait_for_element(self.add_questions, 50)
         self.wait_to_click(self.add_questions)
         
@@ -705,7 +714,14 @@ class LookUpTablePage(BasePage):
         self.wait_to_click(self.add_module)
         
         self.wait_to_click(self.add_case_list)
-        
+        if self.is_present(self.create_case_list_btn):
+            self.wait_for_element(self.caselist_span)
+            self.click(self.caselist_span)
+            self.wait_for_element(self.caselist_dropdown_input)
+            self.send_keys(self.caselist_dropdown_input, "Case List")
+            time.sleep(1)
+            self.select_by_value(self.caselist_dropdown, "Case_List")
+            self.click(self.create_case_list_btn)
         self.wait_to_click(self.add_questions)
         
         self.wait_to_click(self.lookup_question)
@@ -722,9 +738,15 @@ class LookUpTablePage(BasePage):
 
     def create_new_form(self):
         self.wait_to_click(self.add_module)
-        
         self.wait_to_click(self.add_case_list)
-        
+        if self.is_present(self.create_case_list_btn):
+            self.wait_for_element(self.caselist_span)
+            self.click(self.caselist_span)
+            self.wait_for_element(self.caselist_dropdown_input)
+            self.send_keys(self.caselist_dropdown_input, "Case List")
+            time.sleep(1)
+            self.select_by_value(self.caselist_dropdown, "Case_List")
+            self.click(self.create_case_list_btn)
         self.wait_to_click(self.add_questions)
         
         self.wait_to_click(self.lookup_question)

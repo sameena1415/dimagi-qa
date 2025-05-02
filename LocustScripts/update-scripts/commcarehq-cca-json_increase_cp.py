@@ -68,14 +68,14 @@ class WorkloadModelSteps(SequentialTaskSet):
 
     def on_start(self):
         self.filepath = PathSettings.ROOT + "/dimagi-qa/LocustScripts/update-scripts/project-config/co-carecoordination-perf/"
-        self.input_file = "Test_CCA_80_CP.json"
+        self.input_file = "Test_CCA_10_CP.json"
         self.cca_api_url = "https://commcare-analytics.dimagi.com/commcarehq_dataset/change/"
         self.json_header = {
-            'Authorization': 'Bearer El0LxFRRUqql1n9owjQDfmlV7Uj1QlAqwTi19ehSFY',
+            'Authorization': 'Bearer JFV1BVYWpUzitkQ7qPdgMdRvUU2anCh1QnaUXKw5Yq',
             'Content-Type': 'application/json',
-            'content-length': '1205'
+            'content-length': '465'
             }
-        self.datasource_id = "0a194584ff35d96d39ca6bc8de17de63"
+        self.datasource_id = "59ac38e0635f2041d947666a370ce0df"
         self.USER_INPUT_BASE_DIR = os.path.dirname(os.path.abspath(__file__))
         
     @task
@@ -93,11 +93,11 @@ class WorkloadModelSteps(SequentialTaskSet):
         # property_count = [1, 20001, 10]  # 10 users, 20 CP, 200k rows
         # property_count = [1, 50001, 10]  # 10 users, 20 CP, 500k rows
         # property_count = [1, 20001, 10]  # 10 users, 30 CP, 200k rows
-        property_count = [1, 33335, 30]  # 30 users, 80 CP, 1m rows
+        property_count = [1, 125, 40]  # 30 users, 10 CP, 1m rows
         # property_count = [1, 50001, 10]  # 10 users, 40 CP, 500k rows
         count = property_count[1] - property_count[0]
         file = open(self.filepath + self.input_file, "r")
-        csv_file_name = f"Records_for_80_CP_{str(property_count[2])}_users_{self.user.user_detail.username}.csv"
+        csv_file_name = f"Records_for_10_CP_{str(property_count[2])}_users_{self.user.user_detail.username}.csv"
         request_input = json.loads(file.read())
         # self.create_csv_file(csv_file_name)
         for i in range(property_count[0], property_count[1]):
