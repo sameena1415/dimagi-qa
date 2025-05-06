@@ -82,6 +82,15 @@ class BasePage:
             self.wait_until(ec.presence_of_element_located(locator), timeout, f"Couldn't find: {locator}")
         self.wait_after_interaction()
 
+    def wait_to_clear_and_send_keys(self, locator, user_input, timeout=10):
+        try:
+            element = self.wait_until(ec.visibility_of_element_located(locator), timeout, f"Couldn't find: {locator}")
+            element.clear()
+            element.send_keys(user_input)
+        except Exception as e:
+            logger.error(f"[wait_to_clear_and_send_keys] Failed on {locator}: {e}")
+            raise
+
     def click(self, locator):
         try:
             self.driver.find_element(*locator).click()
