@@ -179,3 +179,200 @@ class BasePage:
         except WebDriverException as e:
             logger.warning(f"driver.back() failed: {e}, trying JS fallback")
             self.driver.execute_script("window.history.back();")
+    def is_present(self, locator):
+        try:
+            self.driver.find_element(*locator)
+            return True
+        except NoSuchElementException:
+            return False
+
+    def is_selected(self, locator):
+        try:
+            return self.driver.find_element(*locator).is_selected()
+        except (NoSuchElementException, TimeoutException):
+            return False
+
+    def is_enabled(self, locator):
+        try:
+            return self.driver.find_element(*locator).is_enabled()
+        except (NoSuchElementException, TimeoutException):
+            return False
+
+    def clear(self, locator):
+        try:
+            self.driver.find_element(*locator).clear()
+        except Exception as e:
+            logger.warning(f"[clear] Failed to clear {locator}: {e}")
+
+    def get_text(self, locator):
+        try:
+            element_text = self.driver.find_element(*locator).text
+            logger.info(f"[get_text] Found text: {element_text}")
+            return element_text
+        except Exception as e:
+            logger.error(f"[get_text] Failed to get text from {locator}: {e}")
+            raise
+
+    def get_attribute(self, locator, attribute):
+        try:
+            attr = self.driver.find_element(*locator).get_attribute(attribute)
+            logger.info(f"[get_attribute] {attribute}={attr}")
+            return attr
+        except Exception as e:
+            logger.error(f"[get_attribute] Failed for {locator}: {e}")
+            raise
+
+    def find_element(self, locator):
+        try:
+            return self.driver.find_element(*locator)
+        except NoSuchElementException:
+            logger.warning(f"[find_element] Element not found: {locator}")
+            return None
+
+    def find_elements(self, locator):
+        return self.driver.find_elements(*locator)
+
+    def find_elements_texts(self, locator):
+        return [el.text for el in self.driver.find_elements(*locator)]
+
+    def select_by_text(self, locator, text):
+        try:
+            select = Select(self.driver.find_element(*locator))
+            select.select_by_visible_text(text)
+            logger.info(f"[select_by_text] Selected '{text}'")
+        except Exception as e:
+            logger.error(f"[select_by_text] Failed to select '{text}' from {locator}: {e}")
+            raise
+
+    def select_by_value(self, locator, value):
+        try:
+            select = Select(self.driver.find_element(*locator))
+            select.select_by_value(value)
+            logger.info(f"[select_by_value] Selected value '{value}'")
+        except Exception as e:
+            logger.error(f"[select_by_value] Failed to select value '{value}' from {locator}: {e}")
+            raise
+
+    def select_by_index(self, locator, index):
+        try:
+            select = Select(self.driver.find_element(*locator))
+            select.select_by_index(index)
+            logger.info(f"[select_by_index] Selected index '{index}'")
+        except Exception as e:
+            logger.error(f"[select_by_index] Failed to select index '{index}' from {locator}: {e}")
+            raise
+
+    def get_selected_text(self, locator):
+        try:
+            select = Select(self.driver.find_element(*locator))
+            selected_text = select.first_selected_option.text
+            logger.info(f"[get_selected_text] Selected option: {selected_text}")
+            return selected_text
+        except Exception as e:
+            logger.error(f"[get_selected_text] Failed to get selected option from {locator}: {e}")
+            raise
+
+    def deselect_all(self, locator):
+        try:
+            select = Select(self.driver.find_element(*locator))
+            select.deselect_all()
+            logger.info(f"[deselect_all] Deselected all options for {locator}")
+        except Exception as e:
+            logger.error(f"[deselect_all] Failed to deselect all from {locator}: {e}")
+            raise
+
+    def switch_to_next_tab(self):
+        try:
+            win_handles = self.driver.window_handles
+            self.driver.switch_to.window(win_handles[1])
+            logger.info(f"[switch_to_next_tab] Switched to: {self.driver.title}")
+        except Exception as e:
+            logger.error(f"[switch_to_next_tab] Failed: {e}")
+            raise
+
+    def switch_back_to_prev_tab(self):
+        try:
+            win_handles = self.driver.window_handles
+            self.driver.switch_to.window(win_handles[0])
+            logger.info(f"[switch_back_to_prev_tab] Switched to: {self.driver.title}")
+        except Exception as e:
+            logger.error(f"[switch_back_to_prev_tab] Failed: {e}")
+            raise
+
+    def switch_to_new_tab(self):
+        try:
+            self.driver.switch_to.new_window('tab')
+            logger.info("[switch_to_new_tab] New tab opened")
+        except Exception as e:
+            logger.error(f"[switch_to_new_tab] Failed: {e}")
+            raise
+
+    def switch_to_default_content(self):
+        try:
+            self.driver.switch_to.default_content()
+            logger.info("[switch_to_default_content] Switched to default content")
+        except Exception as e:
+            logger.error(f"[switch_to_default_content] Failed: {e}")
+            raise
+
+    def switch_to_frame(self, frame_locator):
+        try:
+            frame = self.driver.find_element(*frame_locator)
+            self.driver.switch_to.frame(frame)
+            logger.info("[switch_to_frame] Switched to frame")
+        except Exception as e:
+            logger.error(f"[switch_to_frame] Failed: {e}")
+            raise
+
+    def scroll_to_top(self):
+        self.driver.execute_script("window.scrollTo(0, 0);")
+        logger.info("[scroll_to_top] Scrolled to top")
+
+    def scroll_to_bottom(self):
+        self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+        logger.info("[scroll_to_bottom] Scrolled to bottom")
+
+    def hover_on_element(self, locator):
+        try:
+            element = self.wait_until(ec.visibility_of_element_located(locator), timeout=10)
+            ActionChains(self.driver).move_to_element(element).pause(2).perform()
+            logger.info("[hover_on_element] Hovered over element")
+        except Exception as e:
+            logger.error(f"[hover_on_element] Failed: {e}")
+            raise
+
+    def hover_and_click(self, locator1, locator2):
+        try:
+            action = ActionChains(self.driver)
+            el1 = self.wait_until(ec.visibility_of_element_located(locator1), timeout=5)
+            el2 = self.wait_until(ec.visibility_of_element_located(locator2), timeout=5)
+            action.move_to_element(el1).move_to_element(el2).click().perform()
+            logger.info("[hover_and_click] Performed hover and click")
+        except Exception as e:
+            logger.error(f"[hover_and_click] Failed: {e}")
+            raise
+
+    def accept_pop_up(self):
+        try:
+            WebDriverWait(self.driver, 3, poll_frequency=0.5).until(ec.alert_is_present())
+            alert = self.driver.switch_to.alert
+            alert.accept()
+            logger.info("[accept_pop_up] Alert accepted")
+        except TimeoutException:
+            logger.info("[accept_pop_up] No alert found")
+
+    def assert_downloaded_file(self, file_path, file_name):
+        try:
+            mod_time = file_path.stat().st_mtime
+            file_time = datetime.datetime.fromtimestamp(mod_time)
+            now = datetime.datetime.now()
+            age = (now - file_time).total_seconds()
+            assert file_name in file_path.name and age < 600, f"[assert_downloaded_file] Invalid or old file: {file_path.name}"
+            logger.info(f"[assert_downloaded_file] Verified file: {file_path.name}")
+        except Exception as e:
+            logger.error(f"[assert_downloaded_file] Assertion failed: {e}")
+            raise
+
+    def page_source_contains(self, text):
+        assert text in self.driver.page_source, f"[page_source_contains] Text '{text}' not in page source"
+        logger.info(f"[page_source_contains] Verified text in page source: {text}")
