@@ -376,3 +376,7 @@ class BasePage:
     def page_source_contains(self, text):
         assert text in self.driver.page_source, f"[page_source_contains] Text '{text}' not in page source"
         logger.info(f"[page_source_contains] Verified text in page source: {text}")
+
+    def get_url(self, link):
+        self.driver.get(link)
+        time.sleep(2)
