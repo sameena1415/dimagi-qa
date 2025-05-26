@@ -29,7 +29,7 @@ jobs:
       - id: set-matrix-schedule
         if: ${{ github.event_name  == 'schedule' }}
         run: |
-          echo "::set-output name=matrix::{\"environment\": [\"staging\"]}"
+          echo "::set-output name=matrix::{\"environment\": [\"staging\", \"eu\"]}"
       - id: set-matrix-deploy
         if: ${{ github.event_name == 'repository_dispatch' && github.event.client_payload.environment != 'staging' }}
         run: |
@@ -41,7 +41,7 @@ jobs:
       - id: set-matrix-default
         if: ${{ github.event_name != 'repository_dispatch' }}
         run: |
-          echo "::set-output name=matrix::{\"environment\": [\"production\", \"staging\"]}"
+          echo "::set-output name=matrix::{\"environment\": [\"production\", \"staging\", \"eu\"]}"
       - id: invalid-deploy
         if: ${{ github.event_name == 'repository_dispatch' && github.event.client_payload.environment != 'production' }}
         run: |

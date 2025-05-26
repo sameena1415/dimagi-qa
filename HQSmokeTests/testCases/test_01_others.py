@@ -34,6 +34,8 @@ def test_case_53_rage_clicks(driver, settings):
 
 @pytest.mark.twoFactorAuth
 def test_case_two_factor_auth(driver, settings):
+    if "eu" in settings["url"]:
+        pytest.skip("Auth key is not setup for eu server")
     login = LoginPage(driver, settings["url"])
     login.logout()
     if "staging" in settings["url"]:

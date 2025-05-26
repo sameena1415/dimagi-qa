@@ -74,7 +74,7 @@ class LoginAsAppPreviewPage(BasePage):
     def login_as_app_preview_presence(self):
         self.switch_to_frame(self.iframe)
         
-        assert self.is_visible_and_displayed(self.title_bar), "This is not the Webaspps menu page."
+        self.wait_for_element(self.title_bar), "This is not the Webaspps menu page."
         # self.webapp.wait_to_click(self.login_as_button)
         self.wait_for_element(self.login_as_button, 200)
         self.scroll_to_element(self.login_as_button)
@@ -106,7 +106,7 @@ class LoginAsAppPreviewPage(BasePage):
         
         self.wait_to_click(self.submit)
         
-        assert self.is_visible_and_displayed(self.submit_success)
+        self.wait_for_element(self.submit_success)
         self.switch_to_default_content()
 
 

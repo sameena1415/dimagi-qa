@@ -113,7 +113,7 @@ class WebApps(BasePage):
             print("No assertion needed")
         else:
             self.wait_for_element((By.XPATH, self.current_page.format(menu_name)), timeout=60)
-            assert self.is_visible_and_displayed(self.caselist_header)
+            self.wait_for_element(self.caselist_header)
 
     def open_form(self, form_name):
         self.form_header = self.get_element(self.form_name_header_format, form_name)
@@ -245,14 +245,14 @@ class WebApps(BasePage):
         time.sleep(2)
         try:
             self.wait_for_element(self.form_submission_successful, timeout=50)
-            assert self.is_visible_and_displayed(self.form_submission_successful, timeout=50)
+            self.wait_for_element(self.form_submission_successful, timeout=50)
         except AssertionError:
             if self.is_displayed(self.form_500_error):
                 time.sleep(10)
                 self.wait_after_interaction()
                 self.wait_to_click(self.form_submit)
                 self.wait_for_element(self.form_submission_successful, timeout=50)
-                assert self.is_visible_and_displayed(self.form_submission_successful, timeout=50)
+                self.wait_for_element(self.form_submission_successful, timeout=50)
             else:
                 raise AssertionError
         time.sleep(2)

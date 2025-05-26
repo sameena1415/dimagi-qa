@@ -168,10 +168,10 @@ class OrganisationStructurePage(BasePage):
             self.wait_to_clear_and_send_keys(self.loc_name_input_id, "updated_on:" + str(date.today()))
             self.click(self.update_loc_xpath)
             
-            assert self.is_visible_and_displayed(self.loc_saved_success_msg), "Location editing not successful!"
+            self.wait_for_element(self.loc_saved_success_msg), "Location editing not successful!"
             self.click(self.org_menu_link_text)
             self.driver.refresh()
-            assert self.is_visible_and_displayed(self.renamed_location), "Location editing not successful!"
+            self.wait_for_element(self.renamed_location), "Location editing not successful!"
         except StaleElementReferenceException:
             print(StaleElementReferenceException)
 

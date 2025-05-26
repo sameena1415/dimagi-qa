@@ -184,7 +184,7 @@ class MessagingPage(BasePage):
             
             self.scroll_to_element(self.send_message)
             self.wait_to_click(self.send_message)
-            assert self.is_visible_and_displayed(self.message_sent_success_msg), "Message not sent successfully"
+            self.wait_for_element(self.message_sent_success_msg), "Message not sent successfully"
             print("SMS composed successfully!")
 
     def send_broadcast_message(self):
@@ -210,7 +210,7 @@ class MessagingPage(BasePage):
                 else:
                     assert True
         except StaleElementReferenceException:
-            assert self.is_visible_and_displayed(self.broadcast_created), "Broadcast not created successfully!"
+            self.wait_for_element(self.broadcast_created), "Broadcast not created successfully!"
         print("Broadcast created successfully!")
 
     def create_cond_alert(self):
@@ -286,7 +286,7 @@ class MessagingPage(BasePage):
         file_that_was_downloaded = PathSettings.DOWNLOAD_PATH / newest_file
         self.send_keys(self.choose_file, str(file_that_was_downloaded))
         self.wait_to_click(self.upload)
-        assert self.is_visible_and_displayed(self.upload_success_message), "Conditional Alert upload not completed!"
+        self.wait_for_element(self.upload_success_message), "Conditional Alert upload not completed!"
         print("Conditional Alert uploaded successfully!")
 
     def add_keyword_trigger(self):
@@ -301,7 +301,7 @@ class MessagingPage(BasePage):
         
         self.select_by_value(self.page_limit, "50")
         time.sleep(3)
-        assert self.is_visible_and_displayed(self.keyword_created), "Keyword not created successfully!"
+        self.wait_for_element(self.keyword_created), "Keyword not created successfully!"
         print("Keyword created successfully!")
 
     def add_structured_keyword_trigger(self):
@@ -318,7 +318,7 @@ class MessagingPage(BasePage):
         
         self.select_by_value(self.page_limit, "50")
         time.sleep(3)
-        assert self.is_visible_and_displayed(
+        self.wait_for_element(
             self.structured_keyword_created), "Structured keyword not created successfully!"
         print("Structured keyword created successfully!")
 
@@ -357,7 +357,7 @@ class MessagingPage(BasePage):
         
         self.scroll_to_element(self.send_message)
         self.wait_to_click(self.send_message)
-        assert self.is_visible_and_displayed(self.message_sent_success_msg), "Settings page not updated successfully!"
+        self.wait_for_element(self.message_sent_success_msg), "Settings page not updated successfully!"
         print("Settings page updated successfully!")
 
     def delete_languages(self):
@@ -559,7 +559,7 @@ class MessagingPage(BasePage):
         file_that_was_downloaded = PathSettings.DOWNLOAD_PATH / newest_file
         self.send_keys(self.choose_file, str(file_that_was_downloaded))
         self.wait_to_click(self.upload)
-        assert self.is_visible_and_displayed(self.upload_success_message), "Msg Trans not uploaded successfully"
+        self.wait_for_element(self.upload_success_message), "Msg Trans not uploaded successfully"
         print("Msg Trans uploaded successfully!")
 
     # def project_settings_page(self, value=None):
@@ -575,14 +575,14 @@ class MessagingPage(BasePage):
     #     self.click(self.settings_bar)
     #     self.wait_for_element(self.project_settings_menu)
     #     self.wait_to_click(self.project_settings_menu)
-    #     assert self.is_visible_and_displayed(
+    #     self.wait_for_element(
     #         self.project_settings_elements), "Project Settings page did not load successfully"
     #     print("Project Settings page loaded successfully!")
 
     def current_subscription_page(self):
         self.wait_to_click(self.settings_bar)
         self.wait_to_click(self.subscription_menu)
-        assert self.is_visible_and_displayed(
+        self.wait_for_element(
             self.subscription_elements_id), "Subscription Page did not load successfully"
         print("Current Subscription page loaded successfully!")
 

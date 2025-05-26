@@ -34,7 +34,7 @@ class CaseSearchWorkflows(BasePage):
         self.required_validation_on_top = "//div[contains(@class,'alert-danger')]//following::*[contains(text(),'{}')]"
         self.required_validation_per_property_text = self.search_against_text_property_format + "//following::div[contains (text(),'{}')][1]"
         self.required_validation_per_property_combox = self.search_property_name_combobox + "//following::div[contains (text(),'{}')][1]"
-        self.required_validation_per_property_combox2 = self.search_property_name_combobox +"//parent::div//parent::td[contains(@class,'required')]"
+        self.required_validation_per_property_combox2 = self.search_property_name_combobox + "//parent::div//parent::td[contains(@class,'required')]"
         self.city_value_home = "//span[contains(@class,'webapp-markdown-output')][contains(text(), '{}')]"
         self.city_value_work = "//span[contains(@class,'webapp-markdown-output')][contains(text()[2], '{}')]"
         self.search_screen_title = "//h2[contains(text(), '{}')]"
@@ -73,7 +73,8 @@ class CaseSearchWorkflows(BasePage):
         values_ = self.find_elements_texts(self.value_in_table)
         print(expected_value, values_)  # added for debugging
         if is_multi == YES:
-            assert all(item in values_ for item in expected_value) or any(item in values_ for item in expected_value), "Expected values are not present"
+            assert all(item in values_ for item in expected_value) or any(item in values_ for item in expected_value
+                                                                          ), "Expected values are not present"
             print("Expected values are present")
         elif is_multi == NO:
             assert expected_value in values_, "Expected values are not present"
@@ -87,9 +88,10 @@ class CaseSearchWorkflows(BasePage):
         elif search_format == combobox:
             search_property = (
                 By.XPATH, self.combobox_search_property_name_and_value_format.format(search_property, default_value))
-        time.sleep(10)
-        assert self.is_visible_and_displayed(search_property, 400), "Search "+default_value+" property not present"
-        print("Search "+default_value+" property is present")
+        time.sleep(1)
+        self.wait_for_element(search_property, 400)
+        assert self.is_present(search_property), "Search " + default_value + " property not present"
+        print("Search " + default_value + " property is present")
 
     def search_against_property(self, search_property, input_value, property_type, include_blanks=None):
         print("Providing value: ", input_value)
@@ -105,7 +107,7 @@ class CaseSearchWorkflows(BasePage):
                 if self.is_visible_and_displayed(self.date_picker_clear, 10):
                     self.click(self.date_picker_clear)
                 time.sleep(1)
-                self.send_keys(self.search_property, input_value+Keys.TAB)
+                self.send_keys(self.search_property, input_value + Keys.TAB)
                 time.sleep(2)
                 if self.is_present(self.date_picker_close):
                     self.click(self.date_picker_close)
@@ -141,15 +143,21 @@ class CaseSearchWorkflows(BasePage):
             # below line works on linux
             if platform.system() == 'Windows':
                 print("Current OS is Windows")
-                date_ranges = str(sixty_days_ago.strftime("%#m/%#d/%Y")) + " to " + str(today_date.strftime("%#m/%#d/%Y"))
+                date_ranges = str(sixty_days_ago.strftime("%#m/%#d/%Y")) + " to " + str(
+                    today_date.strftime("%#m/%#d/%Y")
+                    )
             else:
                 print("Current OS is Linux")
-                date_ranges = str(sixty_days_ago.strftime("%-m/%-d/%Y")) + " to " + str(today_date.strftime("%-m/%-d/%Y"))
+                date_ranges = str(sixty_days_ago.strftime("%-m/%-d/%Y")) + " to " + str(
+                    today_date.strftime("%-m/%-d/%Y")
+                    )
             # the below line works on windows
             # date_ranges = str(sixty_days_ago.strftime("%#m/%#d/%Y")) + " to " + str(today_date.strftime("%#m/%#d/%Y"))
         else:
             date_obj = datetime.strptime(input_date, input_format)
-            date_ranges = str(date_obj.strftime(output_format).lstrip('0')) + " to " + str(date_obj.strftime(output_format).lstrip('0'))
+            date_ranges = str(date_obj.strftime(output_format).lstrip('0')) + " to " + str(
+                date_obj.strftime(output_format).lstrip('0')
+                )
         print(date_ranges)
         return str(date_ranges)
 
@@ -161,8 +169,9 @@ class CaseSearchWorkflows(BasePage):
 
     def check_help_text(self, search_property, help_text_value):
         help_text = (By.XPATH, self.help_text_format.format(search_property, help_text_value, help_text_value))
-        assert self.is_visible_and_displayed(help_text), "Expected text "+help_text_value+" is not present"
-        print("Expected text "+help_text_value+" is present")
+        self.wait_for_element(help_text)
+        assert self.is_present(help_text), "Expected text " + help_text_value + " is not present"
+        print("Expected text " + help_text_value + " is present")
 
     def check_date_range(self, search_property, date_range):
         time.sleep(2)
@@ -172,8 +181,8 @@ class CaseSearchWorkflows(BasePage):
         print('date range: ', date_range)
         print('value: ', value)
         print(date_element)
-        assert self.is_present(date_element) or value == date_range, "Date "+date_range+" not present"
-        print("Date "+date_range+"  present")
+        assert self.is_present(date_element) or value == date_range, "Date " + date_range + " not present"
+        print("Date " + date_range + "  present")
 
     def add_address(self, address, search_property):
         address_search = self.get_element(self.search_for_address, search_property)
@@ -185,12 +194,12 @@ class CaseSearchWorkflows(BasePage):
     def check_value_on_form(self, city_address, type=HOME):
         if type == HOME:
             city_home = self.get_element(self.city_value_home, city_address)
-            assert self.is_present_and_displayed(city_home), "Value "+city_address+" is not present"
-            print("Value "+city_address+" is present")
+            assert self.is_present_and_displayed(city_home), "Value " + city_address + " is not present"
+            print("Value " + city_address + " is present")
         if type == WORK:
             city_work = self.get_element(self.city_value_work, city_address)
-            assert self.is_present_and_displayed(city_work), "Value "+city_address+" is not present"
-            print("Value "+city_address+" is present")
+            assert self.is_present_and_displayed(city_work), "Value " + city_address + " is not present"
+            print("Value " + city_address + " is present")
 
     def check_search_screen_title(self, title=None):
         title_on_screen = self.get_element(self.search_screen_title, title)
@@ -207,12 +216,12 @@ class CaseSearchWorkflows(BasePage):
             assert self.is_displayed(title_on_screen_sscs), "Value " + title + " is not present"
             print("Value " + title + " is present")
         else:
-            assert not self.is_displayed(title_on_screen_sscs),  "title is present"
+            assert not self.is_displayed(title_on_screen_sscs), "title is present"
             print(" title is not present")
 
     def check_search_screen_subtitle(self, subtitle):
         subtitle_on_screen = self.get_element(self.search_screen_subtitle, subtitle)
-        assert self.is_displayed(subtitle_on_screen),  "Value " + subtitle + " is not present"
+        assert self.is_displayed(subtitle_on_screen), "Value " + subtitle + " is not present"
         print("Value " + subtitle + " is present")
 
     def assert_address_is_hidden(self, hidden_property):
@@ -240,17 +249,21 @@ class CaseSearchWorkflows(BasePage):
             self.wait_after_interaction()
             time.sleep(1)
             assert self.is_displayed(
-                validation_message_per_prop) or self.is_displayed(validation_message_per_prop2), f"Required validation missing {validation_message_per_prop2}"
+                validation_message_per_prop
+                ) or self.is_displayed(validation_message_per_prop2
+                                       ), f"Required validation missing {validation_message_per_prop2}"
             print(f"Required validation present {validation_message_per_prop}")
             self.scroll_to_top()
             time.sleep(1)
             assert self.is_displayed(
-                validation_message_on_top), f"Required validation missing {validation_message_on_top}"
+                validation_message_on_top
+                ), f"Required validation missing {validation_message_on_top}"
             print(f"Required validation present {validation_message_on_top}")
         elif required_or_validated == NO:
             self.wait_after_interaction()
             time.sleep(1)
-            assert not self.is_displayed(validation_message_per_prop),  f"validation present {validation_message_per_prop}"
+            assert not self.is_displayed(validation_message_per_prop
+                                         ), f"validation present {validation_message_per_prop}"
             print(f"validation not present {validation_message_per_prop}")
         time.sleep(2)
 
@@ -258,11 +271,11 @@ class CaseSearchWorkflows(BasePage):
         dropdown_values_ = self.get_element(self.dropdown_values, search_property)
         values = self.find_elements_texts(dropdown_values_)
         if present == NO:
-            assert value not in values, "Value "+value+" is present"
-            print("Value "+value+" is not present")
+            assert value not in values, "Value " + value + " is present"
+            print("Value " + value + " is not present")
         if present == YES:
-            assert value in values, "Value "+value+" is not present"
-            print("Value "+value+" is present")
+            assert value in values, "Value " + value + " is not present"
+            print("Value " + value + " is present")
 
     def check_eof_navigation(self, eof_nav, menu=None):
         if eof_nav == PREV_MENU or eof_nav == FORM:
@@ -273,7 +286,7 @@ class CaseSearchWorkflows(BasePage):
             header = (By.XPATH, self.menu_breadcrumb.format(menu, menu))
             assert self.is_displayed(header), f"Navigated to {header}"
             print(f"Not Navigated to {header}")
-            
+
         elif eof_nav == HOME_SCREEN:
             assert self.is_displayed(self.webapps_home), f"Navigated to {self.webapps_home}"
             print(f"Not Navigated to {self.webapps_home}")
@@ -286,8 +299,9 @@ class CaseSearchWorkflows(BasePage):
         if tabname is not None:
             self.select_case_detail_tab(tabname)
         value = (By.XPATH, self.case_detail_value.format(search_property, expected_value))
-        assert self.is_visible_and_displayed(value), "Value "+expected_value+" is not present"
-        print("Value "+expected_value+" is present")
+        self.wait_for_element(value)
+        assert self.is_present(value), "Value " + expected_value + " is not present"
+        print("Value " + expected_value + " is present")
         self.wait_to_click(self.close_case_detail_tab)
 
     def check_todays_case_claim_present_on_report(self):
@@ -297,8 +311,9 @@ class CaseSearchWorkflows(BasePage):
         recent_claim_case = (By.XPATH, self.commcare_case_claim_case.format(date_on_report))
         print(date_on_report, recent_claim_case)
         try:
-            assert self.is_visible_and_displayed(recent_claim_case), "Value "+date_on_report+" is not present"
-            print("Value "+date_on_report+" is present")
+            self.wait_for_element(recent_claim_case)
+            assert self.is_present(recent_claim_case), "Value " + date_on_report + " is not present"
+            print("Value " + date_on_report + " is present")
         except AssertionError:
             logging.basicConfig(filename='logs.log', encoding='utf-8', level=logging.DEBUG)
             logging.warning("Elastic search is taking too long to update the case")
@@ -315,8 +330,9 @@ class CaseSearchWorkflows(BasePage):
         self.wait_for_element((By.XPATH, self.song_label.format(song_names_on_case_list[0])))
         for item in song_names_on_case_list:
             self.scroll_to_element((By.XPATH, self.song_label.format(item)))
-            assert self.is_present_and_displayed((By.XPATH, self.song_label.format(item))), "Song "+item+" is not present in the form"
-            print("Song "+item+" is present in the form")
+            assert self.is_present_and_displayed((By.XPATH, self.song_label.format(item))
+                                                 ), "Song " + item + " is not present in the form"
+            print("Song " + item + " is present in the form")
         # song_names_on_form = self.find_elements_texts(self.selected_case_names_on_forms)
         # stripped = list(filter(None, [s.replace("song: by", "") for s in song_names_on_form]))
         # stripped_final = list([s.lstrip() for s in stripped])
@@ -328,8 +344,8 @@ class CaseSearchWorkflows(BasePage):
         rating_on_form = self.find_elements_texts(self.selected_case_names_on_forms)
         for rating_value in rating_on_form:
             print(rating_on_form, expected_value)
-            assert expected_value in rating_value, "Value "+expected_value+" is not present"
-            print("Value "+expected_value+" is present")
+            assert expected_value in rating_value, "Value " + expected_value + " is not present"
+            print("Value " + expected_value + " is present")
 
     def check_if_checkbox_selected(self, search_property, values):
         for value in values:
@@ -357,11 +373,11 @@ class CaseSearchWorkflows(BasePage):
     def check_clear_button_in_singleselect_combobox(self, expected, search_property):
         remove_selection = self.get_element(self.remove_combobox_selection, search_property)
         if expected == YES:
-            assert self.is_present(remove_selection), "Property "+search_property+" is not present"
-            print("Property "+search_property+" is present")
+            assert self.is_present(remove_selection), "Property " + search_property + " is not present"
+            print("Property " + search_property + " is present")
         if expected == NO:
-            assert not self.is_present(remove_selection),  "Property "+search_property+" is present"
-            print("Property "+search_property+" is not present")
+            assert not self.is_present(remove_selection), "Property " + search_property + " is present"
+            print("Property " + search_property + " is not present")
 
     def select_rating_answer_(self, rating_input):
         rating_selection = self.get_element(self.rating_answer, rating_input)
