@@ -190,7 +190,7 @@ class ApplicationPage(BasePage):
         try:
             self.wait_to_click(self.register_form)
         except TimeoutException:
-            self.driver.refresh()
+            self.reload_page()
         self.wait_for_element(self.new_form_settings)
         self.click(self.new_form_settings)
         self.wait_for_element(self.actions_tab)
@@ -209,7 +209,7 @@ class ApplicationPage(BasePage):
         try:
             self.wait_to_click(self.settings)
         except TimeoutException:
-            self.driver.refresh()
+            self.reload_page()
             self.click(self.settings)
         assert self.is_present_and_displayed(self.languages_tab_content)
         self.wait_to_click(self.multimedia_tab)
@@ -254,7 +254,7 @@ class ApplicationPage(BasePage):
         
         self.wait_to_click(self.make_new_version_button)
         time.sleep(2)
-        self.driver.refresh()
+        self.reload_page()
         self.wait_for_element(self.release_button)
         self.wait_to_click(self.release_button)
         print("Sleeping for the installation code to generate")
@@ -344,7 +344,7 @@ class ApplicationPage(BasePage):
         
         self.wait_to_click(self.make_new_version_button)
         time.sleep(2)
-        self.driver.refresh()
+        self.reload_page()
         self.wait_for_element(self.release_button)
         self.wait_to_click(self.release_button)
         print("Sleeping for the installation code to generate")
@@ -384,7 +384,7 @@ class ApplicationPage(BasePage):
         self.wait_to_click(self.confirm_change)
         self.accept_pop_up()
         self.wait_for_element((By.XPATH, self.app_created.format(app_name)))
-        self.driver.refresh()
+        self.reload_page()
         time.sleep(3)
         assert self.is_present_and_displayed((By.XPATH, self.app_created.format(app_name)))
         print("New App created successfully!")
@@ -434,7 +434,7 @@ class ApplicationPage(BasePage):
         else:
             print("No test app present")
         print(app_names)
-        self.driver.refresh()
+        self.reload_page()
         time.sleep(2)
         return app_names
 

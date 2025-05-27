@@ -357,7 +357,7 @@ class LookUpTablePage(BasePage):
         
         if self.is_present(self.please_complete):
             self.wait_to_click(self.close_download_popup)
-            self.driver.refresh()
+            self.reload_page()
             self.wait_for_element((By.XPATH, self.select_checkbox.format(tablename)))
             self.wait_to_click((By.XPATH, self.select_checkbox.format(tablename)))
             

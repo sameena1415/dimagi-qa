@@ -155,7 +155,7 @@ class OrganisationStructurePage(BasePage):
         self.click(self.create_loc_xpath)
         assert self.is_present_and_displayed(self.loc_saved_success_msg), "Location not created!"
         self.wait_to_click(self.org_menu_link_text)
-        self.driver.refresh()
+        self.reload_page()
         try:
             assert self.is_present_and_displayed(self.location_created_xpath), "Location not created!"
         except StaleElementReferenceException:
@@ -170,7 +170,7 @@ class OrganisationStructurePage(BasePage):
             
             assert self.is_visible_and_displayed(self.loc_saved_success_msg), "Location editing not successful!"
             self.click(self.org_menu_link_text)
-            self.driver.refresh()
+            self.reload_page()
             assert self.is_visible_and_displayed(self.renamed_location), "Location editing not successful!"
         except StaleElementReferenceException:
             print(StaleElementReferenceException)
@@ -190,7 +190,7 @@ class OrganisationStructurePage(BasePage):
         self.wait_to_clear_and_send_keys(self.choice_xpath, self.loc_field_name)
         self.click(self.save_btn_id)
         assert self.is_displayed(self.success_msg_xpath), "Location field edit not successful!"
-        self.driver.refresh()
+        self.reload_page()
 
     def selection_location_field_for_location_created(self):
         try:
@@ -260,7 +260,7 @@ class OrganisationStructurePage(BasePage):
                     self.scroll_to_element(self.save_btn_xpath)
                     self.wait_to_click(self.save_btn_xpath)
                     
-                    self.driver.refresh()
+                    self.reload_page()
                     time.sleep(7)
                     list_org_level = self.driver.find_elements(By.XPATH, "//input[@class='loctype_name form-control']")
                 else:
@@ -359,7 +359,7 @@ class OrganisationStructurePage(BasePage):
         self.wait_to_click(self.archive_buttton)
         self.wait_to_click(self.archive_button_popup)
         self.is_present_and_displayed(self.archive_success_message, 10)
-        self.driver.refresh()
+        self.reload_page()
         check_archived_loc = self.is_present_and_displayed(self.test_location, 10)
         assert not check_archived_loc, "Location is still Active"
         self.wait_to_click(self.show_arhcived_locations_button)
@@ -391,7 +391,7 @@ class OrganisationStructurePage(BasePage):
             time.sleep(2)
         archived_loc = self.get_text(self.test_location)
         self.wait_to_click(self.unarchive_button)
-        self.driver.refresh()
+        self.reload_page()
         time.sleep(3)
         check_unarchived_loc = self.is_present_and_displayed(self.test_location, 10)
         assert not check_unarchived_loc, "Location is still Unarchived"

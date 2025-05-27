@@ -79,7 +79,7 @@ class WebAppsPage(BasePage):
         self.wait_for_element(self.sync_button)
         self.wait_to_click(self.sync_button)
         time.sleep(2)
-        self.driver.refresh()
+        self.reload_page()
         return self.case_name_created
 
     def submit_case_change_register_form(self):
@@ -100,7 +100,7 @@ class WebAppsPage(BasePage):
         return self.text_value
 
     def submit_case_update_form(self, case_name):
-        self.driver.refresh()
+        self.reload_page()
         self.wait_to_click(self.update_case_change_link)
         self.wait_to_click(self.case_update_form)
         self.wait_to_clear_and_send_keys(self.search_text, case_name)

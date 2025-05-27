@@ -80,7 +80,7 @@ class ReassignCasesPage(BasePage):
         self.is_visible_and_displayed(self.out_of_range)
         print("Sleeping sometime for the case to get updated")
         time.sleep(10)
-        self.driver.refresh()
+        self.reload_page()
         time.sleep(2)
         self.remove_default_users()
         self.wait_to_clear_and_send_keys(self.search_query, case_being_reassgined)

@@ -83,7 +83,7 @@ class ManageFormsPage(BasePage):
         self.wait_and_sleep_to_click(self.archived_restored_dropdown)
         self.wait_and_sleep_to_click(self.archived_forms_option)
         self.wait_and_sleep_to_click(self.apply_button)
-        self.driver.refresh()
+        self.reload_page()
 
     def view_archived_forms(self):
         self.wait_and_sleep_to_click(self.view_form_link)

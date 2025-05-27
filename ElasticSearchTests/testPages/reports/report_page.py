@@ -270,7 +270,7 @@ class ReportPage(BasePage):
             try:
                 self.wait_to_click(self.edit_report_id)
             except TimeoutException:
-                self.driver.refresh()
+                self.reload_page()
                 self.wait_to_click(self.edit_report_id)
             self.wait_to_click(self.delete_report_xpath)
             print("Report deleted successfully!")
@@ -387,7 +387,7 @@ class ReportPage(BasePage):
                 self.wait_to_click(self.delete_report_xpath)
                 print("Deleted Saved Report")
                 
-                self.driver.refresh()
+                self.reload_page()
                 time.sleep(2)
                 list = self.find_elements(self.report_case_links)
 
@@ -408,7 +408,7 @@ class ReportPage(BasePage):
                 self.wait_to_click(self.delete_report_xpath)
                 print("Deleted Saved Report")
                 
-                self.driver.refresh()
+                self.reload_page()
                 time.sleep(2)
                 list = self.find_elements(self.report_form_links)
 

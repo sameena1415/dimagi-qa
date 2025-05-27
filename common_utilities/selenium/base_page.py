@@ -1,382 +1,605 @@
 import time
 import datetime
-import logging
-from functools import wraps
 
 from dateutil.parser import parse
 from selenium.webdriver.support.select import Select
+from selenium.common.exceptions import TimeoutException, ElementClickInterceptedException, \
+    UnexpectedAlertPresentException, StaleElementReferenceException, NoSuchElementException, JavascriptException, \
+    ElementNotInteractableException, WebDriverException
+from selenium.webdriver import ActionChains, Keys
 from selenium.webdriver.common.by import By
-from selenium.webdriver.common.action_chains import ActionChains
-from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.support.wait import WebDriverWait
-from selenium.common.exceptions import (
-    TimeoutException, ElementClickInterceptedException, UnexpectedAlertPresentException,
-    StaleElementReferenceException, NoSuchElementException, JavascriptException,
-    ElementNotInteractableException, WebDriverException
-)
 
 from common_utilities.path_settings import PathSettings
 
-logger = logging.getLogger(__name__)
+"""This class contains all the generic methods and utilities for all pages"""
 
+from functools import wraps
 
-def retry_on_stale(retries=2, delay=0.5):
+def retry_on_exception(exceptions, retries=2, delay=1):
     def decorator(func):
         @wraps(func)
         def wrapper(*args, **kwargs):
             for attempt in range(retries):
                 try:
                     return func(*args, **kwargs)
-                except StaleElementReferenceException:
-                    time.sleep(delay)
-            raise
+                except exceptions as e:
+                    if attempt < retries - 1:
+                        time.sleep(delay)
+                    else:
+                        raise
         return wrapper
     return decorator
-
 
 class BasePage:
     def __init__(self, driver):
         self.driver = driver
+
         self.alert_button_accept = (By.ID, "hs-eu-confirmation-button")
         self.error_404 = (By.XPATH, "//h1[contains(text(),'404')]")
         self.error_403 = (By.XPATH, "//h1[text()='403 Forbidden']")
 
-    def wait_until(self, condition, timeout=10, message=None):
-        return WebDriverWait(self.driver, timeout, poll_frequency=0.5).until(condition, message=message)
-
     def page_404(self):
-        return self.is_displayed(self.error_404)
+        try:
+            self.page_404_displayed = self.is_displayed(self.error_404)
+        except NoSuchElementException:
+            self.page_404_displayed = False
+        return self.page_404_displayed
 
     def page_403(self):
-        return self.is_displayed(self.error_403)
+        try:
+            self.page_403_displayed = self.is_displayed(self.error_403)
+        except NoSuchElementException:
+            self.page_403_displayed = False
+        return self.page_403_displayed
 
     def cookie_alert(self):
-        return self.is_displayed(self.alert_button_accept)
-
-    @retry_on_stale()
-    def wait_to_click(self, locator, timeout=30):
         try:
-            element = self.wait_until(ec.element_to_be_clickable(locator), timeout, f"Couldn't click: {locator}")
+            self.cookie_alert_displayed = self.is_displayed(self.alert_button_accept)
+        except NoSuchElementException:
+            self.cookie_alert_displayed = False
+        return self.cookie_alert_displayed
+
+    @retry_on_exception((StaleElementReferenceException, TimeoutException))
+    def wait_to_click(self, locator, timeout=30):
+        element = WebDriverWait(self.driver, timeout).until(
+            ec.element_to_be_clickable(locator),
+            message=f"Couldn't find locator: {locator}"
+            )
+        try:
             element.click()
         except UnexpectedAlertPresentException:
             self.driver.switch_to.alert.accept()
-            self.wait_until(ec.element_to_be_clickable(locator), timeout).click()
-        except TimeoutException:
-            self.wait_for_element(locator)
-            if self.page_403() or self.page_404():
-                self.driver.back()
-                self.wait_until(ec.element_to_be_clickable(locator), timeout).click()
-            else:
-                raise
+            element.click()
         except Exception:
-            element = self.driver.find_element(*locator)
             self.driver.execute_script("arguments[0].click();", element)
         self.wait_after_interaction()
 
+    @retry_on_exception((ElementNotInteractableException, StaleElementReferenceException, TimeoutException))
+    def wait_to_clear_and_send_keys(self, locator, user_input, timeout=10):
+        element = WebDriverWait(self.driver, timeout).until(
+            ec.visibility_of_element_located(locator),
+            message=f"Couldn't find locator: {locator}"
+            )
+        element.clear()
+        element.send_keys(user_input)
+        self.wait_after_interaction()
+
+    def wait_to_get_text(self, locator, timeout=10):
+        clickable = ec.visibility_of_element_located(locator)
+        element_text = WebDriverWait(self.driver, timeout, poll_frequency=0.5).until(clickable).text
+        return element_text
+
+    def wait_to_get_value(self, locator, timeout=10):
+        clickable = ec.visibility_of_element_located(locator)
+        element_text = WebDriverWait(self.driver, timeout, poll_frequency=0.5).until(clickable).get_attribute("value")
+        return element_text
+
     def wait_for_element(self, locator, timeout=10):
         try:
-            self.wait_until(ec.presence_of_element_located(locator), timeout, f"Couldn't find: {locator}")
+            clickable = ec.presence_of_element_located(locator)
+            WebDriverWait(self.driver, timeout, poll_frequency=0.5).until(clickable,
+                                                                        message="Couldn't find locator: " + str(locator)
+                                                                        )
+            self.wait_after_interaction()
         except (StaleElementReferenceException, TimeoutException):
             self.wait_after_interaction()
-            self.wait_until(ec.presence_of_element_located(locator), timeout, f"Couldn't find: {locator}")
-        self.wait_after_interaction()
+            clickable = ec.presence_of_element_located(locator)
+            WebDriverWait(self.driver, timeout, poll_frequency=0.5).until(clickable,
+                                                                        message="Couldn't find locator: " + str(locator)
+                                                                        )
+            self.wait_after_interaction()
 
-    def wait_to_clear_and_send_keys(self, locator, user_input, timeout=10):
+    @retry_on_exception((StaleElementReferenceException, TimeoutException))
+    def wait_and_sleep_to_click(self, locator, timeout=40):
+        time.sleep(2)  # Optional initial sleep
+        element = WebDriverWait(self.driver, timeout).until(
+            ec.element_to_be_clickable(locator),
+            message=f"Couldn't find locator: {locator}"
+            )
         try:
-            element = self.wait_until(ec.visibility_of_element_located(locator), timeout, f"Couldn't find: {locator}")
-            element.clear()
-            element.send_keys(user_input)
-        except Exception as e:
-            logger.error(f"[wait_to_clear_and_send_keys] Failed on {locator}: {e}")
-            raise
-
-    def click(self, locator):
-        try:
-            self.driver.find_element(*locator).click()
+            element.click()
+        except ElementClickInterceptedException:
+            if self.cookie_alert():
+                self.click(self.alert_button_accept)
+                element.click()
+        except UnexpectedAlertPresentException:
+            self.driver.switch_to.alert.accept()
+            element.click()
         except Exception:
-            self.driver.execute_script("arguments[0].click();", self.driver.find_element(*locator))
+            self.driver.execute_script("arguments[0].click();", element)
         self.wait_after_interaction()
-        time.sleep(1)
 
-    def send_keys(self, locator, user_input, timeout=10):
+    def find_elements(self, locator):
+        self.wait_after_interaction()
+        elements = self.driver.find_elements(*locator)
+        return elements
+        # return [WrappedWebElement(e, self.driver, base_page=self) for e in elements]
+
+    def find_elements_texts(self, locator):
+        self.wait_after_interaction()
+        elements = self.driver.find_elements(*locator)
+        value_list = []
+        for element in elements:
+            value_list.append(element.text)
+        return value_list
+
+    def find_element(self, locator):
+        self.wait_after_interaction()
+        element = self.driver.find_element(*locator)
+        return element
+        # return WrappedWebElement(element, self.driver, base_page=self)
+
+    @retry_on_exception((StaleElementReferenceException, ElementClickInterceptedException, TimeoutException))
+    def click(self, locator, timeout=10):
+        element = WebDriverWait(self.driver, timeout).until(
+            ec.element_to_be_clickable(locator),
+            message=f"Couldn't find or click locator: {locator}"
+            )
         try:
-            element = self.wait_until(ec.element_to_be_clickable(locator), timeout, f"Couldn't click: {locator}")
+            element.click()
+        except Exception:
+            self.driver.execute_script("arguments[0].click();", element)
+        self.wait_after_interaction()
+
+    def select_by_partial_text(self, locator, partial_text):
+        select_element = self.driver.find_element(*locator)
+        options = select_element.find_elements(By.TAG_NAME, "option")
+        for option in options:
+            text = option.text.strip().replace('\u200e', '')  # Remove LRM or other hidden chars
+            if partial_text in text:
+                option.click()
+                print(f"[INFO] Selected: '{text}'")
+                return
+        raise Exception(f"[ERROR] Option with partial text '{partial_text}' not found.")
+
+    def select_by_text(self, source_locator, value):
+        select_source = Select(self.driver.find_element(*source_locator))
+        select_source.select_by_visible_text(value)
+
+    def select_by_value(self, source_locator, value):
+        select_source = Select(self.driver.find_element(*source_locator))
+        select_source.select_by_value(value)
+
+    def select_by_index(self, source_locator, value):
+        select_source = Select(self.driver.find_element(*source_locator))
+        select_source.select_by_index(value)
+
+    def get_selected_text(self, source_locator):
+        select_source = Select(self.driver.find_element(*source_locator))
+        return select_source.first_selected_option.text
+
+    def deselect_all(self, source_locator):
+        select_source = Select(self.driver.find_element(*source_locator))
+        select_source.deselect_all()
+
+    def move_to_element_and_click(self, locator):
+        element = self.driver.find_element(*locator)
+        ActionChains(self.driver).move_to_element(element).click(element).perform()
+
+    def hover_on_element(self, locator):
+        element = WebDriverWait(self.driver, 20, poll_frequency=0.5).until(ec.visibility_of_element_located(locator))
+        ActionChains(self.driver).move_to_element(element).pause(2).perform()
+
+    def clear(self, locator):
+        element = self.driver.find_element(*locator)
+        element.clear()
+
+    @retry_on_exception((ElementNotInteractableException, StaleElementReferenceException, TimeoutException))
+    def send_keys(self, locator, user_input, timeout=10):
+        element = WebDriverWait(self.driver, timeout).until(
+            ec.element_to_be_clickable(locator),
+            message=f"Couldn't find or click locator: {locator}"
+            )
+        try:
             element.clear()
             element.send_keys(user_input)
-        except (ElementNotInteractableException, TimeoutException) as e:
-            logger.warning(f"{type(e).__name__}: {e} — trying JS fallback")
-            try:
-                element = self.driver.find_element(*locator)
-                self.driver.execute_script("arguments[0].scrollIntoView(true);", element)
-                self.driver.execute_script("arguments[0].value = arguments[1];", element, user_input)
-            except JavascriptException as js_e:
-                logger.error(f"JS fallback failed: {js_e}")
-                raise
+        except ElementNotInteractableException:
+            print("[WARNING] Element not interactable. Trying JavaScript fallback...")
+            self.driver.execute_script("arguments[0].scrollIntoView(true);", element)
+            self.driver.execute_script("arguments[0].value = arguments[1];", element, user_input)
         except Exception as e:
-            logger.error(f"send_keys failed: {e}")
-            raise
+            print(f"[ERROR] send_keys failed: {e}")
+            self.driver.execute_script("arguments[0].value = arguments[1];", element, user_input)
+        self.wait_after_interaction()
+
+    def get_text(self, locator):
+        element = self.driver.find_element(*locator)
+        element_text = element.text
+        print(element_text)
+        return element_text
+
+    def get_attribute(self, locator, attribute):
+        element = self.driver.find_element(*locator)
+        element_attribute = element.get_attribute(attribute)
+        print(element_attribute)
+        return element_attribute
+
+    def is_selected(self, locator):
+        try:
+            element = self.driver.find_element(*locator)
+            is_selected = element.is_selected()
+        except TimeoutException:
+            is_selected = False
+        return bool(is_selected)
+
+    def is_enabled(self, locator):
+        try:
+            element = self.driver.find_element(*locator)
+            is_enabled = element.is_enabled()
+        except TimeoutException:
+            is_enabled = False
+        return bool(is_enabled)
 
     def is_displayed(self, locator):
         try:
-            return self.driver.find_element(*locator).is_displayed()
+            element = self.driver.find_element(*locator)
+            is_displayed = element.is_displayed()
         except (TimeoutException, NoSuchElementException):
-            return False
+            is_displayed = False
+        return bool(is_displayed)
 
-    def wait_after_interaction(self):
-        if self.driver.find_elements(By.ID, "formplayer-progress") or \
-           self.driver.find_elements(By.ID, "formplayer-progress-container") or \
-           self.driver.find_elements(By.CSS_SELECTOR, ".spinner"):
-            logger.info("Detected progress/spinner — waiting...")
-            self.wait_until(lambda d: not d.find_elements(By.ID, "formplayer-progress"), timeout=60)
-            self.wait_for_ajax_and_progress()
-        else:
-            logger.info("No progress detected — continuing.")
-
-    def wait_for_ajax_and_progress(self, timeout=10):
+    def is_present(self, locator):
         try:
-            self.wait_until(lambda d: d.execute_script("return window.jQuery ? jQuery.active == 0 : true"), timeout)
-            if self.driver.find_elements(By.ID, "formplayer-progress-container"):
-                self.wait_until(lambda d: d.execute_script(
-                    """
-                    const el = document.querySelector('#formplayer-progress-container');
-                    return el && el.children.length === 0;
-                    """), timeout)
-        except Exception as e:
-            logger.warning(f"Exception while waiting for AJAX/progress: {e}")
+            element = self.driver.find_element(*locator)
+            is_displayed = True
+        except NoSuchElementException:
+            is_displayed = False
+        return bool(is_displayed)
 
-    def wait_until_progress_removed(self, timeout=60):
+    def is_visible_and_displayed(self, locator, timeout=50):
         try:
-            if self.driver.find_elements(By.ID, "formplayer-progress"):
-                self.wait_until(lambda d: not d.find_elements(By.ID, "formplayer-progress"), timeout)
-        except Exception as e:
-            logger.warning(f"Exception while waiting for progress to disappear: {e}")
+            visible = ec.visibility_of_element_located(locator)
+            element = WebDriverWait(self.driver, timeout, poll_frequency=0.50).until(visible,
+                                                                                   message="Element" + str(
+                                                                                       locator
+                                                                                       ) + "not displayed"
+                                                                                   )
+            is_displayed = element.is_displayed()
+        except TimeoutException:
+            is_displayed = False
+        return bool(is_displayed)
+
+    def is_present_and_displayed(self, locator, timeout=50):
+        try:
+            visible = ec.presence_of_element_located(locator)
+            element = WebDriverWait(self.driver, timeout, poll_frequency=2).until(visible,
+                                                                                  message="Element" + str(
+                                                                                      locator
+                                                                                      ) + "not displayed"
+                                                                                  )
+            is_displayed = element.is_displayed()
+        except TimeoutException:
+            is_displayed = False
+        except StaleElementReferenceException:
+            self.driver.refresh()
+            time.sleep(0.5)
+            visible = ec.presence_of_element_located(locator)
+            element = WebDriverWait(self.driver, timeout, poll_frequency=0.5).until(visible,
+                                                                                  message="Element" + str(locator
+                                                                                                          ) + "not displayed"
+                                                                                  )
+            is_displayed = element.is_displayed()
+        return bool(is_displayed)
+
+    def switch_to_next_tab(self):
+        winHandles = self.driver.window_handles
+        window_after = winHandles[1]
+        self.driver.switch_to.window(window_after)
+        print(self.driver.title)
+        print(self.driver.current_window_handle)
+
+    def switch_to_new_tab(self):
+        self.driver.switch_to.new_window('tab')
+
+    def switch_to_default_content(self):
+        self.driver.switch_to.default_content()
+
+    def switch_back_to_prev_tab(self):
+        winHandles = self.driver.window_handles
+        window_before = winHandles[0]
+        self.driver.switch_to.window(window_before)
+        print(self.driver.title)
+        print(self.driver.current_window_handle)
+
+    def get_current_url(self):
+        get_url = self.driver.current_url
+        print("Current URL : " + get_url)
+        return get_url
+
+    def get_environment(self):
+        get_env = self.driver.current_url
+        env_name = get_env.split("/")[2]
+        print("server : " + env_name)
+        return env_name
+
+    def get_domain(self):
+        get_url = self.driver.current_url
+        domain_name = get_url.split("/")[4]
+        print("domain: " + domain_name)
+        return domain_name
+
+    def assert_downloaded_file(self, newest_file, file_name):
+        modTimesinceEpoc = (PathSettings.DOWNLOAD_PATH / newest_file).stat().st_mtime
+        modificationTime = datetime.datetime.fromtimestamp(modTimesinceEpoc)
+        timeNow = datetime.datetime.now()
+        diff_seconds = round((timeNow - modificationTime).total_seconds())
+        print("Last Modified Time : ", str(modificationTime) + 'Current Time : ', str(timeNow),
+              "Diff: " + str(diff_seconds)
+              )
+        assert file_name in newest_file and diff_seconds in range(0, 600), f"Export not completed, {file_name} not in {newest_file}"
+
+    def accept_pop_up(self):
+        try:
+            WebDriverWait(self.driver, 3, poll_frequency=0.5).until(ec.alert_is_present(), 'Waiting for popup to appear.')
+            alert = self.driver.switch_to.alert
+            alert.accept()
+            print("alert accepted")
+        except TimeoutException:
+            print("no alert")
+
+    def page_source_contains(self, text):
+        assert text in self.driver.page_source
+
+    def scroll_to_bottom(self):
+        self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight)")
+
+    def scroll_to_top(self):
+        self.driver.execute_script("window.scrollTo(0, 0)")
+
+    def hover_and_click(self, locator1, locator2):
+        action = ActionChains(self.driver)
+        element_1 = WebDriverWait(self.driver, 5).until(ec.visibility_of_element_located(locator1))
+        action.move_to_element(element_1).perform()
+        # identify sub menu element
+        element_2 = WebDriverWait(self.driver, 5).until(ec.visibility_of_element_located(locator2))
+        # hover over element and click
+        action.move_to_element(element_2).click().perform()
+
+    def double_click(self, locator, timeout=10):
+        clickable = ec.element_to_be_clickable(locator)
+        element = WebDriverWait(self.driver, timeout, poll_frequency=0.5).until(clickable,
+                                                                              message="Couldn't find locator: "
+                                                                                      + str(locator)
+                                                                              )
+        # action chain object
+        action = ActionChains(self.driver)
+        # double click operation
+        action.double_click(element)
+
+    @retry_on_exception((TimeoutException,))
+    def js_click(self, locator, timeout=10):
+        element = WebDriverWait(self.driver, timeout).until(
+            ec.presence_of_element_located(locator),
+            message=f"Couldn't find locator: {locator}"
+            )
+        self.driver.execute_script("arguments[0].click();", element)
+        self.wait_after_interaction()
 
     def scroll_to_element(self, locator):
         element = self.driver.find_element(*locator)
         self.driver.execute_script("arguments[0].scrollIntoView();", element)
 
-    def js_click(self, locator, timeout=10):
-        try:
-            element = self.driver.find_element(*locator)
-            self.driver.execute_script("arguments[0].click();", element)
-        except Exception as e:
-            logger.warning(f"JS click failed: {e}, retrying...")
-            element = self.wait_until(ec.element_to_be_clickable(locator), timeout)
-            self.driver.execute_script("arguments[0].click();", element)
+    def wait_and_find_elements(self, locator, cols, timeout=100):
+        elements = WebDriverWait(self.driver, timeout, poll_frequency=2).until(
+            lambda driver: len(driver.find_elements(*locator)) >= int(cols)
+            )
+        return elements
 
-    def js_send_keys(self, locator, value, timeout=10):
-        element = self.wait_until(ec.element_to_be_clickable(locator), timeout)
-        self.driver.execute_script("arguments[0].value='" + value + "';", element)
-        self.wait_after_interaction()
+    def wait_till_progress_completes(self, type="export"):
+        if type == "export":
+            if self.is_present((By.XPATH, "//div[contains(@class,'progress-bar')]")):
+                WebDriverWait(self.driver, 200, poll_frequency=2).until(
+                    ec.visibility_of_element_located((By.XPATH,
+                                                      "//div[contains(@class,'progress-bar')][.//span[@data-bind='text: progress'][.='100']]")
+                                                     )
+                    )
+        elif type == "integration":
+            WebDriverWait(self.driver, 200, poll_frequency=0.50).until(
+                ec.invisibility_of_element_located((By.XPATH, "//div[contains(@class,'progress-bar')]"))
+                )
+
+    def is_clickable(self, locator, timeout=20):
+        try:
+            clickable = ec.element_to_be_clickable(locator)
+            element = WebDriverWait(self.driver, timeout, poll_frequency=0.5).until(clickable,
+                                                                                  message="Element" + str(
+                                                                                      locator
+                                                                                      ) + "not displayed"
+                                                                                  )
+            is_clickable = element.is_enabled()
+        except TimeoutException:
+            is_clickable = False
+        return bool(is_clickable)
+
+    def get_element(self, xpath_format, insert_value):
+        element = (By.XPATH, xpath_format.format(insert_value))
+        return element
+
+    def wait_for_ajax(self, timeout=10):
+        """
+        Waits for jQuery AJAX calls to complete.
+        Automatically detects jQuery even if it's namespaced or suffixed.
+        Skips wait if jQuery is not used or no AJAX is active.
+        """
+        try:
+            # Find the actual jQuery object (handles cases like jQuery1234567890)
+            jquery_object = self.driver.execute_script("""
+                for (var key in window) {
+                    if (key.startsWith("jQuery") && window[key] && window[key].active !== undefined) {
+                        return key;
+                    }
+                }
+                return null;
+            """
+                                                       )
+
+            if jquery_object:
+                # Check if AJAX is active
+                is_ajax_active = self.driver.execute_script(f"return window['{jquery_object}'].active != 0;")
+                if is_ajax_active:
+                    print(f"Waiting for AJAX (using {jquery_object}) to complete...")
+                    WebDriverWait(self.driver, timeout).until(
+                        lambda driver: driver.execute_script(f"return window['{jquery_object}'].active") == 0
+                        )
+                else:
+                    print("No active jQuery AJAX requests — skipping wait.")
+            else:
+                # Fallback: wait for document readyState
+                print("No jQuery object detected — waiting for document.readyState == 'complete'")
+                ready_state = self.driver.execute_script("return document.readyState")
+                if ready_state != "complete":
+                    WebDriverWait(self.driver, timeout).until(
+                        lambda driver: driver.execute_script("return document.readyState") == "complete"
+                        )
+
+        except (JavascriptException, TimeoutException) as e:
+            print(f"[wait_for_ajax] Skipped or timed out: {e}")
+
+    def is_date(self, string, fuzzy=False):
+        """
+        Return whether the string can be interpreted as a date.
+
+        :param string: str, string to check for date
+        :param fuzzy: bool, ignore unknown tokens in string if True
+        """
+        try:
+            parse(string, fuzzy=fuzzy)
+            return True
+
+        except ValueError:
+            return False
+
+    def get_all_dropdown_options(self, source_locator):
+        select_source = Select(self.driver.find_element(*source_locator))
+        list_opt = []
+        for opt in select_source.options:
+            print(opt.text)
+            list_opt.append(opt.text)
+        print("Option list", list_opt)
+        return list_opt
+
+    def select_multiple_by_text(self, source_locator, value_list):
+        select_source = Select(self.driver.find_element(*source_locator))
+        ActionChains(self.driver).key_down(Keys.CONTROL).perform()
+        for value in value_list:
+            select_source.select_by_visible_text(value)
+        ActionChains(self.driver).key_up(Keys.CONTROL).perform()
 
     def reload_page(self):
         self.driver.refresh()
+        time.sleep(0.5)
+
+    def get_url(self, link):
+        self.driver.get(link)
+        time.sleep(0.5)
+
+    def switch_to_frame(self, frame_name):
+        frame = self.driver.find_element(*frame_name)
+        self.driver.switch_to.frame(frame)
+        print("Switched to frame.")
+
+    def js_send_keys(self, locator, value, timeout=10):
+        clickable = ec.element_to_be_clickable(locator)
+        element = WebDriverWait(self.driver, timeout, poll_frequency=0.5).until(clickable,
+                                                                              message="Couldn't find locator: "
+                                                                                      + str(locator)
+                                                                              )
+        self.driver.execute_script("arguments[0].value='" + value + "';", element)
+        self.wait_after_interaction()
+
+    def wait_for_loading_spinner(self, timeout=10):
+        try:
+            WebDriverWait(self.driver, timeout, poll_frequency=0.5).until_not(
+                ec.presence_of_element_located(("css selector", ".spinner"))
+                )
+        except Exception:
+            pass
+
+    def wait_for_ajax_and_progress(self, timeout=6):  # lower default timeout
+        try:
+            jquery_present = self._is_jquery_present()
+            progress_container_present = self._is_element_present(By.ID, "formplayer-progress-container")
+
+            if not jquery_present and not progress_container_present:
+                return  # no need to wait
+
+            end_time = time.time() + timeout
+            while time.time() < end_time:
+                ajax_done = (
+                        not jquery_present or
+                        self.driver.execute_script("return jQuery.active == 0")
+                )
+                progress_done = (
+                        not progress_container_present or
+                        self.driver.execute_script("""
+                        const el = document.querySelector('#formplayer-progress-container');
+                        return el && el.children.length === 0;
+                    """
+                                                   )
+                )
+                if ajax_done and progress_done:
+                    return  # done early
+                time.sleep(0.25)
+        except Exception as e:
+            print(f"[wait_for_ajax_and_progress] skipped or failed: {e}")
+
+
+    def wait_until_progress_removed(self, timeout=20):
+        if not self._is_element_present(By.ID, "formplayer-progress"):
+            return
+        try:
+            WebDriverWait(self.driver, timeout, poll_frequency=0.5).until(
+                lambda d: not d.find_elements(By.ID, "formplayer-progress")
+                )
+        except Exception as e:
+            print(f"[wait_until_progress_removed] Timeout or error: {e}")
+
+    def wait_after_interaction(self):
+        if self._is_element_present(By.ID, "formplayer-progress"):
+            self.wait_until_progress_removed()
+
+        self.wait_for_ajax_and_progress(timeout=6)
+
+    def _is_element_present(self, by, value):
+        return bool(self.driver.find_elements(by, value))
+
+    def _is_jquery_present(self):
+        try:
+            return self.driver.execute_script("return !!window.jQuery")
+        except JavascriptException:
+            return False
 
     def back(self):
         try:
             self.driver.back()
+            print("[INFO] Navigated back using driver.back()")
         except WebDriverException as e:
-            logger.warning(f"driver.back() failed: {e}, trying JS fallback")
-            self.driver.execute_script("window.history.back();")
-    def is_present(self, locator):
-        try:
-            self.driver.find_element(*locator)
-            return True
-        except NoSuchElementException:
-            return False
-
-    def is_selected(self, locator):
-        try:
-            return self.driver.find_element(*locator).is_selected()
-        except (NoSuchElementException, TimeoutException):
-            return False
-
-    def is_enabled(self, locator):
-        try:
-            return self.driver.find_element(*locator).is_enabled()
-        except (NoSuchElementException, TimeoutException):
-            return False
-
-    def clear(self, locator):
-        try:
-            self.driver.find_element(*locator).clear()
-        except Exception as e:
-            logger.warning(f"[clear] Failed to clear {locator}: {e}")
-
-    def get_text(self, locator):
-        try:
-            element_text = self.driver.find_element(*locator).text
-            logger.info(f"[get_text] Found text: {element_text}")
-            return element_text
-        except Exception as e:
-            logger.error(f"[get_text] Failed to get text from {locator}: {e}")
-            raise
-
-    def get_attribute(self, locator, attribute):
-        try:
-            attr = self.driver.find_element(*locator).get_attribute(attribute)
-            logger.info(f"[get_attribute] {attribute}={attr}")
-            return attr
-        except Exception as e:
-            logger.error(f"[get_attribute] Failed for {locator}: {e}")
-            raise
-
-    def find_element(self, locator):
-        try:
-            return self.driver.find_element(*locator)
-        except NoSuchElementException:
-            logger.warning(f"[find_element] Element not found: {locator}")
-            return None
-
-    def find_elements(self, locator):
-        return self.driver.find_elements(*locator)
-
-    def find_elements_texts(self, locator):
-        return [el.text for el in self.driver.find_elements(*locator)]
-
-    def select_by_text(self, locator, text):
-        try:
-            select = Select(self.driver.find_element(*locator))
-            select.select_by_visible_text(text)
-            logger.info(f"[select_by_text] Selected '{text}'")
-        except Exception as e:
-            logger.error(f"[select_by_text] Failed to select '{text}' from {locator}: {e}")
-            raise
-
-    def select_by_value(self, locator, value):
-        try:
-            select = Select(self.driver.find_element(*locator))
-            select.select_by_value(value)
-            logger.info(f"[select_by_value] Selected value '{value}'")
-        except Exception as e:
-            logger.error(f"[select_by_value] Failed to select value '{value}' from {locator}: {e}")
-            raise
-
-    def select_by_index(self, locator, index):
-        try:
-            select = Select(self.driver.find_element(*locator))
-            select.select_by_index(index)
-            logger.info(f"[select_by_index] Selected index '{index}'")
-        except Exception as e:
-            logger.error(f"[select_by_index] Failed to select index '{index}' from {locator}: {e}")
-            raise
-
-    def get_selected_text(self, locator):
-        try:
-            select = Select(self.driver.find_element(*locator))
-            selected_text = select.first_selected_option.text
-            logger.info(f"[get_selected_text] Selected option: {selected_text}")
-            return selected_text
-        except Exception as e:
-            logger.error(f"[get_selected_text] Failed to get selected option from {locator}: {e}")
-            raise
-
-    def deselect_all(self, locator):
-        try:
-            select = Select(self.driver.find_element(*locator))
-            select.deselect_all()
-            logger.info(f"[deselect_all] Deselected all options for {locator}")
-        except Exception as e:
-            logger.error(f"[deselect_all] Failed to deselect all from {locator}: {e}")
-            raise
-
-    def switch_to_next_tab(self):
-        try:
-            win_handles = self.driver.window_handles
-            self.driver.switch_to.window(win_handles[1])
-            logger.info(f"[switch_to_next_tab] Switched to: {self.driver.title}")
-        except Exception as e:
-            logger.error(f"[switch_to_next_tab] Failed: {e}")
-            raise
-
-    def switch_back_to_prev_tab(self):
-        try:
-            win_handles = self.driver.window_handles
-            self.driver.switch_to.window(win_handles[0])
-            logger.info(f"[switch_back_to_prev_tab] Switched to: {self.driver.title}")
-        except Exception as e:
-            logger.error(f"[switch_back_to_prev_tab] Failed: {e}")
-            raise
-
-    def switch_to_new_tab(self):
-        try:
-            self.driver.switch_to.new_window('tab')
-            logger.info("[switch_to_new_tab] New tab opened")
-        except Exception as e:
-            logger.error(f"[switch_to_new_tab] Failed: {e}")
-            raise
-
-    def switch_to_default_content(self):
-        try:
-            self.driver.switch_to.default_content()
-            logger.info("[switch_to_default_content] Switched to default content")
-        except Exception as e:
-            logger.error(f"[switch_to_default_content] Failed: {e}")
-            raise
-
-    def switch_to_frame(self, frame_locator):
-        try:
-            frame = self.driver.find_element(*frame_locator)
-            self.driver.switch_to.frame(frame)
-            logger.info("[switch_to_frame] Switched to frame")
-        except Exception as e:
-            logger.error(f"[switch_to_frame] Failed: {e}")
-            raise
-
-    def scroll_to_top(self):
-        self.driver.execute_script("window.scrollTo(0, 0);")
-        logger.info("[scroll_to_top] Scrolled to top")
-
-    def scroll_to_bottom(self):
-        self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-        logger.info("[scroll_to_bottom] Scrolled to bottom")
-
-    def hover_on_element(self, locator):
-        try:
-            element = self.wait_until(ec.visibility_of_element_located(locator), timeout=10)
-            ActionChains(self.driver).move_to_element(element).pause(2).perform()
-            logger.info("[hover_on_element] Hovered over element")
-        except Exception as e:
-            logger.error(f"[hover_on_element] Failed: {e}")
-            raise
-
-    def hover_and_click(self, locator1, locator2):
-        try:
-            action = ActionChains(self.driver)
-            el1 = self.wait_until(ec.visibility_of_element_located(locator1), timeout=5)
-            el2 = self.wait_until(ec.visibility_of_element_located(locator2), timeout=5)
-            action.move_to_element(el1).move_to_element(el2).click().perform()
-            logger.info("[hover_and_click] Performed hover and click")
-        except Exception as e:
-            logger.error(f"[hover_and_click] Failed: {e}")
-            raise
-
-    def accept_pop_up(self):
-        try:
-            WebDriverWait(self.driver, 3, poll_frequency=0.5).until(ec.alert_is_present())
-            alert = self.driver.switch_to.alert
-            alert.accept()
-            logger.info("[accept_pop_up] Alert accepted")
-        except TimeoutException:
-            logger.info("[accept_pop_up] No alert found")
-
-    def assert_downloaded_file(self, file_path, file_name):
-        try:
-            mod_time = file_path.stat().st_mtime
-            file_time = datetime.datetime.fromtimestamp(mod_time)
-            now = datetime.datetime.now()
-            age = (now - file_time).total_seconds()
-            assert file_name in file_path.name and age < 600, f"[assert_downloaded_file] Invalid or old file: {file_path.name}"
-            logger.info(f"[assert_downloaded_file] Verified file: {file_path.name}")
-        except Exception as e:
-            logger.error(f"[assert_downloaded_file] Assertion failed: {e}")
-            raise
-
-    def page_source_contains(self, text):
-        assert text in self.driver.page_source, f"[page_source_contains] Text '{text}' not in page source"
-        logger.info(f"[page_source_contains] Verified text in page source: {text}")
-
-    def get_url(self, link):
-        self.driver.get(link)
-        time.sleep(2)
+            print(f"[WARNING] driver.back() failed: {e}. Trying JavaScript fallback...")
+            try:
+                self.driver.execute_script("window.history.back();")
+                print("[INFO] Navigated back using JavaScript")
+            except Exception as js_e:
+                print(f"[ERROR] JavaScript fallback also failed: {js_e}")
+                raise

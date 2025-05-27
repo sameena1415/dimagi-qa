@@ -60,7 +60,7 @@ class MessagingPage(BasePage):
             self.scroll_to_element(self.save_button)
             self.webapp.wait_to_click(self.save_button)
             
-            self.driver.refresh()
+            self.reload_page()
             time.sleep(2)
 
 
@@ -72,6 +72,6 @@ class MessagingPage(BasePage):
                 self.webapp.wait_to_click((By.XPATH, self.keyword_delete_button.format(items)))
                 self.webapp.wait_to_click((By.XPATH,self.confirm_delete.format(items)))
                 
-                self.driver.refresh()
+                self.reload_page()
             else:
                 print("Keyword "+items+" is not present")
