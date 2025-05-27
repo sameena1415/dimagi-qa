@@ -96,7 +96,7 @@ class CaseSearchWorkflows(BasePage):
         print("Providing value: ", input_value)
         if property_type == TEXT_INPUT:
             self.search_property = self.get_element(self.search_against_text_property_format, search_property)
-            self.wait_for_element(self.search_property, 100)
+            self.wait_for_element(self.search_property, 50)
             class_type = self.get_attribute(self.search_property, "class")
             self.scroll_to_element(self.search_property)
             self.wait_to_click(self.search_property)
@@ -115,19 +115,19 @@ class CaseSearchWorkflows(BasePage):
                 time.sleep(2)
         elif property_type == COMBOBOX:
             self.combox_select_element = self.get_element(self.combox_select, search_property)
-            self.wait_for_element(self.combox_select_element, 100)
+            self.wait_for_element(self.combox_select_element, 50)
             self.select_by_text(self.combox_select_element, input_value)
             print("Selected text: ", input_value)
             time.sleep(2)
         elif property_type == COMBOBOX2:
             self.combox_select_element = self.get_element(self.combox_select2, search_property)
-            self.wait_for_element(self.combox_select_element, 100)
+            self.wait_for_element(self.combox_select_element, 50)
             self.select_by_text(self.combox_select_element, input_value)
             print("Selected text: ", input_value)
             time.sleep(2)
         elif property_type == COMBOBOX3:
             self.combox_select_element = self.get_element(self.combox_select, search_property)
-            self.wait_for_element(self.combox_select_element, 100)
+            self.wait_for_element(self.combox_select_element, 50)
             self.select_by_partial_text(self.combox_select_element, input_value)
             print("Selected text: ", input_value)
             time.sleep(2)
@@ -239,7 +239,7 @@ class CaseSearchWorkflows(BasePage):
             validation_message_per_prop2 = (
                 By.XPATH, self.required_validation_per_property_combox2.format(search_property, message))
         if required_or_validated == YES:
-            self.wait_after_interaction()
+            # self.wait_after_interaction()
             time.sleep(1)
             assert self.is_displayed(
                 validation_message_per_prop) or self.is_displayed(validation_message_per_prop2), f"Required validation missing {validation_message_per_prop2}"
@@ -250,7 +250,7 @@ class CaseSearchWorkflows(BasePage):
                 validation_message_on_top), f"Required validation missing {validation_message_on_top}"
             print(f"Required validation present {validation_message_on_top}")
         elif required_or_validated == NO:
-            self.wait_after_interaction()
+            # self.wait_after_interaction()
             time.sleep(1)
             assert not self.is_displayed(validation_message_per_prop),  f"validation present {validation_message_per_prop}"
             print(f"validation not present {validation_message_per_prop}")
@@ -275,7 +275,7 @@ class CaseSearchWorkflows(BasePage):
             header = (By.XPATH, self.menu_breadcrumb.format(menu, menu))
             assert self.is_displayed(header), f"Navigated to {header}"
             print(f"Not Navigated to {header}")
-            
+
         elif eof_nav == HOME_SCREEN:
             assert self.is_displayed(self.webapps_home), f"Navigated to {self.webapps_home}"
             print(f"Not Navigated to {self.webapps_home}")
@@ -315,7 +315,7 @@ class CaseSearchWorkflows(BasePage):
         print("Selected cases: ", song_names_on_case_list)
         self.wait_to_click(self.multi_select_continue)
         print("Waiting for the form to load")
-        self.wait_after_interaction()
+        # self.wait_after_interaction()
         self.wait_for_element((By.XPATH, self.song_label.format(song_names_on_case_list[0])))
         for item in song_names_on_case_list:
             self.scroll_to_element((By.XPATH, self.song_label.format(item)))

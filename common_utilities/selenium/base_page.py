@@ -62,8 +62,8 @@ class BasePage:
         return self.cookie_alert_displayed
 
     @retry_on_exception((StaleElementReferenceException, TimeoutException))
-    def wait_to_click(self, locator, timeout=30):
-        element = WebDriverWait(self.driver, timeout).until(
+    def wait_to_click(self, locator, timeout=10):
+        element = WebDriverWait(self.driver, timeout, poll_frequency=0.5).until(
             ec.element_to_be_clickable(locator),
             message=f"Couldn't find locator: {locator}"
             )
@@ -112,9 +112,9 @@ class BasePage:
             self.wait_after_interaction()
 
     @retry_on_exception((StaleElementReferenceException, TimeoutException))
-    def wait_and_sleep_to_click(self, locator, timeout=40):
+    def wait_and_sleep_to_click(self, locator, timeout=20):
         time.sleep(2)  # Optional initial sleep
-        element = WebDriverWait(self.driver, timeout).until(
+        element = WebDriverWait(self.driver, timeout, poll_frequency=0.5).until(
             ec.element_to_be_clickable(locator),
             message=f"Couldn't find locator: {locator}"
             )
@@ -153,7 +153,7 @@ class BasePage:
 
     @retry_on_exception((StaleElementReferenceException, ElementClickInterceptedException, TimeoutException))
     def click(self, locator, timeout=10):
-        element = WebDriverWait(self.driver, timeout).until(
+        element = WebDriverWait(self.driver, timeout, poll_frequency=0.5).until(
             ec.element_to_be_clickable(locator),
             message=f"Couldn't find or click locator: {locator}"
             )
@@ -208,7 +208,7 @@ class BasePage:
 
     @retry_on_exception((ElementNotInteractableException, StaleElementReferenceException, TimeoutException))
     def send_keys(self, locator, user_input, timeout=10):
-        element = WebDriverWait(self.driver, timeout).until(
+        element = WebDriverWait(self.driver, timeout, poll_frequency=0.5).until(
             ec.element_to_be_clickable(locator),
             message=f"Couldn't find or click locator: {locator}"
             )
@@ -268,7 +268,7 @@ class BasePage:
             is_displayed = False
         return bool(is_displayed)
 
-    def is_visible_and_displayed(self, locator, timeout=50):
+    def is_visible_and_displayed(self, locator, timeout=30):
         try:
             visible = ec.visibility_of_element_located(locator)
             element = WebDriverWait(self.driver, timeout, poll_frequency=0.50).until(visible,
@@ -281,7 +281,7 @@ class BasePage:
             is_displayed = False
         return bool(is_displayed)
 
-    def is_present_and_displayed(self, locator, timeout=50):
+    def is_present_and_displayed(self, locator, timeout=30):
         try:
             visible = ec.presence_of_element_located(locator)
             element = WebDriverWait(self.driver, timeout, poll_frequency=2).until(visible,
@@ -401,7 +401,7 @@ class BasePage:
         element = self.driver.find_element(*locator)
         self.driver.execute_script("arguments[0].scrollIntoView();", element)
 
-    def wait_and_find_elements(self, locator, cols, timeout=100):
+    def wait_and_find_elements(self, locator, cols, timeout=50):
         elements = WebDriverWait(self.driver, timeout, poll_frequency=2).until(
             lambda driver: len(driver.find_elements(*locator)) >= int(cols)
             )
@@ -416,7 +416,7 @@ class BasePage:
                                                      )
                     )
         elif type == "integration":
-            WebDriverWait(self.driver, 200, poll_frequency=0.50).until(
+            WebDriverWait(self.driver, 200, poll_frequency=0.5).until(
                 ec.invisibility_of_element_located((By.XPATH, "//div[contains(@class,'progress-bar')]"))
                 )
 
