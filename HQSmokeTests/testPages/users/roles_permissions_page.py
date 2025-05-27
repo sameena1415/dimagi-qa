@@ -51,10 +51,10 @@ class RolesPermissionPage(BasePage):
         self.wait_to_click(self.add_new_role)
         self.wait_to_clear_and_send_keys(self.role_name, self.role_name_created)
         
-        self.click(self.edit_web_user_checkbox)
+        self.wait_to_click(self.edit_web_user_checkbox)
         self.scroll_to_element(self.save_button)
         time.sleep(0.5)
-        self.click(self.save_button)
+        self.wait_to_click(self.save_button)
         
         assert self.is_present_and_displayed(self.role_created), "Role not added successfully!"
 
@@ -62,10 +62,10 @@ class RolesPermissionPage(BasePage):
         self.wait_to_click(self.edit_created_role)
         self.wait_to_clear_and_send_keys(self.role_name, self.role_rename_created)
         
-        self.click(self.edit_mobile_worker_checkbox)
+        self.wait_to_click(self.edit_mobile_worker_checkbox)
         self.scroll_to_element(self.save_button)
         time.sleep(0.5)
-        self.click(self.save_button)
+        self.wait_to_click(self.save_button)
         
         assert self.is_present_and_displayed(self.role_renamed), "Role not edited successfully!"
         
@@ -118,7 +118,7 @@ class RolesPermissionPage(BasePage):
         self.wait_to_click(self.add_new_role)
         self.wait_to_clear_and_send_keys(self.role_name, self.role_non_admin_created)
         
-        self.click(self.edit_mobile_worker_checkbox)
+        self.wait_to_click(self.edit_mobile_worker_checkbox)
         self.scroll_to_element(self.access_all_reports_checkbox)
         is_checked = self.get_attribute(self.access_all_reports_checkbox, 'checked')
         print("All report access checked ", is_checked)
@@ -139,7 +139,7 @@ class RolesPermissionPage(BasePage):
             assert True
         self.scroll_to_element(self.save_button)
         time.sleep(0.5)
-        self.click(self.save_button)
+        self.wait_to_click(self.save_button)
         
         assert self.is_present_and_displayed(self.role_non_admin), "Role not added successfully!"
         return self.role_non_admin_created

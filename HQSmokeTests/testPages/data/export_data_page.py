@@ -185,7 +185,7 @@ class ExportDataPage(BasePage):
         self.wait_to_clear_and_send_keys(self.date_range, self.date_having_submissions)
 
         if self.is_present(self.close_date_picker):
-            self.click(self.close_date_picker)
+            self.wait_to_click(self.close_date_picker)
         self.wait_and_sleep_to_click(self.apply, timeout=10)
 
     def prepare_and_download_export(self, name, flag=None):

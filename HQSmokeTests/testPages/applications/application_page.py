@@ -135,12 +135,12 @@ class ApplicationPage(BasePage):
         self.wait_to_click(self.add_case_list)
         time.sleep(1)
         if self.is_present(self.create_case_list_btn):
-            self.click(self.caselist_span)
+            self.wait_to_click(self.caselist_span)
             self.wait_for_element(self.caselist_dropdown_input)
             self.send_keys(self.caselist_dropdown_input, "Case List")
             time.sleep(1)
             self.select_by_value(self.caselist_dropdown, "Case_List")
-            self.click(self.create_case_list_btn)
+            self.wait_to_click(self.create_case_list_btn)
         self.wait_for_element(self.add_questions)
         self.wait_to_click(self.add_questions)
         self.wait_to_click(self.text_question)
@@ -201,7 +201,7 @@ class ApplicationPage(BasePage):
         file_that_was_downloaded = PathSettings.DOWNLOAD_PATH / newest_file
         print(f"file_that_was_downloaded: {file_that_was_downloaded}")
         self.send_keys(self.choose_file, str(file_that_was_downloaded))
-        self.click(self.upload)
+        self.wait_to_click(self.upload)
         assert self.is_present_and_displayed(self.same_question_present)
         print("XML copied successfully!")
 
@@ -210,7 +210,7 @@ class ApplicationPage(BasePage):
             self.wait_to_click(self.settings)
         except TimeoutException:
             self.reload_page()
-            self.click(self.settings)
+            self.wait_to_click(self.settings)
         assert self.is_present_and_displayed(self.languages_tab_content)
         self.wait_to_click(self.multimedia_tab)
         assert self.is_present_and_displayed(self.multimedia_tab_content)
@@ -287,12 +287,12 @@ class ApplicationPage(BasePage):
         self.wait_to_click(self.add_case_list)
         time.sleep(1)
         if self.is_present(self.create_case_list_btn):
-            self.click(self.caselist_span)
+            self.wait_to_click(self.caselist_span)
             self.wait_for_element(self.caselist_dropdown_input)
             self.send_keys(self.caselist_dropdown_input, "Case List")
             time.sleep(1)
             self.select_by_value(self.caselist_dropdown, "Case_List")
-            self.click(self.create_case_list_btn)
+            self.wait_to_click(self.create_case_list_btn)
         self.wait_for_element(self.add_questions)
         self.wait_to_click(self.edit_form_name_icon)
         self.wait_to_clear_and_send_keys(self.edit_form_name_text, self.reg_form_name)

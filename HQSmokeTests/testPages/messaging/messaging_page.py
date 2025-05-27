@@ -165,7 +165,7 @@ class MessagingPage(BasePage):
         print("Messaging dashboard loaded successfully!")
 
     def compose_sms(self):
-        self.click(self.compose_sms_menu)
+        self.wait_to_click(self.compose_sms_menu)
         self.wait_for_element(self.recipients_select)
         self.select_by_value(self.recipients_select, "[send to all]")
         
@@ -176,7 +176,7 @@ class MessagingPage(BasePage):
         try:
             assert self.is_present_and_displayed(self.message_sent_success_msg), "Message not sent successfully"
         except TimeoutException:
-            self.click(self.compose_sms_menu)
+            self.wait_to_click(self.compose_sms_menu)
             self.wait_for_element(self.recipients_select)
             self.select_by_value(self.recipients_select, "[send to all]")
             
@@ -191,7 +191,7 @@ class MessagingPage(BasePage):
         self.wait_to_click(self.broadcasts)
         self.wait_to_click(self.add_broadcast)
         self.send_keys(self.broadcast_name, self.broadcast_input)
-        self.click(self.recipients)
+        self.wait_to_click(self.recipients)
         self.wait_to_click(self.select_recipient_type)
         self.wait_to_click(self.user_recipient)
         
@@ -323,7 +323,7 @@ class MessagingPage(BasePage):
         print("Structured keyword created successfully!")
 
     def chat_page(self):
-        self.click(self.chat)
+        self.wait_to_click(self.chat)
         assert self.is_displayed(self.contact_table), "Chat Page did not load successfully!"
         print("Chat Page loaded successfully!")
 
@@ -347,13 +347,13 @@ class MessagingPage(BasePage):
     #     print("Gateway created successfully!")
 
     def general_settings_page(self):
-        self.click(self.general_settings)
+        self.wait_to_click(self.general_settings)
         
         if self.is_enabled(self.disable_button):
-            self.click(self.enable_button)
+            self.wait_to_click(self.enable_button)
             self.send_keys(self.time_input, "23:59")
         else:
-            self.click(self.disable_button)
+            self.wait_to_click(self.disable_button)
         
         self.scroll_to_element(self.send_message)
         self.wait_to_click(self.send_message)
@@ -522,7 +522,7 @@ class MessagingPage(BasePage):
         self.wait_for_element(self.search_box)
         self.clear(self.search_box)
         self.send_keys(self.search_box, alert_name)
-        self.click(self.search_box)
+        self.wait_to_click(self.search_box)
         time.sleep(2)
         if self.is_present(self.empty_table_alert):
             print("No alert created with the same name")

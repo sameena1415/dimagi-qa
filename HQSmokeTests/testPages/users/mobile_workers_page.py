@@ -299,8 +299,8 @@ class MobileWorkerPage(BasePage):
         self.search_user(username)
         time.sleep(3)
         if not self.is_present((By.XPATH, self.username_link.format(username))):
-            self.click(self.show_deactivated_users_btn)
-        self.click((By.XPATH, self.username_link.format(username)))
+            self.wait_to_click(self.show_deactivated_users_btn)
+        self.wait_to_click((By.XPATH, self.username_link.format(username)))
         self.wait_for_element(self.user_name_span)
         print("Mobile Worker page opened.")
 
@@ -342,7 +342,7 @@ class MobileWorkerPage(BasePage):
             assert self.is_present_and_displayed((By.XPATH, self.login_as_username.format(username)),
                                                  10
                                                  ) == False, "Deactivated mobile worker still visible"
-            self.click(self.show_full_menu_id)
+            self.wait_to_click(self.show_full_menu_id)
         else:
             assert False
 
@@ -382,7 +382,7 @@ class MobileWorkerPage(BasePage):
                                                  ), "user is not activated"
             self.wait_to_click((By.XPATH, self.login_as_username.format(username)))
             self.wait_to_click(self.webapp_login_confirmation)
-            self.click(self.show_full_menu_id)
+            self.wait_to_click(self.show_full_menu_id)
             self.wait_for_element(self.webapp_working_as, 50)
             login_username = self.get_text(self.webapp_working_as)
             print("Logged in user: ", login_username)
@@ -470,7 +470,7 @@ class MobileWorkerPage(BasePage):
     def upload_mobile_worker(self):
         self.mobile_worker_menu()
         try:
-            self.click(self.bulk_upload_btn)
+            self.wait_to_click(self.bulk_upload_btn)
             newest_file = latest_download_file()
             file_that_was_downloaded = PathSettings.DOWNLOAD_PATH / newest_file
             time.sleep(2)
@@ -487,7 +487,7 @@ class MobileWorkerPage(BasePage):
         self.wait_to_click(self.profile_tab)
 
     def click_fields(self):
-        self.click(self.field_tab)
+        self.wait_to_click(self.field_tab)
 
     def add_profile(self, user_field):
         self.wait_to_click(self.add_new_profile)
@@ -601,7 +601,7 @@ class MobileWorkerPage(BasePage):
         
         self.wait_to_click(self.search_button_mw)
         time.sleep(3)
-        self.click((By.LINK_TEXT, user))
+        self.wait_to_click((By.LINK_TEXT, user))
         try:
             self.wait_to_click(self.actions_tab_link_text)
             self.wait_to_click(self.delete_mobile_worker)
@@ -640,7 +640,7 @@ class MobileWorkerPage(BasePage):
     def bulk_delete_mobile_worker_upload(self, file_path):
         self.mobile_worker_menu()
         try:
-            self.click(self.bulk_user_delete_button)
+            self.wait_to_click(self.bulk_user_delete_button)
             time.sleep(2)
             self.send_keys(self.choose_file, str(file_path))
             self.wait_and_sleep_to_click(self.upload)
@@ -657,7 +657,7 @@ class MobileWorkerPage(BasePage):
         self.wait_to_click(self.users_menu_id)
         self.mobile_worker_menu()
         try:
-            self.click(self.bulk_upload_btn)
+            self.wait_to_click(self.bulk_upload_btn)
             self.edit_username_in_excel(self.to_be_edited_file, self.username_cell, self.renamed_file)
             
             self.wait_to_clear_and_send_keys(self.choose_file, self.renamed_file)

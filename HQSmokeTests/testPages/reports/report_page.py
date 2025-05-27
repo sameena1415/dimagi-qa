@@ -280,7 +280,7 @@ class ReportPage(BasePage):
     def create_report_builder_case_report(self):
         self.wait_to_click(self.create_new_rep_id)
         self.send_keys(self.report_name_textbox_id, self.report_name_case)
-        self.click(self.select_app)
+        self.wait_to_click(self.select_app)
         self.select_by_text(self.select_source_id, self.select_source_id_case_value)
         self.wait_to_click(self.next_button_id)
         self.wait_to_click(self.save_and_view_button_id)
@@ -350,7 +350,7 @@ class ReportPage(BasePage):
         self.wait_for_element(self.saved_reports_menu_link, 400)
         self.wait_to_click(self.saved_reports_menu_link)
         try:
-            self.click(self.delete_saved)
+            self.wait_to_click(self.delete_saved)
             print("Deleted Saved Report")
         except NoSuchElementException:
             print("Not such report found!")

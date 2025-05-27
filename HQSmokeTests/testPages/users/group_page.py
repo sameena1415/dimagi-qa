@@ -78,7 +78,7 @@ class GroupPage(BasePage):
         self.wait_to_click(self.edit_settings)
         renamed_group = group_name+"_rename"
         self.wait_to_clear_and_send_keys(self.group_name_input, renamed_group)
-        self.click(self.save_button)
+        self.wait_to_click(self.save_button)
         assert self.is_visible_and_displayed(self.success_alert), "Group could not be renamed"
         print("Renamed a group")
         return renamed_group
@@ -119,7 +119,7 @@ class GroupPage(BasePage):
                 for i in range(len(group_names)):
                     
                     self.scroll_to_element((By.XPATH, self.group_name_link.format(group_names[i])))
-                    self.click((By.XPATH, self.group_name_link.format(group_names[i])))
+                    self.wait_to_click((By.XPATH, self.group_name_link.format(group_names[i])))
                     self.wait_for_element(self.delete_group)
                     self.click(self.delete_group)
                     self.wait_for_element(self.confirm_delete)

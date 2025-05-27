@@ -396,6 +396,7 @@ class BasePage:
             message=f"Couldn't find locator: {locator}"
             )
         self.driver.execute_script("arguments[0].click();", element)
+        time.sleep(1)
         self.wait_after_interaction()
 
     def scroll_to_element(self, locator):
@@ -510,11 +511,11 @@ class BasePage:
 
     def reload_page(self):
         self.driver.refresh()
-        time.sleep(0.5)
+        time.sleep(3)
 
     def get_url(self, link):
         self.driver.get(link)
-        time.sleep(0.5)
+        time.sleep(3)
 
     def switch_to_frame(self, frame_name):
         frame = self.driver.find_element(*frame_name)
@@ -528,6 +529,7 @@ class BasePage:
                                                                                       + str(locator)
                                                                               )
         self.driver.execute_script("arguments[0].value='" + value + "';", element)
+        time.sleep(1)
         self.wait_after_interaction()
 
     def wait_for_loading_spinner(self, timeout=10):
