@@ -17,7 +17,7 @@ from common_utilities.path_settings import PathSettings
 
 from functools import wraps
 
-def retry_on_exception(exceptions, retries=2, delay=1):
+def retry_on_exception(exceptions, retries=1, delay=1):
     def decorator(func):
         @wraps(func)
         def wrapper(*args, **kwargs):
