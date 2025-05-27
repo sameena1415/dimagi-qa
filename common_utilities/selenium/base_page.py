@@ -33,6 +33,7 @@ def retry_on_exception(exceptions, retries=1, delay=1):
     return decorator
 
 class BasePage:
+    ENABLE_WAIT_AFTER_INTERACTION = False
     def __init__(self, driver):
         self.driver = driver
 
@@ -577,6 +578,9 @@ class BasePage:
             print(f"[wait_until_progress_removed] Timeout or error: {e}")
 
     def wait_after_interaction(self):
+        if not BasePage.ENABLE_WAIT_AFTER_INTERACTION:
+            return
+
         if self._is_element_present(By.ID, "formplayer-progress"):
             self.wait_until_progress_removed()
 

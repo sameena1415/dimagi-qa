@@ -78,6 +78,7 @@ jobs:
           DIMAGIQA_SSCS_PROD_AUTH_KEY: ${{ secrets.DIMAGIQA_SSCS_PROD_AUTH_KEY }}
           DIMAGIQA_MAIL_USERNAME: ${{ secrets.DIMAGIQA_MAIL_USERNAME }}
           DIMAGIQA_MAIL_PASSWORD: ${{ secrets.DIMAGIQA_MAIL_PASSWORD }}
+          ENABLE_WAITS: 'true'
         run: |
           echo "client_payload: ${{ toJson(github.event.client_payload) }}"
           echo "matrix environment: ${{ matrix.environment }}"
