@@ -85,7 +85,7 @@ class BasePage:
             )
         element.clear()
         element.send_keys(user_input)
-        self.wait_after_interaction()
+        # self.wait_after_interaction()
 
     def wait_to_get_text(self, locator, timeout=10):
         clickable = ec.visibility_of_element_located(locator)
@@ -97,20 +97,14 @@ class BasePage:
         element_text = WebDriverWait(self.driver, timeout, poll_frequency=0.5).until(clickable).get_attribute("value")
         return element_text
 
+    @retry_on_exception((StaleElementReferenceException, TimeoutException))
     def wait_for_element(self, locator, timeout=10):
-        try:
-            clickable = ec.presence_of_element_located(locator)
-            WebDriverWait(self.driver, timeout, poll_frequency=0.5).until(clickable,
+        clickable = ec.presence_of_element_located(locator)
+        WebDriverWait(self.driver, timeout, poll_frequency=0.5).until(clickable,
                                                                         message="Couldn't find locator: " + str(locator)
                                                                         )
-            self.wait_after_interaction()
-        except (StaleElementReferenceException, TimeoutException):
-            self.wait_after_interaction()
-            clickable = ec.presence_of_element_located(locator)
-            WebDriverWait(self.driver, timeout, poll_frequency=0.5).until(clickable,
-                                                                        message="Couldn't find locator: " + str(locator)
-                                                                        )
-            self.wait_after_interaction()
+            # self.wait_after_interaction()
+
 
     @retry_on_exception((StaleElementReferenceException, TimeoutException))
     def wait_and_sleep_to_click(self, locator, timeout=20):
@@ -130,16 +124,16 @@ class BasePage:
             element.click()
         except Exception:
             self.driver.execute_script("arguments[0].click();", element)
-        self.wait_after_interaction()
+        # self.wait_after_interaction()
 
     def find_elements(self, locator):
-        self.wait_after_interaction()
+        # self.wait_after_interaction()
         elements = self.driver.find_elements(*locator)
         return elements
         # return [WrappedWebElement(e, self.driver, base_page=self) for e in elements]
 
     def find_elements_texts(self, locator):
-        self.wait_after_interaction()
+        # self.wait_after_interaction()
         elements = self.driver.find_elements(*locator)
         value_list = []
         for element in elements:
@@ -147,7 +141,7 @@ class BasePage:
         return value_list
 
     def find_element(self, locator):
-        self.wait_after_interaction()
+        # self.wait_after_interaction()
         element = self.driver.find_element(*locator)
         return element
         # return WrappedWebElement(element, self.driver, base_page=self)
@@ -162,7 +156,7 @@ class BasePage:
             element.click()
         except Exception:
             self.driver.execute_script("arguments[0].click();", element)
-        self.wait_after_interaction()
+        # self.wait_after_interaction()
 
     def select_by_partial_text(self, locator, partial_text):
         select_element = self.driver.find_element(*locator)
@@ -223,7 +217,7 @@ class BasePage:
         except Exception as e:
             print(f"[ERROR] send_keys failed: {e}")
             self.driver.execute_script("arguments[0].value = arguments[1];", element, user_input)
-        self.wait_after_interaction()
+        # self.wait_after_interaction()
 
     def get_text(self, locator):
         element = self.driver.find_element(*locator)
@@ -272,7 +266,7 @@ class BasePage:
     def is_visible_and_displayed(self, locator, timeout=30):
         try:
             visible = ec.visibility_of_element_located(locator)
-            element = WebDriverWait(self.driver, timeout, poll_frequency=0.50).until(visible,
+            element = WebDriverWait(self.driver, timeout, poll_frequency=0.5).until(visible,
                                                                                    message="Element" + str(
                                                                                        locator
                                                                                        ) + "not displayed"
@@ -285,7 +279,7 @@ class BasePage:
     def is_present_and_displayed(self, locator, timeout=30):
         try:
             visible = ec.presence_of_element_located(locator)
-            element = WebDriverWait(self.driver, timeout, poll_frequency=2).until(visible,
+            element = WebDriverWait(self.driver, timeout, poll_frequency=0.5).until(visible,
                                                                                   message="Element" + str(
                                                                                       locator
                                                                                       ) + "not displayed"
@@ -389,9 +383,9 @@ class BasePage:
         # double click operation
         action.double_click(element)
 
-    @retry_on_exception((TimeoutException,))
+    @retry_on_exception((TimeoutException,StaleElementReferenceException))
     def js_click(self, locator, timeout=10):
-        element = WebDriverWait(self.driver, timeout).until(
+        element = WebDriverWait(self.driver, timeout, poll_frequency=0.25).until(
             ec.presence_of_element_located(locator),
             message=f"Couldn't find locator: {locator}"
             )
@@ -412,7 +406,7 @@ class BasePage:
     def wait_till_progress_completes(self, type="export"):
         if type == "export":
             if self.is_present((By.XPATH, "//div[contains(@class,'progress-bar')]")):
-                WebDriverWait(self.driver, 200, poll_frequency=2).until(
+                WebDriverWait(self.driver, 200, poll_frequency=0.5).until(
                     ec.visibility_of_element_located((By.XPATH,
                                                       "//div[contains(@class,'progress-bar')][.//span[@data-bind='text: progress'][.='100']]")
                                                      )
