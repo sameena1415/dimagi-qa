@@ -34,13 +34,13 @@ def test_case_53_rage_clicks(driver, settings):
 
 @pytest.mark.twoFactorAuth
 def test_case_two_factor_auth(driver, settings):
-    if "eu" in settings["url"]:
-        pytest.skip("Auth key is not setup for eu server")
     login = LoginPage(driver, settings["url"])
     login.logout()
     if "staging" in settings["url"]:
         login.login(UserData.two_fa_user, settings["login_password"], settings["staging_auth_key"])
     elif "india" in settings["url"]:
         login.login(UserData.two_fa_user, settings["login_password"], settings["india_auth_key"])
+    elif "eu" in settings["url"]:
+        login.login(UserData.two_fa_user, settings["login_password"], settings["eu_auth_key"])
     else:
         login.login(UserData.two_fa_user, settings["login_password"], settings["prod_auth_key"])

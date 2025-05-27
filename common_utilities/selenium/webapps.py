@@ -91,7 +91,7 @@ class WebApps(BasePage):
         self.application_header = self.get_element(self.app_header_format, app_name)
         self.scroll_to_element(self.application)
         self.click(self.application)
-        time.sleep(2)
+        time.sleep(0.5)
         self.wait_after_interaction()
         self.wait_for_element(self.application_header, timeout=200)
 
@@ -99,7 +99,7 @@ class WebApps(BasePage):
         self.link = (By.XPATH, self.breadcrumb_format.format(breadcrumb_value, breadcrumb_value))
         self.wait_for_element(self.link)
         self.wait_to_click(self.link)
-        time.sleep(2)
+        time.sleep(0.5)
         self.wait_for_element((By.XPATH, self.current_page.format(breadcrumb_value)), timeout=60)
 
     def open_menu(self, menu_name, assertion='Yes'):
@@ -107,7 +107,7 @@ class WebApps(BasePage):
         self.caselist_header = self.get_element(self.menu_name_header_format, menu_name)
         self.scroll_to_element(self.caselist_menu)
         self.click(self.caselist_menu)
-        time.sleep(2)
+        time.sleep(0.5)
         self.wait_after_interaction()
         if assertion == 'No':
             print("No assertion needed")
@@ -124,7 +124,7 @@ class WebApps(BasePage):
             self.wait_for_element(self.form_name, timeout=50)
             self.scroll_to_element(self.form_name)
             self.wait_to_click(self.form_name)
-            time.sleep(2)
+            time.sleep(0.5)
             self.wait_after_interaction()
             self.wait_for_element((By.XPATH, self.current_page.format(form_name)), timeout=50)
 
@@ -147,7 +147,7 @@ class WebApps(BasePage):
         self.wait_for_element(self.clear_case_search_page)
         self.scroll_to_element(self.clear_case_search_page)
         self.wait_to_click(self.clear_case_search_page)
-        time.sleep(2)
+        time.sleep(0.5)
 
     def search_button_on_case_search_page(self, enter_key=None, case_list=None):
         if enter_key == YES:
@@ -156,7 +156,7 @@ class WebApps(BasePage):
         else:
             self.scroll_to_element(self.submit_on_case_search_page)
             self.wait_to_click(self.submit_on_case_search_page)
-            time.sleep(5)
+            time.sleep(1)
             self.wait_after_interaction()
         if case_list == None:
             self.is_visible_and_displayed(self.case_list, timeout=80)
@@ -172,7 +172,7 @@ class WebApps(BasePage):
             self.wait_to_clear_and_send_keys(self.omni_search_input, case_name)
             self.wait_for_element(self.omni_search_button)
             self.wait_to_click(self.omni_search_button)
-            time.sleep(10)
+            time.sleep(3)
             self.wait_after_interaction()
         else:
             print("Split Screen Case Search enabled")
@@ -194,7 +194,7 @@ class WebApps(BasePage):
         return case_name
 
     def select_case(self, case_name):
-        time.sleep(2)
+        time.sleep(0.5)
         self.case = self.get_element(self.case_name_format, case_name)
         self.scroll_to_element(self.case)
         self.wait_for_element(self.case)
@@ -214,7 +214,7 @@ class WebApps(BasePage):
     def continue_to_forms(self):
         self.wait_for_element(self.continue_button, 100)
         self.wait_to_click(self.continue_button)
-        time.sleep(2)
+        time.sleep(0.5)
 
     def select_case_and_continue(self, case_name):
         self.select_case(case_name)
@@ -224,10 +224,10 @@ class WebApps(BasePage):
         return form_names
 
     def async_restore_resubmit(self):
-        time.sleep(2)
+        time.sleep(0.5)
         if self.is_present_and_displayed(self.async_restore_error, 30):
             self.click(self.async_restore_error)
-            time.sleep(7)
+            time.sleep(2)
             self.scroll_to_element(self.form_submit)
             self.wait_to_click(self.form_submit)
             
@@ -240,22 +240,22 @@ class WebApps(BasePage):
         time.sleep(3)
         self.wait_for_element(self.form_submit)
         self.click(self.form_submit)
-        time.sleep(7)
-        self.async_restore_resubmit()
         time.sleep(2)
+        self.async_restore_resubmit()
+        time.sleep(0.5)
         try:
             self.wait_for_element(self.form_submission_successful, timeout=50)
             self.wait_for_element(self.form_submission_successful, timeout=50)
         except AssertionError:
             if self.is_displayed(self.form_500_error):
-                time.sleep(10)
+                time.sleep(3)
                 self.wait_after_interaction()
                 self.wait_to_click(self.form_submit)
                 self.wait_for_element(self.form_submission_successful, timeout=50)
                 self.wait_for_element(self.form_submission_successful, timeout=50)
             else:
                 raise AssertionError
-        time.sleep(2)
+        time.sleep(0.5)
 
     def select_user(self, username):
         self.login_as_user = self.get_element(self.login_as_username, username)
@@ -263,7 +263,7 @@ class WebApps(BasePage):
         self.wait_to_click(self.login_as_user)
         self.wait_for_element(self.webapp_login_confirmation)
         self.wait_to_click(self.webapp_login_confirmation)
-        time.sleep(2)
+        time.sleep(0.5)
         self.wait_for_element(self.webapp_working_as, 50)
         loggedin_user = self.get_text(self.webapp_working_as)
         print("Logged in User: ", loggedin_user)
@@ -276,10 +276,10 @@ class WebApps(BasePage):
         # url = self.get_current_url()
         # if url not in self.url:
         #     self.driver.get(self.url)
-        #     time.sleep(2)
+        #     time.sleep(0.5)
         # else:
         #     self.wait_to_click(self.webapps_home)
-        #     time.sleep(2)
+        #     time.sleep(0.5)
         self.driver.get(self.url)
         self.wait_after_interaction()
         try:
@@ -290,7 +290,7 @@ class WebApps(BasePage):
             self.wait_to_click(self.webapps_home)
             self.wait_for_element(self.webapp_login)
             self.wait_to_click(self.webapp_login)
-        time.sleep(1)
+        time.sleep(0.5)
         self.wait_for_element(self.search_user_webapps, timeout=40)
         self.send_keys(self.search_user_webapps, username)
         self.wait_for_element(self.search_button_webapps)
@@ -325,10 +325,10 @@ class WebApps(BasePage):
 
     def switch_bw_pages(self):
         self.wait_to_click(self.next_page)
-        time.sleep(6)
+        time.sleep(1)
         self.wait_for_element(self.prev_page)
         self.wait_to_click(self.prev_page)
-        time.sleep(6)
+        time.sleep(1)
         self.wait_after_interaction()
 
     def go_to_page(self, page_number):
@@ -373,17 +373,17 @@ class WebApps(BasePage):
         url = self.get_current_url()
         if url not in self.url:
             self.driver.get(self.url)
-            time.sleep(2)
+            time.sleep(0.5)
         else:
             self.wait_to_click(self.webapps_home)
-            time.sleep(2)
+            time.sleep(0.5)
         self.wait_for_element(self.setting_button)
         self.wait_to_click(self.setting_button)
         self.wait_for_element(self.sync_button)
         self.wait_to_click(self.sync_button)
-        time.sleep(10)
+        time.sleep(3)
         self.wait_after_interaction()
         self.wait_for_element(self.done_button)
         self.wait_to_click(self.done_button)
-        time.sleep(2)
+        time.sleep(0.5)
 
