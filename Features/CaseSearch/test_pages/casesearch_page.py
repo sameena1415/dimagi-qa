@@ -87,15 +87,16 @@ class CaseSearchWorkflows(BasePage):
         elif search_format == combobox:
             search_property = (
                 By.XPATH, self.combobox_search_property_name_and_value_format.format(search_property, default_value))
-        time.sleep(10)
-        assert self.is_visible_and_displayed(search_property, 400), "Search "+default_value+" property not present"
+        time.sleep(1)
+        self.wait_for_element(search_property, 400)
+        assert self.is_present(search_property), "Search " + default_value + " property not present"
         print("Search "+default_value+" property is present")
 
     def search_against_property(self, search_property, input_value, property_type, include_blanks=None):
         print("Providing value: ", input_value)
         if property_type == TEXT_INPUT:
             self.search_property = self.get_element(self.search_against_text_property_format, search_property)
-            self.wait_for_element(self.search_property, 100)
+            self.wait_for_element(self.search_property, 50)
             class_type = self.get_attribute(self.search_property, "class")
             self.scroll_to_element(self.search_property)
             self.wait_to_click(self.search_property)
@@ -114,19 +115,19 @@ class CaseSearchWorkflows(BasePage):
                 time.sleep(2)
         elif property_type == COMBOBOX:
             self.combox_select_element = self.get_element(self.combox_select, search_property)
-            self.wait_for_element(self.combox_select_element, 100)
+            self.wait_for_element(self.combox_select_element, 50)
             self.select_by_text(self.combox_select_element, input_value)
             print("Selected text: ", input_value)
             time.sleep(2)
         elif property_type == COMBOBOX2:
             self.combox_select_element = self.get_element(self.combox_select2, search_property)
-            self.wait_for_element(self.combox_select_element, 100)
+            self.wait_for_element(self.combox_select_element, 50)
             self.select_by_text(self.combox_select_element, input_value)
             print("Selected text: ", input_value)
             time.sleep(2)
         elif property_type == COMBOBOX3:
             self.combox_select_element = self.get_element(self.combox_select, search_property)
-            self.wait_for_element(self.combox_select_element, 100)
+            self.wait_for_element(self.combox_select_element, 50)
             self.select_by_partial_text(self.combox_select_element, input_value)
             print("Selected text: ", input_value)
             time.sleep(2)
@@ -161,7 +162,8 @@ class CaseSearchWorkflows(BasePage):
 
     def check_help_text(self, search_property, help_text_value):
         help_text = (By.XPATH, self.help_text_format.format(search_property, help_text_value, help_text_value))
-        assert self.is_visible_and_displayed(help_text), "Expected text "+help_text_value+" is not present"
+        self.wait_for_element(help_text)
+        assert self.is_present(help_text), "Expected text " + help_text_value + " is not present"
         print("Expected text "+help_text_value+" is present")
 
     def check_date_range(self, search_property, date_range):
@@ -237,7 +239,7 @@ class CaseSearchWorkflows(BasePage):
             validation_message_per_prop2 = (
                 By.XPATH, self.required_validation_per_property_combox2.format(search_property, message))
         if required_or_validated == YES:
-            self.wait_after_interaction()
+            # self.wait_after_interaction()
             time.sleep(1)
             assert self.is_displayed(
                 validation_message_per_prop) or self.is_displayed(validation_message_per_prop2), f"Required validation missing {validation_message_per_prop2}"
@@ -248,7 +250,7 @@ class CaseSearchWorkflows(BasePage):
                 validation_message_on_top), f"Required validation missing {validation_message_on_top}"
             print(f"Required validation present {validation_message_on_top}")
         elif required_or_validated == NO:
-            self.wait_after_interaction()
+            # self.wait_after_interaction()
             time.sleep(1)
             assert not self.is_displayed(validation_message_per_prop),  f"validation present {validation_message_per_prop}"
             print(f"validation not present {validation_message_per_prop}")
@@ -273,7 +275,7 @@ class CaseSearchWorkflows(BasePage):
             header = (By.XPATH, self.menu_breadcrumb.format(menu, menu))
             assert self.is_displayed(header), f"Navigated to {header}"
             print(f"Not Navigated to {header}")
-            
+
         elif eof_nav == HOME_SCREEN:
             assert self.is_displayed(self.webapps_home), f"Navigated to {self.webapps_home}"
             print(f"Not Navigated to {self.webapps_home}")
@@ -286,7 +288,8 @@ class CaseSearchWorkflows(BasePage):
         if tabname is not None:
             self.select_case_detail_tab(tabname)
         value = (By.XPATH, self.case_detail_value.format(search_property, expected_value))
-        assert self.is_visible_and_displayed(value), "Value "+expected_value+" is not present"
+        self.wait_for_element(value)
+        assert self.is_present(value), "Value "+expected_value+" is not present"
         print("Value "+expected_value+" is present")
         self.wait_to_click(self.close_case_detail_tab)
 
@@ -297,7 +300,8 @@ class CaseSearchWorkflows(BasePage):
         recent_claim_case = (By.XPATH, self.commcare_case_claim_case.format(date_on_report))
         print(date_on_report, recent_claim_case)
         try:
-            assert self.is_visible_and_displayed(recent_claim_case), "Value "+date_on_report+" is not present"
+            self.wait_for_element(recent_claim_case)
+            assert self.is_present(recent_claim_case), "Value "+date_on_report+" is not present"
             print("Value "+date_on_report+" is present")
         except AssertionError:
             logging.basicConfig(filename='logs.log', encoding='utf-8', level=logging.DEBUG)

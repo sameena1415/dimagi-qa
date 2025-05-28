@@ -54,7 +54,7 @@ class HomePage(BasePage):
             self.open_menu(self.reports_menu_id)
         except TimeoutException:
             if self.is_displayed(self.show_full_menu_id):
-                self.click(self.show_full_menu_id)
+                self.wait_to_click(self.show_full_menu_id)
                 self.open_menu(self.reports_menu_id)
             else:
                 raise TimeoutException
@@ -71,7 +71,7 @@ class HomePage(BasePage):
             self.open_menu(self.applications_menu_id)
         except TimeoutException:
             if self.is_displayed(self.show_full_menu_id):
-                self.click(self.show_full_menu_id)
+                self.wait_to_click(self.show_full_menu_id)
                 self.open_menu(self.applications_menu_id)
             else:
                 raise TimeoutException
@@ -97,12 +97,12 @@ class HomePage(BasePage):
     def rage_clicks(self):
         # Rage Clicks on menus
         self.open_menu(self.users_menu_id)
-        self.click(self.users_menu_id)
-        self.click(self.users_menu_id)
+        self.wait_to_click(self.users_menu_id)
+        self.wait_to_click(self.users_menu_id)
         # Rage Clicks on redirect links
         self.wait_to_click(self.view_all)
-        self.click(self.mobile_workers_menu_link_text)
-        self.click(self.mobile_workers_menu_link_text)
+        self.wait_to_click(self.mobile_workers_menu_link_text)
+        self.wait_to_click(self.mobile_workers_menu_link_text)
         assert self.USERS_TITLE in self.driver.title, "Rage clicks failed!."
 
     def open_menu(self, menu):

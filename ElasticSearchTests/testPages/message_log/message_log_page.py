@@ -754,7 +754,7 @@ class MessageLogPage(BasePage):
         self.click((By.XPATH, self.delete_saved.format(report)))
         print("Deleted Saved Report")
         time.sleep(2)
-        self.driver.refresh()
+        self.reload_page()
         assert not self.is_visible_and_displayed((By.XPATH, self.saved_report_created.format(report)), 20)
         print("Deleted Report Successfully")
 
@@ -804,7 +804,7 @@ class MessageLogPage(BasePage):
         assert report_name in text, "Report Name is visible in the Title"
         self.wait_to_click(self.try_again_button)
         
-        self.driver.refresh()
+        self.reload_page()
         self.wait_to_click(self.saved_reports_menu_link)
         assert self.is_visible_and_displayed((By.XPATH, self.saved_report_created.format(report_name)), 120)
         print("Report Saved successfully!")

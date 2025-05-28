@@ -20,15 +20,15 @@ class WebAppPermissionPage(BasePage):
 
     def webapp_permission_option_toggle(self):
         try:
-            self.click(self.web_app_permissions_menu)
+            self.wait_to_click(self.web_app_permissions_menu)
         except NoSuchElementException:
             if self.is_displayed(self.error_403):
                 self.driver.back()
         self.driver.implicitly_wait(2)
         if self.is_selected(self.first_radio_button):
-            self.click(self.second_radio_button)
+            self.wait_to_click(self.second_radio_button)
         else:
-            self.click(self.first_radio_button)
-        self.click(self.save_button)
+            self.wait_to_click(self.first_radio_button)
+        self.wait_to_click(self.save_button)
         assert self.is_visible_and_displayed(self.after_save)
         print("Webapps permissions toggled")

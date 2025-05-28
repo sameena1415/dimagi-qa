@@ -55,7 +55,7 @@ class DeduplicateCasePage(BasePage):
         self.open_deduplicate_case_page()
         self.wait_to_click(self.delete_rule)
         self.wait_to_click(self.delete_confirm)
-        self.driver.refresh()
+        self.reload_page()
         time.sleep(2)
         try:
             isPresent = self.is_present(self.rule_created_path)
