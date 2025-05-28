@@ -419,7 +419,7 @@ class BasePage:
     def is_clickable(self, locator, timeout=20):
         try:
             clickable = ec.element_to_be_clickable(locator)
-            element = WebDriverWait(self.driver, timeout, poll_frequency=0.5).until(clickable,
+            element = WebDriverWait(self.driver, timeout, poll_frequency=2).until(clickable,
                                                                                   message="Element" + str(
                                                                                       locator
                                                                                       ) + "not displayed"

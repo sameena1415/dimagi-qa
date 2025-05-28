@@ -224,13 +224,13 @@ class WebApps(BasePage):
         return form_names
 
     def async_restore_resubmit(self):
-        time.sleep(0.5)
+        time.sleep(5)
         if self.is_present_and_displayed(self.async_restore_error, 10):
+            print("Asynchronous restore error present")
             self.js_click(self.async_restore_error)
             time.sleep(2)
             self.scroll_to_element(self.form_submit)
             self.wait_to_click(self.form_submit)
-            
         else:
             print("No Asynchronous restore error present")
 
@@ -282,7 +282,7 @@ class WebApps(BasePage):
         #     self.wait_to_click(self.webapps_home)
         #     time.sleep(0.5)
         self.driver.get(self.url)
-        # self.wait_after_interaction()
+        self.wait_after_interaction()
         try:
             self.wait_for_element(self.webapp_login)
             self.scroll_to_element(self.webapp_login)

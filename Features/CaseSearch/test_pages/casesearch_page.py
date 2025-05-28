@@ -315,7 +315,7 @@ class CaseSearchWorkflows(BasePage):
         print("Selected cases: ", song_names_on_case_list)
         self.wait_to_click(self.multi_select_continue)
         print("Waiting for the form to load")
-        # self.wait_after_interaction()
+        self.wait_after_interaction()
         self.wait_for_element((By.XPATH, self.song_label.format(song_names_on_case_list[0])))
         for item in song_names_on_case_list:
             self.scroll_to_element((By.XPATH, self.song_label.format(item)))

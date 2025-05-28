@@ -215,7 +215,8 @@ class OrganisationStructurePage(BasePage):
         self.wait_to_click(self.download_filter)
         try:
             self.wait_for_element(self.download_loc_btn, 30)
-            self.click(self.download_loc_btn)
+            print("Clicking on the Download button")
+            self.js_click(self.download_loc_btn)
             wait_for_download_to_finish()
         except TimeoutException:
             print("Still preparing for download..")

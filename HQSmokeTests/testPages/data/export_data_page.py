@@ -83,7 +83,7 @@ class ExportDataPage(BasePage):
         self.user_from_list = "//li[contains(.,'{}')]"
         self.prepare_export_button = (By.XPATH, "//button[@data-bind='disable: disablePrepareExport']")
         self.download_button = (By.XPATH, "//a[@class='btn btn-primary btn-full-width']")
-        self.apply = (By.XPATH, "//button[@class='applyBtn btn btn-sm btn-primary']")
+        self.apply = (By.XPATH, "//button[contains(@class,'btn btn-primary')]/i[contains(@data-bind,'Export') and contains(@class,'down')]")
         self.export_button = (By.XPATH, "//a[@class='btn btn-primary'][contains(text(),'Export')]")
 
         # Find Data By ID
@@ -198,8 +198,7 @@ class ExportDataPage(BasePage):
         if flag == None:
             self.send_keys(self.users_field, UserData.web_user)
             self.wait_to_click((By.XPATH, self.users_list_item.format(UserData.web_user)))
-
-        self.wait_and_sleep_to_click(self.prepare_export_button, timeout=10)
+        # self.wait_and_sleep_to_click(self.prepare_export_button, timeout=10)
         try:
             self.wait_till_progress_completes("exports")
             self.wait_for_element(self.download_button, 300)
@@ -213,7 +212,8 @@ class ExportDataPage(BasePage):
                 self.wait_for_element(self.download_button, 300)
                 self.click(self.download_button)
                 wait_for_download_to_finish()
-        print("Download form button clicked")
+        print("Download form button clicked, waiting for download to complete...")
+        time.sleep(5)
 
     def find_data_by_id_and_verify(self, row, value, export_name, name_on_hq):
         newest_file = latest_download_file()
@@ -242,7 +242,7 @@ class ExportDataPage(BasePage):
         self.wait_for_element(self.add_export_button, 100)
         self.delete_bulk_exports()
         self.wait_and_sleep_to_click(self.add_export_button)
-        time.sleep(50)
+        time.sleep(10)
         self.is_visible_and_displayed(self.app_type, 200)
         self.wait_for_element(self.app_type, 200)
         self.is_clickable(self.app_type)

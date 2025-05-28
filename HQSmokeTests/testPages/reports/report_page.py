@@ -212,55 +212,55 @@ class ReportPage(BasePage):
         self.check_if_report_loaded()
 
     def form_completion_report(self):
-        self.wait_to_click(self.form_completion_rep)
+        self.js_click(self.form_completion_rep)
         self.check_if_report_loaded()
 
     def case_activity_report(self):
-        self.wait_to_click(self.case_activity_rep)
+        self.js_click(self.case_activity_rep)
         self.check_if_report_loaded()
 
     def completion_vs_submission_report(self):
-        self.wait_to_click(self.completion_vs_submission_rep)
+        self.js_click(self.completion_vs_submission_rep)
         self.check_if_report_loaded()
 
     def worker_activity_times_report(self):
-        self.wait_to_click(self.worker_activity_times_rep)
+        self.js_click(self.worker_activity_times_rep)
         self.check_if_report_loaded()
 
     def project_performance_report(self):
-        self.wait_to_click(self.project_performance_rep)
+        self.js_click(self.project_performance_rep)
         self.check_if_report_loaded()
 
     def submit_history_report(self):
-        self.wait_to_click(self.submit_history_rep)
+        self.js_click(self.submit_history_rep)
         self.wait_for_element(self.users_box, 200)
         self.check_if_report_loaded()
 
     def case_list_report(self):
-        self.wait_to_click(self.case_list_rep)
+        self.js_click(self.case_list_rep)
         self.check_if_report_loaded()
 
     def sms_usage_report(self):
-        self.wait_to_click(self.sms_usage_rep)
+        self.js_click(self.sms_usage_rep)
         self.check_if_report_loaded()
 
     def messaging_history_report(self):
-        self.wait_to_click(self.messaging_history_rep)
+        self.js_click(self.messaging_history_rep)
         date_range = self.get_last_7_days_date_range()
         self.clear(self.date_input)
         self.send_keys(self.date_input, date_range + Keys.TAB)
         self.check_if_report_loaded()
 
     def message_log_report(self):
-        self.wait_to_click(self.message_log_rep)
+        self.js_click(self.message_log_rep)
         self.check_if_report_loaded()
 
     def sms_opt_out_report(self):
-        self.wait_to_click(self.sms_opt_out_rep)
+        self.js_click(self.sms_opt_out_rep)
         assert self.is_visible_and_displayed(self.report_content_id)
 
     def scheduled_messaging_report(self):
-        self.wait_to_click(self.scheduled_messaging_rep)
+        self.js_click(self.scheduled_messaging_rep)
         self.check_if_report_loaded()
 
     def delete_report(self):
@@ -298,10 +298,13 @@ class ReportPage(BasePage):
         self.check_if_report_loaded()
 
     def saved_report(self):
-        self.wait_to_click(self.case_activity_rep)
-        self.wait_to_click(self.save_xpath)
+        self.js_click(self.case_activity_rep)
+        self.wait_for_element(self.save_xpath)
+        self.click(self.save_xpath)
+        self.wait_for_element(self.new_saved_report_name)
         self.send_keys(self.new_saved_report_name, self.report_name_saved)
-        self.wait_to_click(self.save_confirm)
+        time.sleep(0.5)
+        self.click(self.save_confirm)
         time.sleep(2)
         self.wait_for_element(self.saved_reports_menu_link, 100)
         self.wait_to_click(self.saved_reports_menu_link)
@@ -310,7 +313,7 @@ class ReportPage(BasePage):
 
     def create_scheduled_report_button(self):
         self.wait_and_sleep_to_click(self.scheduled_reports_menu_xpath)
-        self.wait_to_click(self.create_scheduled_report)
+        self.js_click(self.create_scheduled_report)
 
     def scheduled_report(self):
         self.create_scheduled_report_button()
@@ -348,19 +351,25 @@ class ReportPage(BasePage):
 
     def delete_scheduled_and_saved_reports(self):
         self.wait_for_element(self.saved_reports_menu_link, 400)
-        self.wait_to_click(self.saved_reports_menu_link)
+        self.js_click(self.saved_reports_menu_link)
         try:
-            self.wait_to_click(self.delete_saved)
-            print("Deleted Saved Report")
+            if self.is_present(self.delete_saved):
+                self.click(self.delete_saved)
+                print("Deleted Saved Report")
+            else:
+                print("Not such report found!")
         except NoSuchElementException:
             print("Not such report found!")
         self.wait_to_click(self.scheduled_reports_menu_xpath)
         try:
-            self.wait_to_click(self.select_all)
-            self.wait_to_click(self.delete_selected)
-            self.wait_to_click(self.delete_scheduled_confirm)
-            self.is_visible_and_displayed(self.delete_success_scheduled)
-            print("Deleted Scheduled Report")
+            if self.is_present(self.select_all):
+                self.wait_to_click(self.select_all)
+                self.wait_to_click(self.delete_selected)
+                self.wait_to_click(self.delete_scheduled_confirm)
+                self.is_visible_and_displayed(self.delete_success_scheduled)
+                print("Deleted Scheduled Report")
+            else:
+                print("No reports available")
         except TimeoutException:
             print("No reports available")
 
