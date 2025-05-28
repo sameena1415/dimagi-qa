@@ -408,7 +408,7 @@ class BasePage:
             if self.is_present((By.XPATH, "//div[contains(@class,'progress-bar')]")):
                 WebDriverWait(self.driver, 200, poll_frequency=0.5).until(
                     ec.visibility_of_element_located((By.XPATH,
-                                                      "//div[contains(@class,'progress-bar')][.//span[@data-bind='text: progress'][.='100']]")
+                                                      "//div[contains(@class,'progress-bar bg-success')]")
                                                      )
                     )
         elif type == "integration":

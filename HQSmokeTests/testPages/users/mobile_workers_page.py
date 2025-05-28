@@ -193,7 +193,7 @@ class MobileWorkerPage(BasePage):
         time.sleep(2)
         self.wait_for_element(self.search_user_web_apps, 20)
         self.send_keys(self.search_user_web_apps, username)
-        self.wait_to_click(self.search_button_we_apps)
+        self.js_click(self.search_button_we_apps)
         time.sleep(2)
 
     def mobile_worker_menu(self):
@@ -218,7 +218,7 @@ class MobileWorkerPage(BasePage):
     def click_create(self, username):
         self.wait_to_click(self.create_button_xpath)
         time.sleep(2)
-        self.is_present_and_displayed(self.NEW, 200)
+        self.wait_for_element(self.NEW, 200)
         new_user_created = self.get_text(self.new_user_created_xpath)
         print("Username is : " + new_user_created)
         assert username == new_user_created, "Could find the new mobile worker created"
@@ -255,12 +255,15 @@ class MobileWorkerPage(BasePage):
         df.to_excel(path, sheet_name='users', index=False)
 
     def edit_user_field(self):
-        self.wait_to_click(self.edit_user_field_xpath)
+        self.wait_for_element(self.edit_user_field_xpath)
+        self.js_click(self.edit_user_field_xpath)
 
     def add_field(self):
-        self.wait_to_click(self.add_field_xpath)
+        self.wait_for_element(self.add_field_xpath)
+        self.js_click(self.add_field_xpath)
 
     def add_user_property(self, user_pro):
+        self.wait_for_element(self.user_property_xpath)
         self.clear(self.user_property_xpath)
         self.send_keys(self.user_property_xpath, user_pro + Keys.TAB)
         
@@ -272,7 +275,7 @@ class MobileWorkerPage(BasePage):
 
     def add_choice(self, choice):
         if self.is_present(self.choices_button_xpath):
-            self.wait_to_click(self.choices_button_xpath)
+            self.click(self.choices_button_xpath)
             time.sleep(2)
         else:
             print("Choices button not present")
@@ -285,7 +288,8 @@ class MobileWorkerPage(BasePage):
 
     def save_field(self):
         if self.is_enabled(self.save_field_id):
-            self.wait_to_click(self.save_field_id)
+            self.wait_for_element(self.save_field_id)
+            self.click(self.save_field_id)
             time.sleep(2)
             assert self.is_present(self.user_field_success_msg) or self.is_present(
                 self.duplicate_field_error
