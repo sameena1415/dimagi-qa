@@ -65,11 +65,13 @@ class WebAppsPage(BasePage):
         self.wait_to_click(self.confirm_user_login)
 
     def submit_case_form(self):
-        self.wait_to_click(self.web_app_link)
-        self.wait_to_click(self.case_list_link)
-        self.wait_to_click(self.form_link)
+        self.js_click(self.web_app_link)
+        self.wait_for_element(self.case_list_link)
+        self.js_click(self.case_list_link)
+        self.wait_for_element(self.form_link)
+        self.js_click(self.form_link)
         self.wait_to_clear_and_send_keys(self.form_case_name_input, self.case_name_created)
-        self.wait_to_click(self.form_submit_button)
+        self.js_click(self.form_submit_button)
         self.wait_for_element(self.success_message)
         assert self.is_displayed(self.success_message), "Form not submitted"
         print("Form successfully submitted")
@@ -77,7 +79,7 @@ class WebAppsPage(BasePage):
         self.wait_to_click(self.home_button)
         time.sleep(2)
         self.wait_for_element(self.sync_button)
-        self.wait_to_click(self.sync_button)
+        self.js_click(self.sync_button)
         time.sleep(2)
         self.reload_page()
         return self.case_name_created

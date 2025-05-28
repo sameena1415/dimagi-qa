@@ -483,8 +483,8 @@ class ReportPage(BasePage):
 
     def verify_form_data_case_list(self, case_name):
         self.wait_to_click(self.case_list_rep)
-        self.wait_to_click(self.users_box)
-        self.wait_to_click(self.select_user)
+        # self.wait_to_click(self.users_box)
+        # self.wait_to_click(self.select_user)
         self.send_keys(self.search_input, case_name)
         self.wait_to_click(self.apply_id)
         time.sleep(15)
