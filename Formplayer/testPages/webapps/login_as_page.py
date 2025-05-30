@@ -85,7 +85,7 @@ class LoginAsPage(BasePage):
         self.wait_for_element(self.basic_tests_answer_input, 120)
         self.wait_to_clear_and_send_keys(self.basic_tests_answer_input, input_text)
         self.webapp.wait_to_click(self.submit)
-        assert self.is_visible_and_displayed(self.submit_success)
+        self.wait_for_element(self.submit_success)
 
     def submit_history_verification(self):
         web_app = WebAppsBasics(self.driver)

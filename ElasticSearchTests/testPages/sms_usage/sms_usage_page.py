@@ -220,7 +220,7 @@ class SMSUsagePage(BasePage):
         print("All filters are shown!")
 
     def verify_messaging_section(self):
-        assert self.is_visible_and_displayed(
+        self.wait_for_element(
             self.messaging_section), "Messaging section is not present in the left panel"
         print("Messaging section is present in the left panel")
         elements = self.find_elements(self.messaging_list)
@@ -281,7 +281,7 @@ class SMSUsagePage(BasePage):
         # assert self.is_present(self.report_loading), "Loading Report block is not present"
         time.sleep(2)
         self.wait_for_element(self.result_table, 300)
-        assert self.is_visible_and_displayed(self.report_content_id, 120), "Report not loaded"
+        self.wait_for_element(self.report_content_id, 120), "Report not loaded"
         print("Report loaded successfully!")
         self.scroll_to_bottom()
         time.sleep(100)
@@ -374,7 +374,7 @@ class SMSUsagePage(BasePage):
         self.wait_to_click(self.apply_id)
         time.sleep(2)
         self.wait_for_element(self.result_table, 300)
-        assert self.is_visible_and_displayed(self.report_content_id, 120), "Report not loaded"
+        self.wait_for_element(self.report_content_id, 120), "Report not loaded"
         print("Report loaded successfully!")
         self.scroll_to_element(self.result_table)
         self.select_by_value(self.page_list_dropdown, UserData.pagination[0])
@@ -542,7 +542,7 @@ class SMSUsagePage(BasePage):
         self.wait_to_click(self.apply_id)
         time.sleep(2)
         self.wait_for_element(self.result_table, 300)
-        assert self.is_visible_and_displayed(self.report_content_id, 120), "Report not loaded"
+        self.wait_for_element(self.report_content_id, 120), "Report not loaded"
         print("Report loaded successfully!")
         self.scroll_to_element(self.result_table)
         time.sleep(2)
@@ -588,7 +588,7 @@ class SMSUsagePage(BasePage):
         self.wait_to_click(self.apply_id)
         time.sleep(2)
         self.wait_for_element(self.result_table, 300)
-        assert self.is_visible_and_displayed(self.report_content_id, 120), "Report not loaded"
+        self.wait_for_element(self.report_content_id, 120), "Report not loaded"
         print("Report loaded successfully!")
         self.scroll_to_element(self.result_table)
         time.sleep(2)
@@ -651,7 +651,7 @@ class SMSUsagePage(BasePage):
         self.wait_to_click(self.apply_id)
         time.sleep(2)
         self.wait_for_element(self.result_table, 300)
-        assert self.is_visible_and_displayed(self.report_content_id, 120), "Report not loaded"
+        self.wait_for_element(self.report_content_id, 120), "Report not loaded"
         print("Report loaded successfully!")
         self.scroll_to_element(self.result_table)
         self.verify_users_in_the_group()
@@ -675,7 +675,7 @@ class SMSUsagePage(BasePage):
     def verify_favorite_empty(self, report=None):
         self.wait_to_click(self.favorite_button)
         if report == None:
-            assert self.is_visible_and_displayed(self.empty_fav_list), "Favorites Already Present"
+            self.wait_for_element(self.empty_fav_list), "Favorites Already Present"
         else:
             assert not self.is_visible_and_displayed((By.XPATH, self.saved_fav.format(report)),
                                                      30), "Favorite is already Present"
@@ -684,13 +684,13 @@ class SMSUsagePage(BasePage):
     def verify_favorite_created(self, report):
         self.wait_to_click(self.favorite_button)
         assert not self.is_visible_and_displayed(self.empty_fav_list, 10), "Favorites Already Present"
-        assert self.is_visible_and_displayed((By.XPATH, self.saved_fav.format(report))), "Favorite Not Present"
+        self.wait_for_element((By.XPATH, self.saved_fav.format(report))), "Favorite Not Present"
         print("Favorites added.")
         self.wait_to_click((By.XPATH, self.saved_fav.format(report)))
 
     def delete_saved_report(self, report):
         self.wait_to_click(self.saved_reports_menu_link)
-        assert self.is_visible_and_displayed((By.XPATH, self.saved_report_created.format(report)), 120)
+        self.wait_for_element((By.XPATH, self.saved_report_created.format(report)), 120)
         print("Report Present!")
         self.click((By.XPATH, self.delete_saved.format(report)))
         print("Deleted Saved Report")
@@ -748,7 +748,7 @@ class SMSUsagePage(BasePage):
         
         self.reload_page()
         self.wait_to_click(self.saved_reports_menu_link)
-        assert self.is_visible_and_displayed((By.XPATH, self.saved_report_created.format(report_name)), 120)
+        self.wait_for_element((By.XPATH, self.saved_report_created.format(report_name)), 120)
         print("Report Saved successfully!")
         print("Report name: ", report_name)
         return report_name
@@ -775,7 +775,7 @@ class SMSUsagePage(BasePage):
         self.wait_to_click(self.apply_id)
         time.sleep(2)
         self.wait_for_element(self.result_table, 300)
-        assert self.is_visible_and_displayed(self.report_content_id, 120), "Report not loaded"
+        self.wait_for_element(self.report_content_id, 120), "Report not loaded"
         print("Report loaded successfully!")
         self.scroll_to_element(self.result_table)
         self.verify_users_in_the_group()

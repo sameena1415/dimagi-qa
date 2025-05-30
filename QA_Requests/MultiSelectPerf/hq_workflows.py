@@ -71,7 +71,7 @@ class AppCreationPage(BasePage):
     def sync_user(self):
         self.driver.get("https://www.commcarehq.org/a/casesearch/cloudcare/apps/v2/#apps")
         self.wait_to_click(self.sync_app)
-        assert self.is_visible_and_displayed(self.sync_success, timeout=500)
+        self.wait_for_element(self.sync_success, timeout=500)
 
     def open_app(self):
         self.driver.get("https://www.commcarehq.org/a/casesearch/cloudcare/apps/v2/#apps")
@@ -83,7 +83,7 @@ class AppCreationPage(BasePage):
         self.caselist_menu = (By.XPATH, self.menu_name.format(caselist))
         self.case_list_header = (By.XPATH, self.menu_name_header.format(caselist))
         self.wait_to_click(self.caselist_menu)
-        assert self.is_visible_and_displayed(self.case_list_header)
+        self.wait_for_element(self.case_list_header)
 
     def search_all_cases(self):
         try:

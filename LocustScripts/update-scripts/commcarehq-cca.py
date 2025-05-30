@@ -73,7 +73,7 @@ class WorkloadModelSteps(SequentialTaskSet):
     wait_time = between(0, 1)
 
     def on_start(self):
-        self.filepath = PathSettings.ROOT + "/Payloads/"
+        self.filepath = PathSettings.ROOT + "/RequestAPI/Payloads/"
         self.input_file = "Test_XML_cca.xml"
         self.uri = f"{CONFIG['host']}/a/{CONFIG['domain']}"
         # self.api_key = self.user.user_detail.api_key

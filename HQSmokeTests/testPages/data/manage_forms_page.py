@@ -29,6 +29,8 @@ class ManageFormsPage(BasePage):
         self.manage_forms_return = (By.XPATH, '//span[contains(text(),"Return to")]/a[.="Manage Forms"]')
         self.apply = (By.XPATH, "//button[@class='applyBtn btn btn-sm btn-primary']")
         self.date_range_manage_forms = (By.ID, "filter_range")
+        self.users_field = (By.XPATH, "(//textarea[@class='select2-search__field'])[1]")
+        self.users_list_item = "//ul[@role='listbox']/li[contains(.,'{}')]"
         self.village_app = (By.XPATH, "//option[text()='Village Health']")
         self.select_archive_restore = (By.XPATH, "//select[@name='archive_or_restore']")
         self.check_data = (By.XPATH, "//tr[@class = 'form-data-question ']")
@@ -42,8 +44,12 @@ class ManageFormsPage(BasePage):
         self.clear(self.date_range_manage_forms)
         if url == None:
             self.send_keys(self.date_range_manage_forms, UserData.date_having_submissions)
+        elif "eu" in url:
+            self.send_keys(self.date_range_manage_forms, UserData.eu_date_having_submission)
         else:
             self.send_keys(self.date_range_manage_forms, UserData.india_date_having_submission)
+        self.send_keys(self.users_field, UserData.web_user)
+        self.wait_to_click((By.XPATH, self.users_list_item.format(UserData.web_user)))
         self.wait_and_sleep_to_click(self.apply)
         # Report Apply
         self.wait_and_sleep_to_click(self.apply_button)
@@ -80,6 +86,8 @@ class ManageFormsPage(BasePage):
 
     def get_archived_forms(self):
         self.wait_and_sleep_to_click(self.manage_forms_link)
+        self.send_keys(self.users_field, UserData.web_user)
+        self.wait_to_click((By.XPATH, self.users_list_item.format(UserData.web_user)))
         self.wait_and_sleep_to_click(self.archived_restored_dropdown)
         self.wait_and_sleep_to_click(self.archived_forms_option)
         self.wait_and_sleep_to_click(self.apply_button)

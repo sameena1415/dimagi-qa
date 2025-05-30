@@ -24,6 +24,10 @@ class LoginPage(BasePage):
         self.settings = (By.XPATH, "//a[@data-action='Click Gear Icon']")
         self.sign_out = (By.XPATH, "//a[contains(@data-label,'Sign Out')]")
 
+        import socket
+        if "eu" in url:
+            print(socket.gethostbyname("eu.commcarehq.org"))
+        print("url: ", url)
         self.driver.get(url)
         self.driver.maximize_window()
         self.driver.implicitly_wait(10)

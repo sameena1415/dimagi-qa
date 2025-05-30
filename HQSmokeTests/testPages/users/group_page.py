@@ -47,7 +47,7 @@ class GroupPage(BasePage):
         self.click_group_menu()
         self.wait_to_clear_and_send_keys(self.group_name, self.created_group)
         self.wait_to_click(self.add_group_button)
-        assert self.is_visible_and_displayed(self.group_created_success), "Group not created successfully"
+        self.wait_for_element(self.group_created_success), "Group not created successfully"
         print("Group Added")
         return self.created_group
 
@@ -100,7 +100,7 @@ class GroupPage(BasePage):
             self.wait_to_click((By.XPATH, self.created_group.format(renamed_group)))
             self.wait_to_click(self.delete_group)
             self.wait_to_click(self.confirm_delete)
-            assert self.is_visible_and_displayed(self.delete_success_message), "Group deletion not successful"
+            self.wait_for_element(self.delete_success_message)
             print("Clean up added group")
         except Exception:
             print("Group deletion might not have been successful")
@@ -119,12 +119,12 @@ class GroupPage(BasePage):
                 for i in range(len(group_names)):
                     
                     self.scroll_to_element((By.XPATH, self.group_name_link.format(group_names[i])))
-                    self.wait_to_click((By.XPATH, self.group_name_link.format(group_names[i])))
+                    self.click((By.XPATH, self.group_name_link.format(group_names[i])))
                     self.wait_for_element(self.delete_group)
                     self.click(self.delete_group)
                     self.wait_for_element(self.confirm_delete)
                     self.click(self.confirm_delete)
-                    assert self.is_visible_and_displayed(self.delete_success_message), "Group deletion not successful"
+                    self.wait_for_element(self.delete_success_message)
                     print("Deleted group: "+group_names[i])
                     time.sleep(2)
                     self.click_group_menu()

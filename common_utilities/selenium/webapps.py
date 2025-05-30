@@ -125,7 +125,7 @@ class WebApps(BasePage):
             self.scroll_to_element(self.form_name)
             self.js_click(self.form_name)
             time.sleep(0.5)
-            # self.wait_after_interaction()
+            self.wait_after_interaction()
             self.wait_for_element((By.XPATH, self.current_page.format(form_name)), timeout=20)
 
     def search_all_cases(self):
@@ -157,7 +157,7 @@ class WebApps(BasePage):
             self.scroll_to_element(self.submit_on_case_search_page)
             self.wait_to_click(self.submit_on_case_search_page)
             time.sleep(1)
-            # self.wait_after_interaction()
+            self.wait_after_interaction()
         if case_list == None:
             self.is_visible_and_displayed(self.case_list, timeout=80)
         else:
@@ -173,7 +173,7 @@ class WebApps(BasePage):
             self.wait_for_element(self.omni_search_button)
             self.js_click(self.omni_search_button)
             time.sleep(3)
-            # self.wait_after_interaction()
+            self.wait_after_interaction()
         else:
             print("Split Screen Case Search enabled")
         self.case = self.get_element(self.case_name_format, case_name)
@@ -249,7 +249,7 @@ class WebApps(BasePage):
         except AssertionError:
             if self.is_displayed(self.form_500_error):
                 time.sleep(1)
-                # self.wait_after_interaction()
+                self.wait_after_interaction()
                 self.wait_for_element(self.form_submit)
                 self.js_click(self.form_submit)
                 self.wait_for_element(self.form_submission_successful, timeout=20)

@@ -21,6 +21,7 @@ on:
           - staging
           - production
           - india
+          - eu
   schedule:
     - cron: '30 6 * * 1-5'
 
@@ -46,7 +47,7 @@ jobs:
       - id: set-matrix-default
         if: ${{ github.event_name != 'repository_dispatch' }}
         run: |
-          echo "::set-output name=matrix::{\"environment\": [\"production\", \"staging\",\"india\"]}"
+          echo "::set-output name=matrix::{\"environment\": [\"production\", \"staging\",\"india\",\"eu\"]}"
       - id: invalid-deploy
         if: ${{ github.event_name == 'repository_dispatch' && github.event.client_payload.environment != 'production' }}
         run: |
@@ -87,6 +88,7 @@ jobs:
           DIMAGIQA_STAGING_AUTH_KEY: ${{ secrets.DIMAGIQA_STAGING_AUTH_KEY }}
           DIMAGIQA_INDIA_AUTH_KEY: ${{ secrets.DIMAGIQA_INDIA_AUTH_KEY }}
           DIMAGIQA_PROD_AUTH_KEY: ${{ secrets.DIMAGIQA_PROD_AUTH_KEY }}
+          DIMAGIQA_EU_AUTH_KEY: ${{ secrets.DIMAGIQA_EU_AUTH_KEY }}
           DIMAGIQA_INVITED_WEBUSER_PASSWORD: ${{ secrets.DIMAGIQA_INVITED_WEBUSER_PASSWORD }}
           DIMAGIQA_IMAP_PASSWORD: ${{secrets.DIMAGIQA_IMAP_PASSWORD}}
         run: |

@@ -441,16 +441,19 @@ class ApplicationPage(BasePage):
 
     def delete_all_application(self, apps):
         for app in apps:
-            self.wait_to_click(self.applications_menu_id)
-            self.wait_to_click((By.XPATH, self.app_link.format(app)))
-            
-            self.wait_for_element(self.settings, 50)
-            self.click(self.settings)
-            self.wait_for_element(self.actions_tab, 50)
-            self.click(self.actions_tab)
-            self.wait_for_element(self.delete_app, 50)
-            self.click(self.delete_app)
-            self.wait_for_element(self.delete_confirm)
-            self.click(self.delete_confirm)
-            assert self.is_present_and_displayed(self.delete_success, 200), "Application "+app+" not deleted."
-            print("Deleted the application", app)
+            if app == '':
+                print("no test app present")
+            else:
+                self.wait_to_click(self.applications_menu_id)
+                self.wait_to_click((By.XPATH, self.app_link.format(app)))
+
+                self.wait_for_element(self.settings, 50)
+                self.click(self.settings)
+                self.wait_for_element(self.actions_tab, 50)
+                self.click(self.actions_tab)
+                self.wait_for_element(self.delete_app, 50)
+                self.click(self.delete_app)
+                self.wait_for_element(self.delete_confirm)
+                self.click(self.delete_confirm)
+                assert self.is_present_and_displayed(self.delete_success, 200), "Application "+app+" not deleted."
+                print("Deleted the application", app)

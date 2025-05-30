@@ -194,9 +194,9 @@ class ReportPage(BasePage):
         except (TimeoutException, NoSuchElementException):
             print("Button Disabled")
         try:
-            assert self.is_visible_and_displayed(self.report_content_id)
+            self.wait_for_element(self.report_content_id)
         except (TimeoutException, AssertionError):
-            assert self.is_visible_and_displayed(self.custom_report_content_id)
+            self.wait_for_element(self.custom_report_content_id)
         print("Report loaded successfully!")
 
     def worker_activity_report(self):
@@ -256,7 +256,7 @@ class ReportPage(BasePage):
 
     def sms_opt_out_report(self):
         self.wait_to_click(self.sms_opt_out_rep)
-        assert self.is_visible_and_displayed(self.report_content_id)
+        self.wait_for_element(self.report_content_id)
 
     def scheduled_messaging_report(self):
         self.wait_to_click(self.scheduled_messaging_rep)
@@ -303,7 +303,7 @@ class ReportPage(BasePage):
         self.wait_to_click(self.save_confirm)
         
         self.wait_to_click(self.saved_reports_menu_link)
-        assert self.is_visible_and_displayed(self.saved_report_created, 120)
+        self.wait_for_element(self.saved_report_created, 120)
         print("Report Saved successfully!")
 
 
@@ -326,7 +326,7 @@ class ReportPage(BasePage):
         self.wait_to_click((By.XPATH, self.recipient_value.format(UserData.p1p2_user)))
         selected_hour = self.get_selected_text(self.start_hour)
         self.wait_to_click(self.submit_id)
-        assert self.is_visible_and_displayed(self.success_alert)
+        self.wait_for_element(self.success_alert)
         print("Scheduled Report Created Successfully")
         return selected_hour, UserData.p1p2_user
 
@@ -666,9 +666,9 @@ class ReportPage(BasePage):
         except (TimeoutException, NoSuchElementException):
             print("Button Disabled")
         try:
-            assert self.is_visible_and_displayed(self.report_content_id)
+            self.wait_for_element(self.report_content_id)
         except (TimeoutException, AssertionError):
-            assert self.is_visible_and_displayed(self.custom_report_content_id)
+            self.wait_for_element(self.custom_report_content_id)
         print("Report loaded successfully!")
         self.wait_for_element(self.daily_form_activity_results)
         col = self.find_elements(self.daily_form_activity_results_cells)
@@ -727,9 +727,9 @@ class ReportPage(BasePage):
         except (TimeoutException, NoSuchElementException):
             print("Button Disabled")
         try:
-            assert self.is_visible_and_displayed(self.report_content_id)
+            self.wait_for_element(self.report_content_id)
         except (TimeoutException, AssertionError):
-            assert self.is_visible_and_displayed(self.custom_report_content_id)
+            self.wait_for_element(self.custom_report_content_id)
         print("Report loaded successfully!")
         self.wait_for_element(self.app_status_results)
         col = self.find_elements(self.app_status_results_cells)

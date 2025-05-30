@@ -136,16 +136,20 @@ class MessagingPage(BasePage):
         # Languages
         self.languages = (By.LINK_TEXT, "Languages")
         self.add_lang = (By.XPATH, "//button[@data-bind='click: addLanguage, disable: addLanguageDisabled']/i")
-        self.lang_input_textarea = (By.XPATH, "(//span[@role='combobox'])[last()]")
-        self.select_first_lang = (By.XPATH, "(//li[@role='option'])[1]")
-        self.select_eng_lang = (By.XPATH, "(//li[@role='option'][contains(.,'en (English)')])[1]")
-        self.select_second_lang = (By.XPATH, "(//li[@role='option'])[2]")
+        self.lang_input_textarea = (By.XPATH, "(//span[@class='selection']//span[@role='combobox'])[last()]")
+        self.select_first_lang = (By.XPATH, "//span[contains(@class,'results')]/ul[@role='listbox']/li[1]")
+        self.select_eng_lang = (By.XPATH, "(//span[contains(@class,'results')]/ul[@role='listbox']//li[@role='option'][contains(.,'en (English)')])[1]")
+        self.select_second_lang = (By.XPATH, "//span[contains(@class,'results')]/ul[@role='listbox']/li[2]")
+        self.language_dropdown_last = (By.XPATH, "(//select[contains(@data-bind,'langcode')])[last()]")
         self.selected_lang_name = (By.XPATH, "(//td//p[contains(@data-bind,'message')])[last()]")
+        self.lang_search_input = (By.XPATH, "//span[contains(@class,'dropdown')]/input")
         self.language_list = (By.XPATH, "//ul[@role='listbox']")
         self.save_lang = (By.XPATH, "(//div[@class='btn btn-primary'])[1]")
         self.delete_lang = "//td[4][./p[contains(@data-bind,'message')][contains(.,'{}')]]//following-sibling::td[2]/a[@data-bind='click: $root.removeLanguage']"
+        self.default_language = (By.XPATH, "//span[contains(@class,'label-default')]")
         self.languages_present = (By.XPATH, "//td//p[contains(@data-bind,'message')]")
         self.lang_error = (By.XPATH, "//p[text()='Language appears twice']")
+        self.language_dropdown = (By.XPATH, "//select[contains(@data-bind,'langcode')]")
         # Message Translation
         self.msg_translation_menu = (By.XPATH, "//a[text()='Messaging Translations']")
         # Project and Subscription Settings
@@ -184,7 +188,7 @@ class MessagingPage(BasePage):
             
             self.scroll_to_element(self.send_message)
             self.wait_to_click(self.send_message)
-            assert self.is_visible_and_displayed(self.message_sent_success_msg), "Message not sent successfully"
+            self.wait_for_element(self.message_sent_success_msg), "Message not sent successfully"
             print("SMS composed successfully!")
 
     def send_broadcast_message(self):
@@ -210,7 +214,7 @@ class MessagingPage(BasePage):
                 else:
                     assert True
         except StaleElementReferenceException:
-            assert self.is_visible_and_displayed(self.broadcast_created), "Broadcast not created successfully!"
+            self.wait_for_element(self.broadcast_created), "Broadcast not created successfully!"
         print("Broadcast created successfully!")
 
     def create_cond_alert(self):
@@ -286,7 +290,7 @@ class MessagingPage(BasePage):
         file_that_was_downloaded = PathSettings.DOWNLOAD_PATH / newest_file
         self.send_keys(self.choose_file, str(file_that_was_downloaded))
         self.wait_to_click(self.upload)
-        assert self.is_visible_and_displayed(self.upload_success_message), "Conditional Alert upload not completed!"
+        self.wait_for_element(self.upload_success_message), "Conditional Alert upload not completed!"
         print("Conditional Alert uploaded successfully!")
 
     def add_keyword_trigger(self):
@@ -301,7 +305,7 @@ class MessagingPage(BasePage):
         
         self.select_by_value(self.page_limit, "50")
         time.sleep(3)
-        assert self.is_visible_and_displayed(self.keyword_created), "Keyword not created successfully!"
+        self.wait_for_element(self.keyword_created), "Keyword not created successfully!"
         print("Keyword created successfully!")
 
     def add_structured_keyword_trigger(self):
@@ -318,7 +322,7 @@ class MessagingPage(BasePage):
         
         self.select_by_value(self.page_limit, "50")
         time.sleep(3)
-        assert self.is_visible_and_displayed(
+        self.wait_for_element(
             self.structured_keyword_created), "Structured keyword not created successfully!"
         print("Structured keyword created successfully!")
 
@@ -357,22 +361,22 @@ class MessagingPage(BasePage):
         
         self.scroll_to_element(self.send_message)
         self.wait_to_click(self.send_message)
-        assert self.is_visible_and_displayed(self.message_sent_success_msg), "Settings page not updated successfully!"
+        self.wait_for_element(self.message_sent_success_msg), "Settings page not updated successfully!"
         print("Settings page updated successfully!")
 
     def delete_languages(self):
         self.wait_to_click(self.languages)
-        
+        self.wait_for_element(self.default_language)
         lang_list = self.find_elements(self.languages_present)
         if len(lang_list) == 1:
-            for item in lang_list:
-                print(item.text)
-                if item.text == 'English':
-                    print("Default language present as English")
-                else:
-                    self.add_eng_lang()
-                    print("English updated successfully")
-
+            text = self.get_selected_text(self.language_dropdown)
+            print("selected option: ", text)
+            if text.strip() == "en":
+                print("Default language present as English")
+            else:
+                print("Default language is non-English")
+                self.add_eng_lang()
+                print("English updated successfully")
         lang_list = self.find_elements(self.languages_present)
         if len(lang_list) > 1:
             for item in lang_list:
@@ -381,42 +385,49 @@ class MessagingPage(BasePage):
                 else:
                     lang = item.text
                     print("Deleting language: ", lang)
-                    self.wait_to_click((By.XPATH, self.delete_lang.format(lang)))
+                    self.js_click((By.XPATH, self.delete_lang.format(lang)))
                     time.sleep(3)
-                    self.wait_to_click(self.save_lang)
+                    self.js_click(self.save_lang)
                     
         else:
             print("Only English is Present and no other languages")
 
     def add_eng_lang(self):
-        self.wait_to_click(self.lang_input_textarea)
-        
-        self.wait_for_element(self.language_list)
-        self.wait_to_click(self.select_eng_lang)
+        self.wait_for_element(self.lang_input_textarea)
+        self.click(self.lang_input_textarea)
+        self.wait_for_element(self.lang_search_input)
+        self.wait_for_element(self.select_eng_lang)
+        self.click(self.select_eng_lang)
         
         lang = self.get_text(self.selected_lang_name)
         print("Language selected is: ", lang)
-        self.wait_to_click(self.save_lang)
+        self.js_click(self.save_lang)
 
     def languages_page(self):
         self.wait_to_click(self.languages)
         self.wait_to_click(self.add_lang)
-        self.wait_to_click(self.lang_input_textarea)
-        time.sleep(1)
-        self.wait_for_element(self.language_list)
-        self.wait_to_click(self.select_first_lang)
+        time.sleep(2)
+        self.wait_for_element(self.lang_input_textarea)
+        self.click(self.lang_input_textarea)
+        self.wait_for_element(self.lang_search_input)
+        self.wait_for_element(self.select_first_lang)
+        self.click(self.select_second_lang)
         lang = self.get_text(self.selected_lang_name)
         print("First language selected is: ", lang)
-        self.wait_to_click(self.save_lang)
-        time.sleep(2)
-        self.wait_to_click(self.lang_input_textarea)
+        self.js_click(self.save_lang)
         time.sleep(1)
-        self.wait_for_element(self.language_list)
-        self.wait_to_click(self.select_second_lang)
+        self.accept_pop_up()
+        time.sleep(2)
+        self.wait_for_element(self.lang_input_textarea)
+        self.click(self.lang_input_textarea)
+        self.wait_for_element(self.lang_search_input)
+        self.wait_for_element(self.select_second_lang)
+        self.click(self.select_second_lang)
         lang = self.get_text(self.selected_lang_name)
         print("Second language selected is: ", lang)
-        self.wait_to_click(self.save_lang)
-        time.sleep(2)
+        self.js_click(self.save_lang)
+        time.sleep(1)
+        self.accept_pop_up()
         self.wait_to_click((By.XPATH, self.delete_lang.format(lang)))
         self.wait_to_click(self.save_lang)
         print("Languages added and deleted successfully!")
@@ -559,7 +570,7 @@ class MessagingPage(BasePage):
         file_that_was_downloaded = PathSettings.DOWNLOAD_PATH / newest_file
         self.send_keys(self.choose_file, str(file_that_was_downloaded))
         self.wait_to_click(self.upload)
-        assert self.is_visible_and_displayed(self.upload_success_message), "Msg Trans not uploaded successfully"
+        self.wait_for_element(self.upload_success_message), "Msg Trans not uploaded successfully"
         print("Msg Trans uploaded successfully!")
 
     # def project_settings_page(self, value=None):
@@ -575,14 +586,14 @@ class MessagingPage(BasePage):
     #     self.click(self.settings_bar)
     #     self.wait_for_element(self.project_settings_menu)
     #     self.wait_to_click(self.project_settings_menu)
-    #     assert self.is_visible_and_displayed(
+    #     self.wait_for_element(
     #         self.project_settings_elements), "Project Settings page did not load successfully"
     #     print("Project Settings page loaded successfully!")
 
     def current_subscription_page(self):
         self.wait_to_click(self.settings_bar)
         self.wait_to_click(self.subscription_menu)
-        assert self.is_visible_and_displayed(
+        self.wait_for_element(
             self.subscription_elements_id), "Subscription Page did not load successfully"
         print("Current Subscription page loaded successfully!")
 
