@@ -126,7 +126,7 @@ class BenchmarkPage(BasePage):
             print("No exports available")
 
     def wait_for_export_page_load_completion(self, cols):
-        self.driver.refresh()
+        self.reload_page()
         self.wait_to_click(self.export_case_data_link)
         self.wait_and_sleep_to_click(self.add_export_button)
         self.is_visible_and_displayed(self.app_type)
@@ -157,7 +157,7 @@ class BenchmarkPage(BasePage):
             writer.writerow({'property_count': cols,'load_time':load_time})
 
     def add_case_export(self, cols):
-        self.driver.refresh()
+        self.reload_page()
         self.wait_to_click(self.export_case_data_link)
         self.delete_bulk_exports()
         self.wait_and_sleep_to_click(self.add_export_button)

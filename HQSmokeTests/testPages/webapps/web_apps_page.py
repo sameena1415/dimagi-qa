@@ -65,11 +65,13 @@ class WebAppsPage(BasePage):
         self.wait_to_click(self.confirm_user_login)
 
     def submit_case_form(self):
-        self.wait_to_click(self.web_app_link)
-        self.wait_to_click(self.case_list_link)
-        self.wait_to_click(self.form_link)
+        self.js_click(self.web_app_link)
+        self.wait_for_element(self.case_list_link)
+        self.js_click(self.case_list_link)
+        self.wait_for_element(self.form_link)
+        self.js_click(self.form_link)
         self.wait_to_clear_and_send_keys(self.form_case_name_input, self.case_name_created)
-        self.wait_to_click(self.form_submit_button)
+        self.js_click(self.form_submit_button)
         self.wait_for_element(self.success_message)
         assert self.is_displayed(self.success_message), "Form not submitted"
         print("Form successfully submitted")
@@ -77,9 +79,9 @@ class WebAppsPage(BasePage):
         self.wait_to_click(self.home_button)
         time.sleep(2)
         self.wait_for_element(self.sync_button)
-        self.wait_to_click(self.sync_button)
+        self.js_click(self.sync_button)
         time.sleep(2)
-        self.driver.refresh()
+        self.reload_page()
         return self.case_name_created
 
     def submit_case_change_register_form(self):
@@ -92,7 +94,7 @@ class WebAppsPage(BasePage):
         self.wait_to_clear_and_send_keys(self.enter_text_area, self.text_value)
         self.wait_to_clear_and_send_keys(self.enter_value_area, self.text_value+Keys.TAB)
         self.wait_to_click(self.form_submit_button)
-        self.wait_after_interaction()
+        # self.wait_after_interaction()
         time.sleep(2)
         self.wait_for_element(self.success_message)
         assert self.is_displayed(self.success_message), "Form not submitted"
@@ -100,7 +102,7 @@ class WebAppsPage(BasePage):
         return self.text_value
 
     def submit_case_update_form(self, case_name):
-        self.driver.refresh()
+        self.reload_page()
         self.wait_to_click(self.update_case_change_link)
         self.wait_to_click(self.case_update_form)
         self.wait_to_clear_and_send_keys(self.search_text, case_name)

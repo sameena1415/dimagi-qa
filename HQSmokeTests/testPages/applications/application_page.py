@@ -135,12 +135,12 @@ class ApplicationPage(BasePage):
         self.wait_to_click(self.add_case_list)
         time.sleep(1)
         if self.is_present(self.create_case_list_btn):
-            self.click(self.caselist_span)
+            self.wait_to_click(self.caselist_span)
             self.wait_for_element(self.caselist_dropdown_input)
             self.send_keys(self.caselist_dropdown_input, "Case List")
             time.sleep(1)
             self.select_by_value(self.caselist_dropdown, "Case_List")
-            self.click(self.create_case_list_btn)
+            self.wait_to_click(self.create_case_list_btn)
         self.wait_for_element(self.add_questions)
         self.wait_to_click(self.add_questions)
         self.wait_to_click(self.text_question)
@@ -178,11 +178,12 @@ class ApplicationPage(BasePage):
     def form_xml_download_upload(self):
         try:
             self.wait_for_element(self.actions_tab)
-            self.click(self.actions_tab)
+            self.js_click(self.actions_tab)
         except TimeoutException:
-            self.wait_to_click(self.form_settings)
+            self.wait_for_element(self.form_settings)
+            self.js_click(self.form_settings)
             self.wait_for_element(self.actions_tab)
-            self.click(self.actions_tab)
+            self.js_click(self.actions_tab)
         self.wait_for_element(self.download_xml)
         self.click(self.download_xml)
         wait_for_download_to_finish(file_extension=".xml")
@@ -190,7 +191,7 @@ class ApplicationPage(BasePage):
         try:
             self.wait_to_click(self.register_form)
         except TimeoutException:
-            self.driver.refresh()
+            self.reload_page()
         self.wait_for_element(self.new_form_settings)
         self.click(self.new_form_settings)
         self.wait_for_element(self.actions_tab)
@@ -201,7 +202,7 @@ class ApplicationPage(BasePage):
         file_that_was_downloaded = PathSettings.DOWNLOAD_PATH / newest_file
         print(f"file_that_was_downloaded: {file_that_was_downloaded}")
         self.send_keys(self.choose_file, str(file_that_was_downloaded))
-        self.click(self.upload)
+        self.wait_to_click(self.upload)
         assert self.is_present_and_displayed(self.same_question_present)
         print("XML copied successfully!")
 
@@ -209,8 +210,8 @@ class ApplicationPage(BasePage):
         try:
             self.wait_to_click(self.settings)
         except TimeoutException:
-            self.driver.refresh()
-            self.click(self.settings)
+            self.reload_page()
+            self.wait_to_click(self.settings)
         assert self.is_present_and_displayed(self.languages_tab_content)
         self.wait_to_click(self.multimedia_tab)
         assert self.is_present_and_displayed(self.multimedia_tab_content)
@@ -227,7 +228,6 @@ class ApplicationPage(BasePage):
     def update_form_field(self):
         self.wait_to_click(self.applications_menu_id)
         self.wait_to_click(self.form_edit_app)
-        
         # self.wait_to_click(self.add_form_button)
         # self.wait_to_click(self.register_form)
         # time.sleep(30)
@@ -254,17 +254,18 @@ class ApplicationPage(BasePage):
         
         self.wait_to_click(self.make_new_version_button)
         time.sleep(2)
-        self.driver.refresh()
+        self.reload_page()
         self.wait_for_element(self.release_button)
-        self.wait_to_click(self.release_button)
+        self.js_click(self.release_button)
         print("Sleeping for the installation code to generate")
         time.sleep(2)
-        self.wait_to_click(self.publish_button)
+        self.js_click(self.publish_button)
         if self.is_present_and_displayed(self.enter_app_code_link):
             self.wait_to_click(self.enter_app_code_link)
         else:
             print("Enter App Code link is not present")
         code_text = self.wait_to_get_text(self.code)
+        print("code generated: ", code_text)
         self.wait_to_click(self.close)
         # self.wait_to_click(self.delete_form)
         # self.wait_to_click(self.delete_form_confirm)
@@ -287,12 +288,12 @@ class ApplicationPage(BasePage):
         self.wait_to_click(self.add_case_list)
         time.sleep(1)
         if self.is_present(self.create_case_list_btn):
-            self.click(self.caselist_span)
+            self.wait_to_click(self.caselist_span)
             self.wait_for_element(self.caselist_dropdown_input)
             self.send_keys(self.caselist_dropdown_input, "Case List")
             time.sleep(1)
             self.select_by_value(self.caselist_dropdown, "Case_List")
-            self.click(self.create_case_list_btn)
+            self.wait_to_click(self.create_case_list_btn)
         self.wait_for_element(self.add_questions)
         self.wait_to_click(self.edit_form_name_icon)
         self.wait_to_clear_and_send_keys(self.edit_form_name_text, self.reg_form_name)
@@ -344,7 +345,7 @@ class ApplicationPage(BasePage):
         
         self.wait_to_click(self.make_new_version_button)
         time.sleep(2)
-        self.driver.refresh()
+        self.reload_page()
         self.wait_for_element(self.release_button)
         self.wait_to_click(self.release_button)
         print("Sleeping for the installation code to generate")
@@ -384,7 +385,7 @@ class ApplicationPage(BasePage):
         self.wait_to_click(self.confirm_change)
         self.accept_pop_up()
         self.wait_for_element((By.XPATH, self.app_created.format(app_name)))
-        self.driver.refresh()
+        self.reload_page()
         time.sleep(3)
         assert self.is_present_and_displayed((By.XPATH, self.app_created.format(app_name)))
         print("New App created successfully!")
@@ -434,7 +435,7 @@ class ApplicationPage(BasePage):
         else:
             print("No test app present")
         print(app_names)
-        self.driver.refresh()
+        self.reload_page()
         time.sleep(2)
         return app_names
 

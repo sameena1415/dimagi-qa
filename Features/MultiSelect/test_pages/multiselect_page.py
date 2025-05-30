@@ -33,7 +33,6 @@ class MultiSelectWorkflows(BasePage):
         song_names = []
         for i in range(1, case_count+1):
             row_checkbox = self.get_element(self.row_checkbox_xpath, str(i))
-            
             self.wait_to_click(row_checkbox)
             case_name_in_table = self.get_element(self.value_in_table_format, str(i))
             selected_song_names = self.get_text(case_name_in_table)
@@ -61,7 +60,7 @@ class MultiSelectWorkflows(BasePage):
 
     def continue_to_proceed_multiselect(self):
         self.wait_to_click(self.multi_select_continue)
-        self.wait_after_interaction()
+        # self.wait_after_interaction()
 
     def check_no_of_cases_on_form(self, max_size, type):
         song_names_on_form = self.find_elements_texts((By.XPATH, self.selected_case_names_on_forms.format(type)))

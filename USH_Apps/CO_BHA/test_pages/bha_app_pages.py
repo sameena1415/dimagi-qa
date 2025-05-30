@@ -40,12 +40,12 @@ class BhaWorkflows(BasePage):
         return original_string[:index] + new_character + original_string[index + 1:]
 
     def select_radio(self, value):
-        time.sleep(4)
+        time.sleep(1)
         radio_value = self.get_element(self.radio_option_value, value)
         if self.is_present_and_displayed(radio_value, 10):
             self.scroll_to_element(radio_value)
             self.wait_to_click(radio_value)
-            time.sleep(4)
+            time.sleep(1)
         else:
             print("Yes button is not present")
 
@@ -67,16 +67,16 @@ class BhaWorkflows(BasePage):
         print("Value "+search_value+" is present in "+value_on_form)
 
     def select_clinic(self, clinic_name):
-        time.sleep(4)
+        time.sleep(1)
         if self.is_displayed(self.combobox_select_clinic):
             self.scroll_to_element(self.combobox_select_clinic)
             self.select_by_text(self.combobox_select_clinic, clinic_name)
-        time.sleep(4)
+        time.sleep(1)
 
     def remove_clinic(self, clinic_name):
         close_xpath = self.get_element(self.clinic_close_button, clinic_name)
         self.wait_to_click(close_xpath)
-        time.sleep(4)
+        time.sleep(1)
 
     def check_answer_options(self, label, displayed=None):
         answer_label = self.get_element(self.answer_option_label, label)

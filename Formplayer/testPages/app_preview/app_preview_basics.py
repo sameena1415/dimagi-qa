@@ -308,7 +308,7 @@ class AppPreviewBasics(BasePage):
         
         assert self.is_displayed(self.empty_form_error_message)
         self.switch_to_default_content()
-        self.driver.refresh()
+        self.reload_page()
         
         self.hover_and_click(self.last_form, self.delete_form)
         self.webapp.wait_to_click(self.delete_confirm_button)

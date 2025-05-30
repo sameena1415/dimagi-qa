@@ -85,20 +85,20 @@ class WebApps(BasePage):
 
 
     def open_app(self, app_name):
-        if self.is_present_and_displayed(self.webapps_home, 20):
+        if self.is_present_and_displayed(self.webapps_home, 10):
             self.wait_to_click(self.webapps_home)
         self.application = self.get_element(self.app_name_format, app_name)
         self.application_header = self.get_element(self.app_header_format, app_name)
         self.scroll_to_element(self.application)
-        self.click(self.application)
+        self.js_click(self.application)
         time.sleep(0.5)
         self.wait_after_interaction()
-        self.wait_for_element(self.application_header, timeout=200)
+        self.wait_for_element(self.application_header, timeout=20)
 
     def navigate_to_breadcrumb(self, breadcrumb_value):
         self.link = (By.XPATH, self.breadcrumb_format.format(breadcrumb_value, breadcrumb_value))
         self.wait_for_element(self.link)
-        self.wait_to_click(self.link)
+        self.js_click(self.link)
         time.sleep(0.5)
         self.wait_for_element((By.XPATH, self.current_page.format(breadcrumb_value)), timeout=60)
 
@@ -106,7 +106,7 @@ class WebApps(BasePage):
         self.caselist_menu = self.get_element(self.menu_name_format, menu_name)
         self.caselist_header = self.get_element(self.menu_name_header_format, menu_name)
         self.scroll_to_element(self.caselist_menu)
-        self.click(self.caselist_menu)
+        self.js_click(self.caselist_menu)
         time.sleep(0.5)
         self.wait_after_interaction()
         if assertion == 'No':
@@ -121,12 +121,12 @@ class WebApps(BasePage):
             print("Auto advance enabled")
         else:
             self.form_name = self.get_element(self.form_name_format, form_name)
-            self.wait_for_element(self.form_name, timeout=50)
+            self.wait_for_element(self.form_name, timeout=20)
             self.scroll_to_element(self.form_name)
-            self.wait_to_click(self.form_name)
+            self.js_click(self.form_name)
             time.sleep(0.5)
-            self.wait_after_interaction()
-            self.wait_for_element((By.XPATH, self.current_page.format(form_name)), timeout=50)
+            # self.wait_after_interaction()
+            self.wait_for_element((By.XPATH, self.current_page.format(form_name)), timeout=20)
 
     def search_all_cases(self):
         self.scroll_to_element(self.search_all_cases_button)
@@ -135,7 +135,7 @@ class WebApps(BasePage):
     def search_again_cases(self):
         self.scroll_to_bottom()
         self.wait_for_element(self.search_again_button)
-        self.wait_to_click(self.search_again_button)
+        self.js_click(self.search_again_button)
 
     def clear_selections_on_case_search_page(self):
         if self.is_present_and_displayed(self.error_message, 10):
@@ -146,7 +146,7 @@ class WebApps(BasePage):
             print("No banners present")
         self.wait_for_element(self.clear_case_search_page)
         self.scroll_to_element(self.clear_case_search_page)
-        self.wait_to_click(self.clear_case_search_page)
+        self.js_click(self.clear_case_search_page)
         time.sleep(0.5)
 
     def search_button_on_case_search_page(self, enter_key=None, case_list=None):
@@ -157,7 +157,7 @@ class WebApps(BasePage):
             self.scroll_to_element(self.submit_on_case_search_page)
             self.wait_to_click(self.submit_on_case_search_page)
             time.sleep(1)
-            self.wait_after_interaction()
+            # self.wait_after_interaction()
         if case_list == None:
             self.is_visible_and_displayed(self.case_list, timeout=80)
         else:
@@ -171,9 +171,9 @@ class WebApps(BasePage):
         if self.is_displayed(self.omni_search_input):
             self.wait_to_clear_and_send_keys(self.omni_search_input, case_name)
             self.wait_for_element(self.omni_search_button)
-            self.wait_to_click(self.omni_search_button)
+            self.js_click(self.omni_search_button)
             time.sleep(3)
-            self.wait_after_interaction()
+            # self.wait_after_interaction()
         else:
             print("Split Screen Case Search enabled")
         self.case = self.get_element(self.case_name_format, case_name)
@@ -198,12 +198,12 @@ class WebApps(BasePage):
         self.case = self.get_element(self.case_name_format, case_name)
         self.scroll_to_element(self.case)
         self.wait_for_element(self.case)
-        self.wait_to_click(self.case)
+        self.js_click(self.case)
 
     def select_first_case_on_list(self):
         self.case_name_first = self.get_text(self.first_case_on_list)
         self.wait_for_element(self.first_case_on_list)
-        self.wait_to_click(self.first_case_on_list)
+        self.js_click(self.first_case_on_list)
         return self.case_name_first
 
     def select_first_case_on_list_and_continue(self):
@@ -213,46 +213,47 @@ class WebApps(BasePage):
 
     def continue_to_forms(self):
         self.wait_for_element(self.continue_button, 100)
-        self.wait_to_click(self.continue_button)
+        self.js_click(self.continue_button)
         time.sleep(0.5)
 
     def select_case_and_continue(self, case_name):
         self.select_case(case_name)
         self.continue_to_forms()
-        self.wait_for_element(self.content_container, timeout=100)
+        self.wait_for_element(self.content_container, timeout=30)
         form_names = self.find_elements_texts(self.form_names)
         return form_names
 
     def async_restore_resubmit(self):
-        time.sleep(0.5)
-        if self.is_present_and_displayed(self.async_restore_error, 30):
-            self.click(self.async_restore_error)
+        time.sleep(5)
+        if self.is_present_and_displayed(self.async_restore_error, 10):
+            print("Asynchronous restore error present")
+            self.js_click(self.async_restore_error)
             time.sleep(2)
             self.scroll_to_element(self.form_submit)
             self.wait_to_click(self.form_submit)
-            
         else:
             print("No Asynchronous restore error present")
 
 
 
     def submit_the_form(self):
-        time.sleep(3)
+        time.sleep(0.5)
         self.wait_for_element(self.form_submit)
-        self.click(self.form_submit)
-        time.sleep(2)
+        self.js_click(self.form_submit)
+        time.sleep(1)
         self.async_restore_resubmit()
         time.sleep(0.5)
         try:
-            self.wait_for_element(self.form_submission_successful, timeout=50)
-            self.wait_for_element(self.form_submission_successful, timeout=50)
+            self.wait_for_element(self.form_submission_successful, timeout=20)
+            assert self.is_present(self.form_submission_successful)
         except AssertionError:
             if self.is_displayed(self.form_500_error):
-                time.sleep(3)
-                self.wait_after_interaction()
-                self.wait_to_click(self.form_submit)
-                self.wait_for_element(self.form_submission_successful, timeout=50)
-                self.wait_for_element(self.form_submission_successful, timeout=50)
+                time.sleep(1)
+                # self.wait_after_interaction()
+                self.wait_for_element(self.form_submit)
+                self.js_click(self.form_submit)
+                self.wait_for_element(self.form_submission_successful, timeout=20)
+                assert self.is_present(self.form_submission_successful)
             else:
                 raise AssertionError
         time.sleep(0.5)
@@ -260,9 +261,9 @@ class WebApps(BasePage):
     def select_user(self, username):
         self.login_as_user = self.get_element(self.login_as_username, username)
         self.wait_for_element(self.login_as_user)
-        self.wait_to_click(self.login_as_user)
+        self.js_click(self.login_as_user)
         self.wait_for_element(self.webapp_login_confirmation)
-        self.wait_to_click(self.webapp_login_confirmation)
+        self.js_click(self.webapp_login_confirmation)
         time.sleep(0.5)
         self.wait_for_element(self.webapp_working_as, 50)
         loggedin_user = self.get_text(self.webapp_working_as)
@@ -285,16 +286,16 @@ class WebApps(BasePage):
         try:
             self.wait_for_element(self.webapp_login)
             self.scroll_to_element(self.webapp_login)
-            self.wait_to_click(self.webapp_login)
+            self.js_click(self.webapp_login)
         except NoSuchElementException:
             self.wait_to_click(self.webapps_home)
             self.wait_for_element(self.webapp_login)
-            self.wait_to_click(self.webapp_login)
+            self.js_click(self.webapp_login)
         time.sleep(0.5)
         self.wait_for_element(self.search_user_webapps, timeout=40)
         self.send_keys(self.search_user_webapps, username)
         self.wait_for_element(self.search_button_webapps)
-        self.wait_to_click(self.search_button_webapps)
+        self.js_click(self.search_button_webapps)
         self.select_user(username)
         return username
 
@@ -327,9 +328,9 @@ class WebApps(BasePage):
         self.wait_to_click(self.next_page)
         time.sleep(1)
         self.wait_for_element(self.prev_page)
-        self.wait_to_click(self.prev_page)
+        self.js_click(self.prev_page)
         time.sleep(1)
-        self.wait_after_interaction()
+        # self.wait_after_interaction()
 
     def go_to_page(self, page_number):
         self.scroll_to_element(self.go_to_page_textarea)
@@ -378,12 +379,12 @@ class WebApps(BasePage):
             self.wait_to_click(self.webapps_home)
             time.sleep(0.5)
         self.wait_for_element(self.setting_button)
-        self.wait_to_click(self.setting_button)
+        self.js_click(self.setting_button)
         self.wait_for_element(self.sync_button)
-        self.wait_to_click(self.sync_button)
+        self.js_click(self.sync_button)
         time.sleep(3)
         self.wait_after_interaction()
         self.wait_for_element(self.done_button)
-        self.wait_to_click(self.done_button)
+        self.js_click(self.done_button)
         time.sleep(0.5)
 

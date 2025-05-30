@@ -102,7 +102,7 @@ class WebUsersPage(BasePage):
         self.wait_to_clear_and_send_keys(self.login_password, mail_password)
         self.wait_and_sleep_to_click(self.signin_button)
         self.wait_to_click(self.mail_icon)
-        self.click(self.latest_mail)
+        self.wait_to_click(self.latest_mail)
         self.verify_invitation_received()
 
     def verify_invitation_received(self):
@@ -169,7 +169,7 @@ class WebUsersPage(BasePage):
         self.wait_to_click(self.users_menu_id)
         self.wait_to_click(self.web_users_menu)
         try:
-            self.click(self.bulk_upload_btn)
+            self.wait_to_click(self.bulk_upload_btn)
             newest_file = latest_download_file()
             file_that_was_downloaded = PathSettings.DOWNLOAD_PATH / newest_file
             time.sleep(2)

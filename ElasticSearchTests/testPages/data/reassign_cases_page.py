@@ -74,7 +74,7 @@ class ReassignCasesPage(BasePage):
         self.is_visible_and_displayed(self.out_of_range)
         print("Sleeping sometime for the case to get updated")
         time.sleep(2)
-        self.driver.refresh()
+        self.reload_page()
         print("Cases reassigned")
 
     def sort_for_latest_on_top(self):

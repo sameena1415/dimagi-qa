@@ -193,7 +193,7 @@ class MobileWorkerPage(BasePage):
         time.sleep(2)
         self.wait_for_element(self.search_user_web_apps, 20)
         self.send_keys(self.search_user_web_apps, username)
-        self.wait_to_click(self.search_button_we_apps)
+        self.js_click(self.search_button_we_apps)
         time.sleep(2)
 
     def mobile_worker_menu(self):
@@ -218,7 +218,7 @@ class MobileWorkerPage(BasePage):
     def click_create(self, username):
         self.wait_to_click(self.create_button_xpath)
         time.sleep(2)
-        self.is_present_and_displayed(self.NEW, 200)
+        self.wait_for_element(self.NEW, 200)
         new_user_created = self.get_text(self.new_user_created_xpath)
         print("Username is : " + new_user_created)
         assert username == new_user_created, "Could find the new mobile worker created"
@@ -255,12 +255,15 @@ class MobileWorkerPage(BasePage):
         df.to_excel(path, sheet_name='users', index=False)
 
     def edit_user_field(self):
-        self.wait_to_click(self.edit_user_field_xpath)
+        self.wait_for_element(self.edit_user_field_xpath)
+        self.js_click(self.edit_user_field_xpath)
 
     def add_field(self):
-        self.wait_to_click(self.add_field_xpath)
+        self.wait_for_element(self.add_field_xpath)
+        self.js_click(self.add_field_xpath)
 
     def add_user_property(self, user_pro):
+        self.wait_for_element(self.user_property_xpath)
         self.clear(self.user_property_xpath)
         self.send_keys(self.user_property_xpath, user_pro + Keys.TAB)
         
@@ -272,7 +275,7 @@ class MobileWorkerPage(BasePage):
 
     def add_choice(self, choice):
         if self.is_present(self.choices_button_xpath):
-            self.wait_to_click(self.choices_button_xpath)
+            self.click(self.choices_button_xpath)
             time.sleep(2)
         else:
             print("Choices button not present")
@@ -285,7 +288,8 @@ class MobileWorkerPage(BasePage):
 
     def save_field(self):
         if self.is_enabled(self.save_field_id):
-            self.wait_to_click(self.save_field_id)
+            self.wait_for_element(self.save_field_id)
+            self.click(self.save_field_id)
             time.sleep(2)
             assert self.is_present(self.user_field_success_msg) or self.is_present(
                 self.duplicate_field_error
@@ -299,8 +303,8 @@ class MobileWorkerPage(BasePage):
         self.search_user(username)
         time.sleep(3)
         if not self.is_present((By.XPATH, self.username_link.format(username))):
-            self.click(self.show_deactivated_users_btn)
-        self.click((By.XPATH, self.username_link.format(username)))
+            self.wait_to_click(self.show_deactivated_users_btn)
+        self.wait_to_click((By.XPATH, self.username_link.format(username)))
         self.wait_for_element(self.user_name_span)
         print("Mobile Worker page opened.")
 
@@ -342,7 +346,7 @@ class MobileWorkerPage(BasePage):
             assert self.is_present_and_displayed((By.XPATH, self.login_as_username.format(username)),
                                                  10
                                                  ) == False, "Deactivated mobile worker still visible"
-            self.click(self.show_full_menu_id)
+            self.wait_to_click(self.show_full_menu_id)
         else:
             assert False
 
@@ -382,7 +386,7 @@ class MobileWorkerPage(BasePage):
                                                  ), "user is not activated"
             self.wait_to_click((By.XPATH, self.login_as_username.format(username)))
             self.wait_to_click(self.webapp_login_confirmation)
-            self.click(self.show_full_menu_id)
+            self.wait_to_click(self.show_full_menu_id)
             self.wait_for_element(self.webapp_working_as, 50)
             login_username = self.get_text(self.webapp_working_as)
             print("Logged in user: ", login_username)
@@ -455,7 +459,8 @@ class MobileWorkerPage(BasePage):
         time.sleep(2)
         try:
             self.wait_for_element(self.download_users_btn, 150)
-            self.click(self.download_users_btn)
+            print("Clicking on Download link")
+            self.js_click(self.download_users_btn)
             wait_for_download_to_finish()
         except TimeoutException:
             print("TIMEOUT ERROR: Still preparing for download..Celery might be down..")
@@ -470,7 +475,7 @@ class MobileWorkerPage(BasePage):
     def upload_mobile_worker(self):
         self.mobile_worker_menu()
         try:
-            self.click(self.bulk_upload_btn)
+            self.wait_to_click(self.bulk_upload_btn)
             newest_file = latest_download_file()
             file_that_was_downloaded = PathSettings.DOWNLOAD_PATH / newest_file
             time.sleep(2)
@@ -487,7 +492,7 @@ class MobileWorkerPage(BasePage):
         self.wait_to_click(self.profile_tab)
 
     def click_fields(self):
-        self.click(self.field_tab)
+        self.wait_to_click(self.field_tab)
 
     def add_profile(self, user_field):
         self.wait_to_click(self.add_new_profile)
@@ -601,7 +606,7 @@ class MobileWorkerPage(BasePage):
         
         self.wait_to_click(self.search_button_mw)
         time.sleep(3)
-        self.click((By.LINK_TEXT, user))
+        self.wait_to_click((By.LINK_TEXT, user))
         try:
             self.wait_to_click(self.actions_tab_link_text)
             self.wait_to_click(self.delete_mobile_worker)
@@ -640,7 +645,7 @@ class MobileWorkerPage(BasePage):
     def bulk_delete_mobile_worker_upload(self, file_path):
         self.mobile_worker_menu()
         try:
-            self.click(self.bulk_user_delete_button)
+            self.wait_to_click(self.bulk_user_delete_button)
             time.sleep(2)
             self.send_keys(self.choose_file, str(file_path))
             self.wait_and_sleep_to_click(self.upload)
@@ -657,7 +662,7 @@ class MobileWorkerPage(BasePage):
         self.wait_to_click(self.users_menu_id)
         self.mobile_worker_menu()
         try:
-            self.click(self.bulk_upload_btn)
+            self.wait_to_click(self.bulk_upload_btn)
             self.edit_username_in_excel(self.to_be_edited_file, self.username_cell, self.renamed_file)
             
             self.wait_to_clear_and_send_keys(self.choose_file, self.renamed_file)

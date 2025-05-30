@@ -54,7 +54,7 @@ class ImportCasesPage(BasePage):
         time.sleep(2)
         if self.is_present_and_displayed(self.alert_msg, 20):
             print("Error message displayed on importing excel. Repeating process..")
-            self.driver.refresh()
+            self.reload_page()
             self.wait_for_element(self.choose_file)
             self.send_keys(self.choose_file, self.renamed_file)
             self.wait_for_element(self.next_step)

@@ -83,9 +83,9 @@ class ExportDataPage(BasePage):
         self.user_from_list = "//li[contains(.,'{}')]"
         self.prepare_export_button = (By.XPATH, "//button[@data-bind='disable: disablePrepareExport']")
         self.download_button = (By.XPATH, "//a[@class='btn btn-primary btn-full-width']")
-        self.apply = (By.XPATH, "//button[@class='applyBtn btn btn-sm btn-primary']")
+        self.apply = (By.XPATH, "//button[contains(@class,'btn btn-primary')]/i[contains(@data-bind,'Export') and contains(@class,'down')]")
         self.export_button = (By.XPATH, "//a[@class='btn btn-primary'][contains(text(),'Export')]")
-
+        self.success_progress = (By.XPATH, "//div[contains(@class,'progress-bar bg-success')]")
         # Find Data By ID
         self.find_data_by_ID = (By.LINK_TEXT, 'Find Data by ID')
         self.find_data_by_ID_textbox = (By.XPATH, "//input[@placeholder='Form Submission ID']")
@@ -180,13 +180,16 @@ class ExportDataPage(BasePage):
         self.driver.get(final_URL_case)
 
     def date_filter(self):
-        self.wait_and_sleep_to_click(self.date_range)
-        print(self.date_having_submissions)
-        self.wait_to_clear_and_send_keys(self.date_range, self.date_having_submissions)
-
+        self.wait_for_element(self.date_range, 100)
+        print("Providing date range: ", self.date_having_submissions)
+        self.js_click(self.date_range)
+        self.clear(self.date_range)
+        self.send_keys(self.date_range, self.date_having_submissions)
+        time.sleep(0.25)
         if self.is_present(self.close_date_picker):
-            self.click(self.close_date_picker)
-        self.wait_and_sleep_to_click(self.apply, timeout=10)
+            self.wait_to_click(self.close_date_picker)
+        self.wait_for_element(self.apply, timeout=10)
+        self.js_click(self.apply)
 
     def prepare_and_download_export(self, name, flag=None):
         time.sleep(2)
@@ -198,22 +201,23 @@ class ExportDataPage(BasePage):
         if flag == None:
             self.send_keys(self.users_field, UserData.web_user)
             self.wait_to_click((By.XPATH, self.users_list_item.format(UserData.web_user)))
-
-        self.wait_and_sleep_to_click(self.prepare_export_button, timeout=10)
+        # self.wait_and_sleep_to_click(self.prepare_export_button, timeout=10)
         try:
             self.wait_till_progress_completes("exports")
+            self.wait_for_element(self.success_progress, 100)
             self.wait_for_element(self.download_button, 300)
-            self.click(self.download_button)
+            self.js_click(self.download_button)
             wait_for_download_to_finish()
         except TimeoutException:
             if self.is_visible_and_displayed(self.failed_to_export):
-                self.driver.refresh()
+                self.reload_page()
                 self.wait_and_sleep_to_click(self.prepare_export_button, timeout=10)
                 self.wait_till_progress_completes("exports")
                 self.wait_for_element(self.download_button, 300)
                 self.click(self.download_button)
                 wait_for_download_to_finish()
-        print("Download form button clicked")
+        print("Download form button clicked, waiting for download to complete...")
+        time.sleep(5)
 
     def find_data_by_id_and_verify(self, row, value, export_name, name_on_hq):
         newest_file = latest_download_file()
@@ -242,7 +246,7 @@ class ExportDataPage(BasePage):
         self.wait_for_element(self.add_export_button, 100)
         self.delete_bulk_exports()
         self.wait_and_sleep_to_click(self.add_export_button)
-        time.sleep(50)
+        time.sleep(10)
         self.is_visible_and_displayed(self.app_type, 200)
         self.wait_for_element(self.app_type, 200)
         self.is_clickable(self.app_type)
@@ -277,7 +281,7 @@ class ExportDataPage(BasePage):
         self.wait_for_element(self.add_export_button, 100)
         self.delete_bulk_exports()
         self.wait_and_sleep_to_click(self.add_export_button)
-        time.sleep(50)
+        time.sleep(20)
         self.is_visible_and_displayed(self.case_type, 200)
         self.wait_for_element(self.case_type, 200)
         # self.is_clickable(self.application)
@@ -335,14 +339,14 @@ class ExportDataPage(BasePage):
             text = self.get_text((By.XPATH, self.data_upload_msg_form.format(exported_file)))
             print("Data Upload message is displayed as: ", text)
             time.sleep(2)
-            self.driver.refresh()
+            self.reload_page()
             time.sleep(2)
             self.wait_to_click(self.daily_saved_export_link)
             time.sleep(2)
             self.wait_for_element((By.XPATH, self.download_dse_form.format(exported_file)), 50)
             self.wait_to_click((By.XPATH, self.download_dse_form.format(exported_file)))
         except:
-            self.driver.refresh()
+            self.reload_page()
             time.sleep(2)
             self.wait_for_element((By.XPATH, self.download_dse_form.format(exported_file)), 50)
             self.wait_to_click((By.XPATH, self.download_dse_form.format(exported_file)))
@@ -422,7 +426,7 @@ class ExportDataPage(BasePage):
         self.wait_and_sleep_to_click((By.XPATH, self.update_data_conf.format(UserData.dashboard_feed_form)))
         self.wait_for_element(self.data_upload_msg), "Export not completed!"
         time.sleep(2)
-        self.driver.refresh()
+        self.reload_page()
         time.sleep(2)
         return UserData.dashboard_feed_form
 
@@ -458,13 +462,13 @@ class ExportDataPage(BasePage):
         self.wait_and_sleep_to_click((By.XPATH, self.update_data_conf.format(UserData.dashboard_feed_case)))
         self.wait_for_element(self.data_upload_msg), "Export not completed!"
         time.sleep(2)
-        self.driver.refresh()
+        self.reload_page()
         time.sleep(2)
         return UserData.dashboard_feed_case
 
     def check_feed_link(self, name):
         try:
-            self.driver.refresh()
+            self.reload_page()
             time.sleep(2)
             self.wait_for_element((By.XPATH, self.copy_dashfeed_link.format(name)))
             self.wait_to_click((By.XPATH, self.copy_dashfeed_link.format(name)))
@@ -512,14 +516,14 @@ class ExportDataPage(BasePage):
         self.wait_to_click(self.export_settings_create)
         print("Odata Form Feed created!!")
         time.sleep(10)
-        self.driver.refresh()
+        self.reload_page()
         self.wait_and_sleep_to_click(self.copy_odata_link_btn_form)
         self.get_url_paste_browser(username, password, "forms")
         self.assert_odata_feed_data()
 
     # Test Case - 27 - Power BI / Tableau Integration, Case`
     def power_bi_tableau_integration_case(self, username, password):
-        self.driver.refresh()
+        self.reload_page()
         self.wait_to_click(self.powerBI_tab_int)
         self.delete_bulk_exports()
         self.wait_and_sleep_to_click(self.add_export_button)
@@ -551,7 +555,7 @@ class ExportDataPage(BasePage):
         self.wait_to_click(self.export_settings_create)
         print("Odata Case Feed created!!")
         time.sleep(10)
-        self.driver.refresh()
+        self.reload_page()
         self.wait_and_sleep_to_click(self.copy_odata_link_btn_case)
         self.get_url_paste_browser(username, password, "cases")
         self.assert_odata_feed_data()
@@ -640,7 +644,7 @@ class ExportDataPage(BasePage):
             wait_for_download_to_finish()
         except TimeoutException:
             if self.is_visible_and_displayed(self.failed_to_export):
-                self.driver.refresh()
+                self.reload_page()
                 self.wait_and_sleep_to_click(self.prepare_export_button, timeout=10)
                 self.wait_till_progress_completes("exports")
                 self.wait_for_element(self.download_button, 300)
@@ -743,7 +747,7 @@ class ExportDataPage(BasePage):
             wait_for_download_to_finish()
         except TimeoutException:
             if self.is_visible_and_displayed(self.failed_to_export):
-                self.driver.refresh()
+                self.reload_page()
                 self.wait_and_sleep_to_click(self.prepare_export_button, timeout=10)
                 self.wait_till_progress_completes("exports")
                 self.wait_for_element(self.download_button, 300)

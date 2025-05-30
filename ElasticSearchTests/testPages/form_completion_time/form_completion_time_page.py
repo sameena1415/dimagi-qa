@@ -619,7 +619,7 @@ class FormCompletionTimePage(BasePage):
         self.click((By.XPATH, self.delete_saved.format(report)))
         print("Deleted Saved Report")
         time.sleep(2)
-        self.driver.refresh()
+        self.reload_page()
         assert not self.is_visible_and_displayed((By.XPATH, self.saved_report_created.format(report)), 20)
         print("Deleted Report Successfully")
 
@@ -651,7 +651,7 @@ class FormCompletionTimePage(BasePage):
         print("Date range is matching")
         self.wait_to_click(self.try_again_button)
         
-        self.driver.refresh()
+        self.reload_page()
         self.wait_to_click(self.saved_reports_menu_link)
         self.wait_for_element((By.XPATH, self.saved_report_created.format(report_name)), 120)
         print("Report Saved successfully!")
@@ -835,7 +835,7 @@ class FormCompletionTimePage(BasePage):
         self.wait_to_click(self.remove_active_worker)
         assert not self.is_present(self.remove_active_worker), "Active Mobile Worker is still not removed"
         print("Active Mobile Worker is removed successfully")
-        self.driver.refresh()
+        self.reload_page()
         self.wait_for_element(self.apply_id, 100)
         self.verify_user_lookup_table()
         self.remove_default_users()
@@ -869,7 +869,7 @@ class FormCompletionTimePage(BasePage):
         self.wait_to_click(self.remove_deactive_worker)
         assert not self.is_present(self.remove_deactive_worker), "Deactivated Mobile Worker is still not removed"
         print("Deactivated Mobile Worker is removed successfully")
-        self.driver.refresh()
+        self.reload_page()
         self.wait_for_element(self.apply_id, 100)
         self.verify_user_lookup_table()
         self.remove_default_users()
