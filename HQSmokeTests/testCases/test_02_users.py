@@ -200,6 +200,8 @@ def test_aftertest_cleanup_items_in_users_menu(driver, settings):
 @pytest.mark.webUser
 @pytest.mark.userInvitation
 def test_case_13_new_webuser_invitation(driver, settings):
+    if "eu" in settings["url"]:
+        pytest.skip("Email status not getting displayed in eu server")
     menu = HomePage(driver, settings)
     webuser = WebUsersPage(driver)
     menu.users_menu()

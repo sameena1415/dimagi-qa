@@ -136,16 +136,20 @@ class MessagingPage(BasePage):
         # Languages
         self.languages = (By.LINK_TEXT, "Languages")
         self.add_lang = (By.XPATH, "//button[@data-bind='click: addLanguage, disable: addLanguageDisabled']/i")
-        self.lang_input_textarea = (By.XPATH, "(//span[@role='combobox'])[last()]")
-        self.select_first_lang = (By.XPATH, "(//li[@role='option'])[1]")
-        self.select_eng_lang = (By.XPATH, "(//li[@role='option'][contains(.,'en (English)')])[1]")
-        self.select_second_lang = (By.XPATH, "(//li[@role='option'])[2]")
+        self.lang_input_textarea = (By.XPATH, "(//span[@class='selection']//span[@role='combobox'])[last()]")
+        self.select_first_lang = (By.XPATH, "//span[contains(@class,'results')]/ul[@role='listbox']/li[1]")
+        self.select_eng_lang = (By.XPATH, "(//span[contains(@class,'results')]/ul[@role='listbox']//li[@role='option'][contains(.,'en (English)')])[1]")
+        self.select_second_lang = (By.XPATH, "//span[contains(@class,'results')]/ul[@role='listbox']/li[2]")
+        self.language_dropdown_last = (By.XPATH, "(//select[contains(@data-bind,'langcode')])[last()]")
         self.selected_lang_name = (By.XPATH, "(//td//p[contains(@data-bind,'message')])[last()]")
+        self.lang_search_input = (By.XPATH, "//span[contains(@class,'dropdown')]/input")
         self.language_list = (By.XPATH, "//ul[@role='listbox']")
         self.save_lang = (By.XPATH, "(//div[@class='btn btn-primary'])[1]")
         self.delete_lang = "//td[4][./p[contains(@data-bind,'message')][contains(.,'{}')]]//following-sibling::td[2]/a[@data-bind='click: $root.removeLanguage']"
+        self.default_language = (By.XPATH, "//span[contains(@class,'label-default')]")
         self.languages_present = (By.XPATH, "//td//p[contains(@data-bind,'message')]")
         self.lang_error = (By.XPATH, "//p[text()='Language appears twice']")
+        self.language_dropdown = (By.XPATH, "//select[contains(@data-bind,'langcode')]")
         # Message Translation
         self.msg_translation_menu = (By.XPATH, "//a[text()='Messaging Translations']")
         # Project and Subscription Settings
@@ -362,17 +366,17 @@ class MessagingPage(BasePage):
 
     def delete_languages(self):
         self.wait_to_click(self.languages)
-        
+        self.wait_for_element(self.default_language)
         lang_list = self.find_elements(self.languages_present)
         if len(lang_list) == 1:
-            for item in lang_list:
-                print(item.text)
-                if item.text == 'English':
-                    print("Default language present as English")
-                else:
-                    self.add_eng_lang()
-                    print("English updated successfully")
-
+            text = self.get_selected_text(self.language_dropdown)
+            print("selected option: ", text)
+            if text.strip() == "en":
+                print("Default language present as English")
+            else:
+                print("Default language is non-English")
+                self.add_eng_lang()
+                print("English updated successfully")
         lang_list = self.find_elements(self.languages_present)
         if len(lang_list) > 1:
             for item in lang_list:
@@ -381,42 +385,49 @@ class MessagingPage(BasePage):
                 else:
                     lang = item.text
                     print("Deleting language: ", lang)
-                    self.wait_to_click((By.XPATH, self.delete_lang.format(lang)))
+                    self.js_click((By.XPATH, self.delete_lang.format(lang)))
                     time.sleep(3)
-                    self.wait_to_click(self.save_lang)
+                    self.js_click(self.save_lang)
                     
         else:
             print("Only English is Present and no other languages")
 
     def add_eng_lang(self):
-        self.wait_to_click(self.lang_input_textarea)
-        
-        self.wait_for_element(self.language_list)
-        self.wait_to_click(self.select_eng_lang)
+        self.wait_for_element(self.lang_input_textarea)
+        self.click(self.lang_input_textarea)
+        self.wait_for_element(self.lang_search_input)
+        self.wait_for_element(self.select_eng_lang)
+        self.click(self.select_eng_lang)
         
         lang = self.get_text(self.selected_lang_name)
         print("Language selected is: ", lang)
-        self.wait_to_click(self.save_lang)
+        self.js_click(self.save_lang)
 
     def languages_page(self):
         self.wait_to_click(self.languages)
         self.wait_to_click(self.add_lang)
-        self.wait_to_click(self.lang_input_textarea)
-        time.sleep(1)
-        self.wait_for_element(self.language_list)
-        self.wait_to_click(self.select_first_lang)
+        time.sleep(2)
+        self.wait_for_element(self.lang_input_textarea)
+        self.click(self.lang_input_textarea)
+        self.wait_for_element(self.lang_search_input)
+        self.wait_for_element(self.select_first_lang)
+        self.click(self.select_second_lang)
         lang = self.get_text(self.selected_lang_name)
         print("First language selected is: ", lang)
-        self.wait_to_click(self.save_lang)
-        time.sleep(2)
-        self.wait_to_click(self.lang_input_textarea)
+        self.js_click(self.save_lang)
         time.sleep(1)
-        self.wait_for_element(self.language_list)
-        self.wait_to_click(self.select_second_lang)
+        self.accept_pop_up()
+        time.sleep(2)
+        self.wait_for_element(self.lang_input_textarea)
+        self.click(self.lang_input_textarea)
+        self.wait_for_element(self.lang_search_input)
+        self.wait_for_element(self.select_second_lang)
+        self.click(self.select_second_lang)
         lang = self.get_text(self.selected_lang_name)
         print("Second language selected is: ", lang)
-        self.wait_to_click(self.save_lang)
-        time.sleep(2)
+        self.js_click(self.save_lang)
+        time.sleep(1)
+        self.accept_pop_up()
         self.wait_to_click((By.XPATH, self.delete_lang.format(lang)))
         self.wait_to_click(self.save_lang)
         print("Languages added and deleted successfully!")

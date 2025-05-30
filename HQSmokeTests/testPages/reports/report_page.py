@@ -481,10 +481,14 @@ class ReportPage(BasePage):
         # self.switch_back_to_prev_tab()
         self.driver.back()
 
-    def verify_form_data_case_list(self, case_name):
+    def verify_form_data_case_list(self, case_name, username):
         self.wait_to_click(self.case_list_rep)
         # self.wait_to_click(self.users_box)
         # self.wait_to_click(self.select_user)
+        self.wait_for_element(self.users_box, 200)
+        self.wait_to_click(self.users_box)
+        self.send_keys(self.search_user, username)
+        self.wait_to_click((By.XPATH, self.app_user_select.format(username)))
         self.send_keys(self.search_input, case_name)
         self.wait_to_click(self.apply_id)
         time.sleep(15)

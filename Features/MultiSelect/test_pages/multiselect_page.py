@@ -43,7 +43,7 @@ class MultiSelectWorkflows(BasePage):
         song_names = []
         for i in range(1, case_count+1):
             row_checkbox = self.get_element(self.row_checkbox_xpath, str(i))
-            self.wait_to_click(row_checkbox)
+            self.js_click(row_checkbox)
             case_name_in_table = self.get_element(self.case_tile_grid_one, str(i))
             song_on_case_tiles = self.get_text(case_name_in_table)
             stripped_song = song_on_case_tiles.split("</b>")
@@ -53,14 +53,15 @@ class MultiSelectWorkflows(BasePage):
         return song_names
 
     def click_select_all_checkbox(self):
-        self.wait_to_click(self.select_all_checkbox)
+        self.js_click(self.select_all_checkbox)
 
     def click_select_all_tile_checkbox(self):
-        self.wait_to_click(self.select_all_tile_checkbox)
+        self.js_click(self.select_all_tile_checkbox)
 
     def continue_to_proceed_multiselect(self):
-        self.wait_to_click(self.multi_select_continue)
-        # self.wait_after_interaction()
+        self.wait_for_element(self.multi_select_continue)
+        self.js_click(self.multi_select_continue)
+        self.wait_after_interaction()
 
     def check_no_of_cases_on_form(self, max_size, type):
         song_names_on_form = self.find_elements_texts((By.XPATH, self.selected_case_names_on_forms.format(type)))
@@ -112,9 +113,9 @@ class MultiSelectWorkflows(BasePage):
     def open_menu_settings(self, menu):
         menu_xpath = self.get_element(self.open_app_builder_menu, menu)
         self.wait_for_element(menu_xpath)
-        self.click(menu_xpath)
+        self.js_click(menu_xpath)
         self.wait_for_element(self.case_list_settings)
-        self.click(self.case_list_settings)
+        self.js_click(self.case_list_settings)
 
 
 

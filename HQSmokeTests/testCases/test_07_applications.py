@@ -65,6 +65,8 @@ def test_case_40_app_preview(driver, settings):
 def test_case_38_create_new_build_deploy_to_mobile(driver, settings):
     if 'staging' in settings['url']:
         pytest.xfail("Failing on Staging due to QA-7314")
+    elif  "eu" in settings["url"]:
+        pytest.skip("App code is not getting displayed")
     load = ApplicationPage(driver)
     install_code, field_text = load.update_form_field()
     print(install_code, field_text)

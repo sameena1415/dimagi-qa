@@ -81,7 +81,7 @@ class ExportDataPage(BasePage):
         self.users_list_item = "//ul[@role='listbox']/li[contains(.,'{}')]"
         self.users_list = (By.XPATH, "//ul[contains(@class,'select2-results__options')]/li")
         self.user_from_list = "//li[contains(.,'{}')]"
-        self.prepare_export_button = (By.XPATH, "//button[@data-bind='disable: disablePrepareExport']")
+        self.prepare_export_button = (By.XPATH, "//button[contains(@class,'btn btn-primary')]/i[contains(@data-bind,'Export') and contains(@class,'down')]")
         self.download_button = (By.XPATH, "//a[@class='btn btn-primary btn-full-width']")
         self.apply = (By.XPATH, "//button[contains(@class,'btn btn-primary')]/i[contains(@data-bind,'Export') and contains(@class,'down')]")
         self.export_button = (By.XPATH, "//a[@class='btn btn-primary'][contains(text(),'Export')]")
@@ -189,7 +189,7 @@ class ExportDataPage(BasePage):
         if self.is_present(self.close_date_picker):
             self.wait_to_click(self.close_date_picker)
         self.wait_for_element(self.apply, timeout=10)
-        self.js_click(self.apply)
+        # self.js_click(self.apply)
 
     def prepare_and_download_export(self, name, flag=None):
         time.sleep(2)
@@ -201,7 +201,7 @@ class ExportDataPage(BasePage):
         if flag == None:
             self.send_keys(self.users_field, UserData.web_user)
             self.wait_to_click((By.XPATH, self.users_list_item.format(UserData.web_user)))
-        # self.wait_and_sleep_to_click(self.prepare_export_button, timeout=10)
+        self.wait_and_sleep_to_click(self.prepare_export_button, timeout=10)
         try:
             self.wait_till_progress_completes("exports")
             self.wait_for_element(self.success_progress, 100)
@@ -269,7 +269,7 @@ class ExportDataPage(BasePage):
         return UserData.form_export_name
 
     def form_exports(self, name):
-        self.prepare_and_download_export(name=name)
+        self.prepare_and_download_export(name=name, flag=None)
         self.find_data_by_id_and_verify('form.womans_name', 'formid', UserData.form_export_name,
                                         self.woman_form_name_HQ
                                         )

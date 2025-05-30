@@ -49,7 +49,7 @@ def test_case_15_16_submit_form_verify_formdata_casedata(driver, settings):
     home.reports_menu()
     load = ReportPage(driver)
     load.verify_form_data_submit_history(case_name, settings['login_username'])
-    load.verify_form_data_case_list(case_name)
+    load.verify_form_data_case_list(case_name, settings['login_username'])
 
 
 @pytest.mark.report
