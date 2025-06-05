@@ -124,7 +124,7 @@ jobs:
         if: ${{ failure() }}
         run: |
           sudo apt-get install jq -y
-          jq -r '.tests[] | select(.outcome=="failed") | "Test: \(.nodeid)\nRepro Steps:\n\(.call.docstring // \"Not documented.\")\n\n---"' final_failures.json > jira_ticket_body.txt
+          jq -r '.tests[] | select(.outcome=="failed") | "Test: \(.nodeid)\\nRepro Steps:\\n\(.call.docstring // \"Not documented.\")\\n\\n---"' final_failures.json > jira_ticket_body.txt
 
       - name: Send Jira Ticket Email
         if: ${{ failure() && matrix.environment == 'production' }}

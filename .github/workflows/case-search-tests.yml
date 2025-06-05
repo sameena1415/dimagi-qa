@@ -30,7 +30,7 @@ jobs:
       - id: set-matrix-schedule
         if: ${{ github.event_name  == 'schedule' }}
         run: |
-          echo "::set-output name=matrix::{\"environment\": [\"staging\", \"eu\"]}"
+          echo "::set-output name=matrix::{\"environment\": [\"staging\"]}"
       - id: set-matrix-deploy
         if: ${{ github.event_name == 'repository_dispatch' && github.event.client_payload.environment == 'production' }}
         run: |
