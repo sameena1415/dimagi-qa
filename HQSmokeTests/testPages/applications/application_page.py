@@ -187,6 +187,8 @@ class ApplicationPage(BasePage):
         self.wait_for_element(self.download_xml)
         self.click(self.download_xml)
         wait_for_download_to_finish(file_extension=".xml")
+        print("XML downloaded successfully")
+        time.sleep(4)
         self.wait_to_click(self.add_form_button)
         try:
             self.wait_to_click(self.register_form)
@@ -226,7 +228,9 @@ class ApplicationPage(BasePage):
 
 
     def update_form_field(self):
-        self.wait_to_click(self.applications_menu_id)
+        self.driver.switch_to.default_content()
+        time.sleep(2)
+        self.js_click(self.applications_menu_id)
         self.wait_to_click(self.form_edit_app)
         # self.wait_to_click(self.add_form_button)
         # self.wait_to_click(self.register_form)

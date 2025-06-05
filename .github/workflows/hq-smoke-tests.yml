@@ -96,7 +96,8 @@ jobs:
           echo "matrix environment: ${{ matrix.environment }}"
           echo "NOW=$(date +'%m-%d %H:%M')" >> $GITHUB_ENV
           echo ${{env.NOW}}
-          pytest -v --rootdir= HQSmokeTests/testCases -n 4 --dist=loadfile --reruns 1 --html=report_${{ matrix.environment }}.html
+          pytest -v --rootdir= HQSmokeTests/testCases -n 4 --dist=loadfile --reruns 1 --html=report_${{ matrix.environment }}.html --json-report --json-report-file=final_failures.json
+
 
       - name: Parse test counts
         id: parse_counts
@@ -119,6 +120,25 @@ jobs:
       - name: Fetch artifact ID
         run: echo 'Artifact ID is ${{ steps.artifact-upload-step.outputs.artifact-id }}'
 
+      - name: Extract final failed test info for Jira
+        if: ${{ failure() }}
+        run: |
+          sudo apt-get install jq -y
+          jq -r '.tests[] | select(.outcome=="failed") | "Test: \(.nodeid)\nRepro Steps:\n\(.call.docstring // \"Not documented.\")\n\n---"' final_failures.json > jira_ticket_body.txt
+
+      - name: Send Jira Ticket Email
+        if: ${{ failure() && matrix.environment == 'production' }}
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          username: ${{ secrets.DIMAGIQA_MAIL_USERNAME }}
+          password: ${{ secrets.DIMAGIQA_MAIL_PASSWORD }}
+          subject: "[Smoke Test][${{ matrix.environment }}] Automated Jira Ticket created - for Run #${{ github.run_number }} with ${{ steps.parse_counts.outputs.FAILED }} failures at ${{env.NOW}}"
+          to: qa@dimagi.com, kbordoloi@dimagi.com
+          from: <${{ secrets.DIMAGIQA_MAIL_USERNAME }}>
+          body: file://jira_ticket_body.txt
+          attachments: report_${{ matrix.environment }}.html
 
       - name: Set email vars
         if: ${{ failure() }}

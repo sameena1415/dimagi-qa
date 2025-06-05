@@ -62,9 +62,9 @@ class BasePage:
             self.cookie_alert_displayed = False
         return self.cookie_alert_displayed
 
-    @retry_on_exception((StaleElementReferenceException, TimeoutException))
+    @retry_on_exception((StaleElementReferenceException, TimeoutException), retries=2, delay=2)
     def wait_to_click(self, locator, timeout=10):
-        element = WebDriverWait(self.driver, timeout, poll_frequency=0.5).until(
+        element = WebDriverWait(self.driver, timeout, poll_frequency=1).until(
             ec.element_to_be_clickable(locator),
             message=f"Couldn't find locator: {locator}"
             )

@@ -91,3 +91,20 @@ def pytest_terminal_summary(terminalreporter, exitstatus, config):
         f.write(f'ERROR={len(error)}\n')
         f.write(f'SKIPPED={len(skipped)}\n')
         f.write(f'XFAIL={len(xfail)}\n')
+
+def pytest_sessionfinish(session, exitstatus):
+    """Generate final failure summary with docstrings for Jira"""
+    failed_tests = [
+        item for item in session.items
+        if hasattr(item, '_report_call') and item._report_call.failed
+    ]
+    if not failed_tests:
+        return
+
+    lines = []
+    for item in failed_tests:
+        doc = item.function.__doc__ or "No reproduction steps provided."
+        lines.append(f"Test: {item.nodeid}\nRepro Steps:\n{doc.strip()}\n\n---")
+
+    with open("jira_ticket_body.txt", "w", encoding="utf-8") as f:
+        f.write("\n".join(lines))
