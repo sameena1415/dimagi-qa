@@ -2,6 +2,9 @@ import os
 
 from configparser import ConfigParser
 from pathlib import Path
+
+import pytest_html
+
 from common_utilities.fixtures import *
 from datetime import datetime
 
@@ -73,9 +76,6 @@ def settings(environment_settings_hq):
         settings["default"]["url"] = f"{settings['default']['url']}a/qa-automation"
     return settings["default"]
 
-def pytest_runtest_makereport(item, call):
-    if call.when == "call" and call.excinfo is not None:
-        failed_items.append(item)
 
 def pytest_terminal_summary(terminalreporter, exitstatus, config):
     # Collect test counts
@@ -98,17 +98,41 @@ def pytest_terminal_summary(terminalreporter, exitstatus, config):
         f.write(f'SKIPPED={len(skipped)}\n')
         f.write(f'XFAIL={len(xfail)}\n')
 
+def pytest_configure(config):
+    global pytest_html
+    pytest_html = config.pluginmanager.getplugin('html')
+
+@pytest.hookimpl(hookwrapper=True)
+def pytest_runtest_makereport(item, call):
+    outcome = yield
+    report = outcome.get_result()
+
+    # Call existing screenshot hook from fixtures if it exists
+    try:
+        from common_utilities.fixtures import pytest_runtest_makereport as screenshot_hook
+        # Simulate calling the other makereport logic manually
+        screenshot_hook(item, call)
+    except (ImportError, AttributeError):
+        pass
+
+    if report.when == "call" and report.failed:
+        failed_items.append(item)
+
+
 def pytest_sessionfinish(session, exitstatus):
-    """Generate final failure summary with docstrings for Jira"""
+    if not failed_items:
+        return
+
     lines = []
     for item in failed_items:
-        doc = item.function.__doc__ or "No reproduction steps provided."
+        try:
+            doc = item.function.__doc__ or "No reproduction steps provided."
+        except AttributeError:
+            doc = "No docstring available (non-function test case)"
         lines.append(f"Test: {item.nodeid}\nRepro Steps:\n{doc.strip()}\n\n---")
 
     with open("jira_ticket_body.txt", "w", encoding="utf-8") as f:
         f.write(f"🔥 Automated Failure Report - {datetime.now().strftime('%Y-%m-%d %H:%M')}\n\n")
-        if lines:
-            f.write("\n".join(lines))
-        else:
-            f.write("✅ All tests passed. No failures to report.")
+        f.write("\n".join(lines) if lines else "✅ All tests passed.")
+
 
