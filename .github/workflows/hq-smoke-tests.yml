@@ -96,7 +96,7 @@ jobs:
           echo "matrix environment: ${{ matrix.environment }}"
           echo "NOW=$(date +'%m-%d %H:%M')" >> $GITHUB_ENV
           echo ${{env.NOW}}
-          pytest -v --rootdir= HQSmokeTests/testCases -n 9 --dist=loadfile --reruns 1 --html=report_${{ matrix.environment }}.html --json-report --json-report-file=final_failures.json
+          pytest -v --rootdir= HQSmokeTests/testCases -n 4 --dist=loadfile --reruns 1 --html=report_${{ matrix.environment }}.html --json-report --json-report-file=final_failures.json
 
 
       - name: Parse test counts
@@ -120,15 +120,21 @@ jobs:
       - name: Fetch artifact ID
         run: echo 'Artifact ID is ${{ steps.artifact-upload-step.outputs.artifact-id }}'
 
+      - name: Print Jira ticket summary to log
+        if: ${{ failure() }}
+        run: |
+          echo "Generated failure summary:"
+          cat /home/runner/work/dimagi-qa/dimagi-qa/jira_ticket_body.txt
+
       - name: Confirm jira_ticket_body.txt exists
         if: ${{ failure() }}
         id: extract_summary
         run: |
             {
-              printf "body<<EOF\n" 
-              cat jira_ticket_body.txt
-              printf "EOF\n"
-            } >> "$GITHUB_OUTPUT"
+              echo "body<<EOF"
+              cat /home/runner/work/dimagi-qa/dimagi-qa/jira_ticket_body.txt
+              echo "EOF"
+            } >> $GITHUB_OUTPUT
 
       - name: Debug email body output
         if: ${{ failure() }}
