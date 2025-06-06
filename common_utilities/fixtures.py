@@ -149,8 +149,13 @@ def pytest_sessionfinish(session, exitstatus):
     if not failed_items:
         return
 
+    seen = set()
     lines = []
     for item in failed_items:
+        if item.nodeid in seen:
+            continue  # skip duplicate test node
+        seen.add(item.nodeid)
+
         try:
             doc = item.function.__doc__ or "No reproduction steps provided."
         except AttributeError:

@@ -145,7 +145,7 @@ jobs:
           username: ${{ secrets.DIMAGIQA_MAIL_USERNAME }}
           password: ${{ secrets.DIMAGIQA_MAIL_PASSWORD }}
           subject: "[Smoke Test][${{ matrix.environment }}] Automated Jira Ticket created - for Run #${{ github.run_number }} with ${{ steps.parse_counts.outputs.FAILED }} failures at ${{env.NOW}}"
-          to: kbordoloi@dimagi.com
+          to: qa@dimagi.com, kbordoloi@dimagi.com
           from: <${{ secrets.DIMAGIQA_MAIL_USERNAME }}>
           body:  ${{ steps.extract_summary.outputs.body }}
           attachments: report_${{ matrix.environment }}.html

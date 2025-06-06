@@ -80,6 +80,16 @@ def test_case_15_16_submit_form_verify_formdata_casedata(driver, settings):
 @pytest.mark.report
 @pytest.mark.reportBuilder
 def test_case_18_create_case_report(driver, settings):
+    """
+        1. Navigate to HQ.
+        2. Go to Reports>View all.
+        3. Click on Create new report under 'Report Builder' section.
+        4. Enter report name.
+        5. Select a case report
+        5. Select remaining fields as you desire.
+        6. Create and save and view report
+        7. Verify you are able to create a custom report.
+    """
     report = HomePage(driver, settings)
     report.reports_menu()
     load = ReportPage(driver)

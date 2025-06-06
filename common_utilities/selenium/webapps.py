@@ -239,8 +239,8 @@ class WebApps(BasePage):
 
 
     def submit_the_form(self):
-        time.sleep(0.5)
-        self.wait_for_element(self.form_submit)
+        time.sleep(1)
+        # self.wait_for_element(self.form_submit)
         print("clicking on the submit button")
         self.js_click(self.form_submit)
         print("clicked the submit button")
