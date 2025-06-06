@@ -111,7 +111,7 @@ def pytest_runtest_makereport(item, call):
     try:
         from common_utilities.fixtures import pytest_runtest_makereport as screenshot_hook
         # Simulate calling the other makereport logic manually
-        screenshot_hook(item, call)
+        screenshot_hook(item)
     except (ImportError, AttributeError):
         pass
 

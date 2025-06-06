@@ -36,7 +36,7 @@ def driver(settings, browser):
             chrome_options.add_argument('--disable-extensions')
             chrome_options.add_argument('--safebrowsing-disable-download-protection')
             chrome_options.add_argument('--safebrowsing-disable-extension-blacklist')
-            chrome_options.add_argument('--window-size=1366,768')  # sets consistent resolution
+            chrome_options.add_argument('--window-size=1920,1080')  # sets consistent resolution
             chrome_options.add_argument('--force-device-scale-factor=1')  # fixes zoom/dpi issues
 
             chrome_options.add_experimental_option("prefs", {

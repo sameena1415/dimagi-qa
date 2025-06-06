@@ -124,7 +124,7 @@ jobs:
         if: ${{ failure() }}
         run: |
           echo "Generated failure summary:"
-          cat jira_ticket_body.txt
+          cat  /home/runner/work/dimagi-qa/dimagi-qa/jira_ticket_body.txt
 
       - name: Send Jira Ticket Email
         if: ${{ failure() && matrix.environment == 'production' }}
@@ -137,7 +137,7 @@ jobs:
           subject: "[Smoke Test][${{ matrix.environment }}] Automated Jira Ticket created - for Run #${{ github.run_number }} with ${{ steps.parse_counts.outputs.FAILED }} failures at ${{env.NOW}}"
           to: qa@dimagi.com, kbordoloi@dimagi.com
           from: <${{ secrets.DIMAGIQA_MAIL_USERNAME }}>
-          body: jira_ticket_body.txt
+          body:  /home/runner/work/dimagi-qa/dimagi-qa/jira_ticket_body.txt
           attachments: report_${{ matrix.environment }}.html
 
       - name: Set email vars

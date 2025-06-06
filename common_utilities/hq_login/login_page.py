@@ -29,7 +29,7 @@ class LoginPage(BasePage):
         #     print(socket.gethostbyname("eu.commcarehq.org"))
         # print("url: ", url)
         self.driver.get(url)
-        self.driver.set_window_size(1366, 768)
+        self.driver.set_window_size(1920,1080)
         # self.driver.maximize_window()
         self.driver.implicitly_wait(10)
         print("[DEBUG] Window size:", self.driver.get_window_size())
