@@ -99,8 +99,6 @@ def pytest_sessionfinish(session, exitstatus):
         item for item in session.items
         if hasattr(item, '_report_call') and item._report_call.failed
     ]
-    if not failed_tests:
-        return
 
     lines = []
     for item in failed_tests:
@@ -109,4 +107,8 @@ def pytest_sessionfinish(session, exitstatus):
 
     with open("jira_ticket_body.txt", "w", encoding="utf-8") as f:
         f.write(f"🔥 Automated Failure Report - {datetime.now().strftime('%Y-%m-%d %H:%M')}\n\n")
-        f.write("\n".join(lines))
+        if lines:
+            f.write("\n".join(lines))
+        else:
+            f.write("✅ All tests passed. No failures to report.")
+
