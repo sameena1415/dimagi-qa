@@ -126,15 +126,37 @@ jobs:
           echo "Generated failure summary:"
           cat /home/runner/work/dimagi-qa/dimagi-qa/jira_ticket_body.txt
 
-      - name: Confirm jira_ticket_body.txt exists
-        if: ${{ failure() }}
+      - name: Generate Jira Summary from HTML Report
+        if: ${{ failure() && matrix.environment == 'production' }}
+        run: |
+            pip install beautifulsoup4
+            python3 <<EOF
+            from bs4 import BeautifulSoup
+            
+            with open("report_${{ matrix.environment }}.html", "r", encoding="utf-8") as f:
+                soup = BeautifulSoup(f, "html.parser")
+            
+            failures = []
+            rows = soup.select('table#results-table tr')
+            for row in rows:
+                cols = row.find_all('td')
+                if len(cols) >= 3 and 'Failed' in cols[0].text:
+                    test_name = cols[2].text.strip()
+                    failures.append(test_name)
+            
+            with open("jira_ticket_body.txt", "w", encoding="utf-8") as f:
+                f.write("🔥 Automated Failure Report - Auto Extracted\\n\\n")
+                for test in failures:
+                    f.write(f"Test: {test}\\nRepro Steps:\\n[Add docstring or known steps here]\\n\\n---\\n\\n")
+            EOF
+
+      - name: Extract Summary for Email
+        if: ${{ failure() && matrix.environment == 'production' }}
         id: extract_summary
         run: |
-             python3 -c "content=open('/home/runner/work/dimagi-qa/dimagi-qa/jira_ticket_body.txt').read(); print(f'body<<EOF\\n{content}\\nEOF')" >> $GITHUB_OUTPUT
-
-      - name: Debug email body output
-        if: ${{ failure() }}
-        run: echo "${{ steps.extract_summary.outputs.body }}"
+          echo "body<<EOF" >> $GITHUB_OUTPUT
+          cat jira_ticket_body.txt >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
 
       - name: Send Jira Ticket Email
         if: ${{ failure() && matrix.environment == 'production' }}
@@ -144,10 +166,10 @@ jobs:
           server_port: 465
           username: ${{ secrets.DIMAGIQA_MAIL_USERNAME }}
           password: ${{ secrets.DIMAGIQA_MAIL_PASSWORD }}
-          subject: "[Smoke Test][${{ matrix.environment }}] Automated Jira Ticket created - for Run #${{ github.run_number }} with ${{ steps.parse_counts.outputs.FAILED }} failures at ${{env.NOW}}"
-          to: qa@dimagi.com, kbordoloi@dimagi.com
+          subject: "[Smoke Test][${{ matrix.environment }}] Automated Jira Ticket - Run #${{ github.run_number }} with ${{ steps.parse_counts.outputs.FAILED }} failures at ${{ env.NOW }}"
+          to: kbordoloi@dimagi.com
           from: <${{ secrets.DIMAGIQA_MAIL_USERNAME }}>
-          body:  ${{ steps.extract_summary.outputs.body }}
+          body: ${{ steps.extract_summary.outputs.body }}
           attachments: report_${{ matrix.environment }}.html
 
       - name: Set email vars
