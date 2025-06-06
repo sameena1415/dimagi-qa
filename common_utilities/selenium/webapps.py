@@ -230,7 +230,9 @@ class WebApps(BasePage):
             self.js_click(self.async_restore_error)
             time.sleep(2)
             self.scroll_to_element(self.form_submit)
-            self.wait_to_click(self.form_submit)
+            print("clicking on the submit button again")
+            self.js_click(self.form_submit)
+            print("resubmitted form")
         else:
             print("No Asynchronous restore error present")
 
@@ -239,7 +241,9 @@ class WebApps(BasePage):
     def submit_the_form(self):
         time.sleep(0.5)
         self.wait_for_element(self.form_submit)
+        print("clicking on the submit button")
         self.js_click(self.form_submit)
+        print("clicked the submit button")
         time.sleep(1)
         self.async_restore_resubmit()
         time.sleep(0.5)
