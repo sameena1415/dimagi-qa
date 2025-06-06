@@ -66,10 +66,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Set up Python 3.9
+      - name: Set up Python 3.13
         uses: actions/setup-python@v2
         with:
-          python-version: 3.9
+          python-version: 3.13
 
       - name: Install dependencies
         run: |
@@ -120,11 +120,11 @@ jobs:
       - name: Fetch artifact ID
         run: echo 'Artifact ID is ${{ steps.artifact-upload-step.outputs.artifact-id }}'
 
-      - name: Extract final failed test info for Jira
+      - name: Confirm jira_ticket_body.txt exists
         if: ${{ failure() }}
         run: |
-          sudo apt-get install jq -y
-          jq -r '.tests[] | select(.outcome=="failed") | "Test: \(.nodeid)\\nRepro Steps:\\n\(.call.docstring // \"Not documented.\")\\n\\n---"' final_failures.json > jira_ticket_body.txt
+          echo "Generated failure summary:"
+          cat jira_ticket_body.txt
 
       - name: Send Jira Ticket Email
         if: ${{ failure() && matrix.environment == 'production' }}

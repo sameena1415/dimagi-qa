@@ -3,6 +3,7 @@ import os
 from configparser import ConfigParser
 from pathlib import Path
 from common_utilities.fixtures import *
+from datetime import datetime
 
 """"This file provides fixture functions for driver initialization"""
 
@@ -107,4 +108,5 @@ def pytest_sessionfinish(session, exitstatus):
         lines.append(f"Test: {item.nodeid}\nRepro Steps:\n{doc.strip()}\n\n---")
 
     with open("jira_ticket_body.txt", "w", encoding="utf-8") as f:
+        f.write(f"🔥 Automated Failure Report - {datetime.now().strftime('%Y-%m-%d %H:%M')}\n\n")
         f.write("\n".join(lines))
