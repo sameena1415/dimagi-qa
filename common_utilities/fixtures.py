@@ -11,7 +11,9 @@ from datetime import datetime
 """"This file provides fixture functions for driver initialization"""
 
 global driver
-failed_items = []
+from collections import OrderedDict
+
+failed_items = OrderedDict()
 
 @pytest.fixture(scope="module", autouse=True)
 def driver(settings, browser):
@@ -138,8 +140,8 @@ def pytest_runtest_makereport(item):
                 )
                 extra.append(pytest_html.extras.html(html))
 
-        if report.failed:
-            failed_items.append(item)
+        if report.when == "call" and report.failed:
+            failed_items[item.nodeid] = item
 
     report.extra = extra
     report.tags = tags
@@ -151,16 +153,16 @@ def pytest_sessionfinish(session, exitstatus):
 
     seen = set()
     lines = []
-    for item in failed_items:
-        if item.nodeid in seen:
-            continue  # skip duplicate test node
-        seen.add(item.nodeid)
+    for nodeid, item in failed_items.items():
+        if nodeid in seen:
+            continue
+        seen.add(nodeid)
 
         try:
             doc = item.function.__doc__ or "No reproduction steps provided."
         except AttributeError:
             doc = "No docstring available (non-function test case)"
-        lines.append(f"Test: {item.nodeid}\nRepro Steps:\n{doc.strip()}\n\n---")
+        lines.append(f"Test: {nodeid}\nRepro Steps:\n{doc.strip()}\n\n---")
 
     with open("jira_ticket_body.txt", "w", encoding="utf-8") as f:
         f.write(f"🔥 Automated Failure Report - {datetime.now().strftime('%Y-%m-%d %H:%M')}\n\n")
