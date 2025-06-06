@@ -6,6 +6,8 @@ from common_utilities.path_settings import PathSettings
 from common_utilities.hq_login.login_page import LoginPage
 import base64
 from datetime import datetime
+from bs4 import BeautifulSoup
+import os
 
 
 """"This file provides fixture functions for driver initialization"""
@@ -120,50 +122,88 @@ def _capture_screenshot(driver):
 
 @pytest.hookimpl(hookwrapper=True)
 def pytest_runtest_makereport(item):
+    pytest_html = item.config.pluginmanager.getplugin("html")
     outcome = yield
     report = outcome.get_result()
-    pytest_html = item.config.pluginmanager.getplugin("html")
-
     tags = ", ".join([m.name for m in item.iter_markers() if m.name != 'run'])
     extra = getattr(report, 'extra', [])
 
-    if report.when in ("call", "teardown"):
+    if report.when == "call" or report.when == "teardown":
         xfail = hasattr(report, 'wasxfail')
         if (report.skipped and xfail) or (report.failed and not xfail):
-            driver = item.funcargs.get("driver", None)
-            if driver:
-                screen_img = _capture_screenshot(driver)
+            print("reports skipped or failed")
+            file_name = report.nodeid.replace("::", "_") + ".png"
+            screen_img = _capture_screenshot(item.funcargs["driver"])
+            if file_name:
                 html = (
                     '<div><img src="data:image/png;base64,%s" alt="screenshot" '
-                    'style="width:600px;height:300px;" onclick="window.open(this.src)" '
-                    'align="right"/></div>' % screen_img
+                    'style="width:600px;height:300px;" onclick="window.open(this.src)" align="right"/></div>'
+                    % screen_img
                 )
                 extra.append(pytest_html.extras.html(html))
-
-        if report.when == "call" and report.failed:
-            failed_items[item.nodeid] = item
-
-    report.extra = extra
-    report.tags = tags
+        report.extra = extra
+        report.tags = tags
 
 
-def pytest_sessionfinish(session, exitstatus):
-    if not failed_items:
+
+# def pytest_sessionfinish(session, exitstatus):
+#     if not failed_items:
+#         return
+#
+#     seen = set()
+#     lines = []
+#     for nodeid, item in failed_items.items():
+#         if nodeid in seen:
+#             continue
+#         seen.add(nodeid)
+#
+#         try:
+#             doc = item.function.__doc__ or "No reproduction steps provided."
+#         except AttributeError:
+#             doc = "No docstring available (non-function test case)"
+#         lines.append(f"Test: {nodeid}\nRepro Steps:\n{doc.strip()}\n\n---")
+#
+#     with open("jira_ticket_body.txt", "w", encoding="utf-8") as f:
+#         f.write(f"🔥 Automated Failure Report - {datetime.now().strftime('%Y-%m-%d %H:%M')}\n\n")
+#         f.write("\n".join(lines) if lines else "✅ All tests passed.")
+#
+
+
+def generate_jira_summary_from_html_report(report_path, output_file="jira_ticket_body.txt"):
+    with open(report_path, "r", encoding="utf-8") as file:
+        soup = BeautifulSoup(file, "html.parser")
+
+    failed_tests = []
+    seen_tests = set()
+
+    data_div = soup.find("div", {"id": "data-container"})
+    if not data_div or not data_div.get("data-jsonblob"):
+        print("⚠️ data-jsonblob not found in HTML report.")
         return
 
-    seen = set()
-    lines = []
-    for nodeid, item in failed_items.items():
-        if nodeid in seen:
+    report_data = json.loads(data_div.get("data-jsonblob"))
+    tests = report_data.get("tests", {})
+
+    for test_id, entries in tests.items():
+        if not isinstance(entries, list):
             continue
-        seen.add(nodeid)
+        for entry in entries:
+            if entry.get("result") == "Failed" and test_id not in seen_tests:
+                seen_tests.add(test_id)
+                log = entry.get("log", "").strip()
+                repro_steps = "\n".join(
+                    line.strip() for line in log.splitlines()
+                    if line.strip() and not line.startswith("[DEBUG]")
+                )
+                summary = (
+                    f"Test: {test_id}\n"
+                    f"Repro Steps:\n{repro_steps or 'Logs not found'}\n\n---\n"
+                )
+                failed_tests.append(summary)
 
-        try:
-            doc = item.function.__doc__ or "No reproduction steps provided."
-        except AttributeError:
-            doc = "No docstring available (non-function test case)"
-        lines.append(f"Test: {nodeid}\nRepro Steps:\n{doc.strip()}\n\n---")
+    now = datetime.now().strftime("%Y-%m-%d %H:%M")
+    header = f"🔥 Automated Failure Report - {now}\n\n"
+    full_body = header + "".join(failed_tests)
 
-    with open("jira_ticket_body.txt", "w", encoding="utf-8") as f:
-        f.write(f"🔥 Automated Failure Report - {datetime.now().strftime('%Y-%m-%d %H:%M')}\n\n")
-        f.write("\n".join(lines) if lines else "✅ All tests passed.")
+    with open(output_file, "w", encoding="utf-8") as f:
+        f.write(full_body)
