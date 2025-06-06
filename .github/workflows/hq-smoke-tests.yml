@@ -130,11 +130,7 @@ jobs:
         if: ${{ failure() }}
         id: extract_summary
         run: |
-            {
-              echo "body<<EOF"
-              cat /home/runner/work/dimagi-qa/dimagi-qa/jira_ticket_body.txt
-              echo "EOF"
-            } >> $GITHUB_OUTPUT
+             python3 -c "content=open('/home/runner/work/dimagi-qa/dimagi-qa/jira_ticket_body.txt').read(); print(f'body<<EOF\\n{content}\\nEOF')" >> $GITHUB_OUTPUT
 
       - name: Debug email body output
         if: ${{ failure() }}
