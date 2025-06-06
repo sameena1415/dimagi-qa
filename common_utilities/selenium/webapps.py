@@ -131,6 +131,7 @@ class WebApps(BasePage):
     def search_all_cases(self):
         self.scroll_to_element(self.search_all_cases_button)
         self.wait_to_click(self.search_all_cases_button)
+        self.wait_after_interaction(timeout=20)
 
     def search_again_cases(self):
         self.scroll_to_bottom()
@@ -225,6 +226,7 @@ class WebApps(BasePage):
 
     def async_restore_resubmit(self):
         time.sleep(5)
+        self.scroll_to_top()
         if self.is_present_and_displayed(self.async_restore_error, 10):
             print("Asynchronous restore error present")
             self.js_click(self.async_restore_error)
@@ -232,6 +234,7 @@ class WebApps(BasePage):
             self.scroll_to_element(self.form_submit)
             print("clicking on the submit button again")
             self.js_click(self.form_submit)
+            self.wait_after_interaction()
             print("resubmitted form")
         else:
             print("No Asynchronous restore error present")
@@ -242,9 +245,9 @@ class WebApps(BasePage):
         time.sleep(1)
         # self.wait_for_element(self.form_submit)
         print("clicking on the submit button")
-        self.js_click(self.form_submit)
+        self.wait_to_click(self.form_submit)
         print("clicked the submit button")
-        time.sleep(1)
+        self.wait_after_interaction()
         self.async_restore_resubmit()
         time.sleep(0.5)
         try:
@@ -255,7 +258,7 @@ class WebApps(BasePage):
                 time.sleep(1)
                 self.wait_after_interaction()
                 self.wait_for_element(self.form_submit)
-                self.js_click(self.form_submit)
+                self.wait_to_click(self.form_submit)
                 self.wait_for_element(self.form_submission_successful, timeout=20)
                 assert self.is_present(self.form_submission_successful)
             else:
@@ -287,20 +290,27 @@ class WebApps(BasePage):
         #     time.sleep(0.5)
         self.driver.get(self.url)
         self.wait_after_interaction()
-        try:
-            self.wait_for_element(self.webapp_login)
-            self.scroll_to_element(self.webapp_login)
-            self.js_click(self.webapp_login)
-        except NoSuchElementException:
-            self.wait_to_click(self.webapps_home)
-            self.wait_for_element(self.webapp_login)
-            self.js_click(self.webapp_login)
-        time.sleep(0.5)
-        self.wait_for_element(self.search_user_webapps, timeout=40)
-        self.send_keys(self.search_user_webapps, username)
-        self.wait_for_element(self.search_button_webapps)
-        self.js_click(self.search_button_webapps)
-        self.select_user(username)
+        loggedin_user = None
+        if self.is_present(self.webapp_working_as):
+            loggedin_user = self.get_text(self.webapp_working_as)
+            print("Logged in User: ", loggedin_user)
+        if loggedin_user == username:
+            print("User already logged in")
+        else:
+            try:
+                self.wait_for_element(self.webapp_login)
+                self.scroll_to_element(self.webapp_login)
+                self.js_click(self.webapp_login)
+            except NoSuchElementException:
+                self.wait_to_click(self.webapps_home)
+                self.wait_for_element(self.webapp_login)
+                self.js_click(self.webapp_login)
+            time.sleep(0.5)
+            self.wait_for_element(self.search_user_webapps, timeout=40)
+            self.send_keys(self.search_user_webapps, username)
+            self.wait_for_element(self.search_button_webapps)
+            self.js_click(self.search_button_webapps)
+            self.select_user(username)
         return username
 
     def answer_question(self, question_label, input_type, input_value):
@@ -315,7 +325,7 @@ class WebApps(BasePage):
             self.scroll_to_element(per_answer_locator)
             
             self.clear(per_answer_locator)
-            self.send_keys(per_answer_locator, input_value)
+            self.send_keys(per_answer_locator, input_value+Keys.TAB)
             
             print(str(per_answer_locator), input_value)
 

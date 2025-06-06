@@ -73,7 +73,8 @@ class AppPreviewPage(BasePage):
         if self.is_displayed(self.next_button):
             self.wait_to_click(self.next_button)
             self.wait_to_click(self.complete_button)
-        self.is_visible_and_displayed(self.submit_success)
+        assert self.is_visible_and_displayed(self.submit_success)
+        print("Form submitted successfully")
         self.driver.switch_to.default_content()
 
     def submit_form_with_loc(self):

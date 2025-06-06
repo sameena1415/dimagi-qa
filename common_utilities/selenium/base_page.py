@@ -573,14 +573,14 @@ class BasePage:
         except Exception as e:
             print(f"[wait_until_progress_removed] Timeout or error: {e}")
 
-    def wait_after_interaction(self):
+    def wait_after_interaction(self, timeout=6):
         if not BasePage.ENABLE_WAIT_AFTER_INTERACTION:
             return
 
         if self._is_element_present(By.ID, "formplayer-progress"):
             self.wait_until_progress_removed()
 
-        self.wait_for_ajax_and_progress(timeout=6)
+        self.wait_for_ajax_and_progress(timeout=timeout)
 
     def _is_element_present(self, by, value):
         return bool(self.driver.find_elements(by, value))

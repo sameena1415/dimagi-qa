@@ -107,6 +107,7 @@ def test_case_38_create_new_build_deploy_to_mobile(driver, settings):
     elif  "eu" in settings["url"]:
         pytest.skip("App code is not getting displayed")
     load = ApplicationPage(driver)
+    load.opening_dashboard()
     install_code, field_text = load.update_form_field()
     print(install_code, field_text)
     mobile = AndroidScreen(settings)

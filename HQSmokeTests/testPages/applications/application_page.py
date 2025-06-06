@@ -226,11 +226,14 @@ class ApplicationPage(BasePage):
         assert self.is_present_and_displayed(self.advanced_settings_tab_content)
         print("App Settings loading successfully!")
 
+    def opening_dashboard(self):
+        self.wait_for_element(self.dashboard_tab)
+        self.js_click(self.dashboard_tab)
 
     def update_form_field(self):
         self.driver.switch_to.default_content()
         time.sleep(2)
-        self.js_click(self.applications_menu_id)
+        self.wait_to_click(self.applications_menu_id)
         self.wait_to_click(self.form_edit_app)
         # self.wait_to_click(self.add_form_button)
         # self.wait_to_click(self.register_form)
