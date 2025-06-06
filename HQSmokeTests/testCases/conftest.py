@@ -9,6 +9,7 @@ from datetime import datetime
 
 global driver
 
+failed_items = []
 
 @pytest.fixture(scope="session")
 def environment_settings_hq():
@@ -72,6 +73,10 @@ def settings(environment_settings_hq):
         settings["default"]["url"] = f"{settings['default']['url']}a/qa-automation"
     return settings["default"]
 
+def pytest_runtest_makereport(item, call):
+    if call.when == "call" and call.excinfo is not None:
+        failed_items.append(item)
+
 def pytest_terminal_summary(terminalreporter, exitstatus, config):
     # Collect test counts
     passed = terminalreporter.stats.get('passed', [])
@@ -95,13 +100,8 @@ def pytest_terminal_summary(terminalreporter, exitstatus, config):
 
 def pytest_sessionfinish(session, exitstatus):
     """Generate final failure summary with docstrings for Jira"""
-    failed_tests = [
-        item for item in session.items
-        if hasattr(item, '_report_call') and item._report_call.failed
-    ]
-
     lines = []
-    for item in failed_tests:
+    for item in failed_items:
         doc = item.function.__doc__ or "No reproduction steps provided."
         lines.append(f"Test: {item.nodeid}\nRepro Steps:\n{doc.strip()}\n\n---")
 

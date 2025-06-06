@@ -30,14 +30,15 @@ def driver(settings, browser):
             # chrome_options.add_argument("--disable-notifications")
             chrome_options.add_argument('--no-sandbox')
             chrome_options.add_argument('--disable-dev-shm-usage')
-            chrome_options.add_argument('--disable-gpu')  # helps in CI rendering
-            chrome_options.add_argument('--headless')  # headless mode for CI
+            chrome_options.add_argument('--disable-gpu')
+            chrome_options.add_argument('--headless=new')  # or '--headless=chrome' for newer versions
             chrome_options.add_argument('--disable-notifications')
             chrome_options.add_argument('--disable-extensions')
             chrome_options.add_argument('--safebrowsing-disable-download-protection')
             chrome_options.add_argument('--safebrowsing-disable-extension-blacklist')
-            chrome_options.add_argument('--window-size=1366,768')  # consistent viewport
-            chrome_options.add_argument('--force-device-scale-factor=1')  # fix zoom/DPI
+            chrome_options.add_argument('--window-size=1366,768')  # sets consistent resolution
+            chrome_options.add_argument('--force-device-scale-factor=1')  # fixes zoom/dpi issues
+
             chrome_options.add_experimental_option("prefs", {
                 "download.default_directory": str(PathSettings.DOWNLOAD_PATH),
                 "download.prompt_for_download": False,
