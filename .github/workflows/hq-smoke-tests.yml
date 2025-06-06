@@ -124,9 +124,15 @@ jobs:
         if: ${{ failure() }}
         id: extract_summary
         run: |
-            echo body<<EOF >> $GITHUB_OUTPUT
-            cat jira_ticket_body.txt >> $GITHUB_OUTPUT
-            echo EOF >> $GITHUB_OUTPUT
+            {
+              printf "body<<EOF\n" 
+              cat jira_ticket_body.txt
+              printf "EOF\n"
+            } >> "$GITHUB_OUTPUT"
+
+      - name: Debug email body output
+        if: ${{ failure() }}
+        run: echo "${{ steps.extract_summary.outputs.body }}"
 
       - name: Send Jira Ticket Email
         if: ${{ failure() && matrix.environment == 'production' }}
