@@ -168,7 +168,17 @@ def pytest_runtest_makereport(item):
 #         f.write(f"🔥 Automated Failure Report - {datetime.now().strftime('%Y-%m-%d %H:%M')}\n\n")
 #         f.write("\n".join(lines) if lines else "✅ All tests passed.")
 #
-
+def check_if_any_test_failed(json_path="final_failures.json") -> bool:
+    """
+    Returns True if any test has outcome 'failed' in the JSON report.
+    """
+    try:
+        with open(json_path, "r") as f:
+            data = json.load(f)
+        return any(t.get("outcome") == "failed" for t in data.get("tests", []))
+    except Exception as e:
+        print(f"Error checking failures: {e}")
+        return False
 
 def generate_jira_summary_from_json_report(json_path="final_failures.json", html_output="jira_ticket_body.html"):
     """

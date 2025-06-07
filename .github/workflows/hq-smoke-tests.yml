@@ -151,20 +151,33 @@ jobs:
           ENCODED=$(base64 -w 0 jira_ticket_body.html)
           echo "body_html_b64=$ENCODED" >> "$GITHUB_OUTPUT"
 
+      - name: Check if any test actually failed
+        if: ${{ failure() && matrix.environment == 'production' }}
+        id: has_failures
+        run: |
+          pip install -q beautifulsoup4
+          python3 -c "
+          import json
+          from common_utilities.fixtures import check_if_any_test_failed
+          has_failed = check_if_any_test_failed()
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as fh:
+            fh.write(f'has_failures={str(has_failed).lower()}\n')
+          "
+
       - name: Send Jira Ticket Email
-        if: ${{ failure() && matrix.environment == 'production' && steps.check_summary.outputs.send_email == 'true' }}
+        if: ${{ steps.has_failures.outputs.has_failures == 'true' }}
         uses: dawidd6/action-send-mail@v3
         with:
           server_address: smtp.gmail.com
           server_port: 465
           username: ${{ secrets.DIMAGIQA_MAIL_USERNAME }}
           password: ${{ secrets.DIMAGIQA_MAIL_PASSWORD }}
-          subject: "[Smoke Test][${{ matrix.environment }}] Automated Jira Ticket - Run #${{ github.run_number }} with ${{ steps.parse_counts.outputs.FAILED }} failures at ${{ env.NOW }}"
+          subject: "[ Smoke Test ][ ${ { matrix.environment } } ] Automated Jira Ticket - Run #${{ github.run_number }} with ${{ steps.parse_counts.outputs.FAILED }} failures"
           to: kbordoloi@dimagi.com
           from: <${{ secrets.DIMAGIQA_MAIL_USERNAME }}>
           content_type: text/html
-          body: >-
-            ${{ fromJSON(format('{"text": "{0}"}', steps.extract_summary.outputs.body_html_b64)).text }}
+          body: |
+            ${{ steps.extract_summary.outputs.body_html }}
           attachments: report_${{ matrix.environment }}.html
 
       - name: Set email vars
