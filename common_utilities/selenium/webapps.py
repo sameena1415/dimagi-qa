@@ -227,9 +227,9 @@ class WebApps(BasePage):
     def async_restore_resubmit(self):
         time.sleep(5)
         self.scroll_to_top()
-        self.wait_for_element(self.async_restore_error, 30)
         if self.is_present_and_displayed(self.async_restore_error):
             print("Asynchronous restore error present")
+            self.wait_for_element(self.async_restore_error)
             self.js_click(self.async_restore_error)
             time.sleep(2)
             self.scroll_to_element(self.form_submit)

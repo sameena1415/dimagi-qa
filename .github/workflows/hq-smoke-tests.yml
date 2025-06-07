@@ -120,11 +120,6 @@ jobs:
       - name: Fetch artifact ID
         run: echo 'Artifact ID is ${{ steps.artifact-upload-step.outputs.artifact-id }}'
 
-      - name: Print Jira ticket summary to log
-        if: ${{ failure() }}
-        run: |
-          echo "Generated failure summary:"
-          cat /home/runner/work/dimagi-qa/dimagi-qa/jira_ticket_body.txt
 
       - name: Generate Jira Summary from HTML Report
         if: ${{ failure() && matrix.environment == 'production' }}
@@ -133,8 +128,7 @@ jobs:
           python3 -c "
           from common_utilities.fixtures import generate_jira_summary_from_html_report
           generate_jira_summary_from_html_report('report_production.html')
-          "
-      
+          "   
 
       - name: Extract Summary for Email
         if: ${{ failure() && matrix.environment == 'production' }}

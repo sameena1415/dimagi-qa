@@ -169,41 +169,36 @@ def pytest_runtest_makereport(item):
 #
 
 
-def generate_jira_summary_from_html_report(report_path, output_file="jira_ticket_body.txt"):
+from bs4 import BeautifulSoup
+from datetime import datetime
+
+def generate_jira_summary_from_html_report(report_path):
     with open(report_path, "r", encoding="utf-8") as file:
         soup = BeautifulSoup(file, "html.parser")
 
-    failed_tests = []
-    seen_tests = set()
+    failures = soup.find_all("tr", class_="failed")
 
-    data_div = soup.find("div", {"id": "data-container"})
-    if not data_div or not data_div.get("data-jsonblob"):
-        print("⚠️ data-jsonblob not found in HTML report.")
+    if not failures:
+        with open("jira_ticket_body.txt", "w", encoding="utf-8") as f:
+            f.write(f"✅ All tests passed at {datetime.now().strftime('%Y-%m-%d %H:%M')}")
         return
 
-    report_data = json.loads(data_div.get("data-jsonblob"))
-    tests = report_data.get("tests", {})
+    report_lines = [f"🔥 Automated Failure Report - {datetime.now().strftime('%Y-%m-%d %H:%M')}\n"]
 
-    for test_id, entries in tests.items():
-        if not isinstance(entries, list):
-            continue
-        for entry in entries:
-            if entry.get("result") == "Failed" and test_id not in seen_tests:
-                seen_tests.add(test_id)
-                log = entry.get("log", "").strip()
-                repro_steps = "\n".join(
-                    line.strip() for line in log.splitlines()
-                    if line.strip() and not line.startswith("[DEBUG]")
-                )
-                summary = (
-                    f"Test: {test_id}\n"
-                    f"Repro Steps:\n{repro_steps or 'Logs not found'}\n\n---\n"
-                )
-                failed_tests.append(summary)
+    for failure in failures:
+        test_name = failure.find("td", class_="col-name").text.strip()
+        longrepr = failure.find("td", class_="col-log").text.strip()
 
-    now = datetime.now().strftime("%Y-%m-%d %H:%M")
-    header = f"🔥 Automated Failure Report - {now}\n\n"
-    full_body = header + "".join(failed_tests)
+        # Try to extract Repro Steps from within the logs
+        if "Repro Steps:" in longrepr:
+            steps = longrepr.split("Repro Steps:")[1].strip()
+        else:
+            steps = longrepr[:500] + "\n(Full log in HTML report)"
 
-    with open(output_file, "w", encoding="utf-8") as f:
-        f.write(full_body)
+        report_lines.append(f"Test: {test_name}")
+        report_lines.append("Repro Steps:")
+        report_lines.append(steps)
+        report_lines.append("\n---")
+
+    with open("jira_ticket_body.txt", "w", encoding="utf-8") as f:
+        f.write("\n".join(report_lines))
