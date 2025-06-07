@@ -120,25 +120,29 @@ jobs:
       - name: Fetch artifact ID
         run: echo 'Artifact ID is ${{ steps.artifact-upload-step.outputs.artifact-id }}'
 
+      - name: Check file exists
+        run: |
+          ls -l jira_ticket_body.txt
+          cat jira_ticket_body.txt || echo "File missing"
 
-      - name: Generate Jira Summary from HTML Report
+      - name: Generate Jira HTML Summary from JSON Report
         if: ${{ failure() && matrix.environment == 'production' }}
         run: |
           pip install beautifulsoup4
           python3 -c "
           from common_utilities.fixtures import generate_jira_summary_from_json_report
-          generate_jira_summary_from_json_report('final_failures.json')
+          generate_jira_summary_from_json_report('final_failures.json', 'jira_ticket_body.html')
           "
 
       - name: Extract Summary for Email
         if: ${{ failure() && matrix.environment == 'production' }}
         id: extract_summary
         run: |
-          SUMMARY=$(cat jira_ticket_body.txt)
+          SUMMARY=$(cat jira_ticket_body.html)
           SUMMARY="${SUMMARY//'%'/'%25'}"
           SUMMARY="${SUMMARY//$'\n'/'%0A'}"
           SUMMARY="${SUMMARY//$'\r'/'%0D'}"
-          echo "body=$SUMMARY" >> "$GITHUB_OUTPUT"
+          echo "body_html=$SUMMARY" >> "$GITHUB_OUTPUT"
 
       - name: Send Jira Ticket Email
         if: ${{ failure() && matrix.environment == 'production' }}
@@ -151,7 +155,9 @@ jobs:
           subject: "[Smoke Test][${{ matrix.environment }}] Automated Jira Ticket - Run #${{ github.run_number }} with ${{ steps.parse_counts.outputs.FAILED }} failures at ${{ env.NOW }}"
           to: kbordoloi@dimagi.com
           from: <${{ secrets.DIMAGIQA_MAIL_USERNAME }}>
-          body: ${{ steps.extract_summary.outputs.body }}
+          content_type: text/html
+          body: |
+            ${{ steps.extract_summary.outputs.body_html }}
           attachments: report_${{ matrix.environment }}.html
 
       - name: Set email vars
