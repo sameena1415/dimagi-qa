@@ -170,7 +170,7 @@ def pytest_runtest_makereport(item):
 #
 
 
-def generate_jira_summary_from_json_report(json_path="final_failures.json", output_path="jira_ticket_body.html"):
+def generate_jira_summary_from_json_report(json_path="final_failures.json", html_output="jira_ticket_body.html"):
     """
     Extracts failed test cases from JSON report and gathers their docstrings for Jira summary as HTML.
     """
@@ -214,9 +214,10 @@ def generate_jira_summary_from_json_report(json_path="final_failures.json", outp
 
         return "Docstring not found."
 
-    with open(output_path, "w", encoding="utf-8") as f:
+    with open(html_output, "w", encoding="utf-8") as f:
         if not unique_failures:
             f.write("<p>✅ All testcases passed.</p>")
+            return
         else:
             for test in unique_failures:
                 doc = extract_docstring_from_file(test["nodeid"])
@@ -231,4 +232,4 @@ def generate_jira_summary_from_json_report(json_path="final_failures.json", outp
                     <hr style="border:1px solid #ccc;">
                     """)
 
-    print(f"Formatted Jira summary written to {output_path}")
+    print(f"Formatted Jira summary written to {html_output}")

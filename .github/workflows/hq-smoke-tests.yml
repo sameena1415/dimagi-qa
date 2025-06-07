@@ -120,10 +120,12 @@ jobs:
       - name: Fetch artifact ID
         run: echo 'Artifact ID is ${{ steps.artifact-upload-step.outputs.artifact-id }}'
 
-      - name: Check file exists
+      - name: Check if jira_ticket_body.html exists
         run: |
-          ls -l jira_ticket_body.txt
-          cat jira_ticket_body.txt || echo "File missing"
+          if [ ! -f "jira_ticket_body.html" ]; then
+            echo "Missing summary file!"
+            exit 1
+          fi
 
       - name: Generate Jira HTML Summary from JSON Report
         if: ${{ failure() && matrix.environment == 'production' }}
@@ -146,9 +148,8 @@ jobs:
         if: ${{ failure() && matrix.environment == 'production' }}
         id: extract_summary
         run: |
-          echo "body_html<<EOF" >> $GITHUB_OUTPUT
-          cat jira_ticket_body.html >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
+          ENCODED=$(base64 -w 0 jira_ticket_body.html)
+          echo "body_html_b64=$ENCODED" >> "$GITHUB_OUTPUT"
 
       - name: Send Jira Ticket Email
         if: ${{ failure() && matrix.environment == 'production' && steps.check_summary.outputs.send_email == 'true' }}
@@ -162,7 +163,7 @@ jobs:
           to: kbordoloi@dimagi.com
           from: <${{ secrets.DIMAGIQA_MAIL_USERNAME }}>
           content_type: text/html
-          body: ${{ steps.extract_summary.outputs.body_html }}
+          body:${{ fromJSON(format('{"text": "{0}" }', steps.extract_summary.outputs.body_html_b64)).text }}
           attachments: report_${{ matrix.environment }}.html
 
       - name: Set email vars
