@@ -92,8 +92,8 @@ class WebApps(BasePage):
         self.scroll_to_element(self.application)
         self.js_click(self.application)
         time.sleep(0.5)
-        self.wait_after_interaction()
-        self.wait_for_element(self.application_header, timeout=20)
+        self.wait_after_interaction(timeout=20)
+        self.wait_for_element(self.application_header, timeout=100)
 
     def navigate_to_breadcrumb(self, breadcrumb_value):
         self.link = (By.XPATH, self.breadcrumb_format.format(breadcrumb_value, breadcrumb_value))
@@ -108,7 +108,7 @@ class WebApps(BasePage):
         self.scroll_to_element(self.caselist_menu)
         self.js_click(self.caselist_menu)
         time.sleep(0.5)
-        self.wait_after_interaction()
+        self.wait_after_interaction(timeout=20)
         if assertion == 'No':
             print("No assertion needed")
         else:
@@ -125,7 +125,7 @@ class WebApps(BasePage):
             self.scroll_to_element(self.form_name)
             self.js_click(self.form_name)
             time.sleep(0.5)
-            self.wait_after_interaction()
+            self.wait_after_interaction(timeout=20)
             self.wait_for_element((By.XPATH, self.current_page.format(form_name)), timeout=20)
 
     def search_all_cases(self):
@@ -227,12 +227,14 @@ class WebApps(BasePage):
     def async_restore_resubmit(self):
         time.sleep(5)
         self.scroll_to_top()
-        if self.is_present_and_displayed(self.async_restore_error, 30):
+        self.wait_for_element(self.async_restore_error, 30)
+        if self.is_present_and_displayed(self.async_restore_error):
             print("Asynchronous restore error present")
             self.js_click(self.async_restore_error)
             time.sleep(2)
             self.scroll_to_element(self.form_submit)
             print("clicking on the submit button again")
+            time.sleep(0.5)
             self.js_click(self.form_submit)
             self.wait_after_interaction()
             print("resubmitted form")
@@ -248,6 +250,7 @@ class WebApps(BasePage):
         self.wait_to_click(self.form_submit)
         print("clicked the submit button")
         self.wait_after_interaction()
+        time.sleep(2)
         self.async_restore_resubmit()
         time.sleep(0.5)
         try:

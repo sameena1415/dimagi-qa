@@ -100,7 +100,7 @@ class BasePage:
     @retry_on_exception((StaleElementReferenceException, TimeoutException))
     def wait_for_element(self, locator, timeout=10):
         clickable = ec.presence_of_element_located(locator)
-        WebDriverWait(self.driver, timeout, poll_frequency=0.5).until(clickable,
+        WebDriverWait(self.driver, timeout, poll_frequency=1).until(clickable,
                                                                         message="Couldn't find locator: " + str(locator)
                                                                         )
             # self.wait_after_interaction()

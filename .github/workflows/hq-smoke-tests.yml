@@ -131,7 +131,7 @@ jobs:
         run: |
           pip install beautifulsoup4
           python3 -c "
-          from fixtures import generate_jira_summary_from_html_report
+          from common_utilities.fixtures import generate_jira_summary_from_html_report
           generate_jira_summary_from_html_report('report_production.html')
           "
       
