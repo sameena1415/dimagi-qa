@@ -8,7 +8,7 @@ import base64
 import json
 from pathlib import Path
 import ast
-
+import os
 
 
 """"This file provides fixture functions for driver initialization"""

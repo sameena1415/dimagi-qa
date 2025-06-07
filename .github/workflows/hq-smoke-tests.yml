@@ -151,6 +151,17 @@ jobs:
           ENCODED=$(base64 -w 0 jira_ticket_body.html)
           echo "body_html_b64=$ENCODED" >> "$GITHUB_OUTPUT"
 
+      - name: Check if jira_ticket_body.html exists
+        if: ${{ failure() && matrix.environment == 'production' }}
+        id: check_summary_file
+        run: |
+          if [ -f "jira_ticket_body.html" ]; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "Jira summary not generated (likely no test failures)"
+            echo "exists=false" >> $GITHUB_OUTPUT
+          fi
+
       - name: Check if any test actually failed
         if: ${{ failure() && matrix.environment == 'production' }}
         id: has_failures
@@ -165,7 +176,7 @@ jobs:
           "
 
       - name: Send Jira Ticket Email
-        if: ${{ steps.has_failures.outputs.has_failures == 'true' }}
+        if: ${{ steps.check_summary_file.outputs.exists == 'true' }}
         uses: dawidd6/action-send-mail@v3
         with:
           server_address: smtp.gmail.com
