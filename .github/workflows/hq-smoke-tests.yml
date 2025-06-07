@@ -125,20 +125,21 @@ jobs:
         if: ${{ failure() && matrix.environment == 'production' }}
         run: |
           pip install beautifulsoup4
+          REPORT_PATH="/home/runner/work/dimagi-qa/dimagi-qa/report_${{ matrix.environment }}.html"
           python3 -c "
           from common_utilities.fixtures import generate_jira_summary_from_html_report
-          generate_jira_summary_from_html_report('report_production.html')
-          "   
+          generate_jira_summary_from_html_report('${REPORT_PATH}')
+          "  
 
       - name: Extract Summary for Email
         if: ${{ failure() && matrix.environment == 'production' }}
         id: extract_summary
         run: |
-          {
-            echo "body<<EOF"
-            cat jira_ticket_body.txt
-            echo "EOF"
-          } | tee -a $GITHUB_OUTPUT 
+          SUMMARY=$(cat jira_ticket_body.txt)
+          SUMMARY="${SUMMARY//'%'/'%25'}"
+          SUMMARY="${SUMMARY//$'\n'/'%0A'}"
+          SUMMARY="${SUMMARY//$'\r'/'%0D'}"
+          echo "body=$SUMMARY" >> "$GITHUB_OUTPUT"
 
       - name: Send Jira Ticket Email
         if: ${{ failure() && matrix.environment == 'production' }}
