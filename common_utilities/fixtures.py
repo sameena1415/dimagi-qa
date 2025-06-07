@@ -169,17 +169,17 @@ def pytest_runtest_makereport(item):
 #         f.write("\n".join(lines) if lines else "✅ All tests passed.")
 #
 
-def generate_jira_summary_from_json_report(json_path="final_failures.json", output_path="jira_ticket_body.txt"):
+
+def generate_jira_summary_from_json_report(json_path="final_failures.json", output_path="jira_ticket_body.html"):
     """
-    Extracts failed test cases from JSON report and gathers their docstrings for Jira summary.
-    Outputs a clean HTML-formatted summary for email.
+    Extracts failed test cases from JSON report and gathers their docstrings for Jira summary as HTML.
     """
     json_file = Path(json_path)
     if not json_file.exists():
         print(f"JSON report {json_path} not found.")
         return
 
-    with open(json_file, "r", encoding="utf-8") as f:
+    with open(json_file, "r") as f:
         report_data = json.load(f)
 
     failures = [
@@ -204,7 +204,7 @@ def generate_jira_summary_from_json_report(json_path="final_failures.json", outp
 
         try:
             full_path = Path(filepath).resolve()
-            with open(full_path, "r", encoding="utf-8") as f:
+            with open(full_path, "r") as f:
                 parsed = ast.parse(f.read())
                 for node in ast.walk(parsed):
                     if isinstance(node, ast.FunctionDef) and node.name == test_func:
@@ -216,14 +216,19 @@ def generate_jira_summary_from_json_report(json_path="final_failures.json", outp
 
     with open(output_path, "w", encoding="utf-8") as f:
         if not unique_failures:
-            f.write("<p>✅ All tests passed.</p>\n")
+            f.write("<p>✅ All testcases passed.</p>")
         else:
-            for i, test in enumerate(unique_failures):
+            for test in unique_failures:
                 doc = extract_docstring_from_file(test["nodeid"])
-                formatted_doc = "<br>".join(doc.strip().splitlines())
-                f.write(f"<b>Test:</b> {test['nodeid']}<br><b>Repro Steps:</b><br>{formatted_doc}")
-                if i != len(unique_failures) - 1:
-                    f.write("<br><hr style='border:1px dashed #ccc;'><br>")
+                f.write(f"""
+                    <div style="margin-bottom: 25px;">
+                      <p><strong>Test:</strong> {test['nodeid']}</p>
+                      <p><strong>Repro Steps:</strong></p>
+                      <div style="margin-left: 20px;">
+                        {"<br>".join(doc.strip().splitlines())}
+                      </div>
+                    </div>
+                    <hr style="border:1px solid #ccc;">
+                    """)
 
-    print(f"✅ Jira HTML summary written to {output_path}")
-
+    print(f"Formatted Jira summary written to {output_path}")
