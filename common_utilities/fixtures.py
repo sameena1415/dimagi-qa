@@ -169,18 +169,17 @@ def pytest_runtest_makereport(item):
 #         f.write("\n".join(lines) if lines else "✅ All tests passed.")
 #
 
-
-
 def generate_jira_summary_from_json_report(json_path="final_failures.json", output_path="jira_ticket_body.txt"):
     """
     Extracts failed test cases from JSON report and gathers their docstrings for Jira summary.
+    Outputs a clean HTML-formatted summary for email.
     """
     json_file = Path(json_path)
     if not json_file.exists():
         print(f"JSON report {json_path} not found.")
         return
 
-    with open(json_file, "r") as f:
+    with open(json_file, "r", encoding="utf-8") as f:
         report_data = json.load(f)
 
     failures = [
@@ -205,7 +204,7 @@ def generate_jira_summary_from_json_report(json_path="final_failures.json", outp
 
         try:
             full_path = Path(filepath).resolve()
-            with open(full_path, "r") as f:
+            with open(full_path, "r", encoding="utf-8") as f:
                 parsed = ast.parse(f.read())
                 for node in ast.walk(parsed):
                     if isinstance(node, ast.FunctionDef) and node.name == test_func:
@@ -215,12 +214,16 @@ def generate_jira_summary_from_json_report(json_path="final_failures.json", outp
 
         return "Docstring not found."
 
-    with open(output_path, "w") as f:
+    with open(output_path, "w", encoding="utf-8") as f:
         if not unique_failures:
-            f.write("All testcases passed.\n")
+            f.write("<p>✅ All tests passed.</p>\n")
         else:
-            for test in unique_failures:
+            for i, test in enumerate(unique_failures):
                 doc = extract_docstring_from_file(test["nodeid"])
-                f.write(f"Test: {test['nodeid']}\nRepro Steps:\n{doc}\n\n---\n")
+                formatted_doc = "<br>".join(doc.strip().splitlines())
+                f.write(f"<b>Test:</b> {test['nodeid']}<br><b>Repro Steps:</b><br>{formatted_doc}")
+                if i != len(unique_failures) - 1:
+                    f.write("<br><hr style='border:1px dashed #ccc;'><br>")
 
-    print(f"Jira summary written to {output_path}")
+    print(f"✅ Jira HTML summary written to {output_path}")
+
