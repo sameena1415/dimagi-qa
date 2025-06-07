@@ -125,11 +125,10 @@ jobs:
         if: ${{ failure() && matrix.environment == 'production' }}
         run: |
           pip install beautifulsoup4
-          REPORT_PATH="/home/runner/work/dimagi-qa/dimagi-qa/report_${{ matrix.environment }}.html"
           python3 -c "
-          from common_utilities.fixtures import generate_jira_summary_from_html_report
-          generate_jira_summary_from_html_report('${REPORT_PATH}')
-          "  
+          from common_utilities.fixtures import generate_jira_summary_from_json_report
+          generate_jira_summary_from_json_report('final_failures.json')
+          "
 
       - name: Extract Summary for Email
         if: ${{ failure() && matrix.environment == 'production' }}

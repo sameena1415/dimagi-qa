@@ -82,7 +82,8 @@ class WebApps(BasePage):
 
         self.async_restore_error = (By.XPATH, "//div[contains(@class,'alert-danger') and contains(.,'Asynchronous restore')]/button[contains(@class,'close')]")
         self.error_message = (By.XPATH, "//div[contains(@class,'alert-danger')]/button[contains(@class,'close')]")
-
+        self.alert_close_button = (By.XPATH, "//button[@data-bs-dismiss='alert']")
+        self.alert_close_text = (By.XPATH, "//button[@data-bs-dismiss='alert']//parent::div[contains(@class,'alert-dismiss')]")
 
     def open_app(self, app_name):
         if self.is_present_and_displayed(self.webapps_home, 10):
@@ -225,22 +226,17 @@ class WebApps(BasePage):
         return form_names
 
     def async_restore_resubmit(self):
-        time.sleep(5)
-        self.scroll_to_top()
-        if self.is_present_and_displayed(self.async_restore_error):
-            print("Asynchronous restore error present")
-            self.wait_for_element(self.async_restore_error)
-            self.js_click(self.async_restore_error)
-            time.sleep(2)
-            self.scroll_to_element(self.form_submit)
-            print("clicking on the submit button again")
-            time.sleep(0.5)
-            self.js_click(self.form_submit)
-            self.wait_after_interaction()
-            print("resubmitted form")
-        else:
-            print("No Asynchronous restore error present")
-
+        print("Asynchronous restore error present")
+        self.scroll_to_element(self.async_restore_error)
+        time.sleep(0.5)
+        self.js_click(self.async_restore_error)
+        time.sleep(2)
+        self.scroll_to_element(self.form_submit)
+        print("clicking on the submit button again")
+        time.sleep(0.5)
+        self.js_click(self.form_submit)
+        self.wait_after_interaction()
+        print("resubmitted form")
 
 
     def submit_the_form(self):
@@ -249,9 +245,17 @@ class WebApps(BasePage):
         print("clicking on the submit button")
         self.wait_to_click(self.form_submit)
         print("clicked the submit button")
-        self.wait_after_interaction()
-        time.sleep(2)
-        self.async_restore_resubmit()
+        self.wait_after_interaction(timeout=20)
+        time.sleep(5)
+        self.wait_for_element(self.alert_close_button, 40)
+        text = self.get_text(self.alert_close_text)
+        print(text)
+        if 'Asynchronous' in text or self.is_present(self.form_submit):
+            print("Form not submitted successfully. Need Resubmission")
+            self.scroll_to_top()
+            self.async_restore_resubmit()
+        else:
+            print("form submitted successfully")
         time.sleep(0.5)
         try:
             self.wait_for_element(self.form_submission_successful, timeout=20)

@@ -5,9 +5,10 @@ from selenium import webdriver
 from common_utilities.path_settings import PathSettings
 from common_utilities.hq_login.login_page import LoginPage
 import base64
-from datetime import datetime
-from bs4 import BeautifulSoup
 import json
+from pathlib import Path
+import ast
+
 
 
 """"This file provides fixture functions for driver initialization"""
@@ -169,36 +170,57 @@ def pytest_runtest_makereport(item):
 #
 
 
-from bs4 import BeautifulSoup
-from datetime import datetime
 
-def generate_jira_summary_from_html_report(report_path):
-    with open(report_path, "r", encoding="utf-8") as file:
-        soup = BeautifulSoup(file, "html.parser")
-
-    failures = soup.find_all("tr", class_="failed")
-
-    if not failures:
-        with open("jira_ticket_body.txt", "w", encoding="utf-8") as f:
-            f.write(f"✅ All tests passed at {datetime.now().strftime('%Y-%m-%d %H:%M')}")
+def generate_jira_summary_from_json_report(json_path="final_failures.json", output_path="jira_ticket_body.txt"):
+    """
+    Extracts failed test cases from JSON report and gathers their docstrings for Jira summary.
+    """
+    json_file = Path(json_path)
+    if not json_file.exists():
+        print(f"JSON report {json_path} not found.")
         return
 
-    report_lines = [f"🔥 Automated Failure Report - {datetime.now().strftime('%Y-%m-%d %H:%M')}\n"]
+    with open(json_file, "r") as f:
+        report_data = json.load(f)
 
-    for failure in failures:
-        test_name = failure.find("td", class_="col-name").text.strip()
-        longrepr = failure.find("td", class_="col-log").text.strip()
+    failures = [
+        test for test in report_data.get("tests", [])
+        if test.get("outcome") == "failed"
+    ]
 
-        # Try to extract Repro Steps from within the logs
-        if "Repro Steps:" in longrepr:
-            steps = longrepr.split("Repro Steps:")[1].strip()
+    seen = set()
+    unique_failures = []
+    for test in failures:
+        if test["nodeid"] not in seen:
+            unique_failures.append(test)
+            seen.add(test["nodeid"])
+
+    def extract_docstring_from_file(nodeid):
+        parts = nodeid.split("::")
+        if not parts:
+            return "Could not parse nodeid"
+
+        filepath = parts[0]
+        test_func = parts[-1]
+
+        try:
+            full_path = Path(filepath).resolve()
+            with open(full_path, "r") as f:
+                parsed = ast.parse(f.read())
+                for node in ast.walk(parsed):
+                    if isinstance(node, ast.FunctionDef) and node.name == test_func:
+                        return ast.get_docstring(node) or "Not documented."
+        except Exception as e:
+            return f"Error reading docstring: {e}"
+
+        return "Docstring not found."
+
+    with open(output_path, "w") as f:
+        if not unique_failures:
+            f.write("All testcases passed.\n")
         else:
-            steps = longrepr[:500] + "\n(Full log in HTML report)"
+            for test in unique_failures:
+                doc = extract_docstring_from_file(test["nodeid"])
+                f.write(f"Test: {test['nodeid']}\nRepro Steps:\n{doc}\n\n---\n")
 
-        report_lines.append(f"Test: {test_name}")
-        report_lines.append("Repro Steps:")
-        report_lines.append(steps)
-        report_lines.append("\n---")
-
-    with open("jira_ticket_body.txt", "w", encoding="utf-8") as f:
-        f.write("\n".join(report_lines))
+    print(f"Jira summary written to {output_path}")
