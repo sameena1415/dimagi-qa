@@ -163,7 +163,8 @@ jobs:
           to: kbordoloi@dimagi.com
           from: <${{ secrets.DIMAGIQA_MAIL_USERNAME }}>
           content_type: text/html
-          body:${{ fromJSON(format('{"text": "{0}" }', steps.extract_summary.outputs.body_html_b64)).text }}
+          body: >-
+            ${{ fromJSON(format('{"text": "{0}"}', steps.extract_summary.outputs.body_html_b64)).text }}
           attachments: report_${{ matrix.environment }}.html
 
       - name: Set email vars
