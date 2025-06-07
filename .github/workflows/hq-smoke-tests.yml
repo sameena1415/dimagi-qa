@@ -133,19 +133,25 @@ jobs:
           from common_utilities.fixtures import generate_jira_summary_from_json_report
           generate_jira_summary_from_json_report('final_failures.json', 'jira_ticket_body.html')
           "
+      - name: Check if any test actually failed
+        id: check_summary
+        run: |
+          if grep -q "All testcases passed" jira_ticket_body.html; then
+            echo "send_email=false" >> $GITHUB_OUTPUT
+          else
+            echo "send_email=true" >> $GITHUB_OUTPUT
+          fi
 
       - name: Extract Summary for Email
         if: ${{ failure() && matrix.environment == 'production' }}
         id: extract_summary
         run: |
-          SUMMARY=$(cat jira_ticket_body.html)
-          SUMMARY="${SUMMARY//'%'/'%25'}"
-          SUMMARY="${SUMMARY//$'\n'/'%0A'}"
-          SUMMARY="${SUMMARY//$'\r'/'%0D'}"
-          echo "body_html=$SUMMARY" >> "$GITHUB_OUTPUT"
+          echo "body_html<<EOF" >> $GITHUB_OUTPUT
+          cat jira_ticket_body.html >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
 
       - name: Send Jira Ticket Email
-        if: ${{ failure() && matrix.environment == 'production' }}
+        if: ${{ failure() && matrix.environment == 'production' && steps.check_summary.outputs.send_email == 'true' }}
         uses: dawidd6/action-send-mail@v3
         with:
           server_address: smtp.gmail.com
@@ -156,8 +162,7 @@ jobs:
           to: kbordoloi@dimagi.com
           from: <${{ secrets.DIMAGIQA_MAIL_USERNAME }}>
           content_type: text/html
-          body: |
-            ${{ steps.extract_summary.outputs.body_html }}
+          body: ${{ steps.extract_summary.outputs.body_html }}
           attachments: report_${{ matrix.environment }}.html
 
       - name: Set email vars
