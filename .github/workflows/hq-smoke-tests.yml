@@ -127,29 +127,34 @@ jobs:
             exit 1
           fi
 
-      - name: Generate Jira HTML Summary from JSON Report
-        if: ${{ failure() }}
+      - name: Generate Jira Summary from HTML Report
+        if: ${{ failure() && matrix.environment == 'production' }}
+        id: generate_jira
         run: |
-          pip install beautifulsoup4 
+          pip install beautifulsoup4
           python3 -c "
-          from common_utilities.fixtures import generate_jira_summary_from_json_report
-          generate_jira_summary_from_json_report('final_failures.json', 'jira_ticket_body.html')
-          "
-      - name: Check if any test actually failed
+          from common_utilities.fixtures import generate_jira_summary_from_html_report
+          generate_jira_summary_from_html_report('report_production.html')"
+          
+
+      - name: Check Summary File Exists and Has Failures
+        if: ${{ failure() && matrix.environment == 'production' }}
         id: check_summary
         run: |
-          if grep -q "All testcases passed" jira_ticket_body.html; then
-            echo "send_email=false" >> $GITHUB_OUTPUT
+          if [[ -s "jira_ticket_body.html" ]]; then
+            echo "send_email=true" >> "$GITHUB_OUTPUT"
           else
-            echo "send_email=true" >> $GITHUB_OUTPUT
+            echo "send_email=false" >> "$GITHUB_OUTPUT"
           fi
+      
 
       - name: Extract Summary for Email
         if: ${{ failure() && matrix.environment == 'production' }}
         id: extract_summary
         run: |
-          ENCODED=$(base64 -w 0 jira_ticket_body.html)
-          echo "body_html_b64=$ENCODED" >> "$GITHUB_OUTPUT"
+          body_b64=$(base64 -w 0 jira_ticket_body.html)
+          echo "body_html_b64=$body_b64" >> "$GITHUB_OUTPUT"
+      
 
       - name: Check if jira_ticket_body.html exists
         if: ${{ failure() && matrix.environment == 'production' }}
@@ -177,20 +182,21 @@ jobs:
           "
 
       - name: Send Jira Ticket Email
-        if: ${{ steps.check_summary.outputs.send_email == 'true' }}
+        if: ${{ failure() && steps.check_summary.outputs.send_email == 'true' && matrix.environment == 'production' }}
         uses: dawidd6/action-send-mail@v3
         with:
           server_address: smtp.gmail.com
           server_port: 465
           username: ${{ secrets.DIMAGIQA_MAIL_USERNAME }}
           password: ${{ secrets.DIMAGIQA_MAIL_PASSWORD }}
-          subject: "[ Smoke Test ][ ${ { matrix.environment } } ] Automated Jira Ticket - Run #${{ github.run_number }} with ${{ steps.parse_counts.outputs.FAILED }} failures"
+          subject: "[Smoke Test][${{ matrix.environment }}] Jira Summary - Run #${{ github.run_number }} with ${{ steps.parse_counts.outputs.FAILED }} failures"
           to: kbordoloi@dimagi.com
           from: <${{ secrets.DIMAGIQA_MAIL_USERNAME }}>
           content_type: text/html
           body: |
-            ${{ steps.extract_summary.outputs.body_html }}
+            ${{ fromJSON(format('{"text": "{0}" }', steps.extract_summary.outputs.body_html_b64)).text }}
           attachments: report_${{ matrix.environment }}.html
+      
 
       - name: Set email vars
         if: ${{ failure() }}
