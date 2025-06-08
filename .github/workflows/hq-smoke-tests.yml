@@ -128,11 +128,9 @@ jobs:
         if: ${{ failure() && matrix.environment == 'production' }}
         id: extract_summary
         run: |
-          body_html=$(< jira_ticket_body.html)
-          body_html="${body_html//'%'/'%25'}"
-          body_html="${body_html//$'\n'/'%0A'}"
-          body_html="${body_html//$'\r'/'%0D'}"
-          echo "body_html=$body_html" >> $GITHUB_OUTPUT
+          echo "body_html<<EOF" >> $GITHUB_OUTPUT
+          cat jira_ticket_body.html >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
 
       - name: Send Jira Ticket Email
         if: ${{ failure() && matrix.environment == 'production' }}
