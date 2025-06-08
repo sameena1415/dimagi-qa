@@ -180,9 +180,9 @@ def check_if_any_test_failed(json_path="final_failures.json") -> bool:
         print(f"Error checking failures: {e}")
         return False
 
-def generate_jira_summary_from_json_report(json_path="final_failures.json", html_output="jira_ticket_body.html"):
+def generate_jira_summary_from_json_report(json_path="final_failures.json", output_path="jira_ticket_body.html"):
     """
-    Extracts failed test cases from JSON report and gathers their docstrings for Jira summary as HTML.
+    Extracts failed test cases from JSON report and gathers their docstrings for Jira summary in HTML format.
     """
     json_file = Path(json_path)
     if not json_file.exists():
@@ -224,22 +224,15 @@ def generate_jira_summary_from_json_report(json_path="final_failures.json", html
 
         return "Docstring not found."
 
-    with open(html_output, "w", encoding="utf-8") as f:
+    with open(output_path, "w") as f:
         if not unique_failures:
-            f.write("<p>✅ All testcases passed.</p>")
-            return
+            f.write("<p><b>All testcases passed.</b></p>\n")
         else:
+            f.write("<h2 style='color:red;'>🚨 Failed Test Cases Summary</h2>\n")
             for test in unique_failures:
                 doc = extract_docstring_from_file(test["nodeid"])
-                f.write(f"""
-                    <div style="margin-bottom: 25px;">
-                      <p><strong>Test:</strong> {test['nodeid']}</p>
-                      <p><strong>Repro Steps:</strong></p>
-                      <div style="margin-left: 20px;">
-                        {"<br>".join(doc.strip().splitlines())}
-                      </div>
-                    </div>
-                    <hr style="border:1px solid #ccc;">
-                    """)
+                f.write(f"<b>Test:</b> {test['nodeid']}<br>")
+                f.write("<b>Repro Steps:</b><br>")
+                f.write(f"{doc.replace(chr(10), '<br>')}<br><hr>")
 
-    print(f"Formatted Jira summary written to {html_output}")
+    print(f"Jira summary written to {output_path}")

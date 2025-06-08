@@ -96,8 +96,7 @@ jobs:
           echo "matrix environment: ${{ matrix.environment }}"
           echo "NOW=$(date +'%m-%d %H:%M')" >> $GITHUB_ENV
           echo ${{env.NOW}}
-          pytest -v --rootdir= HQSmokeTests/testCases -n 4 --dist=loadfile --reruns 1 --reruns-delay 1 --html=report_${{ matrix.environment }}.html --json-report --json-report-file=final_failures.json
-
+          pytest -v --rootdir= HQSmokeTests/testCases -n 4 --dist=loadfile --reruns 1 --reruns-delay 1 --html=report_${{ matrix.environment }}.html --self-contained-html --json-report --json-report-file=final_failures.json
 
       - name: Parse test counts
         id: parse_counts
@@ -120,83 +119,33 @@ jobs:
       - name: Fetch artifact ID
         run: echo 'Artifact ID is ${{ steps.artifact-upload-step.outputs.artifact-id }}'
 
-      - name: Check if jira_ticket_body.html exists
-        run: |
-          if [ ! -f "jira_ticket_body.html" ]; then
-            echo "Missing summary file!"
-            exit 1
-          fi
-
-      - name: Generate Jira HTML Summary from JSON Report
-        if: ${{ matrix.environment == 'production' && steps.check_failures.outputs.has_failures == 'true' }}
-        run: |
-          pip install beautifulsoup4
-          python3 -c "
-          from common_utilities.fixtures import generate_jira_summary_from_json_report
-          generate_jira_summary_from_json_report('final_failures.json', 'jira_ticket_body.html')
-          "
-          
-
-      - name: Check Summary File Exists and Has Failures
+      - name: Generate Jira Summary from HTML Report
         if: ${{ failure() && matrix.environment == 'production' }}
-        id: check_summary
         run: |
-          if [[ -s "jira_ticket_body.html" ]]; then
-            echo "send_email=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "send_email=false" >> "$GITHUB_OUTPUT"
-          fi
-      
+          python3 -c "from common_utilities.fixtures import generate_jira_summary_from_json_report; generate_jira_summary_from_json_report('final_failures.json', 'jira_ticket_body.html')"
 
-      - name: Extract Summary for Email
+      - name: Extract Summary for Email (HTML Base64)
         if: ${{ failure() && matrix.environment == 'production' }}
         id: extract_summary
         run: |
-          body_b64=$(base64 -w 0 jira_ticket_body.html)
-          echo "body_html_b64=$body_b64" >> "$GITHUB_OUTPUT"
-      
-
-      - name: Check if jira_ticket_body.html exists
-        if: ${{ failure() && matrix.environment == 'production' }}
-        id: check_summary_file
-        run: |
-          if [ -f "jira_ticket_body.html" ]; then
-            echo "exists=true" >> $GITHUB_OUTPUT
-          else
-            echo "Jira summary not generated (likely no test failures)"
-            echo "exists=false" >> $GITHUB_OUTPUT
-          fi
-
-      - name: Check if any test actually failed
-        if: ${{ failure() && matrix.environment == 'production' }}
-        id: has_failures
-        run: |
-          pip install -q beautifulsoup4
-          python3 -c "
-          import json
-          import os
-          from common_utilities.fixtures import check_if_any_test_failed
-          has_failed = check_if_any_test_failed()
-          with open(os.environ['GITHUB_OUTPUT'], 'a') as fh:
-            fh.write(f'has_failures={str(has_failed).lower()}\n')
-          "
+          ENCODED=$(base64 -w 0 jira_ticket_body.html)
+          echo "body_html_b64=$ENCODED" >> $GITHUB_OUTPUT
 
       - name: Send Jira Ticket Email
-        if: ${{ failure() && steps.check_summary.outputs.send_email == 'true' && matrix.environment == 'production' }}
+        if: ${{ failure() && matrix.environment == 'production' }}
         uses: dawidd6/action-send-mail@v3
         with:
           server_address: smtp.gmail.com
           server_port: 465
           username: ${{ secrets.DIMAGIQA_MAIL_USERNAME }}
           password: ${{ secrets.DIMAGIQA_MAIL_PASSWORD }}
-          subject: "[Smoke Test][${{ matrix.environment }}] Jira Summary - Run #${{ github.run_number }} with ${{ steps.parse_counts.outputs.FAILED }} failures"
+          subject: "[Smoke Test][${{ matrix.environment }}] Automated Jira Ticket created - Run #${{ github.run_number }} failed at ${{ env.NOW }}"
           to: kbordoloi@dimagi.com
           from: <${{ secrets.DIMAGIQA_MAIL_USERNAME }}>
           content_type: text/html
           body: |
-            ${{ fromJSON(format('{"text": "{0}" }', steps.extract_summary.outputs.body_html_b64)).text }}
+            ${{ fromJSON(format('{{"text": "{0}"}}', steps.extract_summary.outputs.body_html_b64)).text }}
           attachments: report_${{ matrix.environment }}.html
-      
 
       - name: Set email vars
         if: ${{ failure() }}
