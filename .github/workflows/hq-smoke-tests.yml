@@ -128,7 +128,7 @@ jobs:
           fi
 
       - name: Generate Jira HTML Summary from JSON Report
-        if: ${{ failure() && matrix.environment == 'production' }}
+        if: ${{ failure() }}
         run: |
           pip install beautifulsoup4 
           python3 -c "
@@ -177,7 +177,7 @@ jobs:
           "
 
       - name: Send Jira Ticket Email
-        if: ${{ steps.check_summary_file.outputs.exists == 'true' }}
+        if: ${{ steps.check_summary.outputs.send_email == 'true' }}
         uses: dawidd6/action-send-mail@v3
         with:
           server_address: smtp.gmail.com
