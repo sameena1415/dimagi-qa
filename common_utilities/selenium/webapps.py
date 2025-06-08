@@ -248,12 +248,13 @@ class WebApps(BasePage):
         self.wait_after_interaction(timeout=20)
         time.sleep(5)
         self.wait_for_element(self.alert_close_button, 40)
-        text = self.get_text(self.alert_close_text)
-        print(text)
-        if 'Asynchronous' in text:
-            print("Form not submitted successfully. Need Resubmission")
-            self.scroll_to_top()
-            self.async_restore_resubmit()
+        if self.is_present(self.form_submit):
+            if self.is_present(self.async_restore_error):
+                print("Form not submitted successfully. Need Resubmission")
+                self.scroll_to_top()
+                self.async_restore_resubmit()
+            elif self.is_present(self.form_submission_successful):
+                print("form submitted successfully")
         else:
             print("form submitted successfully")
         time.sleep(0.5)
