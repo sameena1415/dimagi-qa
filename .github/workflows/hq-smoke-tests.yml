@@ -127,14 +127,14 @@ jobs:
             exit 1
           fi
 
-      - name: Generate Jira Summary from HTML Report
-        if: ${{ failure() && matrix.environment == 'production' }}
-        id: generate_jira
+      - name: Generate Jira HTML Summary from JSON Report
+        if: ${{ matrix.environment == 'production' && steps.check_failures.outputs.has_failures == 'true' }}
         run: |
           pip install beautifulsoup4
           python3 -c "
-          from common_utilities.fixtures import generate_jira_summary_from_html_report
-          generate_jira_summary_from_html_report('report_production.html')"
+          from common_utilities.fixtures import generate_jira_summary_from_json_report
+          generate_jira_summary_from_json_report('final_failures.json', 'jira_ticket_body.html')
+          "
           
 
       - name: Check Summary File Exists and Has Failures
