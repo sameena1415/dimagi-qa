@@ -124,11 +124,15 @@ jobs:
         run: |
           python3 -c "from common_utilities.fixtures import generate_jira_summary_from_json_report; generate_jira_summary_from_json_report('final_failures.json', 'jira_ticket_body.html')"
 
-      - name: Extract Summary for Email (HTML Base64)
+      - name: Extract Summary for Email
         if: ${{ failure() && matrix.environment == 'production' }}
         id: extract_summary
         run: |
-          echo "body_html_b64=$(base64 -w 0 jira_ticket_body.html)" >> $GITHUB_OUTPUT
+          SUMMARY=$(cat jira_ticket_body.html)
+          SUMMARY="${SUMMARY//'%'/'%25'}"
+          SUMMARY="${SUMMARY//$'\n'/'%0A'}"
+          SUMMARY="${SUMMARY//$'\r'/'%0D'}"
+          echo "body=$SUMMARY" >> $GITHUB_OUTPUT
 
       - name: Send Jira Ticket Email
         if: ${{ failure() && matrix.environment == 'production' }}
@@ -138,12 +142,11 @@ jobs:
           server_port: 465
           username: ${{ secrets.DIMAGIQA_MAIL_USERNAME }}
           password: ${{ secrets.DIMAGIQA_MAIL_PASSWORD }}
-          subject: "[Smoke Test][${{ matrix.environment }}] Automated Jira Ticket created - Run #${{ github.run_number }} failed at ${{ env.NOW }}"
+          subject: "[Smoke Test][${{ matrix.environment }}] Jira Ticket - Run #${{ github.run_number }}"
           to: kbordoloi@dimagi.com
           from: <${{ secrets.DIMAGIQA_MAIL_USERNAME }}>
           content_type: text/html
-          body: >
-            ${{ fromJSON(format('{\"text\":\"{0}\"}', steps.extract_summary.outputs.body_html_b64)).text }}
+          body: ${{ steps.extract_summary.outputs.body }}
           attachments: report_${{ matrix.environment }}.html
 
       - name: Set email vars
