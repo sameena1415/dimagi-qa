@@ -128,11 +128,7 @@ jobs:
         if: ${{ failure() && matrix.environment == 'production' }}
         id: extract_summary
         run: |
-          {
-            echo 'body_html<<EOF'
-            cat jira_ticket_body.html
-            echo 'EOF'
-          } | tee -a "$GITHUB_OUTPUT"
+          echo "body_html_b64=$(base64 -w 0 jira_ticket_body.html)" >> $GITHUB_OUTPUT
 
       - name: Send Jira Ticket Email
         if: ${{ failure() && matrix.environment == 'production' }}
@@ -146,7 +142,7 @@ jobs:
           to: kbordoloi@dimagi.com
           from: <${{ secrets.DIMAGIQA_MAIL_USERNAME }}>
           content_type: text/html
-          body: ${{ steps.extract_summary.outputs.body_html }}
+          body: ${{ fromJSON(format('{\"text\":\"{0}\"}', steps.extract_summary.outputs.body_html_b64)).text }}
           attachments: report_${{ matrix.environment }}.html
 
       - name: Set email vars
