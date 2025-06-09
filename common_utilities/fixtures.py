@@ -180,9 +180,11 @@ def check_if_any_test_failed(json_path="final_failures.json") -> bool:
         print(f"Error checking failures: {e}")
         return False
 
-def generate_jira_summary_from_json_report(json_path="final_failures.json", output_path="jira_ticket_body.html"):
+from datetime import datetime  # Add this at the top if not already imported
+
+def generate_jira_summary_from_json_report(json_path="final_failures.json", output_path="jira_ticket_body.txt"):
     """
-    Extracts failed test cases from JSON report and gathers their docstrings for Jira summary in HTML format.
+    Extracts failed test cases from JSON report and gathers their docstrings for Jira summary in plain text format.
     """
     json_file = Path(json_path)
     if not json_file.exists():
@@ -224,15 +226,16 @@ def generate_jira_summary_from_json_report(json_path="final_failures.json", outp
 
         return "Docstring not found."
 
-    with open(output_path, "w") as f:
+    with open(output_path, "w", encoding="utf-8") as f:
         if not unique_failures:
-            f.write("<p><b>All testcases passed.</b></p>\n")
+            f.write("✅ All testcases passed.\n")
         else:
-            f.write("<h2 style='color:red;'>🚨 Failed Test Cases Summary</h2>\n")
+            f.write(f"🚨 Failed Test Cases Summary ({datetime.now().strftime('%Y-%m-%d %H:%M')})\n\n")
             for test in unique_failures:
                 doc = extract_docstring_from_file(test["nodeid"])
-                f.write(f"<b>Test:</b> {test['nodeid']}<br>")
-                f.write("<b>Repro Steps:</b><br>")
-                f.write(f"{doc.replace(chr(10), '<br>')}<br><hr>")
+                f.write(f"Test: {test['nodeid']}\n")
+                f.write("Repro Steps:\n")
+                f.write(f"{doc.strip()}\n")
+                f.write("---\n")
 
     print(f"Jira summary written to {output_path}")

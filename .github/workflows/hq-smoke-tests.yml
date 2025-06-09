@@ -128,10 +128,11 @@ jobs:
         if: ${{ failure() && matrix.environment == 'production' }}
         id: extract_summary
         run:  |
-          pip install beautifulsoup4
-          SUMMARY=$(python3 -c "from bs4 import BeautifulSoup; print(BeautifulSoup(open('jira_ticket_body.html'), 'html.parser').get_text())")
-          body_b64=$(echo "$SUMMARY" | base64 -w 0)
-          echo "body_b64=$body_b64" >> $GITHUB_OUTPUT
+          SUMMARY=$(cat jira_ticket_body.txt)
+          SUMMARY="${SUMMARY//'%'/'%25'}"
+          SUMMARY="${SUMMARY//$'\n'/'%0A'}"
+          SUMMARY="${SUMMARY//$'\r'/'%0D'}"
+          echo "body=$SUMMARY" >> "$GITHUB_OUTPUT"
 
       - name: Send Jira Ticket Email
         uses: dawidd6/action-send-mail@v3
@@ -144,7 +145,7 @@ jobs:
           to: kbordoloi@dimagi.com
           from: <${{ secrets.DIMAGIQA_MAIL_USERNAME }}>
           content_type: text/plain
-          body: ${{ fromBase64(steps.extract_summary.outputs.body_b64) }}
+          body: ${{ steps.extract_summary.outputs.body }}
           attachments: report_${{ matrix.environment }}.html
 
       - name: Set email vars
