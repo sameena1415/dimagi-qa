@@ -1,3 +1,5 @@
+from datetime import datetime
+
 import pytest
 from py.xml import html
 
@@ -180,11 +182,9 @@ def check_if_any_test_failed(json_path="final_failures.json") -> bool:
         print(f"Error checking failures: {e}")
         return False
 
-from datetime import datetime  # Add this at the top if not already imported
-
 def generate_jira_summary_from_json_report(json_path="final_failures.json", output_path="jira_ticket_body.html"):
     """
-    Extracts failed test cases from JSON report and gathers their docstrings for Jira summary in plain text format.
+    Extracts failed test cases from JSON report and gathers their docstrings for Jira summary in HTML format.
     """
     json_file = Path(json_path)
     if not json_file.exists():
@@ -227,15 +227,16 @@ def generate_jira_summary_from_json_report(json_path="final_failures.json", outp
         return "Docstring not found."
 
     with open(output_path, "w", encoding="utf-8") as f:
+        f.write("<html><body style='font-family:Arial,sans-serif;'>\n")
         if not unique_failures:
-            f.write("✅ All testcases passed.\n")
+            f.write("<p>✅ All testcases passed.</p>\n")
         else:
-            f.write(f"🚨 Failed Test Cases Summary ({datetime.now().strftime('%Y-%m-%d %H:%M')})\n\n")
+            f.write(f"<h2 style='color:red;'>🚨 Failed Test Cases Summary ({datetime.now().strftime('%Y-%m-%d %H:%M')})</h2>\n")
             for test in unique_failures:
                 doc = extract_docstring_from_file(test["nodeid"])
-                f.write(f"Test: {test['nodeid']}\n")
-                f.write("Repro Steps:\n")
-                f.write(f"{doc.strip()}\n")
-                f.write("---\n")
+                f.write(f"<b>Test:</b> {test['nodeid']}<br>\n")
+                f.write(f"<b>Repro Steps:</b><br>\n")
+                f.write(f"{doc.strip().replace('\n', '<br>')}<br><hr>\n")
+        f.write("</body></html>\n")
 
     print(f"Jira summary written to {output_path}")
