@@ -128,9 +128,11 @@ jobs:
         id: extract_summary
         if: ${{ failure() && matrix.environment == 'production' }}
         run: |
-          echo "body_html<<EOF" >> $GITHUB_OUTPUT
-          cat jira_ticket_body.html >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
+          {
+            echo 'body_html<<EOF'
+            cat jira_ticket_body.html
+            echo 'EOF'
+          } | tee -a "$GITHUB_OUTPUT"
       
 
       - name: Send Jira Ticket Email
@@ -144,7 +146,6 @@ jobs:
           subject: "[Smoke Test][${{ matrix.environment }}] Jira Ticket - Run #${{ github.run_number }}"
           to: kbordoloi@dimagi.com
           from: <${{ secrets.DIMAGIQA_MAIL_USERNAME }}>
-          content_type: text/html
           html_body: ${{ steps.extract_summary.outputs.body_html }}
           attachments: report_${{ matrix.environment }}.html
 
