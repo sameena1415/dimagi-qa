@@ -122,7 +122,7 @@ jobs:
       - name: Generate Jira Summary from HTML Report
         if: ${{ failure() && matrix.environment == 'production' }}
         run: |
-          python3 -c "from common_utilities.fixtures import generate_jira_summary_from_json_report; generate_jira_summary_from_json_report('final_failures.json', 'jira_ticket_body.html')"
+          python3 -c "from common_utilities.fixtures import generate_jira_summary_from_json_report; generate_jira_summary_from_json_report('final_failures.json', 'jira_ticket_body.txt')"
 
       - name: Extract Summary for Email
         if: ${{ failure() && matrix.environment == 'production' }}
