@@ -141,8 +141,8 @@ jobs:
           subject: "[Smoke Test][${{ matrix.environment }}] Jira Ticket - Run #${{ github.run_number }}"
           to: kbordoloi@dimagi.com
           from: <${{ secrets.DIMAGIQA_MAIL_USERNAME }}>
-          content_type: text/plain
-          body: ${{ github.workspace }}/jira_email_body.txt
+          content_type: text/html
+          html_body: ${{ github.workspace }}/jira_ticket_body.html
           attachments: report_${{ matrix.environment }}.html
 
       - name: Set email vars
