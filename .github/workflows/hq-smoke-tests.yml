@@ -127,13 +127,14 @@ jobs:
       - name: Extract Summary for Email
         if: ${{ failure() && matrix.environment == 'production' }}
         id: extract_summary
-        run: |
-          sudo apt-get update && sudo apt-get install -y python3
+        run:  |
+          pip install beautifulsoup4
           SUMMARY=$(python3 -c "from bs4 import BeautifulSoup; print(BeautifulSoup(open('jira_ticket_body.html'), 'html.parser').get_text())")
           SUMMARY="${SUMMARY//'%'/'%25'}"
-          SUMMARY="${SUMMARY//$'\n'/'%0A'}"
           SUMMARY="${SUMMARY//$'\r'/'%0D'}"
-          echo "body=$SUMMARY" >> $GITHUB_OUTPUT
+          echo "body<<EOF" >> $GITHUB_OUTPUT
+          echo "$SUMMARY" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
 
       - name: Send Jira Ticket Email
         if: ${{ failure() && matrix.environment == 'production' }}
