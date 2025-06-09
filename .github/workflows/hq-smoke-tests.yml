@@ -124,11 +124,14 @@ jobs:
         run: |
           python3 -c "from common_utilities.fixtures import generate_jira_summary_from_json_report; generate_jira_summary_from_json_report('final_failures.json', 'jira_ticket_body.html')"
 
-      - name: Extract Summary for Email
-        if: ${{ failure() && matrix.environment == 'production' }}
+      - name: Extract JIRA Summary HTML
         id: extract_summary
+        if: ${{ failure() && matrix.environment == 'production' }}
         run: |
-          sed 's/%/%%/g' jira_ticket_body.html > jira_email_body.txt
+          echo "body_html<<EOF" >> $GITHUB_OUTPUT
+          cat jira_ticket_body.html >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+      
 
       - name: Send Jira Ticket Email
         if: ${{ failure() && matrix.environment == 'production' }}
@@ -142,7 +145,7 @@ jobs:
           to: kbordoloi@dimagi.com
           from: <${{ secrets.DIMAGIQA_MAIL_USERNAME }}>
           content_type: text/html
-          html_body: ${{ github.workspace }}/jira_ticket_body.html
+          html_body: ${{ steps.extract_summary.outputs.body_html }}
           attachments: report_${{ matrix.environment }}.html
 
       - name: Set email vars
