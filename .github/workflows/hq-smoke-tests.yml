@@ -128,7 +128,8 @@ jobs:
         if: ${{ failure() && matrix.environment == 'production' }}
         id: extract_summary
         run: |
-          SUMMARY=$(cat jira_ticket_body.html)
+          sudo apt-get update && sudo apt-get install -y python3
+          SUMMARY=$(python3 -c "from bs4 import BeautifulSoup; print(BeautifulSoup(open('jira_ticket_body.html'), 'html.parser').get_text())")
           SUMMARY="${SUMMARY//'%'/'%25'}"
           SUMMARY="${SUMMARY//$'\n'/'%0A'}"
           SUMMARY="${SUMMARY//$'\r'/'%0D'}"
