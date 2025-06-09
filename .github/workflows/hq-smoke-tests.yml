@@ -130,14 +130,10 @@ jobs:
         run:  |
           pip install beautifulsoup4
           SUMMARY=$(python3 -c "from bs4 import BeautifulSoup; print(BeautifulSoup(open('jira_ticket_body.html'), 'html.parser').get_text())")
-          SUMMARY="${SUMMARY//'%'/'%25'}"
-          SUMMARY="${SUMMARY//$'\r'/'%0D'}"
-          echo "body<<EOF" >> $GITHUB_OUTPUT
-          echo "$SUMMARY" >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
+          body_b64=$(echo "$SUMMARY" | base64 -w 0)
+          echo "body_b64=$body_b64" >> $GITHUB_OUTPUT
 
       - name: Send Jira Ticket Email
-        if: ${{ failure() && matrix.environment == 'production' }}
         uses: dawidd6/action-send-mail@v3
         with:
           server_address: smtp.gmail.com
@@ -147,8 +143,8 @@ jobs:
           subject: "[Smoke Test][${{ matrix.environment }}] Jira Ticket - Run #${{ github.run_number }}"
           to: kbordoloi@dimagi.com
           from: <${{ secrets.DIMAGIQA_MAIL_USERNAME }}>
-          content_type: text/html
-          body: ${{ steps.extract_summary.outputs.body }}
+          content_type: text/plain
+          body: ${{ fromBase64(steps.extract_summary.outputs.body_b64) }}
           attachments: report_${{ matrix.environment }}.html
 
       - name: Set email vars
@@ -186,7 +182,7 @@ jobs:
 
             let receivers = 'qa-automation@dimagi.com'
             if (context.eventName !== "pull_request" || context.eventName !== "push") {
-              receivers = 'qa@dimagi.com, sameena.shaik@fissionlabs.com, pruthvi.gottimukkula@fissionlabs.com'
+              receivers = 'qa@dimagi.com, sameena.shaik@fissionlabs.com'
             }
 
             return {
