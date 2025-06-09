@@ -119,15 +119,23 @@ jobs:
       - name: Fetch artifact ID
         run: echo 'Artifact ID is ${{ steps.artifact-upload-step.outputs.artifact-id }}'
 
+      - name: Set JIRA email flag
+        if: ${{ failure() }}
+        run: |
+          if [ "${{ matrix.environment }}" == "production" ]; then
+            echo "SEND_JIRA_EMAIL=true" >> $GITHUB_ENV
+          fi
+
+
       - name: Generate Jira Summary from HTML Report
-        if: ${{ failure() && matrix.environment == 'production' }}
+        if: ${{ env.SEND_JIRA_EMAIL == 'true' }}
         run: |
           python3 -c "from common_utilities.fixtures import generate_jira_summary_from_json_report; generate_jira_summary_from_json_report('final_failures.json', 'jira_ticket_body.txt')"
 
       - name: Extract Summary for Email
-        if: ${{ failure() && matrix.environment == 'production' }}
+        if: ${{ env.SEND_JIRA_EMAIL == 'true' }}
         id: extract_summary
-        run:  |
+        run: |
           SUMMARY=$(cat jira_ticket_body.txt)
           SUMMARY="${SUMMARY//'%'/'%25'}"
           SUMMARY="${SUMMARY//$'\n'/'%0A'}"
@@ -135,6 +143,7 @@ jobs:
           echo "body=$SUMMARY" >> "$GITHUB_OUTPUT"
 
       - name: Send Jira Ticket Email
+        if: ${{ env.SEND_JIRA_EMAIL == 'true' }}
         uses: dawidd6/action-send-mail@v3
         with:
           server_address: smtp.gmail.com
