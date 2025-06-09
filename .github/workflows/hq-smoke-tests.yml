@@ -120,13 +120,13 @@ jobs:
         run: echo 'Artifact ID is ${{ steps.artifact-upload-step.outputs.artifact-id }}'
 
       - name: Generate Jira Summary from HTML Report
-        if: ${{ failure() && matrix.environment == 'production' }}
+        if: ${{ failure() }}
         run: |
           python3 -c "from common_utilities.fixtures import generate_jira_summary_from_json_report; generate_jira_summary_from_json_report('final_failures.json', 'jira_ticket_body.html')"
 
       - name: Extract JIRA Summary HTML
         id: extract_summary
-        if: ${{ failure() && matrix.environment == 'production' }}
+        if: ${{ failure() }}
         run: |
           {
             echo 'body_html<<EOF'
@@ -136,14 +136,14 @@ jobs:
       
 
       - name: Send Jira Ticket Email
-        if: ${{ failure() && matrix.environment == 'production' }}
+        if: ${{ failure() }}
         uses: dawidd6/action-send-mail@v3
         with:
           server_address: smtp.gmail.com
           server_port: 465
           username: ${{ secrets.DIMAGIQA_MAIL_USERNAME }}
           password: ${{ secrets.DIMAGIQA_MAIL_PASSWORD }}
-          subject: "[Smoke Test][${{ matrix.environment }}] Jira Ticket - Run #${{ github.run_number }}"
+          subject: "[Smoke Test][${{ matrix.environment }}] Automated Jira Ticket - HQSmokeTest Run #${{ github.run_number }} with ${{ steps.parse_counts.outputs.ERROR }} Test Failure(s)"
           to: kbordoloi@dimagi.com
           from: <${{ secrets.DIMAGIQA_MAIL_USERNAME }}>
           html_body: ${{ steps.extract_summary.outputs.body_html }}
