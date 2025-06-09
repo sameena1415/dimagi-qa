@@ -98,6 +98,13 @@ jobs:
           echo ${{env.NOW}}
           pytest -v --rootdir= HQSmokeTests/testCases -n 4 --dist=loadfile --reruns 1 --reruns-delay 1 --html=report_${{ matrix.environment }}.html --self-contained-html --json-report --json-report-file=final_failures.json
 
+      - name: Set JIRA email flag
+        if: ${{ failure() }}
+        run: |
+          if [ "${{ matrix.environment }}" == "production" ]; then
+            echo "SEND_JIRA_EMAIL=true" >> $GITHUB_ENV
+          fi
+
       - name: Parse test counts
         id: parse_counts
         if: always()
@@ -118,14 +125,6 @@ jobs:
 
       - name: Fetch artifact ID
         run: echo 'Artifact ID is ${{ steps.artifact-upload-step.outputs.artifact-id }}'
-
-      - name: Set JIRA email flag
-        if: ${{ failure() }}
-        run: |
-          if [ "${{ matrix.environment }}" == "production" ]; then
-            echo "SEND_JIRA_EMAIL=true" >> $GITHUB_ENV
-          fi
-
 
       - name: Generate Jira Summary from HTML Report
         if: ${{ env.SEND_JIRA_EMAIL == 'true' }}
