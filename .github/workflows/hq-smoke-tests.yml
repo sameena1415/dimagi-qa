@@ -128,11 +128,7 @@ jobs:
         if: ${{ failure() && matrix.environment == 'production' }}
         id: extract_summary
         run: |
-          SUMMARY=$(cat jira_ticket_body.html)
-          SUMMARY="${SUMMARY//'%'/'%25'}"
-          SUMMARY="${SUMMARY//$'\n'/'%0A'}"
-          SUMMARY="${SUMMARY//$'\r'/'%0D'}"
-          echo "body=$SUMMARY" >> "$GITHUB_OUTPUT"
+          sed 's/%/%%/g' jira_ticket_body.html > jira_email_body.txt
 
       - name: Send Jira Ticket Email
         if: ${{ failure() && matrix.environment == 'production' }}
@@ -146,7 +142,7 @@ jobs:
           to: kbordoloi@dimagi.com
           from: <${{ secrets.DIMAGIQA_MAIL_USERNAME }}>
           content_type: text/plain
-          body: ${{ steps.extract_summary.outputs.body }}
+          body: ${{ github.workspace }}/jira_email_body.txt
           attachments: report_${{ matrix.environment }}.html
 
       - name: Set email vars
