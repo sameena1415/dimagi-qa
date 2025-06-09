@@ -182,7 +182,7 @@ def check_if_any_test_failed(json_path="final_failures.json") -> bool:
 
 from datetime import datetime  # Add this at the top if not already imported
 
-def generate_jira_summary_from_json_report(json_path="final_failures.json", output_path="jira_ticket_body.txt"):
+def generate_jira_summary_from_json_report(json_path="final_failures.json", output_path="jira_ticket_body.html"):
     """
     Extracts failed test cases from JSON report and gathers their docstrings for Jira summary in plain text format.
     """

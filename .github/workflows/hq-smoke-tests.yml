@@ -98,13 +98,6 @@ jobs:
           echo ${{env.NOW}}
           pytest -v --rootdir= HQSmokeTests/testCases -n 4 --dist=loadfile --reruns 1 --reruns-delay 1 --html=report_${{ matrix.environment }}.html --self-contained-html --json-report --json-report-file=final_failures.json
 
-      - name: Set JIRA email flag
-        if: ${{ failure() }}
-        run: |
-          if [ "${{ matrix.environment }}" == "production" ]; then
-            echo "SEND_JIRA_EMAIL=true" >> $GITHUB_ENV
-          fi
-
       - name: Parse test counts
         id: parse_counts
         if: always()
@@ -127,22 +120,22 @@ jobs:
         run: echo 'Artifact ID is ${{ steps.artifact-upload-step.outputs.artifact-id }}'
 
       - name: Generate Jira Summary from HTML Report
-        if: ${{ env.SEND_JIRA_EMAIL == 'true' }}
+        if: ${{ failure() && matrix.environment == 'production' }}
         run: |
-          python3 -c "from common_utilities.fixtures import generate_jira_summary_from_json_report; generate_jira_summary_from_json_report('final_failures.json', 'jira_ticket_body.txt')"
+          python3 -c "from common_utilities.fixtures import generate_jira_summary_from_json_report; generate_jira_summary_from_json_report('final_failures.json', 'jira_ticket_body.html')"
 
       - name: Extract Summary for Email
-        if: ${{ env.SEND_JIRA_EMAIL == 'true' }}
+        if: ${{ failure() && matrix.environment == 'production' }}
         id: extract_summary
         run: |
-          SUMMARY=$(cat jira_ticket_body.txt)
+          SUMMARY=$(cat jira_ticket_body.html)
           SUMMARY="${SUMMARY//'%'/'%25'}"
           SUMMARY="${SUMMARY//$'\n'/'%0A'}"
           SUMMARY="${SUMMARY//$'\r'/'%0D'}"
           echo "body=$SUMMARY" >> "$GITHUB_OUTPUT"
 
       - name: Send Jira Ticket Email
-        if: ${{ env.SEND_JIRA_EMAIL == 'true' }}
+        if: ${{ failure() && matrix.environment == 'production' }}
         uses: dawidd6/action-send-mail@v3
         with:
           server_address: smtp.gmail.com
