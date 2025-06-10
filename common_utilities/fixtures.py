@@ -231,7 +231,7 @@ def generate_jira_summary_from_json_report(json_path="final_failures.json", outp
         if not unique_failures:
             f.write("<p>✅ All testcases passed.</p>\n")
         else:
-            f.write(f"<h2 style='color:red;'>🚨 Failed Test Cases Summary ({datetime.now().strftime('%Y-%m-%d %H:%M')})</h2>\n")
+            f.write(f"<h2 style='color:red;'>🚨 Failed Test Cases with Reproducible Steps ({datetime.now().strftime('%Y-%m-%d %H:%M')})</h2>\n")
             for test in unique_failures:
                 doc = extract_docstring_from_file(test["nodeid"])
                 f.write(f"<b>Test:</b> {test['nodeid']}<br>\n")
