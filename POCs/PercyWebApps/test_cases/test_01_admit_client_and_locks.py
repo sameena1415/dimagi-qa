@@ -1,13 +1,7 @@
-import pytest
-
-from Features.CaseSearch.constants import *
-from Features.CaseSearch.test_pages.casesearch_page import CaseSearchWorkflows
 from POCs.PercyWebApps.test_pages.visual_test_page import VisualTestPage
-from USH_Apps.CO_BHA.test_pages.bha_app_pages import BhaWorkflows
 from POCs.PercyWebApps.user_inputs.bha_user_inputs import BhaUserInput
-from common_utilities.hq_login.login_page import LoginPage
 from common_utilities.selenium.webapps import WebApps
-import names
+
 
 
 def test_case_take_screenshots(driver, settings):

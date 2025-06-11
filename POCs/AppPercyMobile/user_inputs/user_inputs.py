@@ -5,8 +5,8 @@ class UserInput:
     """Test Data"""
 
     screens = {
-        "app_code_install_screen_before": "app_code_install_screen_after",
-        "app_code_install_screen_after": "app_code_install_screen_before",
+        "app_code_install_screen_before": "app_code_install_screen_before",
+        "app_code_install_screen_after": "app_code_install_screen_after",
         "login_before": "login_before",
         "login_after" : "login_after",
         "home_screen": "home_screen",
