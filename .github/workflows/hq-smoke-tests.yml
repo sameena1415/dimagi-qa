@@ -20,7 +20,6 @@ on:
         options:
           - staging
           - production
-          - india
           - eu
   schedule:
     - cron: '30 6 * * 1-5'
@@ -47,7 +46,7 @@ jobs:
       - id: set-matrix-default
         if: ${{ github.event_name != 'repository_dispatch' }}
         run: |
-          echo "::set-output name=matrix::{\"environment\": [\"production\", \"staging\",\"india\",\"eu\"]}"
+          echo "::set-output name=matrix::{\"environment\": [\"production\", \"staging\",\"eu\"]}"
       - id: invalid-deploy
         if: ${{ github.event_name == 'repository_dispatch' && github.event.client_payload.environment != 'production' }}
         run: |
