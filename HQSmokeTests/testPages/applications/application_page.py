@@ -38,7 +38,7 @@ class ApplicationPage(BasePage):
         self.confirm_change = (By.XPATH, "(//button[@data-bind=\"click: save, hasFocus: saveHasFocus, visible: !isSaving()\"])[1]")
         self.add_module = (By.XPATH, "//a[contains(@class,'new-module') or contains(@class,'appnav-add js-add-new-item')]/i")
         self.add_case_list = (By.XPATH, "//button[@data-type='case']")
-        self.add_questions = (By.XPATH, "//div[@class='dropdown fd-add-question-dropdown']")
+        self.add_questions = (By.XPATH, "//div[@class='dropdown fd-add-question-dropdown']/button")
         self.text_question = (By.XPATH, "//a[@data-qtype='Text']")
         self.advanced_question = (By.XPATH, "//a[@data-qtype='Geopoint'][contains(.,'Advanced')]")
         self.location_question = (By.XPATH, "//a[@data-qtype='Geopoint'][contains(.,'GPS')]")
@@ -186,7 +186,17 @@ class ApplicationPage(BasePage):
             self.js_click(self.actions_tab)
         self.wait_for_element(self.download_xml)
         self.click(self.download_xml)
-        wait_for_download_to_finish(file_extension=".xml")
+        file_name=wait_for_download_to_finish(file_extension=".xml")
+        time.sleep(5)
+        # newest_file = latest_download_file(".xml")
+        if 'xml' in file_name:
+            file_that_was_downloaded = PathSettings.DOWNLOAD_PATH / file_name
+        else:
+            print("Not the expected file. Downloading again...")
+            self.js_click(self.download_xml)
+            file_name = wait_for_download_to_finish(file_extension=".xml")
+            # newest_file = latest_download_file(".xml")
+            file_that_was_downloaded = PathSettings.DOWNLOAD_PATH / file_name
         print("XML downloaded successfully")
         time.sleep(4)
         self.wait_to_click(self.add_form_button)
@@ -200,8 +210,6 @@ class ApplicationPage(BasePage):
         self.click(self.actions_tab)
         self.wait_for_element(self.upload_xml)
         self.click(self.upload_xml)
-        newest_file = latest_download_file(".xml")
-        file_that_was_downloaded = PathSettings.DOWNLOAD_PATH / newest_file
         print(f"file_that_was_downloaded: {file_that_was_downloaded}")
         self.send_keys(self.choose_file, str(file_that_was_downloaded))
         self.wait_to_click(self.upload)

@@ -272,3 +272,7 @@ P1P2Tests/settings.cfg
 /P1P2Tests/userInputs/test_data/import_to_parent_*
 
 LocustScripts/update-scripts/project-config/co-carecoordination-perf/mobile_worker_credentials.json
+
+/POCs/AppPercyMobile/settings.cfg
+/POCs/PercyWebApps/settings.cfg
+/POCs/VisualComparison/settings.cfg

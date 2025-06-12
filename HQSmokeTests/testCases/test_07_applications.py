@@ -49,6 +49,7 @@ def test_case_37_form_xml_download_upload(driver):
         3. Ensure this new form is a copy of the original form
     """
     load = ApplicationPage(driver)
+    load.create_new_application()
     load.form_xml_download_upload()
 
 
@@ -104,8 +105,10 @@ def test_case_38_create_new_build_deploy_to_mobile(driver, settings):
     """
     if 'staging' in settings['url']:
         pytest.xfail("Failing on Staging due to QA-7314")
-    elif  "eu" in settings["url"]:
+    if  "eu" in settings["url"]:
         pytest.skip("App code is not getting displayed")
+    if  "india" in settings["url"]:
+        pytest.skip("App code limit exhausted for the month")
     load = ApplicationPage(driver)
     load.opening_dashboard()
     install_code, field_text = load.update_form_field()

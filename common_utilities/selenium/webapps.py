@@ -221,6 +221,7 @@ class WebApps(BasePage):
     def select_case_and_continue(self, case_name):
         self.select_case(case_name)
         self.continue_to_forms()
+        self.wait_after_interaction(timeout=20)
         self.wait_for_element(self.content_container, timeout=30)
         form_names = self.find_elements_texts(self.form_names)
         return form_names
@@ -364,6 +365,7 @@ class WebApps(BasePage):
 
     def open_data_preview(self):
         self.wait_to_click(self.data_preview)
+        time.sleep(5)
 
     def present_in_data_preview(self, value):
         value_in_data_preview = self.get_element(self.value_in_data_preview, value)

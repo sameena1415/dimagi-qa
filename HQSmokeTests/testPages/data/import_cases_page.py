@@ -40,8 +40,15 @@ class ImportCasesPage(BasePage):
         self.wait_for_element(self.choose_file)
         print(str(self.renamed_file))
         self.send_keys(self.choose_file, self.renamed_file)
-        
         self.wait_for_element(self.next_step)
+        if self.is_present(self.alert_msg):
+            print("Upload might have failed. Reuploading...")
+            self.reload_page()
+            self.wait_for_element(self.choose_file)
+            self.send_keys(self.choose_file, self.renamed_file)
+            self.wait_for_element(self.next_step)
+        else:
+            print("Upload successful.")
         self.click(self.next_step)
         self.is_visible_and_displayed(self.case_type)
         self.select_by_text(self.case_type, UserData.case_pregnancy)

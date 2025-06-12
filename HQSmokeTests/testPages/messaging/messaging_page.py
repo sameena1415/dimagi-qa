@@ -287,7 +287,14 @@ class MessagingPage(BasePage):
 
     def cond_alert_upload(self):
         newest_file = latest_download_file()
-        file_that_was_downloaded = PathSettings.DOWNLOAD_PATH / newest_file
+        if 'Alerts' in newest_file:
+            file_that_was_downloaded = PathSettings.DOWNLOAD_PATH / newest_file
+        else:
+            print("Not the expected file. Downloading again...")
+            self.js_click(self.download_id)
+            wait_for_download_to_finish()
+            newest_file = latest_download_file()
+            file_that_was_downloaded = PathSettings.DOWNLOAD_PATH / newest_file
         self.send_keys(self.choose_file, str(file_that_was_downloaded))
         self.wait_to_click(self.upload)
         self.wait_for_element(self.upload_success_message)

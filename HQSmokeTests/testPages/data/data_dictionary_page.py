@@ -6,8 +6,7 @@ from selenium.webdriver.common.by import By
 from common_utilities.generate_random_string import fetch_random_string
 from common_utilities.selenium.base_page import BasePage
 from common_utilities.path_settings import PathSettings
-from HQSmokeTests.testPages.users.org_structure_page import latest_download_file
-
+from HQSmokeTests.testPages.users.org_structure_page import latest_download_file, wait_for_download_to_finish
 
 """"Contains test page elements and functions related to data dictionary module"""
 
@@ -40,7 +39,14 @@ class DataDictionaryPage(BasePage):
             self.click(self.export_button)
             time.sleep(2)
             newest_file = latest_download_file()
-            self.assert_downloaded_file(newest_file, "data_dictionary"), "Download Not Completed!"
+            if 'data_dictionary' in newest_file:
+                self.assert_downloaded_file(newest_file, "data_dictionary"), "Download Not Completed!"
+            else:
+                print("Not the expected file. Downloading again...")
+                self.js_click(self.export_button)
+                wait_for_download_to_finish()
+                newest_file = latest_download_file()
+                self.assert_downloaded_file(newest_file, "data_dictionary"), "Download Not Completed!"
             print("File download successful")
         except TimeoutException:
             print("TIMEOUT ERROR: Still preparing for download..Celery might be down..")
