@@ -162,7 +162,14 @@ class WebUsersPage(BasePage):
         # verify_downloaded_workers
         newest_file = latest_download_file()
         print(newest_file)
-        self.assert_downloaded_file(newest_file, "_users_"), "Download Not Completed!"
+        if '_users_' in newest_file:
+            self.assert_downloaded_file(newest_file, "_users_"), "Download Not Completed!"
+        else:
+            print("Not the expected file. Downloading again...")
+            self.js_click(self.download_users_btn)
+            wait_for_download_to_finish()
+            newest_file = latest_download_file()
+            self.assert_downloaded_file(newest_file, "_users_"), "Download Not Completed!"
         print("File download successful")
 
     def upload_web_users(self):

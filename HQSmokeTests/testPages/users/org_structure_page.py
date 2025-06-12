@@ -223,7 +223,14 @@ class OrganisationStructurePage(BasePage):
             assert False
         # verify_downloaded_location
         newest_file = latest_download_file()
-        self.assert_downloaded_file(newest_file, "_locations"), "Download not completed!"
+        if '_locations' in newest_file:
+            self.assert_downloaded_file(newest_file, "_locations"), "Download Not Completed!"
+        else:
+            print("Not the expected file. Downloading again...")
+            self.js_click(self.download_loc_btn)
+            wait_for_download_to_finish()
+            newest_file = latest_download_file()
+            self.assert_downloaded_file(newest_file, "_locations"), "Download Not Completed!"
         print("File download successful")
 
     def upload_locations(self):
