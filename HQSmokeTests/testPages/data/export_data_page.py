@@ -78,6 +78,7 @@ class ExportDataPage(BasePage):
         self.web_users_option = (By.XPATH, "//li/span[.='[Web Users]']")
         self.all_data_option = (By.XPATH, "//li/span[.='[All Data]']")
         self.users_field = (By.XPATH, "(//textarea[@class='select2-search__field'])[1]")
+        self.user_selected = "//span[contains(@class, 'choice') and .='{}']"
         self.users_list_item = "//ul[@role='listbox']/li[contains(.,'{}')]"
         self.users_list = (By.XPATH, "//ul[contains(@class,'select2-results__options')]/li")
         self.user_from_list = "//li[contains(.,'{}')]"
@@ -199,8 +200,12 @@ class ExportDataPage(BasePage):
             time.sleep(2)
         self.date_filter()
         if flag == None:
-            self.send_keys(self.users_field, UserData.web_user)
-            self.wait_to_click((By.XPATH, self.users_list_item.format(UserData.web_user)))
+            if not self.is_present((By.XPATH, self.user_selected.format(UserData.web_user))):
+                print("Web User option is not already selected")
+                self.send_keys(self.users_field, UserData.web_user)
+                self.wait_to_click((By.XPATH, self.users_list_item.format(UserData.web_user)))
+            else:
+                print("Web User option is already selected")
         self.wait_and_sleep_to_click(self.prepare_export_button, timeout=10)
         try:
             self.wait_till_progress_completes("exports")
