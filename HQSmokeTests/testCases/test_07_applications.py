@@ -49,6 +49,7 @@ def test_case_37_form_xml_download_upload(driver):
         3. Ensure this new form is a copy of the original form
     """
     load = ApplicationPage(driver)
+    load.create_new_application()
     load.form_xml_download_upload()
 
 

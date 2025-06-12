@@ -594,11 +594,13 @@ class BasePage:
     def back(self):
         try:
             self.driver.back()
+            self.wait_after_interaction(timeout=20)
             print("[INFO] Navigated back using driver.back()")
         except WebDriverException as e:
             print(f"[WARNING] driver.back() failed: {e}. Trying JavaScript fallback...")
             try:
                 self.driver.execute_script("window.history.back();")
+                self.wait_after_interaction(timeout=20)
                 print("[INFO] Navigated back using JavaScript")
             except Exception as js_e:
                 print(f"[ERROR] JavaScript fallback also failed: {js_e}")

@@ -40,7 +40,6 @@ class ImportCasesPage(BasePage):
         self.wait_for_element(self.choose_file)
         print(str(self.renamed_file))
         self.send_keys(self.choose_file, self.renamed_file)
-        
         self.wait_for_element(self.next_step)
         self.click(self.next_step)
         self.is_visible_and_displayed(self.case_type)

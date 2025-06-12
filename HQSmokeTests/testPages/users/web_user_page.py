@@ -84,6 +84,8 @@ class WebUsersPage(BasePage):
             self.wait_to_clear_and_send_keys(self.email_input, UserData.yahoo_user_name)
             self.select_by_value(self.select_project_role_id, role)
             self.wait_to_click(self.send_invite)
+        print("Waiting for sometime for the status to get updated...")
+        time.sleep(5)
 
     def assert_invitation_sent(self):
         time.sleep(2)
