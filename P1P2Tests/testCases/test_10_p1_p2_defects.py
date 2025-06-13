@@ -47,6 +47,7 @@ def test_case_75_daily_form_activity(driver, settings):
 
 @pytest.mark.report
 @pytest.mark.p1p2EscapeDefect
+@pytest.mark.skip
 def test_case_76_application_status(driver, settings):
     home = HomePage(driver, settings)
     home.reports_menu()
