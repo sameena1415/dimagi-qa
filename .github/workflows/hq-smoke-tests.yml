@@ -47,7 +47,7 @@ jobs:
       - id: set-matrix-default
         if: ${{ github.event_name != 'repository_dispatch' }}
         run: |
-          echo "::set-output name=matrix::{\"environment\": [\"production\", \"staging\", \"india\",\"eu\"]}"
+          echo "::set-output name=matrix::{\"environment\": [\"production\", \"staging\", \"india\"]}"
       - id: invalid-deploy
         if: ${{ github.event_name == 'repository_dispatch' && github.event.client_payload.environment != 'production' }}
         run: |

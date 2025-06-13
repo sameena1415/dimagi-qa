@@ -973,6 +973,7 @@ class LookUpTablePage(BasePage):
                 self.wait_to_click(self.home)
             app.login_as_app_preview(UserData.user_ids_list[i])
             self.submit_form_on_registration("en", UserData.user_ids_list[i])
+            time.sleep(5)
 
     def language_submit_form_on_registration(self, language_list, user, type):
         app_preview = AppPreviewPage(self.driver)

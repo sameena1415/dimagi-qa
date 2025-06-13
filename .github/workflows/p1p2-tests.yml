@@ -4,10 +4,6 @@
 name: Priority Escape Defects Tests
 
 on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
   workflow_dispatch:
     inputs:
       environment:
