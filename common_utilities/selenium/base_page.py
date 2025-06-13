@@ -169,9 +169,39 @@ class BasePage:
                 return
         raise Exception(f"[ERROR] Option with partial text '{partial_text}' not found.")
 
-    def select_by_text(self, source_locator, value):
-        select_source = Select(self.driver.find_element(*source_locator))
-        select_source.select_by_visible_text(value)
+    # def select_by_text(self, source_locator, value):
+    #     select_source = Select(self.driver.find_element(*source_locator))
+    #     select_source.select_by_visible_text(value)
+
+    def select_by_text(self, source_locator, value, timeout=10):
+        try:
+            # Wait for the <select> element to be present and visible
+            WebDriverWait(self.driver, timeout).until(
+                ec.element_to_be_clickable(source_locator)
+                )
+            select_elem = self.driver.find_element(*source_locator)
+            select_source = Select(select_elem)
+            select_source.select_by_visible_text(value)
+
+        except (NoSuchElementException, ElementNotInteractableException, TimeoutException, Exception) as e:
+            # Fallback to JS in case standard method fails
+            print(f"Standard select_by_visible_text failed: {e}. Trying JS fallback...")
+            try:
+                select_elem = self.driver.find_element(*source_locator)
+                script = """
+                var select = arguments[0];
+                var value = arguments[1];
+                for (var i = 0; i < select.options.length; i++) {
+                    if (select.options[i].text === value) {
+                        select.selectedIndex = i;
+                        select.dispatchEvent(new Event('change'));
+                        break;
+                    }
+                }
+                """
+                self.driver.execute_script(script, select_elem, value)
+            except Exception as js_e:
+                raise Exception(f"JavaScript fallback also failed: {js_e}")
 
     def select_by_value(self, source_locator, value):
         select_source = Select(self.driver.find_element(*source_locator))

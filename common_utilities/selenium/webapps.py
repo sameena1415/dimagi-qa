@@ -159,7 +159,7 @@ class WebApps(BasePage):
             self.scroll_to_element(self.submit_on_case_search_page)
             self.wait_to_click(self.submit_on_case_search_page)
             time.sleep(1)
-            self.wait_after_interaction()
+        self.wait_after_interaction(20)
         if case_list == None:
             self.is_visible_and_displayed(self.case_list, timeout=80)
         else:

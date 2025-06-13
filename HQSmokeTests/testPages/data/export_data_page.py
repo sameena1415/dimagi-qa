@@ -426,9 +426,11 @@ class ExportDataPage(BasePage):
         self.wait_to_click(self.export_settings_create)
         print("Dashboard Form Feed created!!")
         time.sleep(2)
-        self.wait_and_sleep_to_click((By.XPATH, self.update_data.format(UserData.dashboard_feed_form)))
+        self.wait_for_element((By.XPATH, self.update_data.format(UserData.dashboard_feed_form)))
+        self.js_click((By.XPATH, self.update_data.format(UserData.dashboard_feed_form)))
         self.wait_till_progress_completes("integration")
-        self.wait_and_sleep_to_click((By.XPATH, self.update_data_conf.format(UserData.dashboard_feed_form)))
+        self.wait_for_element((By.XPATH, self.update_data_conf.format(UserData.dashboard_feed_form)), 20)
+        self.wait_to_click((By.XPATH, self.update_data_conf.format(UserData.dashboard_feed_form)))
         self.wait_for_element(self.data_upload_msg)
         time.sleep(2)
         self.reload_page()
@@ -446,10 +448,10 @@ class ExportDataPage(BasePage):
         self.wait_for_element(self.model, 200)
         self.select_by_value(self.model, UserData.model_type_case)
         try:
-            self.select_by_text(self.application, UserData.village_application)
+            self.select_by_value(self.application, UserData.village_application)
         except:
             print("Application dropdown is not present")
-        self.select_by_text(self.case, UserData.case_pregnancy)
+        self.select_by_value(self.case, UserData.case_pregnancy)
         self.wait_and_sleep_to_click(self.add_export_conf)
         print("Dashboard Feed added!!")
         self.wait_for_element(self.export_name, 200)
@@ -462,12 +464,19 @@ class ExportDataPage(BasePage):
         self.wait_to_click(self.export_settings_create)
         print("Dashboard Form Feed created!!")
         time.sleep(2)
-        self.wait_and_sleep_to_click((By.XPATH, self.update_data.format(UserData.dashboard_feed_case)))
+        self.wait_for_element((By.XPATH, self.update_data.format(UserData.dashboard_feed_case)))
+        self.js_click((By.XPATH, self.update_data.format(UserData.dashboard_feed_case)))
         self.wait_till_progress_completes("integration")
-        self.wait_and_sleep_to_click((By.XPATH, self.update_data_conf.format(UserData.dashboard_feed_case)))
-        self.wait_for_element(self.data_upload_msg)
-        time.sleep(2)
-        self.reload_page()
+        self.wait_for_element((By.XPATH, self.update_data_conf.format(UserData.dashboard_feed_case)), 20)
+        self.wait_to_click((By.XPATH, self.update_data_conf.format(UserData.dashboard_feed_case)))
+        # self.wait_and_sleep_to_click((By.XPATH, self.update_data_conf.format(UserData.dashboard_feed_case)))
+        self.wait_for_element(self.data_upload_msg, 50)
+        if self.is_present(self.data_upload_msg):
+            print("Data uploaded successfully.")
+        else:
+            print("Data not uploaded successfully.")
+        time.sleep(10)
+        self.wait_and_sleep_to_click(self.export_excel_dash_int)
         time.sleep(2)
         return UserData.dashboard_feed_case
 
@@ -747,8 +756,9 @@ class ExportDataPage(BasePage):
         self.wait_and_sleep_to_click(self.prepare_export_button, timeout=10)
         try:
             self.wait_till_progress_completes("exports")
+            self.wait_for_element(self.success_progress, 100)
             self.wait_for_element(self.download_button, 300)
-            self.click(self.download_button)
+            self.js_click(self.download_button)
             wait_for_download_to_finish()
         except TimeoutException:
             if self.is_visible_and_displayed(self.failed_to_export):
@@ -758,7 +768,8 @@ class ExportDataPage(BasePage):
                 self.wait_for_element(self.download_button, 300)
                 self.click(self.download_button)
                 wait_for_download_to_finish()
-        print("Download form button clicked")
+        print("Download form button clicked, waiting for download to complete...")
+        time.sleep(5)
 
     def add_case_exports_reassign(self):
         self.wait_to_click(self.export_case_data_link)
@@ -781,7 +792,14 @@ class ExportDataPage(BasePage):
         self.download_export_without_condition(UserData.p1p2_case_export_name, "case")
         newest_file = latest_download_file()
         print("Newest file:" + newest_file)
-        self.assert_downloaded_file(newest_file, UserData.p1p2_case_export_name)
+        if UserData.p1p2_case_export_name in newest_file:
+            self.assert_downloaded_file(newest_file, UserData.p1p2_case_export_name), "Download Not Completed!"
+        else:
+            print("Not the expected file. Downloading again...")
+            self.js_click(self.download_button)
+            wait_for_download_to_finish()
+            newest_file = latest_download_file()
+            self.assert_downloaded_file(newest_file, UserData.p1p2_case_export_name), "Download Not Completed!"
         return newest_file
 
     def check_for_related_cases(self, parent_id):

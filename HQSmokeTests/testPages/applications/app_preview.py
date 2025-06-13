@@ -34,6 +34,7 @@ class AppPreviewPage(BasePage):
         self.login_as_button = (
             By.XPATH, "//div[@aria-labelledby='single-app-login-as-heading']/descendant::h3[.='Log in as']")
         self.username_in_list = "//h3[./b[text() ='{}']]"
+        self.users_table = (By.XPATH, "//table[@class='table module-table']//tr[1]")
         self.webapp_login_confirmation = (By.ID, 'js-confirmation-confirm')
         self.webapp_working_as = (By.XPATH, "//div[contains(@class,'restore-as-banner')]/b")
         self.case_list_menu = "//h3[contains(text(), '{}')]"
@@ -124,16 +125,16 @@ class AppPreviewPage(BasePage):
     def login_as_app_preview(self, username = UserData.app_login):
         self.wait_to_click(self.login_as_button)
         time.sleep(2)
-        self.wait_for_element(self.search_worker, 100)
-        self.wait_to_clear_and_send_keys(self.search_worker, username)
-        self.wait_for_element(self.search_users_button)
+        self.wait_for_element(self.users_table, 100)
+        self.send_keys(self.search_worker, username)
+        time.sleep(1)
         self.wait_to_click(self.search_users_button)
-        
-        self.wait_for_element((By.XPATH, self.username_in_list.format(username)))
+        time.sleep(2)
+        self.wait_for_element((By.XPATH, self.username_in_list.format(username)), 15)
         self.wait_to_click((By.XPATH, self.username_in_list.format(username)))
         
         self.wait_for_element(self.webapp_login_confirmation)
-        self.wait_to_click(self.webapp_login_confirmation)
+        self.click(self.webapp_login_confirmation)
         
         logged_in_username = self.get_text(self.webapp_working_as)
         assert logged_in_username == username, "Logged in"

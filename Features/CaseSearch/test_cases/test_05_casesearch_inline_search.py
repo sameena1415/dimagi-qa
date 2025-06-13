@@ -55,7 +55,6 @@ def test_case_02_navigation_via_breadcrumbs(driver, settings):
 def test_case_03_search_property_settings(driver, settings):
     webapps = WebApps(driver, settings)
     casesearch = CaseSearchWorkflows(driver)
-    webapps.login_as(CaseSearchUserInput.user_1)
     webapps.open_app(CaseSearchUserInput.case_search_app_name)
     webapps.open_menu(CaseSearchUserInput.inline_search_menu)
     webapps.clear_selections_on_case_search_page()
@@ -67,6 +66,7 @@ def test_case_03_search_property_settings(driver, settings):
                                        input_value=CaseSearchUserInput.five_star,
                                        property_type=COMBOBOX,
                                        include_blanks=YES)
+    time.sleep(2)
     webapps.search_button_on_case_search_page()
     casesearch.check_values_on_caselist(row_num=CaseSearchUserInput.four,
                                         expected_value=[CaseSearchUserInput.four,

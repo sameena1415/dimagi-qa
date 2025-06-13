@@ -79,7 +79,7 @@ class LookUpTablePage(BasePage):
         self.add_module = (By.XPATH, "//a[contains(@class,'new-module') or contains(@class,'appnav-add js-add-new-item')]/i")
         self.add_case_list = (By.XPATH, "//button[@data-type='case']")
         self.delete_popup = (By.XPATH, "(//*[@class='disable-on-submit btn btn-danger'])[1]")
-        self.add_questions = (By.XPATH, "//div[@class='dropdown fd-add-question-dropdown']")
+        self.add_questions = (By.XPATH, "//div[@class='dropdown fd-add-question-dropdown']/button")
         self.lookup_question = (By.XPATH,
                                 "//ul[@class='dropdown-menu multi-level']/li[@class='dropdown-submenu']/a[contains(.,'Lookup Tables')]")
         self.checkbox_question = (By.XPATH, "//a[@data-qtype='MSelectDynamic']")
@@ -973,6 +973,7 @@ class LookUpTablePage(BasePage):
                 self.wait_to_click(self.home)
             app.login_as_app_preview(UserData.user_ids_list[i])
             self.submit_form_on_registration("en", UserData.user_ids_list[i])
+            time.sleep(5)
 
     def language_submit_form_on_registration(self, language_list, user, type):
         app_preview = AppPreviewPage(self.driver)

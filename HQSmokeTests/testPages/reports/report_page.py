@@ -573,8 +573,9 @@ class ReportPage(BasePage):
         else:
             owner = UserData.appiumtest_owner_id
         self.wait_to_click(self.case_list_rep)
-        self.wait_for_element(self.remove_case_owner)
-        self.wait_to_click(self.remove_case_owner)
+        # self.wait_for_element(self.remove_case_owner)
+        # self.wait_to_click(self.remove_case_owner)
+        self.remove_default_users()
         self.wait_to_click(self.case_owner_textarea)
         self.send_keys(self.case_owner_textarea, UserData.app_login)
         self.wait_for_element((By.XPATH, self.case_owner_list_item.format(UserData.app_login)))
@@ -840,3 +841,15 @@ class ReportPage(BasePage):
         formatter = '{:.' + '{}'.format(digits) + 'f}'
         x = round(n, digits)
         return formatter.format(x)
+
+    def remove_default_users(self):
+        self.wait_for_element(self.users_field)
+        count = self.find_elements(self.remove_buttons)
+        print(len(count))
+        for i in range(len(count)):
+            count[0].click()
+
+            if len(count) != 1:
+                ActionChains(self.driver).send_keys(Keys.TAB).perform()
+
+            count = self.find_elements(self.remove_buttons)

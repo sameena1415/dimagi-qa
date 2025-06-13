@@ -89,7 +89,7 @@ class ApplicationPage(BasePage):
         self.edit_form_name_icon = (By.XPATH, "//a[@href='#edit-form-name-modal']")
         self.edit_form_name_text =(By.XPATH,"//input[@data-bind='value: name']")
         self.form_edit_app = (By.XPATH,"//a[contains(text(),'"+ UserData.reassign_cases_application+"')]")
-        self.form_name_save_button = (By.XPATH, "//button[text()='Save']")
+        self.form_name_save_button = (By.XPATH, "//button[contains(text(),'Save')]")
         self.reg_form_head_text = (By.XPATH, "//span[@class='fd-head-text']")
         self.form_settings_btn = "//a[.//span[contains(.,'{}')]]//following-sibling::a//i[contains(@class,'fa-gear appnav-show-on-hover')]"
         self.reg_form_variable_name = (By.XPATH, "//span[@class='variable-form_name']")
