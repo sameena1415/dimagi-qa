@@ -409,6 +409,7 @@ def test_case_15_sticky_search_without_default_value(driver, settings):
     casesearch.search_against_property(search_property=CaseSearchUserInput.rating,
                                        input_value=CaseSearchUserInput.three_star,
                                        property_type=COMBOBOX)
+    time.sleep(2)
     webapps.search_button_on_case_search_page()
     base.back()
     casesearch.check_default_values_displayed(search_property=CaseSearchUserInput.mood,
