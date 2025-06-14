@@ -728,7 +728,7 @@ class ExportDataPage(BasePage):
         print("Export created!!")
         self.click(self.cancel_alert)
         time.sleep(2)
-        self.download_export_without_condition(UserData.p1p2_form_export_name,"form")
+        self.download_export_without_condition(UserData.p1p2_form_export_name, "form")
         newest_file = latest_download_file()
         print("Newest file:" + newest_file)
         self.assert_downloaded_file(newest_file, UserData.p1p2_form_export_name)
