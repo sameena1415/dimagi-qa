@@ -359,11 +359,6 @@ class MobileWorkerPage(BasePage):
             self.mobile_worker_menu()
             self.search_user(username)
             time.sleep(2)
-            if self.is_present(self.show_deactivated_users_btn):
-                self.js_click(self.show_deactivated_users_btn)
-                self.wait_for_element(self.show_reactivated_users_btn)
-                if self.is_present(self.show_reactivated_users_btn):
-                    print("Showing all Active users")
             if not self.is_present_and_displayed((By.XPATH, self.username_link.format(username)), 10):
                 print("This is a rerun so skipping this steps")
                 print("User is already activated")
