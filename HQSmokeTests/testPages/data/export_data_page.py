@@ -742,7 +742,7 @@ class ExportDataPage(BasePage):
         assert int(rows_count) >= 2000, "Export is not showing all the data"
         print("Export is successfully loading more than 2000 rows of data")
 
-    def download_export_without_condition(self, name, type):
+    def download_export_without_condition(self, name, type=None):
         self.wait_and_sleep_to_click((By.XPATH, self.export_form_case_data_button.format(name)))
         self.wait_for_element(self.prepare_export_button)
         if type == "form":
