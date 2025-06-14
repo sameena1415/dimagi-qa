@@ -125,7 +125,10 @@ class CaseSearchWorkflows(BasePage):
                 print("Selected text: ", input_value)
             else:
                 print("reselecting...")
-                self.select_by_value(self.combox_select_element, CaseSearchUserInput.ratings[input_value])
+                if "*" in input_value:
+                    self.select_by_value(self.combox_select_element, CaseSearchUserInput.ratings[input_value])
+                else:
+                    self.select_by_text(self.combox_select_element, input_value)
                 text = self.get_selected_text(self.combox_select_element)
                 print(text)
             time.sleep(2)
@@ -190,9 +193,10 @@ class CaseSearchWorkflows(BasePage):
     def add_address(self, address, search_property):
         address_search = self.get_element(self.search_for_address, search_property)
         self.send_keys(address_search, address)
-        time.sleep(2)
+        time.sleep(1)
         self.send_keys(address_search, Keys.TAB)
         time.sleep(2)
+
 
     def check_value_on_form(self, city_address, type=HOME):
         if type == HOME:
