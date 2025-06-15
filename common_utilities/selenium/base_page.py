@@ -176,13 +176,10 @@ class BasePage:
     def select_by_text(self, source_locator, value, timeout=10):
         try:
             # Wait for the <select> element to be present and visible
-            WebDriverWait(self.driver, timeout).until(
-                ec.element_to_be_clickable(source_locator)
-                )
-            select_elem = self.driver.find_element(*source_locator)
-            select_source = Select(select_elem)
+            select_source = Select(self.driver.find_element(*source_locator))
             select_source.select_by_visible_text(value)
-            text = self.get_selected_text(select_elem)
+            time.sleep(1)
+            text = self.get_selected_text(select_source)
             print(text)
             assert text == value
 
@@ -308,6 +305,20 @@ class BasePage:
         except TimeoutException:
             is_displayed = False
         return bool(is_displayed)
+
+    def is_invisible(self, locator, timeout=30):
+        try:
+            visible = ec.invisibility_of_element_located(locator)
+            element = WebDriverWait(self.driver, timeout, poll_frequency=0.5).until(visible,
+                                                                                   message="Element" + str(
+                                                                                       locator
+                                                                                       ) + "not displayed"
+                                                                                   )
+            is_not_displayed = True
+        except TimeoutException:
+            is_not_displayed = False
+        return bool(is_not_displayed)
+
 
     def is_present_and_displayed(self, locator, timeout=30):
         try:
