@@ -174,6 +174,7 @@ def test_case_52_settings_pages(driver, settings):
     home = HomePage(driver, settings)
     home.project_settings_page()
     msg.current_subscription_page()
+    msg.data_forwarding_page()
 
 @pytest.mark.messaging
 @pytest.mark.conditionalAlerts

@@ -178,7 +178,7 @@ class MobileWorkerPage(BasePage):
 
         self.bulk_user_delete_button = (By.XPATH, "//a[contains(@href,'users/commcare/delete')]")
         self.successfully_deleted = (By.XPATH, "//text()[contains(.,'user&#40;s&#41; deleted')]")
-        self.no_user_found = (By.XPATH, "//div[contains(@class,'alert')][contains(.,'No Mobile Workers were found')]")
+        self.no_user_found = (By.XPATH, "//div[contains(@class,'alert')][contains(.,'No Mobile Workers were found') and not(contains(@style,'none'))]")
 
         self.role_dropdown = (By.XPATH, "//select[@id='id_role']")
 
@@ -186,7 +186,9 @@ class MobileWorkerPage(BasePage):
         self.wait_for_element(self.search_mw)
         self.wait_to_click(self.clear_button_mw)
         self.send_keys(self.search_mw, username)
+        time.sleep(2)
         self.wait_to_click(self.search_button_mw)
+        time.sleep(5)
 
 
     def search_webapps_user(self, username):
@@ -301,13 +303,24 @@ class MobileWorkerPage(BasePage):
             print("User Field/Profile Added or is already present")
         else:
             print("Save Button is not enabled")
+        time.sleep(5)
 
     def select_mobile_worker_created(self, username):
+        self.wait_for_element(self.mobile_worker_on_left_panel)
         self.wait_to_click(self.mobile_worker_on_left_panel)
         self.search_user(username)
-        if not self.is_present((By.XPATH, self.username_link.format(username))):
-            print("Username not present")
-            self.wait_to_click(self.show_deactivated_users_btn)
+        time.sleep(2)
+        if self.is_present(self.no_user_found):
+            if self.is_present(self.show_deactivated_users_btn):
+                print("No Active Mobile Workers found")
+                self.wait_to_click(self.show_deactivated_users_btn)
+                self.wait_for_element(self.show_reactivated_users_btn)
+                self.wait_for_element((By.XPATH, self.username_link.format(username)))
+                assert self.is_present((By.XPATH, self.reactivate_buttons_list.format(username))
+                                       ), "Mobile Worker is not in the deactivated users list"
+                print("Found Mobile worker in the deactivated users list")
+        elif self.is_present((By.XPATH, self.username_link.format(username))):
+            print("Username present")
         self.wait_to_click((By.XPATH, self.username_link.format(username)))
         self.wait_for_element(self.user_name_span)
         print("Mobile Worker page opened.")
@@ -506,11 +519,15 @@ class MobileWorkerPage(BasePage):
             print("TIMEOUT ERROR: Could not upload file")
         assert self.is_present_and_displayed(self.import_complete), "Upload Not Completed! Taking Longer to process.."
         print("File uploaded successfully")
+        print("Sleeping for some time for the upload to reflect...")
+        self.reload_page()
         time.sleep(2)
 
     def click_profile(self):
         self.wait_for_element(self.profile_tab)
         self.wait_to_click(self.profile_tab)
+        time.sleep(2)
+        self.wait_for_element(self.add_new_profile)
 
     def click_fields(self):
         self.wait_to_click(self.field_tab)
@@ -558,7 +575,8 @@ class MobileWorkerPage(BasePage):
         time.sleep(2)
         self.wait_for_element(self.delete_profile_item)
         self.wait_to_click(self.delete_profile_item)
-        
+
+        self.wait_for_element(self.done_button)
         self.wait_to_click(self.done_button)
         time.sleep(2)
         self.scroll_to_element(self.profile_delete_button)

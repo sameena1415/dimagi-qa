@@ -62,6 +62,8 @@ def test_case_76_application_status(driver, settings):
 @pytest.mark.appBuilder
 @pytest.mark.p1p2EscapeDefect
 def test_case_77_create_new_app(driver, settings):
+    if "india" in settings['url']:
+        pytest.skip("Skipping for this month as limit exhausted")
     load = ApplicationPage(driver)
     app_name = load.create_application_with_verifications()
     app = AppPreviewPage(driver)
