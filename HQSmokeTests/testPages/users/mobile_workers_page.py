@@ -308,6 +308,7 @@ class MobileWorkerPage(BasePage):
     def select_mobile_worker_created(self, username):
         self.wait_for_element(self.mobile_worker_on_left_panel)
         self.wait_to_click(self.mobile_worker_on_left_panel)
+        time.sleep(5)
         self.search_user(username)
         time.sleep(2)
         if self.is_present(self.no_user_found):
@@ -520,6 +521,7 @@ class MobileWorkerPage(BasePage):
         assert self.is_present_and_displayed(self.import_complete), "Upload Not Completed! Taking Longer to process.."
         print("File uploaded successfully")
         print("Sleeping for some time for the upload to reflect...")
+        time.sleep(5)
         self.reload_page()
         time.sleep(2)
 
