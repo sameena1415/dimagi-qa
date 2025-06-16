@@ -30,6 +30,7 @@ class CaseSearchWorkflows(BasePage):
         self.help_text_format = '//label[@for="{}"]//following::a[@data-bs-content="{}" or @data-content="{}"]'
         self.combox_select = "(//label[contains(text(), '{}')])[1]//following::select[contains(@class, 'query-field')][1]"
         self.combox_select2 = "(//label[contains(text(), '{}')])[1]//following::div/select[contains(@class, 'query-field')][1]"
+        self.selected_dropdown_item = "(//label[contains(text(), '{}')])[1]//following::ul[1]/li[contains(@title,'{}')][./span[contains(@id,'{}')]]"
         self.search_for_address = "//*[contains(text(),'{}')]//following::input[contains(@aria-label,'Search')][1]"
         self.include_blanks = self.search_property_name_combobox + "//following::input[contains(@class,'search-for-blank')][1]"
         self.required_validation_on_top = "//div[contains(@class,'alert-danger')]//following::*[contains(text(),'{}')]"
@@ -118,7 +119,7 @@ class CaseSearchWorkflows(BasePage):
             self.combox_select_element = self.get_element(self.combox_select, search_property)
             self.wait_for_element(self.combox_select_element, 50)
             self.select_by_text(self.combox_select_element, input_value)
-            time.sleep(1)
+            self.wait_after_interaction(10)
             text = self.get_selected_text(self.combox_select_element)
             print(text)
             if text == input_value:
@@ -384,3 +385,17 @@ class CaseSearchWorkflows(BasePage):
     def select_rating_answer_(self, rating_input):
         rating_selection = self.get_element(self.rating_answer, rating_input)
         self.wait_to_click(rating_selection)
+
+    def check_values_selected(self, search_property, value_list, rating=None):
+        bool_value = None
+        if rating == YES:
+            for item in value_list:
+                selected_value = (By.XPATH,self.selected_dropdown_item.format(search_property, item, CaseSearchUserInput.ratings[item]))
+                if self.is_present(selected_value):
+                    assert True, f"Expected item {selected_value} not present"
+                    print(f"Expected item {selected_value} present")
+                else:
+                    print(f"Expected item {selected_value} not present")
+                    assert False
+
+
