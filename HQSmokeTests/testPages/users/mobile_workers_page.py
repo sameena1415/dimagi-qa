@@ -193,7 +193,7 @@ class MobileWorkerPage(BasePage):
         time.sleep(5)
 
 
-    def search_webapps_user(self, username):
+    def search_webapps_user(self, username, flag="YES"):
         self.wait_to_click(self.web_apps_menu_id)
         self.wait_to_click(self.webapp_login)
         print("Waiting for the login page to load.....")
@@ -204,7 +204,10 @@ class MobileWorkerPage(BasePage):
         self.wait_for_element(self.search_button_we_apps)
         self.js_click(self.search_button_we_apps)
         time.sleep(2)
-        self.wait_for_element((By.XPATH, self.username_in_list.format(username)), 15)
+        if flag == "YES":
+            self.wait_for_element((By.XPATH, self.username_in_list.format(username)), 15)
+        else:
+            print("User should not be present")
 
     def mobile_worker_menu(self):
         self.wait_to_click(self.mobile_workers_menu_link_text)
@@ -372,7 +375,7 @@ class MobileWorkerPage(BasePage):
 
     def verify_deactivation_via_login(self, username, text):
         if text == "Success":
-            self.search_webapps_user(username)
+            self.search_webapps_user(username, "NO")
             assert self.is_present_and_displayed((By.XPATH, self.login_as_username.format(username)),
                                                  10
                                                  ) == False, "Deactivated mobile worker still visible"
