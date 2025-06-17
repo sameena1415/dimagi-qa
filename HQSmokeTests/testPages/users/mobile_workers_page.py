@@ -366,7 +366,7 @@ class MobileWorkerPage(BasePage):
                 self.reload_page()
                 time.sleep(5)
                 self.mobile_worker_menu()
-                self.search_user(username)
+                self.search_user(username, "No")
                 self.wait_for_element(self.show_deactivated_users_btn)
                 self.js_click(self.show_deactivated_users_btn)
                 assert self.is_present_and_displayed((By.XPATH, self.reactivate_buttons_list.format(username)), 20)
