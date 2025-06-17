@@ -184,13 +184,17 @@ class MobileWorkerPage(BasePage):
         self.username_in_list = "//h3[./b[text() ='{}']]"
 
 
-    def search_user(self, username):
+    def search_user(self, username, flag="YES"):
         self.wait_for_element(self.search_mw)
         self.wait_to_click(self.clear_button_mw)
         self.send_keys(self.search_mw, username)
         time.sleep(2)
         self.wait_to_click(self.search_button_mw)
         time.sleep(5)
+        if flag == "YES":
+            self.wait_for_element((By.XPATH, self.username_link.format(username)), 15)
+        else:
+            print("User should not be present")
 
 
     def search_webapps_user(self, username, flag="YES"):
