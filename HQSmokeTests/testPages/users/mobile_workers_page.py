@@ -389,7 +389,7 @@ class MobileWorkerPage(BasePage):
     def reactivate_user(self, username):
         try:
             self.mobile_worker_menu()
-            self.search_user(username)
+            self.search_user(username, "No")
             time.sleep(2)
             if self.is_present(self.no_user_found):
                 if self.is_present(self.show_deactivated_users_btn):
