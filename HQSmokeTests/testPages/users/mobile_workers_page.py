@@ -314,12 +314,13 @@ class MobileWorkerPage(BasePage):
         time.sleep(5)
 
     def select_mobile_worker_created(self, username):
-        self.wait_for_element(self.mobile_worker_on_left_panel)
-        self.wait_to_click(self.mobile_worker_on_left_panel)
+        self.mobile_worker_menu()
         time.sleep(5)
         self.search_user(username)
         time.sleep(2)
-        if self.is_present(self.no_user_found):
+        if self.is_present((By.XPATH, self.username_link.format(username))):
+            print("Username present")
+        elif self.is_present(self.no_user_found):
             if self.is_present(self.show_deactivated_users_btn):
                 print("No Active Mobile Workers found")
                 self.wait_to_click(self.show_deactivated_users_btn)
@@ -328,8 +329,6 @@ class MobileWorkerPage(BasePage):
                 assert self.is_present((By.XPATH, self.reactivate_buttons_list.format(username))
                                        ), "Mobile Worker is not in the deactivated users list"
                 print("Found Mobile worker in the deactivated users list")
-        elif self.is_present((By.XPATH, self.username_link.format(username))):
-            print("Username present")
         self.wait_to_click((By.XPATH, self.username_link.format(username)))
         self.wait_for_element(self.user_name_span)
         print("Mobile Worker page opened.")
