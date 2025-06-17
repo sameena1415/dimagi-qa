@@ -537,7 +537,7 @@ class MobileWorkerPage(BasePage):
         print("Sleeping for some time for the upload to reflect...")
         time.sleep(5)
         self.reload_page()
-        time.sleep(2)
+        time.sleep(20)
 
     def click_profile(self):
         self.wait_for_element(self.profile_tab)
