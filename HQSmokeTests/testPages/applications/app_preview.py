@@ -49,7 +49,7 @@ class AppPreviewPage(BasePage):
         self.next_question_force = (By.XPATH, "//button[contains(@data-bind,'clickedNextOnRequired')]")
         self.complete_form = (By.XPATH, "//button[@data-bind='visible: atLastIndex(), click: submitForm']")
         self.success_message = (By.XPATH, "//p[contains(text(),'successfully saved')]")
-        self.home_button = (By.XPATH, "//li[contains(@class,'home')]")
+        self.home_button = (By.XPATH, "//li[contains(@class,'home')]/a")
         self.sync_button = (By.XPATH, "//div[@class='js-sync-item appicon appicon-sync']")
         self.sync_message = (By.XPATH, "//p[contains(text(),'successfully synced')]")
 
@@ -110,15 +110,16 @@ class AppPreviewPage(BasePage):
         
         self.wait_for_element(self.success_message)
         print("Form submitted")
-        
-        self.wait_to_click(self.home_button)
-        
+        time.sleep(2)
+        self.wait_for_element(self.home_button)
+        self.js_click(self.home_button)
+        time.sleep(2)
         self.wait_for_element(self.sync_button)
-        self.wait_to_click(self.sync_button)
-        
+        self.js_click(self.sync_button)
+        time.sleep(5)
         self.switch_to_default_content()
         print("Sleeping for sometime so the form data is updated")
-        time.sleep(100)
+        time.sleep(70)
         print("Latitude: ", lat, "Longitude: ", lon)
         return lat, lon
 

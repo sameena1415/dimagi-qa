@@ -67,6 +67,9 @@ def test_case_03_search_property_settings(driver, settings):
                                        property_type=COMBOBOX,
                                        include_blanks=YES)
     time.sleep(2)
+    casesearch.check_values_selected(search_property=CaseSearchUserInput.rating,
+                                     value_list=[CaseSearchUserInput.four_star, CaseSearchUserInput.five_star],
+                                     rating=YES)
     webapps.search_button_on_case_search_page()
     casesearch.check_values_on_caselist(row_num=CaseSearchUserInput.four,
                                         expected_value=[CaseSearchUserInput.four,

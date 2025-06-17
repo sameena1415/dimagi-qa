@@ -35,6 +35,10 @@ class HomePage(BasePage):
         self.project_settings_menu = (By.LINK_TEXT, "Project Settings")
         self.project_settings_elements = (By.XPATH, "//form[@class='form form-horizontal']")
         self.application_names = "//li[@class='nav-header dropdown-header' and contains(.,'My Applications')]//following-sibling::li[contains(.,'{}')]"
+        self.my_account_settings = (By.LINK_TEXT, "My Account Settings")
+        self.my_project = (By.LINK_TEXT, "My Projects")
+        self.my_project_table = (By.XPATH, "//table[.//th[.='Project'] and .//th[.='Status']]")
+
 
         self.DASHBOARD_TITLE = "CommCare HQ"
         self.REPORTS_TITLE = "My Saved Reports : Project Reports :: - CommCare HQ"
@@ -43,6 +47,8 @@ class HomePage(BasePage):
         self.MESSAGING_TITLE = "Dashboard : Messaging :: - CommCare HQ"
         self.WEBAPPS_TITLE = "Web Apps - CommCare HQ"
         self.PROJECT_SETTINGS = "Basic : Project Settings :: - CommCare HQ"
+        self.ACCOUNT_SETTINGS = "My Information : My Account :: - CommCare HQ"
+        self.MY_PROJECT_ACCOUNT_SETTINGS = "My Projects : My Account :: - CommCare HQ"
 
     def dashboard_menu(self):
         self.open_menu(self.dashboard_menu_id)
@@ -139,3 +145,19 @@ class HomePage(BasePage):
         self.wait_to_click(self.project_settings_menu)
         assert self.PROJECT_SETTINGS == self.driver.title, "This is not the Project Settings page."
         print("Project Settings page loaded successfully!")
+
+    def my_account_settings_page(self, value=None):
+        self.driver.get(self.dashboard_link)
+        self.accept_pop_up()
+        time.sleep(2)
+        self.wait_for_element(self.settings_bar)
+        self.click(self.settings_bar)
+        self.wait_for_element(self.my_account_settings)
+        self.wait_to_click(self.my_account_settings)
+        time.sleep(2)
+        assert self.ACCOUNT_SETTINGS == self.driver.title, "This is not the My Account Settings page."
+        print("My Account Settings page loaded successfully!")
+        self.wait_to_click(self.my_project)
+        time.sleep(2)
+        assert self.MY_PROJECT_ACCOUNT_SETTINGS == self.driver.title and self.is_present_and_displayed(self.my_project_table), "This is not the My Projects page."
+        print("My Projects page loaded successfully!")

@@ -809,7 +809,7 @@ class ReportPage(BasePage):
 
     def verify_form_in_submit_history(self, app_name, lat, lon):
         print("Sleeping for sometime for the case to get registered.")
-        time.sleep(140)
+        time.sleep(100)
         self.wait_to_click(self.submit_history_rep)
         self.wait_for_element(self.users_box, 200)
         self.wait_to_click(self.users_box)
@@ -835,6 +835,7 @@ class ReportPage(BasePage):
         result_lat = self.format_number(abs(float(text[0])), 5)
         result_lon = self.format_number(abs(float(text[1])), 5)
         print(result_lat, result_lon)
+        print(lat, lon)
         assert result_lat in lat and result_lon in lon, "Mismatch"
 
     def format_number(self, n, digits):

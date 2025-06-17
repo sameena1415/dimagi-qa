@@ -156,8 +156,10 @@ class MessagingPage(BasePage):
         # Project and Subscription Settings
         self.settings_bar = (By.XPATH, "//ul[@role='menu']//a[@data-action='Click Gear Icon']/i")
         self.subscription_menu = (By.LINK_TEXT, "Current Subscription")
+        self.data_forwarding_menu = (By.LINK_TEXT, "Data Forwarding")
         self.subscription_elements_id = (By.ID, "subscriptionSummary")
         self.project_settings_menu = (By.LINK_TEXT, "Project Settings")
+        self.forward_forms_header = (By.XPATH, "//h2[.='Forward Forms']")
         self.project_settings_elements = (By.XPATH, "//form[@class='form form-horizontal']")
         self.page_limit = (By.XPATH, "//select[@id='pagination-limit']")
         self.keywords_list = (By.XPATH, "//td[.//span/a[contains(.,'KEYWORD_')]]")
@@ -615,6 +617,13 @@ class MessagingPage(BasePage):
         self.wait_for_element(
             self.subscription_elements_id), "Subscription Page did not load successfully"
         print("Current Subscription page loaded successfully!")
+
+    def data_forwarding_page(self):
+        self.wait_to_click(self.settings_bar)
+        self.wait_to_click(self.data_forwarding_menu)
+        self.wait_for_element(
+            self.forward_forms_header), "Forward Form header did not load successfully"
+        print("Forward Form header loaded successfully!")
 
 
     def remove_all_cond_alert(self):
