@@ -181,6 +181,8 @@ class MobileWorkerPage(BasePage):
         self.no_user_found = (By.XPATH, "//div[contains(@class,'alert')][contains(.,'No Mobile Workers were found') and not(contains(@style,'none'))]")
 
         self.role_dropdown = (By.XPATH, "//select[@id='id_role']")
+        self.username_in_list = "//h3[./b[text() ='{}']]"
+
 
     def search_user(self, username):
         self.wait_for_element(self.search_mw)
@@ -198,8 +200,11 @@ class MobileWorkerPage(BasePage):
         time.sleep(2)
         self.wait_for_element(self.search_user_web_apps, 20)
         self.send_keys(self.search_user_web_apps, username)
+        time.sleep(2)
+        self.wait_for_element(self.search_button_we_apps)
         self.js_click(self.search_button_we_apps)
         time.sleep(2)
+        self.wait_for_element((By.XPATH, self.username_in_list.format(username)), 15)
 
     def mobile_worker_menu(self):
         self.wait_to_click(self.mobile_workers_menu_link_text)
@@ -340,20 +345,26 @@ class MobileWorkerPage(BasePage):
     def deactivate_user(self, username):
         try:
             self.search_user(username)
-            self.wait_for_element((By.XPATH, self.username_link.format(username)), 50)
-            self.js_click(self.deactivate_buttons_list)
-            self.wait_for_element(self.confirm_deactivate_xpath_list)
-            self.js_click(self.confirm_deactivate_xpath_list)
-            time.sleep(2)
-            self.is_invisible(self.confirm_deactivate_xpath_list)
-            assert self.is_present_and_displayed((By.XPATH, self.reactivate_buttons_list.format(username)), 20)
-            self.mobile_worker_menu()
-            self.wait_for_element(self.show_deactivated_users_btn)
-            self.js_click(self.show_deactivated_users_btn)
-            self.search_user(username)
-            assert self.is_present_and_displayed((By.XPATH, self.reactivate_buttons_list.format(username)), 20)
-            print("Deactivation successful")
-            return "Success"
+            if self.is_present(self.no_user_found):
+                if self.is_present(self.show_deactivated_users_btn):
+                    print("No Active Mobile Workers found. User already deactivated.")
+            else:
+                self.wait_for_element((By.XPATH, self.username_link.format(username)), 50)
+                self.js_click(self.deactivate_buttons_list)
+                self.wait_for_element(self.confirm_deactivate_xpath_list)
+                self.js_click(self.confirm_deactivate_xpath_list)
+                time.sleep(2)
+                self.wait_for_element((By.XPATH, self.reactivate_buttons_list.format(username)))
+                self.is_invisible(self.confirm_deactivate_xpath_list)
+                self.reload_page()
+                time.sleep(5)
+                self.mobile_worker_menu()
+                self.search_user(username)
+                self.wait_for_element(self.show_deactivated_users_btn)
+                self.js_click(self.show_deactivated_users_btn)
+                assert self.is_present_and_displayed((By.XPATH, self.reactivate_buttons_list.format(username)), 20)
+                print("Deactivation successful")
+                return "Success"
         except (TimeoutException, NoSuchElementException):
             print("TIMEOUT ERROR: Deactivation Unsuccessful.")
             return "Not Success"

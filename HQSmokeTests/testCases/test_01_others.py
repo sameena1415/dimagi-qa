@@ -65,3 +65,13 @@ def test_case_two_factor_auth(driver, settings):
         login.login(UserData.two_fa_user, settings["login_password"], settings["eu_auth_key"])
     else:
         login.login(UserData.two_fa_user, settings["login_password"], settings["prod_auth_key"])
+
+
+@pytest.mark.myAccountSettings
+def test_case_my_account_settings(driver, settings):
+    """
+        1. Go to My Account Settings
+        2. Click on My Project
+    """
+    visible = HomePage(driver, settings)
+    visible.my_account_settings_page()

@@ -835,6 +835,7 @@ class ReportPage(BasePage):
         result_lat = self.format_number(abs(float(text[0])), 5)
         result_lon = self.format_number(abs(float(text[1])), 5)
         print(result_lat, result_lon)
+        print(lat, lon)
         assert result_lat in lat and result_lon in lon, "Mismatch"
 
     def format_number(self, n, digits):
