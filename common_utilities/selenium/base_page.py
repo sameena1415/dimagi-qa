@@ -618,7 +618,7 @@ class BasePage:
             print(f"[wait_until_progress_removed] Timeout or error: {e}")
 
     def wait_after_interaction(self, timeout=6):
-        url=self.get_url()
+        url=self.get_current_url()
         if 'staging' in url:
             timeout=100
         if not BasePage.ENABLE_WAIT_AFTER_INTERACTION:
