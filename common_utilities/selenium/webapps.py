@@ -246,9 +246,15 @@ class WebApps(BasePage):
         print("clicking on the submit button")
         self.wait_to_click(self.form_submit)
         print("clicked the submit button")
-        self.wait_after_interaction(timeout=20)
-        time.sleep(5)
-        self.wait_for_element(self.alert_close_button, 40)
+        url=self.get_current_url()
+        if 'staging' in url:
+            self.wait_after_interaction(timeout=120)
+            time.sleep(5)
+            self.wait_for_element(self.alert_close_button, 60)
+        else:
+            self.wait_after_interaction(timeout=20)
+            time.sleep(5)
+            self.wait_for_element(self.alert_close_button, 40)
         if self.is_present(self.form_submit):
             if self.is_present(self.async_restore_error):
                 print("Form not submitted successfully. Need Resubmission")
