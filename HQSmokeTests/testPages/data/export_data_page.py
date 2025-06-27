@@ -269,7 +269,7 @@ class ExportDataPage(BasePage):
         self.js_click(self.export_settings_create)
         time.sleep(10)
         try:
-            self.wait_for_element(self.cancel_alert, 80)
+            self.wait_for_element(self.cancel_alert)
             print("Export created!!")
             self.click(self.cancel_alert)
         except:
