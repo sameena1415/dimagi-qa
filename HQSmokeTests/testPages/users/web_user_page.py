@@ -154,9 +154,11 @@ class WebUsersPage(BasePage):
         self.wait_to_click(self.web_users_menu)
         self.wait_to_click(self.download_worker_btn)
         self.wait_to_click(self.download_filter)
+        time.sleep(5)
         try:
             self.wait_for_element(self.download_users_btn)
-            self.click(self.download_users_btn)
+            self.js_click(self.download_users_btn)
+            time.sleep(2)
             wait_for_download_to_finish()
         except TimeoutException:
             print("TIMEOUT ERROR: Still preparing for download..Celery might be down..")
@@ -169,6 +171,7 @@ class WebUsersPage(BasePage):
         else:
             print("Not the expected file. Downloading again...")
             self.js_click(self.download_users_btn)
+            time.sleep(2)
             wait_for_download_to_finish()
             newest_file = latest_download_file()
             self.assert_downloaded_file(newest_file, "_users_"), "Download Not Completed!"

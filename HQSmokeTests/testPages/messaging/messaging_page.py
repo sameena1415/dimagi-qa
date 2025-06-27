@@ -531,7 +531,8 @@ class MessagingPage(BasePage):
         self.wait_and_sleep_to_click(self.search_box)
         self.wait_for_element(self.delete_cond_alert, 300)
         time.sleep(2)
-        self.wait_to_click(self.delete_cond_alert)
+        self.click(self.delete_cond_alert)
+        time.sleep(1)
         try:
             obj = self.driver.switch_to.alert
             obj.accept()
@@ -637,7 +638,8 @@ class MessagingPage(BasePage):
             while alert_presence:
                 text = self.get_text(self.cond_alerts_name)
                 print("alert name: ", text)
-                self.wait_to_click((By.XPATH, self.cond_alert_delete_button.format(text, 1)))
+                self.click((By.XPATH, self.cond_alert_delete_button.format(text, 1)))
+                time.sleep(1)
                 try:
                     obj = self.driver.switch_to.alert
                     obj.accept()
