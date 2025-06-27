@@ -275,7 +275,7 @@ class ExportDataPage(BasePage):
         except:
             self.reload_page()
             self.wait_for_element(self.add_export_button)
-            print("Export created!!"
+            print("Export created!!")
         time.sleep(2)
         return UserData.form_export_name
 
