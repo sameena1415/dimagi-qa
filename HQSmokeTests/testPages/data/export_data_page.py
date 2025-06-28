@@ -272,7 +272,8 @@ class ExportDataPage(BasePage):
             print("Export created!!")
             self.click(self.cancel_alert)
         else:
-            self.reload_page()
+            print("Report creation got stuck. Clicking on back.")
+            self.back()
             self.wait_for_element(self.add_export_button)
             print("Export created!!")
         time.sleep(2)
@@ -312,7 +313,8 @@ class ExportDataPage(BasePage):
             print("Export created!!")
             self.click(self.cancel_alert)
         else:
-            self.reload_page()
+            print("Report creation got stuck. Clicking on back.")
+            self.back()
             self.wait_for_element(self.add_export_button)
             print("Export created!!")
         time.sleep(2)
