@@ -143,7 +143,7 @@ class LookUpTablePage(BasePage):
         self.number_of_questions = (By.XPATH, "//*[@id='formdesigner']/div[1]/div[1]/div[1]/div[4]/div[1]/ul/li")
         self.child_node = (By.XPATH, "//*[@id='formdesigner']/div[1]/div[1]/div[1]/div[4]/div[1]/ul/li/ul")
         self.home = (By.XPATH, "//li[contains(@class,'home')]")
-        self.sync = (By.XPATH, "//*[@class='ff ff-sync appicon-icon']")
+        self.sync = (By.XPATH, "//div[contains(@class,'appicon-sync')]/i")
         self.label = (By.XPATH, "//*[@data-qtype='Trigger']")
         self.refresh = (By.XPATH, "//button[contains(@class,'refresh')]")
         self.settings = (By.XPATH, "//*[contains(@class,'fa-gear appicon-icon')]")
@@ -245,7 +245,7 @@ class LookUpTablePage(BasePage):
         self.send_keys(self.field_name, self.table_id_name)
         self.wait_to_click(self.save_table)
         
-        assert self.is_present_and_displayed(self.table_created_path)
+        assert self.is_present_and_displayed(self.table_created_path, 120)
         print("LookUp Table created successfully!")
         return self.table_id_name
 
