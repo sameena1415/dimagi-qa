@@ -268,9 +268,13 @@ class ExportDataPage(BasePage):
         time.sleep(2)
         self.js_click(self.export_settings_create)
         time.sleep(10)
-        self.wait_for_element(self.cancel_alert, 80)
-        print("Export created!!")
-        self.click(self.cancel_alert)
+        if self.is_visible_and_displayed(self.cancel_alert, 20):
+            print("Export created!!")
+            self.click(self.cancel_alert)
+        else:
+            self.reload_page()
+            self.wait_for_element(self.add_export_button)
+            print("Export created!!")
         time.sleep(2)
         return UserData.form_export_name
 
@@ -303,9 +307,14 @@ class ExportDataPage(BasePage):
         time.sleep(2)
         self.js_click(self.export_settings_create)
         time.sleep(10)
-        self.wait_for_element(self.cancel_alert)
-        print("Export created!!")
-        self.click(self.cancel_alert)
+        if self.is_visible_and_displayed(self.cancel_alert, 20):
+            # self.wait_for_element(self.cancel_alert)
+            print("Export created!!")
+            self.click(self.cancel_alert)
+        else:
+            self.reload_page()
+            self.wait_for_element(self.add_export_button)
+            print("Export created!!")
         time.sleep(2)
         return UserData.case_export_name
 
