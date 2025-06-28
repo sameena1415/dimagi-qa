@@ -115,11 +115,12 @@ class CaseSearchWorkflows(BasePage):
             else:
                 self.send_keys(self.search_property, input_value + Keys.TAB)
                 time.sleep(2)
+            self.wait_after_interaction(40)
         elif property_type == COMBOBOX:
             self.combox_select_element = self.get_element(self.combox_select, search_property)
             self.wait_for_element(self.combox_select_element, 50)
             self.select_by_text(self.combox_select_element, input_value)
-            self.wait_after_interaction(10)
+            self.wait_after_interaction(40)
             text = self.get_selected_text(self.combox_select_element)
             print(text)
             if text == input_value:
@@ -130,6 +131,7 @@ class CaseSearchWorkflows(BasePage):
                     self.select_by_value(self.combox_select_element, CaseSearchUserInput.ratings[input_value])
                 else:
                     self.select_by_text(self.combox_select_element, input_value)
+                self.wait_after_interaction(40)
                 text = self.get_selected_text(self.combox_select_element)
                 print(text)
             time.sleep(2)
@@ -137,12 +139,14 @@ class CaseSearchWorkflows(BasePage):
             self.combox_select_element = self.get_element(self.combox_select2, search_property)
             self.wait_for_element(self.combox_select_element, 50)
             self.select_by_text(self.combox_select_element, input_value)
+            self.wait_after_interaction(40)
             print("Selected text: ", input_value)
             time.sleep(2)
         elif property_type == COMBOBOX3:
             self.combox_select_element = self.get_element(self.combox_select, search_property)
             self.wait_for_element(self.combox_select_element, 50)
             self.select_by_partial_text(self.combox_select_element, input_value)
+            self.wait_after_interaction(40)
             print("Selected text: ", input_value)
             time.sleep(2)
         if include_blanks == YES:
