@@ -309,7 +309,7 @@ class ReportPage(BasePage):
         self.js_click(self.save_confirm)
         time.sleep(2)
         self.wait_for_element(self.saved_reports_menu_link, 100)
-        self.js_click(self.saved_reports_menu_link)
+        self.click(self.saved_reports_menu_link)
         time.sleep(2)
         assert self.is_visible_and_displayed(self.saved_report_created, 220)
         print("Report Saved successfully!")
