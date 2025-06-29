@@ -79,8 +79,8 @@ class MessagingPage(BasePage):
         self.user_recipients_results = (
         By.XPATH, "//ul[@id='select2-id_schedule-user_recipients-results']/li[.='" + UserData.app_login + "']")
         self.save_button_xpath = (By.XPATH, "//button[@type='submit'and text()='Save']")
-        self.delete_cond_alert = (By.XPATH, "//a[text()='" + str(
-            self.cond_alert_name_input) + "']//preceding::button[@class='btn btn-danger'][1]")
+        self.delete_cond_alert = (By.XPATH, "//td[.//a[text()='" + str(
+            self.cond_alert_name_input) + "']]//preceding-sibling::td[1]//button[@class='btn btn-danger'][not(@disabled)][1]")
         self.alert_process_none = (By.XPATH, "//td[.//a[text()='" + str(
             self.cond_alert_name_input) + "']]//following::span[contains(@data-bind,'locked_for_editing')  and @style='display: none;']")
         self.search_box = (By.XPATH, "//form[@class='input-group']/input[@class='form-control']")
@@ -258,6 +258,7 @@ class MessagingPage(BasePage):
         self.wait_to_click(self.search_box)
         self.wait_for_element(self.delete_cond_alert, 700)
         self.reload_page()
+        time.sleep(4)
         if self.is_clickable(self.delete_cond_alert):
             print("Restart is not required.")
         else:
