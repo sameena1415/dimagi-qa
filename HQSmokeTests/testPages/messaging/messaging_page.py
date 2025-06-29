@@ -247,9 +247,12 @@ class MessagingPage(BasePage):
         time.sleep(1)
         self.wait_to_clear_and_send_keys(self.search_box, self.cond_alert_name_input)
         self.wait_for_element(self.alert_process_none, 500)
-        time.sleep(40)
+        if 'staging' in self.get_current_url():
+            time.sleep(240)
+        else:
+            time.sleep(40)
         self.reload_page()
-        # time.sleep(140)
+        time.sleep(10)
         self.clear(self.search_box)
         self.send_keys(self.search_box, self.cond_alert_name_input)
         self.wait_to_click(self.search_box)
@@ -456,9 +459,13 @@ class MessagingPage(BasePage):
         self.wait_for_element(self.page_limit)
         self.select_by_value(self.page_limit, "50")
         time.sleep(2)
-        self.wait_to_click(self.delete_keyword)
-        self.wait_to_click(self.confirm_delete_keyword)
+        self.wait_for_element(self.delete_keyword)
+        self.click(self.delete_keyword)
+        self.wait_for_element(self.confirm_delete_keyword)
+        self.click(self.confirm_delete_keyword)
+        time.sleep(3)
         self.reload_page()
+        self.wait_for_element(self.page_limit, 30)
         try:
             isPresent = self.is_displayed(self.keyword_created)
         except NoSuchElementException:
@@ -472,9 +479,13 @@ class MessagingPage(BasePage):
         self.wait_for_element(self.page_limit)
         self.select_by_value(self.page_limit, "50")
         time.sleep(2)
-        self.wait_to_click(self.delete_structured_keyword)
-        self.wait_to_click(self.confirm_delete_structured_keyword)
+        self.wait_for_element(self.delete_structured_keyword)
+        self.click(self.delete_structured_keyword)
+        self.wait_for_element(self.confirm_delete_structured_keyword)
+        self.click(self.confirm_delete_structured_keyword)
+        time.sleep(3)
         self.reload_page()
+        self.wait_for_element(self.page_limit, 30)
         try:
             isPresent = self.is_displayed(self.structured_keyword_created)
         except NoSuchElementException:

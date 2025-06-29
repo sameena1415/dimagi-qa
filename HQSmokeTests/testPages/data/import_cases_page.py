@@ -82,7 +82,7 @@ class ImportCasesPage(BasePage):
         
         self.click(self.confirm_import)
         print("Imported case!")
-        self.wait_for_element((By.XPATH, self.success.format(self.file_new_name)))
+        self.wait_for_element((By.XPATH, self.success.format(self.file_new_name)),400)
 
     def edit_spreadsheet(self, edited_file, cell, renamed_file, sheet_name):
         workbook = load_workbook(filename=edited_file)
