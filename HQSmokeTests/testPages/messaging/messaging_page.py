@@ -247,9 +247,12 @@ class MessagingPage(BasePage):
         time.sleep(1)
         self.wait_to_clear_and_send_keys(self.search_box, self.cond_alert_name_input)
         self.wait_for_element(self.alert_process_none, 500)
-        time.sleep(40)
+        if 'staging' in self.get_current_url():
+            time.sleep(240)
+        else:
+            time.sleep(40)
         self.reload_page()
-        # time.sleep(140)
+        time.sleep(10)
         self.clear(self.search_box)
         self.send_keys(self.search_box, self.cond_alert_name_input)
         self.wait_to_click(self.search_box)
