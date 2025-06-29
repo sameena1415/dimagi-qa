@@ -305,7 +305,7 @@ class ReportPage(BasePage):
         self.wait_for_element(self.new_saved_report_name, 50)
         self.send_keys(self.new_saved_report_name, self.report_name_saved)
         time.sleep(1)
-        self.wait_for_element(self.save_confirma)
+        self.wait_for_element(self.save_confirm)
         self.js_click(self.save_confirm)
         time.sleep(2)
         self.wait_for_element(self.saved_reports_menu_link, 100)
