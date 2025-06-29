@@ -299,15 +299,17 @@ class ReportPage(BasePage):
 
     def saved_report(self):
         self.js_click(self.case_activity_rep)
-        self.wait_for_element(self.save_xpath)
-        self.click(self.save_xpath)
-        self.wait_for_element(self.new_saved_report_name)
+        self.wait_for_element(self.save_xpath, 30)
+        self.js_click(self.save_xpath)
+        time.sleep(1)
+        self.wait_for_element(self.new_saved_report_name, 50)
         self.send_keys(self.new_saved_report_name, self.report_name_saved)
         time.sleep(0.5)
         self.click(self.save_confirm)
         time.sleep(2)
         self.wait_for_element(self.saved_reports_menu_link, 100)
-        self.wait_to_click(self.saved_reports_menu_link)
+        self.js_click(self.saved_reports_menu_link)
+        time.sleep(2)
         assert self.is_visible_and_displayed(self.saved_report_created, 220)
         print("Report Saved successfully!")
 
@@ -548,6 +550,7 @@ class ReportPage(BasePage):
 
     def validate_messaging_history_for_cond_alert(self, cond_alert):
         self.wait_to_click(self.messaging_history_rep)
+        self.wait_for_element(self.date_input, 50)
         date_range = self.get_todays_date_range()
         self.clear(self.date_input)
         self.send_keys(self.date_input, date_range + Keys.TAB)

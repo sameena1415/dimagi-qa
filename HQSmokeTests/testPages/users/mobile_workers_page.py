@@ -214,12 +214,14 @@ class MobileWorkerPage(BasePage):
             print("User should not be present")
 
     def mobile_worker_menu(self):
-        self.wait_to_click(self.mobile_workers_menu_link_text)
+        self.wait_for_element(self.mobile_workers_menu_link_text, 50)
+        self.js_click(self.mobile_workers_menu_link_text)
+        time.sleep(5)
         assert "Mobile Workers : Users :: - CommCare HQ" in self.driver.title, "Unable find the Users Menu."
 
     def create_mobile_worker(self):
         try:
-            self.wait_to_click(self.create_mobile_worker_id)
+            self.wait_to_click(self.create_mobile_worker_id, 40)
             self.wait_for_element(self.mobile_worker_username_id)
         except (TimeoutException, NoSuchElementException):
             print("TIMEOUT ERROR: Couldn't find create mobile worker button. ")
