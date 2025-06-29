@@ -456,9 +456,13 @@ class MessagingPage(BasePage):
         self.wait_for_element(self.page_limit)
         self.select_by_value(self.page_limit, "50")
         time.sleep(2)
-        self.wait_to_click(self.delete_keyword)
-        self.wait_to_click(self.confirm_delete_keyword)
+        self.wait_for_element(self.delete_keyword)
+        self.click(self.delete_keyword)
+        self.wait_for_element(self.confirm_delete_keyword)
+        self.click(self.confirm_delete_keyword)
+        time.sleep(3)
         self.reload_page()
+        self.wait_for_element(self.page_limit, 30)
         try:
             isPresent = self.is_displayed(self.keyword_created)
         except NoSuchElementException:
@@ -472,9 +476,13 @@ class MessagingPage(BasePage):
         self.wait_for_element(self.page_limit)
         self.select_by_value(self.page_limit, "50")
         time.sleep(2)
-        self.wait_to_click(self.delete_structured_keyword)
-        self.wait_to_click(self.confirm_delete_structured_keyword)
+        self.wait_for_element(self.delete_structured_keyword)
+        self.click(self.delete_structured_keyword)
+        self.wait_for_element(self.confirm_delete_structured_keyword)
+        self.click(self.confirm_delete_structured_keyword)
+        time.sleep(3)
         self.reload_page()
+        self.wait_for_element(self.page_limit, 30)
         try:
             isPresent = self.is_displayed(self.structured_keyword_created)
         except NoSuchElementException:
