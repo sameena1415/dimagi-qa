@@ -68,18 +68,18 @@ def main():
     is_ci = os.environ.get("CI") == "true"
     mt_tz = pytz.timezone("US/Mountain")
 
-
+   
     if is_ci:
-    for hour in range(24):
-        run_locust_for_hour(hour, args, is_ci)
-        if hour < 23:
-            time.sleep(3600)
+        hours_to_run = range(24)
     else:
         current_hour = int(datetime.now(mt).strftime("%H"))
-        for hour in range(current_hour, 24):
-            run_locust_for_hour(hour, args, is_ci)
-            if hour < 23:
-                time.sleep(90)
+        hours_to_run = range(current_hour, 24)
+
+    for hour in hours_to_run:
+        run_locust_for_hour(hour, args, is_ci)
+        if hour < 23:
+            time.sleep(100)  # short gap before next hour run
+    
     # current_hour = datetime.now(mt_tz).strftime("%H")
     # run_locust_for_hour(int(current_hour), args, is_ci)
 
