@@ -310,7 +310,8 @@ class ReportPage(BasePage):
         time.sleep(2)
         self.wait_for_element(self.saved_reports_menu_link, 100)
         self.click(self.saved_reports_menu_link)
-        time.sleep(2)
+        time.sleep(10)
+        self.wait_for_element(self.scheduled_reports_menu_xpath, 200)
         assert self.is_visible_and_displayed(self.saved_report_created, 220)
         print("Report Saved successfully!")
 
