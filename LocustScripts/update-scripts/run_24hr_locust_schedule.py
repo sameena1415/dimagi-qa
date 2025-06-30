@@ -33,6 +33,8 @@ def run_locust_for_hour(hour, args, is_ci):
         f"--user-details={args.users_json}",
         f"--html={html_report_name}"
     ]
+    if is_ci:
+        cmd.insert(3, "--headless")
 
     print(f"[{datetime.now()}] Starting Locust for hour {hour:02d}...")
     try:
