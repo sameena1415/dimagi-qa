@@ -5,7 +5,8 @@ name: Hourly Admit Client Load test
 
 on:
   schedule:
-    - cron: '0 * * * 1-5'  # 00:00 MT during DST (UTC-6)
+    - cron: '0 6 * * 1-5'  # 00:00 MT during DST (UTC-6)
+    - cron: '0 7 * * 1-5'
 
   workflow_dispatch:
     inputs:
@@ -80,17 +81,30 @@ jobs:
             --app-id 77bbaaa1d7e5404781bbe680ce9a90d2 \
             --build-id 2ae6dcfc44834e40a703155ebedd3bec
 
+      - name: Echo current Mountain Time hour
+        run: |
+          python -c "
+          import pytz
+          from datetime import datetime
+          mt = pytz.timezone('US/Mountain')
+          now = datetime.now(mt)
+          print('Current Mountain Time hour:', now.strftime('%H'))
+
+      - name: Set MT hour to env
+        run: |
+          echo "MT_HOUR=$(python -c 'import pytz; from datetime import datetime; print(datetime.now(pytz.timezone(\"US/Mountain\")).strftime(\"%H\"))')" >> $GITHUB_ENV
+
       - name: Archive test results
-        id: artifact-upload-step
+        id: artifact-upload-step-${{ env.MT_HOUR }}
         if: ${{ always() }}
         uses: actions/upload-artifact@v4
         with:
-          name: hourly-locust-reports-*
+          name: hourly-locust-reports-${{ env.NOW }}
           path:  /home/runner/work/dimagi-qa/dimagi-qa/hour_*.html
           retention-days: 2
 
       - name: Fetch artifact ID
-        run: echo 'Artifact ID is ${{ steps.artifact-upload-step.outputs.artifact-id }}'
+        run: echo 'Artifact ID is ${{ steps.artifact-upload-step-${{ env.MT_HOUR }}.outputs.artifact-id }}'
 
 
       - name: Set email vars
@@ -119,7 +133,7 @@ jobs:
             }
 
             let actionRunLink = context.payload.repository.html_url + `/actions/runs/${context.runId}`
-            let testSuite = 'BHA Admit Client Hourle Load Tests'
+            let testSuite = 'BHA Admit Client Hourly Load Tests for ${{ env.MT_HOUR }} hrs'
             let bodyContent = await fs.readFile(bodyFile, 'utf8')
             bodyContent = bodyContent.replace(/{{actionRunLink}}/g, actionRunLink)
                 .replace(/{{runNumber}}/g, context.runNumber)
@@ -139,7 +153,7 @@ jobs:
             }
 
       - name: Send Result Email
-        if: ${{ failure() }}
+        if: ${{ always() }}
         uses: dawidd6/action-send-mail@v3
         with:
           server_address: smtp.gmail.com
@@ -192,7 +206,7 @@ jobs:
             					"type": "section",
             					"text": {
             						"type": "mrkdwn",
-            						"text": " Bonjour :alphabet-yellow-q::alphabet-yellow-a: 👋 \n*${{ github.workflow }}* were just triggered!\n"
+            						"text": " Hola :alphabet-yellow-q::alphabet-yellow-a: 👋 \n*${{ github.workflow }}* were just triggered for ${{ env.MT_HOUR }} hrs!\n"
             					}
             				},
             				{
@@ -226,7 +240,7 @@ jobs:
             							"emoji": true
             						},
             						"value": "click_me_123",
-                                    "url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts/${{ steps.artifact-upload-step.outputs.artifact-id }}",
+                                    "url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts/${{ steps.artifact-upload-step-${{ env.MT_HOUR }}.outputs.artifact-id }}",
             						"action_id": "button-action",
             						"style": "danger"
             					}
@@ -254,7 +268,7 @@ jobs:
             					"type": "section",
             					"text": {
             						"type": "mrkdwn",
-            						"text": " Bonjour :alphabet-yellow-q::alphabet-yellow-a: 👋 \n*${{ github.workflow }}* were just triggered!\n"
+            						"text": " Hola :alphabet-yellow-q::alphabet-yellow-a: 👋 \n*${{ github.workflow }}* were just triggered for ${{ env.MT_HOUR }} hrs!\n"
             					}
             				},
             				{
@@ -288,7 +302,7 @@ jobs:
             							"emoji": true
             						},
             						"value": "click_me_123",
-            						"url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts/${{ steps.artifact-upload-step.outputs.artifact-id }}",
+            						"url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts/${{ steps.artifact-upload-step-${{ env.MT_HOUR }}.outputs.artifact-id }}",
             						"action_id": "button-action",
             						"style": "primary"
             					}
