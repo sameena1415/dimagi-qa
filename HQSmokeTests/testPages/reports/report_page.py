@@ -88,6 +88,7 @@ class ReportPage(BasePage):
 
         # Saved Reports
         self.new_saved_report_name = (By.ID, "name")
+        self.saved_report_description = (By.NAME, "description")
         self.save_confirm = (By.XPATH, '//div[@class = "btn btn-primary"]')
         self.saved_reports_menu_link = (By.LINK_TEXT, 'My Saved Reports')
         self.saved_report_created = (By.XPATH, "//a[text()='" + self.report_name_saved + "']")
@@ -298,13 +299,16 @@ class ReportPage(BasePage):
         self.check_if_report_loaded()
 
     def saved_report(self):
-        self.js_click(self.case_activity_rep)
-        self.wait_for_element(self.save_xpath, 30)
-        self.js_click(self.save_xpath)
-        time.sleep(1)
+        self.case_activity_report()
+        time.sleep(3)
+        self.wait_for_element(self.save_xpath, 50)
+        self.click(self.save_xpath)
+        time.sleep(3)
         self.wait_for_element(self.new_saved_report_name, 50)
         self.send_keys(self.new_saved_report_name, self.report_name_saved)
         time.sleep(1)
+        self.send_keys(self.saved_report_description, self.report_name_saved)
+        time.sleep(2)
         self.wait_for_element(self.save_confirm)
         self.js_click(self.save_confirm)
         time.sleep(2)
@@ -312,7 +316,7 @@ class ReportPage(BasePage):
         self.click(self.saved_reports_menu_link)
         time.sleep(10)
         self.wait_for_element(self.scheduled_reports_menu_xpath, 200)
-        assert self.is_visible_and_displayed(self.saved_report_created, 220)
+        assert self.is_present_and_displayed(self.saved_report_created, 220)
         print("Report Saved successfully!")
 
     def create_scheduled_report_button(self):
