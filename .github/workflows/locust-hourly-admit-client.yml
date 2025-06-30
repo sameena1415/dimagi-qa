@@ -95,16 +95,16 @@ jobs:
           echo "MT_HOUR=$(python -c 'import pytz; from datetime import datetime; print(datetime.now(pytz.timezone(\"US/Mountain\")).strftime(\"%H\"))')" >> $GITHUB_ENV
 
       - name: Archive test results
-        id: artifact-upload-step-${{ env.MT_HOUR }}
+        id: artifact-upload-step
         if: ${{ always() }}
         uses: actions/upload-artifact@v4
         with:
-          name: hourly-locust-reports-${{ env.NOW }}
+          name: hourly-locust-reports-${{ env.MT_HOUR }}
           path:  /home/runner/work/dimagi-qa/dimagi-qa/hour_*.html
           retention-days: 2
 
       - name: Fetch artifact ID
-        run: echo 'Artifact ID is ${{ steps.artifact-upload-step-${{ env.MT_HOUR }}.outputs.artifact-id }}'
+        run: echo 'Artifact ID is ${{ steps.artifact-upload-step.outputs.artifact-id }}'
 
 
       - name: Set email vars
@@ -240,7 +240,7 @@ jobs:
             							"emoji": true
             						},
             						"value": "click_me_123",
-                                    "url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts/${{ steps.artifact-upload-step-${{ env.MT_HOUR }}.outputs.artifact-id }}",
+                                    "url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts/${{ steps.artifact-upload-step.outputs.artifact-id }}",
             						"action_id": "button-action",
             						"style": "danger"
             					}
@@ -302,7 +302,7 @@ jobs:
             							"emoji": true
             						},
             						"value": "click_me_123",
-            						"url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts/${{ steps.artifact-upload-step-${{ env.MT_HOUR }}.outputs.artifact-id }}",
+            						"url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts/${{ steps.artifact-upload-step.outputs.artifact-id }}",
             						"action_id": "button-action",
             						"style": "primary"
             					}
