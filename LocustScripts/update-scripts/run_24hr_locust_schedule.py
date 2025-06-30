@@ -28,7 +28,7 @@ def run_locust_for_hour(hour, args, is_ci):
         f"--app-id={args.app_id}",
         f"--build-id={args.build_id}",
         f"--app-config={args.app_config}",
-        f"--user-details={args.user_details}",
+        f"--user-details={args.users_json}",
         f"--html={html_report_name}"
     ]
 
@@ -49,7 +49,7 @@ def wait_until_next_hour():
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("-f", "--locustfile", required=True)
+    parser.add_argument("-f", "--locust-file", required=True)
     parser.add_argument("-u", "--users", required=False)
     parser.add_argument("-r", "--spawn-rate", required=False)
     parser.add_argument("--run-time", default="1h")
@@ -58,7 +58,7 @@ def main():
     parser.add_argument("--app-id", required=True)
     parser.add_argument("--build-id", required=True)
     parser.add_argument("--app-config", required=True)
-    parser.add_argument("--user-details", required=True)
+    parser.add_argument("--users-json", required=True)
 
     args = parser.parse_args()
     is_ci = os.environ.get("CI") == "true"
