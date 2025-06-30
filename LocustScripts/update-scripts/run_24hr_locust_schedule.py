@@ -1,17 +1,28 @@
 import argparse
+import json
 import subprocess
 import time
 import os
 from datetime import datetime
 
 def run_locust_for_hour(hour, args, is_ci):
+    with open(args.users_json) as f:
+        data = json.load(f)
+    users = data["users_by_hour"].get(str(hour).zfill(2), [])
+    user_count = len(users)
+
+    if user_count == 0:
+        print(f"[{hour:02d}:00] No users to run.")
+        return
+
+    print(f"[{hour:02d}:00] Running {user_count} users.")
     html_report_name = f"hour_{hour:02d}_report.html"
     cmd = [
         "locust",
-        "-f", args.locustfile,
-        "-u", args.users,
-        "-r", args.spawn_rate,
-        "--run-time", args.run_time,
+        "-f", args.locust_file,
+        "-u", str(user_count),
+        "-r", str(max(1, user_count // 30)),
+        "--run-time", "1h",
         f"--host={args.host}",
         f"--domain={args.domain}",
         f"--app-id={args.app_id}",
@@ -39,8 +50,8 @@ def wait_until_next_hour():
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("-f", "--locustfile", required=True)
-    parser.add_argument("-u", "--users", required=True)
-    parser.add_argument("-r", "--spawn-rate", required=True)
+    parser.add_argument("-u", "--users", required=False)
+    parser.add_argument("-r", "--spawn-rate", required=False)
     parser.add_argument("--run-time", default="1h")
     parser.add_argument("--host", required=True)
     parser.add_argument("--domain", required=True)
