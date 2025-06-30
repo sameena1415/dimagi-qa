@@ -5,6 +5,8 @@ import time
 import os
 from datetime import datetime
 
+import pytz
+
 def run_locust_for_hour(hour, args, is_ci):
     with open(args.users_json) as f:
         data = json.load(f)
@@ -62,11 +64,15 @@ def main():
 
     args = parser.parse_args()
     is_ci = os.environ.get("CI") == "true"
+    mt_tz = pytz.timezone("US/Mountain")
 
-    for hour in range(24):
-        run_locust_for_hour(hour, args, is_ci)
-        if hour < 23:
-            wait_until_next_hour()
+    current_hour = datetime.now(mt_tz).strftime("%H")
+    run_locust_for_hour(int(current_hour), args, is_ci)
+
+    # for hour in range(24):
+    #     run_locust_for_hour(hour, args, is_ci)
+    #     if hour < 23:
+    #         wait_until_next_hour()
 
 if __name__ == "__main__":
     main()
