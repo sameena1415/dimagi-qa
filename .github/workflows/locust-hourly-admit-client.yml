@@ -89,6 +89,7 @@ jobs:
           mt = pytz.timezone('US/Mountain')
           now = datetime.now(mt)
           print('Current Mountain Time hour:', now.strftime('%H'))
+          "
 
       - name: Set MT hour to env
         run: |
