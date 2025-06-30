@@ -4,6 +4,9 @@
 name: Hourly Admit Client Load test
 
 on:
+  schedule:
+    - cron: '0 6 * * 1-5'  # 00:00 MT during DST (UTC-6)
+    - cron: '0 7 * * 1-5'
   workflow_dispatch:
     inputs:
       environment:
@@ -57,6 +60,7 @@ jobs:
           pip install -r LocustScripts/requirements.txt
 
       - name: Hourly Admit Client Load test with Locust
+        continue-on-error: true
         env:
           DIMAGIQA_ENV: ${{ matrix.environment }}  #${{ secrets.DIMAGIQA_URL }}
           DIMAGIQA_LOCUST_PASSWORD: ${{ secrets.DIMAGIQA_LOCUST_PASSWORD }}
@@ -78,7 +82,7 @@ jobs:
 
       - name: Archive test results
         id: artifact-upload-step
-        if: ${{ success() || failure() }}
+        if: ${{ always() }}
         uses: actions/upload-artifact@v4
         with:
           name: hourly-locust-reports-*
@@ -90,7 +94,7 @@ jobs:
 
 
       - name: Set email vars
-        if: ${{ failure() }}
+        if: ${{ always() }}
         id: configure_email
         uses: actions/github-script@v6
         env:
@@ -162,22 +166,10 @@ jobs:
           result-encoding: string
           script: |
             const {CC_ENV, JOB_STATUS, CC_EVENT} = process.env
-            let SLACK_WEBHOOK_URL = '${{ secrets.SLACK_WEBHOOK_URL_SMOKE }}'
-            if (CC_EVENT == 'repository_dispatch' && CC_ENV == 'production') {
-              SLACK_WEBHOOK_URL = '${{ secrets.SLACK_WEBHOOK_URL_PROD_RESULTS }}'
-              console.log( "Prod deploy")
-            } else if (CC_EVENT != 'repository_dispatch' && CC_ENV == 'production' && JOB_STATUS == 'failure') {
-              SLACK_WEBHOOK_URL = '${{ secrets.SLACK_WEBHOOK_URL_SMOKE }}'
-              console.log( "Not Prod deploy but Prof failure")
-            } else if (CC_ENV == 'staging' && JOB_STATUS == 'failure') {
-              SLACK_WEBHOOK_URL = '${{ secrets.SLACK_WEBHOOK_URL_SMOKE }}'
-              console.log("Staging Failure")
-            } else if (CC_EVENT == 'repository_dispatch' && CC_ENV == 'india') {
-              SLACK_WEBHOOK_URL = '${{ secrets.SLACK_WEBHOOK_URL_INDIA }}'
-              console.log("India Failure")
-            } else if (CC_EVENT != 'repository_dispatch' && CC_ENV == 'india' && JOB_STATUS == 'failure') {
-              SLACK_WEBHOOK_URL = '${{ secrets.SLACK_WEBHOOK_URL_SMOKE }}'
-              console.log("India Success")
+            let SLACK_WEBHOOK_URL = '${{ secrets.SLACK_WEBHOOK_URL_BHA }}'
+            if (CC_ENV == 'production') {
+              SLACK_WEBHOOK_URL = '${{ secrets.SLACK_WEBHOOK_URL_BHA }}'
+              console.log("Slack notification")
             } else {
               SLACK_WEBHOOK_URL = ' '
               console.log("No notification sent")
