@@ -131,6 +131,7 @@ class WebApps(BasePage):
             self.wait_for_element((By.XPATH, self.current_page.format(form_name)), timeout=20)
 
     def search_all_cases(self):
+        self.wait_for_element(self.search_all_cases_button, 100)
         self.scroll_to_element(self.search_all_cases_button)
         self.wait_to_click(self.search_all_cases_button)
         self.wait_after_interaction(timeout=20)
