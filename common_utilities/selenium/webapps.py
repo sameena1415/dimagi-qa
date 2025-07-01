@@ -90,6 +90,7 @@ class WebApps(BasePage):
             self.wait_to_click(self.webapps_home)
         self.application = self.get_element(self.app_name_format, app_name)
         self.application_header = self.get_element(self.app_header_format, app_name)
+        self.wait_for_element(self.application, 200)
         self.scroll_to_element(self.application)
         self.js_click(self.application)
         time.sleep(0.5)

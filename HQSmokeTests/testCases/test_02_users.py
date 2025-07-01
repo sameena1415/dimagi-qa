@@ -73,6 +73,7 @@ def test_case_02_create_mobile_worker(driver, settings):
     menu = HomePage(driver, settings)
     menu.users_menu()
     worker.delete_bulk_users()
+    menu.users_menu()
     worker.mobile_worker_menu()
     worker.create_mobile_worker()
     worker.mobile_worker_enter_username(username)
