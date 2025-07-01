@@ -59,13 +59,13 @@ def test_case_03_search_property_settings(driver, settings):
     webapps.open_menu(CaseSearchUserInput.inline_search_menu)
     webapps.clear_selections_on_case_search_page()
     casesearch.search_against_property(search_property=CaseSearchUserInput.rating,
-                                       input_value=CaseSearchUserInput.four_star,
-                                       property_type=COMBOBOX)
-    time.sleep(2)
-    casesearch.search_against_property(search_property=CaseSearchUserInput.rating,
                                        input_value=CaseSearchUserInput.five_star,
                                        property_type=COMBOBOX,
                                        include_blanks=YES)
+    time.sleep(4)
+    casesearch.search_against_property(search_property=CaseSearchUserInput.rating,
+                                       input_value=CaseSearchUserInput.four_star,
+                                       property_type=COMBOBOX)
     time.sleep(2)
     casesearch.check_values_selected(search_property=CaseSearchUserInput.rating,
                                      value_list=[CaseSearchUserInput.four_star, CaseSearchUserInput.five_star],
