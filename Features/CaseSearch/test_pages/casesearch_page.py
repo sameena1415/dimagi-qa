@@ -315,7 +315,8 @@ class CaseSearchWorkflows(BasePage):
     def check_todays_case_claim_present_on_report(self):
         self.select_by_text(self.case_type_select, "commcare-case-claim")
         self.wait_to_click(self.report_apply_filters)
-        date_on_report = str((datetime.today()).date().strftime("%b %d, %Y"))
+        date_on_report =  str(datetime.utcnow().strftime("%b %d, %Y"))
+        # date_on_report = str((datetime.today()).date().strftime("%b %d, %Y"))
         recent_claim_case = (By.XPATH, self.commcare_case_claim_case.format(date_on_report))
         print(date_on_report, recent_claim_case)
         try:
