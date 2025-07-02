@@ -18,13 +18,15 @@ def run_locust_for_current_hour(args):
     with open(args.user_details, 'r') as f:
         users_data = json.load(f)
 
-    if current_hour not in users_data:
+    users_by_hour = users_data.get("users_by_hour", {})
+    if current_hour not in users_by_hour:
         print(f"No user data for hour {current_hour}. Skipping...")
         return
 
-    users = users_data[current_hour]
+    users = users_by_hour[current_hour]
     user_count = len(users)
     remaining_minutes = get_remaining_minutes_in_hour()
+    os.environ["REMAINING_SECONDS"] = str(remaining_minutes * 60)
 
     # Use dynamic run-time and spawn-rate
     run_time = f"{remaining_minutes}m"

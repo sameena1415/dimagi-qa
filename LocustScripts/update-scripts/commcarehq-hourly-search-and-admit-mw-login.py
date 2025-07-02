@@ -348,11 +348,34 @@ class LoginCommCareHQWithUniqueUsers(BaseLoginCommCareUser):
 
     def on_start(self):
         self.user_details = USERS_DETAILS.get()
+        # if hasattr(self, "user_details") and getattr(self.user_details, "index", None) is not None:
+        #     idx = self.user_details.index
+        #     base = 3600 / TOTAL_USERS
+        #     delay = base * idx
+        #     logger.info(f"User {self.user_details.username} sleeping for {delay:.2f} seconds before starting")
+        #     time.sleep(delay)
+        # else:
+        #     logger.warning("User index not set, skipping delay")
+        #
+        # if self.user_details is None:
+        #     logger.warning("No available user credentials for this hour. User exiting.")
+        #     self.environment.runner.quit()
+        #     raise StopUser()
         if hasattr(self, "user_details") and getattr(self.user_details, "index", None) is not None:
             idx = self.user_details.index
-            base = 3600 / TOTAL_USERS
-            delay = base * idx
-            logger.info(f"User {self.user_details.username} sleeping for {delay:.2f} seconds before starting")
+            total_users = TOTAL_USERS
+
+            # Use remaining seconds from env or default to 3600
+            try:
+                total_duration = int(os.environ.get("REMAINING_SECONDS", "3600"))
+            except ValueError:
+                total_duration = 3600
+
+            base_delay = total_duration / total_users
+            delay = base_delay * idx
+            logger.info(
+                f"User {self.user_details.username} sleeping for {delay:.2f} seconds (based on {total_duration}s)"
+                )
             time.sleep(delay)
         else:
             logger.warning("User index not set, skipping delay")
