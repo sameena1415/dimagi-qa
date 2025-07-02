@@ -35,7 +35,7 @@ def run_locust_for_current_hour(args):
     cmd = [
         "locust",
         "--headless",
-        "-f", args.locust-file,
+        "-f", args.f,
         "-u", str(user_count),
         "-r", str(spawn_rate),
         "--run-time", run_time,
@@ -53,12 +53,12 @@ def run_locust_for_current_hour(args):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("-f", "--locust-file", required=True)
+    parser.add_argument("-f", required=True)
     parser.add_argument("--host", required=True)
     parser.add_argument("--domain", required=True)
     parser.add_argument("--app-id", required=True)
     parser.add_argument("--build-id", required=True)
-    parser.add_argument("--app-config", required=True)
+    parser.add_argument("--app_config", required=True)
     parser.add_argument("--user_details", required=True)
     args = parser.parse_args()
 
