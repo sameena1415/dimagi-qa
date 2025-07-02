@@ -36,8 +36,6 @@ def test_case_30_reassign_cases(driver, settings):
         3. Reassign this case to a new parent
         (This routine may take a few minutes to run)
     """
-    if 'staging' in settings['url']:
-        pytest.xfail("Failing on Staging")
     home = HomePage(driver, settings)
     home.data_menu()
     reassign = ReassignCasesPage(driver, settings)
