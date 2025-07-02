@@ -1,92 +1,69 @@
 import argparse
 import json
 import subprocess
-import time
-import os
-from datetime import datetime
-
+from datetime import datetime, timedelta
 import pytz
 
-def run_locust_for_hour(hour, args, is_ci):
-    with open(args.users_json) as f:
-        data = json.load(f)
-    users = data["users_by_hour"].get(str(hour).zfill(2), [])
-    user_count = len(users)
+mt = pytz.timezone("America/Denver")
 
-    if user_count == 0:
-        print(f"[{hour:02d}:00] No users to run.")
+def get_remaining_minutes_in_hour():
+    now = datetime.now(mt)
+    next_hour = (now + timedelta(hours=1)).replace(minute=0, second=0, microsecond=0)
+    return int((next_hour - now).total_seconds() // 60)
+
+def run_locust_for_current_hour(args):
+    current_hour = datetime.now(mt).strftime("%H")
+    print(f"Running for hour: {current_hour}")
+
+    with open(args.user_details, 'r') as f:
+        users_data = json.load(f)
+
+    if current_hour not in users_data:
+        print(f"No user data for hour {current_hour}. Skipping...")
         return
 
-    print(f"[{hour:02d}:00] Running {user_count} users.")
-    html_report_name = f"hour_{hour:02d}_report.html"
+    users = users_data[current_hour]
+    user_count = len(users)
+    remaining_minutes = get_remaining_minutes_in_hour()
+
+    # Use dynamic run-time and spawn-rate
+    run_time = f"{remaining_minutes}m"
+    spawn_rate = max(1, user_count // max(1, remaining_minutes))
+
+    print(f"Users: {user_count}, Run-time: {run_time}, Spawn rate: {spawn_rate}")
+
     cmd = [
         "locust",
-        "-f", args.locust_file,
+        "--headless",
+        "-f", args.locustfile,
         "-u", str(user_count),
-        "-r", str(max(1, user_count // 30)),
-        "--run-time", "1h",
-        f"--host={args.host}",
-        f"--domain={args.domain}",
-        f"--app-id={args.app_id}",
-        f"--build-id={args.build_id}",
-        f"--app-config={args.app_config}",
-        f"--user-details={args.users_json}",
-        f"--html={html_report_name}"
+        "-r", str(spawn_rate),
+        "--run-time", run_time,
+        "--host", args.host,
+        "--domain", args.domain,
+        "--app-id", args.app_id,
+        "--build-id", args.build_id,
+        "--app-config", args.app_config,
+        "--user-details", args.user_details,
+        "--html", f"hour_{current_hour}_report.html"
     ]
-    if is_ci:
-        cmd.insert(3, "--headless")
 
-    print(f"[{datetime.now()}] Starting Locust for hour {hour:02d}...")
-    try:
-        subprocess.run(cmd, check=True)
-    except subprocess.CalledProcessError as e:
-        print(f"Error running locust for hour {hour:02d}: {e}")
-    else:
-        print(f"[{datetime.now()}] Completed hour {hour:02d}")
+    subprocess.run(cmd, check=True)
 
-def wait_until_next_hour():
-    now = time.time()
-    next_hour = (int(now // 3600) + 1) * 3600
-    sleep_duration = max(0, next_hour - now)
-    print(f"Waiting {sleep_duration:.2f} seconds until next hour...")
-    time.sleep(sleep_duration)
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("-f", "--locust-file", required=True)
-    parser.add_argument("-u", "--users", required=False)
-    parser.add_argument("-r", "--spawn-rate", required=False)
-    parser.add_argument("--run-time", default="1h")
+    parser.add_argument("-f", "--locustfile", required=True)
     parser.add_argument("--host", required=True)
     parser.add_argument("--domain", required=True)
     parser.add_argument("--app-id", required=True)
     parser.add_argument("--build-id", required=True)
     parser.add_argument("--app-config", required=True)
-    parser.add_argument("--users-json", required=True)
-
+    parser.add_argument("--user_details", required=True)
     args = parser.parse_args()
-    is_ci = os.environ.get("CI") == "true"
-    mt_tz = pytz.timezone("US/Mountain")
 
-   
-    if is_ci:
-        hours_to_run = range(24)
-    else:
-        current_hour = int(datetime.now(mt).strftime("%H"))
-        hours_to_run = range(current_hour, 24)
+    run_locust_for_current_hour(args)
 
-    for hour in hours_to_run:
-        run_locust_for_hour(hour, args, is_ci)
-        if hour < 23:
-            time.sleep(100)  # short gap before next hour run
-    
-    # current_hour = datetime.now(mt_tz).strftime("%H")
-    # run_locust_for_hour(int(current_hour), args, is_ci)
-
-    # for hour in range(24):
-    #     run_locust_for_hour(hour, args, is_ci)
-    #     if hour < 23:
-    #         wait_until_next_hour()
 
 if __name__ == "__main__":
     main()
