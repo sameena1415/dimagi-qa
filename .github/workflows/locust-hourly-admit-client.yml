@@ -5,7 +5,7 @@ name: Hourly Admit Client Load test
 
 on:
   schedule:
-    - cron: '0 0 * * 1-5'
+    - cron: '0 * * * 1-5'
 
   workflow_dispatch:
     inputs:
