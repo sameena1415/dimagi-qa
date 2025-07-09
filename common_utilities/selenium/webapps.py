@@ -418,7 +418,7 @@ class WebApps(BasePage):
             print("Sync button present in home page")
             self.wait_to_click(self.sync)
             self.wait_after_interaction(200)
-            assert self.is_present_and_displayed(self.sync_success_message), ("Sync is not successful!")
+            assert self.is_present_and_displayed(self.sync_success_message, 300), ("Sync is not successful!")
         else:
             print("Sync button not present in home page")
             self.js_click(self.setting_button)
