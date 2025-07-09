@@ -38,7 +38,8 @@ class WebApps(BasePage):
         self.setting_button = (By.XPATH, "//h3[contains(@id,'setting')]")
         self.sync_button = (By.XPATH, "//button[contains(@class,'sync')]")
         self.done_button = (By.XPATH, "//button[contains(@class,'done')]")
-
+        self.sync = (By.XPATH, "//h3[contains(text(), 'Sync')]")
+        self.sync_success_message = (By.XPATH, "(//div[text()='User Data successfully synced.'])[1]")
 
         self.form_submit = (By.XPATH, "//div[contains(@id,'submit')]//button[contains(@class,'submit')]")
         self.form_submission_successful = (By.XPATH, "//div[contains(@class,'alert-success')][contains(text(), 'successfully saved') or .//p[contains(text(), 'successfully saved')]]")
@@ -413,12 +414,20 @@ class WebApps(BasePage):
             self.wait_to_click(self.webapps_home)
             time.sleep(0.5)
         self.wait_for_element(self.setting_button)
-        self.js_click(self.setting_button)
-        self.wait_for_element(self.sync_button)
-        self.js_click(self.sync_button)
-        time.sleep(3)
-        self.wait_after_interaction()
-        self.wait_for_element(self.done_button)
-        self.js_click(self.done_button)
-        time.sleep(0.5)
+        if self.is_present(self.sync):
+            print("Sync button present in home page")
+            self.wait_to_click(self.sync)
+            self.wait_after_interaction(200)
+            assert self.is_present_and_displayed(self.sync_success_message), ("Sync is not successful!")
+        else:
+            print("Sync button not present in home page")
+            self.js_click(self.setting_button)
+            self.wait_for_element(self.sync_button)
+            self.js_click(self.sync_button)
+            time.sleep(3)
+            self.wait_after_interaction(200)
+            self.wait_for_element(self.done_button)
+            self.js_click(self.done_button)
+        time.sleep(10)
+        print("Sleeping for some time for the data to get updated")
 
