@@ -12,7 +12,8 @@ def post(command, client, app_details, user_details, extra_json=None, name=None,
         "app_id": app_details.id,
         "domain": app_details.domain,
         "locale": "en",
-        "username": user_details.username
+        "username": user_details.username,
+        "windowWidth": 1280
         }
     if extra_json:
         data.update(extra_json)
@@ -34,6 +35,8 @@ def post(command, client, app_details, user_details, extra_json=None, name=None,
             logger.info(f"{formplayer_host}/{command}/")
             # logger.info("json submitted: "+ str(data))
             # logger.info("response"+str(response.json()))
+        if command == 'get_endpoint':
+            logger.info(f"response status: {str(response.status_code)}")
         if validation:
             validate_response(response, validation)
         return response.json()
