@@ -4,8 +4,6 @@
 name: Hourly Send Referrals Load test
 
 on:
-  schedule:
-    - cron: '2 * * * 1-5'
 
   workflow_dispatch:
     inputs:
