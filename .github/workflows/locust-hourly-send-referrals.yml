@@ -68,7 +68,7 @@ jobs:
           echo ${{env.NOW}}
           python LocustScripts/update-scripts/run_24hr_locust_schedule.py \
             --locust-file LocustScripts/update-scripts/commcarehq-hourly-send_refferals-mw-login.py \
-            --user-details LocustScripts/update-scripts/project-config/co-carecoordination-perf/mobile_worker_credentials_update_bed_avail_hourly.json \
+            --user-details LocustScripts/update-scripts/project-config/co-carecoordination-perf/mobile_worker_credentials_send_refferals_hourly.json \
             --app-config LocustScripts/update-scripts/project-config/co-carecoordination-perf/app_config_send_referrals.json \
             --host https://www.commcarehq.org \
             --domain co-carecoordination-perf \
