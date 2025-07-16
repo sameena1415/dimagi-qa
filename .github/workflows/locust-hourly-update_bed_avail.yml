@@ -70,10 +70,11 @@ jobs:
             --locust-file LocustScripts/update-scripts/commcarehq-hourly-update-bed-availability-mw-login.py \
             --user-details LocustScripts/update-scripts/project-config/co-carecoordination-perf/mobile_worker_credentials_update_bed_avail_hourly.json \
             --app-config LocustScripts/update-scripts/project-config/co-carecoordination-perf/app_config_update_bed_avail.json \
-            --host https://www.commcarehq.org \
+            --host https://www.commcarehq.org/ \
             --domain co-carecoordination-perf \
             --app-id 6283b3d054f141c88345c584a8f2c48f \
             --build-id b9a1ef9ff5ba4b61957f1e0524f0dd03
+
 
       - name: Echo current Mountain Time hour
         run: |

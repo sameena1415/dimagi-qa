@@ -141,7 +141,7 @@ class WorkloadModelSteps(SequentialTaskSet):
                     recurse(item)
 
         recurse(data)
-        logger.info(f"Extracted answers: {answers}")
+        logger.info(f"Answers extracted")
         return answers
 
     def get_first_5_numeric_ixs(self, answers):
