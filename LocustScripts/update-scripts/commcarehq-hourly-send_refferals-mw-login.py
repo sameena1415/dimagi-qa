@@ -117,12 +117,13 @@ class WorkloadModelSteps(SequentialTaskSet):
             self.data_before=self.user.hq_user.navigate(
                 "Open 'Send Referrals' Menu",
                 data={"selections": [self.FUNC_SEND_REFERRALS_MENU['selections']],
-                      "cases_per_page": self.cases_per_page,},
+                      "cases_per_page": self.cases_per_page},
                 expected_title=self.FUNC_SEND_REFERRALS_MENU['title']
             )
-            time.sleep(2)
+            logger.info(self.data_before)
             logger.info("Open 'Send Referrals' Menu  for user " + self.user.user_details.username
                         )
+            return self.data_before
         except Exception as e:
             logger.exception(f"Task open_send_referrals_menu failed, stopping user {self.user.user_details.username}")
             self.user.stop()
