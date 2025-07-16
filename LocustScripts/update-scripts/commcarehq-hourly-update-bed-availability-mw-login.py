@@ -113,8 +113,9 @@ class WorkloadModelSteps(SequentialTaskSet):
             data={"selections": [self.FUNC_BED_AVAILABILITY_MENU['selections']]},
             expected_title=self.FUNC_BED_AVAILABILITY_MENU['title']
         )
+        logger.info(f"Response: {self.data}")
         self.session_id=self.data["session_id"]
-        logger.info("Open 'Update Bed Availability' Menu  for user " + self.user.user_details.username
+        logger.info(f"Open 'Update Bed Availability' Menu  for user {self.user.user_details.username} with session ID: {self.session_id}"
                     )
 
     @task
