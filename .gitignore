@@ -276,3 +276,8 @@ LocustScripts/update-scripts/project-config/co-carecoordination-perf/mobile_work
 /POCs/AppPercyMobile/settings.cfg
 /POCs/PercyWebApps/settings.cfg
 /POCs/VisualComparison/settings.cfg
+
+USH_Apps/WeeklyBHACleanup/testCases/report.html
+USH_Apps/WeeklyBHACleanup/report.html
+USH_Apps/WeeklyBHACleanup/report_*
+USH_Apps/WeeklyBHACleanup/settings.cfg

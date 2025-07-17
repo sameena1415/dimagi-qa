@@ -88,7 +88,8 @@ jobs:
 
       - name: Set MT hour to env
         run: |
-          echo "MT_HOUR=$(python -c 'import pytz; from datetime import datetime; print(datetime.now(pytz.timezone(\"US/Mountain\")).strftime(\"%H\"))')" >> $GITHUB_ENV
+          MT_HOUR=$(python -c "import pytz; from datetime import datetime; print(datetime.now(pytz.timezone('US/Mountain')).strftime('%H'))")
+          echo "MT_HOUR=$MT_HOUR" >> $GITHUB_ENV
 
       - name: Archive test results
         id: artifact-upload-step

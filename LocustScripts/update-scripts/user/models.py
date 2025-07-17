@@ -135,6 +135,22 @@ class HQUser:
             "submit-all", data, name=name, validation=validation
             )
 
+    def get_endpoint(self, name, data, expected_response_message=None, status=None):
+        validation = None
+        if expected_response_message:
+            validation = formplayer.ValidationCriteria(key_value_pairs={
+                "submitResponseMessage": expected_response_message
+                }
+                )
+        elif status:
+            validation = formplayer.ValidationCriteria(key_value_pairs={
+                "status": status
+                }
+                )
+        return self.post_formplayer(
+            "get_endpoint", data, name=name, validation=validation
+            )
+
     def post_formplayer(self, command, extra_json=None, name=None, validation=None):
         logger.info("User: %s; Request: %s; Name: %s", self.user_details.username, command, name)
         try:
