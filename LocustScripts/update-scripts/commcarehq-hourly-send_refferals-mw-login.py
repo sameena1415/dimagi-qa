@@ -134,12 +134,14 @@ class WorkloadModelSteps(SequentialTaskSet):
         try:
             entities = response_json.get('entities', [])
             all_ids = list(map(lambda x: x['id'], entities))
+            all_group_keys = list(map(lambda x: x['groupKey'], entities))
             # Extract first ID
             first_case_id = all_ids[0]
-            logger.info(f"First ID: {first_case_id}")
-            payload = {
+            first_group_key = all_group_keys[0]
+            logger.info(f"First ID: {first_case_id} and groupKey: {first_group_key}")
+            payload_endpoint = {
                 "cases_per_page": self.cases_per_page,
-                "endpoint_args": {"case_id": str(first_case_id)},
+                "endpoint_args": {"case_id": str(first_group_key)},
                 "endpoint_id": "favoriting_icon_endpoint",
                 "geo_location": None,
                 "keepAPMTraces": False,
@@ -150,10 +152,26 @@ class WorkloadModelSteps(SequentialTaskSet):
                 "search_text": None,
                 "selections": [self.FUNC_SEND_REFERRALS_SEARCH["selections"]]
                 }
+            payload_detail = {
+                "cases_per_page": self.cases_per_page,
+                "isRefreshCaseSearch":True,
+                "geo_location": None,
+                "keepAPMTraces": False,
+                "offset": 0,
+                "query_data": {},
+                "requestInitiatedByTag": "clickable_icon",
+                "restoreAs": None,
+                "search_text": None,
+                "selections": [self.FUNC_SEND_REFERRALS_SEARCH["selections"], str(first_case_id)]
+                }
 
             self.user.hq_user.get_endpoint(
                 "Selecting first case as favorite",
-                data=payload
+                data=payload_endpoint
+                )
+            self.user.hq_user.get_details(
+                "Selecting first case as favorite",
+                data=payload_detail
                 )
             time.sleep(3)
             return first_case_id
