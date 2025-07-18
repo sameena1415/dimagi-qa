@@ -73,7 +73,7 @@ jobs:
             --app-config LocustScripts/update-scripts/project-config/co-carecoordination-perf/app_config_update_bed_avail.json \
             --host https://www.commcarehq.org/ \
             --domain co-carecoordination-perf \
-            --app-id 6283b3d054f141c88345c584a8f2c48f \
+            --app-id 5abfe7d62fd54e7cb7e6038f8a68e0ea \
             --build-id b9a1ef9ff5ba4b61957f1e0524f0dd03
 
 
