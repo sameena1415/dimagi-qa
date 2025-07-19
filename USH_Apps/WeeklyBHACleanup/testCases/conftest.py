@@ -33,10 +33,10 @@ def environment_settings_hq():
         if var in os.environ:
             settings[name] = os.environ[var]
     if "url" not in settings:
-        env = os.environ.get("DIMAGIQA_ENV") or "staging"
-        subdomain = "www" if env == "production" else env
+        # env = os.environ.get("DIMAGIQA_ENV") or "staging"
+        # subdomain = "www" if env == "production" else env
         # updates the url with the project domain while testing in CI
-        settings["url"] = f"https://{subdomain}.commcarehq.org/a/co-carecoordination-perf"
+        settings["url"] = f"https://www.commcarehq.org/a/co-carecoordination-perf"
     return settings
 
 
