@@ -77,7 +77,7 @@ def pytest_terminal_summary(terminalreporter, exitstatus, config):
     env = os.environ.get("DIMAGIQA_ENV", "default_env")
 
     # Define the filename based on the environment
-    filename = f'bha_weekly_test_counts_{env}.txt'
+    filename = f'bha_weekly_test_counts_production.txt'
 
     # Write the counts to a file
     with open(filename, 'w') as f:
