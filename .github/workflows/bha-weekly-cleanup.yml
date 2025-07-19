@@ -56,7 +56,7 @@ jobs:
           pip install -r USH_Apps/WeeklyBHACleanup/requires.txt
       - name: BHA Weekly Cleanup with pytest
         env:
-          DIMAGIQA_ENV: ${{ DIMAGIQA_BHA_PERF_URL }}
+          DIMAGIQA_ENV: ${{ secrets.DIMAGIQA_BHA_PERF_URL }}
           DIMAGIQA_LOGIN_USERNAME: ${{ secrets.DIMAGIQA_BHA_PERF_USERNAME }}
           DIMAGIQA_LOGIN_PASSWORD: ${{ secrets.DIMAGIQA_LOCUST_PASSWORD }}
           DIMAGIQA_MAIL_USERNAME: ${{ secrets.DIMAGIQA_MAIL_USERNAME }}
