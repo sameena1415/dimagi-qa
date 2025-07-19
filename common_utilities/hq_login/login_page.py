@@ -27,7 +27,7 @@ class LoginPage(BasePage):
         # import socket
         # if "eu" in url:
         #     print(socket.gethostbyname("eu.commcarehq.org"))
-        # print("url: ", url)
+        print("url: ", url)
         self.driver.get(url)
         driver.set_window_position(0, 0)
         driver.set_window_size(1920, 1080)
