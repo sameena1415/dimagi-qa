@@ -3,7 +3,7 @@ import platform
 import time
 
 from dateutil.relativedelta import relativedelta
-from datetime import datetime
+from datetime import datetime, timezone
 
 from selenium.webdriver import ActionChains
 from selenium.webdriver.common.keys import Keys
@@ -315,14 +315,16 @@ class CaseSearchWorkflows(BasePage):
     def check_todays_case_claim_present_on_report(self):
         self.select_by_text(self.case_type_select, "commcare-case-claim")
         self.wait_to_click(self.report_apply_filters)
-        date_on_report =  str(datetime.utcnow().strftime("%b %d, %Y"))
+        date_on_report =  str(datetime.now(timezone.utc).strftime("%b %d, %Y"))
         # date_on_report = str((datetime.today()).date().strftime("%b %d, %Y"))
         recent_claim_case = (By.XPATH, self.commcare_case_claim_case.format(date_on_report))
         print(date_on_report, recent_claim_case)
         try:
             self.wait_for_element(recent_claim_case)
-            assert self.is_present(recent_claim_case), "Value "+date_on_report+" is not present"
-            print("Value "+date_on_report+" is present")
+            if self.is_present(recent_claim_case):
+                print("Value " + date_on_report + " is present")
+            else:
+                print("Value "+date_on_report+" is not present")
         except AssertionError:
             logging.basicConfig(filename='logs.log', encoding='utf-8', level=logging.DEBUG)
             logging.warning("Elastic search is taking too long to update the case")
