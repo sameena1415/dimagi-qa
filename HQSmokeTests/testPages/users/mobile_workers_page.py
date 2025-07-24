@@ -63,7 +63,7 @@ class MobileWorkerPage(BasePage):
         # self.webapp_login_with_username = (By.XPATH, self.login_as_usernames)
         self.webapp_login = (By.XPATH, "(//div[@class='js-restore-as-item appicon appicon-restore-as'])")
         self.confirm_reactivate_xpath_list = (By.XPATH,
-                                              "((//div[@class='modal-footer'])/button[@data-bind='click: function(user) { user.is_active(true); }'])")
+                                              "(//div[contains(@class,'modal fade in')][contains(@style,'display: block')]//div[@class='modal-footer'])/button[@data-bind='click: function(user) { user.is_active(true); }']")
         self.reactivate_buttons_list = "//td[./a/strong[text()='{}']]/following-sibling::td/div[contains(@data-bind,'visible: !is_active()')]/button[contains(.,'Reactivate')]"
         self.deactivate_button = "//td[./a/strong[text()='{}']]/following-sibling::td/div[contains(@data-bind,'visible: is_active()')]/button[contains(.,'Deactivate')]"
         self.confirm_deactivate_xpath_list = (
