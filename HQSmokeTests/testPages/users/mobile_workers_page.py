@@ -67,7 +67,7 @@ class MobileWorkerPage(BasePage):
         self.reactivate_buttons_list = "//td[./a/strong[text()='{}']]/following-sibling::td/div[contains(@data-bind,'visible: !is_active()')]/button[contains(.,'Reactivate')]"
         self.deactivate_button = "//td[./a/strong[text()='{}']]/following-sibling::td/div[contains(@data-bind,'visible: is_active()')]/button[contains(.,'Deactivate')]"
         self.confirm_deactivate_xpath_list = (
-            By.XPATH, "((//div[@class='modal-footer'])/button[@class='btn btn-danger'])")
+            By.XPATH, "(//div[contains(@class,'modal fade in')][contains(@style,'display: block')]//div[@class='modal-footer'])/button[contains(@class,'btn btn-danger')]")
         self.deactivate_buttons_list = (
             By.XPATH, "(//td/div[@data-bind='visible: is_active()']/button[@class='btn btn-default'])")
         self.show_deactivated_users_btn = (
