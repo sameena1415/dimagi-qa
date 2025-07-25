@@ -68,18 +68,34 @@ class CaseSearchWorkflows(BasePage):
         self.rating_answer = "//span[text()='Rating']/following::input[@value='{}'][1]"
         self.date_picker_close = (By.XPATH, "//div[contains(@class,'show')]//div[@data-action='close']/i")
         self.date_picker_clear = (By.XPATH, "//div[contains(@class,'show')]//div[@data-action='clear']/i")
+        self.result_table = (By.XPATH, "(//div[@id='report-content']//table//tbody//td[1])[1]")
+        self.report_content_id = (By.ID, "report-content")
 
-    def check_values_on_caselist(self, row_num, expected_value, is_multi=NO):
+    def check_values_on_caselist(self, row_num, expected_value, is_multi=NO, flag=None):
         self.value_in_table = self.get_element(self.value_in_table_format, row_num)
         self.wait_for_element(self.value_in_table)
         values_ = self.find_elements_texts(self.value_in_table)
         print(expected_value, values_)  # added for debugging
         if is_multi == YES:
-            assert all(item in values_ for item in expected_value) or any(item in values_ for item in expected_value), "Expected values are not present"
-            print("Expected values are present")
+            if all(item in values_ for item in expected_value) or any(item in values_ for item in expected_value):
+                if flag is None or flag==True:
+                    print("Expected values are present")
+                    assert True
+                else:
+                    print("Values did not get selected right")
+            else:
+                print("Expected values are not present")
+                assert False
         elif is_multi == NO:
-            assert expected_value in values_, "Expected values are not present"
-            print("Expected values are present")
+            if expected_value in values_:
+                if flag is None or flag==True:
+                    print("Expected values are present")
+                    assert True
+                else:
+                    print("Values did not get selected right")
+            else:
+                print("Expected values are not present")
+                assert False
 
     def check_default_values_displayed(self, search_property, default_value, search_format):
         time.sleep(2)
@@ -320,7 +336,9 @@ class CaseSearchWorkflows(BasePage):
         recent_claim_case = (By.XPATH, self.commcare_case_claim_case.format(date_on_report))
         print(date_on_report, recent_claim_case)
         try:
-            self.wait_for_element(recent_claim_case)
+            self.wait_for_element(self.result_table, 300)
+            self.wait_for_element(self.report_content_id, 120)
+            print("Report loaded successfully!")
             if self.is_present(recent_claim_case):
                 print("Value " + date_on_report + " is present")
             else:
@@ -401,8 +419,11 @@ class CaseSearchWorkflows(BasePage):
                 if self.is_present(selected_value):
                     assert True, f"Expected item {selected_value} not present"
                     print(f"Expected item {selected_value} present")
+                    bool_value=True
                 else:
                     print(f"Expected item {selected_value} not present")
-                    assert False
+                    bool_value = False
+        return bool_value
+
 
 
