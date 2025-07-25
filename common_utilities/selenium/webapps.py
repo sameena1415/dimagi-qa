@@ -23,7 +23,6 @@ class WebApps(BasePage):
         self.title = "//title[text()='{}']"
         self.current_page = "//a[@aria-current='page' and contains(.,'{}')]"
         self.content_container = (By.XPATH, "//div[@id='content-container']")
-        self.url = self.settings['url']
         self.app_name_format = "//div[@aria-label='{}']/div/h3"
         self.app_header_format = "//h1[contains(text(),'{}')]"
         self.menu_name_format = '//*[contains(@aria-label,"{}")]'
@@ -87,8 +86,13 @@ class WebApps(BasePage):
         self.alert_close_text = (By.XPATH, "//button[@data-bs-dismiss='alert']//parent::div[contains(@class,'alert-dismiss')]")
 
     def open_app(self, app_name):
+        if self.is_present_and_displayed(self.error_message, 5):
+            self.js_click(self.error_message)
         if self.is_present_and_displayed(self.webapps_home, 10):
             self.wait_to_click(self.webapps_home)
+        else:
+            self.get_url(self.settings['url'])
+            self.wait_after_interaction()
         self.application = self.get_element(self.app_name_format, app_name)
         self.application_header = self.get_element(self.app_header_format, app_name)
         self.wait_for_element(self.application, 200)
@@ -218,6 +222,7 @@ class WebApps(BasePage):
 
     def continue_to_forms(self):
         self.wait_for_element(self.continue_button, 100)
+        time.sleep(2)
         self.js_click(self.continue_button)
         time.sleep(0.5)
 
@@ -234,7 +239,7 @@ class WebApps(BasePage):
         self.scroll_to_element(self.async_restore_error)
         time.sleep(0.5)
         self.js_click(self.async_restore_error)
-        time.sleep(2)
+        time.sleep(10)
         self.scroll_to_element(self.form_submit)
         print("clicking on the submit button again")
         time.sleep(0.5)
@@ -255,7 +260,7 @@ class WebApps(BasePage):
             time.sleep(5)
             self.wait_for_element(self.alert_close_button, 60)
         else:
-            self.wait_after_interaction(timeout=20)
+            self.wait_after_interaction(timeout=40)
             time.sleep(5)
             self.wait_for_element(self.alert_close_button, 40)
         if self.is_present(self.form_submit):
@@ -300,14 +305,14 @@ class WebApps(BasePage):
         url = str(self.settings['url']).replace('#apps', '#restore_as')
         print(url)
         # url = self.get_current_url()
-        # if url not in self.url:
-        #     self.driver.get(self.url)
+        # if url not in self.settings['url']:
+        #     self.driver.get(self.settings['url'])
         #     time.sleep(0.5)
         # else:
         #     self.wait_to_click(self.webapps_home)
         #     time.sleep(0.5)
-        self.driver.get(self.url)
-        self.wait_after_interaction()
+        self.get_url(self.settings['url'])
+        self.wait_after_interaction(20)
         loggedin_user = None
         if self.is_present(self.webapp_working_as):
             loggedin_user = self.get_text(self.webapp_working_as)
@@ -407,8 +412,8 @@ class WebApps(BasePage):
 
     def sync_app(self):
         url = self.get_current_url()
-        if url not in self.url:
-            self.driver.get(self.url)
+        if url not in self.settings['url']:
+            self.get_url(self.settings['url'])
             time.sleep(0.5)
         else:
             self.wait_to_click(self.webapps_home)
