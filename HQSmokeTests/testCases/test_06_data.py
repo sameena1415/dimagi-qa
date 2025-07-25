@@ -9,6 +9,7 @@ from HQSmokeTests.testPages.data.reassign_cases_page import ReassignCasesPage
 from HQSmokeTests.testPages.data.auto_case_update_page import AutoCaseUpdatePage
 from HQSmokeTests.testPages.data.lookup_table_page import LookUpTablePage
 from HQSmokeTests.testPages.home.home_page import HomePage
+from HQSmokeTests.userInputs.user_inputs import UserData
 
 """"Contains test cases related to the Data module"""
 
@@ -24,7 +25,7 @@ def test_case_29_import_cases(driver, settings):
     home = HomePage(driver, settings)
     home.data_menu()
     imp = ImportCasesPage(driver)
-    imp.replace_property_and_upload()
+    imp.replace_property_and_upload(casetype=UserData.case_pregnancy)
 
 
 @pytest.mark.data
