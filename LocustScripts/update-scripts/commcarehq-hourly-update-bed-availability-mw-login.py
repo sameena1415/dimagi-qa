@@ -206,7 +206,7 @@ class WorkloadModelSteps(SequentialTaskSet):
                         match = re.search(r"Max Capacity:\s*(\d+)", obj["caption"])
                         if match:
                             max_capacity = int(match.group(1))
-                            answers[ix] = max_capacity - 1
+                            answers[ix] = random.randint(1, max_capacity)
                 for v in obj.values():
                     recurse(v)
             elif isinstance(obj, list):
@@ -241,6 +241,7 @@ class WorkloadModelSteps(SequentialTaskSet):
                 status="success"
                 # expected_response_message=self.FUNC_BED_AVAILABILITY_FORM_SUBMIT["submitResponseMessage"]
                 )
+            logger.info(extra_json)
             logger.info(
                 f"{self.FUNC_BED_AVAILABILITY_FORM_SUBMIT["submitResponseMessage"]} - user: {self.user.user_details.username}; session: {session_id}"
                 )
