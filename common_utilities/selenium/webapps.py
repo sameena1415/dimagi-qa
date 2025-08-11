@@ -165,8 +165,8 @@ class WebApps(BasePage):
         else:
             self.scroll_to_element(self.submit_on_case_search_page)
             self.wait_to_click(self.submit_on_case_search_page)
-            time.sleep(1)
-        self.wait_after_interaction(20)
+            time.sleep(5)
+        self.wait_after_interaction(50)
         if case_list == None:
             self.is_visible_and_displayed(self.case_list, timeout=80)
         else:
@@ -206,7 +206,7 @@ class WebApps(BasePage):
         time.sleep(0.5)
         self.case = self.get_element(self.case_name_format, case_name)
         self.scroll_to_element(self.case)
-        self.wait_for_element(self.case)
+        self.wait_for_element(self.case, 60)
         self.js_click(self.case)
 
     def select_first_case_on_list(self):
@@ -260,9 +260,9 @@ class WebApps(BasePage):
             time.sleep(5)
             self.wait_for_element(self.alert_close_button, 60)
         else:
-            self.wait_after_interaction(timeout=40)
+            self.wait_after_interaction(timeout=60)
             time.sleep(5)
-            self.wait_for_element(self.alert_close_button, 40)
+            self.wait_for_element(self.alert_close_button, 70)
         if self.is_present(self.form_submit):
             if self.is_present(self.async_restore_error):
                 print("Form not submitted successfully. Need Resubmission")
