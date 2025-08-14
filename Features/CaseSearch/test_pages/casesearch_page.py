@@ -70,6 +70,7 @@ class CaseSearchWorkflows(BasePage):
         self.date_picker_clear = (By.XPATH, "//div[contains(@class,'show')]//div[@data-action='clear']/i")
         self.result_table = (By.XPATH, "(//div[@id='report-content']//table//tbody//td[1])[1]")
         self.report_content_id = (By.ID, "report-content")
+        self.webform_section = (By.XPATH, "//section[contains(@id,'webforms')]")
 
     def check_values_on_caselist(self, row_num, expected_value, is_multi=NO, flag=None):
         self.value_in_table = self.get_element(self.value_in_table_format, row_num)
@@ -355,7 +356,8 @@ class CaseSearchWorkflows(BasePage):
         print("Selected cases: ", song_names_on_case_list)
         self.wait_to_click(self.multi_select_continue)
         print("Waiting for the form to load")
-        self.wait_after_interaction()
+        self.wait_after_interaction(50)
+        self.wait_for_element(self.webform_section, 100)
         self.wait_for_element((By.XPATH, self.song_label.format(song_names_on_case_list[0])))
         for item in song_names_on_case_list:
             self.scroll_to_element((By.XPATH, self.song_label.format(item)))
