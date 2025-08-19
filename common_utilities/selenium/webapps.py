@@ -88,11 +88,14 @@ class WebApps(BasePage):
     def open_app(self, app_name):
         if self.is_present_and_displayed(self.error_message, 5):
             self.js_click(self.error_message)
+            print("Error message was present")
         if self.is_present_and_displayed(self.webapps_home, 10):
             self.wait_to_click(self.webapps_home)
+            print("Clicked on home link")
         else:
             self.get_url(self.settings['url'])
-            self.wait_after_interaction()
+            print("Opening home url again")
+            self.wait_after_interaction(10)
         self.application = self.get_element(self.app_name_format, app_name)
         self.application_header = self.get_element(self.app_header_format, app_name)
         self.wait_for_element(self.application, 200)
@@ -167,8 +170,8 @@ class WebApps(BasePage):
             self.wait_to_click(self.submit_on_case_search_page)
             time.sleep(5)
         self.wait_after_interaction(50)
-        if case_list == None:
-            self.is_visible_and_displayed(self.case_list, timeout=80)
+        if case_list is not None:
+            self.is_visible_and_displayed(self.case_list, timeout=100)
         else:
             print("Case List is not displayed")
 
