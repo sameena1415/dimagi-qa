@@ -64,7 +64,7 @@ class ApplicationStatusPage(BasePage):
         self.users_field = (By.XPATH, "(//textarea[@class='select2-search__field'])[1]")
         self.no_results = (By.XPATH, "//li[.='No results found']")
         self.filter_dates_by = (By.XPATH, "//select[@id='report_filter_sub_time']")
-        self.remove_buttons = (By.XPATH, "//ul//button")
+        self.remove_buttons = (By.XPATH, "//ul//button[contains(@class,'remove')]")
         self.custome_remove_button = "//span[contains(.,'{}')]//preceding-sibling::button[@class='select2-selection__choice__remove']"
         self.user_remove_btn = (By.XPATH, "(//button[@class='select2-selection__choice__remove'])[last()]")
         self.user_from_list = "//li[contains(.,'{}')]"

@@ -39,7 +39,7 @@ class ReassignCasesPage(BasePage):
 
         self.users_field = (By.XPATH, "(//textarea[@class='select2-search__field'])[1]")
         self.users_list_item = "//ul[@role='listbox']/li[contains(.,'{}')]"
-        self.remove_buttons = (By.XPATH, "//ul//button")
+        self.remove_buttons = (By.XPATH, "//ul//button[contains(@class,'remove')]")
 
     def remove_default_users(self):
         self.wait_for_element(self.users_field)

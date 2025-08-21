@@ -49,7 +49,7 @@ class SubmissionsByFormPage(BasePage):
             By.XPATH, "(//tfoot)[2]/tr/td")
         self.users_field = (By.XPATH, "(//textarea[@class='select2-search__field'])[1]")
         self.filter_dates_by = (By.XPATH, "//select[@id='report_filter_sub_time']")
-        self.remove_buttons = (By.XPATH, "//ul//button")
+        self.remove_buttons = (By.XPATH, "//ul//button[contains(@class,'remove')]")
         self.user_remove_btn = (By.XPATH, "(//button[@class='select2-selection__choice__remove'])[last()]")
         self.user_from_list = "//li[contains(.,'{}')]"
         self.export_to_excel = (By.XPATH, "//a[@id='export-report-excel']")

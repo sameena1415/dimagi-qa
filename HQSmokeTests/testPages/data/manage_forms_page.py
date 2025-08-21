@@ -38,7 +38,7 @@ class ManageFormsPage(BasePage):
         self.village_app = (By.XPATH, "//option[text()='Village Health']")
         self.select_archive_restore = (By.XPATH, "//select[@name='archive_or_restore']")
         self.check_data = (By.XPATH, "//tr[@class = 'form-data-question ']")
-        self.remove_buttons = (By.XPATH, "//ul//button")
+        self.remove_buttons = (By.XPATH, "//ul//button[contains(@class,'remove')]")
         self.result_table = (By.XPATH, "(//div[@id='report-content']//table//tbody//td[1])[1]")
         self.report_content_id = (By.ID, "report-content")
 

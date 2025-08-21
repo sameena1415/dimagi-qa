@@ -26,7 +26,7 @@ class DeduplicateCasePage(BasePage):
         self.case_type = (By.XPATH, "//span[@class='selection']")
         self.case_type_option_value = (By.XPATH, "//option[@value = 'pregnancy']")
         self.case_property = (By.XPATH, "//input[@class='textinput form-control' and contains(@data-bind, 'caseProperty.name')]")
-        self.save_rule_button = (By.XPATH, "//button[@type = 'submit']")
+        self.save_rule_button = (By.XPATH, "(//button[@type='submit' and contains(@class,'primary')])[1]")
         self.success_message = (By.XPATH, "//a[@data-dismiss='alert']")
         self.delete_rule = (By.XPATH, "//button[@class = 'btn btn-danger']")
         self.delete_confirm = (By.XPATH, "//button[@class = 'btn btn-danger delete-item-confirm']")
