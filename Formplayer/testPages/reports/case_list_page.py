@@ -42,7 +42,7 @@ class CaseListPage(BasePage):
         self.case_name = (By.XPATH, "//td[div[contains(text(),'abc')]]")
         self.submit_history_table = (By.XPATH, "//table[@id='report_table_submit_history']/tbody/tr")
         self.apply_id = (By.ID, "apply-filters")
-        self.remove_buttons = (By.XPATH, "//ul//button")
+        self.remove_buttons = (By.XPATH, "//ul//button[contains(@class,'remove')]")
 
 
         # Case List

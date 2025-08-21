@@ -22,7 +22,7 @@ class LoginPage(BasePage):
         self.iframe = (By.XPATH, "//iframe[contains(@src,'/embed/frame')]")
         self.view_latest_updates = (By.XPATH, "//*[.='View latest updates']")
         self.settings = (By.XPATH, "//a[@data-action='Click Gear Icon']")
-        self.sign_out = (By.XPATH, "//a[contains(@data-label,'Sign Out')]")
+        self.sign_out = (By.XPATH, "//*[contains(.,'Sign Out')][./i[contains(@class,'signout')]]")
 
         # import socket
         # if "eu" in url:

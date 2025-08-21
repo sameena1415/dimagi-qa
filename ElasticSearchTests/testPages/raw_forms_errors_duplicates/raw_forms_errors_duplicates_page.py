@@ -49,7 +49,7 @@ class RawFormsErrorsDuplicatesPage(BasePage):
             By.XPATH, "(//tfoot)[2]/tr/td")
         self.users_field = (By.XPATH, "(//textarea[@class='select2-search__field'])[1]")
         self.filter_dates_by = (By.XPATH, "//select[@id='report_filter_sub_time']")
-        self.remove_buttons = (By.XPATH, "//ul//button")
+        self.remove_buttons = (By.XPATH, "//ul//button[contains(@class,'remove')]")
         self.submit_form_type = "//div[@id='report_filter_submitfilter']//button[.='{}']"
         self.form_type_selected = "//div[@id='report_filter_submitfilter']//button[.='{}'][@aria-pressed='true']"
         self.form_type_selected_after = "//div[@id='report_filter_submitfilter']//button[.='{}'][contains(@class,'active')]"

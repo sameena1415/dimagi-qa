@@ -25,7 +25,7 @@ class ImportCasesPage(BasePage):
         self.import_cases_menu = (By.LINK_TEXT, "Import Cases from Excel")
         self.download_file = (By.XPATH, "(//span[@data-bind='text: upload_file_name'])[1]")
         self.choose_file = (By.ID, "file")
-        self.next_step = (By.XPATH, "(//button[@type='submit'])[1]")
+        self.next_step = (By.XPATH, "(//button[@type='submit' and contains(@class,'primary')])[1]")
         self.confirm_import = (By.XPATH, "//button[@type='submit'][contains(.,'Confirm Import')]/i")
         self.case_type = (By.XPATH, "//select[@id='case_type']")
         self.case_type_option_value = (By.XPATH, "//option[@value='pregnancy']")

@@ -45,7 +45,7 @@ class CaseActivityPage(BasePage):
         self.form_activity_results = (By.XPATH, "//table[@id='report_table_case_activity']/tbody/tr")
         self.form_activity_results_cells = (By.XPATH, "//table[@id='report_table_case_activity']/tbody/tr/td")
         self.users_field = (By.XPATH, "(//textarea[@class='select2-search__field'])[1]")
-        self.remove_buttons = (By.XPATH, "//ul//button")
+        self.remove_buttons = (By.XPATH, "//ul//button[contains(@class,'remove')]")
         self.user_remove_btn = (By.XPATH, "(//button[@class='select2-selection__choice__remove'])[last()]")
         self.user_from_list = "//li[contains(.,'{}')]"
         self.case_type_dropdown = (By.XPATH, "//select[@id='report_filter_case_type']")
