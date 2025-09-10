@@ -1,0 +1,55 @@
+# This workflow will install Python dependencies, run tests and lint with a single version of Python
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
+
+name: Just test
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to run tests against'
+        required: true
+        default: 'india'
+        type: choice
+        options:
+          - india
+  
+jobs:
+  set_matrix:
+    runs-on: ubuntu-latest
+    if: ${{ !(github.event_name == 'repository_dispatch' && github.event.client_payload.environment == 'staging') }}
+    outputs:
+      matrix: ${{ steps.set-matrix-schedule.outputs.matrix || steps.set-matrix-deploy.outputs.matrix || steps.set-matrix-manual.outputs.matrix || steps.set-matrix-default.outputs.matrix }}
+    steps:
+      - id: set-matrix-schedule
+        if: ${{ github.event_name  == 'schedule' }}
+        run: |
+          echo "::set-output name=matrix::{\"environment\": [\"staging\"]}"
+      - id: set-matrix-deploy
+        if: ${{ github.event_name == 'repository_dispatch' && github.event.client_payload.environment != 'staging' }}
+        run: |
+          echo "::set-output name=matrix::{\"environment\": [\"${{ github.event.client_payload.environment }}\"]}"
+      - id: set-matrix-manual
+        if: ${{ github.event_name == 'workflow_dispatch' }}
+        run: |
+          echo "::set-output name=matrix::{\"environment\": [\"${{ inputs.environment }}\"]}"
+      - id: set-matrix-default
+        if: ${{ github.event_name != 'repository_dispatch' }}
+        run: |
+          echo "::set-output name=matrix::{\"environment\": [\"production\", \"staging\",\"india\"]}"
+
+    - name: Send Email
+      uses: dawidd6/action-send-mail@v3
+      if: always()
+      with:
+        server_address: smtp.gmail.com
+        server_port: 465
+        username: ${{secrets.DIMAGIQA_MAIL_USERNAME}}
+        password: ${{secrets.DIMAGIQA_MAIL_PASSWORD}}
+        subject: ${{ github.event.client_payload.environment }} FAIL - Email API Tests ${{secrets.DIMAGIQA_MAIL_USERNAME}} on branch "${{ github.ref_name }} ${{secrets.DIMAGIQA_MAIL_PASSWORD}}", ${{env.NOW}}
+        to: kbordoloi@dimagi.com
+        from: <${{secrets.DIMAGIQA_MAIL_USERNAME}}>
+        html_body: file:////home/runner/work/dimagi-qa/dimagi-qa/RequestAPI/email_fail.html
+        attachments: /home/runner/work/dimagi-qa/dimagi-qa/report_api_${{ matrix.environment }}.html
+        priority: normal
+
