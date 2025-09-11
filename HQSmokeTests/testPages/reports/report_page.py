@@ -33,7 +33,7 @@ class ReportPage(BasePage):
 
         # Mobile Worker Reports
         self.reports_menu_id = (By.ID, "ProjectReportsTab")
-        self.worker_activity_rep = (By.LINK_TEXT, "Worker Activity")
+        self.worker_activity_rep = (By.LINK_TEXT, "User Activity")
         self.daily_form_activity_rep = (By.LINK_TEXT, "Daily Form Activity")
         self.submissions_by_form_rep = (By.LINK_TEXT, "Submissions By Form")
         self.form_completion_rep = (By.LINK_TEXT, "Form Completion Time")
