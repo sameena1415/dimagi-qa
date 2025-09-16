@@ -60,7 +60,7 @@ class CaseSearchWorkflows(BasePage):
         self.select_all_checkbox = (By.ID, "select-all-checkbox")
         self.case_names = (By.XPATH, "//td[contains(@class,'case-list-column')][3]")
         self.multi_select_continue = (By.XPATH, "(//button[contains(@class,'multi-select-continue-btn')])[1]")
-        self.selected_case_names_on_forms = (By.XPATH, "//span[contains(@class,'webapp-markdown-output')]")
+        self.selected_case_names_on_forms = (By.XPATH, "//span[contains(@class,'webapp-markdown-output') and contains(@data-bind,'caption')]")
         self.song_label = "//span[contains(@class,'webapp-markdown-output')][.='song: by {}']"
         self.checkbox_xpath = "//label[contains (text(),'{}')][1]//following::input[@value='{}'][1]"
         self.search_property_checked = "//label[contains (text(),'{}')][1]//following::input[@value='{}' and @checked][1]"
@@ -373,9 +373,12 @@ class CaseSearchWorkflows(BasePage):
     def check_label_in_form(self, expected_value):
         rating_on_form = self.find_elements_texts(self.selected_case_names_on_forms)
         for rating_value in rating_on_form:
-            print(rating_on_form, expected_value)
-            assert expected_value in rating_value, "Value "+expected_value+" is not present"
-            print("Value "+expected_value+" is present")
+            if rating_value is not None or rating_value != '':
+                print(rating_value, expected_value)
+                assert expected_value in rating_value, "Value "+expected_value+" is not present"
+                print("Value "+expected_value+" is present")
+            else:
+                print("No value present")
 
     def check_if_checkbox_selected(self, search_property, values):
         for value in values:
