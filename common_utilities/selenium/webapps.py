@@ -115,6 +115,8 @@ class WebApps(BasePage):
     def open_menu(self, menu_name, assertion='Yes'):
         self.caselist_menu = self.get_element(self.menu_name_format, menu_name)
         self.caselist_header = self.get_element(self.menu_name_header_format, menu_name)
+        time.sleep(3)
+        self.wait_for_element(self.caselist_menu)
         self.scroll_to_element(self.caselist_menu)
         self.js_click(self.caselist_menu)
         time.sleep(0.5)
