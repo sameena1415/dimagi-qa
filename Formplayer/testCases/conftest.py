@@ -119,66 +119,65 @@ def _matplotlib_img(fig) -> str:
     buf.seek(0)
     return base64.b64encode(buf.read()).decode("utf-8")
 
-def pytest_html_results_summary(prefix, summary, postfix):
-    """Inject donut pie + conditional bar chart into pytest-html report."""
-    if not _test_stats:
-        return
+def pytest_html_results_summary(prefix, summary, postfix, session):
+    """Inject donut pie + bar chart with reruns support (parallel-safe)."""
+    tr = session.config.pluginmanager.get_plugin("terminalreporter")
+    stats = tr.stats if tr and hasattr(tr, "stats") else {}
 
-    passed = _test_stats.get("passed", 0)
-    failed = _test_stats.get("failed", 0)
-    skipped = _test_stats.get("skipped", 0)
-    reruns = _test_stats.get("rerun", 0)
+    passed  = len(stats.get("passed", []))
+    failed  = len(stats.get("failed", []))
+    skipped = len(stats.get("skipped", []))
+
+    # Reruns are recorded separately by pytest-rerunfailures
+    reruns = len(stats.get("rerun", []))
 
     # --- Donut Pie Chart (Passed, Failed, Skipped) ---
     pie_labels = ["Passed", "Failed", "Skipped"]
     pie_sizes = [passed, failed, skipped]
-    pie_colors = ["#66bb6a", "#ef5350", "#ffee58"]
+    pie_colors = ["#66bb6a", "#ef5350", "#fad000"]
 
     fig, ax = plt.subplots()
     wedges, texts = ax.pie(
         pie_sizes,
-        labels=None,  # don't place labels inside
+        labels=None,
         colors=pie_colors,
         startangle=90,
-        wedgeprops=dict(width=0.4)  # donut style
-        )
+        wedgeprops=dict(width=0.4)
+    )
     ax.axis("equal")
 
-    # Add labels outside with counts
-    ax.legend(
+    # Legend below the donut
+    plt.legend(
         wedges,
         [f"{l}: {v}" for l, v in zip(pie_labels, pie_sizes)],
         title="Results",
-        loc="center left",
-        bbox_to_anchor=(1, 0, 0.5, 1)
-        )
-
+        loc="upper center",
+        bbox_to_anchor=(0.5, -0.08),
+        ncol=len(pie_labels)
+    )
     pie_img = _matplotlib_img(fig)
 
     # --- Bar Chart (Failures + Reruns) ---
     bar_img = None
-    if failed > 0 or reruns > 0:   # only generate if relevant
-        bar_labels = ["Failed", "Reruns"]
-        bar_sizes = [failed, reruns]
-        bar_colors = ["#ef5350", "#42a5f5"]
-
+    if failed > 0 or reruns > 0:
         fig, ax = plt.subplots()
-        ax.bar(bar_labels, bar_sizes, color=bar_colors)
+        bars = ax.bar(["Failed", "Reruns"], [failed, reruns], color=["#ef5350", "#ff9933"])
         ax.set_title("Failures and Reruns")
         ax.set_ylabel("Number of Tests")
+        plt.legend(
+            bars,
+            [f"Failed: {failed}", f"Reruns: {reruns}"],
+            loc="upper center",
+            bbox_to_anchor=(0.5, -0.12),
+            ncol=2
+        )
         bar_img = _matplotlib_img(fig)
 
-    # --- Embed in HTML report (center aligned) ---
-    html = (
-        "<div style='text-align:center; margin-top:20px;'>"
-        f"<h3>Test Summary</h3>"
-        f"<img src='data:image/png;base64,{pie_img}' style='max-width:500px;'/>"
-    )
+    # --- Embed in HTML report ---
+    html = "<div style='text-align:center; margin-top:20px;'>"
+    html += f"<h3>Test Summary</h3><img src='data:image/png;base64,{pie_img}' style='max-width:500px;'/>"
     if bar_img:
-        html += (
-            f"<h3>Failures and Reruns</h3>"
-            f"<img src='data:image/png;base64,{bar_img}' style='max-width:500px;'/>"
-        )
+        html += f"<h3>Failures and Reruns</h3><img src='data:image/png;base64,{bar_img}' style='max-width:500px;'/>"
     html += "</div>"
 
     summary.append(html)
