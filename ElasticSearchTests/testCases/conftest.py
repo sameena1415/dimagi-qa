@@ -91,3 +91,81 @@ def pytest_terminal_summary(terminalreporter, exitstatus, config):
         f.write(f'ERROR={len(error)}\n')
         f.write(f'SKIPPED={len(skipped)}\n')
         f.write(f'XFAIL={len(xfail)}\n')
+
+
+# conftest.py
+import pytest
+import matplotlib.pyplot as plt
+import base64
+from io import BytesIO
+
+_test_stats = {}
+
+def pytest_sessionfinish(session, exitstatus):
+    """Collect stats at the end of the test session."""
+    tr = session.config.pluginmanager.get_plugin("terminalreporter")
+    global _test_stats
+    _test_stats = {
+        "passed": len(tr.stats.get("passed", [])),
+        "failed": len(tr.stats.get("failed", [])),
+        "skipped": len(tr.stats.get("skipped", [])),
+        "error": len(tr.stats.get("error", [])),
+        "xfail": len(tr.stats.get("xfail", [])),
+    }
+
+def _matplotlib_img(fig) -> str:
+    """Convert a matplotlib figure to base64 string."""
+    buf = BytesIO()
+    plt.tight_layout()
+    fig.savefig(buf, format="png")
+    plt.close(fig)
+    buf.seek(0)
+    return base64.b64encode(buf.read()).decode("utf-8")
+
+def pytest_html_results_summary(prefix, summary, postfix):
+    """Inject simplified charts into pytest-html report."""
+    if not _test_stats:
+        return
+
+    passed = _test_stats.get("passed", 0)
+    failed = _test_stats.get("failed", 0)
+    skipped = _test_stats.get("skipped", 0)
+    reruns = _test_stats.get("rerun", 0)  # reruns are recorded separately if pytest-rerunfailures is used
+
+    # --- Pie Chart (Passed, Failed, Skipped) ---
+    pie_labels = ["Passed", "Failed", "Skipped"]
+    pie_sizes = [passed, failed, skipped]
+    pie_colors = ["#66bb6a", "#ef5350", "#ffee58"]
+
+    fig, ax = plt.subplots()
+    wedges, texts = ax.pie(
+        pie_sizes,
+        labels=[f"{l}: {v}" for l, v in zip(pie_labels, pie_sizes)],
+        colors=pie_colors,
+        startangle=90,
+        wedgeprops=dict(width=0.4)  # donut style
+    )
+    ax.axis("equal")
+    pie_img = _matplotlib_img(fig)
+
+    # --- Bar Chart (Failed, Reruns) ---
+    bar_labels = ["Failed", "Reruns"]
+    bar_sizes = [failed, reruns]
+    bar_colors = ["#ef5350", "#42a5f5"]
+
+    fig, ax = plt.subplots()
+    ax.bar(bar_labels, bar_sizes, color=bar_colors)
+    ax.set_title("Failures and Reruns")
+    ax.set_ylabel("Number of Tests")
+    bar_img = _matplotlib_img(fig)
+
+    # --- Embed in HTML report (center aligned) ---
+    html = (
+        "<div style='text-align:center; margin-top:20px;'>"
+        f"<h3>Test Summary</h3>"
+        f"<img src='data:image/png;base64,{pie_img}' style='max-width:500px;'/>"
+        f"<h3>Failures and Reruns</h3>"
+        f"<img src='data:image/png;base64,{bar_img}' style='max-width:500px;'/>"
+        "</div>"
+    )
+    summary.append(html)

@@ -113,7 +113,7 @@ class ExportDataPage(BasePage):
         self.create_DSE_checkbox = (By.XPATH, '//input[@id="daily-saved-export-checkbox"]')
         self.download_dse = (By.XPATH, "(//a[@class='btn btn-info btn-xs'])[1]")
         self.download_dse_form = "(//*[contains(@data-bind,'hasEmailedExport')][.//span[.='{}']]/following-sibling::div//*[./i[contains(@class,'fa-cloud')]])[1]"
-        self.data_upload_msg = (By.XPATH, "//div[contains(@class,'success')]")
+        self.data_upload_msg = (By.XPATH, "//p[contains(@class,'success')]")
         self.data_upload_msg_form = "//*[contains(@data-bind,'hasEmailedExport')][.//span[.='{}']]/following-sibling::div//*[contains(text(),'Data update complete')]"
         self.cancel_alert = (By.XPATH, "//button[@data-bs-dismiss='alert']")
 
@@ -453,6 +453,7 @@ class ExportDataPage(BasePage):
         self.wait_till_progress_completes("integration")
         self.wait_for_element((By.XPATH, self.update_data_conf.format(UserData.dashboard_feed_form)), 20)
         self.wait_to_click((By.XPATH, self.update_data_conf.format(UserData.dashboard_feed_form)))
+
         self.wait_for_element(self.data_upload_msg)
         time.sleep(2)
         self.reload_page()

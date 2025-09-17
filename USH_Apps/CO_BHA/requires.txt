@@ -13,3 +13,4 @@ requests
 py
 openpyxl
 beautifulsoup4
+pytest-metadata
