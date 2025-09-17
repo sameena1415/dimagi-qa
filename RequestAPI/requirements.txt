@@ -6,3 +6,4 @@ pytest-html
 pytest-rerunfailures
 pytest-xdist
 pytest-metadata
+matplotlib

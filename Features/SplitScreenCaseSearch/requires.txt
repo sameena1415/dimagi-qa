@@ -13,3 +13,4 @@ py
 openpyxl
 beautifulsoup4
 pytest-metadata
+matplotlib

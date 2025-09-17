@@ -14,3 +14,4 @@ pytest-order
 py
 beautifulsoup4
 pytest-metadata
+matplotlib

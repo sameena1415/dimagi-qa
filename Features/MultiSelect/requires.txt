@@ -11,3 +11,4 @@ pandas>=1.2.2
 py
 beautifulsoup4
 pytest-metadata
+matplotlib
