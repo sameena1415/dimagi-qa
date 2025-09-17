@@ -189,23 +189,23 @@ def pytest_html_results_summary(prefix, summary, postfix):
     pie_colors = ["#66bb6a", "#ef5350", "#ffee58"]
 
     fig, ax = plt.subplots()
-    wedges, texts, autotexts = ax.pie(
+    wedges, texts = ax.pie(
         pie_sizes,
         labels=None,  # don't place labels inside
         colors=pie_colors,
         startangle=90,
         wedgeprops=dict(width=0.4)  # donut style
-    )
+        )
     ax.axis("equal")
 
-    # Add labels outside with leader lines
+    # Add labels outside with counts
     ax.legend(
         wedges,
         [f"{l}: {v}" for l, v in zip(pie_labels, pie_sizes)],
         title="Results",
         loc="center left",
         bbox_to_anchor=(1, 0, 0.5, 1)
-    )
+        )
 
     pie_img = _matplotlib_img(fig)
 
