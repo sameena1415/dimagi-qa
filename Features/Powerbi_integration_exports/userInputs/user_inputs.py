@@ -24,5 +24,6 @@ class UserData:
     Basic_tests_application = 'Basic Tests'
     Basic_menu = 'Formplayer Specific Tests'
     Repeat_form = '[Formplayer] Repeats'
-    parent = 'form_linking_child'
+    parent = 'sub_case_one'
     odata_feed_form = ''
+    case='case'
