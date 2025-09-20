@@ -407,7 +407,7 @@ jobs:
 #            }
 
       - name: Post Slack Notification
-        if: ${{ success() || failure() }}
+        if: ${{ fromJSON(steps.configure_slack.outputs.result).SLACK_WEBHOOK_URL != ' '}}
         uses: slackapi/slack-github-action@v1.25.0
         with:
           payload: |
