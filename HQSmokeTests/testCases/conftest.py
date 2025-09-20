@@ -125,39 +125,45 @@ def save_base64_chart(image_path, b64_path):
     with open(b64_path, "w") as f:
         f.write(encoded)
 
+import matplotlib.pyplot as plt
+
 def save_summary_charts(stats):
     from pathlib import Path
     out_dir = Path("slack_charts")
     out_dir.mkdir(exist_ok=True)
 
-    passed  = int(stats.get("passed", 0))
-    failed  = int(stats.get("failed", 0))
-    skipped = int(stats.get("skipped", 0))
-    reruns  = int(stats.get("rerun", 0))  # from pytest-rerunfailures
+    # Pie chart (with labels + counts)
+    labels = ["Passed", "Failed", "Skipped"]
+    values = [stats.get("passed", 0), stats.get("failed", 0), stats.get("skipped", 0)]
+    colors = ["#66bb6a", "#ef5350", "#ffee58"]
 
-    # --- Pie chart (Passed/Failed/Skipped) ---
     fig, ax = plt.subplots()
-    ax.pie(
-        [passed, failed, skipped],
+    wedges, texts, autotexts = ax.pie(
+        values,
+        labels=[f"{l}: {v}" for l, v in zip(labels, values)],
+        colors=colors,
+        autopct='%1.0f%%',
         startangle=90,
-        colors=["#66bb6a", "#ef5350", "#fad000"],
-        wedgeprops=dict(width=0.4),
-        autopct="%1.0f%%" if (passed+failed+skipped) else None,
+        wedgeprops=dict(width=0.4)
     )
-    ax.axis("equal")
-    pie_path = out_dir / "summary_pie.png"
-    fig.savefig(pie_path, bbox_inches="tight")
+    ax.set_title("Test Summary", fontsize=14)
+    plt.legend(wedges, labels, title="Results", loc="lower center", ncol=3)
+    fig.savefig(out_dir / "summary_pie.png")
     plt.close(fig)
-    save_base64_chart(pie_path, out_dir / "summary_pie_b64.txt")
 
-    # --- Bar chart (Failures & Reruns) ---
+    # Bar chart (failures vs reruns)
+    fails = stats.get("failed", 0)
+    reruns = stats.get("rerun", 0)
+
     fig, ax = plt.subplots()
-    ax.bar(["Failed", "Reruns"], [failed, reruns])
-    ax.set_title("Failures and Reruns")
-    bar_path = out_dir / "summary_bar.png"
-    fig.savefig(bar_path, bbox_inches="tight")
+    ax.bar(["Failed", "Reruns"], [fails, reruns], color=["#ef5350", "#ffa726"])
+    ax.set_title("Failures and Reruns", fontsize=14)
+    ax.set_ylabel("Number of Tests")
+    for i, v in enumerate([fails, reruns]):
+        ax.text(i, v + 0.05, str(v), ha="center", fontsize=10, fontweight="bold")
+    fig.savefig(out_dir / "summary_bar.png")
     plt.close(fig)
-    save_base64_chart(bar_path, out_dir / "summary_bar_b64.txt")
+
 
 def _matplotlib_img(fig) -> str:
     """Convert a matplotlib figure to base64 string."""
