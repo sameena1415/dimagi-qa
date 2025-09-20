@@ -134,7 +134,7 @@ def save_summary_charts(stats):
     wedges, texts, autotexts = ax.pie(
         pie_sizes,
         labels=None,
-        autopct='%1.0f%%',  # show percentages
+         # show percentages
         colors=pie_colors,
         startangle=90,
         wedgeprops=dict(width=0.4)

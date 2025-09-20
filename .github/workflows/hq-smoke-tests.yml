@@ -263,29 +263,171 @@ jobs:
         run: |
           echo "COMBINED_JSON=$COMBINED_JSON"
           echo "COMBINED_URL=$COMBINED_URL"
+#
+#      - name: Post to Slack channel on Success
+#        if: ${{ fromJSON(steps.configure_slack.outputs.result).SLACK_WEBHOOK_URL != '' && success() }}
+#        uses: slackapi/slack-github-action@v1.23.0
+#        with:
+#          payload: |
+#            {
+#              "attachments": [
+#                {
+#                  "color": "#36a64f",
+#                  "blocks": [
+#                    {
+#                      "type": "section",
+#                      "text": {
+#                        "type": "mrkdwn",
+#                        "text": "Hey 👋 \n*${{ github.workflow }}* just finished successfully! 🎉\n"
+#                      }
+#                    },
+#                    {
+#                      "type": "section",
+#                      "text": {
+#                        "type": "mrkdwn",
+#                        "text": "*Passed:* ${{ steps.parse_counts.outputs.PASSED }}  *Failed:* ${{ steps.parse_counts.outputs.FAILED }}  *Error:* ${{ steps.parse_counts.outputs.ERROR }}  *Skipped:* ${{ steps.parse_counts.outputs.SKIPPED }}  *XFail:* ${{ steps.parse_counts.outputs.XFAIL }}"
+#                      }
+#                    },
+#                    {
+#                      "type": "context",
+#                      "elements": [
+#                        {
+#                          "type": "mrkdwn",
+#                          "text": "*Environment:* ${{ matrix.environment }}"
+#                        },
+#                        {
+#                          "type": "mrkdwn",
+#                          "text": "*Status:* ✅ Passed"
+#                        }
+#                      ]
+#                    },
+#                    {
+#                      "type": "image",
+#                      "title": {
+#                        "type": "plain_text",
+#                        "text": "Test Summary Charts"
+#                      },
+#                      "image_url": "${{ env.COMBINED_URL }}",
+#                      "alt_text": "Pie + Bar Chart"
+#                    },
+#                    {
+#                      "type": "section",
+#                      "text": {
+#                        "type": "mrkdwn",
+#                        "text": "Here's the corresponding report :arrow_right::arrow_right:"
+#                      },
+#                      "accessory": {
+#                        "type": "button",
+#                        "text": {
+#                          "type": "plain_text",
+#                          "text": "Click to Download",
+#                          "emoji": true
+#                        },
+#                        "url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts/${{ steps.artifact-upload-step.outputs.artifact-id }}",
+#                        "style": "primary",
+#                        "action_id": "button-action"
+#                      }
+#                    }
+#                  ]
+#                }
+#              ]
+#            }
+#
+#        env:
+#          SLACK_WEBHOOK_URL: ${{ fromJSON(steps.configure_slack.outputs.result).SLACK_WEBHOOK_URL }}
+#          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+#
+#      - name: Post to Slack channel on Failure
+#        if: ${{ fromJSON(steps.configure_slack.outputs.result).SLACK_WEBHOOK_URL != '' && failure() }}
+#        uses: slackapi/slack-github-action@v1.23.0
+#        with:
+#          payload: |
+#            {
+#              "attachments": [
+#                {
+#                  "color": "#FF0000",
+#                  "blocks": [
+#                    {
+#                      "type": "section",
+#                      "text": {
+#                        "type": "mrkdwn",
+#                        "text": "Hey 👋 \n*${{ github.workflow }}* has failed! ❌\n"
+#                      }
+#                    },
+#                    {
+#                      "type": "section",
+#                      "text": {
+#                        "type": "mrkdwn",
+#                        "text": "*Passed:* ${{ steps.parse_counts.outputs.PASSED }}  *Failed:* ${{ steps.parse_counts.outputs.FAILED }}  *Error:* ${{ steps.parse_counts.outputs.ERROR }}  *Skipped:* ${{ steps.parse_counts.outputs.SKIPPED }}  *XFail:* ${{ steps.parse_counts.outputs.XFAIL }}"
+#                      }
+#                    },
+#                    {
+#                      "type": "context",
+#                      "elements": [
+#                        {
+#                          "type": "mrkdwn",
+#                          "text": "*Environment:* ${{ matrix.environment }}"
+#                        },
+#                        {
+#                          "type": "mrkdwn",
+#                          "text": "*Status:* ❌ Failed"
+#                        }
+#                      ]
+#                    },
+#                    {
+#                      "type": "image",
+#                      "title": {
+#                        "type": "plain_text",
+#                        "text": "Test Summary Charts"
+#                      },
+#                      "image_url": "${{ env.COMBINED_URL }}",
+#                      "alt_text": "Pie + Bar Chart"
+#                    },
+#                    {
+#                      "type": "section",
+#                      "text": {
+#                        "type": "mrkdwn",
+#                        "text": "Here's the corresponding report :arrow_right::arrow_right:"
+#                      },
+#                      "accessory": {
+#                        "type": "button",
+#                        "text": {
+#                          "type": "plain_text",
+#                          "text": "Click to Download",
+#                          "emoji": true
+#                        },
+#                        "url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts/${{ steps.artifact-upload-step.outputs.artifact-id }}",
+#                        "style": "danger",
+#                        "action_id": "button-action"
+#                      }
+#                    }
+#                  ]
+#                }
+#              ]
+#            }
 
-      - name: Post to Slack channel on Success
-        if: ${{ fromJSON(steps.configure_slack.outputs.result).SLACK_WEBHOOK_URL != '' && success() }}
-        uses: slackapi/slack-github-action@v1.23.0
+      - name: Post Slack Notification
+        if: ${{ success() || failure() }}
+        uses: slackapi/slack-github-action@v1.25.0
         with:
           payload: |
             {
               "attachments": [
                 {
-                  "color": "#36a64f",
+                  "color": "${{ job.status == 'success' && '#36a64f' || '#FF0000' }}",
                   "blocks": [
                     {
                       "type": "section",
                       "text": {
                         "type": "mrkdwn",
-                        "text": "Hey 👋 \n*${{ github.workflow }}* just finished successfully! 🎉\n"
+                        "text": "Hola 👋 \n*${{ github.workflow }}* just ran!"
                       }
                     },
                     {
                       "type": "section",
                       "text": {
                         "type": "mrkdwn",
-                        "text": "*Passed:* ${{ steps.parse_counts.outputs.PASSED }}  *Failed:* ${{ steps.parse_counts.outputs.FAILED }}  *Error:* ${{ steps.parse_counts.outputs.ERROR }}  *Skipped:* ${{ steps.parse_counts.outputs.SKIPPED }}  *XFail:* ${{ steps.parse_counts.outputs.XFAIL }}"
+                        "text": "*Passed:* ${{ steps.parse_counts.outputs.PASSED }}   *Failed:* ${{ steps.parse_counts.outputs.FAILED }}   *Error:* ${{ steps.parse_counts.outputs.ERROR }}   *Skipped:* ${{ steps.parse_counts.outputs.SKIPPED }}   *XFail:* ${{ steps.parse_counts.outputs.XFAIL }}"
                       }
                     },
                     {
@@ -297,80 +439,22 @@ jobs:
                         },
                         {
                           "type": "mrkdwn",
-                          "text": "*Status:* ✅ Passed"
+                          "text": "*Status:* ${{ job.status == 'success' && ':white_check_mark:' || ':x:' }}"
                         }
                       ]
                     },
                     {
-                      "type": "image",
-                      "title": {
-                        "type": "plain_text",
-                        "text": "Test Summary Charts"
-                      },
-                      "image_url": "${{ env.COMBINED_URL }}",
-                      "alt_text": "Pie + Bar Chart"
-                    },
-                    {
-                      "type": "section",
-                      "text": {
-                        "type": "mrkdwn",
-                        "text": "Here's the corresponding report :arrow_right::arrow_right:"
-                      },
-                      "accessory": {
-                        "type": "button",
-                        "text": {
-                          "type": "plain_text",
-                          "text": "Click to Download",
-                          "emoji": true
-                        },
-                        "url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts/${{ steps.artifact-upload-step.outputs.artifact-id }}",
-                        "style": "primary",
-                        "action_id": "button-action"
-                      }
-                    }
-                  ]
-                }
-              ]
-            }
-
-        env:
-          SLACK_WEBHOOK_URL: ${{ fromJSON(steps.configure_slack.outputs.result).SLACK_WEBHOOK_URL }}
-          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
-
-      - name: Post to Slack channel on Failure
-        if: ${{ fromJSON(steps.configure_slack.outputs.result).SLACK_WEBHOOK_URL != '' && failure() }}
-        uses: slackapi/slack-github-action@v1.23.0
-        with:
-          payload: |
-            {
-              "attachments": [
-                {
-                  "color": "#FF0000",
-                  "blocks": [
-                    {
-                      "type": "section",
-                      "text": {
-                        "type": "mrkdwn",
-                        "text": "Hey 👋 \n*${{ github.workflow }}* has failed! ❌\n"
-                      }
-                    },
-                    {
-                      "type": "section",
-                      "text": {
-                        "type": "mrkdwn",
-                        "text": "*Passed:* ${{ steps.parse_counts.outputs.PASSED }}  *Failed:* ${{ steps.parse_counts.outputs.FAILED }}  *Error:* ${{ steps.parse_counts.outputs.ERROR }}  *Skipped:* ${{ steps.parse_counts.outputs.SKIPPED }}  *XFail:* ${{ steps.parse_counts.outputs.XFAIL }}"
-                      }
-                    },
-                    {
-                      "type": "context",
+                      "type": "actions",
                       "elements": [
                         {
-                          "type": "mrkdwn",
-                          "text": "*Environment:* ${{ matrix.environment }}"
-                        },
-                        {
-                          "type": "mrkdwn",
-                          "text": "*Status:* ❌ Failed"
+                          "type": "button",
+                          "text": {
+                            "type": "plain_text",
+                            "text": "⬇️ Click to Download Report",
+                            "emoji": true
+                          },
+                          "url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts/${{ steps.artifact-upload-step.outputs.artifact-id }}",
+                          "style": "${{ job.status == 'success' && 'primary' || 'danger' }}"
                         }
                       ]
                     },
@@ -382,24 +466,6 @@ jobs:
                       },
                       "image_url": "${{ env.COMBINED_URL }}",
                       "alt_text": "Pie + Bar Chart"
-                    },
-                    {
-                      "type": "section",
-                      "text": {
-                        "type": "mrkdwn",
-                        "text": "Here's the corresponding report :arrow_right::arrow_right:"
-                      },
-                      "accessory": {
-                        "type": "button",
-                        "text": {
-                          "type": "plain_text",
-                          "text": "Click to Download",
-                          "emoji": true
-                        },
-                        "url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts/${{ steps.artifact-upload-step.outputs.artifact-id }}",
-                        "style": "danger",
-                        "action_id": "button-action"
-                      }
                     }
                   ]
                 }
