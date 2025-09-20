@@ -169,10 +169,10 @@ jobs:
               subject = `${prefix} on branch "${GITHUB_HEAD_REF}" ${suffix}`
             }
 
-#            let bodyFile = './common_utilities/mail_templates/email_pass.html'
-#            if (JOB_STATUS !== 'success') {
-#              bodyFile = './common_utilities/mail_templates/email_fail.html'
-#            }
+            let bodyFile = './common_utilities/mail_templates/email_pass.html'
+            if (JOB_STATUS !== 'success') {
+              bodyFile = './common_utilities/mail_templates/email_fail.html'
+            }
 
             let actionRunLink = context.payload.repository.html_url + `/actions/runs/${context.runId}`
             let testSuite = 'BHA Smoke'
@@ -201,8 +201,6 @@ jobs:
               "reference": Math.random().toString(36).substr(2),  // used to prevent threading of similar emails
               "receivers": receivers
             }
-
-
 
       - name: Send Result Email
         if: ${{ failure() }}
