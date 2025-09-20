@@ -173,22 +173,22 @@ jobs:
 #            if (JOB_STATUS !== 'success') {
 #              bodyFile = './common_utilities/mail_templates/email_fail.html'
 #            }
-#
-#            let actionRunLink = context.payload.repository.html_url + `/actions/runs/${context.runId}`
-#            let testSuite = 'BHA Smoke'
-#            let bodyContent = await fs.readFile(bodyFile, 'utf8')
-#
-#                              // load base64 chart strings
-#            let pie_b64 = await fs.readFile('slack_charts/summary_pie_b64.txt', 'utf8')
-#            let bar_b64 = await fs.readFile('slack_charts/summary_bar_b64.txt', 'utf8')
-#
-#            bodyContent = bodyContent
-#              .replace(/{{actionRunLink}}/g, actionRunLink)
-#              .replace(/{{runNumber}}/g, context.runNumber)
-#              .replace(/{{environment}}/g, CC_ENV)
-#              .replace(/{{testSuite}}/g, testSuite)
-#              .replace(/{{pie_b64}}/g, pie_b64)
-#              .replace(/{{bar_b64}}/g, bar_b64)
+
+            let actionRunLink = context.payload.repository.html_url + `/actions/runs/${context.runId}`
+            let testSuite = 'BHA Smoke'
+            let bodyContent = await fs.readFile(bodyFile, 'utf8')
+            
+                              // load base64 chart strings
+            let pie_b64 = await fs.readFile('slack_charts/summary_pie_b64.txt', 'utf8')
+            let bar_b64 = await fs.readFile('slack_charts/summary_bar_b64.txt', 'utf8')
+
+            bodyContent = bodyContent
+              .replace(/{{actionRunLink}}/g, actionRunLink)
+              .replace(/{{runNumber}}/g, context.runNumber)
+              .replace(/{{environment}}/g, CC_ENV)
+              .replace(/{{testSuite}}/g, testSuite)
+              .replace(/{{pie_b64}}/g, pie_b64)
+              .replace(/{{bar_b64}}/g, bar_b64)
   
             let receivers = 'qa-automation@dimagi.com'
             if (context.eventName !== "pull_request" || context.eventName !== "push") {
@@ -197,6 +197,7 @@ jobs:
 
             return {
               "subject": subject,
+              "body": bodyContent,
               "reference": Math.random().toString(36).substr(2),  // used to prevent threading of similar emails
               "receivers": receivers
             }
