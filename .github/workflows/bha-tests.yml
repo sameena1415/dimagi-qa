@@ -197,7 +197,6 @@ jobs:
 
             return {
               "subject": subject,
-#              "body": bodyContent,
               "reference": Math.random().toString(36).substr(2),  // used to prevent threading of similar emails
               "receivers": receivers
             }
