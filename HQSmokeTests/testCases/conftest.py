@@ -132,42 +132,71 @@ def save_summary_charts(stats):
     out_dir = Path("slack_charts")
     out_dir.mkdir(exist_ok=True)
 
-    # --- Pie chart ---
+    passed = stats.get("passed", 0)
+    failed = stats.get("failed", 0)
+    skipped = stats.get("skipped", 0)
+    reruns = stats.get("rerun", 0)
+
+    # --- Pie chart with legend ---
     pie_labels = ["Passed", "Failed", "Skipped"]
-    pie_sizes = [stats.get("passed", 0),
-                 stats.get("failed", 0),
-                 stats.get("skipped", 0)]
+    pie_sizes = [passed, failed, skipped]
     pie_colors = ["#66bb6a", "#ef5350", "#fad000"]
 
     fig, ax = plt.subplots()
-    wedges, texts = ax.pie(
+    wedges, texts, autotexts = ax.pie(
         pie_sizes,
         labels=None,
+        autopct='%1.0f%%',  # show percentages
         colors=pie_colors,
         startangle=90,
         wedgeprops=dict(width=0.4)
     )
     ax.axis("equal")
-    plt.legend(
-        wedges,
-        [f"{l}: {v}" for l, v in zip(pie_labels, pie_sizes)],
-        title="Results",
-        loc="upper center",
-        bbox_to_anchor=(0.5, -0.08),
-        ncol=len(pie_labels)
+    ax.set_title("Test Summary")
+
+    # Add legend with counts
+    ax.legend(
+        [f"Passed: {passed}", f"Failed: {failed}", f"Skipped: {skipped}"],
+        loc="lower center",
+        ncol=3,
+        bbox_to_anchor=(0.5, -0.15)
     )
-    fig.savefig(out_dir / "summary_pie.png")
+
+    fig.savefig(out_dir / "summary_pie.png", bbox_inches="tight")
     plt.close(fig)
 
-    # --- Bar chart ---
-    fails = stats.get("failed", 0)
-    reruns = stats.get("rerun", 0)
+    # --- Bar chart with labels + legend ---
     fig, ax = plt.subplots()
-    bars = ax.bar(["Failed", "Reruns"], [fails, reruns], color=["#ef5350", "#ff9933"])
+    bars = ax.bar(
+        ["Failed", "Reruns"],
+        [failed, reruns],
+        color=["#ef5350", "#ffa726"]
+    )
     ax.set_ylabel("Number of Tests")
-    for i, v in enumerate([fails, reruns]):
-        ax.text(i, v + 0.05, str(v), ha="center", fontsize=10, fontweight="bold")
-    fig.savefig(out_dir / "summary_bar.png")
+    ax.set_title("Failures and Reruns")
+
+    # Add counts above bars
+    for bar in bars:
+        height = bar.get_height()
+        ax.text(
+            bar.get_x() + bar.get_width() / 2,
+            height + 0.05,
+            str(int(height)),
+            ha="center",
+            va="bottom",
+            fontsize=10,
+            fontweight="bold"
+        )
+
+    # Legend with counts
+    ax.legend(
+        [f"Failed: {failed}", f"Reruns: {reruns}"],
+        loc="lower center",
+        ncol=2,
+        bbox_to_anchor=(0.5, -0.15)
+    )
+
+    fig.savefig(out_dir / "summary_bar.png", bbox_inches="tight")
     plt.close(fig)
 
     # --- Combine ---
