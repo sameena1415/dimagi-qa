@@ -143,10 +143,9 @@ def save_summary_charts(stats):
     pie_colors = ["#66bb6a", "#ef5350", "#fad000"]
 
     fig, ax = plt.subplots()
-    wedges, texts, autotexts = ax.pie(
+    wedges, texts = ax.pie(
         pie_sizes,
         labels=None,
-        autopct=None,  # show percentages
         colors=pie_colors,
         startangle=90,
         wedgeprops=dict(width=0.4)
