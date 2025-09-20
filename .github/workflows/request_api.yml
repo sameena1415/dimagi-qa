@@ -97,15 +97,6 @@ jobs:
           echo "::set-output name=${line%=*}::${line#*=}"
         done < test_counts_${{ matrix.environment }}.txt
 
-    - name: Upload charts
-      if: always()
-      uses: actions/upload-artifact@v4
-      with:
-        name: charts-${{ matrix.environment }}
-        path: slack_charts/*.png
-        retention-days: 2
-
-
     - name: Archive test results
       id: artifact-upload-step
       if: always()
@@ -118,76 +109,20 @@ jobs:
     - name: Fetch artifact ID
       run: echo 'Artifact ID is ${{ steps.artifact-upload-step.outputs.artifact-id }}'
 
-    - name: Embed charts into email HTML
-      if: ${{ success() || failure() }}
-      run: |
-        pie64=$(base64 -w0 slack_charts/summary_pie.png || echo "")
-        bar64=$(base64 -w0 slack_charts/summary_bar.png || echo "")
-    
-        if [ "${{ job.status }}" = "success" ]; then
-          STATUS="PASSED"
-          STATUS_COLOR="green"
-        else
-          STATUS="FAILED"
-          STATUS_COLOR="red"
-        fi
-    
-        cp common_utilities/mail_templates/email_template.html email_embedded.html
-        sed -i "s|{{pie_b64}}|$pie64|g" email_embedded.html
-        sed -i "s|{{bar_b64}}|$bar64|g" email_embedded.html
-        sed -i "s|{{status}}|$STATUS|g" email_embedded.html
-        sed -i "s|{{status_color}}|$STATUS_COLOR|g" email_embedded.html
-        sed -i "s|{{testSuite}}|BHA Smoke|g" email_embedded.html
-        sed -i "s|{{environment}}|${{ matrix.environment }}|g" email_embedded.html
-        sed -i "s|{{runNumber}}|${{ github.run_number }}|g" email_embedded.html
-        sed -i "s|{{actionRunLink}}|${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|g" email_embedded.html
-    
-        echo "EMAIL_FILE=email_embedded.html" >> $GITHUB_ENV
-
-    - name: Set email vars
-      id: configure_email
-      if: ${{ success() || failure() }}
-      uses: actions/github-script@v6
-      env:
-        JOB_STATUS: ${{ job.status }}
-        CC_ENV: ${{ matrix.environment }}
-      with:
-        script: |
-          const fs = require('fs').promises;
-          const { JOB_STATUS, CC_ENV, NOW } = process.env;
-    
-          const prefix = `[${CC_ENV}] REQUEST API - ${JOB_STATUS.toUpperCase()} - Run #${context.runNumber}`;
-          const suffix = `at ${NOW}`;
-          let subject = `${prefix} on branch "${context.ref}" ${suffix}`;
-    
-          // read modified HTML template
-          let bodyContent = await fs.readFile('email_embedded.html', 'utf8');
-    
-          let receivers = 'qa@dimagi.com, sameena.shaik@fissionlabs.com';
-    
-          return {
-            subject,
-            receivers,
-            reference: Math.random().toString(36).substring(2),
-            body: bodyContent
-          }
-
-    - name: Send Result Email
-      if: ${{ success() || failure() }}
+    - name: Send Failure Email
       uses: dawidd6/action-send-mail@v3
+      if: failure()
       with:
         server_address: smtp.gmail.com
         server_port: 465
-        username: ${{ secrets.DIMAGIQA_MAIL_USERNAME }}
-        password: ${{ secrets.DIMAGIQA_MAIL_PASSWORD }}
-        subject: ${{ fromJSON(steps.configure_email.outputs.result).subject }}
-        to: ${{ fromJSON(steps.configure_email.outputs.result).receivers }}
-        from: <${{ secrets.DIMAGIQA_MAIL_USERNAME }}>
-        html_body: ${{ fromJSON(steps.configure_email.outputs.result).body }}
-        convert_markdown: false
-        attachments: ${{ github.workspace }}/report_${{ matrix.environment }}.html
-        in_reply_to: ${{ fromJSON(steps.configure_email.outputs.result).reference }}
-
+        username: ${{secrets.DIMAGIQA_MAIL_USERNAME}}
+        password: ${{secrets.DIMAGIQA_MAIL_PASSWORD}}
+        subject: ${{ github.event.client_payload.environment }} FAIL - Request API Tests[#${{github.run_number}}] on branch "${{ github.ref_name }}", ${{env.NOW}}
+        to: qa@dimagi.com, sameena.shaik@fissionlabs.com
+        from: <${{secrets.DIMAGIQA_MAIL_USERNAME}}>
+        html_body: file:////home/runner/work/dimagi-qa/dimagi-qa/RequestAPI/email_fail.html
+        attachments: /home/runner/work/dimagi-qa/dimagi-qa/report_api_${{ matrix.environment }}.html
+        priority: normal
 
     - name: Set slack vars
       if: ${{ always() }}
@@ -229,6 +164,18 @@ jobs:
           }
 
           return  { SLACK_WEBHOOK_URL, SLACK_CHANNEL_ID }
+
+    - name: Upload Combined Chart to Slack
+      if: ${{ !cancelled() }}
+      run: |
+        COMBINED_JSON=$(curl -s -F file=@slack_charts/summary_combined.png \
+          -F channels=${{ fromJSON(steps.configure_slack.outputs.result).SLACK_CHANNEL_ID }} \
+          -F "initial_comment=📊 Test Summary Charts - ${{ matrix.environment }}" \
+          -H "Authorization: Bearer ${{ secrets.SLACK_QA_BOT_TOKEN }}" \
+          https://slack.com/api/files.upload)
+    
+        COMBINED_URL=$(echo $COMBINED_JSON | jq -r '.file.permalink')
+        echo "COMBINED_URL=$COMBINED_URL" >> $GITHUB_ENV
 
     - name: Post to Slack channel on Success
       id: slack_success
@@ -272,6 +219,15 @@ jobs:
             						}
             					]
             				},
+                            {
+                                "type": "image",
+                                "title": {
+                                  "type": "plain_text",
+                                  "text": "Test Summary Charts"
+                                },
+                                "image_url": "${{ env.COMBINED_URL }}",
+                                "alt_text": "Pie + Bar Chart"
+                            },
             				{
             					"type": "section",
             					"text": {
@@ -342,6 +298,15 @@ jobs:
             						}
             					]
             				},
+                            {
+                                "type": "image",
+                                "title": {
+                                  "type": "plain_text",
+                                  "text": "Test Summary Charts"
+                                },
+                                "image_url": "${{ env.COMBINED_URL }}",
+                                "alt_text": "Pie + Bar Chart"
+                            },
             				{
             					"type": "section",
             					"text": {
@@ -369,28 +334,3 @@ jobs:
       env:
         SLACK_WEBHOOK_URL: ${{ fromJSON(steps.configure_slack.outputs.result).SLACK_WEBHOOK_URL }}
         SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
-
-    - name: Upload Charts to Slack
-      if: ${{ always() }}
-      run: |
-        # Upload pie chart
-        PIE_JSON=$(curl -s -F file=@slack_charts/summary_pie.png \
-          -F channels=${{ fromJSON(steps.configure_slack.outputs.result).SLACK_CHANNEL_ID }} \
-          -F "initial_comment=Pie & Bar Charts - ${{ matrix.environment }}" \
-          -H "Authorization: Bearer ${{ secrets.SLACK_QA_BOT_TOKEN }}" \
-          https://slack.com/api/files.upload)
-          
-        PIE_URL=$(echo $PIE_JSON | jq -r '.file.permalink')
-         
-        # Upload bar chart
-        BAR_JSON=$(curl -s -F file=@slack_charts/summary_bar.png \
-          -F channels=${{ fromJSON(steps.configure_slack.outputs.result).SLACK_CHANNEL_ID }} \
-          -H "Authorization: Bearer ${{ secrets.SLACK_QA_BOT_TOKEN }}" \
-          https://slack.com/api/files.upload)
-          
-        BAR_URL=$(echo $BAR_JSON | jq -r '.file.permalink')
-          
-        echo "PIE_URL=$PIE_URL" >> $GITHUB_ENV
-        echo "BAR_URL=$BAR_URL" >> $GITHUB_ENV
-  
-
