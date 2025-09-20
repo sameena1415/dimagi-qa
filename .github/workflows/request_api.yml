@@ -176,179 +176,129 @@ jobs:
 
           return  { SLACK_WEBHOOK_URL, SLACK_CHANNEL_ID }
 
-
-
-    - name: Post to Slack channel on Failure
-      id: slack-api-staging-fail
-      uses: slackapi/slack-github-action@v1.23.0
-      if: ${{ fromJSON(steps.configure_slack.outputs.result).SLACK_WEBHOOK_URL != ' ' && failure() }}
-      with:
-        payload: |
-          {
-          	"attachments": [
-          		{
-          			"color": "#ff0000",
-          			"blocks": [
-          				{
-          					"type": "section",
-          					"text": {
-          						"type": "mrkdwn",
-          						"text": " Hola  👋 \n*${{ github.workflow }}* were just triggered!\n"
-          					}
-          				},
-          				{
-          					"type": "section",
-          					"text": {
-          						"type": "mrkdwn",
-          						"text": "*Passed:* ${{ steps.parse_counts.outputs.PASSED }} *Failed:* ${{ steps.parse_counts.outputs.FAILED }} *Error:* ${{ steps.parse_counts.outputs.ERROR }} *Skipped:* ${{ steps.parse_counts.outputs.SKIPPED }} *XFail:* ${{ steps.parse_counts.outputs.XFAIL }}\n"
-          					}
-          				},
-          				{
-          					"type": "context",
-          					"elements": [
-          						{
-          							"type": "mrkdwn",
-          							"text": "*Environment: *\n ${{ matrix.environment }}  \n"
-          						},
-          						{
-          							"type": "mrkdwn",
-          							"text": " "
-          						},
-          						{
-          							"type": "mrkdwn",
-          							"text": "*Status: *\n ${{ job.status }}  :x:"
-          						}
-          					]
-          				},
-          				{
-          					"type": "section",
-          					"text": {
-          						"type": "mrkdwn",
-          						"text": "Here's the corresponding report :arrow_right::arrow_right:"
-          					},
-          					"accessory": {
-          						"type": "button",
-          						"text": {
-          							"type": "plain_text",
-          							"text": "Click to Download",
-          							"emoji": true
-          						},
-          						"value": "click_me_123",
-          						"url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts/${{ steps.artifact-upload-step.outputs.artifact-id }}",
-          						"action_id": "button-action",
-          						"style": "danger"
-          					}
-          				}
-          			]
-          		}
-          	]
-          }
-      env:
-        SLACK_WEBHOOK_URL: ${{ fromJSON(steps.configure_slack.outputs.result).SLACK_WEBHOOK_URL }}
-        SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
-
-    - name: Upload Pie Chart to Slack (Failure)
-      if: ${{ failure() && fromJSON(steps.configure_slack.outputs.result).SLACK_WEBHOOK_URL != ' ' }}
-      run: |
-        curl -F file=@slack_charts/summary_pie.png \
-             -F "initial_comment=📊 Test Results Pie Chart - ${{ matrix.environment }}" \
-             -F channels=${{ fromJSON(steps.configure_slack.outputs.result).SLACK_CHANNEL_ID }} \
-             -H "Authorization: Bearer ${{ secrets.SLACK_QA_BOT_TOKEN }}" \
-             https://slack.com/api/files.upload
-
-    - name: Upload Bar Chart to Slack (Failure)
-      if: ${{ failure() && fromJSON(steps.configure_slack.outputs.result).SLACK_WEBHOOK_URL != ' ' }}
-      run: |
-        curl -F file=@slack_charts/summary_bar.png \
-             -F "initial_comment=📊 Failures & Reruns - ${{ matrix.environment }}" \
-             -F channels=${{ fromJSON(steps.configure_slack.outputs.result).SLACK_CHANNEL_ID }} \
-             -H "Authorization: Bearer ${{ secrets.SLACK_QA_BOT_TOKEN }}" \
-             https://slack.com/api/files.upload
-
     - name: Post to Slack channel on Success
-      id: slack-api-staging-pass
+      id: slack_success
       uses: slackapi/slack-github-action@v1.23.0
-      if:  ${{ fromJSON(steps.configure_slack.outputs.result).SLACK_WEBHOOK_URL != ' ' && success() }}
+      if: ${{ fromJSON(steps.configure_slack.outputs.result).SLACK_WEBHOOK_URL != ' ' && success() }}
       with:
         payload: |
           {
-          	"attachments": [
-          		{
-          			"color": "#36a64f",
-          			"blocks": [
-          				{
-          					"type": "section",
-          					"text": {
-          						"type": "mrkdwn",
-          						"text": " Hola  👋 \n*${{ github.workflow }}* were just triggered! \n"
-          					}
-          				},
-          				{
-          					"type": "section",
-          					"text": {
-          						"type": "mrkdwn",
-          						"text": "*Passed:* ${{ steps.parse_counts.outputs.PASSED }} *Failed:* ${{ steps.parse_counts.outputs.FAILED }} *Error:* ${{ steps.parse_counts.outputs.ERROR }} *Skipped:* ${{ steps.parse_counts.outputs.SKIPPED }} *XFail:* ${{ steps.parse_counts.outputs.XFAIL }}\n"
-          					}
-          				},
-          				{
-          					"type": "context",
-          					"elements": [
-          						{
-          							"type": "mrkdwn",
-          							"text": "*Environment: *\n ${{ matrix.environment }}  \n"
-          						},
-          						{
-          							"type": "mrkdwn",
-          							"text": " "
-          						},
-          						{
-          							"type": "mrkdwn",
-          							"text": "*Status: *\n ${{ job.status }}  :white_check_mark:"
-          						}
-          					]
-          				},
-          				{
-          					"type": "section",
-          					"text": {
-          						"type": "mrkdwn",
-          						"text": "Here's the corresponding report :arrow_right::arrow_right:"
-          					},
-          					"accessory": {
-          						"type": "button",
-          						"text": {
-          							"type": "plain_text",
-          							"text": "Click to Downlaod",
-          							"emoji": true
-          						},
-          						"value": "click_me_123",
-          						"url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts/${{ steps.artifact-upload-step.outputs.artifact-id }}",
-          						"action_id": "button-action",
-          						"style": "primary"
-          					}
-          				}
-          			]
-          		}
-          	]
-          }
-        parse-json-secrets: true
+                "attachments": [
+                  {
+                    "color": "#36a64f",
+                    "blocks": [
+                      {
+                        "type": "section",
+                        "text": {
+                          "type": "mrkdwn",
+                          "text": "✅ *${{ github.workflow }}* passed on *${{ matrix.environment }}*"
+                        }
+                      },
+                      {
+                        "type": "section",
+                        "text": {
+                          "type": "mrkdwn",
+                          "text": "*Passed:* ${{ steps.parse_counts.outputs.PASSED }}  *Failed:* ${{ steps.parse_counts.outputs.FAILED }}  *Error:* ${{ steps.parse_counts.outputs.ERROR }}  *Skipped:* ${{ steps.parse_counts.outputs.SKIPPED }}  *XFail:* ${{ steps.parse_counts.outputs.XFAIL }}"
+                        }
+                      },
+                      {
+                        "type": "context",
+                        "elements": [
+                          { "type": "mrkdwn", "text": "*Environment:* `${{ matrix.environment }}`" },
+                          { "type": "mrkdwn", "text": "*Status:* `${{ job.status }}`" }
+                        ]
+                      },
+                      {
+                        "type": "section",
+                        "text": { "type": "mrkdwn", "text": "🔗 *[Download Report]*(${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts/${{ steps.artifact-upload-step.outputs.artifact-id }})" }
+                      }
+                    ]
+                  }
+                ]
+              }
       env:
         SLACK_WEBHOOK_URL: ${{ fromJSON(steps.configure_slack.outputs.result).SLACK_WEBHOOK_URL }}
         SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
 
     - name: Upload Pie Chart to Slack (Success)
-      if: ${{ success() && fromJSON(steps.configure_slack.outputs.result).SLACK_WEBHOOK_URL != ' ' }}
+      if: ${{ success() }}
       run: |
         curl -F file=@slack_charts/summary_pie.png \
-             -F "initial_comment=📊 Test Results Pie Chart - ${{ matrix.environment }}" \
-             -F channels=${{ fromJSON(steps.configure_slack.outputs.result).SLACK_CHANNEL_ID }} \
-             -H "Authorization: Bearer ${{ secrets.SLACK_QA_BOT_TOKEN }}" \
-             https://slack.com/api/files.upload
+                 -F "initial_comment=📊 Pie Chart - ${{ matrix.environment }}" \
+                 -F channels=${{ fromJSON(steps.configure_slack.outputs.result).SLACK_CHANNEL_ID }} \
+                 -H "Authorization: Bearer ${{ secrets.SLACK_QA_BOT_TOKEN }}" \
+                 https://slack.com/api/files.upload
 
     - name: Upload Bar Chart to Slack (Success)
-      if: ${{ success() && fromJSON(steps.configure_slack.outputs.result).SLACK_WEBHOOK_URL != ' ' }}
+      if: ${{ success() }}
       run: |
         curl -F file=@slack_charts/summary_bar.png \
-             -F "initial_comment=📊 Failures & Reruns - ${{ matrix.environment }}" \
-             -F channels=${{ fromJSON(steps.configure_slack.outputs.result).SLACK_CHANNEL_ID }} \
-             -H "Authorization: Bearer ${{ secrets.SLACK_QA_BOT_TOKEN }}" \
-             https://slack.com/api/files.upload
+               -F "initial_comment=📊 Failures vs Reruns Bar Chart - ${{ matrix.environment }}" \
+               -F channels=${{ fromJSON(steps.configure_slack.outputs.result).SLACK_CHANNEL_ID }} \
+               -H "Authorization: Bearer ${{ secrets.SLACK_QA_BOT_TOKEN }}" \
+               https://slack.com/api/files.upload
+
+    - name: Post to Slack channel on Failure
+      id: slack_fail
+      uses: slackapi/slack-github-action@v1.23.0
+      if: ${{ fromJSON(steps.configure_slack.outputs.result).SLACK_WEBHOOK_URL != ' ' && failure() }}
+      with:
+        payload: |
+          {
+              "attachments": [
+                {
+                  "color": "#FF0000",
+                  "blocks": [
+                    {
+                      "type": "section",
+                      "text": {
+                        "type": "mrkdwn",
+                        "text": "❌ *${{ github.workflow }}* failed on *${{ matrix.environment }}*"
+                      }
+                    },
+                    {
+                      "type": "section",
+                      "text": {
+                        "type": "mrkdwn",
+                        "text": "*Passed:* ${{ steps.parse_counts.outputs.PASSED }}  *Failed:* ${{ steps.parse_counts.outputs.FAILED }}  *Error:* ${{ steps.parse_counts.outputs.ERROR }}  *Skipped:* ${{ steps.parse_counts.outputs.SKIPPED }}  *XFail:* ${{ steps.parse_counts.outputs.XFAIL }}"
+                      }
+                    },
+                    {
+                      "type": "context",
+                      "elements": [
+                        { "type": "mrkdwn", "text": "*Environment:* `${{ matrix.environment }}`" },
+                        { "type": "mrkdwn", "text": "*Status:* `${{ job.status }}`" }
+                      ]
+                    },
+                    {
+                      "type": "section",
+                      "text": { "type": "mrkdwn", "text": "🔗 *[Download Report]*(${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts/${{ steps.artifact-upload-step.outputs.artifact-id }})" }
+                    }
+                  ]
+                }
+              ]
+            }
+      env:
+        SLACK_WEBHOOK_URL: ${{ fromJSON(steps.configure_slack.outputs.result).SLACK_WEBHOOK_URL }}
+        SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+
+    - name: Upload Pie Chart to Slack (Failure)
+      if: ${{ failure() }}
+      run: |
+        curl -F file=@slack_charts/summary_pie.png \
+               -F "initial_comment=📊 Pie Chart - ${{ matrix.environment }}" \
+               -F channels=${{ fromJSON(steps.configure_slack.outputs.result).SLACK_CHANNEL_ID }} \
+               -H "Authorization: Bearer ${{ secrets.SLACK_QA_BOT_TOKEN }}" \
+               https://slack.com/api/files.upload
+
+    - name: Upload Bar Chart to Slack (Failure)
+      if: ${{ failure() }}
+      run: |
+        curl -F file=@slack_charts/summary_bar.png \
+               -F "initial_comment=📊 Failures vs Reruns Bar Chart - ${{ matrix.environment }}" \
+               -F channels=${{ fromJSON(steps.configure_slack.outputs.result).SLACK_CHANNEL_ID }} \
+               -H "Authorization: Bearer ${{ secrets.SLACK_QA_BOT_TOKEN }}" \
+               https://slack.com/api/files.upload
+
+
+
