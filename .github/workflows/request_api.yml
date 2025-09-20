@@ -118,6 +118,13 @@ jobs:
     - name: Fetch artifact ID
       run: echo 'Artifact ID is ${{ steps.artifact-upload-step.outputs.artifact-id }}'
 
+    - name: Embed charts into email HTML
+      if: failure()
+      run: |
+        pie64=$(base64 -w0 slack_charts/summary_pie.png)
+        bar64=$(base64 -w0 slack_charts/summary_bar.png)
+        sed "s|{{pie_b64}}|$pie64|g; s|{{bar_b64}}|$bar64|g" RequestAPI/email_fail.html > email_fail_embedded.html
+
     - name: Send Failure Email
       uses: dawidd6/action-send-mail@v3
       if: failure()
@@ -129,7 +136,7 @@ jobs:
         subject: ${{ github.event.client_payload.environment }} FAIL - Request API Tests[#${{github.run_number}}] on branch "${{ github.ref_name }}", ${{env.NOW}}
         to: qa@dimagi.com, sameena.shaik@fissionlabs.com
         from: <${{secrets.DIMAGIQA_MAIL_USERNAME}}>
-        html_body: file:////home/runner/work/dimagi-qa/dimagi-qa/RequestAPI/email_fail.html
+        html_body: file:////home/runner/work/dimagi-qa/dimagi-qa/email_fail_embedded.html
         attachments: |
           /home/runner/work/dimagi-qa/dimagi-qa/report_api_${{ matrix.environment }}.html
         priority: normal
@@ -209,9 +216,23 @@ jobs:
                         ]
                       },
                       {
-                        "type": "section",
-                        "text": { "type": "mrkdwn", "text": "🔗 *[Download Report]*(${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts/${{ steps.artifact-upload-step.outputs.artifact-id }})" }
-                      }
+          					"type": "section",
+          					"text": {
+          						"type": "mrkdwn",
+          						"text": "Here's the corresponding report :arrow_right::arrow_right:"
+          					},
+          					"accessory": {
+          						"type": "button",
+          						"text": {
+          							"type": "plain_text",
+          							"text": "Click to Downlaod",
+          							"emoji": true
+          						},
+          						"value": "click_me_123",
+          						"url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts/${{ steps.artifact-upload-step.outputs.artifact-id }}",
+          						"action_id": "button-action",
+          						"style": "danger"
+          			  }
                     ]
                   }
                 ]
@@ -271,9 +292,23 @@ jobs:
                       ]
                     },
                     {
-                      "type": "section",
-                      "text": { "type": "mrkdwn", "text": "🔗 *[Download Report]*(${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts/${{ steps.artifact-upload-step.outputs.artifact-id }})" }
-                    }
+          					"type": "section",
+          					"text": {
+          						"type": "mrkdwn",
+          						"text": "Here's the corresponding report :arrow_right::arrow_right:"
+          					},
+          					"accessory": {
+          						"type": "button",
+          						"text": {
+          							"type": "plain_text",
+          							"text": "Click to Downlaod",
+          							"emoji": true
+          						},
+          						"value": "click_me_123",
+          						"url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts/${{ steps.artifact-upload-step.outputs.artifact-id }}",
+          						"action_id": "button-action",
+          						"style": "danger"
+          			}
                   ]
                 }
               ]

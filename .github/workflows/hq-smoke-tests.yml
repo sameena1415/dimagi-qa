@@ -205,6 +205,27 @@ jobs:
               "receivers": receivers
             }
 
+      - name: Embed charts into email HTML
+        if: ${{ success() || failure() }}
+        run: |
+          PIE64=$(cat slack_charts/summary_pie_b64.txt)
+          BAR64=$(cat slack_charts/summary_bar_b64.txt)
+      
+          if [ "${{ job.status }}" = "success" ]; then
+            TEMPLATE=common_utilities/mail_templates/email_pass.html
+            OUT=email_pass_embedded.html
+          else
+            TEMPLATE=common_utilities/mail_templates/email_fail.html
+            OUT=email_fail_embedded.html
+          fi
+      
+          cp $TEMPLATE $OUT
+          sed -i "s|{{pie_b64}}|$PIE64|g" $OUT
+          sed -i "s|{{bar_b64}}|$BAR64|g" $OUT
+      
+          echo "EMAIL_FILE=$OUT" >> $GITHUB_ENV
+
+
       - name: Send Result Email
         if: ${{ failure() }}
         uses: dawidd6/action-send-mail@v3
@@ -216,7 +237,7 @@ jobs:
           subject: ${{ fromJSON(steps.configure_email.outputs.result).subject }}
           to: ${{ fromJSON(steps.configure_email.outputs.result).receivers }}
           from: <${{secrets.DIMAGIQA_MAIL_USERNAME}}>
-          html_body: ${{ fromJSON(steps.configure_email.outputs.result).body }}
+          html_body: file:///${{ github.workspace }}/${{ env.EMAIL_FILE }}
           convert_markdown: false
           attachments: ${{ github.workspace }}/report_${{ matrix.environment }}.html
           in_reply_to: ${{ fromJSON(steps.configure_email.outputs.result).reference }}
@@ -295,9 +316,23 @@ jobs:
                         ]
                       },
                       {
-                        "type": "section",
-                        "text": { "type": "mrkdwn", "text": "🔗 *[Download Report]*(${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts/${{ steps.artifact-upload-step.outputs.artifact-id }})" }
-                      }
+          					"type": "section",
+          					"text": {
+          						"type": "mrkdwn",
+          						"text": "Here's the corresponding report :arrow_right::arrow_right:"
+          					},
+          					"accessory": {
+          						"type": "button",
+          						"text": {
+          							"type": "plain_text",
+          							"text": "Click to Downlaod",
+          							"emoji": true
+          						},
+          						"value": "click_me_123",
+          						"url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts/${{ steps.artifact-upload-step.outputs.artifact-id }}",
+          						"action_id": "button-action",
+          						"style": "danger"
+          			  }
                     ]
                   }
                 ]
@@ -357,9 +392,23 @@ jobs:
                       ]
                     },
                     {
-                      "type": "section",
-                      "text": { "type": "mrkdwn", "text": "🔗 *[Download Report]*(${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts/${{ steps.artifact-upload-step.outputs.artifact-id }})" }
-                    }
+          					"type": "section",
+          					"text": {
+          						"type": "mrkdwn",
+          						"text": "Here's the corresponding report :arrow_right::arrow_right:"
+          					},
+          					"accessory": {
+          						"type": "button",
+          						"text": {
+          							"type": "plain_text",
+          							"text": "Click to Downlaod",
+          							"emoji": true
+          						},
+          						"value": "click_me_123",
+          						"url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts/${{ steps.artifact-upload-step.outputs.artifact-id }}",
+          						"action_id": "button-action",
+          						"style": "danger"
+          			}
                   ]
                 }
               ]
