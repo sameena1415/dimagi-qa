@@ -163,6 +163,35 @@ def pytest_sessionfinish(session, exitstatus):
         "error": len(tr.stats.get("error", [])),
         "xfail": len(tr.stats.get("xfail", [])),
     }
+    save_summary_charts(_test_stats)
+
+def save_summary_charts(stats):
+    from pathlib import Path
+    out_dir = Path("slack_charts")
+    out_dir.mkdir(exist_ok=True)
+
+    passed, failed, skipped = stats["passed"], stats["failed"], stats["skipped"]
+
+    # Pie chart
+    fig, ax = plt.subplots()
+    ax.pie([passed, failed, skipped],
+           colors=["#66bb6a", "#ef5350", "#fad000"],
+           startangle=90, autopct="%1.0f%%"
+           )
+    ax.axis("equal")
+    fig.savefig(out_dir / "summary_pie.png")
+    plt.close(fig)
+
+    # Bar chart
+    fig, ax = plt.subplots()
+    ax.bar(["Passed", "Failed", "Skipped"],
+           [passed, failed, skipped],
+           color=["#66bb6a", "#ef5350", "#fad000"]
+           )
+    ax.set_title("Test Results")
+    fig.savefig(out_dir / "summary_bar.png")
+    plt.close(fig)
+
 
 def _matplotlib_img(fig) -> str:
     """Convert a matplotlib figure to base64 string."""
