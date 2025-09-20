@@ -133,18 +133,44 @@ def save_summary_charts(stats):
     out_dir.mkdir(exist_ok=True)
 
     # --- Pie chart ---
+    pie_labels = ["Passed", "Failed", "Skipped"]
+    pie_sizes = [stats.get("passed", 0),
+                 stats.get("failed", 0),
+                 stats.get("skipped", 0)]
+    pie_colors = ["#66bb6a", "#ef5350", "#fad000"]
+
     fig, ax = plt.subplots()
-    # (your existing pie chart plotting code...)
+    wedges, texts = ax.pie(
+        pie_sizes,
+        labels=None,
+        colors=pie_colors,
+        startangle=90,
+        wedgeprops=dict(width=0.4)
+    )
+    ax.axis("equal")
+    plt.legend(
+        wedges,
+        [f"{l}: {v}" for l, v in zip(pie_labels, pie_sizes)],
+        title="Results",
+        loc="upper center",
+        bbox_to_anchor=(0.5, -0.08),
+        ncol=len(pie_labels)
+    )
     fig.savefig(out_dir / "summary_pie.png")
     plt.close(fig)
 
     # --- Bar chart ---
+    fails = stats.get("failed", 0)
+    reruns = stats.get("rerun", 0)
     fig, ax = plt.subplots()
-    # (your existing bar chart plotting code...)
+    bars = ax.bar(["Failed", "Reruns"], [fails, reruns], color=["#ef5350", "#ff9933"])
+    ax.set_ylabel("Number of Tests")
+    for i, v in enumerate([fails, reruns]):
+        ax.text(i, v + 0.05, str(v), ha="center", fontsize=10, fontweight="bold")
     fig.savefig(out_dir / "summary_bar.png")
     plt.close(fig)
 
-    # --- Combine into one chart ---
+    # --- Combine ---
     combine_charts(
         pie_path=out_dir / "summary_pie.png",
         bar_path=out_dir / "summary_bar.png",

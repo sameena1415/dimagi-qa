@@ -224,6 +224,11 @@ jobs:
           COMBINED_URL=$(echo $COMBINED_JSON | jq -r '.file.permalink')
           echo "COMBINED_URL=$COMBINED_URL" >> $GITHUB_ENV
 
+      - name: Debug Slack Upload
+        run: |
+          echo "COMBINED_JSON=$COMBINED_JSON"
+          echo "COMBINED_URL=$COMBINED_URL"
+
 
       - name: Post to Slack channel on Success
         id: slack_success
