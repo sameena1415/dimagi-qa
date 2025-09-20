@@ -117,32 +117,47 @@ def pytest_sessionfinish(session, exitstatus):
     }
     save_summary_charts(_test_stats)
 
+import base64
+
+def save_base64_chart(image_path, b64_path):
+    with open(image_path, "rb") as f:
+        encoded = base64.b64encode(f.read()).decode("utf-8")
+    with open(b64_path, "w") as f:
+        f.write(encoded)
+
 def save_summary_charts(stats):
     from pathlib import Path
     out_dir = Path("slack_charts")
     out_dir.mkdir(exist_ok=True)
 
-    passed, failed, skipped = stats["passed"], stats["failed"], stats["skipped"]
+    passed  = int(stats.get("passed", 0))
+    failed  = int(stats.get("failed", 0))
+    skipped = int(stats.get("skipped", 0))
+    reruns  = int(stats.get("rerun", 0))  # from pytest-rerunfailures
 
-    # Pie chart
+    # --- Pie chart (Passed/Failed/Skipped) ---
     fig, ax = plt.subplots()
-    ax.pie([passed, failed, skipped],
-           colors=["#66bb6a", "#ef5350", "#fad000"],
-           startangle=90, autopct="%1.0f%%"
-           )
+    ax.pie(
+        [passed, failed, skipped],
+        startangle=90,
+        colors=["#66bb6a", "#ef5350", "#fad000"],
+        wedgeprops=dict(width=0.4),
+        autopct="%1.0f%%" if (passed+failed+skipped) else None,
+    )
     ax.axis("equal")
-    fig.savefig(out_dir / "summary_pie.png")
+    pie_path = out_dir / "summary_pie.png"
+    fig.savefig(pie_path, bbox_inches="tight")
     plt.close(fig)
+    save_base64_chart(pie_path, out_dir / "summary_pie_b64.txt")
 
-    # Bar chart
+    # --- Bar chart (Failures & Reruns) ---
     fig, ax = plt.subplots()
-    ax.bar(["Passed", "Failed", "Skipped"],
-           [passed, failed, skipped],
-           color=["#66bb6a", "#ef5350", "#fad000"]
-           )
-    ax.set_title("Test Results")
-    fig.savefig(out_dir / "summary_bar.png")
+    ax.bar(["Failed", "Reruns"], [failed, reruns])
+    ax.set_title("Failures and Reruns")
+    bar_path = out_dir / "summary_bar.png"
+    fig.savefig(bar_path, bbox_inches="tight")
     plt.close(fig)
+    save_base64_chart(bar_path, out_dir / "summary_bar_b64.txt")
 
 def _matplotlib_img(fig) -> str:
     """Convert a matplotlib figure to base64 string."""

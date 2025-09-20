@@ -132,8 +132,6 @@ jobs:
         html_body: file:////home/runner/work/dimagi-qa/dimagi-qa/RequestAPI/email_fail.html
         attachments: |
           /home/runner/work/dimagi-qa/dimagi-qa/report_api_${{ matrix.environment }}.html
-          slack_charts/summary_pie.png
-          slack_charts/summary_bar.png
         priority: normal
 
 
@@ -146,7 +144,7 @@ jobs:
           CC_ENV: ${{ matrix.environment }}
           CC_EVENT: ${{ github.event_name }}
       with:
-        result-encoding: string
+        result-encoding: json
         script: |
           const {CC_ENV, JOB_STATUS, CC_EVENT} = process.env
           let SLACK_WEBHOOK_URL = '${{ secrets.SLACK_WEBHOOK_URL_SMOKE }}'
@@ -183,7 +181,7 @@ jobs:
     - name: Post to Slack channel on Failure
       id: slack-api-staging-fail
       uses: slackapi/slack-github-action@v1.23.0
-      if: ${{ steps.configure_slack.outputs.result != ' ' && failure() }}
+      if: ${{ fromJSON(steps.configure_slack.outputs.result).SLACK_WEBHOOK_URL != ' ' && failure() }}
       with:
         payload: |
           {
@@ -246,31 +244,31 @@ jobs:
           	]
           }
       env:
-        SLACK_WEBHOOK_URL: ${{ steps.configure_slack.outputs.result.SLACK_WEBHOOK_URL }}
+        SLACK_WEBHOOK_URL: ${{ fromJSON(steps.configure_slack.outputs.result).SLACK_WEBHOOK_URL }}
         SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
 
     - name: Upload Pie Chart to Slack (Failure)
-      if: ${{ failure() && steps.configure_slack.outputs.result != ' ' }}
+      if: ${{ failure() && fromJSON(steps.configure_slack.outputs.result).SLACK_WEBHOOK_URL != ' ' }}
       run: |
         curl -F file=@slack_charts/summary_pie.png \
              -F "initial_comment=📊 Test Results Pie Chart - ${{ matrix.environment }}" \
-             -F channels=${{ steps.configure_slack.outputs.result.SLACK_CHANNEL_ID }} \
+             -F channels=${{ fromJSON(steps.configure_slack.outputs.result).SLACK_CHANNEL_ID }} \
              -H "Authorization: Bearer ${{ secrets.SLACK_QA_BOT_TOKEN }}" \
              https://slack.com/api/files.upload
 
     - name: Upload Bar Chart to Slack (Failure)
-      if: ${{ failure() && steps.configure_slack.outputs.result != ' ' }}
+      if: ${{ failure() && fromJSON(steps.configure_slack.outputs.result).SLACK_WEBHOOK_URL != ' ' }}
       run: |
         curl -F file=@slack_charts/summary_bar.png \
              -F "initial_comment=📊 Failures & Reruns - ${{ matrix.environment }}" \
-             -F channels=${{ steps.configure_slack.outputs.result.SLACK_CHANNEL_ID }} \
+             -F channels=${{ fromJSON(steps.configure_slack.outputs.result).SLACK_CHANNEL_ID }} \
              -H "Authorization: Bearer ${{ secrets.SLACK_QA_BOT_TOKEN }}" \
              https://slack.com/api/files.upload
 
     - name: Post to Slack channel on Success
       id: slack-api-staging-pass
       uses: slackapi/slack-github-action@v1.23.0
-      if:  ${{ steps.configure_slack.outputs.result != ' ' && success() }}
+      if:  ${{ fromJSON(steps.configure_slack.outputs.result).SLACK_WEBHOOK_URL != ' ' && success() }}
       with:
         payload: |
           {
@@ -334,23 +332,23 @@ jobs:
           }
         parse-json-secrets: true
       env:
-        SLACK_WEBHOOK_URL: ${{ steps.configure_slack.outputs.result.SLACK_WEBHOOK_URL }}
+        SLACK_WEBHOOK_URL: ${{ fromJSON(steps.configure_slack.outputs.result).SLACK_WEBHOOK_URL }}
         SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
 
     - name: Upload Pie Chart to Slack (Success)
-      if: ${{ success() && steps.configure_slack.outputs.result != ' ' }}
+      if: ${{ success() && fromJSON(steps.configure_slack.outputs.result).SLACK_WEBHOOK_URL != ' ' }}
       run: |
         curl -F file=@slack_charts/summary_pie.png \
              -F "initial_comment=📊 Test Results Pie Chart - ${{ matrix.environment }}" \
-             -F channels=${{ steps.configure_slack.outputs.result.SLACK_CHANNEL_ID }} \
+             -F channels=${{ fromJSON(steps.configure_slack.outputs.result).SLACK_CHANNEL_ID }} \
              -H "Authorization: Bearer ${{ secrets.SLACK_QA_BOT_TOKEN }}" \
              https://slack.com/api/files.upload
 
     - name: Upload Bar Chart to Slack (Success)
-      if: ${{ success() && steps.configure_slack.outputs.result != ' ' }}
+      if: ${{ success() && fromJSON(steps.configure_slack.outputs.result).SLACK_WEBHOOK_URL != ' ' }}
       run: |
         curl -F file=@slack_charts/summary_bar.png \
              -F "initial_comment=📊 Failures & Reruns - ${{ matrix.environment }}" \
-             -F channels=${{ steps.configure_slack.outputs.result.SLACK_CHANNEL_ID }} \
+             -F channels=${{ fromJSON(steps.configure_slack.outputs.result).SLACK_CHANNEL_ID }} \
              -H "Authorization: Bearer ${{ secrets.SLACK_QA_BOT_TOKEN }}" \
              https://slack.com/api/files.upload
