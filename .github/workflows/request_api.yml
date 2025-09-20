@@ -246,7 +246,7 @@ jobs:
           	]
           }
       env:
-        SLACK_WEBHOOK_URL: ${{ fromJSON(steps.configure_slack.outputs.result).SLACK_WEBHOOK_URL }}
+        SLACK_WEBHOOK_URL: ${{ steps.configure_slack.outputs.result.SLACK_WEBHOOK_URL }}
         SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
 
     - name: Upload Pie Chart to Slack (Failure)
@@ -254,7 +254,7 @@ jobs:
       run: |
         curl -F file=@slack_charts/summary_pie.png \
              -F "initial_comment=📊 Test Results Pie Chart - ${{ matrix.environment }}" \
-             -F channels=${{ fromJSON(steps.configure_slack.outputs.result).SLACK_CHANNEL_ID }} \
+             -F channels=${{ steps.configure_slack.outputs.result.SLACK_CHANNEL_ID }} \
              -H "Authorization: Bearer ${{ secrets.SLACK_QA_BOT_TOKEN }}" \
              https://slack.com/api/files.upload
 
@@ -263,7 +263,7 @@ jobs:
       run: |
         curl -F file=@slack_charts/summary_bar.png \
              -F "initial_comment=📊 Failures & Reruns - ${{ matrix.environment }}" \
-             -F channels=${{ fromJSON(steps.configure_slack.outputs.result).SLACK_CHANNEL_ID }} \
+             -F channels=${{ steps.configure_slack.outputs.result.SLACK_CHANNEL_ID }} \
              -H "Authorization: Bearer ${{ secrets.SLACK_QA_BOT_TOKEN }}" \
              https://slack.com/api/files.upload
 
@@ -334,7 +334,7 @@ jobs:
           }
         parse-json-secrets: true
       env:
-        SLACK_WEBHOOK_URL: ${{ fromJSON(steps.configure_slack.outputs.result).SLACK_WEBHOOK_URL }}
+        SLACK_WEBHOOK_URL: ${{ steps.configure_slack.outputs.result.SLACK_WEBHOOK_URL }}
         SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
 
     - name: Upload Pie Chart to Slack (Success)
@@ -342,7 +342,7 @@ jobs:
       run: |
         curl -F file=@slack_charts/summary_pie.png \
              -F "initial_comment=📊 Test Results Pie Chart - ${{ matrix.environment }}" \
-             -F channels=${{ fromJSON(steps.configure_slack.outputs.result).SLACK_CHANNEL_ID }} \
+             -F channels=${{ steps.configure_slack.outputs.result.SLACK_CHANNEL_ID }} \
              -H "Authorization: Bearer ${{ secrets.SLACK_QA_BOT_TOKEN }}" \
              https://slack.com/api/files.upload
 
@@ -351,6 +351,6 @@ jobs:
       run: |
         curl -F file=@slack_charts/summary_bar.png \
              -F "initial_comment=📊 Failures & Reruns - ${{ matrix.environment }}" \
-             -F channels=${{ fromJSON(steps.configure_slack.outputs.result).SLACK_CHANNEL_ID }} \
+             -F channels=${{ steps.configure_slack.outputs.result.SLACK_CHANNEL_ID }} \
              -H "Authorization: Bearer ${{ secrets.SLACK_QA_BOT_TOKEN }}" \
              https://slack.com/api/files.upload

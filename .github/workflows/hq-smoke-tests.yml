@@ -102,6 +102,14 @@ jobs:
             echo "::set-output name=${line%=*}::${line#*=}"
           done < hqsmoke_test_counts_${{ matrix.environment }}.txt
 
+      - name: Upload charts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: charts-${{ matrix.environment }}
+          path: slack_charts/*.png
+          retention-days: 2
+
       - name: Archive test results
         id: artifact-upload-step
         if: ${{ success() || failure() }}
@@ -220,25 +228,31 @@ jobs:
             let SLACK_WEBHOOK_URL = '${{ secrets.SLACK_WEBHOOK_URL_SMOKE }}'
             if (CC_EVENT == 'repository_dispatch' && CC_ENV == 'production') {
               SLACK_WEBHOOK_URL = '${{ secrets.SLACK_WEBHOOK_URL_PROD_RESULTS }}'
+              SLACK_CHANNEL_ID = '${{ secrets.SLACK_CHANNEL_ID_PROD }}'
               console.log( "Prod deploy")
             } else if (CC_EVENT != 'repository_dispatch' && CC_ENV == 'production' && JOB_STATUS == 'failure') {
               SLACK_WEBHOOK_URL = '${{ secrets.SLACK_WEBHOOK_URL_SMOKE }}'
+              SLACK_CHANNEL_ID = '${{ secrets.SLACK_CHANNEL_ID_SMOKE }}'
               console.log( "Not Prod deploy but Prof failure")
             } else if (CC_ENV == 'staging' && JOB_STATUS == 'failure') {
               SLACK_WEBHOOK_URL = '${{ secrets.SLACK_WEBHOOK_URL_SMOKE }}'
+              SLACK_CHANNEL_ID = '${{ secrets.SLACK_CHANNEL_ID_SMOKE }}'
               console.log("Staging Failure")
             } else if (CC_EVENT == 'repository_dispatch' && CC_ENV == 'india') {
               SLACK_WEBHOOK_URL = '${{ secrets.SLACK_WEBHOOK_URL_INDIA }}'
+              SLACK_CHANNEL_ID = '${{ secrets.SLACK_CHANNEL_ID_INDIA }}'
               console.log("India Failure")
             } else if (CC_EVENT != 'repository_dispatch' && CC_ENV == 'india' && JOB_STATUS == 'failure') {
               SLACK_WEBHOOK_URL = '${{ secrets.SLACK_WEBHOOK_URL_SMOKE }}'
+              SLACK_CHANNEL_ID = '${{ secrets.SLACK_CHANNEL_ID_SMOKE }}'
               console.log("India Success")
             } else {
               SLACK_WEBHOOK_URL = ' '
+              SLACK_CHANNEL_ID = ' '
               console.log("No notification sent")
             }
 
-            return SLACK_WEBHOOK_URL
+            return { SLACK_WEBHOOK_URL, SLACK_CHANNEL_ID }
 
       - name: Post to Slack channel on Failure
         id: slack_fail
@@ -306,8 +320,27 @@ jobs:
             	]
             }
         env:
-          SLACK_WEBHOOK_URL: ${{ steps.configure_slack.outputs.result }}
+          SLACK_WEBHOOK_URL: ${{ steps.configure_slack.outputs.result.SLACK_WEBHOOK_URL }}
           SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+
+
+      - name: Upload Pie Chart to Slack (Failure)
+        if: ${{ failure() && steps.configure_slack.outputs.result != ' ' }}
+        run: |
+          curl -F file=@slack_charts/summary_pie.png \
+               -F "initial_comment=📊 Test Results Pie Chart - ${{ matrix.environment }}" \
+               -F channels=${{ steps.configure_slack.outputs.result.SLACK_CHANNEL_ID }} \
+               -H "Authorization: Bearer ${{ secrets.SLACK_QA_BOT_TOKEN }}" \
+               https://slack.com/api/files.upload
+
+      - name: Upload Bar Chart to Slack (Failure)
+        if: ${{ failure() && steps.configure_slack.outputs.result != ' ' }}
+        run: |
+          curl -F file=@slack_charts/summary_bar.png \
+            -F "initial_comment=📊 Failures & Reruns - ${{ matrix.environment }}" \
+            -F channels=${{ steps.configure_slack.outputs.result.SLACK_CHANNEL_ID }} \
+            -H "Authorization: Bearer ${{ secrets.SLACK_QA_BOT_TOKEN }}" \
+            https://slack.com/api/files.upload
 
       - name: Post to Slack channel on Success
         id: slack_pass
@@ -376,5 +409,23 @@ jobs:
             }
 
         env:
-          SLACK_WEBHOOK_URL: ${{ steps.configure_slack.outputs.result }}
+          SLACK_WEBHOOK_URL: ${{ steps.configure_slack.outputs.result.SLACK_WEBHOOK_URL }}
           SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+
+      - name: Upload Pie Chart to Slack (Success)
+        if: ${{ success() && steps.configure_slack.outputs.result != ' ' }}
+        run: |
+          curl -F file=@slack_charts/summary_pie.png \
+               -F "initial_comment=📊 Test Results Pie Chart - ${{ matrix.environment }}" \
+               -F channels=${{ steps.configure_slack.outputs.result.SLACK_CHANNEL_ID }} \
+               -H "Authorization: Bearer ${{ secrets.SLACK_QA_BOT_TOKEN }}" \
+               https://slack.com/api/files.upload
+
+      - name: Upload Bar Chart to Slack (Success)
+        if: ${{ success() && steps.configure_slack.outputs.result != ' ' }}
+        run: |
+          curl -F file=@slack_charts/summary_bar.png \
+               -F "initial_comment=📊 Failures & Reruns - ${{ matrix.environment }}" \
+               -F channels=${{ steps.configure_slack.outputs.result.SLACK_CHANNEL_ID }} \
+               -H "Authorization: Bearer ${{ secrets.SLACK_QA_BOT_TOKEN }}" \
+               https://slack.com/api/files.upload
