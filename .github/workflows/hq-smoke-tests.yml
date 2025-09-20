@@ -157,7 +157,7 @@ jobs:
         run: |
           pie64=$(base64 -w0 slack_charts/summary_pie.png || echo "")
           bar64=$(base64 -w0 slack_charts/summary_bar.png || echo "")
-          
+      
           if [ "${{ job.status }}" = "success" ]; then
             STATUS="PASSED"
             STATUS_COLOR="green"
@@ -171,79 +171,57 @@ jobs:
           sed -i "s|{{bar_b64}}|$bar64|g" email_embedded.html
           sed -i "s|{{status}}|$STATUS|g" email_embedded.html
           sed -i "s|{{status_color}}|$STATUS_COLOR|g" email_embedded.html
+          sed -i "s|{{testSuite}}|BHA Smoke|g" email_embedded.html
+          sed -i "s|{{environment}}|${{ matrix.environment }}|g" email_embedded.html
+          sed -i "s|{{runNumber}}|${{ github.run_number }}|g" email_embedded.html
+          sed -i "s|{{actionRunLink}}|${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|g" email_embedded.html
       
           echo "EMAIL_FILE=email_embedded.html" >> $GITHUB_ENV
 
-
-
       - name: Set email vars
-        if: ${{ failure() }}
         id: configure_email
+        if: ${{ success() || failure() }}
         uses: actions/github-script@v6
         env:
-            JOB_STATUS: ${{ job.status }}
-            CC_ENV: ${{ matrix.environment }}
+          JOB_STATUS: ${{ job.status }}
+          CC_ENV: ${{ matrix.environment }}
         with:
           script: |
-            const { promises: fs } = require('fs')
-
-            const {JOB_STATUS, NOW, CC_ENV, GITHUB_HEAD_REF} = process.env
-            const prefix = `[${CC_ENV}] Smoke Tests - ${JOB_STATUS.toUpperCase()} - Run #${context.runNumber}`
-            const suffix = `at ${NOW}`
-
-            let subject = `${prefix} on "deploy_success" ${suffix}`
-            if (context.eventName !== "repository_dispatch") {
-              subject = `${prefix} on branch "${GITHUB_HEAD_REF}" ${suffix}`
-            }
-
-            let bodyFile = './common_utilities/mail_templates/email_pass.md'
-            if (JOB_STATUS !== 'success') {
-              bodyFile = './common_utilities/mail_templates/email_fail.md'
-            }
-
-            let actionRunLink = context.payload.repository.html_url + `/actions/runs/${context.runId}`
-            let testSuite = 'CommCare HQ Smoke Test'
-            let bodyContent = await fs.readFile(bodyFile, 'utf8')
-
-                  // load base64 chart strings
-            let pie_b64 = await fs.readFile('slack_charts/summary_pie_b64.txt', 'utf8')
-            let bar_b64 = await fs.readFile('slack_charts/summary_bar_b64.txt', 'utf8')
-
-            bodyContent = bodyContent
-              .replace(/{{actionRunLink}}/g, actionRunLink)
-              .replace(/{{runNumber}}/g, context.runNumber)
-              .replace(/{{environment}}/g, CC_ENV)
-              .replace(/{{testSuite}}/g, testSuite)
-              .replace(/{{pie_b64}}/g, pie_b64)
-              .replace(/{{bar_b64}}/g, bar_b64)
-
-            let receivers = 'qa-automation@dimagi.com'
-            if (context.eventName !== "pull_request" || context.eventName !== "push") {
-              receivers = 'qa@dimagi.com, sameena.shaik@fissionlabs.com'
-            }
-
+            const fs = require('fs').promises;
+            const { JOB_STATUS, CC_ENV, NOW } = process.env;
+      
+            const prefix = `[${CC_ENV}] HQ Smoke Tests - ${JOB_STATUS.toUpperCase()} - Run #${context.runNumber}`;
+            const suffix = `at ${NOW}`;
+            let subject = `${prefix} on branch "${context.ref}" ${suffix}`;
+      
+            // read modified HTML template
+            let bodyContent = await fs.readFile('email_embedded.html', 'utf8');
+      
+            let receivers = 'qa@dimagi.com, sameena.shaik@fissionlabs.com';
+      
             return {
-              "subject": subject,
-              "body": bodyContent,
-              "reference": Math.random().toString(36).substr(2),  // used to prevent threading of similar emails
-              "receivers": receivers
+              subject,
+              receivers,
+              reference: Math.random().toString(36).substring(2),
+              body: bodyContent
             }
 
       - name: Send Result Email
-        if: ${{ failure() }}
+        if: ${{ success() || failure() }}
         uses: dawidd6/action-send-mail@v3
         with:
           server_address: smtp.gmail.com
           server_port: 465
-          username: ${{secrets.DIMAGIQA_MAIL_USERNAME}}
-          password: ${{secrets.DIMAGIQA_MAIL_PASSWORD}}
+          username: ${{ secrets.DIMAGIQA_MAIL_USERNAME }}
+          password: ${{ secrets.DIMAGIQA_MAIL_PASSWORD }}
           subject: ${{ fromJSON(steps.configure_email.outputs.result).subject }}
           to: ${{ fromJSON(steps.configure_email.outputs.result).receivers }}
-          from: <${{secrets.DIMAGIQA_MAIL_USERNAME}}>
-          html_body: file:///${{ github.workspace }}/${{ env.EMAIL_FILE }}
+          from: <${{ secrets.DIMAGIQA_MAIL_USERNAME }}>
+          html_body: ${{ fromJSON(steps.configure_email.outputs.result).body }}
           convert_markdown: false
           attachments: ${{ github.workspace }}/report_${{ matrix.environment }}.html
           in_reply_to: ${{ fromJSON(steps.configure_email.outputs.result).reference }}
+
 
       - name: Set slack vars
         if: ${{ always() }}

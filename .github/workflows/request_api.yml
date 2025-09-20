@@ -123,7 +123,7 @@ jobs:
       run: |
         pie64=$(base64 -w0 slack_charts/summary_pie.png || echo "")
         bar64=$(base64 -w0 slack_charts/summary_bar.png || echo "")
-        
+    
         if [ "${{ job.status }}" = "success" ]; then
           STATUS="PASSED"
           STATUS_COLOR="green"
@@ -137,24 +137,56 @@ jobs:
         sed -i "s|{{bar_b64}}|$bar64|g" email_embedded.html
         sed -i "s|{{status}}|$STATUS|g" email_embedded.html
         sed -i "s|{{status_color}}|$STATUS_COLOR|g" email_embedded.html
+        sed -i "s|{{testSuite}}|BHA Smoke|g" email_embedded.html
+        sed -i "s|{{environment}}|${{ matrix.environment }}|g" email_embedded.html
+        sed -i "s|{{runNumber}}|${{ github.run_number }}|g" email_embedded.html
+        sed -i "s|{{actionRunLink}}|${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|g" email_embedded.html
     
         echo "EMAIL_FILE=email_embedded.html" >> $GITHUB_ENV
 
-    - name: Send Failure Email
+    - name: Set email vars
+      id: configure_email
+      if: ${{ success() || failure() }}
+      uses: actions/github-script@v6
+      env:
+        JOB_STATUS: ${{ job.status }}
+        CC_ENV: ${{ matrix.environment }}
+      with:
+        script: |
+          const fs = require('fs').promises;
+          const { JOB_STATUS, CC_ENV, NOW } = process.env;
+    
+          const prefix = `[${CC_ENV}] REQUEST API - ${JOB_STATUS.toUpperCase()} - Run #${context.runNumber}`;
+          const suffix = `at ${NOW}`;
+          let subject = `${prefix} on branch "${context.ref}" ${suffix}`;
+    
+          // read modified HTML template
+          let bodyContent = await fs.readFile('email_embedded.html', 'utf8');
+    
+          let receivers = 'qa@dimagi.com, sameena.shaik@fissionlabs.com';
+    
+          return {
+            subject,
+            receivers,
+            reference: Math.random().toString(36).substring(2),
+            body: bodyContent
+          }
+
+    - name: Send Result Email
+      if: ${{ success() || failure() }}
       uses: dawidd6/action-send-mail@v3
-      if: failure()
       with:
         server_address: smtp.gmail.com
         server_port: 465
-        username: ${{secrets.DIMAGIQA_MAIL_USERNAME}}
-        password: ${{secrets.DIMAGIQA_MAIL_PASSWORD}}
-        subject: ${{ github.event.client_payload.environment }} FAIL - Request API Tests[#${{github.run_number}}] on branch "${{ github.ref_name }}", ${{env.NOW}}
-        to: qa@dimagi.com, sameena.shaik@fissionlabs.com
-        from: <${{secrets.DIMAGIQA_MAIL_USERNAME}}>
-        html_body: file:///${{ github.workspace }}/${{ env.EMAIL_FILE }}
-        attachments: |
-          /home/runner/work/dimagi-qa/dimagi-qa/report_api_${{ matrix.environment }}.html
-        priority: normal
+        username: ${{ secrets.DIMAGIQA_MAIL_USERNAME }}
+        password: ${{ secrets.DIMAGIQA_MAIL_PASSWORD }}
+        subject: ${{ fromJSON(steps.configure_email.outputs.result).subject }}
+        to: ${{ fromJSON(steps.configure_email.outputs.result).receivers }}
+        from: <${{ secrets.DIMAGIQA_MAIL_USERNAME }}>
+        html_body: ${{ fromJSON(steps.configure_email.outputs.result).body }}
+        convert_markdown: false
+        attachments: ${{ github.workspace }}/report_${{ matrix.environment }}.html
+        in_reply_to: ${{ fromJSON(steps.configure_email.outputs.result).reference }}
 
 
     - name: Set slack vars
