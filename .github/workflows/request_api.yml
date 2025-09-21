@@ -133,7 +133,7 @@ jobs:
           CC_ENV: ${{ matrix.environment }}
           CC_EVENT: ${{ github.event_name }}
       with:
-        result-encoding: json
+        result-encoding: string
         script: |
           const {CC_ENV, JOB_STATUS, CC_EVENT} = process.env
           let SLACK_WEBHOOK_URL = '${{ secrets.SLACK_WEBHOOK_URL_SMOKE }}'
@@ -163,7 +163,7 @@ jobs:
             console.log("No notification sent")
           }
 
-          return  { SLACK_WEBHOOK_URL, SLACK_CHANNEL_ID }
+          return JSON.stringify({ SLACK_WEBHOOK_URL, SLACK_CHANNEL_ID })
 
     - name: Upload Combined Chart to Slack
       if: ${{ fromJSON(steps.configure_slack.outputs.result).SLACK_CHANNEL_ID != '' }}
@@ -181,6 +181,7 @@ jobs:
       run: |
         echo "COMBINED_JSON=$COMBINED_JSON"
         echo "COMBINED_URL=$COMBINED_URL"
+        echo "Result: ${{ steps.configure_slack.outputs.result }}"
         
     - name: Slack Notification (Summary + Charts)
       if: ${{ fromJSON(steps.configure_slack.outputs.result).SLACK_WEBHOOK_URL != '' }}
