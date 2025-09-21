@@ -217,7 +217,7 @@ jobs:
         with:
           result-encoding: string
           script: |
-            const core = require('@actions/core');
+
             const {CC_ENV, JOB_STATUS, CC_EVENT} = process.env;
             let SLACK_WEBHOOK_URL = '';
             let SLACK_CHANNEL_ID = '';
