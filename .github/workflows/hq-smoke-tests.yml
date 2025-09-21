@@ -299,6 +299,7 @@ jobs:
             '{
               attachments: [{
                 color: $color,
+                fallback: "Test summary notification for $workflow_text",
                 blocks: [
                   { type: "section", text: { type: "mrkdwn", text: $workflow_text }},
                   { type: "section", 
