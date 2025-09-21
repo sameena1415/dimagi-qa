@@ -159,9 +159,9 @@ jobs:
            SLACK_CHANNEL_ID = '${{ secrets.SLACK_CHANNEL_ID_SMOKE }}';
            console.log("India Success");
           }else {
-            SLACK_WEBHOOK_URL = '';
-            SLACK_CHANNEL_ID = '';
-            console.log("No notification sent");
+           SLACK_WEBHOOK_URL = '${{ secrets.SLACK_WEBHOOK_URL_SMOKE }}';
+           SLACK_CHANNEL_ID = '${{ secrets.SLACK_CHANNEL_ID_SMOKE }}';
+           console.log("No notification sent");
           }
 
           core.setOutput('SLACK_WEBHOOK_URL', SLACK_WEBHOOK_URL);
