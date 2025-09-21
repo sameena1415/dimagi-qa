@@ -218,7 +218,7 @@ jobs:
             return { SLACK_WEBHOOK_URL, SLACK_CHANNEL_ID };
 
       - name: Upload Combined Chart to Slack
-        if: ${{ steps.configure_slack.outputs.SLACK_CHANNEL_ID != '' }}
+        if: ${{ (success() || failure()) && steps.configure_slack.outputs.SLACK_CHANNEL_ID != '' }}
         run: |
           COMBINED_JSON=$(curl -s -F file=@slack_charts/summary_combined.png \
             -F channels=${{ steps.configure_slack.outputs.SLACK_CHANNEL_ID }} \
@@ -230,13 +230,14 @@ jobs:
           echo "COMBINED_URL=$COMBINED_URL" >> $GITHUB_ENV
 
       - name: Debug Slack Upload
+        if: ${{ (success() || failure()) }}
         run: |
           echo "COMBINED_JSON=$COMBINED_JSON"
           echo "COMBINED_URL=$COMBINED_URL"
           echo "Result: ${{ steps.configure_slack.outputs.result }}"
 
       - name: Slack Notification (Summary + Charts)
-        if: ${{ steps.configure_slack.outputs.SLACK_WEBHOOK_URL != '' && env.COMBINED_URL != '' }}
+        if: ${{ (success() || failure()) && steps.configure_slack.outputs.SLACK_WEBHOOK_URL != '' && env.COMBINED_URL != '' }}
         run: |
           STATUS_COLOR="${{ job.status == 'success' && '#36a64f' || '#FF0000' }}"
           STATUS_TEXT="${{ job.status == 'success' && '✅ PASSED' || '❌ FAILED' }}"
