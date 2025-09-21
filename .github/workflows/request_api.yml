@@ -410,6 +410,48 @@ jobs:
 #        SLACK_WEBHOOK_URL: ${{ fromJSON(steps.configure_slack.outputs.result).SLACK_WEBHOOK_URL }}
 #        SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
 
+    - name: Slack Notification (Summary + Charts)
+      run: |
+        curl -X POST -H 'Content-type: application/json' \
+          --data "{
+            \"attachments\": [
+              {
+                \"color\": \"${{ job.status == 'success' && '#36a64f' || '#FF0000' }}\",
+                \"blocks\": [
+                  {
+                    \"type\": \"section\",
+                    \"text\": {
+                      \"type\": \"mrkdwn\",
+                      \"text\": \"Hola 👋\n*${{ github.workflow }}* were just triggered!\n\n*Passed:* ${{ steps.parse_counts.outputs.PASSED }}   *Failed:* ${{ steps.parse_counts.outputs.FAILED }}   *Error:* ${{ steps.parse_counts.outputs.ERROR }}   *Skipped:* ${{ steps.parse_counts.outputs.SKIPPED }}   *Reruns:* ${{ steps.parse_counts.outputs.RERUN }}\n\n*Environment:* `${{ matrix.environment }}`\n*Status:* `${{ job.status }}`\"
+                    }
+                  },
+                  {
+                    \"type\": \"actions\",
+                    \"elements\": [
+                      {
+                        \"type\": \"button\",
+                        \"text\": {\"type\": \"plain_text\", \"text\": \"📥 Download Report\"},
+                        \"url\": \"${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts/${{ steps.artifact-upload-step.outputs.artifact-id }}\",
+                        \"style\": \"primary\"
+                      }
+                    ]
+                  },
+                  {
+                    \"type\": \"image\",
+                    \"title\": {
+                      \"type\": \"plain_text\",
+                      \"text\": \"Test Summary Charts\"
+                    },
+                    \"image_url\": \"${{ env.COMBINED_URL }}\",
+                    \"alt_text\": \"Pie + Bar Chart\"
+                  }
+                ]
+              }
+            ]
+          }" \
+          ${{ secrets.SLACK_WEBHOOK_URL }}
+
+
     - name: Post Slack Notification
       if: ${{ fromJSON(steps.configure_slack.outputs.result).SLACK_WEBHOOK_URL != ' '}}
       uses: slackapi/slack-github-action@v1.25.0
