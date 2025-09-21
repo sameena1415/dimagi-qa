@@ -215,7 +215,7 @@ jobs:
             CC_ENV: ${{ matrix.environment }}
             CC_EVENT: ${{ github.event_name }}
         with:
-          result-encoding: string
+          result-encoding: json
           script: |
 
             const {CC_ENV, JOB_STATUS, CC_EVENT} = process.env;
