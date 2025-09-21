@@ -188,8 +188,9 @@ jobs:
         echo "COMBINED_URL=$COMBINED_URL"
         echo "Result: ${{ steps.configure_slack.outputs.result }}"
 
+
     - name: Slack Notification (Summary + Charts)
-      if: ${{ (success() || failure()) && steps.configure_slack.outputs.SLACK_WEBHOOK_URL != '' && env.COMBINED_URL != '' }}
+      if: ${{ (success() || failure()) && fromJSON(steps.configure_slack.outputs.result).SLACK_WEBHOOK_URL != '' && env.COMBINED_URL != '' }}
       run: |
         jq -n \
           --arg color "$STATUS_COLOR" \
@@ -203,11 +204,12 @@ jobs:
           --arg rerun "${{ steps.parse_counts.outputs.RERUN }}" \
           --arg run_url "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts/${{ steps.artifact-upload-step.outputs.artifact-id }}" \
           --arg img "${{ env.COMBINED_URL }}" \
+          --arg workflow "${{ github.workflow }}" \
           '{
             attachments: [{
               color: $color,
               blocks: [
-                { type: "section", text: { type: "mrkdwn", text: "*${{ github.workflow }}* finished!\n\n*Environment:* `\($env)`\n*Status:* \($status)" }},
+                { type: "section", text: { type: "mrkdwn", text: "*\($workflow)* finished!\n\n*Environment:* `\($env)`\n*Status:* \($status)" }},
                 { type: "section", text: { type: "mrkdwn", text: "*Passed:* \($passed)   *Failed:* \($failed)   *Error:* \($error)   *Skipped:* \($skipped)   *Reruns:* \($rerun)" }},
                 { type: "actions", elements: [
                     { type: "button", text: { type: "plain_text", text: "📥 Download Report" }, url: $run_url, style: $button_style }
