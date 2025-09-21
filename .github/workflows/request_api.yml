@@ -192,7 +192,6 @@ jobs:
     - name: Slack Notification (Summary + Charts)
       if: ${{ (success() || failure()) && steps.configure_slack.outputs.SLACK_WEBHOOK_URL != '' && env.COMBINED_URL != '' }}
       run: |
-        # --- Set status vars ---
         if [ "${{ job.status }}" = "success" ]; then
           STATUS_COLOR="#36a64f"
           STATUS_TEXT="✅ PASSED"
@@ -205,7 +204,6 @@ jobs:
     
         SLACK_URL="${{ steps.configure_slack.outputs.SLACK_WEBHOOK_URL }}"
     
-        # --- Build strings ---
         WORKFLOW_TEXT="*${{ github.workflow }}* finished!\n\n*Environment:* \`${{ matrix.environment }}\`\n*Status:* $STATUS_TEXT"
         SUMMARY_TEXT="*Passed:* ${{ steps.parse_counts.outputs.PASSED }}   *Failed:* ${{ steps.parse_counts.outputs.FAILED }}   *Error:* ${{ steps.parse_counts.outputs.ERROR }}   *Skipped:* ${{ steps.parse_counts.outputs.SKIPPED }}   *Reruns:* ${{ steps.parse_counts.outputs.RERUN }}"
     
