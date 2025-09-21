@@ -301,10 +301,14 @@ jobs:
                 color: $color,
                 blocks: [
                   { type: "section", text: { type: "mrkdwn", text: $workflow_text }},
-                  { type: "section", text: { type: "mrkdwn", text: $summary_text }},
-                  { type: "actions", elements: [
-                      { type: "button", text: { type: "plain_text", text: "📥 Download Report" }, url: $run_url, style: $button_style }
-                    ]
+                  { type: "section", 
+                    text: { type: "mrkdwn", text: $summary_text },
+                    accessory: {
+                      type: "button",
+                      text: { type: "plain_text", text: "📥 Download Report" },
+                      url: $run_url,
+                      action_id: "button-action"
+                    }
                   },
                   { type: "image", title: { type: "plain_text", text: "Test Summary Charts" }, image_url: $img, alt_text: "Pie + Bar Chart" }
                 ]
