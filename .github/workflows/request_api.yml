@@ -204,18 +204,13 @@ jobs:
           --arg run_url "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" \
           --arg img "${{ env.COMBINED_URL }}" \
           '{
-            attachments: [{
-              color: $color,
-              blocks: [
-                { type: "section", text: { type: "mrkdwn", text: $workflow_text }},
-                { type: "section", text: { type: "mrkdwn", text: $summary_text }},
-                { type: "actions", elements: [
-                    { type: "button", text: { type: "plain_text", text: "📥 Download Report" }, url: $run_url, style: $button_style }
-                  ]
-                },
-                { type: "image", image_url: $img, alt_text: "Pie + Bar Chart" }
-              ]
-            }]
-          }' \
-        | tee slack.json \
-        | curl -X POST -H 'Content-type: application/json' --data @- "${{ fromJSON(steps.configure_slack.outputs.result).SLACK_WEBHOOK_URL }}"
+            blocks: [
+              { type: "section", text: { type: "mrkdwn", text: $workflow_text }},
+              { type: "section", text: { type: "mrkdwn", text: $summary_text }},
+              { type: "actions", elements: [
+                  { type: "button", text: { type: "plain_text", text: "📥 Download Report" }, url: $run_url, style: $button_style }
+                ]
+              },
+              { type: "image", title: { type: "plain_text", text: "Test Summary Charts" }, image_url: $img, alt_text: "Pie + Bar Chart" }
+            ]
+          }' | curl -X POST -H "Content-type: application/json" --data @- "$SLACK_URL"
