@@ -256,8 +256,8 @@ jobs:
               attachments: [{
                 color: $color,
                 blocks: [
-                  { type: "section", text: { type: "mrkdwn", text: "*\($workflow)* finished!\n\n*Environment:* `\($env)`\n*Status:* \($status)" }},
-                  { type: "section", text: { type: "mrkdwn", text: "*Passed:* \($passed)   *Failed:* \($failed)   *Error:* \($error)   *Skipped:* \($skipped)   *Reruns:* \($rerun)" }},
+              { type: "section", text: { type: "mrkdwn", text: ("*" + $workflow + "* finished!\n\n*Environment:* `" + $env + "`\n*Status:* " + $status) }},
+              { type: "section", text: { type: "mrkdwn", text: ("*Passed:* " + $passed + "   *Failed:* " + $failed + "   *Error:* " + $error + "   *Skipped:* " + $skipped + "   *Reruns:* " + $rerun) }},
                   { type: "actions", elements: [
                       { type: "button", text: { type: "plain_text", text: "📥 Download Report" }, url: $run_url, style: $button_style }
                     ]
