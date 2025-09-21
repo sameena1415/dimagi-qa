@@ -192,31 +192,30 @@ jobs:
     - name: Slack Notification (Summary + Charts)
       if: ${{ (success() || failure()) && fromJSON(steps.configure_slack.outputs.result).SLACK_WEBHOOK_URL != '' && env.COMBINED_URL != '' }}
       run: |
+        # Build strings in Bash
+        WORKFLOW_TEXT="*${{ github.workflow }}* finished!\n\n*Environment:* \`${{ matrix.environment }}\`\n*Status:* $STATUS_TEXT"
+        SUMMARY_TEXT="*Passed:* ${{ steps.parse_counts.outputs.PASSED }}   *Failed:* ${{ steps.parse_counts.outputs.FAILED }}   *Error:* ${{ steps.parse_counts.outputs.ERROR }}   *Skipped:* ${{ steps.parse_counts.outputs.SKIPPED }}   *Reruns:* ${{ steps.parse_counts.outputs.RERUN }}"
+    
         jq -n \
           --arg color "$STATUS_COLOR" \
-          --arg status "$STATUS_TEXT" \
+          --arg workflow_text "$WORKFLOW_TEXT" \
+          --arg summary_text "$SUMMARY_TEXT" \
           --arg button_style "$BUTTON_STYLE" \
-          --arg env "${{ matrix.environment }}" \
-          --arg passed "${{ steps.parse_counts.outputs.PASSED }}" \
-          --arg failed "${{ steps.parse_counts.outputs.FAILED }}" \
-          --arg error "${{ steps.parse_counts.outputs.ERROR }}" \
-          --arg skipped "${{ steps.parse_counts.outputs.SKIPPED }}" \
-          --arg rerun "${{ steps.parse_counts.outputs.RERUN }}" \
-          --arg run_url "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts/${{ steps.artifact-upload-step.outputs.artifact-id }}" \
+          --arg run_url "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" \
           --arg img "${{ env.COMBINED_URL }}" \
-          --arg workflow "${{ github.workflow }}" \
           '{
             attachments: [{
               color: $color,
               blocks: [
-            { type: "section", text: { type: "mrkdwn", text: ("*" + $workflow + "* finished!\n\n*Environment:* `" + $env + "`\n*Status:* " + $status) }},
-            { type: "section", text: { type: "mrkdwn", text: ("*Passed:* " + $passed + "   *Failed:* " + $failed + "   *Error:* " + $error + "   *Skipped:* " + $skipped + "   *Reruns:* " + $rerun) }},
+                { type: "section", text: { type: "mrkdwn", text: $workflow_text }},
+                { type: "section", text: { type: "mrkdwn", text: $summary_text }},
                 { type: "actions", elements: [
                     { type: "button", text: { type: "plain_text", text: "📥 Download Report" }, url: $run_url, style: $button_style }
                   ]
                 },
-                { type: "image", title: { type: "plain_text", text: "Test Summary Charts" }, image_url: $img, alt_text: "Pie + Bar Chart" }
+                { type: "image", image_url: $img, alt_text: "Pie + Bar Chart" }
               ]
             }]
           }' \
+        | tee slack.json \
         | curl -X POST -H 'Content-type: application/json' --data @- "${{ fromJSON(steps.configure_slack.outputs.result).SLACK_WEBHOOK_URL }}"
