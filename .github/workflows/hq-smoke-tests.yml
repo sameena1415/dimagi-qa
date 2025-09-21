@@ -407,19 +407,31 @@ jobs:
 #            }
 
       - name: Slack Notification (Summary + Charts)
-        if: ${{ fromJSON(steps.configure_slack.outputs.result).SLACK_WEBHOOK_URL != ''}}
+        if: ${{ fromJSON(steps.configure_slack.outputs.result).SLACK_WEBHOOK_URL != '' }}
         run: |
+          STATUS_COLOR="${{ job.status == 'success' && '#36a64f' || '#FF0000' }}"
+          STATUS_TEXT="${{ job.status == 'success' && '✅ PASSED' || '❌ FAILED' }}"
+          BUTTON_STYLE="${{ job.status == 'success' && 'primary' || 'danger' }}"
+          SLACK_URL=${{ fromJSON(steps.configure_slack.outputs.result).SLACK_WEBHOOK_URL }}
+      
           curl -X POST -H 'Content-type: application/json' \
             --data "{
               \"attachments\": [
                 {
-                  \"color\": \"${{ job.status == 'success' && '#36a64f' || '#FF0000' }}\",
+                  \"color\": \"${STATUS_COLOR}\",
                   \"blocks\": [
                     {
                       \"type\": \"section\",
                       \"text\": {
                         \"type\": \"mrkdwn\",
-                        \"text\": \"Hola 👋\n*${{ github.workflow }}* were just triggered!\n\n*Passed:* ${{ steps.parse_counts.outputs.PASSED }}   *Failed:* ${{ steps.parse_counts.outputs.FAILED }}   *Error:* ${{ steps.parse_counts.outputs.ERROR }}   *Skipped:* ${{ steps.parse_counts.outputs.SKIPPED }}   *Reruns:* ${{ steps.parse_counts.outputs.RERUN }}\n\n*Environment:* `${{ matrix.environment }}`\n*Status:* `${{ job.status }}`\"
+                        \"text\": \"*${{ github.workflow }}* finished!\n\n*Environment:* \`${{ matrix.environment }}\`\n*Status:* ${STATUS_TEXT}\"
+                      }
+                    },
+                    {
+                      \"type\": \"section\",
+                      \"text\": {
+                        \"type\": \"mrkdwn\",
+                        \"text\": \"*Passed:* ${{ steps.parse_counts.outputs.PASSED }}   *Failed:* ${{ steps.parse_counts.outputs.FAILED }}   *Error:* ${{ steps.parse_counts.outputs.ERROR }}   *Skipped:* ${{ steps.parse_counts.outputs.SKIPPED }}   *Reruns:* ${{ steps.parse_counts.outputs.RERUN }}\"
                       }
                     },
                     {
@@ -429,16 +441,13 @@ jobs:
                           \"type\": \"button\",
                           \"text\": {\"type\": \"plain_text\", \"text\": \"📥 Download Report\"},
                           \"url\": \"${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts/${{ steps.artifact-upload-step.outputs.artifact-id }}\",
-                          \"style\": \"primary\"
+                          \"style\": \"${BUTTON_STYLE}\"
                         }
                       ]
                     },
                     {
                       \"type\": \"image\",
-                      \"title\": {
-                        \"type\": \"plain_text\",
-                        \"text\": \"Test Summary Charts\"
-                      },
+                      \"title\": {\"type\": \"plain_text\", \"text\": \"Test Summary Charts\"},
                       \"image_url\": \"${{ env.COMBINED_URL }}\",
                       \"alt_text\": \"Pie + Bar Chart\"
                     }
@@ -446,7 +455,7 @@ jobs:
                 }
               ]
             }" \
-            ${{ fromJSON(steps.configure_slack.outputs.result).SLACK_WEBHOOK_URL }}
+            "$SLACK_URL"
 
 
       - name: Post Slack Notification

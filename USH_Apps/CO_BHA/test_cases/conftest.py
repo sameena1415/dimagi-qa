@@ -192,7 +192,7 @@ def save_summary_charts(stats):
     pie_colors = ["#66bb6a", "#ef5350", "#fad000"]
 
     fig, ax = plt.subplots()
-    wedges, texts, = ax.pie(
+    wedges, texts = ax.pie(
         pie_sizes,
         labels=None,
         colors=pie_colors,
@@ -214,43 +214,46 @@ def save_summary_charts(stats):
     plt.close(fig)
 
     # --- Bar chart with labels + legend ---
-    fig, ax = plt.subplots()
-    bars = ax.bar(
-        ["Failed", "Reruns"],
-        [failed, reruns],
-        color=["#ef5350", "#ffa726"]
-    )
-    ax.set_ylabel("Number of Tests")
-    ax.set_title("Failures and Reruns")
+    bar_path = None
+    if failed > 0 or reruns > 0:   # ✅ only generate if needed
+        fig, ax = plt.subplots()
+        bars = ax.bar(
+            ["Failed", "Reruns"],
+            [failed, reruns],
+            color=["#ef5350", "#ffa726"]
+        )
+        ax.set_ylabel("Number of Tests")
+        ax.set_title("Failures and Reruns")
 
-    # Add counts above bars
-    for bar in bars:
-        height = bar.get_height()
-        ax.text(
-            bar.get_x() + bar.get_width() / 2,
-            height + 0.05,
-            str(int(height)),
-            ha="center",
-            va="bottom",
-            fontsize=10,
-            fontweight="bold"
+        # Add counts above bars
+        for bar in bars:
+            height = bar.get_height()
+            ax.text(
+                bar.get_x() + bar.get_width() / 2,
+                height + 0.05,
+                str(int(height)),
+                ha="center",
+                va="bottom",
+                fontsize=10,
+                fontweight="bold"
+            )
+
+        # Legend with counts
+        ax.legend(
+            [f"Failed: {failed}", f"Reruns: {reruns}"],
+            loc="lower center",
+            ncol=2,
+            bbox_to_anchor=(0.5, -0.15)
         )
 
-    # Legend with counts
-    ax.legend(
-        [f"Failed: {failed}", f"Reruns: {reruns}"],
-        loc="lower center",
-        ncol=2,
-        bbox_to_anchor=(0.5, -0.15)
-    )
-
-    fig.savefig(out_dir / "summary_bar.png", bbox_inches="tight")
-    plt.close(fig)
+        bar_path = out_dir / "summary_bar.png"
+        fig.savefig(bar_path, bbox_inches="tight")
+        plt.close(fig)
 
     # --- Combine ---
     combine_charts(
         pie_path=out_dir / "summary_pie.png",
-        bar_path=out_dir / "summary_bar.png",
+        bar_path=bar_path,
         combined_path=out_dir / "summary_combined.png"
     )
 
@@ -258,22 +261,23 @@ import matplotlib.pyplot as plt
 from PIL import Image
 
 def combine_charts(pie_path="slack_charts/summary_pie.png",
-                   bar_path="slack_charts/summary_bar.png",
+                   bar_path=None,
                    combined_path="slack_charts/summary_combined.png"):
-    """Combine pie and bar charts side by side into one PNG."""
-    # Open both charts
+    """Combine pie and bar charts side by side if bar exists, else only pie."""
+    from PIL import Image
+
     pie = Image.open(pie_path)
-    bar = Image.open(bar_path)
 
-    # Resize bar chart to match pie height (optional, keeps uniform look)
-    bar = bar.resize((bar.width * pie.height // bar.height, pie.height))
+    if bar_path and Path(bar_path).exists():
+        bar = Image.open(bar_path)
+        bar = bar.resize((bar.width * pie.height // bar.height, pie.height))
+        combined = Image.new("RGB", (pie.width + bar.width, pie.height), (255, 255, 255))
+        combined.paste(pie, (0, 0))
+        combined.paste(bar, (pie.width, 0))
+    else:
+        # Only pie chart
+        combined = pie.copy()
 
-    # Create new blank canvas (side-by-side)
-    combined = Image.new("RGB", (pie.width + bar.width, pie.height), (255, 255, 255))
-    combined.paste(pie, (0, 0))
-    combined.paste(bar, (pie.width, 0))
-
-    # Save combined file
     combined.save(combined_path)
     print(f"✅ Combined chart saved to {combined_path}")
 
