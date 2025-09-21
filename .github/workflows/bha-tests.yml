@@ -237,8 +237,9 @@ jobs:
           echo "Result: ${{ steps.configure_slack.outputs.result }}"
 
       - name: Slack Notification (Summary + Charts)
-        if: ${{ (success() || failure()) && fromJSON(steps.configure_slack.outputs.result).SLACK_WEBHOOK_URL != '' && env.COMBINED_URL != '' }}
+        if: ${{ (success() || failure()) && steps.configure_slack.outputs.SLACK_WEBHOOK_URL != '' && env.COMBINED_URL != '' }}
         run: |
+          SLACK_URL="${{ steps.configure_slack.outputs.SLACK_WEBHOOK_URL }}"
           # Build strings in Bash
           WORKFLOW_TEXT="*${{ github.workflow }}* finished!\n\n*Environment:* \`${{ matrix.environment }}\`\n*Status:* $STATUS_TEXT"
           SUMMARY_TEXT="*Passed:* ${{ steps.parse_counts.outputs.PASSED }}   *Failed:* ${{ steps.parse_counts.outputs.FAILED }}   *Error:* ${{ steps.parse_counts.outputs.ERROR }}   *Skipped:* ${{ steps.parse_counts.outputs.SKIPPED }}   *Reruns:* ${{ steps.parse_counts.outputs.RERUN }}"
