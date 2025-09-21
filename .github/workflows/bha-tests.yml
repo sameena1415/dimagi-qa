@@ -372,6 +372,7 @@ jobs:
 #            }
 
       - name: Slack Notification (Summary + Charts)
+        if: ${{ fromJSON(steps.configure_slack.outputs.result).SLACK_WEBHOOK_URL != ''}}
         run: |
           curl -X POST -H 'Content-type: application/json' \
             --data "{
@@ -413,7 +414,7 @@ jobs:
             ${{ fromJSON(steps.configure_slack.outputs.result).SLACK_WEBHOOK_URL }}
 
       - name: Post Slack Notification
-        if: ${{ fromJSON(steps.configure_slack.outputs.result).SLACK_WEBHOOK_URL != ' '}}
+        if: ${{ fromJSON(steps.configure_slack.outputs.result).SLACK_WEBHOOK_URL != ''}}
         uses: slackapi/slack-github-action@v1.25.0
         with:
           payload: |
