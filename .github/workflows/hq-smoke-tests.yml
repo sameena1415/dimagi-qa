@@ -217,45 +217,50 @@ jobs:
         with:
           result-encoding: string
           script: |
-            const {CC_ENV, JOB_STATUS, CC_EVENT} = process.env
-            let SLACK_WEBHOOK_URL = '${{ secrets.SLACK_WEBHOOK_URL_SMOKE }}'
+            const core = require('@actions/core');
+            const {CC_ENV, JOB_STATUS, CC_EVENT} = process.env;
+            let SLACK_WEBHOOK_URL = '';
+            let SLACK_CHANNEL_ID = '';
             if (CC_EVENT == 'repository_dispatch' && CC_ENV == 'production') {
-              SLACK_WEBHOOK_URL = '${{ secrets.SLACK_WEBHOOK_URL_PROD_RESULTS }}'
-              SLACK_CHANNEL_ID = '${{ secrets.SLACK_CHANNEL_ID_PROD }}'
-              console.log( "Prod deploy")
+              SLACK_WEBHOOK_URL = '${{ secrets.SLACK_WEBHOOK_URL_PROD_RESULTS }}';
+              SLACK_CHANNEL_ID = '${{ secrets.SLACK_CHANNEL_ID_PROD }}';
+              console.log( "Prod deploy");
             } else if (CC_EVENT != 'repository_dispatch' && CC_ENV == 'production' && JOB_STATUS == 'failure') {
-              SLACK_WEBHOOK_URL = '${{ secrets.SLACK_WEBHOOK_URL_SMOKE }}'
-              SLACK_CHANNEL_ID = '${{ secrets.SLACK_CHANNEL_ID_SMOKE }}'
-              console.log( "Not Prod deploy but Prof failure")
+              SLACK_WEBHOOK_URL = '${{ secrets.SLACK_WEBHOOK_URL_SMOKE }}';
+              SLACK_CHANNEL_ID = '${{ secrets.SLACK_CHANNEL_ID_SMOKE }}';
+              console.log( "Not Prod deploy but Prof failure");
             } else if (CC_ENV == 'staging' && JOB_STATUS == 'failure') {
-              SLACK_WEBHOOK_URL = '${{ secrets.SLACK_WEBHOOK_URL_SMOKE }}'
-              SLACK_CHANNEL_ID = '${{ secrets.SLACK_CHANNEL_ID_SMOKE }}'
-              console.log("Staging Failure")
+              SLACK_WEBHOOK_URL = '${{ secrets.SLACK_WEBHOOK_URL_SMOKE }}';
+              SLACK_CHANNEL_ID = '${{ secrets.SLACK_CHANNEL_ID_SMOKE }}';
+              console.log("Staging Failure");
             } else if (CC_EVENT == 'repository_dispatch' && CC_ENV == 'india') {
-              SLACK_WEBHOOK_URL = '${{ secrets.SLACK_WEBHOOK_URL_INDIA }}'
-              SLACK_CHANNEL_ID = '${{ secrets.SLACK_CHANNEL_ID_INDIA }}'
-              console.log("India Failure")
+              SLACK_WEBHOOK_URL = '${{ secrets.SLACK_WEBHOOK_URL_INDIA }}';
+              SLACK_CHANNEL_ID = '${{ secrets.SLACK_CHANNEL_ID_INDIA }}';
+              console.log("India Failure");
             } else if (CC_EVENT != 'repository_dispatch' && CC_ENV == 'india' && JOB_STATUS == 'failure') {
-              SLACK_WEBHOOK_URL = '${{ secrets.SLACK_WEBHOOK_URL_SMOKE }}'
-              SLACK_CHANNEL_ID = '${{ secrets.SLACK_CHANNEL_ID_SMOKE }}'
-              console.log("India Success")
+              SLACK_WEBHOOK_URL = '${{ secrets.SLACK_WEBHOOK_URL_SMOKE }}';
+              SLACK_CHANNEL_ID = '${{ secrets.SLACK_CHANNEL_ID_SMOKE }}';
+              console.log("India Success");
             } else {
-              SLACK_WEBHOOK_URL = ''
-              SLACK_CHANNEL_ID = ''
-              console.log("No notification sent")
+              SLACK_WEBHOOK_URL = '';
+              SLACK_CHANNEL_ID = '';
+              console.log("No notification sent");
             }
+            
+            core.setOutput('SLACK_WEBHOOK_URL', SLACK_WEBHOOK_URL);
+            core.setOutput('SLACK_CHANNEL_ID', SLACK_CHANNEL_ID);
 
-             return JSON.stringify({ SLACK_WEBHOOK_URL, SLACK_CHANNEL_ID })
+            return { SLACK_WEBHOOK_URL, SLACK_CHANNEL_ID };
 
       - name: Upload Combined Chart to Slack
-        if: ${{ fromJSON(steps.configure_slack.outputs.result).SLACK_CHANNEL_ID != '' }}
+        if: ${{ steps.configure_slack.outputs.SLACK_CHANNEL_ID != '' }}
         run: |
           COMBINED_JSON=$(curl -s -F file=@slack_charts/summary_combined.png \
-            -F channels=${{ fromJSON(steps.configure_slack.outputs.result).SLACK_CHANNEL_ID }} \
+            -F channels=${{ steps.configure_slack.outputs.SLACK_CHANNEL_ID }} \
             -F "initial_comment=📊 Test Summary Charts - ${{ matrix.environment }}" \
             -H "Authorization: Bearer ${{ secrets.SLACK_QA_BOT_TOKEN }}" \
             https://slack.com/api/files.upload)
-      
+
           COMBINED_URL=$(echo $COMBINED_JSON | jq -r '.file.permalink')
           echo "COMBINED_URL=$COMBINED_URL" >> $GITHUB_ENV
 
@@ -266,53 +271,33 @@ jobs:
           echo "Result: ${{ steps.configure_slack.outputs.result }}"
 
       - name: Slack Notification (Summary + Charts)
-        if: ${{ fromJSON(steps.configure_slack.outputs.result).SLACK_WEBHOOK_URL != '' }}
+        if: ${{ steps.configure_slack.outputs.SLACK_WEBHOOK_URL != '' && env.COMBINED_URL != '' }}
         run: |
           STATUS_COLOR="${{ job.status == 'success' && '#36a64f' || '#FF0000' }}"
           STATUS_TEXT="${{ job.status == 'success' && '✅ PASSED' || '❌ FAILED' }}"
           BUTTON_STYLE="${{ job.status == 'success' && 'primary' || 'danger' }}"
-          SLACK_URL=${{ fromJSON(steps.configure_slack.outputs.result).SLACK_WEBHOOK_URL }}
+          SLACK_URL="${{ steps.configure_slack.outputs.SLACK_WEBHOOK_URL }}"
       
-          curl -X POST -H 'Content-type: application/json' \
-            --data @- "$SLACK_URL" <<EOF
-          {
-            "attachments": [
-              {
-                "color": "${STATUS_COLOR}",
-                "blocks": [
-                  {
-                    "type": "section",
-                    "text": {
-                      "type": "mrkdwn",
-                      "text": "*${{ github.workflow }}* finished!\n\n*Environment:* \`${{ matrix.environment }}\`\n*Status:* ${STATUS_TEXT}"
-                    }
-                  },
-                  {
-                    "type": "section",
-                    "text": {
-                      "type": "mrkdwn",
-                      "text": "*Passed:* ${{ steps.parse_counts.outputs.PASSED }}   *Failed:* ${{ steps.parse_counts.outputs.FAILED }}   *Error:* ${{ steps.parse_counts.outputs.ERROR }}   *Skipped:* ${{ steps.parse_counts.outputs.SKIPPED }}   *Reruns:* ${{ steps.parse_counts.outputs.RERUN }}"
-                    }
-                  },
-                  {
-                    "type": "actions",
-                    "elements": [
-                      {
-                        "type": "button",
-                        "text": {"type": "plain_text", "text": "📥 Download Report"},
-                        "url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts/${{ steps.artifact-upload-step.outputs.artifact-id }}",
-                        "style": "${BUTTON_STYLE}"
-                      }
-                    ]
-                  },
-                  {
-                    "type": "image",
-                    "title": {"type": "plain_text", "text": "Test Summary Charts"},
-                    "image_url": "${{ env.COMBINED_URL }}",
-                    "alt_text": "Pie + Bar Chart"
-                  }
+          jq -n \
+            --arg color "$STATUS_COLOR" \
+            --arg status "$STATUS_TEXT" \
+            --arg button_style "$BUTTON_STYLE" \
+            --arg env "${{ matrix.environment }}" \
+            --arg passed "${{ steps.parse_counts.outputs.PASSED }}" \
+            --arg failed "${{ steps.parse_counts.outputs.FAILED }}" \
+            --arg error "${{ steps.parse_counts.outputs.ERROR }}" \
+            --arg skipped "${{ steps.parse_counts.outputs.SKIPPED }}" \
+            --arg rerun "${{ steps.parse_counts.outputs.RERUN }}" \
+            --arg run_url "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts/${{ steps.artifact-upload-step.outputs.artifact-id }}" \
+            --arg img "${{ env.COMBINED_URL }}" \
+            '{
+              attachments: [{
+                color: $color,
+                blocks: [
+                  { type: "section", text: { type: "mrkdwn", text: "*${{ github.workflow }}* finished!\n\n*Environment:* `\($env)`\n*Status:* \($status)" }},
+                  { type: "section", text: { type: "mrkdwn", text: "*Passed:* \($passed)   *Failed:* \($failed)   *Error:* \($error)   *Skipped:* \($skipped)   *Reruns:* \($rerun)" }},
+                  { type: "actions", elements: [{ type: "button", text: { type: "plain_text", text: "📥 Download Report" }, url: $run_url, style: $button_style }] },
+                  { type: "image", title: { type: "plain_text", text: "Test Summary Charts" }, image_url: $img, alt_text: "Pie + Bar Chart" }
                 ]
-              }
-            ]
-          }
-          EOF
+              }]
+            }' | curl -X POST -H 'Content-type: application/json' --data @- "$SLACK_URL"
