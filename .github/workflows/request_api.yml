@@ -411,6 +411,7 @@ jobs:
 #        SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
 
     - name: Slack Notification (Summary + Charts)
+      if: ${{ fromJSON(steps.configure_slack.outputs.result).SLACK_WEBHOOK_URL != ' '}}
       run: |
         curl -X POST -H 'Content-type: application/json' \
           --data "{
@@ -449,7 +450,7 @@ jobs:
               }
             ]
           }" \
-          ${{ secrets.SLACK_WEBHOOK_URL }}
+          ${{ fromJSON(steps.configure_slack.outputs.result).SLACK_WEBHOOK_URL }}
 
 
     - name: Post Slack Notification

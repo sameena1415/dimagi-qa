@@ -445,7 +445,7 @@ jobs:
                 }
               ]
             }" \
-            ${{ secrets.SLACK_WEBHOOK_URL }}
+            ${{ fromJSON(steps.configure_slack.outputs.result).SLACK_WEBHOOK_URL }}
 
 
       - name: Post Slack Notification
