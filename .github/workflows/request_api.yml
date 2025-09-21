@@ -196,8 +196,6 @@ jobs:
         payload: |
             {
               "attachments": [
-                  {
-                      "color": "${{ job.status == 'success' && '#36a64f' || '#FF0000' }}",
                       "blocks": [
                             {
                                 "type": "section",
