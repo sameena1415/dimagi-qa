@@ -207,7 +207,7 @@ jobs:
                 "type": "section",
                 "text": {
                   "type": "mrkdwn",
-                  "text": "*Passed:* ${{ steps.parse_counts.outputs.PASSED }} *Failed:* ${{ steps.parse_counts.outputs.FAILED }} *Error:* ${{ steps.parse_counts.outputs.ERROR }} *Skipped:* ${{ steps.parse_counts.outputs.SKIPPED }} *XFail:* ${{ steps.parse_counts.outputs.XFAIL }}"
+                  "text": "*Passed:* ${{ steps.parse_counts.outputs.PASSED  || '0' }} *Failed:* ${{ steps.parse_counts.outputs.FAILED || '0' }} *Error:* ${{ steps.parse_counts.outputs.ERROR || '0' }} *Skipped:* ${{ steps.parse_counts.outputs.SKIPPED || '0' }} *XFail:* ${{ steps.parse_counts.outputs.XFAIL || '0' }}"
                 }
               },
               {
