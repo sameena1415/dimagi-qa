@@ -194,69 +194,46 @@ jobs:
       if: ${{ (success() || failure()) && steps.configure_slack.outputs.SLACK_WEBHOOK_URL != '' }}
       with:
         payload: |
-            {
-              "attachments": [
-                      "blocks": [
-                            {
-                                "type": "section",
-                                "text": {
-                                  "type": "mrkdwn",
-                                  "text": "${{ job.status == 'success' && '✅' || '❌' }} *${{ github.workflow }}* finished!"
-                                }
-                            },
-            				{
-            					"type": "section",
-            					"text": {
-            						"type": "mrkdwn",
-            						"text": "*Passed:* ${{ steps.parse_counts.outputs.PASSED }} *Failed:* ${{ steps.parse_counts.outputs.FAILED }} *Error:* ${{ steps.parse_counts.outputs.ERROR }} *Skipped:* ${{ steps.parse_counts.outputs.SKIPPED }} *XFail:* ${{ steps.parse_counts.outputs.XFAIL }}\n"
-            					}
-            				},
-            				{
-            					"type": "context",
-            					"elements": [
-            						{
-            							"type": "mrkdwn",
-            							"text": "*Environment: *\n ${{ matrix.environment }}  \n"
-            						},
-            						{
-            							"type": "mrkdwn",
-            							"text": " "
-            						},
-            						{
-            							"type": "mrkdwn",
-            							"text": "*Status:* \n ${{ job.status }}  ${{ job.status == 'success' && ':white_check_mark:' || ':x:' }}"
-            						}
-            					]
-            				},
-            				{
-            					"type": "section",
-            					"text": {
-            						"type": "mrkdwn",
-            						"text": "Here's the corresponding report :arrow_right::arrow_right:"
-            					},
-            					"accessory": {
-            						"type": "button",
-            						"text": {
-            							"type": "plain_text",
-            							"text": "Click to Downlaod",
-            							"emoji": true
-            						},
-            						"value": "click_me_123",
-            						"url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts/${{ steps.artifact-upload-step.outputs.artifact-id }}",
-            						"action_id": "button-action",
-            						"style": "${{ job.status == 'success' && 'primary' || 'danger' }}"
-            					}
-            				},
-                            {
-                                "type": "image",
-                                "title": { "type": "plain_text", "text": "Test Summary Charts" },
-                                "image_url": "${{ env.COMBINED_URL }}",
-                                "alt_text": "Pie + Bar Chart"
-                            }
-            			]
-            		}
-            	]
-            }
+          {
+            "blocks": [
+              {
+                "type": "section",
+                "text": {
+                  "type": "mrkdwn",
+                  "text": "${{ job.status == 'success' && '✅' || '❌' }} *${{ github.workflow }}* finished!"
+                }
+              },
+              {
+                "type": "section",
+                "text": {
+                  "type": "mrkdwn",
+                  "text": "*Passed:* ${{ steps.parse_counts.outputs.PASSED }} *Failed:* ${{ steps.parse_counts.outputs.FAILED }} *Error:* ${{ steps.parse_counts.outputs.ERROR }} *Skipped:* ${{ steps.parse_counts.outputs.SKIPPED }} *XFail:* ${{ steps.parse_counts.outputs.XFAIL }}"
+                }
+              },
+              {
+                "type": "context",
+                "elements": [
+                  { "type": "mrkdwn", "text": "*Environment:* ${{ matrix.environment }}" },
+                  { "type": "mrkdwn", "text": "*Status:* ${{ job.status }} ${{ job.status == 'success' && ':white_check_mark:' || ':x:' }}" }
+                ]
+              },
+              {
+                "type": "section",
+                "text": { "type": "mrkdwn", "text": "Here's the corresponding report :arrow_right::arrow_right:" },
+                "accessory": {
+                  "type": "button",
+                  "text": { "type": "plain_text", "text": "Click to Download", "emoji": true },
+                  "url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts/${{ steps.artifact-upload-step.outputs.artifact-id }}"
+                }
+              },
+              {
+                "type": "image",
+                "title": { "type": "plain_text", "text": "Test Summary Charts" },
+                "image_url": "${{ env.COMBINED_URL }}",
+                "alt_text": "Pie + Bar Chart"
+              }
+            ]
+          }
       env:
         SLACK_WEBHOOK_URL: ${{ steps.configure_slack.outputs.SLACK_WEBHOOK_URL }}
         SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
