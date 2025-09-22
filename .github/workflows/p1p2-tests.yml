@@ -211,7 +211,8 @@ jobs:
           fi
           ARTIFACT_URL="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts/${{ steps.artifact-upload-step.outputs.artifact-id }}"
   
-          COMMENT=$'$STATUS_ICON 📊 *'"${{ github.workflow }}"' Test Summary Charts - '"${{ matrix.environment }}"'*\n\n📎 *Artifact:* <'"$ARTIFACT_URL"'|Download here>'
+          COMMENT="$STATUS_ICON 📊 *${{ github.workflow }} Test Summary Charts - ${{ matrix.environment }}*"$'\n\n'"📎 *Artifact:* <${ARTIFACT_URL}|Download here>"
+
           
           COMBINED_JSON=$(curl -s -F file=@slack_charts/summary_combined.png \
             -F channels=${{ steps.configure_slack.outputs.SLACK_CHANNEL_ID }} \
@@ -262,15 +263,24 @@ jobs:
                           ]
                         },
                         {
-                          "type": "section",
-                          "text": { "type": "mrkdwn", "text": "Here's the corresponding report :arrow_right::arrow_right:" },
-                          "accessory": {
-                            "type": "button",
-                            "text": { "type": "plain_text", "text": "Click to Download", "emoji": true },
-                            "url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts/${{ steps.artifact-upload-step.outputs.artifact-id }}"
-                            "style": "${{ job.status == 'success' && 'primary' || 'danger' }}"
-                          }
-                        }
+          					"type": "section",
+          					"text": {
+          						"type": "mrkdwn",
+          						"text": "Here's the corresponding report :arrow_right::arrow_right:"
+          					},
+          					"accessory": {
+          						"type": "button",
+          						"text": {
+          							"type": "plain_text",
+          							"text": "Click to Downlaod",
+          							"emoji": true
+          						},
+          						"value": "click_me_123",
+          						"url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts/${{ steps.artifact-upload-step.outputs.artifact-id }}",
+          						"action_id": "button-action",
+          						"style": "${{ job.status == 'success' && 'primary' || 'danger' }}"
+          					}
+          				}
                       ]
                     }
                   ]
