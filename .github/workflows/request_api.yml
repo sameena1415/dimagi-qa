@@ -226,12 +226,6 @@ jobs:
                   "url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts/${{ steps.artifact-upload-step.outputs.artifact-id }}"
                 }
               },
-              {
-                "type": "image",
-                "title": { "type": "plain_text", "text": "Test Summary Charts" },
-                "image_url": "${{ env.COMBINED_URL }}",
-                "alt_text": "Pie + Bar Chart"
-              }
             ]
           }
       env:
@@ -273,6 +267,7 @@ jobs:
         echo "Public image URL: ${PUBLIC_IMAGE_URL}"
 
     - name: Prepare Slack payload JSON
+      if: ${{ always() }}
       run: |
         # Conditionally include the image block only when COMBINED_URL exists
         if [ -n "${COMBINED_URL}" ] && [ "${COMBINED_URL}" != "null" ]; then
