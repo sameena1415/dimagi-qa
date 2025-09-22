@@ -110,6 +110,7 @@ def pytest_sessionfinish(session, exitstatus):
         "skipped": len(tr.stats.get("skipped", [])),
         "error": len(tr.stats.get("error", [])),
         "xfail": len(tr.stats.get("xfail", [])),
+        "reruns": len(tr.stats.get("rerun", [])),
     }
     save_summary_charts(_test_stats)
 

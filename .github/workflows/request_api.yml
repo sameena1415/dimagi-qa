@@ -277,11 +277,11 @@ jobs:
       if: ${{ always() }}
       run: |
         # Conditionally include the image block only when COMBINED_URL exists
-        if [ -n "PUBLIC_IMAGE_URL" ] && [ "PUBLIC_IMAGE_URL" != "null" ]; then
+        if [ -n "$PUBLIC_IMAGE_URL" ] && [ "$PUBLIC_IMAGE_URL" != "null" ]; then
           IMAGE_BLOCK=",{
             \"type\":\"image\",
             \"title\": { \"type\":\"plain_text\", \"text\":\"Test Summary Charts\" },
-            \"image_url\":\"PUBLIC_IMAGE_URL\",
+            \"image_url\":\"$PUBLIC_IMAGE_URL\",
             \"alt_text\":\"Pie + Bar Chart\"
           }"
         else
@@ -315,7 +315,7 @@ jobs:
                 "url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts/${{ steps.artifact-upload-step.outputs.artifact-id }}"
               }
             }
-            ${IMAGE_BLOCK}
+            $IMAGE_BLOCK
           ]
         }
         EOF
