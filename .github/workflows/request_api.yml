@@ -193,40 +193,45 @@ jobs:
       uses: slackapi/slack-github-action@v1.23.0
       if: ${{ (success() || failure()) && steps.configure_slack.outputs.SLACK_WEBHOOK_URL != '' }}
       with:
-        payload: >-
+        payload: |
           {
-            "blocks": [
-              {
-                "type": "section",
-                "text": {
-                  "type": "mrkdwn",
-                  "text": "${{ job.status == 'success' && '✅' || '❌' }} *${{ github.workflow }}* finished!"
-                }
-              },
-              {
-                "type": "section",
-                "text": {
-                  "type": "mrkdwn",
-                  "text": "*Passed:* ${{ steps.parse_counts.outputs.PASSED  || '0' }} *Failed:* ${{ steps.parse_counts.outputs.FAILED || '0' }} *Error:* ${{ steps.parse_counts.outputs.ERROR || '0' }} *Skipped:* ${{ steps.parse_counts.outputs.SKIPPED || '0' }} *XFail:* ${{ steps.parse_counts.outputs.XFAIL || '0' }}"
-                }
-              },
-              {
-                "type": "context",
-                "elements": [
-                  { "type": "mrkdwn", "text": "*Environment:* ${{ matrix.environment }}" },
-                  { "type": "mrkdwn", "text": "*Status:* ${{ job.status }} ${{ job.status == 'success' && ':white_check_mark:' || ':x:' }}" }
+          	"attachments": [
+          		{
+          			"color": "#36a64f",
+                    "blocks": [
+                      {
+                        "type": "section",
+                        "text": {
+                          "type": "mrkdwn",
+                          "text": "${{ job.status == 'success' && '✅' || '❌' }} *${{ github.workflow }}* finished!"
+                        }
+                      },
+                      {
+                        "type": "section",
+                        "text": {
+                          "type": "mrkdwn",
+                          "text": "*Passed:* ${{ steps.parse_counts.outputs.PASSED  || '0' }} *Failed:* ${{ steps.parse_counts.outputs.FAILED || '0' }} *Error:* ${{ steps.parse_counts.outputs.ERROR || '0' }} *Skipped:* ${{ steps.parse_counts.outputs.SKIPPED || '0' }} *XFail:* ${{ steps.parse_counts.outputs.XFAIL || '0' }}"
+                        }
+                      },
+                      {
+                        "type": "context",
+                        "elements": [
+                          { "type": "mrkdwn", "text": "*Environment:* ${{ matrix.environment }}" },
+                          { "type": "mrkdwn", "text": "*Status:* ${{ job.status }} ${{ job.status == 'success' && ':white_check_mark:' || ':x:' }}" }
+                        ]
+                      },
+                      {
+                        "type": "section",
+                        "text": { "type": "mrkdwn", "text": "Here's the corresponding report :arrow_right::arrow_right:" },
+                        "accessory": {
+                          "type": "button",
+                          "text": { "type": "plain_text", "text": "Click to Download", "emoji": true },
+                          "url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts/${{ steps.artifact-upload-step.outputs.artifact-id }}"
+                        }
+                      }
+                    ]
+                  }
                 ]
-              },
-              {
-                "type": "section",
-                "text": { "type": "mrkdwn", "text": "Here's the corresponding report :arrow_right::arrow_right:" },
-                "accessory": {
-                  "type": "button",
-                  "text": { "type": "plain_text", "text": "Click to Download", "emoji": true },
-                  "url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts/${{ steps.artifact-upload-step.outputs.artifact-id }}"
-                }
-              },
-            ]
           }
       env:
         SLACK_WEBHOOK_URL: ${{ steps.configure_slack.outputs.SLACK_WEBHOOK_URL }}
@@ -270,11 +275,11 @@ jobs:
       if: ${{ always() }}
       run: |
         # Conditionally include the image block only when COMBINED_URL exists
-        if [ -n "${COMBINED_URL}" ] && [ "${COMBINED_URL}" != "null" ]; then
+        if [ -n "$COMBINED_URL" ] && [ "$COMBINED_URL" != "null" ]; then
           IMAGE_BLOCK=",{
             \"type\":\"image\",
             \"title\": { \"type\":\"plain_text\", \"text\":\"Test Summary Charts\" },
-            \"image_url\":\"${COMBINED_URL}\",
+            \"image_url\":\"$COMBINED_URL\",
             \"alt_text\":\"Pie + Bar Chart\"
           }"
         else
