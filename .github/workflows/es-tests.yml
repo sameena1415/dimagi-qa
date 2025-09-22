@@ -31,6 +31,11 @@ jobs:
         if: ${{ !contains(github.event_name , 'dispatch') }}
         run: |
           echo "::set-output name=matrix::{\"environment\": [\"staging\"]}"
+      - id: block-india-deploy
+        if: ${{ github.event_name == 'repository_dispatch' && github.event.client_payload.environment == 'india' }}
+        run: |
+          echo "India environment is not allowed for deployment runs."
+          exit 1
 
   build:
     needs: set_matrix
@@ -156,71 +161,123 @@ jobs:
           attachments: ${{ github.workspace }}/es_report_${{ matrix.environment }}.html
           in_reply_to: ${{ fromJSON(steps.configure_email.outputs.result).reference }}
 
-      - name: Post to Slack channel on Failure
-        id: slack
+
+      - name: Set slack vars
+        if: ${{ always() }}
+        id: configure_slack
+        uses: actions/github-script@v6
+        env:
+            JOB_STATUS: ${{ job.status }}
+            CC_ENV: ${{ matrix.environment }}
+            CC_EVENT: ${{ github.event_name }}
+        with:
+          result-encoding: json
+          script: |
+
+            const {CC_ENV, JOB_STATUS, CC_EVENT} = process.env;
+            if (CC_EVENT != 'repository_dispatch' && CC_ENV == 'production' && JOB_STATUS == 'failure') {
+              SLACK_WEBHOOK_URL = '${{ secrets.SLACK_WEBHOOK_URL_SMOKE }}';
+              SLACK_CHANNEL_ID = '${{ secrets.SLACK_CHANNEL_ID_SMOKE }}';
+              console.log( "Not Prod deploy but Prof failure");
+            } else if (CC_ENV == 'staging' && JOB_STATUS == 'failure') {
+              SLACK_WEBHOOK_URL = '${{ secrets.SLACK_WEBHOOK_URL_SMOKE }}';
+              SLACK_CHANNEL_ID = '${{ secrets.SLACK_CHANNEL_ID_SMOKE }}';
+              console.log("Staging Failure");
+            } else if (CC_EVENT != 'repository_dispatch' && CC_ENV == 'india') {
+              SLACK_WEBHOOK_URL = '${{ secrets.SLACK_WEBHOOK_URL_SMOKE }}';
+              SLACK_CHANNEL_ID = '${{ secrets.SLACK_CHANNEL_ID_SMOKE }}';
+              console.log("India Failure");
+            } else if (CC_EVENT != 'repository_dispatch' && CC_ENV == 'india' && JOB_STATUS == 'failure') {
+              SLACK_WEBHOOK_URL = '${{ secrets.SLACK_WEBHOOK_URL_SMOKE }}';
+              SLACK_CHANNEL_ID = '${{ secrets.SLACK_CHANNEL_ID_SMOKE }}';
+              console.log("India Success");
+            } else {
+              SLACK_WEBHOOK_URL = '';
+              SLACK_CHANNEL_ID = '';
+              console.log("No notification sent");
+            }
+            
+            core.setOutput('SLACK_WEBHOOK_URL', SLACK_WEBHOOK_URL);
+            core.setOutput('SLACK_CHANNEL_ID', SLACK_CHANNEL_ID);
+
+            return { SLACK_WEBHOOK_URL, SLACK_CHANNEL_ID };
+
+      - name: Upload Combined Chart to Slack
+        if: ${{ (success() || failure()) && steps.configure_slack.outputs.SLACK_CHANNEL_ID != '' }}
+        run: |
+          set -e
+          # Pick emoji based on job status
+          if [ "${{ job.status }}" = "success" ]; then
+            STATUS_ICON="✅"
+          else
+            STATUS_ICON="❌"
+          fi
+          ARTIFACT_URL="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts/${{ steps.artifact-upload-step.outputs.artifact-id }}"
+  
+          COMMENT=$'$STATUS_ICON 📊 *'"${{ github.workflow }}"' Test Summary Charts - '"${{ matrix.environment }}"'*\n\n📎 *Artifact:* <'"$ARTIFACT_URL"'|Download here>'
+          
+          COMBINED_JSON=$(curl -s -F file=@slack_charts/summary_combined.png \
+            -F channels=${{ steps.configure_slack.outputs.SLACK_CHANNEL_ID }} \
+            -F "initial_comment=$COMMENT" \
+            -H "Authorization: Bearer ${{ secrets.SLACK_QA_BOT_TOKEN }}" \
+            https://slack.com/api/files.upload)
+      
+          COMBINED_URL=$(echo $COMBINED_JSON | jq -r '.file.permalink')
+          echo "COMBINED_URL=$COMBINED_URL" >> $GITHUB_ENV
+
+      - name: Debug Slack Upload
+        if: ${{ (success() || failure()) }}
+        run: |
+          echo "COMBINED_JSON=$COMBINED_JSON"
+          echo "COMBINED_URL=$COMBINED_URL"
+          echo "Result: ${{ steps.configure_slack.outputs.result }}"
+
+      - name: Slack Notification (Summary)
+        id: slack_push
         uses: slackapi/slack-github-action@v1.23.0
-        if: failure()
+        if: ${{ (success() || failure()) && steps.configure_slack.outputs.SLACK_WEBHOOK_URL != '' }}
         with:
           payload: |
             {
-            	"attachments": [
-            		{
-            			"color": "#FF0000",
-            			"blocks": [
-            				{
-            					"type": "section",
-            					"text": {
-            						"type": "mrkdwn",
-            						"text": " Hey There!! :bye_boo: \n*${{ github.workflow }}* were just triggered! \n"
-            					}
-            				},
-            				{
-            					"type": "section",
-            					"text": {
-            						"type": "mrkdwn",
-            						"text": "*Passed:* ${{ steps.parse_counts.outputs.PASSED }} *Failed:* ${{ steps.parse_counts.outputs.FAILED }} *Error:* ${{ steps.parse_counts.outputs.ERROR }} *Skipped:* ${{ steps.parse_counts.outputs.SKIPPED }} *XFail:* ${{ steps.parse_counts.outputs.XFAIL }}\n"
-            					}
-            				},
-            				{
-            					"type": "context",
-            					"elements": [
-            						{
-            							"type": "mrkdwn",
-            							"text": "*Environment: *\n ${{ matrix.environment }}  \n"
-            						},
-            						{
-            							"type": "mrkdwn",
-            							"text": " "
-            						},
-            						{
-            							"type": "mrkdwn",
-            							"text": "*Status: *\n ${{ job.status }}  :x:"
-            						}
-            					]
-            				},
-            				{
-            					"type": "section",
-            					"text": {
-            						"type": "mrkdwn",
-            						"text": "Here's the corresponding report :arrow_right::arrow_right:"
-            					},
-            					"accessory": {
-            						"type": "button",
-            						"text": {
-            							"type": "plain_text",
-            							"text": "Click to Downlaod",
-            							"emoji": true
-            						},
-            						"value": "click_me_123",
-            						"url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts/${{ steps.artifact-upload-step.outputs.artifact-id }}",
-            						"action_id": "button-action",
-            						"style": "danger"
-            					}
-            				}
-            			]
-            		}
-            	]
+              "attachments": [
+                  {
+                      "color": "${{ job.status == 'success' && '#36a64f' || '#FF0000' }}",
+                      "blocks": [
+                        {
+                          "type": "section",
+                          "text": {
+                            "type": "mrkdwn",
+                            "text": "*${{ github.workflow }}* finished!"
+                          }
+                        },
+                        {
+                          "type": "section",
+                          "text": {
+                            "type": "mrkdwn",
+                            "text": "*Passed:* ${{ steps.parse_counts.outputs.PASSED  || '0' }} *Failed:* ${{ steps.parse_counts.outputs.FAILED || '0' }} *Error:* ${{ steps.parse_counts.outputs.ERROR || '0' }} *Skipped:* ${{ steps.parse_counts.outputs.SKIPPED || '0' }} *XFail:* ${{ steps.parse_counts.outputs.XFAIL || '0' }}"
+                          }
+                        },
+                        {
+                          "type": "context",
+                          "elements": [
+                            { "type": "mrkdwn", "text": "*Environment:* ${{ matrix.environment }}" },
+                            { "type": "mrkdwn", "text": "*Status:* ${{ job.status }} ${{ job.status == 'success' && ':white_check_mark:' || ':x:' }}" }
+                          ]
+                        },
+                        {
+                          "type": "section",
+                          "text": { "type": "mrkdwn", "text": "Here's the corresponding report :arrow_right::arrow_right:" },
+                          "accessory": {
+                            "type": "button",
+                            "text": { "type": "plain_text", "text": "Click to Download", "emoji": true },
+                            "url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts/${{ steps.artifact-upload-step.outputs.artifact-id }}"
+                            "style": "${{ job.status == 'success' && 'primary' || 'danger' }}"
+                          }
+                        }
+                      ]
+                    }
+                  ]
             }
         env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL_SMOKE }}
+          SLACK_WEBHOOK_URL: ${{ steps.configure_slack.outputs.SLACK_WEBHOOK_URL }}
           SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK

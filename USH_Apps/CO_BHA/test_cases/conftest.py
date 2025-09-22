@@ -162,19 +162,11 @@ def pytest_sessionfinish(session, exitstatus):
         "skipped": len(tr.stats.get("skipped", [])),
         "error": len(tr.stats.get("error", [])),
         "xfail": len(tr.stats.get("xfail", [])),
+        "reruns": len(tr.stats.get("rerun", [])),
     }
     save_summary_charts(_test_stats)
-    print("DEBUG: Final stats =>", _test_stats)
 
 import base64
-
-def save_base64_chart(image_path, b64_path):
-    with open(image_path, "rb") as f:
-        encoded = base64.b64encode(f.read()).decode("utf-8")
-    with open(b64_path, "w") as f:
-        f.write(encoded)
-
-import matplotlib.pyplot as plt
 
 def save_summary_charts(stats):
     from pathlib import Path
@@ -184,7 +176,7 @@ def save_summary_charts(stats):
     passed = stats.get("passed", 0)
     failed = stats.get("failed", 0)
     skipped = stats.get("skipped", 0)
-    reruns = stats.get("rerun", 0)
+    reruns = stats.get("reruns", 0)
 
     # --- Pie chart with legend ---
     pie_labels = ["Passed", "Failed", "Skipped"]
@@ -256,6 +248,7 @@ def save_summary_charts(stats):
         bar_path=bar_path,
         combined_path=out_dir / "summary_combined.png"
     )
+
 
 import matplotlib.pyplot as plt
 from PIL import Image
