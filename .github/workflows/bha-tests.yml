@@ -254,61 +254,59 @@ jobs:
           echo "STATUS_ICON=$STATUS_ICON"
           echo "Result: ${{ steps.configure_slack.outputs.result }}"
 
+      - name: Build Slack payload
+        run: |
+          cat > slack_payload.json <<EOF
+          {
+            "attachments": [
+              {
+                "color": "$COLOUR",
+                "blocks": [
+                  {
+                    "type": "section",
+                    "text": {
+                      "type": "mrkdwn",
+                      "text": "$STATUS_ICON *${{ github.workflow }}* finished!"
+                    }
+                  },
+                  {
+                    "type": "section",
+                    "text": {
+                      "type": "mrkdwn",
+                      "text": "*Passed:* ${{ steps.parse_counts.outputs.PASSED || '0' }} *Failed:* ${{ steps.parse_counts.outputs.FAILED || '0' }} *Error:* ${{ steps.parse_counts.outputs.ERROR || '0' }} *Skipped:* ${{ steps.parse_counts.outputs.SKIPPED || '0' }} *XFail:* ${{ steps.parse_counts.outputs.XFAIL || '0' }}"
+                    }
+                  },
+                  {
+                    "type": "context",
+                    "elements": [
+                      { "type": "mrkdwn", "text": "*Environment:* ${{ matrix.environment }}" },
+                      { "type": "mrkdwn", "text": "*Status:* ${{ job.status }} $STATUS_ICON" }
+                    ]
+                  },
+                  {
+                    "type": "section",
+                    "text": { "type": "mrkdwn", "text": "Here's the corresponding report :arrow_right::arrow_right:" },
+                    "accessory": {
+                      "type": "button",
+                      "text": { "type": "plain_text", "text": "Click to Download", "emoji": true },
+                      "url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts/${{ steps.artifact-upload-step.outputs.artifact-id }}",
+                      "style": "$STYLE_BUTTON"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+          EOF
+
       - name: Slack Notification (Summary)
-        id: slack_push
         uses: slackapi/slack-github-action@v1.23.0
         if: ${{ (success() || failure()) && steps.configure_slack.outputs.SLACK_WEBHOOK_URL != '' }}
         with:
-          payload: |
-            {
-              "attachments": [
-                  {
-                      "color": "${{ job.status == 'success' && '#36a64f' || '#FF0000' }}",
-                      "blocks": [
-                        {
-                          "type": "section",
-                          "text": {
-                            "type": "mrkdwn",
-                            "text": "*${{ github.workflow }}* finished!"
-                          }
-                        },
-                        {
-                          "type": "section",
-                          "text": {
-                            "type": "mrkdwn",
-                            "text": "*Passed:* ${{ steps.parse_counts.outputs.PASSED  || '0' }} *Failed:* ${{ steps.parse_counts.outputs.FAILED || '0' }} *Error:* ${{ steps.parse_counts.outputs.ERROR || '0' }} *Skipped:* ${{ steps.parse_counts.outputs.SKIPPED || '0' }} *XFail:* ${{ steps.parse_counts.outputs.XFAIL || '0' }}"
-                          }
-                        },
-                        {
-                          "type": "context",
-                          "elements": [
-                            { "type": "mrkdwn", "text": "*Environment:* ${{ matrix.environment }}" },
-                            { "type": "mrkdwn", "text": "*Status:* ${{ job.status }} ${{ env.STATUS_ICON }}" }
-                          ]
-                        },
-                        {
-          					"type": "section",
-          					"text": {
-          						"type": "mrkdwn",
-          						"text": "Here's the corresponding report :arrow_right::arrow_right:"
-          					},
-          					"accessory": {
-          						"type": "button",
-          						"text": {
-          							"type": "plain_text",
-          							"text": "Click to Downlaod",
-          							"emoji": true
-          						},
-          						"value": "click_me_123",
-          						"url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts/${{ steps.artifact-upload-step.outputs.artifact-id }}",
-          						"action_id": "button-action",
-          						"style": "${{ env.STYLE_BUTTON }}"
-          					}
-          				}
-                      ]
-                    }
-                  ]
-            }
+          payload-file-path: slack_payload.json
         env:
           SLACK_WEBHOOK_URL: ${{ steps.configure_slack.outputs.SLACK_WEBHOOK_URL }}
           SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+          STATUS_ICON: ${{ env.STATUS_ICON }}
+          STYLE_BUTTON: ${{ env.STYLE_BUTTON }}
+          COLOR: ${{ env.COLOUR }}
