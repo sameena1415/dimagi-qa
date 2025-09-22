@@ -185,7 +185,7 @@ jobs:
         
         COMBINED_JSON=$(curl -s -F file=@slack_charts/summary_combined.png \
           -F channels=${{ steps.configure_slack.outputs.SLACK_CHANNEL_ID }} \
-          -F "initial_comment=" \
+          -F "initial_comment=$COMMENT" \
           -H "Authorization: Bearer ${{ secrets.SLACK_QA_BOT_TOKEN }}" \
           https://slack.com/api/files.upload)
     
