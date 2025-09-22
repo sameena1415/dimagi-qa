@@ -179,9 +179,13 @@ jobs:
         else
           STATUS_ICON="❌"
         fi
+        ARTIFACT_URL="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts/${{ steps.artifact-upload-step.outputs.artifact-id }}"
+
+        COMMENT="$STATUS_ICON 📊 ${{ github.workflow }} Test Summary Charts - ${{ matrix.environment }}\n\n📎 *Artifact:* <$ARTIFACT_URL|Download here>"
+        
         COMBINED_JSON=$(curl -s -F file=@slack_charts/summary_combined.png \
           -F channels=${{ steps.configure_slack.outputs.SLACK_CHANNEL_ID }} \
-          -F "initial_comment=$STATUS_ICON 📊 ${{ github.workflow }} Test Summary Charts - ${{ matrix.environment }}" \
+          -F "initial_comment=" \
           -H "Authorization: Bearer ${{ secrets.SLACK_QA_BOT_TOKEN }}" \
           https://slack.com/api/files.upload)
     
@@ -210,7 +214,7 @@ jobs:
                         "type": "section",
                         "text": {
                           "type": "mrkdwn",
-                          "text": "${{ job.status == 'success' && '✅' || '❌' }} *${{ github.workflow }}* finished!"
+                          "text": "*${{ github.workflow }}* finished!"
                         }
                       },
                       {
@@ -243,97 +247,3 @@ jobs:
       env:
         SLACK_WEBHOOK_URL: ${{ steps.configure_slack.outputs.SLACK_WEBHOOK_URL }}
         SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
-
-  slack_summary:
-    name: Slack Notification of Summary
-    needs: [build]   # adjust to your actual test job
-    runs-on: ubuntu-latest
-    steps:
-      - name: Set slack vars
-        id: configure_slack
-        run: |
-          echo "SLACK_WEBHOOK_URL=${{ steps.configure_slack.outputs.SLACK_WEBHOOK_URL }}" >> $GITHUB_ENV
-          echo "SLACK_CHANNEL_ID=${{ steps.configure_slack.outputs.SLACK_CHANNEL_ID }}" >> $GITHUB_ENV
-
-      - name: Upload Combined Chart to Slack for combined alert
-        id: upload_chart
-        if: ${{ (success() || failure()) && env.SLACK_CHANNEL_ID != '' }}
-        env:
-          SLACK_TOKEN: ${{ secrets.SLACK_QA_BOT_TOKEN }}
-        run: |
-          set -e
-          COMBINED_JSON=$(curl -s -F file=@slack_charts/summary_combined.png \
-            -F channels=$SLACK_CHANNEL_ID \
-            -F "initial_comment=📊 Test Summary Charts - ${{ matrix.environment }}" \
-            -H "Authorization: Bearer $SLACK_TOKEN" \
-            https://slack.com/api/files.upload)
-
-          FILE_ID=$(echo "$COMBINED_JSON" | jq -r '.file.id')
-          FILE_NAME=$(echo "$COMBINED_JSON" | jq -r '.file.name')
-
-          # Make it public
-          SHARE_JSON=$(curl -s -X POST \
-            -H "Authorization: Bearer $SLACK_TOKEN" \
-            -H "Content-type: application/json; charset=utf-8" \
-            --data "{\"file\":\"$FILE_ID\"}" \
-            https://slack.com/api/files.sharedPublicURL)
-
-          PERMALINK_PUBLIC=$(echo "$SHARE_JSON" | jq -r '.file.permalink_public')
-          TID_FID=$(echo "$PERMALINK_PUBLIC" | sed -E 's#https://slack-files.com/([^-]+-[^-]+)-.*#\1#')
-          PUB_SECRET=$(echo "$PERMALINK_PUBLIC" | sed -E 's#https://slack-files.com/[^-]+-[^-]+-(.*)#\1#')
-          PUBLIC_IMAGE_URL="https://files.slack.com/files-pri/$TID_FID/$FILE_NAME?pub_secret=${PUB_SECRET}"
-
-          echo "PUBLIC_IMAGE_URL=$PUBLIC_IMAGE_URL" >> $GITHUB_ENV
-          echo "Public image URL: $PUBLIC_IMAGE_URL"
-
-      - name: Prepare Slack payload JSON
-        if: always()
-        run: |
-          BLOCKS="[
-            {
-              \"type\": \"section\",
-              \"text\": { \"type\": \"mrkdwn\", \"text\": \"${{ job.status == 'success' && '✅' || '❌' }} *${{ github.workflow }}* finished!\" }
-            },
-            {
-              \"type\": \"section\",
-              \"text\": { \"type\": \"mrkdwn\", \"text\": \"*Passed:* ${{ steps.parse_counts.outputs.PASSED || '0' }} *Failed:* ${{ steps.parse_counts.outputs.FAILED || '0' }} *Error:* ${{ steps.parse_counts.outputs.ERROR || '0' }} *Skipped:* ${{ steps.parse_counts.outputs.SKIPPED || '0' }} *XFail:* ${{ steps.parse_counts.outputs.XFAIL || '0' }}\" }
-            },
-            {
-              \"type\": \"context\",
-              \"elements\": [
-                { \"type\": \"mrkdwn\", \"text\": \"*Environment:* ${{ matrix.environment }}\" },
-                { \"type\": \"mrkdwn\", \"text\": \"*Status:* ${{ job.status }} ${{ job.status == 'success' && ':white_check_mark:' || ':x:' }}\" }
-              ]
-            },
-            {
-              \"type\": \"section\",
-              \"text\": { \"type\": \"mrkdwn\", \"text\": \"Here's the corresponding report :arrow_right::arrow_right:\" },
-              \"accessory\": {
-                \"type\": \"button\",
-                \"text\": { \"type\": \"plain_text\", \"text\": \"Click to Download\", \"emoji\": true },
-                \"url\": \"${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts/${{ steps.artifact-upload-step.outputs.artifact-id }}\"
-              }
-            }
-          ]"
-
-          if [ -n "$PUBLIC_IMAGE_URL" ] && [ "$PUBLIC_IMAGE_URL" != "null" ]; then
-            BLOCKS=$(echo "$BLOCKS" | jq ". += [{
-              \"type\": \"image\",
-              \"title\": { \"type\": \"plain_text\", \"text\": \"Test Summary Charts\" },
-              \"image_url\": \"$PUBLIC_IMAGE_URL\",
-              \"alt_text\": \"Pie + Bar Chart\"
-            }]")
-          fi
-
-          echo "{ \"blocks\": $BLOCKS }" > slack_payload.json
-          cat slack_payload.json
-
-      - name: Slack Notification of Summary
-        id: slack_push_summary
-        uses: slackapi/slack-github-action@v1.23.0
-        if: ${{ (success() || failure()) && env.SLACK_WEBHOOK_URL != '' }}
-        with:
-          payload-file-path: slack_payload.json
-        env:
-          SLACK_WEBHOOK_URL: ${{ env.SLACK_WEBHOOK_URL }}
-          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
