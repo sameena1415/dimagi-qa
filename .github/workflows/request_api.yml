@@ -172,9 +172,16 @@ jobs:
     - name: Upload Combined Chart to Slack
       if: ${{ (success() || failure()) && steps.configure_slack.outputs.SLACK_CHANNEL_ID != '' }}
       run: |
+        set -e
+        # Pick emoji based on job status
+        if [ "${{ job.status }}" = "success" ]; then
+          STATUS_ICON="✅"
+        else
+          STATUS_ICON="❌"
+        fi
         COMBINED_JSON=$(curl -s -F file=@slack_charts/summary_combined.png \
           -F channels=${{ steps.configure_slack.outputs.SLACK_CHANNEL_ID }} \
-          -F "initial_comment=📊 Test Summary Charts - ${{ matrix.environment }}" \
+          -F "initial_comment=$STATUS_ICON 📊 ${{ github.workflow }} Test Summary Charts - ${{ matrix.environment }}" \
           -H "Authorization: Bearer ${{ secrets.SLACK_QA_BOT_TOKEN }}" \
           https://slack.com/api/files.upload)
     
@@ -197,7 +204,7 @@ jobs:
           {
           	"attachments": [
           		{
-          			"color": "#36a64f",
+          			"color": "${{ job.status == 'success' && '#36a64f' || '#FF0000' }}",
                     "blocks": [
                       {
                         "type": "section",
@@ -245,8 +252,8 @@ jobs:
       - name: Set slack vars
         id: configure_slack
         run: |
-          echo "SLACK_WEBHOOK_URL=${{ secrets.SLACK_WEBHOOK_URL }}" >> $GITHUB_ENV
-          echo "SLACK_CHANNEL_ID=${{ secrets.SLACK_CHANNEL_ID }}" >> $GITHUB_ENV
+          echo "SLACK_WEBHOOK_URL=${{ steps.configure_slack.outputs.SLACK_WEBHOOK_URL }}" >> $GITHUB_ENV
+          echo "SLACK_CHANNEL_ID=${{ steps.configure_slack.outputs.SLACK_CHANNEL_ID }}" >> $GITHUB_ENV
 
       - name: Upload Combined Chart to Slack for combined alert
         id: upload_chart
