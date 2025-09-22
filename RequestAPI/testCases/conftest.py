@@ -124,7 +124,7 @@ def save_summary_charts(stats):
     passed = stats.get("passed", 0)
     failed = stats.get("failed", 0)
     skipped = stats.get("skipped", 0)
-    reruns = stats.get("rerun", 0)
+    reruns = stats.get("reruns", 0)
 
     # --- Pie chart with legend ---
     pie_labels = ["Passed", "Failed", "Skipped"]
