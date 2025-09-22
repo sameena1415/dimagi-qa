@@ -206,8 +206,10 @@ jobs:
           # Pick emoji based on job status
           if [ "${{ job.status }}" = "success" ]; then
             STATUS_ICON="✅"
+            STYLE_BUTTON="primary"
           else
             STATUS_ICON="❌"
+            STYLE_BUTTON="danger"
           fi
           ARTIFACT_URL="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts/${{ steps.artifact-upload-step.outputs.artifact-id }}"
   
@@ -222,12 +224,16 @@ jobs:
       
           COMBINED_URL=$(echo $COMBINED_JSON | jq -r '.file.permalink')
           echo "COMBINED_URL=$COMBINED_URL" >> $GITHUB_ENV
+          echo "STYLE_BUTTON=$STYLE_BUTTON" >> $GITHUB_ENV
+          echo "STATUS_ICON=$STATUS_ICON" >> $GITHUB_ENV
 
       - name: Debug Slack Upload
         if: ${{ (success() || failure()) }}
         run: |
           echo "COMBINED_JSON=$COMBINED_JSON"
           echo "COMBINED_URL=$COMBINED_URL"
+          echo "STYLE_BUTTON=$STYLE_BUTTON"
+          echo "STATUS_ICON=$STATUS_ICON"
           echo "Result: ${{ steps.configure_slack.outputs.result }}"
 
       - name: Slack Notification (Summary)
@@ -259,7 +265,7 @@ jobs:
                           "type": "context",
                           "elements": [
                             { "type": "mrkdwn", "text": "*Environment:* ${{ matrix.environment }}" },
-                            { "type": "mrkdwn", "text": "*Status:* ${{ job.status }} ${{ job.status == 'success' && ':white_check_mark:' || ':x:' }}" }
+                            { "type": "mrkdwn", "text": "*Status:* ${{ job.status }} ${{ env.STATUS_ICON }}" }
                           ]
                         },
                         {
@@ -278,7 +284,7 @@ jobs:
           						"value": "click_me_123",
           						"url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts/${{ steps.artifact-upload-step.outputs.artifact-id }}",
           						"action_id": "button-action",
-          						"style": "${{ job.status == 'success' && 'primary' || 'danger' }}"
+          						"style": "${{ env.STYLE_BUTTON }}"
           					}
           				}
                       ]
