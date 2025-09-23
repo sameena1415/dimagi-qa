@@ -229,16 +229,17 @@ jobs:
           if [ "${{ job.status }}" = "success" ]; then
             STATUS_ICON="✅"
             STYLE_BUTTON="primary"
-            COLOUR = #36a64f
+            COLOUR = "#36a64f"
           else
             STATUS_ICON="❌"
             STYLE_BUTTON="danger"
-            COLOUR = #FF0000
+            COLOUR = "#FF0000"
           fi
           ARTIFACT_URL="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts/${{ steps.artifact-upload-step.outputs.artifact-id }}"
-
-          COMMENT="$STATUS_ICON 📊 *${{ github.workflow }} Test Summary Charts - ${{ matrix.environment }}*"$'\n\n'"📎 *Artifact:* <${ARTIFACT_URL}|Download here>"
-
+          ENVIRONMENT=$(echo "${{ matrix.environment }}" | tr '[:lower:]' '[:upper:]')
+          ENVIRONMENT="[$ENVIRONMENT]"
+          
+          COMMENT="$STATUS_ICON 📊 *$ENVIRONMENT ${{ github.workflow }} Test Summary Charts*"$'\n\n'"📎 *Artifact:* <${ARTIFACT_URL}|Download here>"
 
           COMBINED_JSON=$(curl -s -F file=@slack_charts/summary_combined.png \
             -F channels=${{ steps.configure_slack.outputs.SLACK_CHANNEL_ID }} \
@@ -251,70 +252,3 @@ jobs:
           echo "STYLE_BUTTON=$STYLE_BUTTON" >> $GITHUB_ENV
           echo "STATUS_ICON=$STATUS_ICON" >> $GITHUB_ENV
           echo "COLOUR=$COLOUR" >> $GITHUB_ENV
-
-      - name: Debug Slack Upload
-        if: ${{ (success() || failure()) }}
-        run: |
-          echo "COMBINED_JSON=$COMBINED_JSON"
-          echo "COMBINED_URL=$COMBINED_URL"
-          echo "STYLE_BUTTON=$STYLE_BUTTON"
-          echo "STATUS_ICON=$STATUS_ICON"
-          echo "COLOUR=$COLOUR"
-          echo "Result: ${{ steps.configure_slack.outputs.result }}"
-
-      - name: Build Slack payload
-        run: |
-          cat > slack_payload.json <<EOF
-          {
-            "attachments": [
-              {
-                "color": "$COLOUR",
-                "blocks": [
-                  {
-                    "type": "section",
-                    "text": {
-                      "type": "mrkdwn",
-                      "text": "$STATUS_ICON *${{ github.workflow }}* finished!"
-                    }
-                  },
-                  {
-                    "type": "section",
-                    "text": {
-                      "type": "mrkdwn",
-                      "text": "*Passed:* ${{ steps.parse_counts.outputs.PASSED || '0' }} *Failed:* ${{ steps.parse_counts.outputs.FAILED || '0' }} *Error:* ${{ steps.parse_counts.outputs.ERROR || '0' }} *Skipped:* ${{ steps.parse_counts.outputs.SKIPPED || '0' }} *XFail:* ${{ steps.parse_counts.outputs.XFAIL || '0' }}"
-                    }
-                  },
-                  {
-                    "type": "context",
-                    "elements": [
-                      { "type": "mrkdwn", "text": "*Environment:* ${{ matrix.environment }}" },
-                      { "type": "mrkdwn", "text": "*Status:* ${{ job.status }} $STATUS_ICON" }
-                    ]
-                  },
-                  {
-                    "type": "section",
-                    "text": { "type": "mrkdwn", "text": "Here's the corresponding report :arrow_right::arrow_right:" },
-                    "accessory": {
-                      "type": "button",
-                      "text": { "type": "plain_text", "text": "Click to Download", "emoji": true },
-                      "url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts/${{ steps.artifact-upload-step.outputs.artifact-id }}",
-                      "style": "$STYLE_BUTTON"
-                    }
-                  }
-                ]
-              }
-            ]
-          }
-          EOF
-
-      - name: Slack Notification (Summary)
-        uses: slackapi/slack-github-action@v1.23.0
-        if: ${{ (success() || failure()) && steps.configure_slack.outputs.SLACK_WEBHOOK_URL != '' }}
-        with:
-          payload-file-path: slack_payload.json
-        env:
-          SLACK_WEBHOOK_URL: ${{ steps.configure_slack.outputs.SLACK_WEBHOOK_URL }}
-          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
-          STATUS_ICON: ${{ env.STATUS_ICON }}
-          STYLE_BUTTON: ${{ env.STYLE_BUTTON }}
-          COLOR: ${{ env.COLOUR }}
