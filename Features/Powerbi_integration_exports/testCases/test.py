@@ -92,7 +92,7 @@ def test_10_Odata_Feed_10(driver, settings):
     data = PowerBiPage(driver)
     data.ui()
     data.select_case()
-    data.case_feed(UserData.reassign_case)
+    data.case_feed(UserData.case)
     data.add_odata()
     data.save_odata_feed()
     data.delete1()

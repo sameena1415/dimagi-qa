@@ -309,7 +309,7 @@ def test_case_importer(driver,settings):
     home = HomePage(driver, settings)
     home.data_menu()
     imp = ImportCasesPage(driver)
-    imp.replace_property_and_upload(UserData.case_type, UserData.file, "YES", ['Hindi', 'Telugu','YYYY-MM-DD'],
+    imp.replace_property_and_upload(UserData.case_type, UserData.file, "Yes", ['Hindi', 'Telugu','YYYY-MM-DD'],
                                     ['select_dd_language', 'opened_date'])
 
 

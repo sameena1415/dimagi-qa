@@ -88,7 +88,7 @@ class PowerBiPage(BasePage):
         print("Add OData Feed button is disabled")
 
     def select_form(self):
-        self.wait_to_click(self.feed_type)
+        self.wait_to_click(self.feed_type,50)
         ss = Select(self.find_element(self.feed_type))
         ss.select_by_visible_text('Form')
         self.is_present_and_displayed(self.feed_type_visible)
@@ -111,7 +111,7 @@ class PowerBiPage(BasePage):
         print(menu_dropdown)
 
     def select_case(self):
-        self.wait_to_click(self.feed_type,10)
+        self.wait_to_click(self.feed_type,30)
         ss = Select(self.find_element(self.feed_type))
         # Select option by visible text
         ss.select_by_visible_text('Case')

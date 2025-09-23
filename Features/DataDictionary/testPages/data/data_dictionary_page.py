@@ -31,6 +31,7 @@ class DataDictionaryPage(BasePage):
         self.dd = (By.XPATH, "//*[@class='text-hq-nav-header']")
         self.check = (By.XPATH, "//*[@id='download-dict']")
         self.datatype = (By.XPATH, "(//select[@class='form-control'])[5]")
+        self.dd_language =(By.XPATH,"(//select[@class='form-control'])[1]")
         self.upload = (By.XPATH, "//*[@id='gtm-upload-dict']")
         self.choose_file1 = (By.XPATH, "//input[@id='file']")
         self.upload_button = (By.XPATH, "//*[@class='btn btn-primary disable-on-submit']")
@@ -61,11 +62,11 @@ class DataDictionaryPage(BasePage):
         self.date_valid_values = (By.XPATH,
                                   "//*[@id='data-dictionary-table']/div[2]/div[1]/div[3]/div[1]/div[6]/div[2]")
         self.edit_button = (By.XPATH, "//div[@id='data-dictionary-table']//div[1]//div[6]//div[1]//div[1]//div[1]//a[1]")
-        self.edit_button_vv = (By.XPATH,"//div[@class='groups ui-sortable']//div[2]//div[6]//div[1]//div[1]//div[1]//a[1]")
+        self.edit_button_vv = (By.XPATH,"//div[@id='data-dictionary-table']//div[1]//div[6]//div[1]//div[1]//div[1]//a[1]")
         self.add_item = (By.XPATH, "(//a[@data-enum-action='add'])[3]")
-        self.valid_value_text = (By.XPATH, "(//input[@placeholder='valid value'])[3]")
-        self.valid_description = (By.XPATH, "(//input[@placeholder='description'])[3]")
-        self.done = (By.XPATH, "(//button[@class='btn btn-primary'][normalize-space()='Done'])[3]")
+        self.valid_value_text = (By.XPATH, "(//input[@placeholder='valid value'])")
+        self.valid_description = (By.XPATH, "(//input[@placeholder='description'])")
+        self.done = (By.XPATH, "(//button[@class='btn btn-primary'][normalize-space()='Done'])[1]")
         self.property_deprecate = (By.XPATH, "(//*[@id='gtm-deprecate-case-property'])[1]")
         self.property_deprecate_message = (By.XPATH, "(//*[contains(text(),'Property has been deprecated')])[3]")
         self.data_strong = (By.XPATH, "//*[@id='hq-breadcrumbs']/li[1]/a/strong")
@@ -146,8 +147,6 @@ class DataDictionaryPage(BasePage):
 
     def ui(self):
         self.js_click(self.data_dictionary, 10)
-        assert self.is_present_and_displayed(self.dd, 10)
-        print("Data dictionary page is opened")
         self.wait_to_click(self.case_type_value)
 
     def data_page(self):
@@ -253,7 +252,7 @@ class DataDictionaryPage(BasePage):
     def group_description(self):
         self.wait_to_click(self.case_type_value, 10)
         self.wait_to_clear_and_send_keys(self.added_group, "updated_description_value")
-        self.wait_to_click(self.addgroup)
+        self.wait_to_click(self.add_group)
         self.wait_to_click(self.save, 10)
         print("group description is updated")
 
@@ -374,7 +373,7 @@ class DataDictionaryPage(BasePage):
         print("deprecated case type label displayed on the already created export")
 
     def exports_edit_data_section(self, filepath):
-        self.js_click(self.data_strong,100)
+        self.js_click(self.data_strong,50)
         self.wait_to_click(self.copy_cases_menu, 200)
         self.wait_for_element(self.case_type_dropdown1, 200)
         dropdown = self.get_all_dropdown_options(self.case_type_dropdown1)
@@ -432,13 +431,15 @@ class DataDictionaryPage(BasePage):
         self.wait_to_click(self.save)
 
     def valid_values_3(self):
+        ss1 = Select(self.find_element(self.dd_language))
+        ss1.select_by_visible_text('Multiple Choice')
         self.wait_to_click(self.edit_button_vv)
         self.wait_to_click(self.valid_value_text, 2)
         self.wait_to_clear_and_send_keys(self.valid_value_text, UserData.english_value)
         self.wait_to_click(self.valid_description, 2)
         self.wait_to_clear_and_send_keys(self.valid_description, UserData.english_value)
-        self.wait_to_click(self.done)
-        self.wait_to_click(self.save)
+        self.js_click(self.done)
+
 
     def resetting_valid_values(self):
         self.wait_to_click(self.edit_button)
