@@ -188,11 +188,11 @@ jobs:
           if [ "${{ job.status }}" = "success" ]; then
             STATUS_ICON="✅"
             STYLE_BUTTON="primary"
-            COLOUR = "#36a64f"
+            
           else
             STATUS_ICON="❌"
             STYLE_BUTTON="danger"
-            COLOUR = "#FF0000"
+            
           fi
           ARTIFACT_URL="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts/${{ steps.artifact-upload-step.outputs.artifact-id }}"
 
@@ -211,4 +211,4 @@ jobs:
           echo "COMBINED_URL=$COMBINED_URL" >> $GITHUB_ENV
           echo "STYLE_BUTTON=$STYLE_BUTTON" >> $GITHUB_ENV
           echo "STATUS_ICON=$STATUS_ICON" >> $GITHUB_ENV
-          echo "COLOUR=$COLOUR" >> $GITHUB_ENV
+          
