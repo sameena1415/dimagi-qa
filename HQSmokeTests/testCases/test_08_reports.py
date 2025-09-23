@@ -113,8 +113,6 @@ def test_case_19_saved_report(driver, settings):
     report.reports_menu()
     load.saved_report()
 
-
-
 @pytest.mark.report
 @pytest.mark.scheduledReport
 def test_case_20_scheduled_report(driver, settings):

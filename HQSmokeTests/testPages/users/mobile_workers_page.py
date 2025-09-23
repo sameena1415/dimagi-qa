@@ -107,24 +107,17 @@ class MobileWorkerPage(BasePage):
         self.user_field_success_msg = (By.XPATH, "//div[contains(@class,'alert-success')]")
         self.mobile_worker_on_left_panel = (By.XPATH, "//a[@data-title='Mobile Workers']")
         self.next_page_button_xpath = (By.XPATH, "//a[contains(@data-bind,'click: nextPage')]")
-        self.additional_info_dropdown = (
-            By.ID, "select2-id_data-field-user_field_" + fetch_random_string() + "-container")
-        self.select_value_dropdown = (By.XPATH,
-                                      "//select[@name = 'data-field-user_field_" + fetch_random_string() + "']/option[text()='user_field_" + fetch_random_string() + "']")
-        self.additional_info_select = (
-            By.XPATH, "//select[@name = 'data-field-user_field_" + fetch_random_string() + "']")
-        self.additional_info_select2 = (By.XPATH, "//select[@name = 'data-field-field_" + fetch_random_string() + "']")
+        self.additional_info_dropdown = "select2-id_data-field-{}-container"
+        self.select_value_dropdown = "//select[@name = 'data-field-{}']/option[text()='{}']"
+        self.additional_info_select = "//select[@name = 'data-field-{}']"
+        self.additional_info_select2 = "//select[@name = 'data-field-{}']"
 
-        self.additional_info_dropdown2 = (
-            By.ID, "select2-id_data-field-" + "field_" + fetch_random_string() + "-container")
-        self.select_value_dropdown2 = (By.XPATH,
-                                       "//select[@name = 'data-field-field_" + fetch_random_string() + "']/option[text()='field_" + fetch_random_string() + "']")
+        self.additional_info_dropdown2 = "select2-id_data-field-{}-container"
+        self.select_value_dropdown2 = "//select[@name = 'data-field-{}']/option[text()='{}']"
 
         self.update_info_button = (By.XPATH, "//button[text()='Update Information']")
-        self.user_file_additional_info = (
-            By.XPATH, "//label[@for='id_data-field-user_field_" + fetch_random_string() + "']")
-        self.user_file_additional_info2 = (
-            By.XPATH, "//label[@for='id_data-field-field_" + fetch_random_string() + "']")
+        self.user_file_additional_info = "//label[@for='id_data-field-{}']"
+        self.user_file_additional_info2 = "//label[@for='id_data-field-{}']"
         self.deactivate_btn_xpath = "//td/a/strong[text()='{}']/following::td[5]/div[@data-bind='visible: is_active()']/button"
         self.confirm_deactivate = (By.XPATH, "(//button[@class='btn btn-danger'])[1]")
         self.view_all_link_text = (By.LINK_TEXT, "View All")
@@ -154,8 +147,8 @@ class MobileWorkerPage(BasePage):
             By.XPATH, "//tbody[@data-bind='sortable: data_fields']//tr[last()]//td[last()]//i[@class='fa fa-times']")
         self.profile_combobox = (
             By.XPATH, "//span[@aria-labelledby='select2-id_data-field-commcare_profile-container']")
-        self.profile_selection = (By.XPATH, "//li[contains(text(),'" + self.profile_name_text + "')]")
-        self.profile_dropdown = (By.XPATH, "//select[@name='data-field-commcare_profile']")
+        self.profile_selection =  "//li[contains(text(),'{}')]"
+        self.profile_dropdown =  (By.XPATH, "//select[@name='data-field-commcare_profile']")
         self.phone_number_field = (By.XPATH, "//input[@name='phone_number']")
         self.add_number_button = (By.XPATH, "//button[.='Add Number']")
         self.registered_phone_number = (By.XPATH, "//label[contains(text(),'+" + self.phone_number + "')]")
@@ -339,10 +332,10 @@ class MobileWorkerPage(BasePage):
         self.wait_for_element(self.user_name_span)
         print("Mobile Worker page opened.")
 
-    def enter_value_for_created_user_field(self):
-        self.scroll_to_element(self.additional_info_select)
-        self.select_by_text(self.additional_info_select, "user_field_" + fetch_random_string())
-        assert self.is_displayed(self.user_file_additional_info), "Unable to assign user field to user."
+    def enter_value_for_created_user_field(self, userfield):
+        self.scroll_to_element((By.XPATH, self.additional_info_select.format(userfield)))
+        self.select_by_text((By.XPATH, self.additional_info_select.format(userfield)), userfield)
+        assert self.is_displayed((By.XPATH, self.user_file_additional_info.format(userfield))), "Unable to assign user field to user."
 
     def update_information(self):
         self.wait_to_click(self.update_info_button)
@@ -553,9 +546,9 @@ class MobileWorkerPage(BasePage):
     def click_fields(self):
         self.wait_to_click(self.field_tab)
 
-    def add_profile(self, user_field):
+    def add_profile(self, profile, user_field):
         self.wait_to_click(self.add_new_profile)
-        self.wait_to_clear_and_send_keys(self.profile_name, self.profile_name_text + Keys.TAB)
+        self.wait_to_clear_and_send_keys(self.profile_name, profile + Keys.TAB)
         time.sleep(2)
         self.wait_to_click(self.profile_edit_button)
         time.sleep(2)
@@ -565,10 +558,9 @@ class MobileWorkerPage(BasePage):
         self.send_keys(self.profile_value, user_field)
         self.wait_to_click(self.done_button)
 
-    def select_profile(self):
+    def select_profile(self, profile):
         self.wait_to_click(self.profile_combobox)
-        
-        self.wait_to_click(self.profile_selection)
+        self.wait_to_click((By.XPATH, self.profile_selection.format(profile)))
 
     def add_phone_number(self):
         self.wait_to_clear_and_send_keys(self.phone_number_field, self.phone_number)
@@ -589,7 +581,7 @@ class MobileWorkerPage(BasePage):
         self.wait_to_click(self.field_delete)
         self.wait_to_click(self.confirm_user_field_delete)
 
-    def remove_profile(self, field):
+    def remove_profile(self, profile, field):
         time.sleep(2)
         self.scroll_to_element((By.XPATH, self.p1p2_profile_edit.format(field)))
         self.wait_to_click((By.XPATH, self.p1p2_profile_edit.format(field)))
@@ -653,9 +645,9 @@ class MobileWorkerPage(BasePage):
 
     def select_user_and_update_fields(self, user, field):
         self.select_mobile_worker_created(user)
-        self.select_by_text(self.additional_info_select2, field)
+        self.select_by_text((By.XPATH, self.additional_info_select2.format(field)), field)
         self.wait_to_click(self.update_info_button)
-        assert self.is_displayed(self.user_file_additional_info2), "Unable to assign user field to user."
+        assert self.is_displayed((By.XPATH, self.user_file_additional_info2.format(field))), "Unable to assign user field to user."
 
     def select_and_delete_mobile_worker(self, user):
         

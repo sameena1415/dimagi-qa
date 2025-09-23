@@ -91,12 +91,16 @@ class ReportPage(BasePage):
         self.saved_report_description = (By.NAME, "description")
         self.save_confirm = (By.XPATH, '//div[@class = "btn btn-primary"]')
         self.saved_reports_menu_link = (By.LINK_TEXT, 'My Saved Reports')
-        self.saved_report_created = (By.XPATH, "//a[text()='" + self.report_name_saved + "']")
+        self.saved_report_created = "//a[text()='{}']"
         self.delete_saved = (By.XPATH,
                              "(//a[text()='" + self.report_name_saved + "']//following::button[@class='btn btn-danger add-spinner-on-click'])[1]")
         self.delete_saved_report_link = "(//a[text()='{}']//following::button[@class='btn btn-danger add-spinner-on-click'])[1]"
         self.all_saved_reports = (
         By.XPATH, "//td[a[contains(.,'Saved')]]//following-sibling::td/button[contains(@data-bind,'delete')]")
+
+        self.favorite_button = (By.XPATH, "//button[contains(.,'Favorites')]")
+        self.empty_fav_list = (By.XPATH, '//a[.="You don\'t have any favorites"]')
+        self.saved_fav = "//a[contains(.,'{}')][contains(@data-bind,'text: name')]"
 
         # Scheduled Reports
         self.scheduled_reports_menu_xpath = (By.XPATH, "//a[@href='#scheduled-reports']")
@@ -312,11 +316,10 @@ class ReportPage(BasePage):
         self.wait_for_element(self.save_confirm)
         self.js_click(self.save_confirm)
         time.sleep(2)
-        self.wait_for_element(self.saved_reports_menu_link, 100)
-        self.click(self.saved_reports_menu_link)
-        time.sleep(10)
-        self.wait_for_element(self.scheduled_reports_menu_xpath, 200)
-        assert self.is_present_and_displayed(self.saved_report_created, 220)
+
+        self.reload_page()
+        self.wait_to_click(self.saved_reports_menu_link)
+        self.wait_for_element((By.XPATH, self.saved_report_created.format(self.report_name_saved)), 120)
         print("Report Saved successfully!")
 
     def create_scheduled_report_button(self):

@@ -25,7 +25,7 @@ class WebApps(BasePage):
         self.content_container = (By.XPATH, "//div[@id='content-container']")
         self.app_name_format = "//div[@aria-label='{}']//div/h3"
         self.app_header_format = "//*[contains(@class,'title')][contains(text(),'{}')]"
-        self.menu_name_format = '//*[contains(@aria-label,"{}")]'
+        self.menu_name_format = '//tr[contains(@aria-label,"{}")]'
         self.menu_name_header_format = '//*[contains(text(),"{}")]'
         self.form_name_format = "//h3[contains(text(), '{}')]"
         self.form_name_header_format = "//h1[contains(text(), '{}')]"

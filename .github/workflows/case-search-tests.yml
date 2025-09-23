@@ -195,20 +195,20 @@ jobs:
               SLACK_CHANNEL_ID = '${{ secrets.SLACK_CHANNEL_ID_PROD }}';
               console.log( "Prod deploy");
             } else if (CC_EVENT != 'repository_dispatch' && CC_ENV == 'production' && JOB_STATUS == 'failure') {
-              SLACK_WEBHOOK_URL = '${{ secrets.SLACK_WEBHOOK_URL_SMOKE }}';
-              SLACK_CHANNEL_ID = '${{ secrets.SLACK_CHANNEL_ID_SMOKE }}';
+              SLACK_WEBHOOK_URL = '${{ secrets.SLACK_WEBHOOK_URL_USH }}';
+              SLACK_CHANNEL_ID = '${{ secrets.SLACK_CHANNEL_ID_USH }}';
               console.log( "Not Prod deploy but Prof failure");
             } else if (CC_ENV == 'staging' && JOB_STATUS == 'failure') {
-              SLACK_WEBHOOK_URL = '${{ secrets.SLACK_WEBHOOK_URL_SMOKE }}';
-              SLACK_CHANNEL_ID = '${{ secrets.SLACK_CHANNEL_ID_SMOKE }}';
+              SLACK_WEBHOOK_URL = '${{ secrets.SLACK_WEBHOOK_URL_USH }}';
+              SLACK_CHANNEL_ID = '${{ secrets.SLACK_CHANNEL_ID_USH }}';
               console.log("Staging Failure");
             } else if (CC_EVENT == 'repository_dispatch' && CC_ENV == 'india') {
               SLACK_WEBHOOK_URL = '${{ secrets.SLACK_WEBHOOK_URL_INDIA }}';
               SLACK_CHANNEL_ID = '${{ secrets.SLACK_CHANNEL_ID_INDIA }}';
               console.log("India Failure");
             } else if (CC_EVENT != 'repository_dispatch' && CC_ENV == 'india' && JOB_STATUS == 'failure') {
-              SLACK_WEBHOOK_URL = '${{ secrets.SLACK_WEBHOOK_URL_SMOKE }}';
-              SLACK_CHANNEL_ID = '${{ secrets.SLACK_CHANNEL_ID_SMOKE }}';
+              SLACK_WEBHOOK_URL = '${{ secrets.SLACK_WEBHOOK_URL_USH }}';
+              SLACK_CHANNEL_ID = '${{ secrets.SLACK_CHANNEL_ID_USH }}';
               console.log("India Success");
             } else {
               SLACK_WEBHOOK_URL = '';

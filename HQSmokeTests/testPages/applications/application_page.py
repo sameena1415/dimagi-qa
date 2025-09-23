@@ -213,7 +213,8 @@ class ApplicationPage(BasePage):
         print(f"file_that_was_downloaded: {file_that_was_downloaded}")
         self.send_keys(self.choose_file, str(file_that_was_downloaded))
         self.wait_to_click(self.upload)
-        assert self.is_present_and_displayed(self.same_question_present)
+        time.sleep(5)
+        assert self.is_present_and_displayed(self.same_question_present, 120)
         print("XML copied successfully!")
 
     def app_settings_exploration(self):
