@@ -151,7 +151,7 @@ def save_summary_charts(stats):
         colors=pie_colors,
         startangle=90,
         wedgeprops=dict(width=0.4)
-        )
+    )
     ax.axis("equal")
     ax.set_title("Test Summary")
 
@@ -161,40 +161,44 @@ def save_summary_charts(stats):
         loc="lower center",
         ncol=3,
         bbox_to_anchor=(0.5, -0.15)
-        )
+    )
 
     fig.savefig(out_dir / "summary_pie.png", bbox_inches="tight")
     plt.close(fig)
 
     # --- Bar chart with labels + legend ---
     bar_path = None
-    if failed > 0 or reruns > 0:  # ✅ only generate if needed
+    if failed > 0 or reruns > 0:   # ✅ only generate if needed
         fig, ax = plt.subplots()
         bars = ax.bar(
             ["Failed", "Reruns"],
             [failed, reruns],
             color=["#ef5350", "#ffa726"]
-            )
+        )
         ax.set_ylabel("Number of Tests")
         ax.set_title("Failures and Reruns")
-        ax.set_xticks([0, 1])
-        ax.set_xticklabels(["Failed", "Reruns"])
 
-        # Add counts above bars
-        for label, bar in zip(["Failed", "Reruns"], bars):
-            height = bar.get_height()
-            ax.text(
-                bar.get_x() + bar.get_width() / 2,
-                height + 0.05,
-                f"{label}: {int(height)}",  # <-- include label + value
-                ha="center",
-                va="bottom",
-                fontsize=10,
-                fontweight="bold"
-                )
+        # ax.set_xticks([0, 1])
+        # ax.set_xticklabels(["Failed", "Reruns"])
+        #
+        #
+        # # Add counts above bars
+        # for label, bar in zip(["Failed", "Reruns"], bars):
+        #     height = bar.get_height()
+        #     ax.text(
+        #         bar.get_x() + bar.get_width() / 2,
+        #         height + 0.05,
+        #         f"{label}: {int(height)}",  # <-- include label + value
+        #         ha="center",
+        #         va="bottom",
+        #         fontsize=10,
+        #         fontweight="bold"
+        #         )
+
         # Legend with counts
         ax.legend(
-            [f"Failed: {failed}", f"Reruns: {reruns}"],
+            [bars[0], bars[1]],  # handles
+            [f"Failed: {failed}", f"Reruns: {reruns}"],  # labels
             loc="lower center",
             ncol=2,
             bbox_to_anchor=(0.5, -0.15)
@@ -209,7 +213,7 @@ def save_summary_charts(stats):
         pie_path=out_dir / "summary_pie.png",
         bar_path=bar_path,
         combined_path=out_dir / "summary_combined.png"
-        )
+    )
 
 
 import matplotlib.pyplot as plt

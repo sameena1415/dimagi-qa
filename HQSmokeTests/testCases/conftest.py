@@ -180,28 +180,32 @@ def save_summary_charts(stats):
         )
         ax.set_ylabel("Number of Tests")
         ax.set_title("Failures and Reruns")
-        ax.set_xticks([0, 1])
-        ax.set_xticklabels(["Failed", "Reruns"])
 
-        for label, bar in zip(["Failed", "Reruns"], bars):
-            height = bar.get_height()
-            ax.text(
-                bar.get_x() + bar.get_width() / 2,
-                height + 0.05,
-                f"{label}: {int(height)}",  # <-- include label + value
-                ha="center",
-                va="bottom",
-                fontsize=10,
-                fontweight="bold"
-                )
+        # ax.set_xticks([0, 1])
+        # ax.set_xticklabels(["Failed", "Reruns"])
+        #
+        #
+        # # Add counts above bars
+        # for label, bar in zip(["Failed", "Reruns"], bars):
+        #     height = bar.get_height()
+        #     ax.text(
+        #         bar.get_x() + bar.get_width() / 2,
+        #         height + 0.05,
+        #         f"{label}: {int(height)}",  # <-- include label + value
+        #         ha="center",
+        #         va="bottom",
+        #         fontsize=10,
+        #         fontweight="bold"
+        #         )
 
         # Legend with counts
         ax.legend(
-            [f"Failed: {failed}", f"Reruns: {reruns}"],
+            [bars[0], bars[1]],  # handles
+            [f"Failed: {failed}", f"Reruns: {reruns}"],  # labels
             loc="lower center",
             ncol=2,
             bbox_to_anchor=(0.5, -0.15)
-        )
+            )
 
         bar_path = out_dir / "summary_bar.png"
         fig.savefig(bar_path, bbox_inches="tight")
