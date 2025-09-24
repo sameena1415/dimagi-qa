@@ -98,7 +98,7 @@ def test_case_03_create_and_assign_user_field(driver, settings):
     create.mobile_worker_menu()
     create.create_new_user_fields(f"user_field_{group_id['run']}_{fetch_random_string()}")
     create.select_mobile_worker_created(group_id["user"])
-    create.enter_value_for_created_user_field()
+    create.enter_value_for_created_user_field(f"user_field_{group_id['run']}_{fetch_random_string()}")
     create.update_information()
 
 

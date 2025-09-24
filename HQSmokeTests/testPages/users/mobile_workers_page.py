@@ -194,13 +194,14 @@ class MobileWorkerPage(BasePage):
         self.wait_to_click(self.web_apps_menu_id)
         self.wait_to_click(self.webapp_login)
         print("Waiting for the login page to load.....")
-        time.sleep(2)
+        time.sleep(10)
         self.wait_for_element(self.search_user_web_apps, 20)
+        print("search box is present")
         self.send_keys(self.search_user_web_apps, username)
         time.sleep(2)
         self.wait_for_element(self.search_button_we_apps)
         self.js_click(self.search_button_we_apps)
-        time.sleep(2)
+        time.sleep(10)
         if flag == "YES":
             self.wait_for_element((By.XPATH, self.username_in_list.format(username)), 15)
         else:
@@ -420,6 +421,7 @@ class MobileWorkerPage(BasePage):
             return "Not Success"
 
     def verify_reactivation_via_login(self, username, text):
+        print(text)
         if text == "Success":
             self.search_webapps_user(username)
             assert self.is_present_and_displayed((By.XPATH, self.login_as_username.format(username))
