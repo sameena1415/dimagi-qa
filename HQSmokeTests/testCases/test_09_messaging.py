@@ -3,6 +3,7 @@ import pytest
 from HQSmokeTests.testPages.home.home_page import HomePage
 from HQSmokeTests.testPages.messaging.messaging_page import MessagingPage
 from HQSmokeTests.testPages.reports.report_page import ReportPage
+from common_utilities.generate_random_string import fetch_random_string
 
 """"Contains test cases related to the Messaging module"""
 
@@ -35,15 +36,16 @@ def test_case_42_compose_sms(driver, settings):
 
 @pytest.mark.messaging
 @pytest.mark.broadcasts
-def test_case_43_broadcast(driver, settings):
+def test_case_43_broadcast(driver, settings, rerun_count):
     """
         1. Navigate to broadcasts
         2. Create a new broadcast message (any data for required fields
     """
+    broadcast_input = f"broadcast_{fetch_random_string()}{rerun_count}"
     menu = HomePage(driver, settings)
     msg = MessagingPage(driver)
     menu.messaging_menu()
-    msg.send_broadcast_message()
+    msg.send_broadcast_message(broadcast_input)
 
 
 
@@ -51,20 +53,21 @@ def test_case_43_broadcast(driver, settings):
 @pytest.mark.conditionalAlerts
 @pytest.mark.report
 @pytest.mark.reportMessaging
-def test_case_44_create_cond_alert(driver, settings):
+def test_case_44_create_cond_alert(driver, settings, rerun_count):
     """
         1. Navigate to the conditional alerts page
         2. Create a new conditional alert
     """
+    cond_alert_name_input = f"cond_alert_{fetch_random_string()}{rerun_count}"
     menu = HomePage(driver, settings)
     msg = MessagingPage(driver)
     menu.messaging_menu()
-    cond_alert = msg.create_cond_alert()
+    msg.create_cond_alert(cond_alert_name_input)
     menu.reports_menu()
     history = ReportPage(driver)
-    history.validate_messaging_history_for_cond_alert(cond_alert)
+    history.validate_messaging_history_for_cond_alert(cond_alert_name_input)
     menu.messaging_menu()
-    msg.remove_cond_alert()
+    msg.remove_cond_alert(cond_alert_name_input)
 
 
 
@@ -87,20 +90,22 @@ def test_case_45_cond_alert_bulk_upload(driver, settings):
 
 @pytest.mark.messaging
 @pytest.mark.keywords
-def test_case_46_keyword_creation(driver, settings):
+def test_case_46_keyword_creation(driver, settings, rerun_count):
     """
         1. Navigate to the keywords page
         2. Create a keyword
         3. Create a structured keyword
     """
+    keyword_name_input = f"KEYWORD_{fetch_random_string().upper()}{rerun_count}"
+    struct_keyword_name_input = f"STRUCTURED_KEYWORD_{fetch_random_string().upper()}{rerun_count}"
+
     menu = HomePage(driver, settings)
     msg = MessagingPage(driver)
     menu.messaging_menu()
-    msg.remove_all_keywords()
-    msg.add_keyword_trigger()
-    msg.remove_keyword()
-    msg.add_structured_keyword_trigger()
-    msg.remove_structured_keyword()
+    msg.add_keyword_trigger(keyword_name_input)
+    msg.remove_keyword(keyword_name_input)
+    msg.add_structured_keyword_trigger(struct_keyword_name_input)
+    msg.remove_structured_keyword(struct_keyword_name_input)
 
 
 @pytest.mark.messaging

@@ -114,7 +114,8 @@ class RolesPermissionPage(BasePage):
 
     def add_non_admin_role(self):
         self.wait_to_click(self.add_new_role)
-        self.wait_to_clear_and_send_keys(self.role_name, self.role_non_admin_created)
+        self.wait_for_element(self.role_name)
+        self.send_keys(self.role_name, self.role_non_admin_created)
         
         self.wait_to_click(self.edit_mobile_worker_checkbox)
         self.scroll_to_element(self.access_all_reports_checkbox)
@@ -140,4 +141,5 @@ class RolesPermissionPage(BasePage):
         self.wait_to_click(self.save_button)
         
         assert self.is_present_and_displayed(self.role_non_admin), "Role not added successfully!"
+        print("Role added successfully")
         return self.role_non_admin_created
