@@ -152,7 +152,7 @@ def test_case_10_download_and_upload_users(driver, settings):
     newest_file = user.download_mobile_worker()
     print("Group ID:", group_id["value"])
     user.check_for_group_in_downloaded_file(newest_file, group_id["value"])
-    user.remove_role_in_downloaded_file(newest_file, group_id["user"])
+    user.remove_role_in_downloaded_file(newest_file, group_id["user"], role=None)
     home.users_menu()
     user.upload_mobile_worker()
 

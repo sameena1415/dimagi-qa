@@ -278,17 +278,20 @@ class MobileWorkerPage(BasePage):
         print(f"[DEBUG] After filtering user='{user}': {df_user.shape}")
         print(df_user.head())
 
-        if "role" in df_user.columns:
-            if not df_user.empty:
-                actual_role = df_user.iloc[0]["role"]
-                if actual_role == role:
-                    print(f"[DEBUG] Role check PASSED: user '{user}' has role '{actual_role}'")
+        if role != None:
+            if "role" in df_user.columns:
+                if not df_user.empty:
+                    actual_role = df_user.iloc[0]["role"]
+                    if actual_role == role:
+                        print(f"[DEBUG] Role check PASSED: user '{user}' has role '{actual_role}'")
+                    else:
+                        print(f"[DEBUG] Role check FAILED: expected '{role}', found '{actual_role}'")
                 else:
-                    print(f"[DEBUG] Role check FAILED: expected '{role}', found '{actual_role}'")
+                    print(f"[DEBUG] No rows found for user '{user}' to check role.")
             else:
-                print(f"[DEBUG] No rows found for user '{user}' to check role.")
+                print("[DEBUG] 'role' column not found for role verification.")
         else:
-            print("[DEBUG] 'role' column not found for role verification.")
+            print("Role value is not passed")
 
         # Step 3: Drop the 'role' column if present
         if "role" in df_user.columns:
@@ -582,7 +585,7 @@ class MobileWorkerPage(BasePage):
         print("Sleeping for some time for the upload to reflect...")
         time.sleep(5)
         self.reload_page()
-        time.sleep(20)
+        self.wait_for_element(self.table_body)
 
     def click_profile(self):
         self.wait_for_element(self.profile_tab)

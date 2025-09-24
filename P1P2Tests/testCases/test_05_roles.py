@@ -78,6 +78,7 @@ def test_case_74_delete_role_column(driver, settings, rerun_count):
     home.users_menu()
     user.upload_mobile_worker(newest_file)
     time.sleep(2)
+    home.users_menu()
     user.mobile_worker_menu()
     user.select_mobile_worker_created(username)
     user.verify_role_for_mobile_worker(role.role_non_admin_created)

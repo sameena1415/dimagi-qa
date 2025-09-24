@@ -97,7 +97,8 @@ class WebAppsPage(BasePage):
         self.wait_to_click(self.form_submit_button)
         # self.wait_after_interaction()
         time.sleep(2)
-        self.wait_for_element(self.success_message)
+        self.wait_for_disappear(self.form_submit_button, 50)
+        self.wait_for_element(self.success_message, 50)
         assert self.is_displayed(self.success_message), "Form not submitted"
         print("Form successfully submitted")
         return self.text_value

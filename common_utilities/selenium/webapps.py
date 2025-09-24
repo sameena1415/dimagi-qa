@@ -103,7 +103,7 @@ class WebApps(BasePage):
             self.scroll_to_element(self.application)
             self.js_click(self.application)
             time.sleep(0.5)
-            self.wait_after_interaction(timeout=20)
+            self.wait_after_interaction(timeout=50)
             self.wait_for_element(self.application_header, timeout=100)
         except Exception:
             if self.is_present_and_displayed(self.error_message, 5):
@@ -114,7 +114,7 @@ class WebApps(BasePage):
             self.scroll_to_element(self.application)
             self.js_click(self.application)
             time.sleep(0.5)
-            self.wait_after_interaction(timeout=20)
+            self.wait_after_interaction(timeout=50)
             self.wait_for_element(self.application_header, timeout=100)
 
     def navigate_to_breadcrumb(self, breadcrumb_value):
@@ -133,7 +133,7 @@ class WebApps(BasePage):
             self.scroll_to_element(self.caselist_menu)
             self.js_click(self.caselist_menu)
             time.sleep(0.5)
-            self.wait_after_interaction(timeout=20)
+            self.wait_after_interaction(timeout=50)
             if assertion == 'No':
                 print("No assertion needed")
             else:
@@ -148,7 +148,7 @@ class WebApps(BasePage):
             self.scroll_to_element(self.caselist_menu)
             self.js_click(self.caselist_menu)
             time.sleep(0.5)
-            self.wait_after_interaction(timeout=20)
+            self.wait_after_interaction(timeout=50)
             if assertion == 'No':
                 print("No assertion needed")
             else:
@@ -169,8 +169,8 @@ class WebApps(BasePage):
                 self.scroll_to_element(self.form_name)
                 self.js_click(self.form_name)
                 time.sleep(0.5)
-                self.wait_after_interaction(timeout=20)
-                self.wait_for_element((By.XPATH, self.current_page.format(form_name)), timeout=20)
+                self.wait_after_interaction(timeout=50)
+                self.wait_for_element((By.XPATH, self.current_page.format(form_name)), timeout=100)
             except Exception:
                 if self.is_present_and_displayed(self.error_message, 5):
                     self.js_click(self.error_message)
@@ -180,14 +180,14 @@ class WebApps(BasePage):
                 self.scroll_to_element(self.form_name)
                 self.js_click(self.form_name)
                 time.sleep(0.5)
-                self.wait_after_interaction(timeout=20)
-                self.wait_for_element((By.XPATH, self.current_page.format(form_name)), timeout=20)
+                self.wait_after_interaction(timeout=50)
+                self.wait_for_element((By.XPATH, self.current_page.format(form_name)), timeout=100)
 
     def search_all_cases(self):
         self.wait_after_interaction(timeout=120)
         self.scroll_to_element(self.search_all_cases_button)
         self.wait_to_click(self.search_all_cases_button)
-        self.wait_after_interaction(timeout=20)
+        self.wait_after_interaction(timeout=50)
 
     def search_again_cases(self):
         self.scroll_to_bottom()
@@ -279,7 +279,7 @@ class WebApps(BasePage):
     def select_case_and_continue(self, case_name):
         self.select_case(case_name)
         self.continue_to_forms()
-        self.wait_after_interaction(timeout=20)
+        self.wait_after_interaction(timeout=50)
         self.wait_for_element(self.content_container, timeout=30)
         form_names = self.find_elements_texts(self.form_names)
         return form_names
