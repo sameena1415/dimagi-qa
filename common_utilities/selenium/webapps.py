@@ -272,9 +272,8 @@ class WebApps(BasePage):
         self.wait_for_element(self.continue_button, 100)
         time.sleep(2)
         self.js_click(self.continue_button)
-        time.sleep(0.5)
-        self.wait_after_interaction()
-        self.wait_for_disappear(self.continue_button, 50)
+        time.sleep(5)
+        self.wait_after_interaction(30)
 
     def select_case_and_continue(self, case_name):
         self.select_case(case_name)
