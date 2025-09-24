@@ -206,7 +206,8 @@ def save_summary_charts(stats):
         )
         ax.set_ylabel("Number of Tests")
         ax.set_title("Failures and Reruns")
-
+        ax.set_xticks([0, 1])
+        ax.set_xticklabels(["Failed", "Reruns"])
         # Add counts above bars
         for bar in bars:
             height = bar.get_height()
