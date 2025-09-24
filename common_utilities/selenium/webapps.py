@@ -98,12 +98,24 @@ class WebApps(BasePage):
             self.wait_after_interaction(10)
         self.application = self.get_element(self.app_name_format, app_name)
         self.application_header = self.get_element(self.app_header_format, app_name)
-        self.wait_for_element(self.application, 200)
-        self.scroll_to_element(self.application)
-        self.js_click(self.application)
-        time.sleep(0.5)
-        self.wait_after_interaction(timeout=20)
-        self.wait_for_element(self.application_header, timeout=100)
+        try:
+            self.wait_for_element(self.application, 200)
+            self.scroll_to_element(self.application)
+            self.js_click(self.application)
+            time.sleep(0.5)
+            self.wait_after_interaction(timeout=20)
+            self.wait_for_element(self.application_header, timeout=100)
+        except Exception:
+            if self.is_present_and_displayed(self.error_message, 5):
+                self.js_click(self.error_message)
+                print("Error message was present")
+            time.sleep(4)
+            self.wait_for_element(self.application, 200)
+            self.scroll_to_element(self.application)
+            self.js_click(self.application)
+            time.sleep(0.5)
+            self.wait_after_interaction(timeout=20)
+            self.wait_for_element(self.application_header, timeout=100)
 
     def navigate_to_breadcrumb(self, breadcrumb_value):
         self.link = (By.XPATH, self.breadcrumb_format.format(breadcrumb_value, breadcrumb_value))
@@ -115,30 +127,61 @@ class WebApps(BasePage):
     def open_menu(self, menu_name, assertion='Yes'):
         self.caselist_menu = self.get_element(self.menu_name_format, menu_name)
         self.caselist_header = self.get_element(self.menu_name_header_format, menu_name)
-        time.sleep(3)
-        self.wait_for_element(self.caselist_menu)
-        self.scroll_to_element(self.caselist_menu)
-        self.js_click(self.caselist_menu)
-        time.sleep(0.5)
-        self.wait_after_interaction(timeout=20)
-        if assertion == 'No':
-            print("No assertion needed")
-        else:
-            self.wait_for_element((By.XPATH, self.current_page.format(menu_name)), timeout=60)
-            self.wait_for_element(self.caselist_header)
+        try:
+            time.sleep(3)
+            self.wait_for_element(self.caselist_menu)
+            self.scroll_to_element(self.caselist_menu)
+            self.js_click(self.caselist_menu)
+            time.sleep(0.5)
+            self.wait_after_interaction(timeout=20)
+            if assertion == 'No':
+                print("No assertion needed")
+            else:
+                self.wait_for_element((By.XPATH, self.current_page.format(menu_name)), timeout=60)
+                self.wait_for_element(self.caselist_header)
+        except Exception:
+            if self.is_present_and_displayed(self.error_message, 5):
+                self.js_click(self.error_message)
+                print("Error message was present")
+            time.sleep(4)
+            self.wait_for_element(self.caselist_menu)
+            self.scroll_to_element(self.caselist_menu)
+            self.js_click(self.caselist_menu)
+            time.sleep(0.5)
+            self.wait_after_interaction(timeout=20)
+            if assertion == 'No':
+                print("No assertion needed")
+            else:
+                self.wait_for_element((By.XPATH, self.current_page.format(menu_name)), timeout=60)
+                self.wait_for_element(self.caselist_header)
 
     def open_form(self, form_name):
+        if self.is_present_and_displayed(self.error_message, 5):
+            self.js_click(self.error_message)
+            print("Error message was present")
         self.form_header = self.get_element(self.form_name_header_format, form_name)
         if self.is_present_and_displayed(self.form_header):
             print("Auto advance enabled")
         else:
             self.form_name = self.get_element(self.form_name_format, form_name)
-            self.wait_for_element(self.form_name, timeout=20)
-            self.scroll_to_element(self.form_name)
-            self.js_click(self.form_name)
-            time.sleep(0.5)
-            self.wait_after_interaction(timeout=20)
-            self.wait_for_element((By.XPATH, self.current_page.format(form_name)), timeout=20)
+            try:
+                self.wait_for_element(self.form_name, timeout=20)
+                self.scroll_to_element(self.form_name)
+                self.js_click(self.form_name)
+                time.sleep(0.5)
+                self.wait_after_interaction(timeout=20)
+                self.wait_for_element((By.XPATH, self.current_page.format(form_name)), timeout=20)
+            except Exception:
+                if self.is_present_and_displayed(self.error_message, 5):
+                    self.js_click(self.error_message)
+                    print("Error message was present")
+                time.sleep(4)
+                self.wait_for_element(self.form_name, timeout=20)
+                self.scroll_to_element(self.form_name)
+                self.js_click(self.form_name)
+                time.sleep(0.5)
+                self.wait_after_interaction(timeout=20)
+                self.wait_for_element((By.XPATH, self.current_page.format(form_name)), timeout=20)
 
     def search_all_cases(self):
         self.wait_after_interaction(timeout=120)
@@ -230,6 +273,8 @@ class WebApps(BasePage):
         time.sleep(2)
         self.js_click(self.continue_button)
         time.sleep(0.5)
+        self.wait_after_interaction()
+        self.wait_for_disappear(self.continue_button, 50)
 
     def select_case_and_continue(self, case_name):
         self.select_case(case_name)

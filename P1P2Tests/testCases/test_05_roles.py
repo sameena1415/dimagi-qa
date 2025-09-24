@@ -55,17 +55,16 @@ def test_case_73_non_admin_role_permission(driver, settings):
 @pytest.mark.userImport
 @pytest.mark.userExport
 @pytest.mark.p1p2EscapeDefect
-def test_case_74_delete_role_column(driver, settings):
+def test_case_74_delete_role_column(driver, settings, rerun_count):
     role = RolesPermissionPage(driver, settings)
     login = LoginPage(driver, settings["url"])
     login.logout()
     time.sleep(2)
     login.login(settings["login_username"], settings["login_password"])
-    username = "username_p1p2_"+fetch_random_string()
+    username = f"username_p1p2_{fetch_random_string()}{rerun_count}"
     user = MobileWorkerPage(driver)
     home = HomePage(driver, settings)
     home.users_menu()
-    user.delete_bulk_users()
     user.mobile_worker_menu()
     user.create_mobile_worker()
     user.mobile_worker_enter_username(username)
@@ -75,9 +74,9 @@ def test_case_74_delete_role_column(driver, settings):
     user.select_mobile_worker_created(username)
     user.update_role_for_mobile_worker(role.role_non_admin_created)
     newest_file = user.download_mobile_worker()
-    user.remove_role_in_downloaded_file(newest_file, role.role_non_admin_created)
+    user.remove_role_in_downloaded_file(newest_file, username, role.role_non_admin_created)
     home.users_menu()
-    user.upload_mobile_worker()
+    user.upload_mobile_worker(newest_file)
     time.sleep(2)
     user.mobile_worker_menu()
     user.select_mobile_worker_created(username)

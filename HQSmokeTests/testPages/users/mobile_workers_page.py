@@ -175,6 +175,7 @@ class MobileWorkerPage(BasePage):
 
         self.role_dropdown = (By.XPATH, "//select[@id='id_role']")
         self.username_in_list = "//h3[./b[text() ='{}']]"
+        self.table_body = (By.XPATH, "//tbody/tr[1]")
 
 
     def search_user(self, username, flag="YES"):
@@ -185,7 +186,11 @@ class MobileWorkerPage(BasePage):
         self.wait_to_click(self.search_button_mw)
         time.sleep(5)
         if flag == "YES":
+            self.wait_for_element(self.table_body, 50)
+            print("Table body loaded")
             self.wait_for_element((By.XPATH, self.username_link.format(username)), 15)
+            assert self.is_present((By.XPATH, self.username_link.format(username))), f"{username} is not present"
+            print(f"{username} present")
         else:
             print("User should not be present")
 
@@ -258,15 +263,55 @@ class MobileWorkerPage(BasePage):
         print("After: ",df)
         df.to_excel(path, sheet_name='users', index=False)
 
-    def remove_role_in_downloaded_file(self, newest_file, user):
+    def remove_role_in_downloaded_file(self, newest_file, user, role):
         path = os.path.join(PathSettings.DOWNLOAD_PATH, newest_file)
-        print(path)
+        print(f"[DEBUG] Editing file: {path}")
         time.sleep(2)
-        data = pd.read_excel(path, sheet_name='users')
-        df = pd.DataFrame(data)
-        df = df.query("username == '" + user + "'")
-        df = df.drop(columns="role")
-        df.to_excel(path, sheet_name='users', index=False)
+
+        # Step 1: Read the Excel sheet
+        df = pd.read_excel(path, sheet_name="users")
+        print(f"[DEBUG] Original shape: {df.shape}")
+        print(f"[DEBUG] Columns: {list(df.columns)}")
+
+        # Step 2: Filter only that user
+        df_user = df.query("username == @user")
+        print(f"[DEBUG] After filtering user='{user}': {df_user.shape}")
+        print(df_user.head())
+
+        if "role" in df_user.columns:
+            if not df_user.empty:
+                actual_role = df_user.iloc[0]["role"]
+                if actual_role == role:
+                    print(f"[DEBUG] Role check PASSED: user '{user}' has role '{actual_role}'")
+                else:
+                    print(f"[DEBUG] Role check FAILED: expected '{role}', found '{actual_role}'")
+            else:
+                print(f"[DEBUG] No rows found for user '{user}' to check role.")
+        else:
+            print("[DEBUG] 'role' column not found for role verification.")
+
+        # Step 3: Drop the 'role' column if present
+        if "role" in df_user.columns:
+            df_user = df_user.drop(columns=["role"])
+            print(f"[DEBUG] After dropping 'role' column: {df_user.shape}")
+            print(f"[DEBUG] Columns now: {list(df_user.columns)}")
+        else:
+            print("[DEBUG] 'role' column not found, skipping drop.")
+
+        # Step 4: Overwrite the file
+        with pd.ExcelWriter(path, engine="openpyxl", mode="w") as writer:
+            df_user.to_excel(writer, sheet_name="users", index=False)
+
+        print(f"[DEBUG] File saved: {path}")
+        # print(path)
+        # time.sleep(2)
+        # data = pd.read_excel(path, sheet_name='users')
+        # df = pd.DataFrame(data)
+        # print(f"Before: {df}")
+        # df = df.query("username == '" + user + "'")
+        # df = df.drop(columns="role")
+        # print(f"After: {df}")
+        # df.to_excel(path, sheet_name='users', index=False)
 
     def edit_user_field(self):
         self.wait_for_element(self.edit_user_field_xpath)
@@ -520,11 +565,11 @@ class MobileWorkerPage(BasePage):
         print("File download successful")
         return newest_file
 
-    def upload_mobile_worker(self):
+    def upload_mobile_worker(self, new_file=None):
         self.mobile_worker_menu()
         try:
             self.wait_to_click(self.bulk_upload_btn)
-            newest_file = latest_download_file()
+            newest_file = new_file if new_file is not None else latest_download_file()
             file_that_was_downloaded = PathSettings.DOWNLOAD_PATH / newest_file
             time.sleep(2)
             self.send_keys(self.choose_file, str(file_that_was_downloaded))
@@ -735,8 +780,15 @@ class MobileWorkerPage(BasePage):
 
     def update_role_for_mobile_worker(self, role):
         self.wait_for_element(self.role_dropdown)
-        self.select_by_text(self.role_dropdown, role)
-        self.update_information()
+        all_roles = self.get_all_dropdown_options(self.role_dropdown)
+        print(f"all roles present are: {all_roles}")
+        if role in all_roles:
+            print("role is present in the options")
+            self.select_by_text(self.role_dropdown, role)
+            self.update_information()
+        else:
+            print("role is not present")
+            assert False
 
     def verify_role_for_mobile_worker(self, role):
         self.wait_for_element(self.role_dropdown)

@@ -160,17 +160,17 @@ def save_summary_charts(stats):
         ax.set_xticks([0, 1])
         ax.set_xticklabels(["Failed", "Reruns"])
         # Add counts above bars
-        for bar in bars:
+        for label, bar in zip(["Failed", "Reruns"], bars):
             height = bar.get_height()
             ax.text(
                 bar.get_x() + bar.get_width() / 2,
                 height + 0.05,
-                str(int(height)),
+                f"{label}: {int(height)}",  # <-- include label + value
                 ha="center",
                 va="bottom",
                 fontsize=10,
                 fontweight="bold"
-            )
+                )
 
         # Legend with counts
         ax.legend(

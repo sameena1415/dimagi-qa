@@ -105,6 +105,14 @@ class BasePage:
                                                                         )
             # self.wait_after_interaction()
 
+    @retry_on_exception((StaleElementReferenceException, TimeoutException))
+    def wait_for_disappear(self, locator, timeout=30):
+        invisible = ec.invisibility_of_element_located(locator)
+        WebDriverWait(self.driver, timeout, poll_frequency=1).until(invisible,
+                                                                        message="Could still find locator: " + str(locator)
+                                                                        )
+            # self.wait_after_interaction()
+
 
     @retry_on_exception((StaleElementReferenceException, TimeoutException))
     def wait_and_sleep_to_click(self, locator, timeout=20):
