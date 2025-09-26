@@ -101,7 +101,7 @@ class AppPreviewPage(BasePage):
         self.send_keys(self.location_field, loc+Keys.ENTER)
         
         self.wait_to_click(self.location_search)
-        
+        time.sleep(5)
         lat = self.get_text(self.latitude)
         lon = self.get_text(self.longitude)
         self.wait_to_click(self.next_question)

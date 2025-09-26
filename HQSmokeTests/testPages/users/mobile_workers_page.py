@@ -107,24 +107,17 @@ class MobileWorkerPage(BasePage):
         self.user_field_success_msg = (By.XPATH, "//div[contains(@class,'alert-success')]")
         self.mobile_worker_on_left_panel = (By.XPATH, "//a[@data-title='Mobile Workers']")
         self.next_page_button_xpath = (By.XPATH, "//a[contains(@data-bind,'click: nextPage')]")
-        self.additional_info_dropdown = (
-            By.ID, "select2-id_data-field-user_field_" + fetch_random_string() + "-container")
-        self.select_value_dropdown = (By.XPATH,
-                                      "//select[@name = 'data-field-user_field_" + fetch_random_string() + "']/option[text()='user_field_" + fetch_random_string() + "']")
-        self.additional_info_select = (
-            By.XPATH, "//select[@name = 'data-field-user_field_" + fetch_random_string() + "']")
-        self.additional_info_select2 = (By.XPATH, "//select[@name = 'data-field-field_" + fetch_random_string() + "']")
+        self.additional_info_dropdown = "select2-id_data-field-{}-container"
+        self.select_value_dropdown = "//select[@name = 'data-field-{}']/option[text()='{}']"
+        self.additional_info_select = "//select[@name = 'data-field-{}']"
+        self.additional_info_select2 = "//select[@name = 'data-field-{}']"
 
-        self.additional_info_dropdown2 = (
-            By.ID, "select2-id_data-field-" + "field_" + fetch_random_string() + "-container")
-        self.select_value_dropdown2 = (By.XPATH,
-                                       "//select[@name = 'data-field-field_" + fetch_random_string() + "']/option[text()='field_" + fetch_random_string() + "']")
+        self.additional_info_dropdown2 = "select2-id_data-field-{}-container"
+        self.select_value_dropdown2 = "//select[@name = 'data-field-{}']/option[text()='{}']"
 
         self.update_info_button = (By.XPATH, "//button[text()='Update Information']")
-        self.user_file_additional_info = (
-            By.XPATH, "//label[@for='id_data-field-user_field_" + fetch_random_string() + "']")
-        self.user_file_additional_info2 = (
-            By.XPATH, "//label[@for='id_data-field-field_" + fetch_random_string() + "']")
+        self.user_file_additional_info = "//label[@for='id_data-field-{}']"
+        self.user_file_additional_info2 = "//label[@for='id_data-field-{}']"
         self.deactivate_btn_xpath = "//td/a/strong[text()='{}']/following::td[5]/div[@data-bind='visible: is_active()']/button"
         self.confirm_deactivate = (By.XPATH, "(//button[@class='btn btn-danger'])[1]")
         self.view_all_link_text = (By.LINK_TEXT, "View All")
@@ -154,8 +147,8 @@ class MobileWorkerPage(BasePage):
             By.XPATH, "//tbody[@data-bind='sortable: data_fields']//tr[last()]//td[last()]//i[@class='fa fa-times']")
         self.profile_combobox = (
             By.XPATH, "//span[@aria-labelledby='select2-id_data-field-commcare_profile-container']")
-        self.profile_selection = (By.XPATH, "//li[contains(text(),'" + self.profile_name_text + "')]")
-        self.profile_dropdown = (By.XPATH, "//select[@name='data-field-commcare_profile']")
+        self.profile_selection =  "//li[contains(text(),'{}')]"
+        self.profile_dropdown =  (By.XPATH, "//select[@name='data-field-commcare_profile']")
         self.phone_number_field = (By.XPATH, "//input[@name='phone_number']")
         self.add_number_button = (By.XPATH, "//button[.='Add Number']")
         self.registered_phone_number = (By.XPATH, "//label[contains(text(),'+" + self.phone_number + "')]")
@@ -182,6 +175,7 @@ class MobileWorkerPage(BasePage):
 
         self.role_dropdown = (By.XPATH, "//select[@id='id_role']")
         self.username_in_list = "//h3[./b[text() ='{}']]"
+        self.table_body = (By.XPATH, "//tbody/tr[1]")
 
 
     def search_user(self, username, flag="YES"):
@@ -192,7 +186,11 @@ class MobileWorkerPage(BasePage):
         self.wait_to_click(self.search_button_mw)
         time.sleep(5)
         if flag == "YES":
+            self.wait_for_element(self.table_body, 50)
+            print("Table body loaded")
             self.wait_for_element((By.XPATH, self.username_link.format(username)), 15)
+            assert self.is_present((By.XPATH, self.username_link.format(username))), f"{username} is not present"
+            print(f"{username} present")
         else:
             print("User should not be present")
 
@@ -201,13 +199,14 @@ class MobileWorkerPage(BasePage):
         self.wait_to_click(self.web_apps_menu_id)
         self.wait_to_click(self.webapp_login)
         print("Waiting for the login page to load.....")
-        time.sleep(2)
+        time.sleep(10)
         self.wait_for_element(self.search_user_web_apps, 20)
+        print("search box is present")
         self.send_keys(self.search_user_web_apps, username)
         time.sleep(2)
         self.wait_for_element(self.search_button_we_apps)
         self.js_click(self.search_button_we_apps)
-        time.sleep(2)
+        time.sleep(10)
         if flag == "YES":
             self.wait_for_element((By.XPATH, self.username_in_list.format(username)), 15)
         else:
@@ -264,15 +263,58 @@ class MobileWorkerPage(BasePage):
         print("After: ",df)
         df.to_excel(path, sheet_name='users', index=False)
 
-    def remove_role_in_downloaded_file(self, newest_file, user):
+    def remove_role_in_downloaded_file(self, newest_file, user, role):
         path = os.path.join(PathSettings.DOWNLOAD_PATH, newest_file)
-        print(path)
+        print(f"[DEBUG] Editing file: {path}")
         time.sleep(2)
-        data = pd.read_excel(path, sheet_name='users')
-        df = pd.DataFrame(data)
-        df = df.query("username == '" + user + "'")
-        df = df.drop(columns="role")
-        df.to_excel(path, sheet_name='users', index=False)
+
+        # Step 1: Read the Excel sheet
+        df = pd.read_excel(path, sheet_name="users")
+        print(f"[DEBUG] Original shape: {df.shape}")
+        print(f"[DEBUG] Columns: {list(df.columns)}")
+
+        # Step 2: Filter only that user
+        df_user = df.query("username == @user")
+        print(f"[DEBUG] After filtering user='{user}': {df_user.shape}")
+        print(df_user.head())
+
+        if role != None:
+            if "role" in df_user.columns:
+                if not df_user.empty:
+                    actual_role = df_user.iloc[0]["role"]
+                    if actual_role == role:
+                        print(f"[DEBUG] Role check PASSED: user '{user}' has role '{actual_role}'")
+                    else:
+                        print(f"[DEBUG] Role check FAILED: expected '{role}', found '{actual_role}'")
+                else:
+                    print(f"[DEBUG] No rows found for user '{user}' to check role.")
+            else:
+                print("[DEBUG] 'role' column not found for role verification.")
+        else:
+            print("Role value is not passed")
+
+        # Step 3: Drop the 'role' column if present
+        if "role" in df_user.columns:
+            df_user = df_user.drop(columns=["role"])
+            print(f"[DEBUG] After dropping 'role' column: {df_user.shape}")
+            print(f"[DEBUG] Columns now: {list(df_user.columns)}")
+        else:
+            print("[DEBUG] 'role' column not found, skipping drop.")
+
+        # Step 4: Overwrite the file
+        with pd.ExcelWriter(path, engine="openpyxl", mode="w") as writer:
+            df_user.to_excel(writer, sheet_name="users", index=False)
+
+        print(f"[DEBUG] File saved: {path}")
+        # print(path)
+        # time.sleep(2)
+        # data = pd.read_excel(path, sheet_name='users')
+        # df = pd.DataFrame(data)
+        # print(f"Before: {df}")
+        # df = df.query("username == '" + user + "'")
+        # df = df.drop(columns="role")
+        # print(f"After: {df}")
+        # df.to_excel(path, sheet_name='users', index=False)
 
     def edit_user_field(self):
         self.wait_for_element(self.edit_user_field_xpath)
@@ -339,10 +381,10 @@ class MobileWorkerPage(BasePage):
         self.wait_for_element(self.user_name_span)
         print("Mobile Worker page opened.")
 
-    def enter_value_for_created_user_field(self):
-        self.scroll_to_element(self.additional_info_select)
-        self.select_by_text(self.additional_info_select, "user_field_" + fetch_random_string())
-        assert self.is_displayed(self.user_file_additional_info), "Unable to assign user field to user."
+    def enter_value_for_created_user_field(self, userfield):
+        self.scroll_to_element((By.XPATH, self.additional_info_select.format(userfield)))
+        self.select_by_text((By.XPATH, self.additional_info_select.format(userfield)), userfield)
+        assert self.is_displayed((By.XPATH, self.user_file_additional_info.format(userfield))), "Unable to assign user field to user."
 
     def update_information(self):
         self.wait_to_click(self.update_info_button)
@@ -427,6 +469,7 @@ class MobileWorkerPage(BasePage):
             return "Not Success"
 
     def verify_reactivation_via_login(self, username, text):
+        print(text)
         if text == "Success":
             self.search_webapps_user(username)
             assert self.is_present_and_displayed((By.XPATH, self.login_as_username.format(username))
@@ -525,11 +568,11 @@ class MobileWorkerPage(BasePage):
         print("File download successful")
         return newest_file
 
-    def upload_mobile_worker(self):
+    def upload_mobile_worker(self, new_file=None):
         self.mobile_worker_menu()
         try:
             self.wait_to_click(self.bulk_upload_btn)
-            newest_file = latest_download_file()
+            newest_file = new_file if new_file is not None else latest_download_file()
             file_that_was_downloaded = PathSettings.DOWNLOAD_PATH / newest_file
             time.sleep(2)
             self.send_keys(self.choose_file, str(file_that_was_downloaded))
@@ -541,8 +584,6 @@ class MobileWorkerPage(BasePage):
         print("File uploaded successfully")
         print("Sleeping for some time for the upload to reflect...")
         time.sleep(5)
-        self.reload_page()
-        time.sleep(20)
 
     def click_profile(self):
         self.wait_for_element(self.profile_tab)
@@ -553,9 +594,9 @@ class MobileWorkerPage(BasePage):
     def click_fields(self):
         self.wait_to_click(self.field_tab)
 
-    def add_profile(self, user_field):
+    def add_profile(self, profile, user_field):
         self.wait_to_click(self.add_new_profile)
-        self.wait_to_clear_and_send_keys(self.profile_name, self.profile_name_text + Keys.TAB)
+        self.wait_to_clear_and_send_keys(self.profile_name, profile + Keys.TAB)
         time.sleep(2)
         self.wait_to_click(self.profile_edit_button)
         time.sleep(2)
@@ -565,10 +606,9 @@ class MobileWorkerPage(BasePage):
         self.send_keys(self.profile_value, user_field)
         self.wait_to_click(self.done_button)
 
-    def select_profile(self):
+    def select_profile(self, profile):
         self.wait_to_click(self.profile_combobox)
-        
-        self.wait_to_click(self.profile_selection)
+        self.wait_to_click((By.XPATH, self.profile_selection.format(profile)))
 
     def add_phone_number(self):
         self.wait_to_clear_and_send_keys(self.phone_number_field, self.phone_number)
@@ -589,7 +629,7 @@ class MobileWorkerPage(BasePage):
         self.wait_to_click(self.field_delete)
         self.wait_to_click(self.confirm_user_field_delete)
 
-    def remove_profile(self, field):
+    def remove_profile(self, profile, field):
         time.sleep(2)
         self.scroll_to_element((By.XPATH, self.p1p2_profile_edit.format(field)))
         self.wait_to_click((By.XPATH, self.p1p2_profile_edit.format(field)))
@@ -653,9 +693,9 @@ class MobileWorkerPage(BasePage):
 
     def select_user_and_update_fields(self, user, field):
         self.select_mobile_worker_created(user)
-        self.select_by_text(self.additional_info_select2, field)
+        self.select_by_text((By.XPATH, self.additional_info_select2.format(field)), field)
         self.wait_to_click(self.update_info_button)
-        assert self.is_displayed(self.user_file_additional_info2), "Unable to assign user field to user."
+        assert self.is_displayed((By.XPATH, self.user_file_additional_info2.format(field))), "Unable to assign user field to user."
 
     def select_and_delete_mobile_worker(self, user):
         
@@ -741,8 +781,15 @@ class MobileWorkerPage(BasePage):
 
     def update_role_for_mobile_worker(self, role):
         self.wait_for_element(self.role_dropdown)
-        self.select_by_text(self.role_dropdown, role)
-        self.update_information()
+        all_roles = self.get_all_dropdown_options(self.role_dropdown)
+        print(f"all roles present are: {all_roles}")
+        if role in all_roles:
+            print("role is present in the options")
+            self.select_by_text(self.role_dropdown, role)
+            self.update_information()
+        else:
+            print("role is not present")
+            assert False
 
     def verify_role_for_mobile_worker(self, role):
         self.wait_for_element(self.role_dropdown)

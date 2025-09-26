@@ -13,9 +13,6 @@ class GroupPage(BasePage):
     def __init__(self, driver):
         super().__init__(driver)
 
-        self.created_group = "group_" + fetch_random_string()
-        self.renamed_group = self.created_group + "_rename"
-
         self.created_group_path = "//a[contains(.,'{}')]"# (By.LINK_TEXT, self.created_group)
         self.group_name = (By.ID, "id_group_name")
         self.add_group_button = (By.XPATH, "//button[@type='submit' and @class='btn btn-primary']")
@@ -43,13 +40,13 @@ class GroupPage(BasePage):
     def click_group_menu(self):
         self.wait_to_click(self.group_menu_xpath)
 
-    def add_group(self):
+    def add_group(self, group):
         self.click_group_menu()
-        self.wait_to_clear_and_send_keys(self.group_name, self.created_group)
+        self.wait_to_clear_and_send_keys(self.group_name, group)
         self.wait_to_click(self.add_group_button)
         self.wait_for_element(self.group_created_success)
         print("Group Added")
-        return self.created_group
+        return group
 
     def add_user_to_group(self, username, group_name):
         self.wait_to_click(self.users_drop_down)
