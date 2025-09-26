@@ -284,7 +284,7 @@ class DataDictionaryPage(BasePage):
         self.wait_to_click(self.show_deprecated_case_type)
         self.wait_to_click(self.case_type_value)
         self.wait_to_click(self.restore_case_type)
-        print("casetype has been restored")
+        print("case_type has been restored")
 
     def application(self):
         self.wait_to_click(self.edit_icon)
@@ -501,7 +501,7 @@ class DataDictionaryPage(BasePage):
         self.wait_to_click(self.view_data, 2)
         self.wait_to_click(self.data_dictionary, 2)
         self.wait_to_click(self.case_type_value)
-        if self.is_present_and_displayed(self.uploadkey):
+        if self.is_present_and_displayed(self.upload_button):
             print("both view and edit access is present for the user login")
         else:
             print("only view access is present for the user login")
