@@ -1,3 +1,5 @@
+import time
+
 from Features.CaseSearch.test_pages.casesearch_page import CaseSearchWorkflows
 from Features.CaseSearch.user_inputs.casesearch_user_inputs import CaseSearchUserInput
 from common_utilities.selenium.webapps import WebApps
@@ -59,10 +61,12 @@ def test_case_03_search_property_settings(driver, settings):
     casesearch.search_against_property(search_property=CaseSearchUserInput.rating,
                                        input_value=CaseSearchUserInput.four_star,
                                        property_type=COMBOBOX)
+    time.sleep(2)
     casesearch.search_against_property(search_property=CaseSearchUserInput.rating,
                                        input_value=CaseSearchUserInput.five_star,
                                        property_type=COMBOBOX,
                                        include_blanks=YES)
+    time.sleep(2)
     webapps.search_button_on_case_search_page()
     casesearch.check_values_on_caselist(row_num=CaseSearchUserInput.four,
                                         expected_value=[CaseSearchUserInput.four,

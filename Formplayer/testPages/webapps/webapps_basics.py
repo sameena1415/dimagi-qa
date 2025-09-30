@@ -70,7 +70,7 @@ class WebAppsBasics(BasePage):
         self.reports_menu_id = (By.LINK_TEXT, "Reports")
         self.full_menu = (By.LINK_TEXT, "Show Full Menu")
         self.ribbon_logo = (By.XPATH, "//a[@class='navbar-brand'][@href='/homepage/']")
-        self.submit_history_rep = (By.LINK_TEXT, "Submit History")
+        self.submit_history_rep = (By.LINK_TEXT, "Submission History")
         self.case_list_rep = (By.LINK_TEXT, "Case List")
         self.apply_id = (By.ID, "apply-filters")
         self.this_form = (By.XPATH, "//a[.='this form']")
@@ -132,19 +132,19 @@ class WebAppsBasics(BasePage):
         self.wait_to_click(self.test_application)
         self.wait_to_click(self.case_list_menu)
         self.wait_to_click(self.registration_form)
-        time.sleep(2)
+        
         assert self.is_present(self.name_question)
         print("We are inside the form")
         self.wait_to_click((By.XPATH, self.breadcrumbs.format(application['case_list'], application['case_list'])))
-        time.sleep(2)
+        
         assert self.is_present(self.registration_form)
         print("We are in the case list screen")
         self.wait_to_click((By.XPATH, self.breadcrumbs.format(application['tests_app'], application['tests_app'])))
-        time.sleep(2)
+        
         assert self.is_present(self.case_list_menu)
         print("We are in the application screen")
         self.wait_to_click(self.home_icon)
-        time.sleep(2)
+        
         assert self.is_present(self.test_application)
         print("We are at the Web Apps home screen")
 
@@ -154,21 +154,21 @@ class WebAppsBasics(BasePage):
         print("Dimagi Ribbon Logo is present")
 
     def sync_forms(self):
-        time.sleep(2)
+        
         self.wait_for_element(self.home_icon)
-        self.js_click(self.home_icon)
-        time.sleep(2)
+        self.wait_to_click(self.home_icon)
+        
         self.wait_to_click(self.sync)
-        time.sleep(2)
+        
         assert self.is_present_and_displayed(self.sync_success_message), ("Sync is not successful!")
-        time.sleep(20)
+        time.sleep(10)
         print("Sleeping for some time for the data to get updated")
 
     def login_as_a_user(self):
         self.wait_to_click(self.login_as_button)
         self.wait_to_clear_and_send_keys(self.filter_workers, UserData.app_preview_mobile_worker)
         self.wait_to_click(self.search_button)
-        time.sleep(2)
+        
         self.wait_to_click(self.login_user)
         self.wait_to_click(self.confirm_login_button)
 
@@ -176,29 +176,29 @@ class WebAppsBasics(BasePage):
         self.open_web_apps_menu()
         self.login_as_a_user()
         self.wait_to_click(self.test_application)
-        time.sleep(2)
+        
         self.wait_to_click(self.case_list_menu)
-        time.sleep(2)
+        
         self.wait_to_click(self.registration_form)
-        time.sleep(2)
+        
         self.wait_to_clear_and_send_keys(self.name_question, self.name_input)
         self.send_keys(self.dob_question, self.get_current_date_form_input() + Keys.TAB)
         # self.wait_to_click(self.click_today_date)
         # self.wait_to_click(self.close_date_picker)
         self.wait_to_clear_and_send_keys(self.mobileno_question, fetch_phone_number() + Keys.TAB)
-        time.sleep(2)
-        self.js_click(self.submit_form_button)
-        time.sleep(2)
+        
+        self.wait_to_click(self.submit_form_button)
+        
         assert self.is_present_and_displayed(self.success_message, 100), ("Form is not submitted!")
         self.wait_to_click(self.case_list_menu)
         self.wait_to_click(self.followup_form)
         self.wait_to_clear_and_send_keys(self.search_case_filter, self.name_input)
         self.wait_to_click(self.search_button)
-        self.js_click(self.case_name)
+        self.wait_to_click(self.case_name)
         self.wait_to_click(self.continue_button)
         self.wait_to_clear_and_send_keys(self.parent_question, self.parent_name_input)
         self.wait_to_clear_and_send_keys(self.no_of_kids, fetch_random_digit_with_range(1, 5))
-        self.js_click(self.submit_form_button)
+        self.wait_to_click(self.submit_form_button)
         assert self.is_present_and_displayed(self.success_message, 100)
 
     def get_present_date(self):
@@ -232,7 +232,7 @@ class WebAppsBasics(BasePage):
     def verify_form_data_submit_history(self, case_name, application):
         print("Serching for case name: ", case_name)
         self.open_submit_history_form_link(application, UserData.app_preview_mobile_worker)
-        time.sleep(2)
+        
         try:
             assert self.is_present_and_displayed((By.XPATH, self.case_name_field.format(
                 case_name))), "Case name " + case_name + "is not present in Submit history"
@@ -252,10 +252,10 @@ class WebAppsBasics(BasePage):
         self.remove_default_users()
         self.clear(self.users_field)
         self.send_keys(self.users_field, username)
-        time.sleep(1)
+        
         self.wait_for_element((By.XPATH, self.users_list_item.format(username)))
         self.click((By.XPATH, self.users_list_item.format(username)))
-        time.sleep(1)
+        
         #
         # self.send_keys(self.search_user, username)
         # self.wait_to_click((By.XPATH, self.app_user_select.format(username)))
@@ -266,7 +266,7 @@ class WebAppsBasics(BasePage):
         self.clear(self.date_input)
         self.send_keys(self.date_input, date_range + Keys.TAB)
         self.wait_to_click(self.apply_id)
-        time.sleep(10)
+        time.sleep(2)
         self.scroll_to_bottom()
         self.verify_table_not_empty(self.submit_history_table)
         self.is_present_and_displayed(self.view_form_link)
@@ -288,7 +288,7 @@ class WebAppsBasics(BasePage):
         self.send_keys(self.search_user, username)
         self.wait_for_element((By.XPATH, self.app_user_select.format(username)))
         self.click((By.XPATH, self.app_user_select.format(username)))
-        time.sleep(2)
+        
         self.select_by_text(self.case_type_select, UserData.case_type)
         self.send_keys(self.search_input, case_name)
         self.wait_to_click(self.apply_id)
@@ -307,16 +307,16 @@ class WebAppsBasics(BasePage):
         self.login_as_a_user()
         self.wait_to_click(self.settings)
         self.wait_to_click(self.break_button)
-        time.sleep(2)
+        
         assert self.is_displayed(self.break_message)
         self.wait_to_click(self.clear_user_data_button)
-        time.sleep(2)
+        
         assert self.is_displayed(self.clear_data_message)
         self.click(self.done_button)
 
     def verify_language(self):
         if self.is_present(self.full_menu):
-            self.js_click(self.full_menu)
+            self.wait_to_click(self.full_menu)
             self.wait_to_click(self.settings_dropdown)
         else:
             self.wait_to_click(self.settings_dropdown)
@@ -333,8 +333,8 @@ class WebAppsBasics(BasePage):
     def wait_to_click(self, locator, timeout=50):
         try:
             self.wait_for_element(locator, timeout)
-            time.sleep(2)
-            self.js_click(locator)
+            
+            self.wait_to_click(locator)
         except (TimeoutException):
             print("locator not present")
 
@@ -344,9 +344,9 @@ class WebAppsBasics(BasePage):
         print(len(count))
         for i in range(len(count)):
              count[0].click()
-             time.sleep(2)
+             
              if len(count) != 1:
                 ActionChains(self.driver).send_keys(Keys.TAB).perform()
-                time.sleep(2)
+                
              count = self.find_elements(self.remove_buttons)
 

@@ -87,20 +87,20 @@ class AppPreviewBasics(BasePage):
         print(mode)
         if 'preview-tablet-mode' in mode:
             print("Preview is in Tablet View")
-            self.js_click((By.XPATH, self.toggle_button.format(2)))
-            time.sleep(2)
+            self.wait_to_click((By.XPATH, self.toggle_button.format(2)))
+            
             mode = self.get_attribute(self.app_preview_view, 'class')
             print(mode)
             assert 'preview-tablet-mode' not in mode, "Preview mode changed to Phone View"
         else:
             print("Preview is in Phone View")
-            self.js_click((By.XPATH, self.toggle_button.format(1)))
-            time.sleep(2)
+            self.wait_to_click((By.XPATH, self.toggle_button.format(1)))
+            
             mode = self.get_attribute(self.app_preview_view, 'class')
             print(mode)
             assert 'preview-tablet-mode' in mode, "Preview mode changed to Tablet View"
-            self.js_click((By.XPATH, self.toggle_button.format(2)))
-            time.sleep(2)
+            self.wait_to_click((By.XPATH, self.toggle_button.format(2)))
+            
             mode = self.get_attribute(self.app_preview_view, 'class')
             print(mode)
             assert 'preview-tablet-mode' not in mode, "Preview mode changed to Phone View"
@@ -123,7 +123,7 @@ class AppPreviewBasics(BasePage):
         self.webapp.wait_to_click(self.start_option)
         self.wait_for_element(self.form_list)
         assert not self.is_present_and_displayed(self.start_option)
-        time.sleep(2)
+        
         self.switch_to_default_content()
         self.webapp.wait_to_click(self.back_button)
         self.switch_to_frame(self.iframe)
@@ -137,7 +137,7 @@ class AppPreviewBasics(BasePage):
         self.webapp.wait_to_click(self.start_option)
         self.webapp.wait_to_click(self.case_list_menu)
         self.switch_to_default_content()
-        time.sleep(5)
+        time.sleep(2)
         self.webapp.wait_to_click(self.refresh_button)
         time.sleep(3)
         self.switch_to_frame(self.iframe)
@@ -149,7 +149,7 @@ class AppPreviewBasics(BasePage):
         self.webapp.wait_to_click(self.form_builder_registration_form)
         self.webapp.wait_to_click(self.add_question)
         self.webapp.wait_to_click(self.text_question_type)
-        time.sleep(5)
+        time.sleep(2)
         self.wait_to_clear_and_send_keys(self.text_question_display_text, self.test_question)
         self.webapp.wait_to_click(self.save_question_button)
         self.webapp.wait_to_click(self.refresh_button)
@@ -158,7 +158,7 @@ class AppPreviewBasics(BasePage):
         self.webapp.wait_to_click(self.case_list_menu)
         self.webapp.wait_to_click(self.registration_form)
         self.wait_to_clear_and_send_keys(self.name_question, self.name_input)
-        self.js_click(self.next_question)
+        self.wait_to_click(self.next_question)
         assert self.is_present_and_displayed(self.new_test_question)
         self.switch_to_default_content()
         time.sleep(3)
@@ -172,7 +172,7 @@ class AppPreviewBasics(BasePage):
         self.webapp.wait_to_click(self.case_list_menu)
         self.webapp.wait_to_click(self.registration_form)
         self.wait_to_clear_and_send_keys(self.name_question, self.name_input)
-        self.js_click(self.next_question)
+        self.wait_to_click(self.next_question)
         assert not self.is_present_and_displayed(self.new_test_question)
         print("Refresh button works!!")
         self.switch_to_default_content()
@@ -183,23 +183,23 @@ class AppPreviewBasics(BasePage):
         self.webapp.wait_to_click(self.case_list_menu)
         self.webapp.wait_to_click(self.registration_form)
         self.wait_to_clear_and_send_keys(self.name_question, self.name_input)
-        self.js_click(self.next_question)
-        time.sleep(2)
+        self.wait_to_click(self.next_question)
+        
         self.wait_for_element(self.dob_question)
         self.click(self.dob_question)
-        self.js_click(self.click_today_date)
-        time.sleep(2)
+        self.wait_to_click(self.click_today_date)
+        
         # if self.is_present(self.close_date_picker):
-        #     self.js_click(self.close_date_picker)
+        #     self.wait_to_click(self.close_date_picker)
         # else:
         #     print("No calender opened")
-        self.js_click(self.next_question)
-        time.sleep(2)
+        self.wait_to_click(self.next_question)
+        
         self.wait_to_clear_and_send_keys(self.mobileno_question, fetch_phone_number())
-        self.js_click(self.next_question)
-        time.sleep(2)
-        self.js_click(self.submit_form_button)
-        time.sleep(2)
+        self.wait_to_click(self.next_question)
+        
+        self.wait_to_click(self.submit_form_button)
+        
         self.wait_for_element(self.success_message)
         assert self.is_present_and_displayed(self.success_message)
         assert self.is_present_and_displayed(self.view_form_link)
@@ -224,8 +224,8 @@ class AppPreviewBasics(BasePage):
         assert self.is_present_and_displayed(self.dob_question)
         self.click(self.dob_question)
         self.wait_for_element(self.click_today_date)
-        self.js_click(self.click_today_date)
-        time.sleep(2)
+        self.wait_to_click(self.click_today_date)
+        
         self.webapp.wait_to_click(self.next_question)
         assert self.is_present_and_displayed(self.mobileno_question)
         self.switch_to_default_content()
@@ -233,14 +233,14 @@ class AppPreviewBasics(BasePage):
     def one_question_per_screen_positive(self):
         self.switch_to_frame(self.iframe)
         self.webapp.wait_to_click(self.settings_option)
-        time.sleep(2)
+        
         isChecked = self.is_selected(self.toggle_button_one_question)
         print(isChecked)
-        time.sleep(2)
+        
         if isChecked is True:
             # self.driver.execute_script("arguments[0].click();", self.driver.find_element(By.XPATH, "//th[(text()='Use one question per screen')]/following-sibling::td//input"))
-            self.js_click(self.toggle_button_one_question)
-            time.sleep(2)
+            self.wait_to_click(self.toggle_button_one_question)
+            
             print("Toggled OFF")
         # self.webapp.wait_to_click((By.XPATH, "//th[(text()='Use one question per screen')]/following-sibling::td//input"))
         assert self.is_selected(self.toggle_button_one_question) is False
@@ -251,21 +251,21 @@ class AppPreviewBasics(BasePage):
         self.wait_to_clear_and_send_keys(self.name_question, self.name_input)
         self.click(self.dob_question)
         self.webapp.wait_to_click(self.click_today_date)
-        time.sleep(2)
+        
         self.wait_to_clear_and_send_keys(self.mobileno_question, fetch_phone_number())
-        time.sleep(2)
-        self.js_click(self.multi_question_submit_button)
+        
+        self.wait_to_click(self.multi_question_submit_button)
         self.webapp.wait_to_click(self.home_button)
         self.wait_for_element(self.settings_option, 120)
-        self.js_click(self.settings_option)
-        time.sleep(2)
+        self.wait_to_click(self.settings_option)
+        
         isChecked = self.is_selected(self.toggle_button_one_question)
         print(isChecked)
-        time.sleep(2)
+        
         if isChecked is False:
             # self.driver.execute_script("arguments[0].click();", self.driver.find_element(By.XPATH, "//th[(text()='Use one question per screen')]/following-sibling::td//input"))
-            self.js_click(self.toggle_button_one_question)
-            time.sleep(2)
+            self.wait_to_click(self.toggle_button_one_question)
+            
             print("Toggled ON")
         # self.webapp.wait_to_click((By.XPATH, "//th[(text()='Use one question per screen')]/following-sibling::td//input"))
         assert self.is_selected(self.toggle_button_one_question) is True
@@ -294,8 +294,8 @@ class AppPreviewBasics(BasePage):
         self.switch_to_default_content()
 
     def add_empty_form(self):
-        self.js_click(self.add_new_form)
-        time.sleep(1)
+        self.wait_to_click(self.add_new_form)
+        
         self.webapp.wait_to_click(self.add_new_reg_form)
         time.sleep(3)
         if not self.is_present(self.view_app_preview_show):
@@ -305,11 +305,11 @@ class AppPreviewBasics(BasePage):
         self.webapp.wait_to_click(self.refresh_button)
         self.switch_to_frame(self.iframe)
         self.webapp.wait_to_click(self.start_option)
-        time.sleep(2)
+        
         assert self.is_displayed(self.empty_form_error_message)
         self.switch_to_default_content()
-        self.driver.refresh()
-        time.sleep(2)
+        self.reload_page()
+        
         self.hover_and_click(self.last_form, self.delete_form)
         self.webapp.wait_to_click(self.delete_confirm_button)
         self.webapp.wait_to_click(self.refresh_button)

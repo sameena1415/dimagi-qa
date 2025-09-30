@@ -35,26 +35,33 @@ class ImportCasesPage(BasePage):
 
     def replace_property_and_upload(self):
         self.wait_to_click(self.import_cases_menu)
-        time.sleep(5)
+        time.sleep(2)
         self.edit_spreadsheet(self.to_be_edited_file, self.village_name_cell, self.renamed_file, self.sheet_name)
         self.wait_for_element(self.choose_file)
         print(str(self.renamed_file))
         self.send_keys(self.choose_file, self.renamed_file)
-        time.sleep(2)
         self.wait_for_element(self.next_step)
+        if self.is_present(self.alert_msg):
+            print("Upload might have failed. Reuploading...")
+            self.reload_page()
+            self.wait_for_element(self.choose_file)
+            self.send_keys(self.choose_file, self.renamed_file)
+            self.wait_for_element(self.next_step)
+        else:
+            print("Upload successful.")
         self.click(self.next_step)
         self.is_visible_and_displayed(self.case_type)
         self.select_by_text(self.case_type, UserData.case_pregnancy)
         self.wait_for_element(self.create_new_cases)
         self.scroll_to_element(self.create_new_cases)
         self.wait_to_click(self.create_new_cases)
-        time.sleep(5)
+        time.sleep(2)
         self.wait_for_element(self.next_step)
         self.wait_to_click(self.next_step)
-        time.sleep(5)
+        time.sleep(2)
         if self.is_present_and_displayed(self.alert_msg, 20):
             print("Error message displayed on importing excel. Repeating process..")
-            self.driver.refresh()
+            self.reload_page()
             self.wait_for_element(self.choose_file)
             self.send_keys(self.choose_file, self.renamed_file)
             self.wait_for_element(self.next_step)
@@ -64,18 +71,18 @@ class ImportCasesPage(BasePage):
             self.wait_for_element(self.create_new_cases)
             self.scroll_to_element(self.create_new_cases)
             self.wait_to_click(self.create_new_cases)
-            time.sleep(5)
+            time.sleep(2)
             self.wait_for_element(self.next_step)
             self.wait_to_click(self.next_step)
-            time.sleep(5)
+            time.sleep(2)
         else:
             print("No error present")
         self.wait_for_element(self.confirm_import)
         self.scroll_to_element(self.confirm_import)
-        time.sleep(2)
+        
         self.click(self.confirm_import)
         print("Imported case!")
-        assert self.is_visible_and_displayed((By.XPATH, self.success.format(self.file_new_name))), "Waitinng to start import. Celery might have a high queue."
+        self.wait_for_element((By.XPATH, self.success.format(self.file_new_name)))
 
     def edit_spreadsheet(self, edited_file, cell, renamed_file, sheet_name):
         workbook = load_workbook(filename=edited_file)
@@ -102,10 +109,10 @@ class ImportCasesPage(BasePage):
         self.wait_for_element(self.next_step)
         self.wait_to_click(self.next_step)
         self.wait_for_element(self.next_step)
-        time.sleep(5)
+        time.sleep(2)
         self.scroll_to_element(self.confirm_import)
-        self.js_click(self.confirm_import)
+        self.wait_to_click(self.confirm_import)
         print("Imported case!")
-        assert self.is_visible_and_displayed((By.XPATH, self.success.format(file)), 100), "Waitinng to start import. Celery might have a high queue."
+        self.wait_for_element((By.XPATH, self.success.format(file)), 100)
         print("Import Completed")
 
