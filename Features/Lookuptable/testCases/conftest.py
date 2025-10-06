@@ -2,29 +2,33 @@ import os
 
 from configparser import ConfigParser
 from pathlib import Path
+
+import pytest_html
+
 from common_utilities.fixtures import *
+from datetime import datetime
 
 """"This file provides fixture functions for driver initialization"""
 
 global driver
 
-
 @pytest.fixture(scope="session")
-def environment_settings_lookup():
+def environment_settings_hq():
     """Load settings from os.environ
 
             Names of environment variables:
                 DIMAGIQA_URL
                 DIMAGIQA_LOGIN_USERNAME
                 DIMAGIQA_LOGIN_PASSWORD
-                DIMAGIQA_STAGING_AUTH_KEY
-                DIMAGIQA_PROD_AUTH_KEY
+                DIMAGIQA_MAIL_USERNAME
+                DIMAGIQA_MAIL_PASSWORD
 
             See https://docs.github.com/en/actions/reference/encrypted-secrets
             for instructions on how to set them.
             """
     settings = {}
-    for name in ["url", "login_username", "login_password",  "staging_auth_key", "prod_auth_key"]:
+    for name in ["url", "login_username", "login_password", "mail_username",
+                 "mail_password", "bs_user", "bs_key", "staging_auth_key", "prod_auth_key", "india_auth_key", "eu_auth_key", "invited_webuser_password", "imap_password"]:
 
         var = f"DIMAGIQA_{name.upper()}"
         if var in os.environ:
@@ -39,14 +43,14 @@ def environment_settings_lookup():
 
 
 @pytest.fixture(scope="session", autouse=True)
-def settings(environment_settings_lookup):
+def settings(environment_settings_hq):
     if os.environ.get("CI") == "true":
-        settings = environment_settings_lookup
+        settings = environment_settings_hq
         settings["CI"] = "true"
         if any(x not in settings for x in ["url", "login_username", "login_password",
-                                           "staging_auth_key",
-                                           "prod_auth_key"]):
-            lines = environment_settings_lookup.__doc__.splitlines()
+                                           "mail_username", "mail_password", "bs_user", "bs_key", "staging_auth_key",
+                                           "prod_auth_key", "india_auth_key", "eu_auth_key", "invited_webuser_password", "imap_password"]):
+            lines = environment_settings_hq.__doc__.splitlines()
             vars_ = "\n  ".join(line.strip() for line in lines if "DIMAGIQA_" in line)
             raise RuntimeError(
                 f"Environment variables not set:\n  {vars_}\n\n"
@@ -82,7 +86,7 @@ def pytest_terminal_summary(terminalreporter, exitstatus, config):
     env = os.environ.get("DIMAGIQA_ENV", "default_env")
 
     # Define the filename based on the environment
-    filename = f'lookup_test_counts_{env}.txt'
+    filename = f'hqsmoke_test_counts_{env}.txt'
 
     # Write the counts to a file
     with open(filename, 'w') as f:
@@ -91,7 +95,6 @@ def pytest_terminal_summary(terminalreporter, exitstatus, config):
         f.write(f'ERROR={len(error)}\n')
         f.write(f'SKIPPED={len(skipped)}\n')
         f.write(f'XFAIL={len(xfail)}\n')
-
 
 # conftest.py
 import pytest
@@ -166,31 +169,26 @@ def save_summary_charts(stats):
         ax.set_ylabel("Number of Tests")
         ax.set_title("Failures and Reruns")
 
-        # ax.set_xticks([0, 1])
-        # ax.set_xticklabels(["Failed", "Reruns"])
-        #
-        #
-        # # Add counts above bars
-        # for label, bar in zip(["Failed", "Reruns"], bars):
-        #     height = bar.get_height()
-        #     ax.text(
-        #         bar.get_x() + bar.get_width() / 2,
-        #         height + 0.05,
-        #         f"{label}: {int(height)}",  # <-- include label + value
-        #         ha="center",
-        #         va="bottom",
-        #         fontsize=10,
-        #         fontweight="bold"
-        #         )
+        # Add counts above bars
+        for bar in bars:
+            height = bar.get_height()
+            ax.text(
+                bar.get_x() + bar.get_width() / 2,
+                height + 0.05,
+                str(int(height)),
+                ha="center",
+                va="bottom",
+                fontsize=10,
+                fontweight="bold"
+            )
 
         # Legend with counts
         ax.legend(
-            [bars[0], bars[1]],  # handles
-            [f"Failed: {failed}", f"Reruns: {reruns}"],  # labels
+            [f"Failed: {failed}", f"Reruns: {reruns}"],
             loc="lower center",
             ncol=2,
             bbox_to_anchor=(0.5, -0.15)
-            )
+        )
 
         bar_path = out_dir / "summary_bar.png"
         fig.savefig(bar_path, bbox_inches="tight")
@@ -227,6 +225,8 @@ def combine_charts(pie_path="slack_charts/summary_pie.png",
 
     combined.save(combined_path)
     print(f"✅ Combined chart saved to {combined_path}")
+
+
 
 def _matplotlib_img(fig) -> str:
     """Convert a matplotlib figure to base64 string."""
@@ -299,4 +299,3 @@ def pytest_html_results_summary(prefix, summary, postfix, session):
     html += "</div>"
 
     summary.append(html)
-

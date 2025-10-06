@@ -25,7 +25,7 @@ class DataDictionaryPage(BasePage):
 
     #data dictionary page
         self.view_data = (By.XPATH, " //*[@id='ProjectDataTab']")
-        self.Data = (By.LINK_TEXT, "Data")
+        self.data = (By.LINK_TEXT, "Data")
         self.view_all = (By.LINK_TEXT, "View All")
         self.data_dictionary = (By.XPATH, "//*[@id='hq-sidebar']/nav/ul[4]/li/a")
         self.dd = (By.XPATH, "//*[@class='text-hq-nav-header']")
@@ -67,9 +67,9 @@ class DataDictionaryPage(BasePage):
         self.valid_value_text = (By.XPATH, "(//input[@placeholder='valid value'])")
         self.valid_description = (By.XPATH, "(//input[@placeholder='description'])")
         self.done = (By.XPATH, "(//button[@class='btn btn-primary'][normalize-space()='Done'])[1]")
-        self.property_deprecate = (By.XPATH, "(//*[@id='gtm-deprecate-case-property'])[1]")
+        self.property_deprecate = (By.XPATH, "(//*[@id='gtm-deprecate-case-property'])[5]")
         self.property_deprecate_message = (By.XPATH, "(//*[contains(text(),'Property has been deprecated')])[3]")
-        self.data_strong = (By.XPATH, "//*[@id='hq-breadcrumbs']/li[1]/a/strong")
+        self.data_bold = (By.XPATH, "//*[@id='hq-breadcrumbs']/li[1]/a/strong")
         self.property_description = (By.XPATH, "//div[@class='groups ui-sortable']//div//div[5]//div[5]//textarea[1]")
         self.add_property_values = "//div[@class='atwho-view'][not(contains(@style,'none'))]//li//strong[.='{}'] "
         self.delete_button_vv = (By.XPATH,"//a[@data-enum-action='remove']")
@@ -97,7 +97,7 @@ class DataDictionaryPage(BasePage):
         self.description_property = (By.XPATH, "(//*[@data-bind='text: $parent.description'])[2]")
 
     # Reports
-        self.case_list_explorer = (By.LINK_TEXT, "Case List Explorer")
+        self.case_list_explorer_report = (By.LINK_TEXT, "Case List Explorer")
         self.report_case_type = (By.XPATH, "//select[contains(@id,'report_filter_case_type')]")
 
     #Exports
@@ -145,14 +145,15 @@ class DataDictionaryPage(BasePage):
         self.add_property_column = (By.XPATH, "(//table[contains(@class,'datatable')]//th[5])[1]")
 
 
-    def ui(self):
-        self.js_click(self.data_dictionary, 10)
-        self.wait_to_click(self.case_type_value)
-
-    def data_page(self):
-        self.js_click(self.data_dictionary, 10)
-        assert self.is_present_and_displayed(self.dd, 10)
-        print("Data dictionary page is opened")
+    def data_page(self,flag):
+        self.js_click(self.data_dictionary, 20)
+        if self.is_present_and_displayed(self.dd, 10):
+            assert self.is_present_and_displayed(self.dd, 10)
+            print("Data dictionary page is opened")
+        else:
+            self.case_type_restore()
+        if flag =='Y':
+            self.wait_to_click(self.case_type_value)
 
     def dropdown(self):
         self.wait_to_click(self.datatype)
@@ -169,12 +170,6 @@ class DataDictionaryPage(BasePage):
         print("File is downloaded")
         time.sleep(5)
 
-    def latest_download_file(self):
-        os.chdir(PathSettings.DOWNLOAD_PATH)
-        files = sorted(os.listdir(os.getcwd()), key=os.path.getmtime)
-        max_file = max(files, key=os.path.getctime)
-        path = os.path.join(PathSettings.DOWNLOAD_PATH, max_file)
-        return path
 
     def upload_dd(self, path):
         download_path = str(PathSettings.DOWNLOAD_PATH / path)
@@ -190,9 +185,6 @@ class DataDictionaryPage(BasePage):
         self.wait_to_click(self.case_type_value, 10)
         self.wait_to_click(self.description)
         self.wait_to_clear_and_send_keys(self.description, "property description to be tested")
-        self.wait_to_click(self.case_property, 10)
-        ss1 = Select(self.find_element(self.case_property))
-        ss1.select_by_visible_text('Plain')
         self.wait_to_click(self.save)
         print("editing property description updated")
 
@@ -206,8 +198,8 @@ class DataDictionaryPage(BasePage):
         print("new property added :", value1)
         return value1
 
-    def case_list_explorer1(self, value1, flag):
-        self.wait_to_click(self.case_list_explorer)
+    def case_list_explorer(self, value1, flag):
+        self.wait_to_click(self.case_list_explorer_report)
         time.sleep(30)
         self.wait_for_element(self.edit_column)
         self.wait_to_click(self.edit_column,10)
@@ -232,7 +224,7 @@ class DataDictionaryPage(BasePage):
         assert property_added == value1
         print("Added property displayed on the CLE report result page")
 
-    def delete_case_property1(self):
+    def case_property_deletion(self):
         self.reload_page()
         self.wait_to_click(self.delete_case_property)
         self.wait_to_click(self.delete_property_confirm)
@@ -270,21 +262,21 @@ class DataDictionaryPage(BasePage):
         self.wait_to_click(self.save, 2)
         print("Case property  is restored")
 
-    def deprecate_case_type1(self):
+    def case_type_deprecate(self):
         self.wait_to_click(self.case_type_value, 10)
         self.wait_to_click(self.deprecate_case, 10)
         self.wait_to_click(self.confirm, 10)
         self.wait_to_click(self.show_deprecate_case_type, 10)
         print("case type has been deprecated")
-        self.wait_to_click(self.data_strong)
+        self.wait_to_click(self.data_bold)
 
-    def restore_case_type1(self):
-        self.wait_to_click((self.data_strong))
+    def case_type_restore(self):
+        self.wait_to_click(self.data_bold)
         self.js_click(self.data_dictionary, 10)
         self.wait_to_click(self.show_deprecated_case_type)
         self.wait_to_click(self.case_type_value)
         self.wait_to_click(self.restore_case_type)
-        print("case_type has been restored")
+        print("case type has been restored")
 
     def application(self):
         self.wait_to_click(self.edit_icon)
@@ -293,7 +285,7 @@ class DataDictionaryPage(BasePage):
         self.wait_to_click(self.make_new_version_button, 10)
         self.is_present_and_displayed(self.case_type_warning, 10)
         print("The new application build contains the following deprecated case type")
-        self.wait_to_click(self.case_list, 10)
+        self.wait_to_click(self.case_list, 20)
         self.is_present_and_displayed(self.case_list_warning, 10)
         print("This case type has been deprecated in the Data Dictionary on case list page")
 
@@ -311,7 +303,8 @@ class DataDictionaryPage(BasePage):
         print("This case uses a deprecated case type. See the help documentation for more information is displayed")
 
     def reports(self):
-        self.wait_to_click(self.case_list_explorer, 10)
+        time.sleep(50)
+        self.wait_to_click(self.case_list_explorer_report, 20)
         self.wait_for_element(self.report_case_type, 60)
         dropdown = self.get_all_dropdown_options(self.report_case_type)
         if 'case_dd' in dropdown:
@@ -373,7 +366,7 @@ class DataDictionaryPage(BasePage):
         print("deprecated case type label displayed on the already created export")
 
     def exports_edit_data_section(self, filepath):
-        self.js_click(self.data_strong,50)
+        self.wait_to_click(self.data_bold,10)
         self.wait_to_click(self.copy_cases_menu, 200)
         self.wait_for_element(self.case_type_dropdown1, 200)
         dropdown = self.get_all_dropdown_options(self.case_type_dropdown1)
@@ -423,16 +416,15 @@ class DataDictionaryPage(BasePage):
         else:
             print("deprecated case types are not displayed in the conditional alert page.")
 
-    def valid_values_2(self):
-        ss1 = Select(self.find_element(self.case_property_vv))
-        ss1.select_by_visible_text('Date')
+    def valid_values_date(self):
+        self.select_by_text(self.case_property_vv,'Date')
         self.is_present_and_displayed(self.date_valid_values)
         print("YYYY-MM-DD Valid values are getting displayed")
+        self.wait_to_click(self.case_property_vv)
         self.wait_to_click(self.save)
 
-    def valid_values_3(self):
-        ss1 = Select(self.find_element(self.dd_language))
-        ss1.select_by_visible_text('Multiple Choice')
+    def valid_values_multiple_choice(self):
+        self.select_by_text(self.dd_language, 'Multiple Choice')
         self.wait_to_click(self.edit_button_vv)
         self.wait_to_click(self.valid_value_text, 2)
         self.wait_to_clear_and_send_keys(self.valid_value_text, UserData.english_value)
@@ -444,8 +436,7 @@ class DataDictionaryPage(BasePage):
     def resetting_valid_values(self):
         self.wait_to_click(self.edit_button)
         self.wait_to_click(self.delete_button_vv)
-        ss1 = Select(self.find_element(self.case_property))
-        ss1.select_by_visible_text('Plain')
+        self.select_by_text(self.case_property,'Plain')
         self.wait_to_click(self.save)
 
     def excel_verification(self, download_path):
@@ -465,8 +456,8 @@ class DataDictionaryPage(BasePage):
     def update_excel_invalid(self, download_path1):
         download_path1 = str(PathSettings.DOWNLOAD_PATH / download_path1)
         excel = ExcelManager()
-        excel.write_excel_data('case_dd-vl', 4, 2, UserData.randomvalue1, download_path1)
-        excel.write_excel_data('case_dd-vl', 4, 3, UserData.randomvalue1, download_path1)
+        excel.write_excel_data('case_dd-vl', 2, 2, UserData.randomvalue1, download_path1)
+        excel.write_excel_data('case_dd-vl', 2, 3, UserData.randomvalue1, download_path1)
 
     def add_property_description(self):
         self.wait_to_click(self.property_description)
@@ -492,6 +483,7 @@ class DataDictionaryPage(BasePage):
         print(message)
 
     def restore_case_property(self):
+        self.wait_to_click(self.case_type_value)
         self.js_click(self.show_deprecate, 2)
         self.wait_to_click(self.restore_button)
         self.wait_to_click(self.save, 2)

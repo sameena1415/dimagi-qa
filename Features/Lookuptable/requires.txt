@@ -13,5 +13,3 @@ pyotp >=2.6.0
 pytest-order
 py
 beautifulsoup4
-pytest-metadata
-matplotlib

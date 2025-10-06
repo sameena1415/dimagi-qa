@@ -19,8 +19,6 @@ class PowerBiPage(BasePage):
 
     def __init__(self, driver):
         super().__init__(driver)
-        self.Data = (By.LINK_TEXT, "Data")
-        self.view_all = (By.LINK_TEXT, "View All")
         self.power_bi = (By.XPATH, "//*[@id='hq-sidebar']/nav/ul[1]/li[7]/a")
         self.add_odata_feed = (By.XPATH, "//*[@id='create-export']/p/a")
         self.disabled = (By.XPATH,"//*[@data-bind='visible: showSubmit, disable: disableSubmit']")
@@ -66,7 +64,7 @@ class PowerBiPage(BasePage):
         self.hide_delete_question = (By.XPATH,"//*[@data-bind='visible: table.showDeleted()']")
         self.allow_sensitive = (By.XPATH, "//*[@id='customize-export']/form/fieldset[3]/button")
         self.de_identified1 = (By.XPATH,"//*[@id='is_deidentified']")
-        self.label = (By.XPATH,"/html/body/div[1]/div[4]/div/div[2]/div[4]/div[2]/div[1]/div[2]/table/tbody/tr/td[2]/h4/label")
+        self.label = (By.XPATH,"(//label[@data-bind='visible: isDeid()'][normalize-space()='De-Identified'])[1]")
         self.check_data = (By.XPATH, "//*[contains(text(), '@odata.context')]")
         self.copy_odata_link = (By.XPATH,"//*[@id='export-list']/div[2]/div[1]/div[2]/table/tbody/tr/td[2]/div[2]/button" )
         self.copy_odata_link_form = (By.XPATH,"(//*[contains(@class,'form-control input-sm')])[1]")
@@ -78,9 +76,11 @@ class PowerBiPage(BasePage):
         self.case_id_duplicate =(By.XPATH,"//body[1]/div[1]/div[3]/div[1]/div[2]/div[2]/form[1]/fieldset[2]/div[1]/div[1]/table[1]/tbody[1]/tr[9]/td[1]/input[1]")
         self.repeat_checkbox1 =(By.XPATH,"//*[@id='customize-export']/form/fieldset[2]/div[4]/legend/span[1]/input")
 
-    def ui(self):
+    def power_bi_ui(self,count):
         self.wait_to_click(self.power_bi,2)
-        self.power_bi_tableau_integration_bulk_delete()
+        #initially to delete the existing files.
+        if count == '1':
+            self.power_bi_tableau_integration_bulk_delete()
         self.wait_to_click(self.add_odata_feed)
 
     def select_feed_type(self):
@@ -94,14 +94,14 @@ class PowerBiPage(BasePage):
         self.is_present_and_displayed(self.feed_type_visible)
         print("App type, application,Menu , form are displayed")
 
-    def application_dropdown(self,selectapp):
+    def application_dropdown(self,select_app):
         self.wait_to_click(self.applications)
         app_dropdown=[]
         app_dropdown=(self.find_elements_texts(self.applications))
         time.sleep(10)
         print(app_dropdown)
         self.wait_to_click(self.applications)
-        self.select_by_text(self.applications,selectapp)
+        self.select_by_text(self.applications,select_app)
 
     def menu_dropdown(self):
         self.wait_to_click(self.menu)
@@ -122,9 +122,9 @@ class PowerBiPage(BasePage):
         time.sleep(10)
         self.wait_to_click(self.cancel_button,10)
 
-    def form_feed(self,appselect,menu_select,form_select):
+    def form_feed(self,app_select,menu_select,form_select):
         self.wait_to_click(self.applications)
-        self.select_by_text(self.applications,appselect)
+        self.select_by_text(self.applications,app_select)
         self.wait_to_click(self.menu)
         self.select_by_text(self.menu,menu_select)
         self.wait_to_click(self.form)
@@ -195,7 +195,7 @@ class PowerBiPage(BasePage):
         self.wait_to_clear_and_send_keys(self.odata_feed_name,UserData.updatedname)
         self.wait_to_click(self.save)
 
-    def odata_20(self):
+    def add_description(self):
         self.wait_to_click(self.description,5)
         self.send_keys(self.description, UserData.description+Keys.TAB)
         assert self.is_present_and_displayed(self.disabled1,10)
@@ -205,7 +205,6 @@ class PowerBiPage(BasePage):
         self.js_click(self.save)
         print("clicked on saved button")
         self.is_present_and_displayed(self.success, 10)
-
 
 
     def delete1(self):
@@ -222,13 +221,15 @@ class PowerBiPage(BasePage):
         self.wait_to_click(self.edit_filter)
         print("Data range values", self.daterange)
 
-    def create_multiple_odatafeed(self,no_of_feeds):
+
+    def create_multiple_odata_feed(self,no_of_feeds):
         for i in range(1,no_of_feeds):
-            self.ui()
+            self.power_bi_ui(10)
             self.select_form()
             self.form_feed(UserData.reassign_cases_application,UserData.reassign_menu,UserData.reassign_form)
             self.add_odata()
             self.save_odata_feed()
+        print("create multiple odata feeds completed")
 
 
     def go_to_page(self):

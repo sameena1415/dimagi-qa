@@ -11,4 +11,7 @@ pytest-xdist>=2.4.0
 pytest-xdist[psutil]
 pyotp >=2.6.0
 pytest-order
+beautifulsoup4
+pytest-metadata
+matplotlib
 py
