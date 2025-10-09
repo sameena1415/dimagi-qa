@@ -209,7 +209,7 @@ jobs:
             } else if (CC_EVENT != 'repository_dispatch' && CC_ENV == 'india' && JOB_STATUS == 'failure') {
               SLACK_WEBHOOK_URL = '${{ secrets.SLACK_WEBHOOK_URL_USH }}';
               SLACK_CHANNEL_ID = '${{ secrets.SLACK_CHANNEL_ID_USH }}';
-              console.log("India Success");
+              console.log("India Failure");
             } else {
               SLACK_WEBHOOK_URL = '';
               SLACK_CHANNEL_ID = '';
