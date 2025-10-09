@@ -524,8 +524,9 @@ class MessagingPage(BasePage):
         self.wait_and_sleep_to_click(self.search_box)
         print("Sleeping till the alert processing completes")
         self.reload_page()
+        time.sleep(5)
         self.wait_to_clear_and_send_keys(self.search_box, cond_alert_name_input)
-        self.wait_and_sleep_to_click(self.search_box)
+        self.click(self.search_box)
         self.wait_for_element((By.XPATH, self.delete_cond_alert.format(cond_alert_name_input)), 300)
         time.sleep(2)
         self.click((By.XPATH, self.delete_cond_alert.format(cond_alert_name_input)))
@@ -538,8 +539,10 @@ class MessagingPage(BasePage):
         try:
             
             self.reload_page()
+            time.sleep(4)
             self.wait_to_clear_and_send_keys(self.search_box, cond_alert_name_input)
-            self.wait_and_sleep_to_click(self.search_box)
+            self.click(self.search_box)
+            time.sleep(3)
             isPresent = self.is_displayed((By.XPATH, self.cond_alert_created.format(cond_alert_name_input)))
         except NoSuchElementException:
             isPresent = False

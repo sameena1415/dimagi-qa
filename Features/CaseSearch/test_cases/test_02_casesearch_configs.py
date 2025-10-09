@@ -448,7 +448,7 @@ def test_case_16_sticky_search_with_default_value(driver, settings):
                                         expected_value=CaseSearchUserInput.four)
     webapps.search_again_cases()
     casesearch.check_default_values_displayed(search_property=CaseSearchUserInput.mood,
-                                              default_value=CaseSearchUserInput.three,
+                                              default_value=CaseSearchUserInput.five,
                                               search_format=text)
 
 
