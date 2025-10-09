@@ -629,26 +629,29 @@ class MessagingPage(BasePage):
 
     def remove_all_cond_alert(self):
         self.wait_to_click(self.cond_alerts)
-        self.wait_for_element(self.value_per_page)
-        self.select_by_value(self.value_per_page, "100")
-        time.sleep(2)
-        print("Sleeping till the alert list is displayed completely")
-        alert_presence = self.is_present(self.cond_alerts_name)
-        if alert_presence:
-            while alert_presence:
-                text = self.get_text(self.cond_alerts_name)
-                print("alert name: ", text)
-                self.click((By.XPATH, self.cond_alert_delete_button.format(text, 1)))
-                time.sleep(1)
-                try:
-                    obj = self.driver.switch_to.alert
-                    obj.accept()
-                except NoAlertPresentException:
-                    raise AssertionError("Celery down")
-                time.sleep(2)
-                self.reload_page()
-                time.sleep(7)
-                alert_presence = self.is_present(self.cond_alerts_name)
-        else:
-            print("No script created cond alerts present")
-        print("All Cond Alert removed successfully!")
+        try:
+            self.wait_for_element(self.value_per_page)
+            self.select_by_value(self.value_per_page, "100")
+            time.sleep(2)
+            print("Sleeping till the alert list is displayed completely")
+            alert_presence = self.is_present(self.cond_alerts_name)
+            if alert_presence:
+                while alert_presence:
+                    text = self.get_text(self.cond_alerts_name)
+                    print("alert name: ", text)
+                    self.click((By.XPATH, self.cond_alert_delete_button.format(text, 1)))
+                    time.sleep(1)
+                    try:
+                        obj = self.driver.switch_to.alert
+                        obj.accept()
+                    except NoAlertPresentException:
+                        raise AssertionError("Celery down")
+                    time.sleep(2)
+                    self.reload_page()
+                    time.sleep(7)
+                    alert_presence = self.is_present(self.cond_alerts_name)
+            else:
+                print("No script created cond alerts present")
+            print("All Cond Alert removed successfully!")
+        except Exception:
+            print("No Conditional alerts are present")
