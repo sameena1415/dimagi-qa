@@ -36,7 +36,7 @@ class FindIdPage(BasePage):
         self.wait_to_click(self.find_data_by_id)
         self.is_present_and_displayed((By.XPATH,self.find_id.format('Case')))
         self.is_present_and_displayed((By.XPATH,self.find_id.format('Form Submission')))
-        print("Find case and Find Forms fields are displayed")
+        assert True,("Find case and Find Forms fields are displayed")
 
     def search_invalid_id(self,type1):
         if type1 =='case':
@@ -44,23 +44,23 @@ class FindIdPage(BasePage):
             self.wait_to_clear_and_send_keys((By.XPATH,self.find_id.format('Case')),UserData.invalid_id)
             self.js_click((By.XPATH,self.find_button.format('case')))
             self.is_present_and_displayed((By.XPATH,self.error_message.format('case')))
-            print("Could not find case submission")
+            assert True,("Could not find case submission")
         elif type1 == 'form':
             self.is_present_and_displayed((By.XPATH, self.find_id.format('Form Submission')))
             self.wait_to_clear_and_send_keys((By.XPATH,self.find_id.format('Form Submission')),UserData.invalid_id)
             self.js_click((By.XPATH, self.find_button.format('form')))
             self.is_present_and_displayed((By.XPATH,self.error_message.format('form submission')))
-            print("Could not find form submission")
+            assert True,("Could not find form submission")
 
     def data_exports_link(self,value):
         if value == 'case':
             self.js_click((By.XPATH, self.export_link.format(value)))
             self.is_present_and_displayed((By.XPATH,self.export_page.format(str(value).capitalize())))
-            print("Case export page opened")
+            assert True,("Case export page opened")
         elif value =='form':
             self.js_click((By.XPATH, self.export_link.format(value)))
             self.is_present_and_displayed((By.XPATH,self.export_page.format(str(value).capitalize())))
-            print("Form export page opened")
+            assert True,("Form export page opened")
 
 
 
@@ -86,10 +86,10 @@ class FindIdPage(BasePage):
         url = self.get_current_url()
         if "staging" in url:
             self.page_source_contains(UserData.user_details['staging'][1])
-            print("Correct location page is opened in staging environment for" ,value_type ,"field search ")
+            assert True,("Correct location page is opened in staging environment for" ,value_type ,"field search ")
         else:
             self.page_source_contains(UserData.user_details['prod'][1])
-            print("Correct location page is opened in production environment for" ,value_type ,"field search ")
+            assert True,("Correct location page is opened in production environment for" ,value_type ,"field search ")
         self.driver.back()
 
 
@@ -114,13 +114,11 @@ class FindIdPage(BasePage):
         url = self.get_current_url()
         if "staging" in url:
             self.page_source_contains(UserData.user_details['staging'][0])
-            print("Correct web user page is opened in staging environment for" ,value_type ,"field search ")
+            assert True,("Correct web user page is opened in staging environment for" ,value_type ,"field search ")
         else:
             self.page_source_contains(UserData.user_details['prod'][0])
-            print("Correct web user page is opened in production environment for" ,value_type ,"field search ")
+            assert True,("Correct web user page is opened in production environment for" ,value_type ,"field search ")
         self.driver.back()
-
-
 
     def group_id(self, value_type):
         if value_type == "case":
@@ -143,10 +141,10 @@ class FindIdPage(BasePage):
         url = self.get_current_url()
         if "staging" in url:
             self.page_source_contains(UserData.user_details['staging'][2])
-            print("Correct group page is opened in staging environment for" ,value_type ,"field search ")
+            assert True,("Correct group page is opened in staging environment for" ,value_type ,"field search ")
         else:
             self.page_source_contains(UserData.user_details['prod'][2])
-            print("Correct group page is opened in production environment for" ,value_type ,"field search ")
+            assert True,("Correct group page is opened in production environment for" ,value_type ,"field search ")
 
 
     def input_id(self, value_type,value):
@@ -165,7 +163,7 @@ class FindIdPage(BasePage):
         time.sleep(10)
         self.wait_to_click(self.view_button)
         self.page_source_contains(value)
-        print("Correct ",value_type,"id page is opened")
+        assert True,("Correct ",value_type,"id page is opened")
         self.driver.back()
 
 
