@@ -12,3 +12,6 @@ names>=0.3.0
 requests
 py
 openpyxl
+beautifulsoup4
+pytest-metadata
+matplotlib

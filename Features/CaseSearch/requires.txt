@@ -11,3 +11,6 @@ pandas>=1.2.2
 requests
 py
 openpyxl
+beautifulsoup4
+pytest-metadata
+matplotlib

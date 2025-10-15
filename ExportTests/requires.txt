@@ -17,3 +17,4 @@ requests
 imap-tools
 beautifulsoup4
 html5lib
+pytest-metadata

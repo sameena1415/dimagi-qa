@@ -1,4 +1,5 @@
 import logging
+import os
 
 import coloredlogs
 from common.web_apps import get_app_build_info
@@ -15,11 +16,41 @@ class UserDetails(pydantic.BaseModel):
     username: str
     password: str
     login_as: str | None = None
+    index: int | None = None
 
     # def __str__(self):
     #     if self.login_as:
     #         return f"{self.username} as {self.login_as}"
     #     return self.username
+
+class UserDetailsManager:
+    def __init__(self, json_file_path):
+        self.items = []
+        self.users_by_hour = {}
+        self._load_users(json_file_path)
+
+    def _load_users(self, path):
+        with open(path, "r") as f:
+            data = json.load(f)
+        if "users_by_hour" in data:
+            self.users_by_hour = data["users_by_hour"]
+        elif "user" in data:
+            self.items = [UserDetails(**user) for user in data["user"]]
+        else:
+            raise ValueError("Invalid user JSON format")
+
+    def get_users_by_hour(self, hour):
+        users = self.users_by_hour.get(hour, [])
+        return [UserDetails(**user) for user in users]
+
+    def get(self):
+        if self.items:
+            return self.items.pop()
+        raise IndexError("No users left to get")
+
+    def set(self, users):
+        self.items = users
+
 
 
 class AppDetails(pydantic.BaseModel):
@@ -42,11 +73,15 @@ class HQUser:
     def login(self, domain, host):
         login_url = f"/a/{domain}/login/"
         self.client.get(login_url)  # get CSRF token
+        if os.environ.get("CI") == "true":
+            password = os.environ.get("DIMAGIQA_LOCUST_PASSWORD")
+        else:
+            password = self.user_details.password
         response = self.client.post(
             login_url,
             {
                 "auth-username": self.user_details.username,
-                "auth-password": self.user_details.password,
+                "auth-password": password,
                 "cloud_care_login_view-current_step": ['auth'],  # fake out two_factor ManagementForm
                 },
             headers={
@@ -100,6 +135,14 @@ class HQUser:
             "submit-all", data, name=name, validation=validation
             )
 
+    def get_endpoint(self, name, data, expected_response_message=None, status=None):
+        return self.post_formplayer(
+            "get_endpoint", data, name=name
+            )
+    def get_details(self, name, data, expected_response_message=None, status=None):
+        return self.post_formplayer(
+            "get_details", data, name=name
+            )
     def post_formplayer(self, command, extra_json=None, name=None, validation=None):
         logger.info("User: %s; Request: %s; Name: %s", self.user_details.username, command, name)
         try:
@@ -114,7 +157,8 @@ class BaseLoginCommCareUser(HttpUser):
     abstract = True
 
     def on_start(self, domain, host, user_details, build_id, app_id):
-        self.user_detail = user_details.get()
+        # self.user_detail = user_details.get()
+        logger.info(f"User_details: {self.user_detail}")
 
         app_details = AppDetails(
             domain=domain,

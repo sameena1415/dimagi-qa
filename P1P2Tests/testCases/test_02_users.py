@@ -15,7 +15,7 @@ from HQSmokeTests.testPages.users.mobile_workers_page import MobileWorkerPage
 """"Contains test cases related to the User's Mobile Worker module"""
 
 group_id = dict()
-group_id["user_new"] = "username_"+fetch_random_string()+"_new"
+group_id["user_new"] = None
 
 
 
@@ -39,30 +39,33 @@ def test_case_89_verify_user_location_alert(driver, settings):
 @pytest.mark.user_fields
 @pytest.mark.user_organization
 @pytest.mark.p1p2EscapeDefect
-def test_case_54_add_custom_user_data_profile_to_mobile_worker(driver, settings):
+def test_case_54_add_custom_user_data_profile_to_mobile_worker(driver, settings, rerun_count):
     create = MobileWorkerPage(driver)
     menu = HomePage(driver, settings)
-    menu.users_menu()
-    create.delete_bulk_users()
+    field = f"field_{rerun_count}{fetch_random_string()}"
+    username = f"username_{fetch_random_string()}{rerun_count}_new"
+    profile_name_text = f"test_profile_{fetch_random_string()}{rerun_count}"
+
     menu.users_menu()
     create.mobile_worker_menu()
-    create.create_new_mobile_worker(group_id["user_new"])
-    create.create_new_user_fields("field_" + fetch_random_string())
+    create.create_new_mobile_worker(username)
+    create.create_new_user_fields(field)
     create.click_profile()
-    create.add_profile("field_" + fetch_random_string())
+    create.add_profile(profile_name_text, field)
     create.save_field()
-    create.select_user_and_update_fields(group_id["user_new"], "field_" + fetch_random_string())
+    create.select_user_and_update_fields(username, field)
     create.add_phone_number()
-    create.select_profile()
+    create.select_profile(profile_name_text)
     create.update_information()
     create.select_location()
-    time.sleep(2)
+    
     menu.users_menu()
     newest_file = create.download_mobile_worker()
-    create.edit_profile_in_downloaded_file(newest_file, group_id["user_new"])
+    create.edit_profile_in_downloaded_file(newest_file, username)
     menu.users_menu()
     create.upload_mobile_worker()
-    create.select_mobile_worker_created(group_id["user_new"])
+    menu.users_menu()
+    create.select_mobile_worker_created(username)
     create.verify_profile_change(UserData.p1p2_profile)
     create.mobile_worker_menu()
     create.delete_bulk_users()
@@ -70,7 +73,7 @@ def test_case_54_add_custom_user_data_profile_to_mobile_worker(driver, settings)
     create.mobile_worker_menu()
     create.edit_user_field()
     create.click_profile()
-    create.remove_profile()
+    create.remove_profile(profile_name_text, field)
     create.save_field()
     create.click_fields()
     create.remove_user_field()
