@@ -76,7 +76,7 @@ class OrganisationStructurePage(BasePage):
         self.add_loc_btn_xpath = (
             By.XPATH, "//span[@data-bind='text: new_child_caption' and text()='New location at top level']")
         self.loc_name_xpath = (By.XPATH, "//input[@type='text']")
-        self.create_loc_xpath = (By.XPATH, "//button[@type='submit']")
+        self.create_loc_xpath = (By.XPATH, "(//button[@type='submit' and contains(@class,'primary')])[1]")
         self.loc_saved_success_msg = (By.XPATH, "//div[contains(@class,'alert-success')]")
         self.duplicate_field_error = (By.XPATH, "//div[contains(text(), 'was duplicated, key names must be unique')]")
         self.error_1_id = (By.ID, "error_1_id_name")
@@ -84,7 +84,7 @@ class OrganisationStructurePage(BasePage):
         self.edit_loc_button_xpath = (By.XPATH,
                                       "(//span[contains(text(),'updated_on:')])[1]//preceding::a[@data-bind='attr: { href: loc_edit_url(uuid()) }'][1]")
         self.loc_name_input_id = (By.ID, "id_name")
-        self.update_loc_xpath = (By.XPATH, "(//button[@type='submit'])[1]")
+        self.update_loc_xpath = (By.XPATH, "(//button[@type='submit' and contains(@class,'primary')])[1]")
         self.location_created_xpath = (By.XPATH, "//span[text()='" + self.new_location_name + "']")
         self.renamed_location = (By.XPATH, "//span[text()='updated_on:" + str(date.today()) + "']")
         self.edit_loc_field_btn_xpath = (By.XPATH, "//a[@data-action='Edit Location Fields']")

@@ -105,6 +105,14 @@ class BasePage:
                                                                         )
             # self.wait_after_interaction()
 
+    @retry_on_exception((StaleElementReferenceException, TimeoutException))
+    def wait_for_disappear(self, locator, timeout=30):
+        invisible = ec.invisibility_of_element_located(locator)
+        WebDriverWait(self.driver, timeout, poll_frequency=1).until(invisible,
+                                                                        message="Could still find locator: " + str(locator)
+                                                                        )
+            # self.wait_after_interaction()
+
 
     @retry_on_exception((StaleElementReferenceException, TimeoutException))
     def wait_and_sleep_to_click(self, locator, timeout=20):
@@ -173,35 +181,23 @@ class BasePage:
         select_source = Select(self.driver.find_element(*source_locator))
         select_source.select_by_visible_text(value)
 
-    #def select_by_text(self, source_locator, value, timeout=10):
-    #    try:
-            # Wait for the <select> element to be present and visible
-        #    select_source = Select(self.driver.find_element(*source_locator))
-          #  select_source.select_by_visible_text(value)
-       #     time.sleep(1)
-         #   text = self.get_selected_text(select_source)
-        #    print(text)
-        #    assert text == value
-
-       # except (NoSuchElementException, ElementNotInteractableException, TimeoutException, Exception) as e:
-            # Fallback to JS in case standard method fails
-       #     print(f"Standard select_by_visible_text failed: {e}. Trying JS fallback...")
-       #     try:
-         #       select_elem = self.driver.find_element(*source_locator)
-           #     script = """
-           #     var select = arguments[0];
-             #   var value = arguments[1];
-           #     for (var i = 0; i < select.options.length; i++) {
-             #       if (select.options[i].text === value) {
-             #           select.selectedIndex = i;
-            #            select.dispatchEvent(new Event('change'));
-             #           break;
-             #       }
-           #     }
-           #     """
-           #     self.driver.execute_script(script, select_elem, value)
-          #  except Exception as js_e:
-           #     raise Exception(f"JavaScript fallback also failed: {js_e}")
+    def js_select_by_text(self, source_locator, value, timeout=10):
+        try:
+            select_elem = self.driver.find_element(*source_locator)
+            script = """
+            var select = arguments[0];
+            var value = arguments[1];
+            for (var i = 0; i < select.options.length; i++) {
+                if (select.options[i].text === value) {
+                    select.selectedIndex = i;
+                    select.dispatchEvent(new Event('change'));
+                    break;
+                }
+            }
+            """
+            self.driver.execute_script(script, select_elem, value)
+        except Exception as js_e:
+            raise Exception(f"JavaScript fallback also failed: {js_e}")
 
     def select_by_value(self, source_locator, value):
         select_source = Select(self.driver.find_element(*source_locator))

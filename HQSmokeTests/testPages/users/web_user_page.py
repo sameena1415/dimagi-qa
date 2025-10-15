@@ -189,7 +189,7 @@ class WebUsersPage(BasePage):
             self.wait_and_sleep_to_click(self.upload)
         except (TimeoutException, NoSuchElementException):
             print("TIMEOUT ERROR: Could not upload file")
-        assert self.is_present_and_displayed(self.import_complete), "Upload Not Completed! Taking Longer to process.."
+        assert self.is_present_and_displayed(self.import_complete, 150), "Upload Not Completed! Taking Longer to process.."
         print("File uploaded successfully")
 
     def edit_user_permission(self, rolename):

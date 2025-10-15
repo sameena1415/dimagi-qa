@@ -110,7 +110,7 @@ class LookUpTablePage(BasePage):
         self.login_user = (By.XPATH, "//*[@class='fa fa-user appicon-icon']")
         self.select_user = "//*[@aria-label='{}']"
         self.login = (By.XPATH, "//*[@id='js-confirmation-confirm']")
-        self.start = (By.XPATH, "//*[@class='ff ff-start-fg appicon-icon appicon-icon-fg']")
+        self.start = (By.ID, "single-app-start-heading")
         self.inapp_case_list = (By.XPATH, "(//*[@class='formplayer-request'])[last()]")
         self.inapp_registration_form = (By.XPATH, "//h3[text()='Registration Form']")
         self.inapp_select_option = (By.XPATH, "//*[(@class='sel clear')]//div/div[1]/label//p")
@@ -143,7 +143,7 @@ class LookUpTablePage(BasePage):
         self.number_of_questions = (By.XPATH, "//*[@id='formdesigner']/div[1]/div[1]/div[1]/div[4]/div[1]/ul/li")
         self.child_node = (By.XPATH, "//*[@id='formdesigner']/div[1]/div[1]/div[1]/div[4]/div[1]/ul/li/ul")
         self.home = (By.XPATH, "//li[contains(@class,'home')]")
-        self.sync = (By.XPATH, "//*[@class='ff ff-sync appicon-icon']")
+        self.sync = (By.XPATH, "//div[contains(@class,'appicon-sync')]/i")
         self.label = (By.XPATH, "//*[@data-qtype='Trigger']")
         self.refresh = (By.XPATH, "//button[contains(@class,'refresh')]")
         self.settings = (By.XPATH, "//*[contains(@class,'fa-gear appicon-icon')]")
@@ -202,7 +202,9 @@ class LookUpTablePage(BasePage):
 
     def delete_lookup_table(self, table):
         self.wait_to_click(self.manage_tables_link)
-        self.wait_to_click((By.XPATH, self.delete_table.format(table)))
+        self.wait_for_element((By.XPATH, self.delete_table.format(table)))
+        self.click((By.XPATH, self.delete_table.format(table)))
+        time.sleep(4)
         self.accept_pop_up()
         print("LookUp Table deleted successfully!")
 
@@ -226,7 +228,7 @@ class LookUpTablePage(BasePage):
         self.scroll_to_bottom()
         self.send_keys(self.upload_table, filepath)
         self.wait_to_click(self.upload)
-        self.wait_for_element(self.success_msg, 10)
+        self.wait_for_element(self.success_msg, 200)
         success = self.get_text(self.success_msg)
         success_msg = "Successfully uploaded " + table_count + " tables."
         assert success == success_msg
@@ -242,8 +244,9 @@ class LookUpTablePage(BasePage):
         self.wait_to_click(self.add_field)
         self.send_keys(self.field_name, self.table_id_name)
         self.wait_to_click(self.save_table)
-        
-        assert self.is_present_and_displayed(self.table_created_path)
+        time.sleep(5)
+        self.reload_page()
+        assert self.is_present_and_displayed(self.table_created_path, 220)
         print("LookUp Table created successfully!")
         return self.table_id_name
 
@@ -268,6 +271,7 @@ class LookUpTablePage(BasePage):
         print("Upload successful")
 
     def invalid_data_assert(self):
+        self.wait_for_element(self.error_alert_msg, 200)
         invalid_data = self.get_text(self.error_alert_msg)
         assert invalid_data == UserData.invalid_data_assert
 
@@ -363,7 +367,7 @@ class LookUpTablePage(BasePage):
             
             self.wait_to_click(self.click_download)
         time.sleep(2)
-        self.wait_for_element(self.download_file, 100)
+        self.wait_for_element(self.download_file, 300)
         self.wait_to_click(self.download_file)
         time.sleep(3)
         self.wait_to_click(self.close_download_popup)

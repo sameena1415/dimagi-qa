@@ -78,8 +78,8 @@ class ExportDataPage(BasePage):
         self.web_users_option = (By.XPATH, "//li/span[.='[Web Users]']")
         self.all_data_option = (By.XPATH, "//li/span[.='[All Data]']")
         self.users_field = (By.XPATH, "(//textarea[@class='select2-search__field'])[1]")
-        self.user_selected = "//span[contains(@class, 'choice') and .='{}']"
-        self.users_list_item = "//ul[@role='listbox']/li[contains(.,'{}')]"
+        self.user_selected = "(//span[contains(@class, 'choice') and contains(.,'{}')])[1]"
+        self.users_list_item = "//ul[@role='listbox']/li[contains(.,'{}')][1]"
         self.users_list = (By.XPATH, "//ul[contains(@class,'select2-results__options')]/li")
         self.user_from_list = "//li[contains(.,'{}')]"
         self.prepare_export_button = (By.XPATH, "//button[contains(@class,'btn btn-primary')]/i[contains(@data-bind,'Export') and contains(@class,'down')]")
@@ -113,7 +113,7 @@ class ExportDataPage(BasePage):
         self.create_DSE_checkbox = (By.XPATH, '//input[@id="daily-saved-export-checkbox"]')
         self.download_dse = (By.XPATH, "(//a[@class='btn btn-info btn-xs'])[1]")
         self.download_dse_form = "(//*[contains(@data-bind,'hasEmailedExport')][.//span[.='{}']]/following-sibling::div//*[./i[contains(@class,'fa-cloud')]])[1]"
-        self.data_upload_msg = (By.XPATH, "//div[contains(@class,'success')]")
+        self.data_upload_msg = (By.XPATH, "//p[contains(@class,'success')]")
         self.data_upload_msg_form = "//*[contains(@data-bind,'hasEmailedExport')][.//span[.='{}']]/following-sibling::div//*[contains(text(),'Data update complete')]"
         self.cancel_alert = (By.XPATH, "//button[@data-bs-dismiss='alert']")
 
@@ -199,11 +199,12 @@ class ExportDataPage(BasePage):
             self.wait_to_click((By.XPATH, self.export_form_case_data_button.format(name)))
             time.sleep(2)
         self.date_filter()
+        web_user = str(UserData.web_user).strip("[]")
         if flag == None:
-            if not self.is_present((By.XPATH, self.user_selected.format(UserData.web_user))):
+            if not self.is_present((By.XPATH, self.user_selected.format(web_user))):
                 print("Web User option is not already selected")
-                self.send_keys(self.users_field, UserData.web_user)
-                self.wait_to_click((By.XPATH, self.users_list_item.format(UserData.web_user)))
+                self.send_keys(self.users_field, web_user)
+                self.wait_to_click((By.XPATH, self.users_list_item.format(web_user)), 30)
             else:
                 print("Web User option is already selected")
         self.wait_and_sleep_to_click(self.prepare_export_button, timeout=10)
@@ -266,10 +267,16 @@ class ExportDataPage(BasePage):
         time.sleep(2)
         self.scroll_to_bottom()
         time.sleep(2)
-        self.wait_to_click(self.export_settings_create)
-        self.wait_for_element(self.cancel_alert)
-        print("Export created!!")
-        self.click(self.cancel_alert)
+        self.js_click(self.export_settings_create)
+        time.sleep(10)
+        if self.is_visible_and_displayed(self.cancel_alert, 20):
+            print("Export created!!")
+            self.click(self.cancel_alert)
+        else:
+            print("Report creation got stuck. Clicking on back.")
+            self.back()
+            self.wait_for_element(self.add_export_button)
+            print("Export created!!")
         time.sleep(2)
         return UserData.form_export_name
 
@@ -300,10 +307,17 @@ class ExportDataPage(BasePage):
         time.sleep(2)
         self.scroll_to_bottom()
         time.sleep(2)
-        self.wait_to_click(self.export_settings_create)
-        self.wait_for_element(self.cancel_alert)
-        print("Export created!!")
-        self.click(self.cancel_alert)
+        self.js_click(self.export_settings_create)
+        time.sleep(10)
+        if self.is_visible_and_displayed(self.cancel_alert, 20):
+            # self.wait_for_element(self.cancel_alert)
+            print("Export created!!")
+            self.click(self.cancel_alert)
+        else:
+            print("Report creation got stuck. Clicking on back.")
+            self.back()
+            self.wait_for_element(self.add_export_button)
+            print("Export created!!")
         time.sleep(2)
         return UserData.case_export_name
 
@@ -424,13 +438,22 @@ class ExportDataPage(BasePage):
         self.scroll_to_bottom()
         time.sleep(2)
         self.wait_to_click(self.export_settings_create)
-        print("Dashboard Form Feed created!!")
+        if self.is_visible_and_displayed(self.cancel_alert, 20):
+            # self.wait_for_element(self.cancel_alert)
+            print("Dashboard Form Feed created!!")
+            self.click(self.cancel_alert)
+        else:
+            print("Report creation got stuck. Clicking on back.")
+            self.back()
+            self.wait_for_element(self.add_export_button)
+            print("Dashboard Form Feed created!!")
         time.sleep(2)
         self.wait_for_element((By.XPATH, self.update_data.format(UserData.dashboard_feed_form)))
         self.js_click((By.XPATH, self.update_data.format(UserData.dashboard_feed_form)))
         self.wait_till_progress_completes("integration")
         self.wait_for_element((By.XPATH, self.update_data_conf.format(UserData.dashboard_feed_form)), 20)
         self.wait_to_click((By.XPATH, self.update_data_conf.format(UserData.dashboard_feed_form)))
+
         self.wait_for_element(self.data_upload_msg)
         time.sleep(2)
         self.reload_page()
@@ -462,7 +485,15 @@ class ExportDataPage(BasePage):
         self.scroll_to_bottom()
         time.sleep(2)
         self.wait_to_click(self.export_settings_create)
-        print("Dashboard Form Feed created!!")
+        if self.is_visible_and_displayed(self.cancel_alert, 20):
+            # self.wait_for_element(self.cancel_alert)
+            print("Dashboard Form Feed created!!")
+            self.click(self.cancel_alert)
+        else:
+            print("Report creation got stuck. Clicking on back.")
+            self.back()
+            self.wait_for_element(self.add_export_button)
+            print("Dashboard Form Feed created!!")
         time.sleep(2)
         self.wait_for_element((By.XPATH, self.update_data.format(UserData.dashboard_feed_case)))
         self.js_click((By.XPATH, self.update_data.format(UserData.dashboard_feed_case)))
@@ -528,7 +559,15 @@ class ExportDataPage(BasePage):
         self.scroll_to_bottom()
         time.sleep(2)
         self.wait_to_click(self.export_settings_create)
-        print("Odata Form Feed created!!")
+        if self.is_visible_and_displayed(self.cancel_alert, 20):
+            # self.wait_for_element(self.cancel_alert)
+            print("Odata Case Feed created!!")
+            self.click(self.cancel_alert)
+        else:
+            print("Report creation got stuck. Clicking on back.")
+            self.back()
+            self.wait_for_element(self.add_export_button)
+            print("Odata Case Feed created!!")
         time.sleep(10)
         self.reload_page()
         self.wait_and_sleep_to_click(self.copy_odata_link_btn_form)
@@ -567,7 +606,15 @@ class ExportDataPage(BasePage):
         self.scroll_to_bottom()
         time.sleep(2)
         self.wait_to_click(self.export_settings_create)
-        print("Odata Case Feed created!!")
+        if self.is_visible_and_displayed(self.cancel_alert, 20):
+            # self.wait_for_element(self.cancel_alert)
+            print("Odata Case Feed created!!")
+            self.click(self.cancel_alert)
+        else:
+            print("Report creation got stuck. Clicking on back.")
+            self.back()
+            self.wait_for_element(self.add_export_button)
+            print("Odata Case Feed created!!")
         time.sleep(10)
         self.reload_page()
         self.wait_and_sleep_to_click(self.copy_odata_link_btn_case)
@@ -627,7 +674,15 @@ class ExportDataPage(BasePage):
         self.scroll_to_bottom()
         time.sleep(2)
         self.wait_to_click(self.export_settings_create)
-        print("Export created!!")
+        if self.is_visible_and_displayed(self.cancel_alert, 20):
+            # self.wait_for_element(self.cancel_alert)
+            print("Odata Case Feed created!!")
+            print("Export created!!")
+        else:
+            print("Report creation got stuck. Clicking on back.")
+            self.back()
+            self.wait_for_element(self.add_export_button)
+            print("Export created!!")
         time.sleep(2)
         self.wait_to_click(self.export_button)
         time.sleep(3)
@@ -635,8 +690,9 @@ class ExportDataPage(BasePage):
         if self.is_present(self.web_users_option):
             print("Web Users is already selected")
         else:
-            self.send_keys(self.users_field, UserData.web_user)
-            self.wait_to_click((By.XPATH, self.user_from_list.format(UserData.web_user)))
+            web_user = str(UserData.web_user).strip("[]")
+            self.send_keys(self.users_field, web_user)
+            self.wait_to_click((By.XPATH, self.user_from_list.format(web_user)))
             print("Selecting Web Users")
 
             ActionChains(self.driver).send_keys(Keys.TAB).perform()
@@ -725,8 +781,15 @@ class ExportDataPage(BasePage):
         time.sleep(2)
         self.wait_to_click(self.export_settings_create)
         self.wait_for_element(self.cancel_alert)
-        print("Export created!!")
-        self.click(self.cancel_alert)
+        if self.is_visible_and_displayed(self.cancel_alert, 20):
+            # self.wait_for_element(self.cancel_alert)
+            print("Export created!!")
+            self.click(self.cancel_alert)
+        else:
+            print("Report creation got stuck. Clicking on back.")
+            self.back()
+            self.wait_for_element(self.add_export_button)
+            print("Export created!!")
         time.sleep(2)
         self.download_export_without_condition(UserData.p1p2_form_export_name, "form")
         newest_file = latest_download_file()
@@ -749,8 +812,9 @@ class ExportDataPage(BasePage):
             if self.is_present(self.web_users_option):
                 print("Web Users is already selected")
             else:
-                self.send_keys(self.users_field, UserData.web_user)
-                self.wait_to_click((By.XPATH, self.user_from_list.format(UserData.web_user)))
+                web_user = str(UserData.web_user).strip("[]")
+                self.send_keys(self.users_field, web_user)
+                self.wait_to_click((By.XPATH, self.user_from_list.format(web_user)))
                 print("Selecting Web Users")
 
                 ActionChains(self.driver).send_keys(Keys.TAB).perform()
@@ -797,7 +861,15 @@ class ExportDataPage(BasePage):
         self.scroll_to_bottom()
         time.sleep(2)
         self.wait_to_click(self.export_settings_create)
-        print("Export created!!")
+        if self.is_visible_and_displayed(self.cancel_alert, 20):
+            # self.wait_for_element(self.cancel_alert)
+            print("Export created!!")
+            self.click(self.cancel_alert)
+        else:
+            print("Report creation got stuck. Clicking on back.")
+            self.back()
+            self.wait_for_element(self.add_export_button)
+            print("Export created!!")
         time.sleep(2)
         self.download_export_without_condition(UserData.p1p2_case_export_name, "case")
         newest_file = latest_download_file()

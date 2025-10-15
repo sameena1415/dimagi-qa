@@ -17,12 +17,6 @@ class MessagingPage(BasePage):
     def __init__(self, driver):
         super().__init__(driver)
 
-        self.cond_alert_name_input = "cond_alert_" + fetch_random_string()
-        self.keyword_name_input = "KEYWORD_" + fetch_random_string().upper()
-        self.struct_keyword_name_input = "STRUCTURED_KEYWORD_" + fetch_random_string().upper()
-        self.broadcast_input = "broadcast_" + fetch_random_string()
-        self.keyword_created_xpath = "//a[text()='" + self.keyword_name_input + "']"
-
         # Messaging Dashboard
         self.messaging_menu_id = (By.ID, "MessagingTab")
         self.dashboard_linked_text = (By.LINK_TEXT, "Dashboard")
@@ -45,7 +39,7 @@ class MessagingPage(BasePage):
         self.email_subject = (By.XPATH, "(//textarea[@data-bind='value: nonTranslatedMessage'])[1]")
         self.send_broadcast = (By.XPATH, "//button[@data-bind='text: saveBroadcastText()']")
         self.broadcast_select = (By.XPATH, "//div[@id='immediate-broadcasts']//select[@class='form-control']")
-        self.broadcast_created = (By.XPATH, "//a[text()='" + self.broadcast_input + "']")
+        self.broadcast_created = "//a[text()='{}']"
         self.next_btn = (By.XPATH, "//div[@id='immediate-broadcasts']//a[@data-bind='click: nextPage']")
         # Conditional Alerts
         self.cond_alerts = (By.LINK_TEXT, "Conditional Alerts")
@@ -65,13 +59,10 @@ class MessagingPage(BasePage):
         self.case_property_input = (By.XPATH, "//input[@class='select2-search__field']")
         self.continue_button_rule_tab = (
         By.XPATH, "//button[@data-bind='click: handleRuleNavContinue, enable: ruleTabValid']")
-        self.cond_alert_created = (By.XPATH, "//a[text()='" + str(self.cond_alert_name_input) + "']")
-        self.restart_rule_button = (By.XPATH, "//td[./a[text()='" + str(
-            self.cond_alert_name_input) + "']]//following-sibling::td/div/button[contains(@data-bind,'restart')]")
-        self.restart_rule_button_none = (By.XPATH, "//td[./a[text()='" + str(
-            self.cond_alert_name_input) + "']]//following-sibling::td/div[@style='display: none;']/button[contains(@data-bind,'restart')]")
-        self.deactive_button_visible = (By.XPATH, "//td[./a[text()='" + str(
-            self.cond_alert_name_input) + "']]//following-sibling::td/button[contains(@data-bind,'toggleStatus')]/span[contains(@data-bind,'visible: active')]")
+        self.cond_alert_created = "//a[text()='{}']"
+        self.restart_rule_button = "//td[./a[text()='{}}']]//following-sibling::td/div/button[contains(@data-bind,'restart')]"
+        self.restart_rule_button_none = "//td[./a[text()='{}}']]//following-sibling::td/div[@style='display: none;']/button[contains(@data-bind,'restart')]"
+        self.deactive_button_visible = "//td[./a[text()='{}}']]//following-sibling::td/button[contains(@data-bind,'toggleStatus')]/span[contains(@data-bind,'visible: active')]"
         self.empty_table_alert = (
         By.XPATH, "//div[contains(@data-bind, 'emptyTable()')][contains(.,'There are no alerts to display')]")
         self.select_recipient_type = (By.XPATH, "//ul[@id='select2-id_schedule-recipient_types-results']/li[.='Users']")
@@ -79,10 +70,8 @@ class MessagingPage(BasePage):
         self.user_recipients_results = (
         By.XPATH, "//ul[@id='select2-id_schedule-user_recipients-results']/li[.='" + UserData.app_login + "']")
         self.save_button_xpath = (By.XPATH, "//button[@type='submit'and text()='Save']")
-        self.delete_cond_alert = (By.XPATH, "//a[text()='" + str(
-            self.cond_alert_name_input) + "']//preceding::button[@class='btn btn-danger'][1]")
-        self.alert_process_none = (By.XPATH, "//td[.//a[text()='" + str(
-            self.cond_alert_name_input) + "']]//following::span[contains(@data-bind,'locked_for_editing')  and @style='display: none;']")
+        self.delete_cond_alert = "//td[.//a[text()='{}']]//preceding-sibling::td[1]//button[@class='btn btn-danger'][not(@disabled)][1]"
+        self.alert_process_none = "//td[.//a[text()='{}']]//following::span[contains(@data-bind,'locked_for_editing')  and @style='display: none;']"
         self.search_box = (By.XPATH, "//form[@class='input-group']/input[@class='form-control']")
         self.search_btn = (
         By.XPATH, "//form[@class='input-group']//button[@data-bind='click: clickAction, visible: !immediate']/i")
@@ -100,20 +89,16 @@ class MessagingPage(BasePage):
         self.add_keyword = (By.LINK_TEXT, "Add Keyword")
         self.keyword_name = (By.XPATH, "//input[@name='keyword']")
         self.keyword_description = (By.XPATH, "//input[@name='description']")
+        self.send_sender = (By.XPATH, "//select[@name='sender_content_type']")
         self.keyword_message = (By.XPATH, "//input[@name='sender_message']")
-        self.keyword_created = (By.XPATH, self.keyword_created_xpath)
+        self.keyword_created = "//a[text()='{}']"
         self.add_structured_keyword = (By.LINK_TEXT, "Add Structured Keyword")
         self.keyword_survey = (By.XPATH, "(//span[@class='select2-selection select2-selection--single'])[1]")
         self.survey_option_select = (
         By.XPATH, "(//li[@class='select2-results__option select2-results__option--selectable'])[1]")
-        self.structured_keyword_created = (By.XPATH, "//a[text()='" + self.struct_keyword_name_input + "']")
-        self.delete_keyword = (By.XPATH, self.keyword_created_xpath + "//following::button[contains(@class,'danger')][1]")
-        self.delete_structured_keyword = (
-        By.XPATH, "//a[text()='" + self.struct_keyword_name_input + "']//following::button[contains(@class,'danger')][1]")
-        self.confirm_delete_keyword = (
-        By.XPATH, self.keyword_created_xpath + "//following::*[contains(@class,'confirm')][1]")
-        self.confirm_delete_structured_keyword = (By.XPATH,
-                                                  "//a[text()='" + self.struct_keyword_name_input + "']//following::*[contains(@class,'confirm')][1]")
+        self.delete_keyword = "//a[text()='{}']//following::button[contains(@class,'danger')][1]"
+        self.confirm_delete_keyword = "//a[text()='{}']//following::*[contains(@class,'confirm')][1]"
+
         # Chat
         self.chat = (By.LINK_TEXT, "Chat")
         self.contact_table = (By.ID, "contact_list")
@@ -194,23 +179,23 @@ class MessagingPage(BasePage):
             self.wait_for_element(self.message_sent_success_msg)
             print("SMS composed successfully!")
 
-    def send_broadcast_message(self):
+    def send_broadcast_message(self, broadcast_input):
         self.wait_to_click(self.broadcasts)
         self.wait_to_click(self.add_broadcast)
-        self.send_keys(self.broadcast_name, self.broadcast_input)
+        self.send_keys(self.broadcast_name, broadcast_input)
         self.wait_to_click(self.recipients)
         self.wait_to_click(self.select_recipient_type)
         self.wait_to_click(self.user_recipient)
         
         self.wait_to_click(self.select_value_dropdown)
-        self.send_keys(self.broadcast_message, "Test Broadcast:" + self.broadcast_input)
+        self.send_keys(self.broadcast_message, "Test Broadcast:" + broadcast_input)
         self.wait_to_click(self.send_broadcast)
         self.reload_page()
         self.select_by_value(self.broadcast_select, '100')
         time.sleep(2)
         try:
             while False:
-                if not self.is_displayed(self.broadcast_created):
+                if not self.is_displayed((By.XPATH, self.broadcast_created.format(broadcast_input))):
                     self.wait_to_click(self.next_btn)
                     time.sleep(2)
                     continue
@@ -220,11 +205,10 @@ class MessagingPage(BasePage):
             self.wait_for_element(self.broadcast_created)
         print("Broadcast created successfully!")
 
-    def create_cond_alert(self):
+    def create_cond_alert(self, cond_alert_name_input):
         self.wait_to_click(self.cond_alerts)
-        self.remove_alert_with_same_name(self.cond_alert_name_input)
         self.wait_to_click(self.add_cond_alert)
-        self.send_keys(self.cond_alert_name, self.cond_alert_name_input)
+        self.send_keys(self.cond_alert_name, cond_alert_name_input)
         self.wait_to_click(self.continue_button_basic_tab)
         self.wait_to_click(self.case_type)
         self.wait_to_click(self.case_type_option_value)
@@ -240,43 +224,47 @@ class MessagingPage(BasePage):
         self.wait_to_click(self.user_recipient)
         self.wait_to_click(self.user_recipients_results)
         self.select_by_text(self.alert_type, "Email")
-        self.send_keys(self.email_subject, "Test Alert:" + self.cond_alert_name_input)
-        self.send_keys(self.broadcast_message, "Test Alert:" + self.cond_alert_name_input)
+        self.send_keys(self.email_subject, "Test Alert:" + cond_alert_name_input)
+        self.send_keys(self.broadcast_message, "Test Alert:" + cond_alert_name_input)
         self.wait_to_click(self.save_button_xpath)
         print("Sleeping till the alert processing completes")
         time.sleep(1)
-        self.wait_to_clear_and_send_keys(self.search_box, self.cond_alert_name_input)
-        self.wait_for_element(self.alert_process_none, 500)
-        time.sleep(40)
+        self.wait_to_clear_and_send_keys(self.search_box, cond_alert_name_input)
+        self.wait_for_element((By.XPATH, self.alert_process_none.format(cond_alert_name_input)), 500)
+        if 'staging' in self.get_current_url():
+            time.sleep(240)
+        else:
+            time.sleep(40)
         self.reload_page()
-        # time.sleep(140)
+        time.sleep(10)
         self.clear(self.search_box)
-        self.send_keys(self.search_box, self.cond_alert_name_input)
+        self.send_keys(self.search_box, cond_alert_name_input)
         self.wait_to_click(self.search_box)
-        self.wait_for_element(self.delete_cond_alert, 700)
+        self.wait_for_element((By.XPATH, self.delete_cond_alert.format(cond_alert_name_input)), 700)
         self.reload_page()
-        if self.is_clickable(self.delete_cond_alert):
+        time.sleep(4)
+        if self.is_clickable((By.XPATH, self.delete_cond_alert.format(cond_alert_name_input))):
             print("Restart is not required.")
         else:
             try:
-                self.wait_to_click(self.restart_rule_button)
+                self.wait_to_click((By.XPATH, self.restart_rule_button.format(cond_alert_name_input)))
                 self.accept_pop_up()
                 time.sleep(2)
                 self.accept_pop_up()
                 print("Sleeping till the alert processing completes")
                 time.sleep(50)
-                self.wait_to_clear_and_send_keys(self.search_box, self.cond_alert_name_input)
+                self.wait_to_clear_and_send_keys(self.search_box, cond_alert_name_input)
                 self.wait_to_click(self.search_box)
-                self.wait_for_element(self.delete_cond_alert, 700)
+                self.wait_for_element((By.XPATH, self.delete_cond_alert.format(cond_alert_name_input)), 700)
                 self.reload_page()
             except:
                 print("Restart not required")
         self.wait_for_element(self.search_box)
-        self.wait_to_clear_and_send_keys(self.search_box, self.cond_alert_name_input)
+        self.wait_to_clear_and_send_keys(self.search_box, cond_alert_name_input)
         self.click(self.search_box)
-        assert self.is_displayed(self.cond_alert_created), "Conditional Alert not created successfully!"
+        assert self.is_displayed((By.XPATH, self.cond_alert_created.format(cond_alert_name_input))), "Conditional Alert not created successfully!"
         print("Conditional Alert created successfully!")
-        return self.cond_alert_name_input
+        return cond_alert_name_input
 
     def cond_alert_download(self):
         self.wait_to_click(self.cond_alerts)
@@ -303,37 +291,38 @@ class MessagingPage(BasePage):
         self.wait_for_element(self.upload_success_message)
         print("Conditional Alert uploaded successfully!")
 
-    def add_keyword_trigger(self):
+    def add_keyword_trigger(self, keyword_name_input):
         self.wait_to_click(self.keywords)
         self.wait_to_click(self.add_keyword)
-        self.send_keys(self.keyword_name, self.keyword_name_input)
-        self.send_keys(self.keyword_description, self.keyword_name_input)
-        self.send_keys(self.keyword_message, "Test Message: " + self.keyword_name_input)
+        self.send_keys(self.keyword_name, keyword_name_input)
+        self.send_keys(self.keyword_description, keyword_name_input)
+        self.select_by_text(self.send_sender, 'SMS')
+        self.send_keys(self.keyword_message, "Test Message: " + keyword_name_input)
         
         self.scroll_to_element(self.send_message)
         self.wait_to_click(self.send_message)
         
         self.select_by_value(self.page_limit, "50")
         time.sleep(3)
-        self.wait_for_element(self.keyword_created)
+        self.wait_for_element((By.XPATH, self.keyword_created.format(keyword_name_input)))
         print("Keyword created successfully!")
 
-    def add_structured_keyword_trigger(self):
+    def add_structured_keyword_trigger(self, struct_keyword_name_input):
         self.wait_to_click(self.keywords)
         self.wait_to_click(self.add_structured_keyword)
-        self.send_keys(self.keyword_name, self.struct_keyword_name_input)
-        self.send_keys(self.keyword_description, self.struct_keyword_name_input)
+        self.send_keys(self.keyword_name, struct_keyword_name_input)
+        self.send_keys(self.keyword_description, struct_keyword_name_input)
         self.wait_to_click(self.keyword_survey)
         self.wait_to_click(self.survey_option_select)
-        self.send_keys(self.keyword_message, "Test Message" + self.struct_keyword_name_input)
-        
+        self.select_by_text(self.send_sender, 'SMS')
+        self.send_keys(self.keyword_message, "Test Message" + struct_keyword_name_input)
+
         self.scroll_to_element(self.send_message)
         self.wait_to_click(self.send_message)
         
         self.select_by_value(self.page_limit, "50")
         time.sleep(3)
-        self.wait_for_element(
-            self.structured_keyword_created), "Structured keyword not created successfully!"
+        self.wait_for_element((By.XPATH, self.keyword_created.format(struct_keyword_name_input))), "Structured keyword not created successfully!"
         print("Structured keyword created successfully!")
 
     def chat_page(self):
@@ -451,32 +440,40 @@ class MessagingPage(BasePage):
         self.wait_to_click(self.save_lang)
         print("Languages added and deleted successfully!")
 
-    def remove_keyword(self):
+    def remove_keyword(self, keyword):
         self.wait_to_click(self.keywords)
         self.wait_for_element(self.page_limit)
         self.select_by_value(self.page_limit, "50")
         time.sleep(2)
-        self.wait_to_click(self.delete_keyword)
-        self.wait_to_click(self.confirm_delete_keyword)
+        self.wait_for_element((By.XPATH, self.delete_keyword.format(keyword)))
+        self.click((By.XPATH, self.delete_keyword.format(keyword)))
+        self.wait_for_element((By.XPATH, self.confirm_delete_keyword.format(keyword)))
+        self.click((By.XPATH, self.confirm_delete_keyword.format(keyword)))
+        time.sleep(3)
         self.reload_page()
+        self.wait_for_element(self.page_limit, 30)
         try:
-            isPresent = self.is_displayed(self.keyword_created)
+            isPresent = self.is_displayed((By.XPATH, self.keyword_created.format(keyword)))
         except NoSuchElementException:
             isPresent = False
         if not isPresent:
             assert not isPresent
             print("Keyword removed successfully!")
 
-    def remove_structured_keyword(self):
+    def remove_structured_keyword(self, keyword):
         self.wait_to_click(self.keywords)
         self.wait_for_element(self.page_limit)
         self.select_by_value(self.page_limit, "50")
         time.sleep(2)
-        self.wait_to_click(self.delete_structured_keyword)
-        self.wait_to_click(self.confirm_delete_structured_keyword)
+        self.wait_for_element((By.XPATH, self.delete_keyword.format(keyword)))
+        self.click((By.XPATH, self.delete_keyword.format(keyword)))
+        self.wait_for_element((By.XPATH, self.confirm_delete_keyword.format(keyword)))
+        self.click((By.XPATH, self.confirm_delete_keyword.format(keyword)))
+        time.sleep(3)
         self.reload_page()
+        self.wait_for_element(self.page_limit, 30)
         try:
-            isPresent = self.is_displayed(self.structured_keyword_created)
+            isPresent = self.is_displayed((By.XPATH, self.keyword_created.format(keyword)))
         except NoSuchElementException:
             isPresent = False
         if not isPresent:
@@ -521,17 +518,19 @@ class MessagingPage(BasePage):
         else:
             print("No test keywords present")
 
-    def remove_cond_alert(self):
+    def remove_cond_alert(self, cond_alert_name_input):
         self.wait_and_sleep_to_click(self.cond_alerts)
-        self.wait_to_clear_and_send_keys(self.search_box, self.cond_alert_name_input)
+        self.wait_to_clear_and_send_keys(self.search_box, cond_alert_name_input)
         self.wait_and_sleep_to_click(self.search_box)
         print("Sleeping till the alert processing completes")
         self.reload_page()
-        self.wait_to_clear_and_send_keys(self.search_box, self.cond_alert_name_input)
-        self.wait_and_sleep_to_click(self.search_box)
-        self.wait_for_element(self.delete_cond_alert, 300)
+        time.sleep(5)
+        self.wait_to_clear_and_send_keys(self.search_box, cond_alert_name_input)
+        self.click(self.search_box)
+        self.wait_for_element((By.XPATH, self.delete_cond_alert.format(cond_alert_name_input)), 300)
         time.sleep(2)
-        self.wait_to_click(self.delete_cond_alert)
+        self.click((By.XPATH, self.delete_cond_alert.format(cond_alert_name_input)))
+        time.sleep(1)
         try:
             obj = self.driver.switch_to.alert
             obj.accept()
@@ -540,9 +539,11 @@ class MessagingPage(BasePage):
         try:
             
             self.reload_page()
-            self.wait_to_clear_and_send_keys(self.search_box, self.cond_alert_name_input)
-            self.wait_and_sleep_to_click(self.search_box)
-            isPresent = self.is_displayed(self.cond_alert_created)
+            time.sleep(4)
+            self.wait_to_clear_and_send_keys(self.search_box, cond_alert_name_input)
+            self.click(self.search_box)
+            time.sleep(3)
+            isPresent = self.is_displayed((By.XPATH, self.cond_alert_created.format(cond_alert_name_input)))
         except NoSuchElementException:
             isPresent = False
         assert not isPresent
@@ -557,7 +558,7 @@ class MessagingPage(BasePage):
         if self.is_present(self.empty_table_alert):
             print("No alert created with the same name")
         else:
-            self.wait_to_click(self.delete_cond_alert)
+            self.wait_to_click((By.XPATH, self.delete_cond_alert.format(alert_name)))
             try:
                 obj = self.driver.switch_to.alert
                 obj.accept()
@@ -566,7 +567,7 @@ class MessagingPage(BasePage):
             try:
                 
                 self.reload_page()
-                self.wait_to_clear_and_send_keys(self.search_box, self.cond_alert_name_input)
+                self.wait_to_clear_and_send_keys(self.search_box, alert_name)
                 self.wait_and_sleep_to_click(self.search_box)
                 isPresent = self.is_displayed(self.cond_alert_created)
             except NoSuchElementException:
@@ -628,25 +629,29 @@ class MessagingPage(BasePage):
 
     def remove_all_cond_alert(self):
         self.wait_to_click(self.cond_alerts)
-        self.wait_for_element(self.value_per_page)
-        self.select_by_value(self.value_per_page, "100")
-        time.sleep(2)
-        print("Sleeping till the alert list is displayed completely")
-        alert_presence = self.is_present(self.cond_alerts_name)
-        if alert_presence:
-            while alert_presence:
-                text = self.get_text(self.cond_alerts_name)
-                print("alert name: ", text)
-                self.wait_to_click((By.XPATH, self.cond_alert_delete_button.format(text, 1)))
-                try:
-                    obj = self.driver.switch_to.alert
-                    obj.accept()
-                except NoAlertPresentException:
-                    raise AssertionError("Celery down")
-                time.sleep(2)
-                self.reload_page()
-                time.sleep(7)
-                alert_presence = self.is_present(self.cond_alerts_name)
-        else:
-            print("No script created cond alerts present")
-        print("All Cond Alert removed successfully!")
+        try:
+            self.wait_for_element(self.value_per_page)
+            self.select_by_value(self.value_per_page, "100")
+            time.sleep(2)
+            print("Sleeping till the alert list is displayed completely")
+            alert_presence = self.is_present(self.cond_alerts_name)
+            if alert_presence:
+                while alert_presence:
+                    text = self.get_text(self.cond_alerts_name)
+                    print("alert name: ", text)
+                    self.click((By.XPATH, self.cond_alert_delete_button.format(text, 1)))
+                    time.sleep(1)
+                    try:
+                        obj = self.driver.switch_to.alert
+                        obj.accept()
+                    except NoAlertPresentException:
+                        raise AssertionError("Celery down")
+                    time.sleep(2)
+                    self.reload_page()
+                    time.sleep(7)
+                    alert_presence = self.is_present(self.cond_alerts_name)
+            else:
+                print("No script created cond alerts present")
+            print("All Cond Alert removed successfully!")
+        except Exception:
+            print("No Conditional alerts are present")

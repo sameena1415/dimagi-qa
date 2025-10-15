@@ -61,13 +61,13 @@ def test_case_03_search_property_settings(driver, settings):
     casesearch.search_against_property(search_property=CaseSearchUserInput.rating,
                                        input_value=CaseSearchUserInput.four_star,
                                        property_type=COMBOBOX)
-    time.sleep(2)
+    time.sleep(1)
     casesearch.search_against_property(search_property=CaseSearchUserInput.rating,
                                        input_value=CaseSearchUserInput.five_star,
                                        property_type=COMBOBOX,
                                        include_blanks=YES)
     time.sleep(2)
-    casesearch.check_values_selected(search_property=CaseSearchUserInput.rating,
+    flag = casesearch.check_values_selected(search_property=CaseSearchUserInput.rating,
                                      value_list=[CaseSearchUserInput.four_star, CaseSearchUserInput.five_star],
                                      rating=YES)
     webapps.search_button_on_case_search_page()
@@ -75,9 +75,11 @@ def test_case_03_search_property_settings(driver, settings):
                                         expected_value=[CaseSearchUserInput.four,
                                                         CaseSearchUserInput.five,
                                                         CaseSearchUserInput.blank],
-                                        is_multi=YES)
+                                        is_multi=YES,
+                                        flag=flag)
     casesearch.check_values_on_caselist(row_num=CaseSearchUserInput.seven,
-                                        expected_value=CaseSearchUserInput.rating_four_and_five)
+                                        expected_value=CaseSearchUserInput.rating_four_and_five,
+                                        flag=flag)
     webapps.select_first_case_on_list()
     casesearch.check_value_on_case_detail(tabname=CaseSearchUserInput.rating,
                                           search_property=CaseSearchUserInput.rating_input,

@@ -17,6 +17,7 @@ group_id["user"] = None
 group_id["value"] = None
 group_id["group_name"] = None
 group_id["active"] = None
+group_id["run"] = None
 
 @pytest.mark.user
 @pytest.mark.groups
@@ -60,25 +61,24 @@ def test_initial_cleanup_items_in_users_menu(driver, settings):
 
 @pytest.mark.user
 @pytest.mark.mobileWorker
-@pytest.mark.run(order=0)
-def test_case_02_create_mobile_worker(driver, settings):
+def test_case_02_create_mobile_worker(driver, settings, rerun_count):
     """
         1. Navigate to Users>Mobile Workers
         2. Bulk Delete all existing test users
         3. Create a new mobile worker
         4. Verify user is able to create a new user
     """
-    username = "username_" + fetch_random_string()
+    username = f"username_{fetch_random_string()}{str(rerun_count)}"
     worker = MobileWorkerPage(driver)
     menu = HomePage(driver, settings)
     menu.users_menu()
-    worker.delete_bulk_users()
     worker.mobile_worker_menu()
     worker.create_mobile_worker()
     worker.mobile_worker_enter_username(username)
     worker.mobile_worker_enter_password(fetch_random_string())
     worker.click_create(username)
     group_id["user"] = username
+    group_id['run'] = rerun_count
     # return group_id["user"]
 
 
@@ -96,31 +96,31 @@ def test_case_03_create_and_assign_user_field(driver, settings):
     menu = HomePage(driver, settings)
     menu.users_menu()
     create.mobile_worker_menu()
-    create.create_new_user_fields("user_field_" + fetch_random_string())
+    create.create_new_user_fields(f"user_field_{group_id['run']}_{fetch_random_string()}")
     create.select_mobile_worker_created(group_id["user"])
-    create.enter_value_for_created_user_field()
+    create.enter_value_for_created_user_field(f"user_field_{group_id['run']}_{fetch_random_string()}")
     create.update_information()
 
 
 
 @pytest.mark.user
 @pytest.mark.groups
-def test_case_05_create_group_and_assign_user(driver, settings):
+def test_case_05_create_group_and_assign_user(driver, settings, rerun_count):
     """
         1. Go to Groups section and create a new group.
         2. Access the new group and add your user to it
     """
     if group_id["user"]==None:
         pytest.skip("Skipping as user name is null")
+    created_group = f"group_{ group_id['run']}{fetch_random_string()}{str(rerun_count)}"
+
     menu = HomePage(driver, settings)
     menu.users_menu()
     visible = GroupPage(driver)
     user = MobileWorkerPage(driver)
     user.mobile_worker_menu()
     visible.click_group_menu()
-    visible.delete_test_groups()
-    print("Deleted the group")
-    group_name = visible.add_group()
+    group_name = visible.add_group(created_group)
     id_value = visible.add_user_to_group(group_id["user"], group_name)
     print(id_value, group_name)
     group_id["value"] = id_value
@@ -152,9 +152,9 @@ def test_case_10_download_and_upload_users(driver, settings):
     newest_file = user.download_mobile_worker()
     print("Group ID:", group_id["value"])
     user.check_for_group_in_downloaded_file(newest_file, group_id["value"])
-    user.remove_role_in_downloaded_file(newest_file, group_id["user"])
+    user.remove_role_in_downloaded_file(newest_file, group_id["user"], role=None)
     home.users_menu()
-    user.upload_mobile_worker()
+    user.upload_mobile_worker(newest_file)
 
 
 @pytest.mark.user

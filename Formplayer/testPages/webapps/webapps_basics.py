@@ -83,7 +83,7 @@ class WebAppsBasics(BasePage):
         self.deselect_user = "(//button[contains(@class,'select2-selection')])[{}]"
         self.search_user = (By.XPATH, "//textarea[@class='select2-search__field']")
         self.users_field = (By.XPATH, "(//textarea[@class='select2-search__field'])[1]")
-        self.remove_buttons = (By.XPATH, "//ul//button")
+        self.remove_buttons = (By.XPATH, "//ul//button[contains(@class,'remove')]")
         self.users_list_item = "//ul[@role='listbox']/li[contains(.,'{}')]"
         self.app_user_select = "(//li[contains(text(),'{}')])[1]"
         self.select_user = (By.XPATH, "//li[contains(text(),'[All Data]')]")

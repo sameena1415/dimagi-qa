@@ -33,7 +33,7 @@ class ReportPage(BasePage):
 
         # Mobile Worker Reports
         self.reports_menu_id = (By.ID, "ProjectReportsTab")
-        self.worker_activity_rep = (By.LINK_TEXT, "Worker Activity")
+        self.worker_activity_rep = (By.LINK_TEXT, "User Activity")
         self.daily_form_activity_rep = (By.LINK_TEXT, "Daily Form Activity")
         self.submissions_by_form_rep = (By.LINK_TEXT, "Submissions By Form")
         self.form_completion_rep = (By.LINK_TEXT, "Form Completion Time")
@@ -88,14 +88,19 @@ class ReportPage(BasePage):
 
         # Saved Reports
         self.new_saved_report_name = (By.ID, "name")
+        self.saved_report_description = (By.NAME, "description")
         self.save_confirm = (By.XPATH, '//div[@class = "btn btn-primary"]')
         self.saved_reports_menu_link = (By.LINK_TEXT, 'My Saved Reports')
-        self.saved_report_created = (By.XPATH, "//a[text()='" + self.report_name_saved + "']")
+        self.saved_report_created = "//a[text()='{}']"
         self.delete_saved = (By.XPATH,
                              "(//a[text()='" + self.report_name_saved + "']//following::button[@class='btn btn-danger add-spinner-on-click'])[1]")
         self.delete_saved_report_link = "(//a[text()='{}']//following::button[@class='btn btn-danger add-spinner-on-click'])[1]"
         self.all_saved_reports = (
         By.XPATH, "//td[a[contains(.,'Saved')]]//following-sibling::td/button[contains(@data-bind,'delete')]")
+
+        self.favorite_button = (By.XPATH, "//button[contains(.,'Favorites')]")
+        self.empty_fav_list = (By.XPATH, '//a[.="You don\'t have any favorites"]')
+        self.saved_fav = "//a[contains(.,'{}')][contains(@data-bind,'text: name')]"
 
         # Scheduled Reports
         self.scheduled_reports_menu_xpath = (By.XPATH, "//a[@href='#scheduled-reports']")
@@ -175,7 +180,7 @@ class ReportPage(BasePage):
         self.users_field = (By.XPATH, "(//textarea[@class='select2-search__field'])[1]")
         self.remove_active_worker = (By.XPATH,"//span[.='[Active Mobile Workers]']//preceding-sibling::button[@class='select2-selection__choice__remove']")
         self.remove_deactive_worker = (By.XPATH, "//span[.='[Deactivated Mobile Workers]']//preceding-sibling::button[@class='select2-selection__choice__remove']")
-        self.remove_buttons = (By.XPATH, "//ul//button")
+        self.remove_buttons = (By.XPATH, "//ul//button[contains(@class,'remove')]")
         self.user_remove_btn = (By.XPATH, "(//button[@class='select2-selection__choice__remove'])[last()]")
         self.user_from_list = "//li[contains(.,'{}')]"
         self.export_to_excel = (By.XPATH, "//a[@id='export-report-excel']")
@@ -298,17 +303,23 @@ class ReportPage(BasePage):
         self.check_if_report_loaded()
 
     def saved_report(self):
-        self.js_click(self.case_activity_rep)
-        self.wait_for_element(self.save_xpath)
+        self.case_activity_report()
+        time.sleep(3)
+        self.wait_for_element(self.save_xpath, 50)
         self.click(self.save_xpath)
-        self.wait_for_element(self.new_saved_report_name)
+        time.sleep(3)
+        self.wait_for_element(self.new_saved_report_name, 50)
         self.send_keys(self.new_saved_report_name, self.report_name_saved)
-        time.sleep(0.5)
-        self.click(self.save_confirm)
+        time.sleep(1)
+        self.send_keys(self.saved_report_description, self.report_name_saved)
         time.sleep(2)
-        self.wait_for_element(self.saved_reports_menu_link, 100)
+        self.wait_for_element(self.save_confirm)
+        self.js_click(self.save_confirm)
+        time.sleep(2)
+
+        self.reload_page()
         self.wait_to_click(self.saved_reports_menu_link)
-        assert self.is_visible_and_displayed(self.saved_report_created, 220)
+        self.wait_for_element((By.XPATH, self.saved_report_created.format(self.report_name_saved)), 120)
         print("Report Saved successfully!")
 
     def create_scheduled_report_button(self):
@@ -455,9 +466,9 @@ class ReportPage(BasePage):
         print("Sleeping for sometime for the case to get registered.")
         time.sleep(90)
         self.wait_to_click(self.submit_history_rep)
-        self.remove_default_users()
         time.sleep(5)
         self.wait_for_element(self.users_box, 200)
+        self.remove_default_users()
         self.wait_to_click(self.users_box)
         self.send_keys(self.search_user, username)
         self.wait_to_click((By.XPATH, self.app_user_select.format(username)))
@@ -548,6 +559,7 @@ class ReportPage(BasePage):
 
     def validate_messaging_history_for_cond_alert(self, cond_alert):
         self.wait_to_click(self.messaging_history_rep)
+        self.wait_for_element(self.date_input, 50)
         date_range = self.get_todays_date_range()
         self.clear(self.date_input)
         self.send_keys(self.date_input, date_range + Keys.TAB)

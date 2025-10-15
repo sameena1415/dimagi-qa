@@ -52,7 +52,7 @@ class SMSUsagePage(BasePage):
         self.group_input = (By.XPATH, "(//input[@class='select2-search__field'])[1]")
         self.no_results = (By.XPATH, "//li[.='No results found']")
         self.group_dropdown = (By.XPATH, "//select[@id='report_filter_group']")
-        self.remove_buttons = (By.XPATH, "//ul//button")
+        self.remove_buttons = (By.XPATH, "//ul//button[contains(@class,'remove')]")
         self.custome_remove_button = "//span[contains(.,'{}')]//preceding-sibling::button[@class='select2-selection__choice__remove']"
         self.user_remove_btn = (By.XPATH, "(//button[@class='select2-selection__choice__remove'])[last()]")
         self.user_from_list = "//li[contains(.,'{}')]"

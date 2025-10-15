@@ -174,170 +174,78 @@ jobs:
           attachments: ${{ github.workspace }}/report_${{ matrix.environment }}.html
           in_reply_to: ${{ fromJSON(steps.configure_email.outputs.result).reference }}
 
+
       - name: Set slack vars
         if: ${{ always() }}
         id: configure_slack
         uses: actions/github-script@v6
         env:
-            JOB_STATUS: ${{ job.status }}
-            CC_ENV: ${{ matrix.environment }}
-            CC_EVENT: ${{ github.event_name }}
+          JOB_STATUS: ${{ job.status }}
+          CC_ENV: ${{ matrix.environment }}
+          CC_EVENT: ${{ github.event_name }}
         with:
-          result-encoding: string
+          result-encoding: json
           script: |
-            const {CC_ENV, JOB_STATUS, CC_EVENT} = process.env
-            let SLACK_WEBHOOK_URL = '${{ secrets.SLACK_WEBHOOK_URL_USH }}'
+
+            const {CC_ENV, JOB_STATUS, CC_EVENT} = process.env;
+            let SLACK_WEBHOOK_URL = '';
+            let SLACK_CHANNEL_ID = '';
             if (CC_EVENT == 'repository_dispatch' && CC_ENV == 'production') {
-              SLACK_WEBHOOK_URL = '${{ secrets.SLACK_WEBHOOK_URL_PROD_RESULTS }}'
-              console.log( "Prod deploy")
+              SLACK_WEBHOOK_URL = '${{ secrets.SLACK_WEBHOOK_URL_PROD_RESULTS }}';
+              SLACK_CHANNEL_ID = '${{ secrets.SLACK_CHANNEL_ID_PROD }}';
+              console.log( "Prod deploy");
             } else if (CC_EVENT != 'repository_dispatch' && CC_ENV == 'production' && JOB_STATUS == 'failure') {
-              SLACK_WEBHOOK_URL = '${{ secrets.SLACK_WEBHOOK_URL_USH }}'
-              console.log( "Not Prod deploy but Prof failure")
+              SLACK_WEBHOOK_URL = '${{ secrets.SLACK_WEBHOOK_URL_USH }}';
+              SLACK_CHANNEL_ID = '${{ secrets.SLACK_CHANNEL_ID_USH }}';
+              console.log( "Not Prod deploy but Prof failure");
             } else if (CC_ENV == 'staging' && JOB_STATUS == 'failure') {
-              SLACK_WEBHOOK_URL = '${{ secrets.SLACK_WEBHOOK_URL_USH }}'
-              console.log("Staging Failure")
+              SLACK_WEBHOOK_URL = '${{ secrets.SLACK_WEBHOOK_URL_USH }}';
+              SLACK_CHANNEL_ID = '${{ secrets.SLACK_CHANNEL_ID_USH }}';
+              console.log("Staging Failure");
+            } else if (CC_EVENT == 'repository_dispatch' && CC_ENV == 'india') {
+              SLACK_WEBHOOK_URL = '${{ secrets.SLACK_WEBHOOK_URL_INDIA }}';
+              SLACK_CHANNEL_ID = '${{ secrets.SLACK_CHANNEL_ID_INDIA }}';
+              console.log("India Failure");
+            } else if (CC_EVENT != 'repository_dispatch' && CC_ENV == 'india' && JOB_STATUS == 'failure') {
+              SLACK_WEBHOOK_URL = '${{ secrets.SLACK_WEBHOOK_URL_USH }}';
+              SLACK_CHANNEL_ID = '${{ secrets.SLACK_CHANNEL_ID_USH }}';
+              console.log("India Failure");
             } else {
-              SLACK_WEBHOOK_URL = ' '
-              console.log("No notification sent")
+              SLACK_WEBHOOK_URL = '';
+              SLACK_CHANNEL_ID = '';
+              console.log("No notification sent");
             }
 
-            return SLACK_WEBHOOK_URL
+            core.setOutput('SLACK_WEBHOOK_URL', SLACK_WEBHOOK_URL);
+            core.setOutput('SLACK_CHANNEL_ID', SLACK_CHANNEL_ID);
 
-      - name: Post to Slack channel on Failure
-        id: slack_fail
-        uses: slackapi/slack-github-action@v1.23.0
-        if: ${{ steps.configure_slack.outputs.result != ' ' && failure() }}
-        with:
-          payload: |
-            {
-            	"attachments": [
-            		{
-            			"color": "#ff0000",
-            			"blocks": [
-            				{
-            					"type": "section",
-            					"text": {
-            						"type": "mrkdwn",
-            						"text": " Hey there! :alien-wave::alien-wave: \n*${{ github.workflow }}* were just triggered! \n"
-            					}
-            				},
-            				{
-            					"type": "section",
-            					"text": {
-            						"type": "mrkdwn",
-            						"text": "*Passed:* ${{ steps.parse_counts.outputs.PASSED }} *Failed:* ${{ steps.parse_counts.outputs.FAILED }} *Error:* ${{ steps.parse_counts.outputs.ERROR }} *Skipped:* ${{ steps.parse_counts.outputs.SKIPPED }} *XFail:* ${{ steps.parse_counts.outputs.XFAIL }}\n"
-            					}
-            				},
-            				{
-            					"type": "context",
-            					"elements": [
-            						{
-            							"type": "mrkdwn",
-            							"text": "*Environment: *\n ${{ matrix.environment }}  \n"
-            						},
-            						{
-            							"type": "mrkdwn",
-            							"text": " "
-            						},
-            						{
-            							"type": "mrkdwn",
-            							"text": "*Status: *\n ${{ job.status }}  :x:"
-            						}
-            					]
-            				},
-            				{
-            					"type": "section",
-            					"text": {
-            						"type": "mrkdwn",
-            						"text": "Here's the corresponding report :arrow_right::arrow_right:"
-            					},
-            					"accessory": {
-            						"type": "button",
-            						"text": {
-            							"type": "plain_text",
-            							"text": "Click to Downlaod",
-            							"emoji": true
-            						},
-            						"value": "click_me_123",
-            						"url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts/${{ steps.artifact-upload-step.outputs.artifact-id }}",
-            						"action_id": "button-action",
-            						"style": "danger"
-            					}
-            				}
-            			]
-            		}
-            	]
-            }
-        env:
-          SLACK_WEBHOOK_URL: ${{ steps.configure_slack.outputs.result }}
-          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+            return { SLACK_WEBHOOK_URL, SLACK_CHANNEL_ID };
 
-      - name: Post to Slack channel on Success
-        id: slack_pass
-        uses: slackapi/slack-github-action@v1.23.0
-        if: ${{ steps.configure_slack.outputs.result != ' ' && success() }}
-        with:
-          payload: |
-            {
-            	"attachments": [
-            		{
-            			"color": "#36a64f",
-            			"blocks": [
-            				{
-            					"type": "section",
-            					"text": {
-            						"type": "mrkdwn",
-            						"text": " Hey there! :alien-wave::alien-wave: \n*${{ github.workflow }}* were just triggered! \n"
-            					}
-            				},
-            				{
-            					"type": "section",
-            					"text": {
-            						"type": "mrkdwn",
-            						"text": "*Passed:* ${{ steps.parse_counts.outputs.PASSED }} *Failed:* ${{ steps.parse_counts.outputs.FAILED }} *Error:* ${{ steps.parse_counts.outputs.ERROR }} *Skipped:* ${{ steps.parse_counts.outputs.SKIPPED }} *XFail:* ${{ steps.parse_counts.outputs.XFAIL }}\n"
-            					}
-            				},
-            				{
-            					"type": "context",
-            					"elements": [
-            						{
-            							"type": "mrkdwn",
-            							"text": "*Environment: *\n ${{ matrix.environment }}  \n"
-            						},
-            						{
-            							"type": "mrkdwn",
-            							"text": " "
-            						},
-            						{
-            							"type": "mrkdwn",
-            							"text": "*Status: *\n ${{ job.status }}  :white_check_mark:"
-            						}
-            					]
-            				},
-            				{
-            					"type": "section",
-            					"text": {
-            						"type": "mrkdwn",
-            						"text": "Here's the corresponding report :arrow_right::arrow_right:"
-            					},
-            					"accessory": {
-            						"type": "button",
-            						"text": {
-            							"type": "plain_text",
-            							"text": "Click to Download",
-            							"emoji": true
-            						},
-            						"value": "click_me_123",
-            						"url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts/${{ steps.artifact-upload-step.outputs.artifact-id }}",
-            						"action_id": "button-action",
-            						"style": "primary"
-            					}
-            				}
-            			]
-            		}
-            	]
-            }
-        env:
-          SLACK_WEBHOOK_URL: ${{ steps.configure_slack.outputs.result }}
-          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
-
+      - name: Upload Combined Chart to Slack
+        if: ${{ (success() || failure()) && steps.configure_slack.outputs.SLACK_CHANNEL_ID != '' }}
+        run: |
+          set -e
+          # Pick emoji based on job status
+          if [ "${{ job.status }}" = "success" ]; then
+            STATUS_ICON="✅"
+            STYLE_BUTTON="primary"
+          else
+            STATUS_ICON="❌"
+            STYLE_BUTTON="danger"
+          fi
+          ARTIFACT_URL="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts/${{ steps.artifact-upload-step.outputs.artifact-id }}"
+          ENVIRONMENT=$(echo "${{ matrix.environment }}" | tr '[:lower:]' '[:upper:]')
+          ENVIRONMENT="[$ENVIRONMENT]"
+        
+          COMMENT="$STATUS_ICON 📊 *$ENVIRONMENT ${{ github.workflow }} Test Summary Charts*"$'\n\n'"📎 *Artifact:* <${ARTIFACT_URL}|Download here>"
+        
+          COMBINED_JSON=$(curl -s -F file=@slack_charts/summary_combined.png \
+            -F channels=${{ steps.configure_slack.outputs.SLACK_CHANNEL_ID }} \
+            -F "initial_comment=$COMMENT" \
+            -H "Authorization: Bearer ${{ secrets.SLACK_QA_BOT_TOKEN }}" \
+            https://slack.com/api/files.upload)
+      
+          COMBINED_URL=$(echo $COMBINED_JSON | jq -r '.file.permalink')
+          echo "COMBINED_URL=$COMBINED_URL" >> $GITHUB_ENV
+          echo "STYLE_BUTTON=$STYLE_BUTTON" >> $GITHUB_ENV
+          echo "STATUS_ICON=$STATUS_ICON" >> $GITHUB_ENV

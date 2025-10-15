@@ -19,10 +19,10 @@ def test_case_01_default_value_expression(driver, settings):
     webapps.open_app(CaseSearchUserInput.case_search_app_name)
     webapps.open_menu(CaseSearchUserInput.search_first_menu)
     casesearch.check_default_values_displayed(search_property=CaseSearchUserInput.song_name,
-                                              default_value=CaseSearchUserInput.default,
+                                              default_value=CaseSearchUserInput.blank,
                                               search_format=text)
     casesearch.check_default_values_displayed(search_property=CaseSearchUserInput.mood,
-                                              default_value=CaseSearchUserInput.three,
+                                              default_value=CaseSearchUserInput.five,
                                               search_format=text)
     casesearch.check_default_values_displayed(search_property=CaseSearchUserInput.date_opened,
                                               default_value=casesearch.parse_date_range(
@@ -30,7 +30,7 @@ def test_case_01_default_value_expression(driver, settings):
                                                   default=True),
                                               search_format=text)
     casesearch.check_default_values_displayed(search_property=CaseSearchUserInput.rating,
-                                              default_value=CaseSearchUserInput.four_star,
+                                              default_value=CaseSearchUserInput.five_star,
                                               search_format=combobox)
     """Check values can be cleared and desired value can be searched"""
     webapps.clear_selections_on_case_search_page()
@@ -180,9 +180,12 @@ def test_case_07_address_geocoder_format(driver, settings):
     webapps.open_menu(CaseSearchUserInput.artist_menu)
     webapps.select_first_case_on_list_and_continue()
     webapps.open_form(CaseSearchUserInput.add_address_form)
+    time.sleep(4)
     casesearch.add_address(address=CaseSearchUserInput.full_home_address,
                            search_property=CaseSearchUserInput.search_home_address)
+    time.sleep(4)
     webapps.open_data_preview()
+    time.sleep(4)
     webapps.present_in_data_preview(CaseSearchUserInput.home_street_value)
     webapps.present_in_data_preview(CaseSearchUserInput.home_city_value)
     webapps.present_in_data_preview(CaseSearchUserInput.home_country_value)
@@ -191,6 +194,7 @@ def test_case_07_address_geocoder_format(driver, settings):
     base.back()
     time.sleep(4)
     base.back()
+    time.sleep(4)
     webapps.search_all_cases()
     webapps.clear_selections_on_case_search_page()
     casesearch.assert_address_is_hidden(CaseSearchUserInput.home_street)
@@ -433,7 +437,7 @@ def test_case_16_sticky_search_with_default_value(driver, settings):
     webapps.search_button_on_case_search_page()
     webapps.search_again_cases()
     casesearch.check_default_values_displayed(search_property=CaseSearchUserInput.mood,
-                                              default_value=CaseSearchUserInput.three,
+                                              default_value=CaseSearchUserInput.five,
                                               search_format=text)
     webapps.clear_selections_on_case_search_page()
     casesearch.search_against_property(search_property=CaseSearchUserInput.mood,
@@ -444,7 +448,7 @@ def test_case_16_sticky_search_with_default_value(driver, settings):
                                         expected_value=CaseSearchUserInput.four)
     webapps.search_again_cases()
     casesearch.check_default_values_displayed(search_property=CaseSearchUserInput.mood,
-                                              default_value=CaseSearchUserInput.three,
+                                              default_value=CaseSearchUserInput.five,
                                               search_format=text)
 
 

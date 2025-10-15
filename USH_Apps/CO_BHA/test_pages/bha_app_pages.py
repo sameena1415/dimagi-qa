@@ -19,7 +19,7 @@ class BhaWorkflows(BasePage):
         self.client_info = " (//h2[contains(text(), 'Client Information')]/following::strong[contains(text(),'{}')]//ancestor::li[1])[1]"
         self.combobox_select_clinic = (By.XPATH, "//select[contains(@class,'select2-hidden-accessible')]")
         self.answer_option_label = "//p[text()='{}']"
-        self.question_label = "//span[text()='{}']"
+        self.question_label = "//*[text()='{}']"
         self.clinic_close_button = "//button[@aria-label='Remove item' and contains(@aria-describedby , '{}')]"
         self.case_list_display_properties = "(//tr[.//th[contains(text(),'{}')]])[1]"
         self.case_prop_value = "//th[@title='{}']/following::td[contains(text(),'{}')]"

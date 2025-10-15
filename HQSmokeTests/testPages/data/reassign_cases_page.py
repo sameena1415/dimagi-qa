@@ -39,7 +39,7 @@ class ReassignCasesPage(BasePage):
 
         self.users_field = (By.XPATH, "(//textarea[@class='select2-search__field'])[1]")
         self.users_list_item = "//ul[@role='listbox']/li[contains(.,'{}')]"
-        self.remove_buttons = (By.XPATH, "//ul//button")
+        self.remove_buttons = (By.XPATH, "//ul//button[contains(@class,'remove')]")
 
     def remove_default_users(self):
         self.wait_for_element(self.users_field)
@@ -60,7 +60,9 @@ class ReassignCasesPage(BasePage):
         self.select_by_value(self.case_type, UserData.case_reassign)
         self.remove_default_users()
         self.send_keys(self.users_field, username)
-        self.wait_to_click((By.XPATH, self.users_list_item.format(username)))
+        self.wait_for_element((By.XPATH, self.users_list_item.format(username)), 30)
+        self.js_click((By.XPATH, self.users_list_item.format(username)))
+        time.sleep(2)
         self.wait_to_click(self.apply)
 
     def reassign_case(self):
@@ -77,7 +79,7 @@ class ReassignCasesPage(BasePage):
         print("Assigned Username:", assigned_username)
         self.move_to_element_and_click(self.reassigned_user_from_list)
         self.wait_to_click(self.submit)
-        self.is_visible_and_displayed(self.out_of_range)
+        self.is_visible_and_displayed(self.out_of_range, 100)
         print("Sleeping sometime for the case to get updated")
         time.sleep(10)
         self.reload_page()

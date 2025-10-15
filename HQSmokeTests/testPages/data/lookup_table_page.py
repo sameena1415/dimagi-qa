@@ -59,7 +59,9 @@ class LookUpTablePage(BasePage):
 
     def delete_lookup_table(self):
         self.wait_to_click(self.manage_tables_link)
-        self.wait_to_click(self.delete_table)
+        self.wait_for_element(self.delete_table)
+        self.click(self.delete_table)
+        time.sleep(4)
         obj = self.driver.switch_to.alert
         obj.accept()
         print("LookUp Table deleted successfully!")

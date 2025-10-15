@@ -57,7 +57,7 @@ class MessageLogPage(BasePage):
         self.location_filter_section = (By.XPATH, "//div[@data-bind='visible: show_location_filter_bool()'][not(@style='display: none;')]")
         self.second_location_dropdown = (By.XPATH, "//label[./text()='Location']//following-sibling::div//select[2]")
 
-        self.remove_buttons = (By.XPATH, "//ul//button")
+        self.remove_buttons = (By.XPATH, "//ul//button[contains(@class,'remove')]")
         self.custome_remove_button = "//span[contains(.,'{}')]//preceding-sibling::button[@class='select2-selection__choice__remove']"
         self.user_remove_btn = (By.XPATH, "(//button[@class='select2-selection__choice__remove'])[last()]")
         self.user_from_list = "//li[contains(.,'{}')]"

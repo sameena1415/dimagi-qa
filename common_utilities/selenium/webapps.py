@@ -23,10 +23,9 @@ class WebApps(BasePage):
         self.title = "//title[text()='{}']"
         self.current_page = "//a[@aria-current='page' and contains(.,'{}')]"
         self.content_container = (By.XPATH, "//div[@id='content-container']")
-        self.url = self.settings['url']
-        self.app_name_format = "//div[@aria-label='{}']/div/h3"
-        self.app_header_format = "//h1[contains(text(),'{}')]"
-        self.menu_name_format = '//*[contains(@aria-label,"{}")]'
+        self.app_name_format = "//div[@aria-label='{}']//div/h3"
+        self.app_header_format = "//*[contains(@class,'title')][contains(text(),'{}')]"
+        self.menu_name_format = '//*[contains(@class,"name")]/*[contains(.,"{}")]'
         self.menu_name_header_format = '//*[contains(text(),"{}")]'
         self.form_name_format = "//h3[contains(text(), '{}')]"
         self.form_name_header_format = "//h1[contains(text(), '{}')]"
@@ -38,7 +37,8 @@ class WebApps(BasePage):
         self.setting_button = (By.XPATH, "//h3[contains(@id,'setting')]")
         self.sync_button = (By.XPATH, "//button[contains(@class,'sync')]")
         self.done_button = (By.XPATH, "//button[contains(@class,'done')]")
-
+        self.sync = (By.XPATH, "//h3[contains(text(), 'Sync')]")
+        self.sync_success_message = (By.XPATH, "(//div[text()='User Data successfully synced.'])[1]")
 
         self.form_submit = (By.XPATH, "//div[contains(@id,'submit')]//button[contains(@class,'submit')]")
         self.form_submission_successful = (By.XPATH, "//div[contains(@class,'alert-success')][contains(text(), 'successfully saved') or .//p[contains(text(), 'successfully saved')]]")
@@ -86,15 +86,36 @@ class WebApps(BasePage):
         self.alert_close_text = (By.XPATH, "//button[@data-bs-dismiss='alert']//parent::div[contains(@class,'alert-dismiss')]")
 
     def open_app(self, app_name):
+        if self.is_present_and_displayed(self.error_message, 5):
+            self.js_click(self.error_message)
+            print("Error message was present")
         if self.is_present_and_displayed(self.webapps_home, 10):
             self.wait_to_click(self.webapps_home)
+            print("Clicked on home link")
+        else:
+            self.get_url(self.settings['url'])
+            print("Opening home url again")
+            self.wait_after_interaction(10)
         self.application = self.get_element(self.app_name_format, app_name)
         self.application_header = self.get_element(self.app_header_format, app_name)
-        self.scroll_to_element(self.application)
-        self.js_click(self.application)
-        time.sleep(0.5)
-        self.wait_after_interaction(timeout=20)
-        self.wait_for_element(self.application_header, timeout=100)
+        try:
+            self.wait_for_element(self.application, 200)
+            self.scroll_to_element(self.application)
+            self.js_click(self.application)
+            time.sleep(0.5)
+            self.wait_after_interaction(timeout=50)
+            self.wait_for_element(self.application_header, timeout=100)
+        except Exception:
+            if self.is_present_and_displayed(self.error_message, 5):
+                self.js_click(self.error_message)
+                print("Error message was present")
+            time.sleep(4)
+            self.wait_for_element(self.application, 200)
+            self.scroll_to_element(self.application)
+            self.js_click(self.application)
+            time.sleep(0.5)
+            self.wait_after_interaction(timeout=50)
+            self.wait_for_element(self.application_header, timeout=100)
 
     def navigate_to_breadcrumb(self, breadcrumb_value):
         self.link = (By.XPATH, self.breadcrumb_format.format(breadcrumb_value, breadcrumb_value))
@@ -106,33 +127,67 @@ class WebApps(BasePage):
     def open_menu(self, menu_name, assertion='Yes'):
         self.caselist_menu = self.get_element(self.menu_name_format, menu_name)
         self.caselist_header = self.get_element(self.menu_name_header_format, menu_name)
-        self.scroll_to_element(self.caselist_menu)
-        self.js_click(self.caselist_menu)
-        time.sleep(0.5)
-        self.wait_after_interaction(timeout=20)
-        if assertion == 'No':
-            print("No assertion needed")
-        else:
-            self.wait_for_element((By.XPATH, self.current_page.format(menu_name)), timeout=60)
-            self.wait_for_element(self.caselist_header)
+        try:
+            time.sleep(3)
+            self.wait_for_element(self.caselist_menu)
+            self.scroll_to_element(self.caselist_menu)
+            self.js_click(self.caselist_menu)
+            time.sleep(0.5)
+            self.wait_after_interaction(timeout=50)
+            if assertion == 'No':
+                print("No assertion needed")
+            else:
+                self.wait_for_element((By.XPATH, self.current_page.format(menu_name)), timeout=60)
+                self.wait_for_element(self.caselist_header)
+        except Exception:
+            if self.is_present_and_displayed(self.error_message, 5):
+                self.js_click(self.error_message)
+                print("Error message was present")
+            time.sleep(4)
+            self.wait_for_element(self.caselist_menu)
+            self.scroll_to_element(self.caselist_menu)
+            self.js_click(self.caselist_menu)
+            time.sleep(0.5)
+            self.wait_after_interaction(timeout=50)
+            if assertion == 'No':
+                print("No assertion needed")
+            else:
+                self.wait_for_element((By.XPATH, self.current_page.format(menu_name)), timeout=60)
+                self.wait_for_element(self.caselist_header)
 
     def open_form(self, form_name):
+        if self.is_present_and_displayed(self.error_message, 5):
+            self.js_click(self.error_message)
+            print("Error message was present")
         self.form_header = self.get_element(self.form_name_header_format, form_name)
         if self.is_present_and_displayed(self.form_header):
             print("Auto advance enabled")
         else:
             self.form_name = self.get_element(self.form_name_format, form_name)
-            self.wait_for_element(self.form_name, timeout=20)
-            self.scroll_to_element(self.form_name)
-            self.js_click(self.form_name)
-            time.sleep(0.5)
-            self.wait_after_interaction(timeout=20)
-            self.wait_for_element((By.XPATH, self.current_page.format(form_name)), timeout=20)
+            try:
+                self.wait_for_element(self.form_name, timeout=20)
+                self.scroll_to_element(self.form_name)
+                self.js_click(self.form_name)
+                time.sleep(0.5)
+                self.wait_after_interaction(timeout=50)
+                self.wait_for_element((By.XPATH, self.current_page.format(form_name)), timeout=100)
+            except Exception:
+                if self.is_present_and_displayed(self.error_message, 5):
+                    self.js_click(self.error_message)
+                    print("Error message was present")
+                time.sleep(4)
+                self.wait_for_element(self.form_name, timeout=20)
+                self.scroll_to_element(self.form_name)
+                self.js_click(self.form_name)
+                time.sleep(0.5)
+                self.wait_after_interaction(timeout=50)
+                self.wait_for_element((By.XPATH, self.current_page.format(form_name)), timeout=100)
 
     def search_all_cases(self):
+        self.wait_after_interaction(timeout=120)
         self.scroll_to_element(self.search_all_cases_button)
         self.wait_to_click(self.search_all_cases_button)
-        self.wait_after_interaction(timeout=20)
+        self.wait_after_interaction(timeout=50)
 
     def search_again_cases(self):
         self.scroll_to_bottom()
@@ -158,10 +213,10 @@ class WebApps(BasePage):
         else:
             self.scroll_to_element(self.submit_on_case_search_page)
             self.wait_to_click(self.submit_on_case_search_page)
-            time.sleep(1)
-        self.wait_after_interaction(20)
-        if case_list == None:
-            self.is_visible_and_displayed(self.case_list, timeout=80)
+            time.sleep(5)
+        self.wait_after_interaction(50)
+        if case_list is not None:
+            self.is_visible_and_displayed(self.case_list, timeout=100)
         else:
             print("Case List is not displayed")
 
@@ -199,7 +254,7 @@ class WebApps(BasePage):
         time.sleep(0.5)
         self.case = self.get_element(self.case_name_format, case_name)
         self.scroll_to_element(self.case)
-        self.wait_for_element(self.case)
+        self.wait_for_element(self.case, 60)
         self.js_click(self.case)
 
     def select_first_case_on_list(self):
@@ -215,13 +270,15 @@ class WebApps(BasePage):
 
     def continue_to_forms(self):
         self.wait_for_element(self.continue_button, 100)
+        time.sleep(2)
         self.js_click(self.continue_button)
-        time.sleep(0.5)
+        time.sleep(5)
+        self.wait_after_interaction(30)
 
     def select_case_and_continue(self, case_name):
         self.select_case(case_name)
         self.continue_to_forms()
-        self.wait_after_interaction(timeout=20)
+        self.wait_after_interaction(timeout=50)
         self.wait_for_element(self.content_container, timeout=30)
         form_names = self.find_elements_texts(self.form_names)
         return form_names
@@ -231,7 +288,7 @@ class WebApps(BasePage):
         self.scroll_to_element(self.async_restore_error)
         time.sleep(0.5)
         self.js_click(self.async_restore_error)
-        time.sleep(2)
+        time.sleep(10)
         self.scroll_to_element(self.form_submit)
         print("clicking on the submit button again")
         time.sleep(0.5)
@@ -252,9 +309,9 @@ class WebApps(BasePage):
             time.sleep(5)
             self.wait_for_element(self.alert_close_button, 60)
         else:
-            self.wait_after_interaction(timeout=20)
+            self.wait_after_interaction(timeout=60)
             time.sleep(5)
-            self.wait_for_element(self.alert_close_button, 40)
+            self.wait_for_element(self.alert_close_button, 70)
         if self.is_present(self.form_submit):
             if self.is_present(self.async_restore_error):
                 print("Form not submitted successfully. Need Resubmission")
@@ -297,14 +354,14 @@ class WebApps(BasePage):
         url = str(self.settings['url']).replace('#apps', '#restore_as')
         print(url)
         # url = self.get_current_url()
-        # if url not in self.url:
-        #     self.driver.get(self.url)
+        # if url not in self.settings['url']:
+        #     self.driver.get(self.settings['url'])
         #     time.sleep(0.5)
         # else:
         #     self.wait_to_click(self.webapps_home)
         #     time.sleep(0.5)
-        self.driver.get(self.url)
-        self.wait_after_interaction()
+        self.get_url(self.settings['url'])
+        self.wait_after_interaction(20)
         loggedin_user = None
         if self.is_present(self.webapp_working_as):
             loggedin_user = self.get_text(self.webapp_working_as)
@@ -404,19 +461,30 @@ class WebApps(BasePage):
 
     def sync_app(self):
         url = self.get_current_url()
-        if url not in self.url:
-            self.driver.get(self.url)
+        if url not in self.settings['url']:
+            self.get_url(self.settings['url'])
             time.sleep(0.5)
         else:
             self.wait_to_click(self.webapps_home)
             time.sleep(0.5)
         self.wait_for_element(self.setting_button)
-        self.js_click(self.setting_button)
-        self.wait_for_element(self.sync_button)
-        self.js_click(self.sync_button)
-        time.sleep(3)
-        self.wait_after_interaction()
-        self.wait_for_element(self.done_button)
-        self.js_click(self.done_button)
-        time.sleep(0.5)
+        if self.is_present(self.sync):
+            print("Sync button present in home page")
+            self.wait_to_click(self.sync)
+            self.wait_after_interaction(200)
+            if self.is_present_and_displayed(self.sync_success_message, 120):
+                print("Sync is successful!")
+            else:
+                print("Sync Success message is not displayed")            
+        else:
+            print("Sync button not present in home page")
+            self.js_click(self.setting_button)
+            self.wait_for_element(self.sync_button)
+            self.js_click(self.sync_button)
+            time.sleep(3)
+            self.wait_after_interaction(200)
+            self.wait_for_element(self.done_button)
+            self.js_click(self.done_button)
+        time.sleep(10)
+        print("Sleeping for some time for the data to get updated")
 

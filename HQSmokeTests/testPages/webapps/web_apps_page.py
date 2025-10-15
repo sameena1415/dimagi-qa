@@ -33,9 +33,9 @@ class WebAppsPage(BasePage):
         self.update_case_change_link = (By.XPATH, "//*[text()='" + UserData.update_case_change_link + "']")
         self.case_register_form = (By.XPATH, "//*[text()='" + UserData.case_register_form + "']")
         self.case_update_form = (By.XPATH, "//*[text()='" + UserData.case_update_form + "']")
-        self.enter_text_area = (By.XPATH, "//label[./div[./span[contains(text(),'Enter text')]]]/following-sibling::div[@data-bind='css: controlWidth']//div/textarea")
-        self.enter_value_area = (By.XPATH, "//label[./div[./span[contains(text(),'Enter a random value')]]]/following-sibling::div[@data-bind='css: controlWidth']//div/textarea")
-        self.update_value_area = (By.XPATH, "//label[./div[./span[contains(text(),'Update')]]]/following-sibling::div[@data-bind='css: controlWidth']//div/textarea")
+        self.enter_text_area = (By.XPATH, "//label[.//div[.//span[contains(text(),'Enter text')]]]/following-sibling::div[@data-bind='css: controlWidth']//div/textarea")
+        self.enter_value_area = (By.XPATH, "//label[.//div[.//span[contains(text(),'Enter a random value')]]]/following-sibling::div[@data-bind='css: controlWidth']//div/textarea")
+        self.update_value_area = (By.XPATH, "//label[.//div[.//span[contains(text(),'Update')]]]/following-sibling::div[@data-bind='css: controlWidth']//div/textarea")
         self.form_link = (By.XPATH, "//*[text()='" + UserData.form_name + "']")
         self.form_case_name_input = (By.XPATH, "//textarea[contains(@class,'textfield form-control')]")
         self.form_submit_button = (By.XPATH, "//div[contains(@id,'submit')]//button[contains(@class,'submit')]")
@@ -66,13 +66,14 @@ class WebAppsPage(BasePage):
 
     def submit_case_form(self):
         self.js_click(self.web_app_link)
-        self.wait_for_element(self.case_list_link)
+        self.wait_for_element(self.case_list_link, 200)
         self.js_click(self.case_list_link)
-        self.wait_for_element(self.form_link)
+        self.wait_for_element(self.form_link, 200)
         self.js_click(self.form_link)
+        self.wait_for_element(self.form_case_name_input, 100)
         self.wait_to_clear_and_send_keys(self.form_case_name_input, self.case_name_created)
         self.js_click(self.form_submit_button)
-        self.wait_for_element(self.success_message)
+        self.wait_for_element(self.success_message, 200)
         assert self.is_displayed(self.success_message), "Form not submitted"
         print("Form successfully submitted")
         time.sleep(2)
@@ -96,7 +97,8 @@ class WebAppsPage(BasePage):
         self.wait_to_click(self.form_submit_button)
         # self.wait_after_interaction()
         time.sleep(2)
-        self.wait_for_element(self.success_message)
+        self.wait_for_disappear(self.form_submit_button, 50)
+        self.wait_for_element(self.success_message, 50)
         assert self.is_displayed(self.success_message), "Form not submitted"
         print("Form successfully submitted")
         return self.text_value

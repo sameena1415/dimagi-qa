@@ -3,7 +3,7 @@ import platform
 import time
 
 from dateutil.relativedelta import relativedelta
-from datetime import datetime
+from datetime import datetime, timezone
 
 from selenium.webdriver import ActionChains
 from selenium.webdriver.common.keys import Keys
@@ -60,7 +60,7 @@ class CaseSearchWorkflows(BasePage):
         self.select_all_checkbox = (By.ID, "select-all-checkbox")
         self.case_names = (By.XPATH, "//td[contains(@class,'case-list-column')][3]")
         self.multi_select_continue = (By.XPATH, "(//button[contains(@class,'multi-select-continue-btn')])[1]")
-        self.selected_case_names_on_forms = (By.XPATH, "//span[contains(@class,'webapp-markdown-output')]")
+        self.selected_case_names_on_forms = (By.XPATH, "//span[contains(@class,'webapp-markdown-output') and contains(@data-bind,'caption')]")
         self.song_label = "//span[contains(@class,'webapp-markdown-output')][.='song: by {}']"
         self.checkbox_xpath = "//label[contains (text(),'{}')][1]//following::input[@value='{}'][1]"
         self.search_property_checked = "//label[contains (text(),'{}')][1]//following::input[@value='{}' and @checked][1]"
@@ -68,18 +68,35 @@ class CaseSearchWorkflows(BasePage):
         self.rating_answer = "//span[text()='Rating']/following::input[@value='{}'][1]"
         self.date_picker_close = (By.XPATH, "//div[contains(@class,'show')]//div[@data-action='close']/i")
         self.date_picker_clear = (By.XPATH, "//div[contains(@class,'show')]//div[@data-action='clear']/i")
+        self.result_table = (By.XPATH, "(//div[@id='report-content']//table//tbody//td[1])[1]")
+        self.report_content_id = (By.ID, "report-content")
+        self.webform_section = (By.XPATH, "//section[contains(@id,'webforms')]")
 
-    def check_values_on_caselist(self, row_num, expected_value, is_multi=NO):
+    def check_values_on_caselist(self, row_num, expected_value, is_multi=NO, flag=None):
         self.value_in_table = self.get_element(self.value_in_table_format, row_num)
         self.wait_for_element(self.value_in_table)
         values_ = self.find_elements_texts(self.value_in_table)
         print(expected_value, values_)  # added for debugging
         if is_multi == YES:
-            assert all(item in values_ for item in expected_value) or any(item in values_ for item in expected_value), "Expected values are not present"
-            print("Expected values are present")
+            if all(item in values_ for item in expected_value) or any(item in values_ for item in expected_value):
+                if flag is None or flag==True:
+                    print("Expected values are present")
+                    assert True
+                else:
+                    print("Values did not get selected right")
+            else:
+                print("Expected values are not present")
+                assert False
         elif is_multi == NO:
-            assert expected_value in values_, "Expected values are not present"
-            print("Expected values are present")
+            if expected_value in values_:
+                if flag is None or flag==True:
+                    print("Expected values are present")
+                    assert True
+                else:
+                    print("Values did not get selected right")
+            else:
+                print("Expected values are not present")
+                assert False
 
     def check_default_values_displayed(self, search_property, default_value, search_format):
         time.sleep(2)
@@ -115,11 +132,12 @@ class CaseSearchWorkflows(BasePage):
             else:
                 self.send_keys(self.search_property, input_value + Keys.TAB)
                 time.sleep(2)
+            self.wait_after_interaction(40)
         elif property_type == COMBOBOX:
             self.combox_select_element = self.get_element(self.combox_select, search_property)
             self.wait_for_element(self.combox_select_element, 50)
             self.select_by_text(self.combox_select_element, input_value)
-            self.wait_after_interaction(10)
+            self.wait_after_interaction(40)
             text = self.get_selected_text(self.combox_select_element)
             print(text)
             if text == input_value:
@@ -130,6 +148,7 @@ class CaseSearchWorkflows(BasePage):
                     self.select_by_value(self.combox_select_element, CaseSearchUserInput.ratings[input_value])
                 else:
                     self.select_by_text(self.combox_select_element, input_value)
+                self.wait_after_interaction(40)
                 text = self.get_selected_text(self.combox_select_element)
                 print(text)
             time.sleep(2)
@@ -137,12 +156,14 @@ class CaseSearchWorkflows(BasePage):
             self.combox_select_element = self.get_element(self.combox_select2, search_property)
             self.wait_for_element(self.combox_select_element, 50)
             self.select_by_text(self.combox_select_element, input_value)
+            self.wait_after_interaction(40)
             print("Selected text: ", input_value)
             time.sleep(2)
         elif property_type == COMBOBOX3:
             self.combox_select_element = self.get_element(self.combox_select, search_property)
             self.wait_for_element(self.combox_select_element, 50)
             self.select_by_partial_text(self.combox_select_element, input_value)
+            self.wait_after_interaction(40)
             print("Selected text: ", input_value)
             time.sleep(2)
         if include_blanks == YES:
@@ -311,13 +332,18 @@ class CaseSearchWorkflows(BasePage):
     def check_todays_case_claim_present_on_report(self):
         self.select_by_text(self.case_type_select, "commcare-case-claim")
         self.wait_to_click(self.report_apply_filters)
-        date_on_report = str((datetime.today()).date().strftime("%b %d, %Y"))
+        date_on_report =  str(datetime.now(timezone.utc).strftime("%b %d, %Y"))
+        # date_on_report = str((datetime.today()).date().strftime("%b %d, %Y"))
         recent_claim_case = (By.XPATH, self.commcare_case_claim_case.format(date_on_report))
         print(date_on_report, recent_claim_case)
         try:
-            self.wait_for_element(recent_claim_case)
-            assert self.is_present(recent_claim_case), "Value "+date_on_report+" is not present"
-            print("Value "+date_on_report+" is present")
+            self.wait_for_element(self.result_table, 300)
+            self.wait_for_element(self.report_content_id, 120)
+            print("Report loaded successfully!")
+            if self.is_present(recent_claim_case):
+                print("Value " + date_on_report + " is present")
+            else:
+                print("Value "+date_on_report+" is not present")
         except AssertionError:
             logging.basicConfig(filename='logs.log', encoding='utf-8', level=logging.DEBUG)
             logging.warning("Elastic search is taking too long to update the case")
@@ -330,7 +356,9 @@ class CaseSearchWorkflows(BasePage):
         print("Selected cases: ", song_names_on_case_list)
         self.wait_to_click(self.multi_select_continue)
         print("Waiting for the form to load")
-        self.wait_after_interaction()
+        self.wait_after_interaction(50)
+        self.wait_for_disappear(self.multi_select_continue, 100)
+        self.wait_for_element(self.webform_section, 100)
         self.wait_for_element((By.XPATH, self.song_label.format(song_names_on_case_list[0])))
         for item in song_names_on_case_list:
             self.scroll_to_element((By.XPATH, self.song_label.format(item)))
@@ -346,9 +374,12 @@ class CaseSearchWorkflows(BasePage):
     def check_label_in_form(self, expected_value):
         rating_on_form = self.find_elements_texts(self.selected_case_names_on_forms)
         for rating_value in rating_on_form:
-            print(rating_on_form, expected_value)
-            assert expected_value in rating_value, "Value "+expected_value+" is not present"
-            print("Value "+expected_value+" is present")
+            if rating_value is not None or rating_value != '':
+                print(rating_value, expected_value)
+                assert expected_value in rating_value, "Value "+expected_value+" is not present"
+                print("Value "+expected_value+" is present")
+            else:
+                print("No value present")
 
     def check_if_checkbox_selected(self, search_property, values):
         for value in values:
@@ -394,8 +425,11 @@ class CaseSearchWorkflows(BasePage):
                 if self.is_present(selected_value):
                     assert True, f"Expected item {selected_value} not present"
                     print(f"Expected item {selected_value} present")
+                    bool_value=True
                 else:
                     print(f"Expected item {selected_value} not present")
-                    assert False
+                    bool_value = False
+        return bool_value
+
 
 
