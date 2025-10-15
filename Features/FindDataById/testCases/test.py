@@ -1,7 +1,7 @@
 import pytest
 
 from HQSmokeTests.testPages.home.home_page import HomePage
-from Features.FindById.testPages.data.find_data_page import FindIdPage
+from Features.FindDataById.testPages.data.find_data_page import FindIdPage
 from HQSmokeTests.testPages.webapps.web_apps_page import WebAppsPage
 from HQSmokeTests.testPages.reports.report_page import ReportPage
 

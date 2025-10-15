@@ -1,7 +1,7 @@
 
 import time
 from selenium.webdriver.common.by import By
-from Features.FindById.userInputs.user_inputs import UserData
+from Features.FindDataById.userInputs.user_inputs import UserData
 from common_utilities.selenium.base_page import BasePage
 
 
