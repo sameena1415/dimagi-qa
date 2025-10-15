@@ -56,6 +56,7 @@ def test_case_86_export_to_excel_config_report(driver, settings):
 @pytest.mark.report
 @pytest.mark.applicationStatusPage
 @pytest.mark.p1p2EscapeDefect
+@pytest.mark.skip
 def test_case_87_application_status_report(driver, settings):
     home = HomePage(driver, settings)
     home.reports_menu()

@@ -21,9 +21,6 @@ from selenium.webdriver.support import expected_conditions as ec
 
 """"Contains test page elements and functions related to the Reports module"""
 
-import re
-
-
 def parse_time(time_str):
     # Define regex patterns to match time units
     time_units = {
@@ -80,6 +77,7 @@ class ReportPage(BasePage):
         self.completion_vs_submission_rep = (By.LINK_TEXT, "Form Completion vs. Submission Trends")
         self.worker_activity_times_rep = (By.LINK_TEXT, "Worker Activity Times")
         self.project_performance_rep = (By.LINK_TEXT, "Project Performance")
+        self.CASE_LIST_TITLE = "Case List - CommCare HQ"
 
         # Inspect Data Reports
         self.submit_history_rep = (By.LINK_TEXT, "Submission History")
@@ -254,7 +252,17 @@ class ReportPage(BasePage):
         # App Status
         self.app_status_results = (By.XPATH, "//table[@class='table table-striped datatable dataTable no-footer']/tbody/tr")
         self.app_status_results_cells = (By.XPATH, "//table[@class='table table-striped datatable dataTable no-footer']/tbody/tr/td")
-
+        self.panel_body_text = (By.XPATH, "//div[@class='panel-body-datatable']")
+        self.last_submit_column_list = (By.XPATH, "//table[@id='report_table_app_status']//tbody//td[3]")
+        self.last_submit_column_first = (By.XPATH, "(//table[@id='report_table_app_status']//tbody//td[3])[1]")
+        self.page_list_dropdown = (By.XPATH, "//select[@name='report_table_app_status_length']")
+        self.pagination_list = (By.XPATH, "//ul[@class='pagination']/li/a")
+        self.application_dropdown = (By.XPATH, "//select[@id='report_filter_app']")
+        self.application_field = (By.XPATH, "//span[contains(@id, 'report_filter_app-container')]")
+        self.application_input = (By.XPATH, "//input[contains(@aria-controls,'report_filter_app-result')]")
+        self.APPLICATION_STATUS_TITLE = "Application Status - CommCare HQ"
+        self.result_table = (By.XPATH, "(//div[@id='report-content']//table//tbody//td[1])[1]")
+        self.users_list_item = "//ul[@role='listbox']/li[contains(.,'{}')]"
 
     def check_if_report_loaded(self):
         try:
@@ -957,19 +965,6 @@ class ReportPage(BasePage):
         newest_file = latest_download_file()
         print("Newest file:" + newest_file)
         self.assert_downloaded_file(newest_file, report_name)
-
-    def remove_default_users(self):
-        self.wait_for_element(self.users_field)
-        count = self.find_elements(self.remove_buttons)
-        print(len(count))
-        for i in range(len(count)):
-            count[0].click()
-            time.sleep(2)
-            if len(count) != 1:
-                ActionChains(self.driver).send_keys(Keys.TAB).perform()
-                time.sleep(2)
-            count = self.find_elements(self.remove_buttons)
-        ActionChains(self.driver).send_keys(Keys.ESCAPE).perform()
 
     def verify_sorted_list(self):
         self.select_by_value(self.page_list_dropdown, '100')

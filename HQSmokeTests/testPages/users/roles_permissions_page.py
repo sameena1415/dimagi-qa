@@ -38,7 +38,6 @@ class RolesPermissionPage(BasePage):
             self.role_name_created) + "']]/following-sibling::td//i[@class='fa fa-trash']")
         self.edit_mobile_worker_checkbox = (By.XPATH, "//input[@id='edit-commcare-users-checkbox']//following-sibling::label/span")
         self.report_for_p1p2 = (By.XPATH, "//div[contains(@data-bind,'reportPermission')]//label/span[.='"+UserData.report_for_p1p2+"']")
-        self.edit_mobile_worker_checkbox = (By.XPATH, "//input[@id='edit-commcare-users-checkbox']")
         self.manage_shared_exports = (By.XPATH, "//input[@id='edit-shared-exports-checkbox']")
         self.data_checkbox = (By.XPATH, "//input[@id='edit-data-checkbox']")
 

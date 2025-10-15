@@ -4,7 +4,7 @@ import time
 
 import pandas as pd
 from openpyxl import load_workbook
-from selenium.webdriver import Keys
+from selenium.webdriver import Keys, ActionChains
 
 from common_utilities.selenium.base_page import BasePage
 from common_utilities.path_settings import PathSettings
@@ -186,6 +186,8 @@ class MobileWorkerPage(BasePage):
         self.role_dropdown = (By.XPATH, "//select[@id='id_role']")
         self.username_in_list = "//h3[./b[text() ='{}']]"
         self.table_body = (By.XPATH, "//tbody/tr[1]")
+        self.loaction_page_alert_info = (By.XPATH,
+                                         "//div[contains(@class,'alert-info')]/p[contains(.,'The user shares all assigned locations with one or more other users.')]")
 
 
     def search_user(self, username, flag="YES"):
@@ -812,6 +814,24 @@ class MobileWorkerPage(BasePage):
         text = self.get_selected_text(self.profile_dropdown)
         print(text)
         assert text == profile, "Profile is not the same as set before upload"
+
+    def remove_location(self):
+        self.wait_to_click(self.location_tab)
+        self.wait_for_element(self.assigned_location_field)
+        count = self.find_elements(self.remove_assigned_location)
+        print(len(count))
+        for i in range(len(count)):
+            count[0].click()
+            time.sleep(2)
+            if len(count) != 1:
+                ActionChains(self.driver).send_keys(Keys.TAB).perform()
+                time.sleep(2)
+            count = self.find_elements(self.remove_assigned_location)
+        ActionChains(self.driver).send_keys(Keys.ESCAPE).perform()
+
+    def verify_location_alert_not_present(self):
+        assert not self.is_present_and_displayed(self.loaction_page_alert_info, 10), "Location alert banner present"
+        print("Location alert button not present")
 
     def reset_mobile_worker_password(self, new):
         self.wait_for_element(self.security_tab)
