@@ -15,6 +15,7 @@ on:
         type: choice
         options:
           - staging
+          - production
 
 concurrency:
   group: formplayer-tests-${{ github.ref }}
@@ -91,45 +92,52 @@ jobs:
         run: echo 'Artifact ID is ${{ steps.artifact-upload-step.outputs.artifact-id }}'
 
       - name: Set email vars
-        if: ${{ success() || failure() }}
+        if: ${{ failure() }}
         id: configure_email
         uses: actions/github-script@v6
         env:
-            JOB_STATUS: ${{ job.status }}
-            CC_ENV: ${{ matrix.environment }}
+          JOB_STATUS: ${{ job.status }}
+          CC_ENV: ${{ matrix.environment }}
         with:
           script: |
             const { promises: fs } = require('fs')
+
             const {JOB_STATUS, NOW, CC_ENV, GITHUB_HEAD_REF} = process.env
             const prefix = `[${CC_ENV}] Formplayer Tests - ${JOB_STATUS.toUpperCase()} - Run #${context.runNumber}`
             const suffix = `at ${NOW}`
-            let subject = `${prefix} on branch "${GITHUB_HEAD_REF}" ${suffix}`
+
+            let subject = `${prefix} on "deploy_success" ${suffix}`
+            if (context.eventName !== "repository_dispatch") {
+              subject = `${prefix} on branch "${GITHUB_HEAD_REF}" ${suffix}`
+            }
 
             let bodyFile = './common_utilities/mail_templates/email_pass.md'
             if (JOB_STATUS !== 'success') {
               bodyFile = './common_utilities/mail_templates/email_fail.md'
             }
-            
+
             let actionRunLink = context.payload.repository.html_url + `/actions/runs/${context.runId}`
-            let testSuite = 'Formplayer Regression'
+            let testSuite = 'CommCare HQ Formplayer Test'
             let bodyContent = await fs.readFile(bodyFile, 'utf8')
             bodyContent = bodyContent.replace(/{{actionRunLink}}/g, actionRunLink)
                 .replace(/{{runNumber}}/g, context.runNumber)
                 .replace(/{{environment}}/g, CC_ENV)
                 .replace(/{{testSuite}}/g, testSuite)
-            
+
             let receivers = 'qa-automation@dimagi.com'
             if (context.eventName !== "pull_request" || context.eventName !== "push") {
               receivers = 'qa@dimagi.com, sameena.shaik@fissionlabs.com'
             }
+
             return {
               "subject": subject,
               "body": bodyContent,
               "reference": Math.random().toString(36).substr(2),  // used to prevent threading of similar emails
               "receivers": receivers
             }
+
       - name: Send Result Email
-        if: ${{ success() || failure() }}
+        if: ${{ failure() }}
         uses: dawidd6/action-send-mail@v3
         with:
           server_address: smtp.gmail.com
@@ -141,17 +149,18 @@ jobs:
           from: <${{secrets.DIMAGIQA_MAIL_USERNAME}}>
           html_body: ${{ fromJSON(steps.configure_email.outputs.result).body }}
           convert_markdown: true
-          attachments: ${{ github.workspace }}/formplayer_report_${{ matrix.environment }}.html
+          attachments: ${{ github.workspace }}/report_${{ matrix.environment }}.html
           in_reply_to: ${{ fromJSON(steps.configure_email.outputs.result).reference }}
+
 
       - name: Set slack vars
         if: ${{ always() }}
         id: configure_slack
         uses: actions/github-script@v6
         env:
-            JOB_STATUS: ${{ job.status }}
-            CC_ENV: ${{ matrix.environment }}
-            CC_EVENT: ${{ github.event_name }}
+          JOB_STATUS: ${{ job.status }}
+          CC_ENV: ${{ matrix.environment }}
+          CC_EVENT: ${{ github.event_name }}
         with:
           result-encoding: json
           script: |
@@ -193,15 +202,15 @@ jobs:
           ARTIFACT_URL="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts/${{ steps.artifact-upload-step.outputs.artifact-id }}"
           ENVIRONMENT=$(echo "${{ matrix.environment }}" | tr '[:lower:]' '[:upper:]')
           ENVIRONMENT="[$ENVIRONMENT]"
-          
+
           COMMENT="$STATUS_ICON 📊 *$ENVIRONMENT ${{ github.workflow }} Test Summary Charts*"$'\n\n'"📎 *Artifact:* <${ARTIFACT_URL}|Download here>"
-          
+
           COMBINED_JSON=$(curl -s -F file=@slack_charts/summary_combined.png \
             -F channels=${{ steps.configure_slack.outputs.SLACK_CHANNEL_ID }} \
             -F "initial_comment=$COMMENT" \
             -H "Authorization: Bearer ${{ secrets.SLACK_QA_BOT_TOKEN }}" \
             https://slack.com/api/files.upload)
-          
+
           COMBINED_URL=$(echo $COMBINED_JSON | jq -r '.file.permalink')
           echo "COMBINED_URL=$COMBINED_URL" >> $GITHUB_ENV
           echo "STYLE_BUTTON=$STYLE_BUTTON" >> $GITHUB_ENV
