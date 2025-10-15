@@ -7,6 +7,7 @@ from HQSmokeTests.testPages.android.android_screen import AndroidScreen
 from HQSmokeTests.testPages.applications.application_page import ApplicationPage
 from HQSmokeTests.testPages.users.group_page import GroupPage
 from HQSmokeTests.userInputs.user_inputs import UserData
+from P1P2Tests.testCases.conftest import rerun_count
 from common_utilities.generate_random_string import fetch_random_string
 from HQSmokeTests.testPages.home.home_page import HomePage
 from HQSmokeTests.testPages.users.mobile_workers_page import MobileWorkerPage
@@ -115,16 +116,16 @@ def test_aftertest_cleanup_items_in_users_menu(driver, settings):
 @pytest.mark.application
 @pytest.mark.appSettings
 @pytest.mark.p1p2EscapeDefect
-def test_case_91_login_with_new_password(driver, settings):
+def test_case_91_login_with_new_password(driver, settings, rerun_count):
     menu = HomePage(driver, settings)
     menu.applications_menu(UserData.village_application)
     load = ApplicationPage(driver)
     code = load.get_app_code(UserData.village_application)
-    username = "username_" + fetch_random_string()
+    username = f"username_{rerun_count}{fetch_random_string()}"
     worker = MobileWorkerPage(driver)
     menu = HomePage(driver, settings)
     menu.users_menu()
-    worker.delete_bulk_users()
+    # worker.delete_bulk_users()
     worker.mobile_worker_menu()
     worker.create_mobile_worker()
     worker.mobile_worker_enter_username(username)

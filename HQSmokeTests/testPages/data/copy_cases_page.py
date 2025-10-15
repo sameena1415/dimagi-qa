@@ -35,7 +35,7 @@ class CopyCasesPage(BasePage):
         self.copy_dropdown = (By.ID, "select2-reassign_owner_select-container")
         self.copy_to_user_dropdown_input = (By.XPATH, "//input[@class='select2-search__field']")
         self.copied_user_from_list = "//li[starts-with(text(), '{}')]"
-        self.success_message = (By.XPATH, "//*[@data-bind='html: message' and contains(.,'Cases copied')]")
+        self.success_message = (By.XPATH, "//*[contains(@class,'alert-success')]")
         self.empty_list = (By.XPATH, "//td[.='No data available to display. Please try changing your filters.']")
         self.users_field = (By.XPATH, "(//textarea[@class='select2-search__field'])[1]")
         self.users_list_item = "//ul[@role='listbox']/li[contains(.,'{}')]"

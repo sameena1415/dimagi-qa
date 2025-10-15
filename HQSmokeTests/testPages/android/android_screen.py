@@ -111,6 +111,7 @@ class AndroidScreen:
         self.form = "//android.widget.TextView[@text='" + UserData.new_form_name + "']"
         self.text_field = "//android.widget.EditText"
         self.submit_button = "//android.widget.TextView[@text='FINISH']"
+        self.log_out = "//android.widget.TextView[@text='Log out of CommCare']"
 
     def click_xpath(self, locator):
         element = self.driver.find_element(AppiumBy.XPATH, locator)
