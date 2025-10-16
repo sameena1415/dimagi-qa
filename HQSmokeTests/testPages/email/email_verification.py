@@ -46,6 +46,8 @@ class EmailVerification:
             from_email = UserData.from_email_prod
         elif 'india' in url:
             from_email = UserData.from_email_india
+        elif "eu" in url:
+            from_email = UserData.from_email_eu
         else:
             from_email = UserData.from_email
 
@@ -94,6 +96,8 @@ class EmailVerification:
             from_email = UserData.from_email_prod
         elif 'india' in url:
             from_email = UserData.from_email_india
+        elif "eu" in url:
+            from_email = UserData.from_email_eu
         else:
             from_email = UserData.from_email
         print(subject)
@@ -132,6 +136,8 @@ class EmailVerification:
             from_email = UserData.from_email_prod
         elif 'india' in url:
             from_email = UserData.from_email_india
+        elif "eu" in url:
+            from_email = UserData.from_email_eu
         else:
             from_email = UserData.from_email
         print(subject)
@@ -255,6 +261,8 @@ class EmailVerification:
             from_email = UserData.from_email_prod
         elif 'india' in url:
             from_email = UserData.from_email_india
+        elif "eu" in url:
+            from_email = UserData.from_email_eu
         else:
             from_email = UserData.from_email
 

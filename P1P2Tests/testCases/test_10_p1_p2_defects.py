@@ -13,6 +13,7 @@ from HQSmokeTests.testPages.reports.report_page import ReportPage
 from HQSmokeTests.testPages.webapps.web_apps_page import WebAppsPage
 
 from HQSmokeTests.userInputs.user_inputs import UserData
+from common_utilities.generate_random_string import fetch_random_string
 
 values = dict()
 values['flag'] = False
@@ -64,11 +65,12 @@ def test_case_76_application_status(driver, settings):
 @pytest.mark.application
 @pytest.mark.appBuilder
 @pytest.mark.p1p2EscapeDefect
-def test_case_77_create_new_app(driver, settings):
+def test_case_77_create_new_app(driver, settings, rerun_count):
     if "india" in settings['url']:
         pytest.skip("Skipping for this month as limit exhausted")
+    app_p1p2_name = f"App P1P2 {rerun_count}{fetch_random_string()}"
     load = ApplicationPage(driver)
-    app_name = load.create_application_with_verifications()
+    app_name = load.create_application_with_verifications(app_p1p2_name)
     app = AppPreviewPage(driver)
     lat, lon = app.submit_form_with_loc()
     home = HomePage(driver, settings)

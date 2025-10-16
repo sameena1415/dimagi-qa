@@ -295,7 +295,7 @@ class ApplicationPage(BasePage):
 
 
 
-    def create_application_with_verifications(self):
+    def create_application_with_verifications(self, app_p1p2_name):
         time.sleep(2)
         self.switch_to_default_content()
         self.wait_for_element(self.applications_menu_id)
@@ -303,7 +303,7 @@ class ApplicationPage(BasePage):
         self.wait_to_click(self.new_application)
         self.wait_to_click(self.edit_app_name)
         self.clear(self.app_name_textbox)
-        self.send_keys(self.app_name_textbox, self.app_p1p2_name)
+        self.send_keys(self.app_name_textbox, app_p1p2_name)
         self.wait_to_click(self.confirm_change)
         self.wait_to_click(self.add_module)
         self.wait_to_click(self.add_case_list)
@@ -361,9 +361,9 @@ class ApplicationPage(BasePage):
 
         time.sleep(2)
         assert self.is_present_and_displayed(self.form_settings_tab)
-        assert self.is_present_and_displayed((By.XPATH, self.app_created.format(self.app_p1p2_name)))
+        assert self.is_present_and_displayed((By.XPATH, self.app_created.format(app_p1p2_name)))
         print("New App created successfully!")
-        self.wait_to_click((By.XPATH, self.field_edit_app_name.format(self.app_p1p2_name)))
+        self.wait_to_click((By.XPATH, self.field_edit_app_name.format(app_p1p2_name)))
 
         self.wait_to_click(self.make_new_version_button)
         time.sleep(2)
@@ -372,7 +372,7 @@ class ApplicationPage(BasePage):
         self.wait_to_click(self.release_button)
         print("Sleeping for the installation code to generate")
         time.sleep(2)
-        return self.app_p1p2_name
+        return app_p1p2_name
 
     def check_for_html_char(self, text):
         matched = re.search(r'\b&\w+;\b', text)
