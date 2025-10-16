@@ -213,7 +213,7 @@ class ReportPage(BasePage):
         self.edit_column = (By.XPATH,
                             "//div[./label[contains(.,'Columns')]]//following-sibling::div//a[@data-parent='#case-list-explorer-columns']")
         self.properties_table = (By.XPATH, "//tbody[contains(@data-bind,'properties')]")
-        self.add_property_button = (By.XPATH, "//*[@data-bind='click: addProperty']")
+        self.add_property_button = (By.XPATH, "//button[@data-bind='click: addProperty']/i")
         self.property_name_input = (By.XPATH, "(//tbody[contains(@data-bind,'properties')]//td[2]//input)[last()]")
         self.cle_case_owner_column = (By.XPATH, "//table[contains(@class,'datatable')]//tbody//td[5]")
 
@@ -687,9 +687,10 @@ class ReportPage(BasePage):
             owner = UserData.appiumtest_owner_id_prod
         else:
             owner = UserData.appiumtest_owner_id
+        self.wait_for_element(self.case_list_explorer, 300)
         self.wait_to_click(self.case_list_explorer)
-        time.sleep(2)
-        self.wait_for_element(self.edit_column, 120)
+        time.sleep(20)
+        self.wait_for_element(self.edit_column, 220)
         self.wait_to_click(self.edit_column)
         self.wait_for_element(self.properties_table)
         self.wait_to_click(self.add_property_button)
@@ -697,8 +698,7 @@ class ReportPage(BasePage):
         self.send_keys(self.property_name_input, "owner_name")
 
         ActionChains(self.driver).key_down(Keys.ENTER).send_keys(Keys.TAB).perform()
-        self.scroll_to_element(self.remove_case_owner)
-        self.wait_to_click(self.remove_case_owner)
+        self.remove_default_users()
         self.wait_to_click(self.case_owner_textarea)
         self.send_keys(self.case_owner_textarea, UserData.app_login)
         self.wait_for_element((By.XPATH, self.case_owner_list_item.format(UserData.app_login)))
@@ -712,7 +712,7 @@ class ReportPage(BasePage):
             for i in range(len(list_of_owner)):
                 text = list_of_owner[i].text
                 print(text)
-                assert text == owner or text == UserData.user_group, "Owner does not match"
+                assert text == owner or text == UserData.user_group, f"Owner {text} does not match for {owner} or {UserData.user_group}"
                 self.check_if_html(text)
 
     def check_if_html(self, text):

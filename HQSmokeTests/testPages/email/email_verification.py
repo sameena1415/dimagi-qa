@@ -1,4 +1,5 @@
 import datetime
+import time
 
 from imap_tools import MailBox
 from imap_tools import AND, OR, NOT
@@ -18,7 +19,29 @@ class EmailVerification:
         self.imap_user = settings['login_username']
         self.imap_pass = settings['imap_password']
 
+    # def get_hyperlink_from_latest_email(self, subject, url):
+    #     if 'www' in url:
+    #         from_email = UserData.from_email_prod
+    #     elif 'india' in url:
+    #         from_email = UserData.from_email_india
+    #     else:
+    #         from_email = UserData.from_email
+    #
+    #     with MailBox(self.imap_host).login(self.imap_user, self.imap_pass, 'INBOX') as mailbox:
+    #         bodies = [msg.html for msg in
+    #                   mailbox.fetch(AND(subject=subject, from_=from_email, date=datetime.date.today()))]
+    #     soup = BeautifulSoup(str(bodies[len(bodies) - 1]), "html.parser")
+    #     links = []
+    #     for link in soup.findAll('a', attrs={'href': re.compile("^https://")}):
+    #         links.append(link.get('href'))
+    #         # print("link: ", link)
+    #     # links  # in this you will have to check the link number starting from 0.
+    #     print(len(links))
+    #     print(links[0])
+    #     return str(links[0])
+
     def get_hyperlink_from_latest_email(self, subject, url):
+        # --- Determine from address ---
         if 'www' in url:
             from_email = UserData.from_email_prod
         elif 'india' in url:
@@ -26,18 +49,45 @@ class EmailVerification:
         else:
             from_email = UserData.from_email
 
-        with MailBox(self.imap_host).login(self.imap_user, self.imap_pass, 'INBOX') as mailbox:
-            bodies = [msg.html for msg in
-                      mailbox.fetch(AND(subject=subject, from_=from_email, date=datetime.date.today()))]
-        soup = BeautifulSoup(str(bodies[len(bodies) - 1]), "html.parser")
-        links = []
-        for link in soup.findAll('a', attrs={'href': re.compile("^https://")}):
-            links.append(link.get('href'))
-            # print("link: ", link)
-        # links  # in this you will have to check the link number starting from 0.
-        print(len(links))
-        print(links[0])
-        return str(links[0])
+        max_retries = 3
+        for attempt in range(max_retries):
+            try:
+                with MailBox(self.imap_host).login(self.imap_user, self.imap_pass, 'INBOX') as mailbox:
+                    # --- Fetch only the newest few messages ---
+                    msgs = list(mailbox.fetch(
+                        AND(subject=subject, from_=from_email, date=datetime.date.today()),
+                        reverse=True,  # newest first
+                        limit=5  # fetch only 5 latest emails
+                        )
+                        )
+
+                    if not msgs:
+                        print(f"Attempt {attempt + 1}: No matching emails yet.")
+                        time.sleep(5)
+                        continue
+
+                    # --- Parse the latest matching email body ---
+                    latest_msg = msgs[0]
+                    soup = BeautifulSoup(latest_msg.html or "", "html.parser")
+
+                    # --- Extract all https:// links ---
+                    links = [
+                        link.get('href')
+                        for link in soup.find_all('a', attrs={'href': re.compile(r"^https://")})
+                        ]
+
+                    if links:
+                        print(f"✅ Found {len(links)} link(s). First: {links[0]}")
+                        return links[0]
+
+                    print(f"Attempt {attempt + 1}: No links found in email, retrying...")
+                    time.sleep(5)
+
+            except Exception as e:
+                print(f"⚠️ IMAP error on attempt {attempt + 1}: {e}")
+                time.sleep(3)
+
+        raise AssertionError("❌ Hyperlink not found after multiple retries")
 
     def get_email_body_from_latest_email(self, subject, url):
         if 'www' in url:
@@ -184,6 +234,22 @@ class EmailVerification:
         table_data = [tab_low + tab_inactive + tab_high]
         return table_data
 
+    # def verify_email_sent(self, subject, url):
+    #     if 'www' in url:
+    #         from_email = UserData.from_email_prod
+    #     elif 'india' in url:
+    #         from_email = UserData.from_email_india
+    #     else:
+    #         from_email = UserData.from_email
+    #
+    #     with MailBox(self.imap_host).login(self.imap_user, self.imap_pass, 'INBOX') as mailbox:
+    #         for msg in mailbox.fetch(
+    #                 AND(from_=from_email, date=datetime.date.today())
+    #                 ):
+    #             if msg.subject == subject:
+    #                 print("Email is received")
+    #                 assert True
+
     def verify_email_sent(self, subject, url):
         if 'www' in url:
             from_email = UserData.from_email_prod
@@ -192,10 +258,26 @@ class EmailVerification:
         else:
             from_email = UserData.from_email
 
-        with MailBox(self.imap_host).login(self.imap_user, self.imap_pass, 'INBOX') as mailbox:
-            for msg in mailbox.fetch(
-                    AND(from_=from_email, date=datetime.date.today())
-                    ):
-                if msg.subject == subject:
-                    print("Email is received")
-                    assert True
+        max_retries = 3
+        for attempt in range(max_retries):
+            try:
+                with MailBox(self.imap_host).login(self.imap_user, self.imap_pass, 'INBOX') as mailbox:
+                    # Fetch only recent few (reverse=True gives most recent first)
+                    msgs = list(mailbox.fetch(
+                        AND(from_=from_email, date=datetime.date.today()),
+                        reverse=True,  # newest first
+                        limit=5  # fetch only 5 recent emails
+                        )
+                        )
+
+                    for msg in msgs:
+                        if msg.subject.strip() == subject.strip():
+                            print("✅ Email is received")
+                            return True
+
+                print(f"Attempt {attempt + 1}: Email not found yet. Retrying...")
+                time.sleep(5)
+            except Exception as e:
+                print(f"IMAP error on attempt {attempt + 1}: {e}")
+                time.sleep(3)
+        raise AssertionError("❌ Email not received after multiple retries")

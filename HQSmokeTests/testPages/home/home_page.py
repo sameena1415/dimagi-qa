@@ -65,7 +65,11 @@ class HomePage(BasePage):
             else:
                 raise TimeoutException
         self.wait_to_click(self.view_all)
-        time.sleep(5)
+        url = self.get_current_url()
+        if "staging" in url:
+            time.sleep(50)
+            self.wait_for_page_title(self.REPORTS_TITLE, 300)
+        time.sleep(10)
         assert self.REPORTS_TITLE in self.driver.title, "This is not the Reports menu page."
 
     def data_menu(self):

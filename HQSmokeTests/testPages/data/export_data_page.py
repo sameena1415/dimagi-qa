@@ -841,7 +841,7 @@ class ExportDataPage(BasePage):
         self.wait_and_sleep_to_click(self.prepare_export_button, timeout=10)
         try:
             self.wait_till_progress_completes("exports")
-            self.wait_for_element(self.success_progress, 100)
+            self.wait_for_element(self.success_progress, 200)
             self.wait_for_element(self.download_button, 300)
             self.js_click(self.download_button)
             wait_for_download_to_finish()

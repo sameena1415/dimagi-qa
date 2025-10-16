@@ -662,3 +662,9 @@ class BasePage:
                 editor.clearSelection();
             """
         self.driver.execute_script(script, text, locator)
+
+    def wait_for_page_title(self, title, timeout=20):
+        WebDriverWait(self.driver, timeout).until(
+            ec.title_is(title)
+            )
+        print(f"✅ Page loaded: {title}")
