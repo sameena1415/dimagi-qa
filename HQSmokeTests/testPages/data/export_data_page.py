@@ -127,6 +127,7 @@ class ExportDataPage(BasePage):
         self.copy_dashfeed_link = "//*[contains(@data-bind,'hasEmailedExport')][.//span[.='{}']]//following-sibling::div//*[contains(@data-bind, 'copyLinkRequested')]"
         self.dashboard_feed_link = "//*[contains(@data-bind,'hasEmailedExport')][.//span[.='{}']]//following-sibling::div//input"
         self.check_data = (By.XPATH, "//*[contains(text(), '@odata.context')]")
+        self.data_upload_complete_text = "(//*[contains(@data-bind,'hasEmailedExport')][.//span[.='{}']]/following-sibling::div//p[contains(@class,'text-success')][contains(.,'Data update complete')])"
 
         # Power BI / Tableau Integration, Form
         self.powerBI_tab_int = (By.LINK_TEXT, 'PowerBi/Tableau Integration')
@@ -510,9 +511,10 @@ class ExportDataPage(BasePage):
         self.wait_for_element((By.XPATH, self.update_data_conf.format(UserData.dashboard_feed_case)), 20)
         self.wait_to_click((By.XPATH, self.update_data_conf.format(UserData.dashboard_feed_case)))
         # self.wait_and_sleep_to_click((By.XPATH, self.update_data_conf.format(UserData.dashboard_feed_case)))
-        self.wait_for_element(self.data_upload_msg, 50)
-        if self.is_present(self.data_upload_msg):
+        self.wait_for_element((By.XPATH, self.data_upload_complete_text.format(UserData.dashboard_feed_case)), 50)
+        if self.is_present((By.XPATH, self.data_upload_complete_text.format(UserData.dashboard_feed_case))):
             print("Data uploaded successfully.")
+            self.reload_page()
         else:
             print("Data not uploaded successfully.")
         time.sleep(10)

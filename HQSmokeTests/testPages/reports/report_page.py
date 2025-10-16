@@ -187,9 +187,11 @@ class ReportPage(BasePage):
         self.case_owner_column = (By.XPATH, "//tbody//td[3]")
 
         # Case List Explorer
-        self.query_div = (By.XPATH, "//div[@class='ace_content']//div[@class='ace_line']")
+        self.query_textarea =  ".report-filter-xpath-textarea"
+        self.query_div = (By.XPATH, "//div[@class='report-filter-xpath-textarea']//pre//div[@class='ace_line']")
+        self.query_cursor = (By.XPATH, "//div[@class='report-filter-xpath-textarea']//pre//div[@class='ace_cursor']")
         self.case_list_explorer_query_field = (
-        By.XPATH, "//textarea[@class='ace_text-input']")
+        By.XPATH, "//div[@class='report-filter-xpath-textarea']//pre//textarea[@class='ace_text-input']")
         self.case_list_explorer_rep = (By.LINK_TEXT, "Case List Explorer")
         self.case_list_explorer_TITLE = "Case List Explorer - CommCare HQ"
         self.case_type_dropdown = (By.XPATH, "//select[@id='report_filter_case_type']")
@@ -687,7 +689,7 @@ class ReportPage(BasePage):
             owner = UserData.appiumtest_owner_id
         self.wait_to_click(self.case_list_explorer)
         time.sleep(2)
-        self.wait_for_element(self.edit_column)
+        self.wait_for_element(self.edit_column, 120)
         self.wait_to_click(self.edit_column)
         self.wait_for_element(self.properties_table)
         self.wait_to_click(self.add_property_button)
@@ -943,6 +945,9 @@ class ReportPage(BasePage):
                 ActionChains(self.driver).send_keys(Keys.TAB).perform()
 
             count = self.find_elements(self.remove_buttons)
+        ActionChains(self.driver).send_keys(Keys.ESCAPE).perform()
+        time.sleep(2)
+        ActionChains(self.driver).send_keys(Keys.TAB).perform()
 
     def verify_case_list_page(self):
         self.wait_to_click(self.case_list_rep)
@@ -1033,11 +1038,11 @@ class ReportPage(BasePage):
     def get_case_id_from_case_list_explorer(self, text):
         query = "case_name = '" + text + "'"
         self.wait_to_click(self.case_list_explorer_rep)
+        time.sleep(5)
         self.wait_for_element(self.apply_id, 100)
         self.remove_default_users()
-        self.js_click(self.query_div)
         time.sleep(2)
-        self.send_keys(self.case_list_explorer_query_field, query)
+        self.set_ace_editor_text(self.query_textarea, query)
         time.sleep(2)
         self.select_by_text(self.case_type_dropdown, UserData.case_reassign_change)
         time.sleep(2)
