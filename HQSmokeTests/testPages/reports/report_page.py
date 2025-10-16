@@ -252,7 +252,7 @@ class ReportPage(BasePage):
         # App Status
         self.app_status_results = (By.XPATH, "//table[@class='table table-striped datatable dataTable no-footer']/tbody/tr")
         self.app_status_results_cells = (By.XPATH, "//table[@class='table table-striped datatable dataTable no-footer']/tbody/tr/td")
-        self.panel_body_text = (By.XPATH, "//div[@class='panel-body-datatable']")
+        self.panel_body_text = (By.XPATH, "//div[@id='report-content']//div[contains(@class,'card-body')]")
         self.last_submit_column_list = (By.XPATH, "//table[@id='report_table_app_status']//tbody//td[3]")
         self.last_submit_column_first = (By.XPATH, "(//table[@id='report_table_app_status']//tbody//td[3])[1]")
         self.page_list_dropdown = (By.XPATH, "//select[@name='report_table_app_status_length']")

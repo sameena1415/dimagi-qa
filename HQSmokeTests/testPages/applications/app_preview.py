@@ -85,8 +85,8 @@ class AppPreviewPage(BasePage):
         self.driver.switch_to.frame(self.find_element(self.iframe_app_preview))
         self.login_as_app_preview()
         self.wait_to_click(self.start_option)
-        
-        self.wait_for_element((By.XPATH, self.case_list_menu.format(UserData.case_list_name)))
+        time.sleep(2)
+        self.wait_for_element((By.XPATH, self.case_list_menu.format(UserData.case_list_name)), 50)
         self.wait_to_click((By.XPATH, self.case_list_menu.format(UserData.case_list_name)))
         
         self.wait_for_element((By.XPATH, self.case_list_menu.format("Reg Form")))
@@ -105,10 +105,11 @@ class AppPreviewPage(BasePage):
         lat = self.get_text(self.latitude)
         lon = self.get_text(self.longitude)
         self.wait_to_click(self.next_question)
-        
+
+        self.wait_for_element(self.complete_form, 60)
         self.wait_to_click(self.complete_form)
         
-        self.wait_for_element(self.success_message)
+        self.wait_for_element(self.success_message, 60)
         print("Form submitted")
         time.sleep(2)
         self.wait_for_element(self.home_button)

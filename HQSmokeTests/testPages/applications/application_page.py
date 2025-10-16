@@ -356,7 +356,8 @@ class ApplicationPage(BasePage):
             self.wait_to_click(self.override_btn)
         time.sleep(3)
         self.hover_on_element((By.XPATH, self.form_link.format("Followup Form")))
-        self.wait_to_click((By.XPATH, self.form_settings_btn.format("Followup Form")))
+        self.wait_for_element((By.XPATH, self.form_settings_btn.format("Followup Form")))
+        self.js_click((By.XPATH, self.form_settings_btn.format("Followup Form")))
 
         time.sleep(2)
         assert self.is_present_and_displayed(self.form_settings_tab)

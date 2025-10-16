@@ -65,6 +65,7 @@ class HomePage(BasePage):
             else:
                 raise TimeoutException
         self.wait_to_click(self.view_all)
+        time.sleep(5)
         assert self.REPORTS_TITLE in self.driver.title, "This is not the Reports menu page."
 
     def data_menu(self):
@@ -118,14 +119,14 @@ class HomePage(BasePage):
                 self.wait_to_click(self.show_full_menu)
             self.driver.get(self.dashboard_link)
             self.accept_pop_up()
-            self.wait_for_element(menu)
+            self.wait_for_element(menu, 60)
             self.wait_to_click(menu)
         except TimeoutException:
             if self.is_present(login.username_textbox_id):
                 login.login(self.settings["login_username"], self.settings["login_password"])
                 self.driver.get(self.dashboard_link)
                 self.accept_pop_up()
-                self.wait_for_element(menu)
+                self.wait_for_element(menu, 60)
                 self.wait_to_click(menu)
             else:
                 print(TimeoutException)
