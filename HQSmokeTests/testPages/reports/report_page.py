@@ -769,6 +769,9 @@ class ReportPage(BasePage):
             self.wait_to_click((By.XPATH, self.user_from_list.format(UserData.app_login)))
 
             ActionChains(self.driver).send_keys(Keys.TAB).perform()
+            date_range = self.get_todays_date_range()
+            self.clear(self.date_input)
+            self.send_keys(self.date_input, date_range + Keys.TAB)
             self.wait_to_click(self.apply_id)
             time.sleep(2)
         except (TimeoutException, NoSuchElementException):

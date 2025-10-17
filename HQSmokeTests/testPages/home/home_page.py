@@ -64,7 +64,10 @@ class HomePage(BasePage):
                 self.open_menu(self.reports_menu_id)
             else:
                 raise TimeoutException
-        self.wait_to_click(self.view_all)
+        try:
+            self.wait_to_click(self.view_all)
+        except Exception:
+            print("View All has been already clicked")
         url = self.get_current_url()
         if "staging" in url:
             time.sleep(50)

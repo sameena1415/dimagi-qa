@@ -660,11 +660,12 @@ class MessagingPage(BasePage):
             print("No Conditional alerts are present")
 
 
-    def create_cond_alert_for_doesnot_have_value(self):
+    def create_cond_alert_for_doesnot_have_value(self, rerun):
+        cond_alert_no_value_name_input = f"{self.cond_alert_no_value_name_input}{rerun}"
         self.wait_to_click(self.cond_alerts)
-        self.remove_alert_with_same_name(self.cond_alert_no_value_name_input)
+        self.remove_alert_with_same_name(cond_alert_no_value_name_input)
         self.wait_to_click(self.add_cond_alert)
-        self.send_keys(self.cond_alert_name, self.cond_alert_no_value_name_input)
+        self.send_keys(self.cond_alert_name, cond_alert_no_value_name_input)
         self.wait_to_click(self.continue_button_basic_tab)
         time.sleep(2)
         self.wait_to_click(self.case_type)
@@ -684,38 +685,38 @@ class MessagingPage(BasePage):
         self.wait_for_element(self.recipients_select_cond_alert)
         self.select_by_value(self.recipients_select_cond_alert, "Owner")
         self.select_by_text(self.alert_type, "Email")
-        self.send_keys(self.email_subject, "Test Alert for no value" + self.cond_alert_no_value_name_input)
-        self.send_keys(self.broadcast_message, "Test Alert for no value:" + self.cond_alert_no_value_name_input)
+        self.send_keys(self.email_subject, "Test Alert for no value " + cond_alert_no_value_name_input)
+        self.send_keys(self.broadcast_message, "Test Alert for no value:" + cond_alert_no_value_name_input)
         self.wait_to_click(self.save_button_xpath)
         print("Sleeping till the alert processing completes")
         time.sleep(360)
         self.driver.refresh()
         time.sleep(160)
-        self.wait_to_clear_and_send_keys(self.search_box, self.cond_alert_no_value_name_input)
+        self.wait_to_clear_and_send_keys(self.search_box, cond_alert_no_value_name_input)
         time.sleep(10)
         self.wait_to_click(self.search_box)
-        self.wait_for_element((By.XPATH, self.delete_cond_alert.format(self.cond_alert_no_value_name_input)), 700)
+        self.wait_for_element((By.XPATH, self.delete_cond_alert.format(cond_alert_no_value_name_input)), 700)
         self.driver.refresh()
-        if self.is_clickable((By.XPATH, self.delete_cond_alert.format(self.cond_alert_no_value_name_input))):
+        if self.is_clickable((By.XPATH, self.delete_cond_alert.format(cond_alert_no_value_name_input))):
             print("Restart is not required.")
         else:
             try:
-                self.js_click((By.XPATH, self.restart_rule_button.format(self.cond_alert_no_value_name_input)))
+                self.js_click((By.XPATH, self.restart_rule_button.format(cond_alert_no_value_name_input)))
                 self.accept_pop_up()
                 time.sleep(5)
                 self.accept_pop_up()
                 print("Sleeping till the alert processing completes")
                 time.sleep(360)
-                self.wait_to_clear_and_send_keys(self.search_box, self.cond_alert_no_value_name_input)
+                self.wait_to_clear_and_send_keys(self.search_box, cond_alert_no_value_name_input)
                 self.wait_to_click(self.search_box)
-                self.wait_for_element((By.XPATH, self.delete_cond_alert.format(self.cond_alert_no_value_name_input)), 700)
+                self.wait_for_element((By.XPATH, self.delete_cond_alert.format(cond_alert_no_value_name_input)), 700)
                 self.driver.refresh()
             except:
                 print("Restart not required")
         self.wait_for_element(self.search_box)
-        self.wait_to_clear_and_send_keys(self.search_box, self.cond_alert_no_value_name_input)
+        self.wait_to_clear_and_send_keys(self.search_box, cond_alert_no_value_name_input)
         self.wait_to_click(self.search_box)
-        assert self.is_displayed((By.XPATH, self.cond_alert_created.format(self.cond_alert_no_value_name_input))), "Conditional Alert not created successfully!"
+        assert self.is_displayed((By.XPATH, self.cond_alert_created.format(cond_alert_no_value_name_input))), "Conditional Alert not created successfully!"
         print("Conditional Alert created successfully!")
-        subject = "Test Alert for no value" + self.cond_alert_no_value_name_input
-        return self.cond_alert_no_value_name_input, subject
+        subject = "Test Alert for no value" + cond_alert_no_value_name_input
+        return cond_alert_no_value_name_input, subject

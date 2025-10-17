@@ -152,13 +152,13 @@ def test_case_83_data_forwarding_add_edit(driver, settings):
 
 @pytest.mark.data
 @pytest.mark.p1p2EscapeDefect
-def test_case_93_cond_alert_on_form_submit(driver, settings):
+def test_case_93_cond_alert_on_form_submit(driver, settings, rerun_count):
     menu = HomePage(driver, settings)
     msg = MessagingPage(driver)
     menu.messaging_menu()
     msg.remove_all_cond_alert()
     menu.messaging_menu()
-    cond_alert, subject = msg.create_cond_alert_for_doesnot_have_value()
+    cond_alert, subject = msg.create_cond_alert_for_doesnot_have_value(rerun_count)
     menu.web_apps_menu()
     webapps = WebAppsPage(driver)
     webapps.verify_apps_presence()

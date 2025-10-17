@@ -889,7 +889,10 @@ class ExportDataPage(BasePage):
             self.assert_downloaded_file(newest_file, UserData.p1p2_case_export_name), "Download Not Completed!"
         else:
             print("Not the expected file. Downloading again...")
-            self.js_click(self.download_button)
+            self.wait_for_element(self.download_button)
+            time.sleep(4)
+            self.wait_to_click(self.download_button)
+            time.sleep(4)
             wait_for_download_to_finish()
             newest_file = latest_download_file()
             self.assert_downloaded_file(newest_file, UserData.p1p2_case_export_name), "Download Not Completed!"
