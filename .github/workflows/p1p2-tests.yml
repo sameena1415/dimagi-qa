@@ -4,6 +4,12 @@
 name: Priority Escape Defects Tests
 
 on:
+  push:
+    branches-ignore:
+      - master   # run on all branches except master
+  pull_request:
+    branches-ignore:
+      - master   # ignore PRs targeting master
   workflow_dispatch:
     inputs:
       environment:
@@ -67,6 +73,8 @@ jobs:
           DIMAGIQA_MAIL_USERNAME: ${{ secrets.DIMAGIQA_MAIL_USERNAME }}
           DIMAGIQA_MAIL_PASSWORD: ${{ secrets.DIMAGIQA_MAIL_PASSWORD }}
           DIMAGIQA_IMAP_PASSWORD: ${{secrets.DIMAGIQA_IMAP_PASSWORD}}
+          DIMAGIQA_BS_USER: ${{ secrets.DIMAGIQA_BS_USER }}
+          DIMAGIQA_BS_KEY: ${{ secrets.DIMAGIQA_BS_KEY }}
         run: |
           echo "client_payload: ${{ toJson(github.event.client_payload) }}"
           echo "matrix environment: ${{ matrix.environment }}"
@@ -181,14 +189,14 @@ jobs:
               SLACK_WEBHOOK_URL = '${{ secrets.SLACK_WEBHOOK_URL_SMOKE }}';
               SLACK_CHANNEL_ID = '${{ secrets.SLACK_CHANNEL_ID_SMOKE }}';
               console.log("Staging Failure");
-            } else if (CC_EVENT != 'repository_dispatch' && CC_ENV == 'india') {
+            } else if (CC_EVENT != 'repository_dispatch' && CC_ENV == 'india' && JOB_STATUS == 'failure') {
               SLACK_WEBHOOK_URL = '${{ secrets.SLACK_WEBHOOK_URL_SMOKE }}';
               SLACK_CHANNEL_ID = '${{ secrets.SLACK_CHANNEL_ID_SMOKE }}';
               console.log("India Failure");
-            } else if (CC_EVENT != 'repository_dispatch' && CC_ENV == 'india' && CC_ENV == 'eu' && JOB_STATUS == 'failure') {
+            } else if (CC_EVENT != 'repository_dispatch' && CC_ENV == 'eu' && JOB_STATUS == 'failure') {
               SLACK_WEBHOOK_URL = '${{ secrets.SLACK_WEBHOOK_URL_SMOKE }}';
               SLACK_CHANNEL_ID = '${{ secrets.SLACK_CHANNEL_ID_SMOKE }}';
-              console.log("India Success");
+              console.log("EU Trigger");
             } else {
               SLACK_WEBHOOK_URL = '';
               SLACK_CHANNEL_ID = '';

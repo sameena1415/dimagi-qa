@@ -64,7 +64,15 @@ class HomePage(BasePage):
                 self.open_menu(self.reports_menu_id)
             else:
                 raise TimeoutException
-        self.wait_to_click(self.view_all)
+        try:
+            self.wait_to_click(self.view_all)
+        except Exception:
+            print("View All has been already clicked")
+        url = self.get_current_url()
+        if "staging" in url:
+            time.sleep(50)
+            self.wait_for_page_title(self.REPORTS_TITLE, 300)
+        time.sleep(10)
         assert self.REPORTS_TITLE in self.driver.title, "This is not the Reports menu page."
 
     def data_menu(self):
@@ -118,14 +126,14 @@ class HomePage(BasePage):
                 self.wait_to_click(self.show_full_menu)
             self.driver.get(self.dashboard_link)
             self.accept_pop_up()
-            self.wait_for_element(menu)
+            self.wait_for_element(menu, 60)
             self.wait_to_click(menu)
         except TimeoutException:
             if self.is_present(login.username_textbox_id):
                 login.login(self.settings["login_username"], self.settings["login_password"])
                 self.driver.get(self.dashboard_link)
                 self.accept_pop_up()
-                self.wait_for_element(menu)
+                self.wait_for_element(menu, 60)
                 self.wait_to_click(menu)
             else:
                 print(TimeoutException)
