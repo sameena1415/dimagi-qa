@@ -39,6 +39,7 @@ def test_case_71_case_owner_list_explorer(driver, settings):
 
 @pytest.mark.report
 @pytest.mark.p1p2EscapeDefect
+# @pytest.mark.xfail
 def test_case_75_daily_form_activity(driver, settings):
     home = HomePage(driver, settings)
     home.reports_menu()
@@ -152,6 +153,7 @@ def test_case_83_data_forwarding_add_edit(driver, settings):
 
 @pytest.mark.data
 @pytest.mark.p1p2EscapeDefect
+# @pytest.mark.xfail
 def test_case_93_cond_alert_on_form_submit(driver, settings, rerun_count):
     menu = HomePage(driver, settings)
     msg = MessagingPage(driver)
@@ -177,5 +179,5 @@ def test_case_93_cond_alert_on_form_submit(driver, settings, rerun_count):
     menu.data_menu()
     export.check_for_case_id(case_id)
     email = EmailVerification(settings)
-    email.verify_email_sent(subject, settings['url'])
+    email.verify_email_sent(subject, settings['url'], sleep="YES")
 

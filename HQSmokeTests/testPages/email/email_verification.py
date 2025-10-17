@@ -286,7 +286,7 @@ class EmailVerification:
         table_data = [tab_low + tab_inactive + tab_high]
         return table_data
 
-    def verify_email_sent(self, subject, url):
+    def verify_email_sent(self, subject, url, sleep = 'NO'):
         if 'www' in url:
             from_email = UserData.from_email_prod
         elif 'india' in url:
@@ -297,7 +297,9 @@ class EmailVerification:
             from_email = UserData.from_email
 
         print(f"📧 Checking for subject: '{subject}' from email: {from_email}")
-
+        if sleep != 'NO':
+            print("Sleeping a couple of minutes for the emails to get triggered")
+            time.sleep(120)
         now = datetime.datetime.now()
 
         # --- Search both Inbox and Spam folders ---

@@ -792,7 +792,7 @@ class ReportPage(BasePage):
         self.wait_for_element(self.export_success)
         print("Export to excel successful")
         print("Sleeping for some time for the email to be sent")
-        time.sleep(30)
+        time.sleep(120)
         return list
 
     def compare_web_with_email(self, link, web_data):
