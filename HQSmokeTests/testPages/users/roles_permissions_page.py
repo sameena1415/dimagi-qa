@@ -22,6 +22,8 @@ class RolesPermissionPage(BasePage):
 
         self.role_name_created = "role_" + fetch_random_string()
         self.role_non_admin_created = "role_non_" + fetch_random_string()
+        self.role_no_shared_export_created = "role_no_export_" + fetch_random_string()
+        self.role_yes_shared_export_created = "role_yes_export_" + fetch_random_string()
         self.role_rename_created = "role_rename_" + fetch_random_string()
         self.roles_menu = (By.XPATH, "//a[@data-title='Roles & Permissions']")
         self.add_new_role = (
@@ -36,8 +38,13 @@ class RolesPermissionPage(BasePage):
             self.role_name_created) + "']]/following-sibling::td//i[@class='fa fa-trash']")
         self.edit_mobile_worker_checkbox = (By.XPATH, "//input[@id='edit-commcare-users-checkbox']//following-sibling::label/span")
         self.report_for_p1p2 = (By.XPATH, "//div[contains(@data-bind,'reportPermission')]//label/span[.='"+UserData.report_for_p1p2+"']")
+        self.manage_shared_exports = (By.XPATH, "//input[@id='edit-shared-exports-checkbox']")
+        self.data_checkbox = (By.XPATH, "//input[@id='edit-data-checkbox']")
+
+        self.report_for_p1p2 = (By.XPATH, "//div[contains(@data-bind,'reportPermission')]//label[./span[.='"+UserData.report_for_p1p2+"']]")
         self.role_renamed = (By.XPATH, "//span[text()='" + str(self.role_rename_created) + "']")
         self.role_non_admin = (By.XPATH, "//span[text()='" + str(self.role_non_admin_created) + "']")
+        self.role_no_shared_export = "//span[text()='{}']"
         self.confirm_role_delete = (By.XPATH, "//div[@class='btn btn-danger']")
         self.full_org_access_checkbox = (By.XPATH, "//label[contains(.,'Full Organization Access')]//following-sibling::div//input")
         self.access_all_reports_checkbox = (By.XPATH, "//input[@id='access-all-reports-checkbox']")
@@ -45,6 +52,9 @@ class RolesPermissionPage(BasePage):
         self.view_data_dictionary = (By.XPATH, "//input[@id='view-data-dict-checkbox']")
         self.edit_data_dictionary = (By.XPATH, "//input[@id='edit-data-dict-checkbox']")
 
+        self.web_user_permission = "//th[./span[.='{}']]//following-sibling::td/div[contains(@data-bind,'edit_web_users')]/i[contains(@class,'check')]"
+        self.mobile_worker_permission = "//th[./span[.='{}']]//following-sibling::td/div[contains(@data-bind,'edit_commcare_users')]/i[contains(@class,'check')]"
+        self.managed_shared_export_permission = "//th[./span[.='{}']]//following-sibling::td/div[contains(@data-bind,'edit_shared_exports')]/i[contains(@class,'check')]"
 
     def roles_menu_click(self):
         self.wait_to_click(self.roles_menu)
@@ -57,7 +67,7 @@ class RolesPermissionPage(BasePage):
         self.scroll_to_element(self.save_button)
         time.sleep(0.5)
         self.wait_to_click(self.save_button)
-        
+
         assert self.is_present_and_displayed(self.role_created), "Role not added successfully!"
 
     def edit_role(self):
@@ -67,9 +77,9 @@ class RolesPermissionPage(BasePage):
         self.scroll_to_element(self.save_button)
         time.sleep(0.5)
         self.wait_to_click(self.save_button)
-        
+
         assert self.is_present_and_displayed(self.role_renamed), "Role not edited successfully!"
-        
+
 
     def cleanup_role(self):
         self.wait_to_click(self.delete_role)
@@ -87,7 +97,7 @@ class RolesPermissionPage(BasePage):
                                              "(//th[.//span[contains(text(),'role_')]]//following-sibling::td//button[@class='btn btn-danger'])[" + str(
                                                  i + 1) + "]").click()
                     self.wait_to_click(self.confirm_role_delete)
-                    
+
                     list_profile = self.driver.find_elements(By.XPATH, "//th[.//span[contains(text(),'role_')]]")
             else:
                 print("There are no test roles")
@@ -108,7 +118,7 @@ class RolesPermissionPage(BasePage):
                                                  "(//th[.//span[contains(text(),'role_')]]//following-sibling::td//button[@class='btn btn-danger'])[" + str(
                                                      i + 1) + "]").click()
                    self.wait_to_click(self.confirm_role_delete)
-                   
+
                    list_profile = self.driver.find_elements(By.XPATH, "//th[.//span[contains(text(),'role_')]]")
                else:
                    print("There are no test roles")
@@ -118,7 +128,6 @@ class RolesPermissionPage(BasePage):
     def add_non_admin_role(self):
         self.wait_to_click(self.add_new_role)
         self.wait_to_clear_and_send_keys(self.role_name, self.role_non_admin_created)
-        
         self.wait_to_click(self.edit_mobile_worker_checkbox)
         self.scroll_to_element(self.access_all_reports_checkbox)
         is_checked = self.get_attribute(self.access_all_reports_checkbox, 'checked')
@@ -141,7 +150,7 @@ class RolesPermissionPage(BasePage):
         self.scroll_to_element(self.save_button)
         time.sleep(0.5)
         self.wait_to_click(self.save_button)
-        
+
         assert self.is_present_and_displayed(self.role_non_admin), "Role not added successfully!"
         return self.role_non_admin_created
 

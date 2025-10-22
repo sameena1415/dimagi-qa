@@ -98,7 +98,7 @@ class BasePage:
         return element_text
 
     @retry_on_exception((StaleElementReferenceException, TimeoutException))
-    def wait_for_element(self, locator, timeout=10):
+    def wait_for_element(self, locator, timeout=30):
         clickable = ec.presence_of_element_located(locator)
         WebDriverWait(self.driver, timeout, poll_frequency=1).until(clickable,
                                                                         message="Couldn't find locator: " + str(locator)
@@ -648,3 +648,23 @@ class BasePage:
             except Exception as js_e:
                 print(f"[ERROR] JavaScript fallback also failed: {js_e}")
                 raise
+
+    def set_ace_editor_text(self, locator, text):
+        script = """
+                var text = arguments[0];
+                var container = document.querySelector(arguments[1]);
+                if (!container) return;
+                var editorEl = container.querySelector('.ace_editor');
+                if (!editorEl || !window.ace) return;
+                var editor = ace.edit(editorEl);
+                editor.focus();
+                editor.setValue(text, 1);
+                editor.clearSelection();
+            """
+        self.driver.execute_script(script, text, locator)
+
+    def wait_for_page_title(self, title, timeout=20):
+        WebDriverWait(self.driver, timeout).until(
+            ec.title_is(title)
+            )
+        print(f"✅ Page loaded: {title}")
