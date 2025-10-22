@@ -19,216 +19,216 @@ from HQSmokeTests.testPages.users.org_structure_page import latest_download_file
 values = dict()
 
 @pytest.mark.lookup
-def test_case_01_data_dictionary_ui(driver,settings):
+def test_case_01_verify_data_dictionary_ui(driver,settings):
     home = HomePage(driver, settings)
     data = DataDictionaryPage(driver)
     home.data_menu()
-    data.data_page("Y")
-    data.dropdown()
+    data.verify_data_page("Y")
+    data.verify_dropdown_values()
 
-def test_case_02_edit(driver,settings):
+def test_case_02_validate_editing_case_property_values(driver,settings):
     home = HomePage(driver, settings)
     data = DataDictionaryPage(driver)
     home.data_menu()
-    data.data_page("N")
+    data.verify_data_page("N")
     data.edit_case_property_description()
 
-def test_case_03_case_property_addition(driver,settings):
+def test_case_03_validate_case_property_addition(driver,settings):
     home = HomePage(driver, settings)
     data = DataDictionaryPage(driver)
     home.data_menu()
-    data.data_page("N")
+    data.verify_data_page("N")
     data.add_new_case_property()
     data.case_property_deletion()
 
-def test_case_04_add_case_group(driver,settings):
+def test_case_04_validate_case_group_addition(driver,settings):
     home = HomePage(driver, settings)
     data = DataDictionaryPage(driver)
     home.data_menu()
-    data.data_page("N")
-    data.add_a_new_group()
+    data.verify_data_page("N")
+    data.adding_a_new_group()
 
-def test_case_05_deprecate(driver,settings):
+def test_case_05_verify_deprecate_property(driver,settings):
     home = HomePage(driver, settings)
     data = DataDictionaryPage(driver)
     home.data_menu()
-    data.data_page("N")
-    data.deprecate_property()
+    data.verify_data_page("Y")
+    data.verify_deprecate_restore_case_property("Y")
 
-def test_case_06_add_group_description(driver,settings):
+def test_case_06_verify_add_group_description(driver,settings):
     home = HomePage(driver, settings)
     data = DataDictionaryPage(driver)
     home.data_menu()
-    data.data_page("N")
-    data.group_description()
+    data.verify_data_page("N")
+    data.updating_group_description()
 
-def test_case_07_download_dd_file(driver, settings):
+def test_case_07_verify_downloading_dd_file(driver, settings):
     home = HomePage(driver, settings)
     data = DataDictionaryPage(driver)
     home.data_menu()
-    data.data_page("N")
-    data.download()
+    data.verify_data_page("N")
+    data.verify_file_getting_downloaded()
 
-def test_case_08_upload_dd_file(driver, settings):
+def test_case_08_verify_uploading_dd_file(driver, settings):
     home = HomePage(driver, settings)
     data = DataDictionaryPage(driver)
     home.data_menu()
-    data.data_page("N")
+    data.verify_data_page("N")
     download_path =latest_download_file()
-    data.upload_dd(download_path)
+    data.verify_uploading_dd(download_path)
 
-def test_case_09_case_type_deprecate(driver,settings):
+def test_case_09_validate_deprecate_case_type(driver,settings):
     home = HomePage(driver, settings)
     data = DataDictionaryPage(driver)
     home.data_menu()
-    data.data_page("N")
+    data.verify_data_page("N")
     data.case_type_deprecate()
     data.case_type_restore()
 
-def test_case_10_deprecate_case_types_reports(driver,settings):
+def test_case_10_validate_deprecate_case_types_reports(driver,settings):
     home = HomePage(driver, settings)
     data = DataDictionaryPage(driver)
     home.data_menu()
-    data.data_page("N")
+    data.verify_data_page("N")
     data.case_type_deprecate()
     home.reports_menu()
-    data.reports()
+    data.verify_reports()
     home.data_menu()
     data.case_type_restore()
 
-def test_case_11_deprecate_case_types_exports(driver,settings):
+def test_case_11_validate_deprecate_restore_data_exports(driver,settings):
     home = HomePage(driver, settings)
     data = DataDictionaryPage(driver)
     home.data_menu()
-    data.data_page("N")
+    data.verify_data_page("N")
     data.case_type_deprecate()
     home.data_menu()
-    data.exports()
+    data.verify_exports()
     home.data_menu()
     data.case_type_restore()
     home.data_menu()
-    data.exports()
+    data.verify_exports()
 
-def test_case_12_deprecate_case_types_exports_1(driver,settings):
+def test_case_12_validate_deprecate_restore_case_exports(driver,settings):
     home = HomePage(driver, settings)
     data = DataDictionaryPage(driver)
     home.data_menu()
     data.create_case_export()
     home.data_menu()
-    data.data_page("N")
+    data.verify_data_page("N")
     data.case_type_deprecate()
     data.validate_exports()
     data.case_type_restore()
     home.data_menu()
     data.validate_exports()
 
-def test_case_13_edit_data_deprecate_cases(driver,settings):
+def test_case_13_validate_case_type_deprecate_restore_on_data_exports(driver,settings):
     home = HomePage(driver, settings)
     data = DataDictionaryPage(driver)
     home.data_menu()
-    data.data_page("N")
+    data.verify_data_page("N")
     data.case_type_deprecate()
-    data.exports_edit_data_section(UserData.data_upload_path)
+    data.validate_exports_edit_data_section(UserData.data_upload_path)
     data.case_type_restore()
-    data.exports_edit_data_section(UserData.data_upload_path)
+    data.validate_exports_edit_data_section(UserData.data_upload_path)
 
-def test_case_14_messaging(driver,settings):
+def test_case_14_verify_deprecate_cases_under_messaging_menu(driver,settings):
     home = HomePage(driver, settings)
     data = DataDictionaryPage(driver)
     menu = HomePage(driver, settings)
     home.data_menu()
-    data.data_page("N")
+    data.verify_data_page("N")
     data.case_type_deprecate()
     menu.messaging_menu()
-    data.messaging()
+    data.verify_conditional_alert_under_messaging()
     home.data_menu()
     data.case_type_restore()
     menu.messaging_menu()
-    data.messaging()
+    data.verify_conditional_alert_under_messaging()
 
 
-def test_case_15_date_valid_values(driver,settings):
+def test_case_15_validate_date_type_valid_values(driver,settings):
     home = HomePage(driver, settings)
     data = DataDictionaryPage(driver)
     home.data_menu()
-    data.data_page("Y")
-    data.valid_values_date()
+    data.verify_data_page("Y")
+    data.verify_valid_values_date_type()
 
-def test_case_16_multiple_choice_valid_values(driver,settings):
+def test_case_16_validate_multiple_choice_type_valid_values(driver,settings):
     home = HomePage(driver, settings)
     data = DataDictionaryPage(driver)
     home.data_menu()
-    data.data_page("Y")
-    data.valid_values_multiple_choice()
+    data.verify_data_page("Y")
+    data.verify_valid_values_multiple_choice_type()
 
-def test_case_17_download_valid_values(driver,settings):
+def test_case_17_validate_downloaded_valid_values(driver,settings):
     home = HomePage(driver, settings)
     data = DataDictionaryPage(driver)
     home.data_menu()
-    data.data_page("N")
-    data.download()
+    data.verify_data_page("N")
+    data.verify_file_getting_downloaded()
     download_path = latest_download_file()
-    data.excel_verification(download_path)
+    data.verify_excel_verification(download_path)
 
-def test_case_18_download_upload_updated_file(driver,settings):
+def test_case_18_verify_uploading_updated_file(driver,settings):
     home = HomePage(driver, settings)
     data = DataDictionaryPage(driver)
     home.data_menu()
-    data.data_page("N")
-    data.download()
+    data.verify_data_page("N")
+    data.verify_file_getting_downloaded()
     download_path = latest_download_file()
-    data.update_excel(download_path)
-    data.upload_dd(download_path)
+    data.verify_update_excel(download_path)
+    data.verify_uploading_dd(download_path)
 
-def test_case_19_invalid_valid_values(driver,settings):
+def test_case_19_validate_invalid_valid_values(driver,settings):
     home = HomePage(driver, settings)
     data = DataDictionaryPage(driver)
     home.data_menu()
-    data.data_page("N")
-    data.download()
+    data.verify_data_page("N")
+    data.verify_file_getting_downloaded()
     download_path = latest_download_file()
-    data.update_excel_invalid(download_path)
-    data.upload_dd(download_path)
+    data.verify_updating_excel_invalid_values(download_path)
+    data.verify_uploading_dd(download_path)
 
 
-def test_case_20_case_management(driver,settings):
+def test_case_20_verify_added_property_under_case_management_tab(driver,settings):
     home = HomePage(driver, settings)
     data = DataDictionaryPage(driver)
     home.data_menu()
-    data.data_page("Y")
-    data.add_property_description()
+    data.verify_data_page("Y")
+    data.verify_add_property_description()
     home.applications_menu(UserData.application)
-    data.case_management()
-    data.app_summary()
+    data.verify_case_management()
+    data.validating_app_summary()
 
-def test_case_21_restore_case_property(driver,settings):
+def test_case_21_verify_restore_case_property(driver,settings):
     home = HomePage(driver, settings)
     data = DataDictionaryPage(driver)
     home.data_menu()
-    data.data_page("Y")
-    data.deprecate_case_property()
+    data.verify_data_page("Y")
+    data.verify_deprecate_restore_case_property("N")
     home.applications_menu(UserData.application)
-    data.case_management()
-    data.warning_message()
+    data.verify_case_management()
+    data.verify_warning_message()
     home.data_menu()
-    data.data_page("N")
-    data.restore_case_property()
+    data.verify_data_page("N")
+    data.verify_restore_case_property()
 
-def test_case_22_cle(driver,settings):
+def test_case_22_verify_case_list_explorer_report(driver,settings):
     home = HomePage(driver, settings)
     data = DataDictionaryPage(driver)
     home.data_menu()
-    data.data_page("Y")
+    data.verify_data_page("Y")
     property_value = data.add_new_case_property()
     home.reports_menu()
-    data.case_list_explorer(property_value,'yes')
+    data.view_case_list_explorer_report(property_value,'yes')
     home.data_menu()
-    data.data_page("Y")
+    data.verify_data_page("Y")
     data.case_property_deletion()
     home.reports_menu()
-    data.case_list_explorer(property_value,'no')
+    data.view_case_list_explorer_report(property_value,'no')
 
-def test_case_23_roles_permission(driver,settings):
+def test_case_23_verify_roles_permission_with_dd_access(driver,settings):
     login = LoginPage(driver, settings["url"])
     menu = HomePage(driver, settings)
     role = RolesPermissionPage(driver, settings)
@@ -245,7 +245,7 @@ def test_case_23_roles_permission(driver,settings):
     web_user1.edit_user_permission(role_name1)
     login.logout()
     login.login(UserData.p1p2_user, settings["login_password"])
-    data.data_dictionary_access_page()
+    data.verify_data_dictionary_access_page()
     login.logout()
     login.login(settings["login_username"], settings["login_password"])
     menu.users_menu()
@@ -258,7 +258,7 @@ def test_case_23_roles_permission(driver,settings):
     web_user1.edit_user_permission(role_name1)
     login.logout()
     login.login(UserData.p1p2_user, settings["login_password"])
-    data.data_dictionary_access_page()
+    data.verify_data_dictionary_access_page()
     login.logout()
     login.login(settings["login_username"], settings["login_password"])
     menu.users_menu()
@@ -270,7 +270,7 @@ def test_case_23_roles_permission(driver,settings):
     web_user1.edit_user_permission(role_name1)
     login.logout()
     login.login(UserData.p1p2_user, settings["login_password"])
-    data.data_dictionary_revoke_access()
+    data.verify_data_dictionary_revoke_access()
     login.logout()
     time.sleep(2)
     login.login(settings["login_username"], settings["login_password"])
@@ -279,7 +279,7 @@ def test_case_23_roles_permission(driver,settings):
     role.roles_menu_click()
     role.delete_test_roles()
 
-def test_case_24_case_importer(driver,settings):
+def test_case_24_validate_case_importer_valid_values(driver,settings):
     home = HomePage(driver, settings)
     imp = ImportCasesPage(driver)
     home.data_menu()
@@ -287,17 +287,17 @@ def test_case_24_case_importer(driver,settings):
                                     ['select_dd_language', 'opened_date'])
 
 
-def test_case_25_make_new_version(driver,settings):
+def test_case_25_verify_making_a_new_version_for_deprecated_case_type(driver,settings):
     home = HomePage(driver, settings)
     data = DataDictionaryPage(driver)
     home.data_menu()
-    data.data_page("Y")
+    data.verify_data_page("Y")
     data.case_type_deprecate()
     home.applications_menu(UserData.application)
-    data.application()
-    data.case_data_page()
+    data.validating_application()
+    data.verify_case_data_page()
     home.data_menu()
-    data.data_page("N")
+    data.verify_data_page("Y")
     data.case_type_restore()
 
 

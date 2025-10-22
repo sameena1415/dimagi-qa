@@ -49,7 +49,7 @@ class PowerBiPage(BasePage):
         self.show_delete = (By.XPATH,"//span[@data-bind='visible: !table.showDeleted()']")
         self.copy_edit_button = (By.XPATH,"(//*[@data-bind='if: isOData()'])[1]")
         self.description = (By.XPATH,("//*[@id='export-description']"))
-        self.disabled1 =(By.XPATH,("//td[5][./input[@disabled]]//preceding-sibling::td//input[@type='checkbox' and @disabled='disabled']"))
+        self.disabled_button =(By.XPATH,("//td[5][./input[@disabled]]//preceding-sibling::td//input[@type='checkbox' and @disabled='disabled']"))
         self.copy_odata_feed = (By.XPATH,("//*[@id='export-list']/div[2]/div[1]/div[2]/table/tbody/tr/td[2]/div/span/a"))
         self.link = (By.XPATH,("//*[@id='export-list']/div[2]/div[1]/div[2]/table/tbody/tr/td[2]/div/input"))
         self.delete = (By.XPATH,("(//a[@data-bs-toggle='modal'])[9]"))
@@ -63,7 +63,7 @@ class PowerBiPage(BasePage):
         self.refresh_page = (By.XPATH, "//*[@id='export-process-deleted-applications']/div/div/div[3]/button[2]")
         self.hide_delete_question = (By.XPATH,"//*[@data-bind='visible: table.showDeleted()']")
         self.allow_sensitive = (By.XPATH, "//*[@id='customize-export']/form/fieldset[3]/button")
-        self.de_identified1 = (By.XPATH,"//*[@id='is_deidentified']")
+        self.de_identified_text = (By.XPATH,"//*[@id='is_deidentified']")
         self.label = (By.XPATH,"(//label[@data-bind='visible: isDeid()'][normalize-space()='De-Identified'])[1]")
         self.check_data = (By.XPATH, "//*[contains(text(), '@odata.context')]")
         self.copy_odata_link = (By.XPATH,"//*[@id='export-list']/div[2]/div[1]/div[2]/table/tbody/tr/td[2]/div[2]/button" )
@@ -74,12 +74,12 @@ class PowerBiPage(BasePage):
         self.repeat_checkbox = (By.XPATH,"//*[@id='customize-export']/form/fieldset[2]/div[2]/legend/span[1]/input")
         self.parent_checkbox = (By.XPATH,"//*[@id='customize-export']/form/fieldset[2]/div[3]/legend/span[1]/input")
         self.case_id_duplicate =(By.XPATH,"//body[1]/div[1]/div[3]/div[1]/div[2]/div[2]/form[1]/fieldset[2]/div[1]/div[1]/table[1]/tbody[1]/tr[9]/td[1]/input[1]")
-        self.repeat_checkbox1 =(By.XPATH,"//*[@id='customize-export']/form/fieldset[2]/div[4]/legend/span[1]/input")
+        self.repeat_checkbox_new =(By.XPATH,"//*[@id='customize-export']/form/fieldset[2]/div[4]/legend/span[1]/input")
 
-    def power_bi_ui(self,count):
+    def power_bi_page_ui(self,flag):
         self.wait_to_click(self.power_bi,2)
         #initially to delete the existing files.
-        if count == '1':
+        if flag == 'Y':
             self.power_bi_tableau_integration_bulk_delete()
         self.wait_to_click(self.add_odata_feed)
 
@@ -118,7 +118,7 @@ class PowerBiPage(BasePage):
         self.is_present_and_displayed(self.case_type,15)
         print("case type field displayed")
 
-    def cancel(self):
+    def cancel_feed(self):
         time.sleep(10)
         self.wait_to_click(self.cancel_button,10)
 
@@ -132,7 +132,7 @@ class PowerBiPage(BasePage):
         self.is_present_and_displayed(self.submission_msg)
         print("Form submission message displayed")
 
-    def add_odata(self):
+    def adding_odata_feed(self):
         self.wait_to_click(self.add_export_conf)
         self.is_present_and_displayed(self.settings,10)
         print ("odata feed settings page displayed")
@@ -142,13 +142,13 @@ class PowerBiPage(BasePage):
         self.scroll_to_bottom()
         self.is_present_and_displayed(self.save,10)
 
-    def repeat_checkbox2(self):
+    def verify_repeat_checkbox(self):
         self.scroll_to_element(self.repeat_checkbox)
         self.wait_to_click(self.repeat_checkbox)
-        self.scroll_to_element(self.repeat_checkbox1)
-        self.wait_to_click(self.repeat_checkbox1)
+        self.scroll_to_element(self.repeat_checkbox_new)
+        self.wait_to_click(self.repeat_checkbox_new)
 
-    def parent_checkbox1(self):
+    def verify_parent_checkbox(self):
         self.scroll_to_element(self.parent_checkbox)
         self.js_click(self.parent_checkbox,2)
 
@@ -170,7 +170,7 @@ class PowerBiPage(BasePage):
             self.js_click(self.powerBI_tab_int)
         self.delete_bulk_exports()
 
-    def case_feed(self,select_case):
+    def create_case_feed(self,select_case):
         self.wait_to_click(self.case,10)
         self.wait_for_element(self.case_select)
         self.send_keys(self.case_select, select_case)
@@ -198,7 +198,7 @@ class PowerBiPage(BasePage):
     def add_description(self):
         self.wait_to_click(self.description,5)
         self.send_keys(self.description, UserData.description+Keys.TAB)
-        assert self.is_present_and_displayed(self.disabled1,10)
+        assert self.is_present_and_displayed(self.disabled_button,10)
         print("disabled button present")
         self.scroll_to_bottom()
         time.sleep(2)
@@ -207,7 +207,7 @@ class PowerBiPage(BasePage):
         self.is_present_and_displayed(self.success, 10)
 
 
-    def delete1(self):
+    def delete_feed(self):
         self.wait_to_click(self.delete)
         self.wait_to_click(self.delete_button)
 
@@ -224,15 +224,15 @@ class PowerBiPage(BasePage):
 
     def create_multiple_odata_feed(self,no_of_feeds):
         for i in range(1,no_of_feeds):
-            self.power_bi_ui(10)
+            self.power_bi_page_ui(10)
             self.select_form()
             self.form_feed(UserData.reassign_cases_application,UserData.reassign_menu,UserData.reassign_form)
-            self.add_odata()
+            self.adding_odata_feed()
             self.save_odata_feed()
         print("create multiple odata feeds completed")
 
 
-    def go_to_page(self):
+    def validate_go_to_page(self):
         self.wait_to_click(self.pagination,10)
         print("pagination working fine")
 
@@ -241,10 +241,10 @@ class PowerBiPage(BasePage):
         self.is_present_and_displayed(self.hide_delete_question)
         print("Deleted questions become included in the question list for form feeds")
 
-    def de_identified(self):
+    def validate_de_identified(self):
         self.scroll_to_bottom()
         self.js_click(self.allow_sensitive,2)
-        self.js_click(self.de_identified1,2)
+        self.js_click(self.de_identified_text,2)
         self.js_click(self.save,10)
         self.is_present_and_displayed(self.label)
         print("odatafeed marked as de-identified")

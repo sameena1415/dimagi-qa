@@ -10,179 +10,179 @@ from Features.Powerbi_integration_exports.testPages.data.power_bi_page import Po
 values = dict()
 
 @pytest.mark.lookup
-def test_case_01_odata_feed_ui(driver,settings):
+def test_case_01_verify_odata_feed_ui(driver,settings):
     home = HomePage(driver, settings)
     data = PowerBiPage(driver)
     home.data_menu()
-    data.power_bi_ui(1)
+    data.power_bi_page_ui('y')
 
-def test_case_02_odata_feed_select_type(driver,settings):
+def test_case_02_verify_odata_feed_select_type(driver,settings):
     home = HomePage(driver, settings)
     data = PowerBiPage(driver)
     home.data_menu()
-    data.power_bi_ui(1)
+    data.power_bi_page_ui('y')
     data.select_feed_type()
 
 
-def test_case_03_odata_feed_select_form(driver,settings):
+def test_case_03_verify_odata_feed_select_form(driver,settings):
     home = HomePage(driver, settings)
     data = PowerBiPage(driver)
     home.data_menu()
-    data.power_bi_ui(1)
+    data.power_bi_page_ui('y')
     data.select_form()
 
-def test_case_04_odata_feed_select_application(driver, settings):
+def test_case_04_verify_odata_feed_select_application(driver, settings):
     home = HomePage(driver, settings)
     data = PowerBiPage(driver)
     home.data_menu()
-    data.power_bi_ui(1)
+    data.power_bi_page_ui('y')
     data.select_form()
     data.application_dropdown(UserData.reassign_cases_application)
 
-def test_case_05_odata_feed_select_menu(driver, settings):
+def test_case_05_verify_odata_feed_select_menu(driver, settings):
     home = (HomePage(driver, settings))
     data = PowerBiPage(driver)
     home.data_menu()
-    data.power_bi_ui(1)
+    data.power_bi_page_ui('y')
     data.select_form()
     data.application_dropdown(UserData.reassign_cases_application)
     data.menu_dropdown()
 
-def test_case_06_odata_feed_6_cancel_selection(driver, settings):
+def test_case_06_verify_odata_feed_cancel_selection(driver, settings):
     home = HomePage(driver, settings)
     data = PowerBiPage(driver)
     home.data_menu()
-    data.power_bi_ui(1)
-    data.cancel()
+    data.power_bi_page_ui('y')
+    data.cancel_feed()
 
-def test_case_07_save_and_delete_odata_feed_form(driver, settings):
+def test_case_07_verify_save_and_delete_odata_feed_form(driver, settings):
     home = HomePage(driver, settings)
     data = PowerBiPage(driver)
     home.data_menu()
-    data.power_bi_ui(1)
+    data.power_bi_page_ui('y')
     data.select_form()
     data.form_feed(UserData.reassign_cases_application,UserData.reassign_menu,UserData.reassign_form)
-    data.add_odata()
+    data.adding_odata_feed()
     data.save_odata_feed()
-    data.delete1()
+    data.delete_feed()
 
-def test_case_08_save_odata_feed_form(driver, settings):
+def test_case_08_verify_save_odata_feed_form(driver, settings):
     home = HomePage(driver, settings)
     data = PowerBiPage(driver)
     home.data_menu()
-    data.power_bi_ui(1)
+    data.power_bi_page_ui('y')
     data.select_form()
     data.form_feed(UserData.reassign_cases_application,UserData.reassign_menu,UserData.reassign_form)
-    data.add_odata()
+    data.adding_odata_feed()
 
-def test_case_09__odata_feed_show_advance_question(driver, settings):
+def test_case_09_validate_odata_feed_show_advance_question(driver, settings):
     home = HomePage(driver, settings)
     data = PowerBiPage(driver)
     home.data_menu()
-    data.power_bi_ui(1)
+    data.power_bi_page_ui('y')
     data.select_form()
     data.form_feed(UserData.reassign_cases_application, UserData.reassign_menu, UserData.reassign_form)
-    data.add_odata()
+    data.adding_odata_feed()
     data.show_advance_question()
 
 
-def test_case_10_save_and_delete_odata_feed_case(driver, settings):
+def test_case_10_verify_save_and_delete_odata_feed_case(driver, settings):
     home = HomePage(driver, settings)
     data = PowerBiPage(driver)
     home.data_menu()
-    data.power_bi_ui(1)
+    data.power_bi_page_ui('y')
     data.select_case()
-    data.case_feed(UserData.case)
-    data.add_odata()
+    data.create_case_feed(UserData.case)
+    data.adding_odata_feed()
     data.save_odata_feed()
-    data.delete1()
+    data.delete_feed()
 
 
 
-def test_case_11_save_and_copy_odata_feed(driver, settings):
+def test_case_11_verify_save_and_copy_odata_feed(driver, settings):
     home = HomePage(driver, settings)
     data = PowerBiPage(driver)
     home.data_menu()
-    data.power_bi_ui(1)
+    data.power_bi_page_ui('y')
     data.select_form()
     data.form_feed(UserData.reassign_cases_application,UserData.reassign_menu,UserData.reassign_form)
-    data.add_odata()
+    data.adding_odata_feed()
     data.save_odata_feed()
     data.copy_edit_feed()
 
 
-def test_case_12_add_description_to_odata_feed(driver, settings):
+def test_case_12_verify_add_description_to_odata_feed(driver, settings):
     home = HomePage(driver, settings)
     data = PowerBiPage(driver)
     home.data_menu()
-    data.power_bi_ui(1)
+    data.power_bi_page_ui('y')
     data.select_form()
     data.form_feed(UserData.reassign_cases_application,UserData.reassign_menu,UserData.reassign_form)
-    data.add_odata()
+    data.adding_odata_feed()
     data.add_description()
 
 
-def test_case_13_bulk_create_bulk_delete_odata_feed(driver, settings):
+def test_case_13_verify_bulk_create_bulk_delete_odata_feed(driver, settings):
     home = HomePage(driver, settings)
     data = PowerBiPage(driver)
     home.data_menu()
     data.create_multiple_odata_feed(10)
-    data.go_to_page()
+    data.validate_go_to_page()
     data.power_bi_tableau_integration_bulk_delete()
 
-def test_case_14_delete_questions_on_odata_feed_page(driver, settings):
+def test_case_14_verify_delete_questions_on_odata_feed_page(driver, settings):
     home = HomePage(driver, settings)
     data = PowerBiPage(driver)
     home.data_menu()
-    data.power_bi_ui(1)
+    data.power_bi_page_ui('y')
     data.select_form()
     data.form_feed(UserData.reassign_cases_application,UserData.reassign_menu,UserData.reassign_form)
-    data.add_odata()
+    data.adding_odata_feed()
     data.delete_questions()
 
-def test_case_15_deidentified_odata_feed(driver, settings):
+def test_case_15_verify_deidentified_odata_feed(driver, settings):
     home = HomePage(driver, settings)
     data = PowerBiPage(driver)
     home.data_menu()
-    data.power_bi_ui(1)
+    data.power_bi_page_ui('y')
     data.select_form()
     data.form_feed(UserData.reassign_cases_application,UserData.reassign_menu,UserData.reassign_form)
-    data.add_odata()
-    data.de_identified()
+    data.adding_odata_feed()
+    data.validate_de_identified()
 
-def test_case_16_view_created_odata_feed(driver, settings):
+def test_case_16_verify_view_created_odata_feed(driver, settings):
     home = HomePage(driver, settings)
     data = PowerBiPage(driver)
     home.data_menu()
     username = settings["login_username"]
     password = settings["login_password"]
-    data.power_bi_ui(1)
+    data.power_bi_page_ui('y')
     data.select_form()
     data.form_feed(UserData.reassign_cases_application,UserData.reassign_menu,UserData.reassign_form)
-    data.add_odata()
+    data.adding_odata_feed()
     data.add_description()
     data.view_odata_feed(username, password)
 
-def test_case_17_odata_feed_edit_filters(driver, settings):
+def test_case_17_verify_odata_feed_edit_filters(driver, settings):
     home = HomePage(driver, settings)
     data = PowerBiPage(driver)
     home.data_menu()
-    data.power_bi_ui(1)
+    data.power_bi_page_ui('y')
     data.select_form()
     data.form_feed(UserData.Basic_tests_application,UserData.Basic_menu,UserData.Repeat_form)
-    data.add_odata()
-    data.repeat_checkbox2()
+    data.adding_odata_feed()
+    data.verify_repeat_checkbox()
     data.save_odata_feed()
     data.edit_filters()
 
 
-def test_case_18_odata_feed_include_parent(driver, settings):
+def test_case_18_verify_odata_feed_include_parent(driver, settings):
     home = HomePage(driver, settings)
     data = PowerBiPage(driver)
     home.data_menu()
-    data.power_bi_ui(1)
+    data.power_bi_page_ui('y')
     data.select_case()
-    data.case_feed(UserData.parent)
-    data.add_odata()
-    data.parent_checkbox1()
+    data.create_case_feed(UserData.parent)
+    data.adding_odata_feed()
+    data.verify_parent_checkbox()
     data.save_odata_feed()
