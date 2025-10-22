@@ -24,8 +24,7 @@ def environment_settings_lookup():
             for instructions on how to set them.
             """
     settings = {}
-    for name in ["url", "login_username", "login_password", "mail_username",
-                 "mail_password", "staging_auth_key", "prod_auth_key"]:
+    for name in ["url", "login_username", "login_password", "staging_auth_key", "prod_auth_key"]:
 
         var = f"DIMAGIQA_{name.upper()}"
         if var in os.environ:
@@ -45,8 +44,7 @@ def settings(environment_settings_lookup):
         settings = environment_settings_lookup
         settings["CI"] = "true"
         if any(x not in settings for x in ["url", "login_username", "login_password",
-                                           "mail_username", "mail_password", "staging_auth_key",
-                                           "prod_auth_key"]):
+                                           "staging_auth_key", "prod_auth_key"]):
             lines = environment_settings_lookup.__doc__.splitlines()
             vars_ = "\n  ".join(line.strip() for line in lines if "DIMAGIQA_" in line)
             raise RuntimeError(
