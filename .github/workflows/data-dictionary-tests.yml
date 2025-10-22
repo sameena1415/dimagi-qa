@@ -24,7 +24,7 @@ on:
           - production
 
 concurrency:
-  group: lookup-table-tests-${{ github.ref }}
+  group: data-dictionary-tests-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -46,7 +46,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix: ${{ fromJSON(needs.set_matrix.outputs.matrix) }}
-    name: Lookup tests on '${{ matrix.environment }}'
+    name: Data Dictionary tests on '${{ matrix.environment }}'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
