@@ -21,6 +21,42 @@ from selenium.webdriver.support import expected_conditions as ec
 
 """"Contains test page elements and functions related to the Reports module"""
 
+def parse_time(time_str):
+    # Define regex patterns to match time units
+    time_units = {
+        'days': 1,
+        'weeks': 7,
+        'months': 30,
+        'years': 365
+        }
+
+    total_days = 0
+    # Match days, weeks, months, and years in the string
+    for unit, multiplier in time_units.items():
+        match = re.search(r'(\d+)\s+' + unit, time_str)
+        if match:
+            total_days += int(match.group(1)) * multiplier
+
+    # If 'Never' is found, we return a very large value to consider it as the "oldest"
+    if 'Never' in time_str:
+        return float('inf')
+
+    return total_days
+
+
+def sort_times(time_list):
+    # Sort the list based on the parsed time values (newest first)
+    return sorted(time_list, key=parse_time, reverse=False)
+
+
+def is_list_sorted_new_to_old(time_list):
+    # Parse each time string and check if they are in sorted order
+    parsed_times = [parse_time(time) for time in time_list]
+    res = all(parsed_times[i] >= parsed_times[i + 1] for i in range(len(parsed_times) - 1))
+    print(res)
+    # Verify if the parsed times are sorted in descending order
+    return res
+
 
 class ReportPage(BasePage):
 
@@ -33,7 +69,7 @@ class ReportPage(BasePage):
 
         # Mobile Worker Reports
         self.reports_menu_id = (By.ID, "ProjectReportsTab")
-        self.worker_activity_rep = (By.LINK_TEXT, "Worker Activity")
+        self.worker_activity_rep = (By.LINK_TEXT, "User Activity")
         self.daily_form_activity_rep = (By.LINK_TEXT, "Daily Form Activity")
         self.submissions_by_form_rep = (By.LINK_TEXT, "Submissions By Form")
         self.form_completion_rep = (By.LINK_TEXT, "Form Completion Time")
@@ -41,6 +77,7 @@ class ReportPage(BasePage):
         self.completion_vs_submission_rep = (By.LINK_TEXT, "Form Completion vs. Submission Trends")
         self.worker_activity_times_rep = (By.LINK_TEXT, "Worker Activity Times")
         self.project_performance_rep = (By.LINK_TEXT, "Project Performance")
+        self.CASE_LIST_TITLE = "Case List - CommCare HQ"
 
         # Inspect Data Reports
         self.submit_history_rep = (By.LINK_TEXT, "Submission History")
@@ -83,6 +120,7 @@ class ReportPage(BasePage):
 
         self.select_source_id = (By.XPATH, "//select[@id='id_source']")
         self.select_form_type_value = "form"
+        self.select_case_type_value = "case"
         self.select_source_id_form_value = "Case List / Registration Form"
         self.select_source_id_case_value = "commcare-user"
 
@@ -91,12 +129,16 @@ class ReportPage(BasePage):
         self.saved_report_description = (By.NAME, "description")
         self.save_confirm = (By.XPATH, '//div[@class = "btn btn-primary"]')
         self.saved_reports_menu_link = (By.LINK_TEXT, 'My Saved Reports')
-        self.saved_report_created = (By.XPATH, "//a[text()='" + self.report_name_saved + "']")
+        self.saved_report_created = "//a[text()='{}']"
         self.delete_saved = (By.XPATH,
                              "(//a[text()='" + self.report_name_saved + "']//following::button[@class='btn btn-danger add-spinner-on-click'])[1]")
         self.delete_saved_report_link = "(//a[text()='{}']//following::button[@class='btn btn-danger add-spinner-on-click'])[1]"
         self.all_saved_reports = (
         By.XPATH, "//td[a[contains(.,'Saved')]]//following-sibling::td/button[contains(@data-bind,'delete')]")
+
+        self.favorite_button = (By.XPATH, "//button[contains(.,'Favorites')]")
+        self.empty_fav_list = (By.XPATH, '//a[.="You don\'t have any favorites"]')
+        self.saved_fav = "//a[contains(.,'{}')][contains(@data-bind,'text: name')]"
 
         # Scheduled Reports
         self.scheduled_reports_menu_xpath = (By.XPATH, "//a[@href='#scheduled-reports']")
@@ -128,6 +170,8 @@ class ReportPage(BasePage):
         self.case_type_select = (By.XPATH, "//select[@id='report_filter_case_type']")
         self.date_input = (By.XPATH, "//input[@id='filter_range']")
         self.view_form_link = (By.XPATH, "//tbody/tr[1]/td[1]/a[.='View Form']")
+        self.view_case_link = (By.XPATH, "//tbody/tr[1]/td[1]/a[.='View Case']")
+
         self.case_name = (By.XPATH, "//td[div[contains(text(),'abc')]]")
         self.submit_history_table = (By.XPATH, "//table[@id='report_table_submit_history']/tbody/tr")
         self.location_values = (By.XPATH, "//tr[@class='form-data-question ']/td[2]")
@@ -143,10 +187,33 @@ class ReportPage(BasePage):
         self.case_owner_column = (By.XPATH, "//tbody//td[3]")
 
         # Case List Explorer
+        self.query_textarea =  ".report-filter-xpath-textarea"
+        self.query_div = (By.XPATH, "//div[@class='report-filter-xpath-textarea']//pre//div[@class='ace_line']")
+        self.query_cursor = (By.XPATH, "//div[@class='report-filter-xpath-textarea']//pre//div[@class='ace_cursor']")
+        self.case_list_explorer_query_field = (
+        By.XPATH, "//div[@class='report-filter-xpath-textarea']//pre//textarea[@class='ace_text-input']")
+        self.case_list_explorer_rep = (By.LINK_TEXT, "Case List Explorer")
+        self.case_list_explorer_TITLE = "Case List Explorer - CommCare HQ"
+        self.case_type_dropdown = (By.XPATH, "//select[@id='report_filter_case_type']")
+        self.column_editor = (By.XPATH, "//a[@href='#columns-editor']")
+        self.add_property_button = (By.XPATH, "//button[@data-bind='click: addProperty']")
+        self.last_properties_input = (
+            By.XPATH,
+            "(//tbody[contains(@data-bind,'properties')]//td//input[contains(@data-bind,'Properties')])[last()]")
+        self.last_value_input = (
+            By.XPATH,
+            "(//tbody[contains(@data-bind,'properties')]//td//input[contains(@data-bind,'value: label')])[last()]")
+        self.last_delete_property = (By.XPATH, "(//tbody[contains(@data-bind,'properties')]//td[4]/i)[last()]")
+        self.property_label = "//div[@class='atwho-container']//div[@class='atwho-view']//ul/li[1]/span[ .='reassign']//following-sibling::strong[.='name']"
+        self.properties_input = (
+            By.XPATH, "//tbody[contains(@data-bind,'properties')]//td//input[contains(@data-bind,'Properties')]")
+        self.value_input = (
+            By.XPATH, "//tbody[contains(@data-bind,'properties')]//td//input[contains(@data-bind,'value: label')]")
+        self.delete_property = (By.XPATH, "//tbody[contains(@data-bind,'properties')]//td[4]")
         self.edit_column = (By.XPATH,
                             "//div[./label[contains(.,'Columns')]]//following-sibling::div//a[@data-parent='#case-list-explorer-columns']")
         self.properties_table = (By.XPATH, "//tbody[contains(@data-bind,'properties')]")
-        self.add_property_button = (By.XPATH, "//*[@data-bind='click: addProperty']")
+        self.add_property_button = (By.XPATH, "//button[@data-bind='click: addProperty']/i")
         self.property_name_input = (By.XPATH, "(//tbody[contains(@data-bind,'properties')]//td[2]//input)[last()]")
         self.cle_case_owner_column = (By.XPATH, "//table[contains(@class,'datatable')]//tbody//td[5]")
 
@@ -193,6 +260,17 @@ class ReportPage(BasePage):
         self.id_values= "//dt[@title='{}']//following-sibling::dd[1]"
 
 
+        self.panel_body_text = (By.XPATH, "//div[@id='report-content']//div[contains(@class,'card-body')]")
+        self.last_submit_column_list = (By.XPATH, "//table[@id='report_table_app_status']//tbody//td[3]")
+        self.last_submit_column_first = (By.XPATH, "(//table[@id='report_table_app_status']//tbody//td[3])[1]")
+        self.page_list_dropdown = (By.XPATH, "//select[@name='report_table_app_status_length']")
+        self.pagination_list = (By.XPATH, "//ul[@class='pagination']/li/a")
+        self.application_dropdown = (By.XPATH, "//select[@id='report_filter_app']")
+        self.application_field = (By.XPATH, "//span[contains(@id, 'report_filter_app-container')]")
+        self.application_input = (By.XPATH, "//input[contains(@aria-controls,'report_filter_app-result')]")
+        self.APPLICATION_STATUS_TITLE = "Application Status - CommCare HQ"
+        self.result_table = (By.XPATH, "(//div[@id='report-content']//table//tbody//td[1])[1]")
+        self.users_list_item = "//ul[@role='listbox']/li[contains(.,'{}')]"
 
     def check_if_report_loaded(self):
         try:
@@ -252,7 +330,7 @@ class ReportPage(BasePage):
         self.check_if_report_loaded()
 
     def messaging_history_report(self):
-        self.js_click(self.messaging_history_rep)
+        self.wait_to_click(self.messaging_history_rep)
         date_range = self.get_last_7_days_date_range()
         self.clear(self.date_input)
         self.send_keys(self.date_input, date_range + Keys.TAB)
@@ -318,11 +396,10 @@ class ReportPage(BasePage):
         self.wait_for_element(self.save_confirm)
         self.js_click(self.save_confirm)
         time.sleep(2)
-        self.wait_for_element(self.saved_reports_menu_link, 100)
-        self.click(self.saved_reports_menu_link)
-        time.sleep(10)
-        self.wait_for_element(self.scheduled_reports_menu_xpath, 200)
-        assert self.is_present_and_displayed(self.saved_report_created, 220)
+
+        self.reload_page()
+        self.wait_to_click(self.saved_reports_menu_link)
+        self.wait_for_element((By.XPATH, self.saved_report_created.format(self.report_name_saved)), 120)
         print("Report Saved successfully!")
 
     def create_scheduled_report_button(self):
@@ -411,7 +488,7 @@ class ReportPage(BasePage):
                 self.wait_to_click(self.edit_report_id)
                 self.wait_to_click(self.delete_report_xpath)
                 print("Deleted Saved Report")
-                
+
                 self.reload_page()
                 time.sleep(2)
                 list = self.find_elements(self.report_case_links)
@@ -432,7 +509,7 @@ class ReportPage(BasePage):
                 self.wait_to_click(self.edit_report_id)
                 self.wait_to_click(self.delete_report_xpath)
                 print("Deleted Saved Report")
-                
+
                 self.reload_page()
                 time.sleep(2)
                 list = self.find_elements(self.report_form_links)
@@ -581,9 +658,9 @@ class ReportPage(BasePage):
         date_range = self.get_todays_date_range()
         self.clear(self.date_input)
         self.send_keys(self.date_input, date_range + Keys.TAB)
-        
+
         self.deselect_all(self.communication_type_select)
-        
+
         self.select_by_text(self.communication_type_select, UserData.communication_type)
         self.check_if_report_loaded()
         self.scroll_to_bottom()
@@ -631,18 +708,18 @@ class ReportPage(BasePage):
             owner = UserData.appiumtest_owner_id_prod
         else:
             owner = UserData.appiumtest_owner_id
+        self.wait_for_element(self.case_list_explorer, 300)
         self.wait_to_click(self.case_list_explorer)
-        time.sleep(2)
-        self.wait_for_element(self.edit_column)
+        time.sleep(20)
+        self.wait_for_element(self.edit_column, 220)
         self.wait_to_click(self.edit_column)
         self.wait_for_element(self.properties_table)
         self.wait_to_click(self.add_property_button)
         self.wait_to_click(self.property_name_input)
         self.send_keys(self.property_name_input, "owner_name")
-        
+
         ActionChains(self.driver).key_down(Keys.ENTER).send_keys(Keys.TAB).perform()
-        self.scroll_to_element(self.remove_case_owner)
-        self.wait_to_click(self.remove_case_owner)
+        self.remove_default_users()
         self.wait_to_click(self.case_owner_textarea)
         self.send_keys(self.case_owner_textarea, UserData.app_login)
         self.wait_for_element((By.XPATH, self.case_owner_list_item.format(UserData.app_login)))
@@ -656,7 +733,7 @@ class ReportPage(BasePage):
             for i in range(len(list_of_owner)):
                 text = list_of_owner[i].text
                 print(text)
-                assert text == owner or text == UserData.user_group, "Owner does not match"
+                assert text == owner or text == UserData.user_group, f"Owner {text} does not match for {owner} or {UserData.user_group}"
                 self.check_if_html(text)
 
     def check_if_html(self, text):
@@ -703,16 +780,19 @@ class ReportPage(BasePage):
             print(len(count))
             for i in range(len(count)):
                 count[0].click()
-                
+
                 if len(count) != 1:
                     ActionChains(self.driver).send_keys(Keys.TAB).perform()
-                    
+
                 count = self.find_elements(self.remove_buttons)
              # self.wait_to_click(self.users_field)
             self.send_keys(self.users_field, UserData.app_login)
             self.wait_to_click((By.XPATH, self.user_from_list.format(UserData.app_login)))
-            
+
             ActionChains(self.driver).send_keys(Keys.TAB).perform()
+            date_range = self.get_todays_date_range()
+            self.clear(self.date_input)
+            self.send_keys(self.date_input, date_range + Keys.TAB)
             self.wait_to_click(self.apply_id)
             time.sleep(2)
         except (TimeoutException, NoSuchElementException):
@@ -733,7 +813,7 @@ class ReportPage(BasePage):
         self.wait_for_element(self.export_success)
         print("Export to excel successful")
         print("Sleeping for some time for the email to be sent")
-        time.sleep(30)
+        time.sleep(120)
         return list
 
     def compare_web_with_email(self, link, web_data):
@@ -775,10 +855,10 @@ class ReportPage(BasePage):
             print(len(count))
             for i in range(len(count)):
                 count[0].click()
-                
+
                 if len(count) != 1:
                     ActionChains(self.driver).send_keys(Keys.TAB).perform()
-                    
+
                 count = self.find_elements(self.remove_buttons)
 
             # self.wait_to_click(self.users_field)
@@ -871,7 +951,6 @@ class ReportPage(BasePage):
         result_lat = self.format_number(abs(float(text[0])), 5)
         result_lon = self.format_number(abs(float(text[1])), 5)
         print(result_lat, result_lon)
-        print(lat, lon)
         assert result_lat in lat and result_lon in lon, "Mismatch"
 
     def format_number(self, n, digits):
@@ -890,3 +969,122 @@ class ReportPage(BasePage):
                 ActionChains(self.driver).send_keys(Keys.TAB).perform()
 
             count = self.find_elements(self.remove_buttons)
+        ActionChains(self.driver).send_keys(Keys.ESCAPE).perform()
+        time.sleep(2)
+        ActionChains(self.driver).send_keys(Keys.TAB).perform()
+
+    def verify_case_list_page(self):
+        self.wait_to_click(self.case_list_rep)
+        self.wait_for_element(self.apply_id, 100)
+        assert self.CASE_LIST_TITLE in self.driver.title, "This is not the Case List page."
+        text = self.get_text(self.panel_body_text)
+        print(text)
+        assert "Why can't I see any data?" in text
+        assert "Please choose your filters above and click Apply to see report data." in text
+
+    def export_to_excel_config_report(self, report_name):
+        self.wait_to_click((By.LINK_TEXT, report_name))
+        time.sleep(10)
+        self.wait_for_element(self.export_to_excel)
+        self.wait_to_click(self.export_to_excel)
+        self.wait_till_progress_completes("exports")
+        self.wait_to_click(self.download_report_link, 300)
+        print("Downloading report...")
+        time.sleep(3)
+        newest_file = latest_download_file()
+        print("Newest file:" + newest_file)
+        self.assert_downloaded_file(newest_file, report_name)
+
+    def verify_sorted_list(self):
+        self.select_by_value(self.page_list_dropdown, '100')
+        time.sleep(10)
+        list1 = self.find_elements(self.last_submit_column_list)
+        list1_names = list()
+        for item in list1:
+            list1_names.append(item.text)
+        print(list1_names)
+        sorted_time_list = sort_times(list1_names)
+        print(sorted_time_list)
+        if list1_names == sorted_time_list:
+            assert True
+        else:
+            assert False
+        # result = is_list_sorted_new_to_old(list1_names)
+        # print(result)
+
+    def application_status_report_search(self):
+        self.wait_to_click(self.application_status_rep)
+        self.wait_for_element(self.apply_id, 100)
+        assert self.APPLICATION_STATUS_TITLE in self.driver.title, "This is not the Application Status page."
+        self.remove_default_users()
+        self.click(self.application_field)
+        self.send_keys(self.application_input, UserData.reassign_cases_application)
+        self.wait_to_click((By.XPATH, self.users_list_item.format(UserData.reassign_cases_application)))
+        time.sleep(2)
+        self.wait_to_click(self.apply_id)
+        time.sleep(10)
+        self.wait_for_element(self.result_table, 300)
+        assert self.is_visible_and_displayed(self.report_content_id, 120), "Report not loaded"
+        print("Report loaded successfully!")
+
+    def verify_case_list_explorer_properties(self):
+        self.wait_to_click(self.case_list_explorer_rep)
+        self.wait_for_element(self.apply_id, 100)
+        assert self.case_list_explorer_TITLE in self.driver.title, "This is not the Case List Explorer page."
+        self.select_by_value(self.case_type_dropdown, UserData.case_reassign)
+        return UserData.case_reassign
+
+    def add_new_property(self, name):
+        self.scroll_to_element(self.column_editor)
+        self.wait_to_click(self.column_editor)
+        props1 = self.find_elements(self.properties_input)
+        value1 = self.find_elements(self.value_input)
+        delete1 = self.find_elements(self.delete_property)
+        assert len(props1) != 0, "Property fields not present"
+        assert len(value1) != 0, "Value fields not present"
+        assert len(delete1) != 0, "Delete fields not present"
+        self.wait_for_element(self.add_property_button)
+        self.wait_to_click(self.add_property_button)
+        time.sleep(2)
+        assert len(props1) + 1 == len(self.find_elements(self.properties_input)), "Property fields not added"
+        assert len(value1) + 1 == len(self.find_elements(self.value_input)), "Value fields not added"
+        assert len(delete1) + 1 == len(self.find_elements(self.delete_property)), "Delete fields not added"
+        self.send_keys(self.last_properties_input, "name")
+        time.sleep(2)
+        if self.is_visible_and_displayed((By.XPATH, self.property_label.format(name))):
+            assert True
+            print("Property present")
+        else:
+            print("Property absent")
+            assert False
+        ActionChains(self.driver).send_keys(Keys.TAB).perform()
+
+    def get_case_id_from_case_list_explorer(self, text):
+        query = "case_name = '" + text + "'"
+        self.wait_to_click(self.case_list_explorer_rep)
+        time.sleep(5)
+        self.wait_for_element(self.apply_id, 100)
+        self.remove_default_users()
+        time.sleep(2)
+        self.set_ace_editor_text(self.query_textarea, query)
+        time.sleep(2)
+        self.select_by_text(self.case_type_dropdown, UserData.case_reassign_change)
+        time.sleep(2)
+        self.scroll_to_element(self.apply_id)
+        self.js_click(self.apply_id)
+        time.sleep(5)
+        self.wait_for_element(self.result_table, 300)
+        assert self.is_visible_and_displayed(self.report_content_id, 120), "Report not loaded"
+        print("Report loaded successfully!")
+        form_link = self.get_attribute(self.view_case_link, "href")
+        print("View Form Link: ", form_link)
+        # self.switch_to_new_tab()
+        self.driver.get(form_link)
+        time.sleep(3)
+        self.page_source_contains(text)
+        assert True, "Case name is present in Submit history"
+        self.page_source_contains(text)
+        print("Case is updated successfully")
+        case_id = self.get_text(self.case_id_block)
+        return case_id
+

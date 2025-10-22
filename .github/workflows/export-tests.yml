@@ -15,6 +15,7 @@ on:
           - staging
           - production
           - india
+          - eu
   schedule:
     - cron: '30 5 * * 1-5'
 
@@ -35,7 +36,7 @@ jobs:
       - id: set-matrix-default
         if: ${{ github.event_name != 'repository_dispatch' }}
         run: |
-          echo "::set-output name=matrix::{\"environment\": [\"production\", \"staging\",\"india\"]}"
+          echo "::set-output name=matrix::{\"environment\": [\"production\", \"staging\",\"india\",\"eu\"]}"
 
   build:
     needs: set_matrix
@@ -185,7 +186,7 @@ jobs:
               SLACK_WEBHOOK_URL = '${{ secrets.SLACK_WEBHOOK_URL_SMOKE }}';
               SLACK_CHANNEL_ID = '${{ secrets.SLACK_CHANNEL_ID_SMOKE }}';
               console.log("India Failure");
-            } else if (CC_EVENT != 'repository_dispatch' && CC_ENV == 'india' && JOB_STATUS == 'failure') {
+            } else if (CC_EVENT != 'repository_dispatch' && CC_ENV == 'india' && CC_ENV == 'eu' && JOB_STATUS == 'failure') {
               SLACK_WEBHOOK_URL = '${{ secrets.SLACK_WEBHOOK_URL_SMOKE }}';
               SLACK_CHANNEL_ID = '${{ secrets.SLACK_CHANNEL_ID_SMOKE }}';
               console.log("India Success");

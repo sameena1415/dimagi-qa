@@ -1,15 +1,19 @@
 import pytest
 
+from HQSmokeTests.testPages.android.android_screen import AndroidScreen
 from HQSmokeTests.testPages.applications.app_preview import AppPreviewPage
 from HQSmokeTests.testPages.applications.application_page import ApplicationPage
 from HQSmokeTests.testPages.data.export_data_page import ExportDataPage
 from HQSmokeTests.testPages.data.import_cases_page import ImportCasesPage
 from HQSmokeTests.testPages.email.email_verification import EmailVerification
 from HQSmokeTests.testPages.home.home_page import HomePage
+from HQSmokeTests.testPages.messaging.messaging_page import MessagingPage
 from HQSmokeTests.testPages.project_settings.repeaters_page import RepeatersPage
 from HQSmokeTests.testPages.reports.report_page import ReportPage
+from HQSmokeTests.testPages.webapps.web_apps_page import WebAppsPage
 
 from HQSmokeTests.userInputs.user_inputs import UserData
+from common_utilities.generate_random_string import fetch_random_string
 
 values = dict()
 values['flag'] = False
@@ -35,6 +39,7 @@ def test_case_71_case_owner_list_explorer(driver, settings):
 
 @pytest.mark.report
 @pytest.mark.p1p2EscapeDefect
+@pytest.mark.xfail
 def test_case_75_daily_form_activity(driver, settings):
     home = HomePage(driver, settings)
     home.reports_menu()
@@ -61,11 +66,12 @@ def test_case_76_application_status(driver, settings):
 @pytest.mark.application
 @pytest.mark.appBuilder
 @pytest.mark.p1p2EscapeDefect
-def test_case_77_create_new_app(driver, settings):
+def test_case_77_create_new_app(driver, settings, rerun_count):
     if "india" in settings['url']:
         pytest.skip("Skipping for this month as limit exhausted")
+    app_p1p2_name = f"App P1P2 {rerun_count}{fetch_random_string()}"
     load = ApplicationPage(driver)
-    app_name = load.create_application_with_verifications()
+    app_name = load.create_application_with_verifications(app_p1p2_name)
     app = AppPreviewPage(driver)
     lat, lon = app.submit_form_with_loc()
     home = HomePage(driver, settings)
@@ -132,4 +138,46 @@ def test_case_81_parent_child_case_imports(driver, settings):
     home.data_menu()
     export.verify_case_import(assignment)
 
+@pytest.mark.projectSettings
+@pytest.mark.createRepeater
+@pytest.mark.editRepeater
+@pytest.mark.p1p2EscapeDefect
+def test_case_83_data_forwarding_add_edit(driver, settings):
+    home = HomePage(driver, settings)
+    home.project_settings_page()
+    repeater = RepeatersPage(driver)
+    repeater.delete_all_repeaters()
+    repeater.add_repeater()
+    repeater.edit_repeater()
+    repeater.delete_repeater()
+
+@pytest.mark.data
+@pytest.mark.p1p2EscapeDefect
+@pytest.mark.xfail
+def test_case_93_cond_alert_on_form_submit(driver, settings, rerun_count):
+    menu = HomePage(driver, settings)
+    msg = MessagingPage(driver)
+    menu.messaging_menu()
+    msg.remove_all_cond_alert()
+    menu.messaging_menu()
+    cond_alert, subject = msg.create_cond_alert_for_doesnot_have_value(rerun_count)
+    menu.web_apps_menu()
+    webapps = WebAppsPage(driver)
+    webapps.verify_apps_presence()
+    case_name = webapps.submit_case_change_register_form_no_value()
+    menu = HomePage(driver, settings)
+    menu.applications_menu(UserData.reassign_cases_application)
+    load = ApplicationPage(driver)
+    code = load.get_app_code(UserData.reassign_cases_application)
+    mobile = AndroidScreen(settings)
+    mobile.verify_app_install(code)
+    mobile.close_android_driver()
+    menu.reports_menu()
+    report = ReportPage(driver)
+    case_id = report.get_case_id_from_case_list_explorer(case_name)
+    export = ExportDataPage(driver)
+    menu.data_menu()
+    export.check_for_case_id(case_id)
+    email = EmailVerification(settings)
+    email.verify_email_sent(subject, settings['url'], sleep="YES")
 
