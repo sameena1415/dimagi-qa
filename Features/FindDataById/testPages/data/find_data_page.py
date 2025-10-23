@@ -12,7 +12,7 @@ class FindIdPage(BasePage):
     def __init__(self, driver):
         super().__init__(driver)
 
-        #Find_Data_By_Id
+        #FindDataById
         self.find_data_by_id= (By.LINK_TEXT, "Find Data by ID")
         self.find_id= "//*[@placeholder='{} ID']"
         self.find_button = "//fieldset[@id='find-{}']/div[@class='form-group']/div[@class='col-sm-8 col-md-9']/button[@class='btn btn-primary']"
@@ -32,39 +32,39 @@ class FindIdPage(BasePage):
         self.view_button = (By.XPATH, "//a[normalize-space()='View']")
 
 
-    def page_ui(self):
+    def find_data_by_id_page_ui(self):
         self.wait_to_click(self.find_data_by_id)
         self.is_present_and_displayed((By.XPATH,self.find_id.format('Case')))
         self.is_present_and_displayed((By.XPATH,self.find_id.format('Form Submission')))
-        assert True,("Find case and Find Forms fields are displayed")
+        assert True, "Find case and Find Forms fields are displayed"
 
-    def search_invalid_id(self,type1):
+    def search_invalid_ids(self,type1):
         if type1 =='case':
             self.is_present_and_displayed((By.XPATH, self.find_id.format('Case')))
             self.wait_to_clear_and_send_keys((By.XPATH,self.find_id.format('Case')),UserData.invalid_id)
             self.js_click((By.XPATH,self.find_button.format('case')))
             self.is_present_and_displayed((By.XPATH,self.error_message.format('case')))
-            assert True,("Could not find case submission")
+            assert True, "Could not find case submission"
         elif type1 == 'form':
             self.is_present_and_displayed((By.XPATH, self.find_id.format('Form Submission')))
             self.wait_to_clear_and_send_keys((By.XPATH,self.find_id.format('Form Submission')),UserData.invalid_id)
             self.js_click((By.XPATH, self.find_button.format('form')))
             self.is_present_and_displayed((By.XPATH,self.error_message.format('form submission')))
-            assert True,("Could not find form submission")
+            assert True, "Could not find form submission"
 
-    def data_exports_link(self,value):
+    def verify_data_exports_link(self,value):
         if value == 'case':
             self.js_click((By.XPATH, self.export_link.format(value)))
             self.is_present_and_displayed((By.XPATH,self.export_page.format(str(value).capitalize())))
-            assert True,("Case export page opened")
+            assert True, "Case export page opened"
         elif value =='form':
             self.js_click((By.XPATH, self.export_link.format(value)))
             self.is_present_and_displayed((By.XPATH,self.export_page.format(str(value).capitalize())))
-            assert True,("Form export page opened")
+            assert True, "Form export page opened"
 
 
 
-    def location_id(self, value_type):
+    def validate_location_ids(self, value_type):
         if value_type == "case":
             self.click((By.XPATH,self.find_id.format('Case')))
             url = self.get_current_url()
@@ -93,7 +93,7 @@ class FindIdPage(BasePage):
         self.driver.back()
 
 
-    def web_user_id(self, value_type):
+    def validate_web_user_ids(self, value_type):
         if value_type == "case":
             self.click((By.XPATH, self.find_id.format('Case')))
             url = self.get_current_url()
@@ -120,7 +120,7 @@ class FindIdPage(BasePage):
             assert True,("Correct web user page is opened in production environment for" ,value_type ,"field search ")
         self.driver.back()
 
-    def group_id(self, value_type):
+    def validate_group_ids(self, value_type):
         if value_type == "case":
             self.click((By.XPATH,self.find_id.format('Case')))
             url = self.get_current_url()
@@ -147,7 +147,7 @@ class FindIdPage(BasePage):
             assert True,("Correct group page is opened in production environment for" ,value_type ,"field search ")
 
 
-    def input_id(self, value_type,value):
+    def validate_case_form_input_id(self, value_type,value):
         if value_type == "case":
             print("case id value", value)
             self.click((By.XPATH, self.find_id.format('Case')))

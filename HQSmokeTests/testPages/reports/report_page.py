@@ -194,6 +194,11 @@ class ReportPage(BasePage):
 
 
 
+        # FindDataById
+        self.properties = "//a[normalize-space()='{}']"
+        self.form_properties = "//a[normalize-space()='Form Properties']"
+        self.id_values = "//dt[@title='{}']//following-sibling::dd[1]"
+
     def check_if_report_loaded(self):
         try:
             self.wait_to_click(self.apply_id)
@@ -465,7 +470,11 @@ class ReportPage(BasePage):
             print("No rows are present in the web table")
             return False
 
+<<<<<<< Updated upstream
     def verify_form_data_submit_history(self, case_name, username, type_value):
+=======
+    def verify_form_data_submit_history(self, case_name, username,type_value=None):
+>>>>>>> Stashed changes
         print("Sleeping for sometime for the case to get registered.")
         time.sleep(90)
         self.wait_to_click(self.submit_history_rep)
@@ -490,7 +499,22 @@ class ReportPage(BasePage):
         print("View Form Link: ", form_link)
         # self.switch_to_new_tab()
         self.driver.get(form_link)
+        if type_value == 'case':
+            self.wait_to_click((By.XPATH, self.properties.format('Case Changes')))
+            value_id = self.get_text((By.XPATH, self.id_values.format('@case_id')))
+            new_value = str(value_id).strip()
+            return new_value
+        elif type_value == 'user':
+            user_id = self.get_text((By.XPATH, self.id_values.format('@user_id')))
+            user_id_value = str(user_id).strip()
+            return user_id_value
+        elif type_value == 'form':
+            self.wait_to_click((By.XPATH, self.properties.format('Form Metadata')))
+            form_id = self.get_text((By.XPATH, self.id_values.format('instanceID')))
+            form_id_value = str(form_id).strip()
+            return form_id_value
         time.sleep(3)
+        self.wait_to_click((By.XPATH, self.properties.format('Form Properties')))
         self.page_source_contains(case_name)
         assert True, "Case name is present in Submit history"
         self.wait_to_click((By.XPATH, self.properties.format('Case Changes')))
