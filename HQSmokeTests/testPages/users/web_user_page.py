@@ -201,7 +201,7 @@ class WebUsersPage(BasePage):
         self.wait_to_click(self.user_link,5)
         self.wait_for_element(self.select_project_role_id)
         self.select_by_text(self.select_project_role_id, role_name)
-        self.wait_to_click(self.update_role_btn)
+        self.wait_to_click(self.update_role_btn,5)
         self.scroll_to_element(self.location_field)
         if self.is_present(self.remove_location):
             self.wait_to_click(self.remove_location)

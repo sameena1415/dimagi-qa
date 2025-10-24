@@ -185,7 +185,8 @@ class DataDictionaryPage(BasePage):
     def edit_case_property_description(self):
         self.wait_to_click(self.case_type_value, 10)
         self.wait_to_click(self.description)
-        self.wait_to_clear_and_send_keys(self.description, "property description to be tested")
+        self.wait_to_clear_and_send_keys(self.description, "property description to be tested" + fetch_random_string())
+        self.wait_to_click(self.datatype)
         self.wait_to_click(self.save)
         print("editing property description updated")
 
@@ -302,6 +303,8 @@ class DataDictionaryPage(BasePage):
         self.get_url(UserData.case_data_link)
         self.is_present_and_displayed(self.case_data_page_warning)
         print("This case uses a deprecated case type. See the help documentation for more information is displayed")
+        time.sleep(20)
+
 
     def verify_reports(self):
         time.sleep(50)
@@ -333,8 +336,8 @@ class DataDictionaryPage(BasePage):
         else:
             print("deprecated case types are not displayed in the daily saved exports.")
         self.wait_to_click(self.export_excel_dash_int)
-        self.wait_to_click(self.add_export_button)
-        self.wait_to_click(self.model_type)
+        self.wait_to_click(self.add_export_button,10)
+        self.wait_to_click(self.model_type,50)
         self.select_by_value(self.model_type, UserData.model_value)
         dropdown = self.get_all_dropdown_options(self.case_type_dropdown)
         if 'case_dd' in dropdown:
@@ -355,7 +358,7 @@ class DataDictionaryPage(BasePage):
     def create_case_export(self):
         self.wait_to_click(self.export_case_data_link, 10)
         self.wait_to_click(self.add_export_button, 200)
-        self.wait_to_click(self.case_type_dropdown)
+        self.wait_to_click(self.case_type_dropdown,20)
         self.select_by_value(self.case_type_dropdown, UserData.case_type)
         self.wait_to_click(self.add_export_conf)
         self.wait_to_click(self.export_settings_create)
