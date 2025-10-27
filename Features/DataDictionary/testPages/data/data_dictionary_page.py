@@ -346,8 +346,8 @@ class DataDictionaryPage(BasePage):
             print("deprecated case types are not displayed in the excel dashboard exports.")
         #self.wait_to_click(self.close_popup)
         self.wait_to_click(self.powerBI_tab_int)
-        self.wait_to_click(self.add_export_button)
-        self.wait_to_click(self.model_type)
+        self.wait_to_click(self.add_export_button,20)
+        self.wait_to_click(self.model_type,20)
         self.select_by_value(self.model_type, UserData.model_value)
         dropdown = self.get_all_dropdown_options(self.case_type_dropdown)
         if 'case_dd' in dropdown:
@@ -356,10 +356,12 @@ class DataDictionaryPage(BasePage):
             print("deprecated case types are not displayed in the power bi exports.")
 
     def create_case_export(self):
+        self.wait_to_click(self.data_bold)
         self.wait_to_click(self.export_case_data_link, 10)
         self.wait_to_click(self.add_export_button, 200)
-        self.wait_to_click(self.case_type_dropdown,20)
-        self.select_by_value(self.case_type_dropdown, UserData.case_type)
+        self.is_visible_and_displayed(self.case_type_dropdown, 200)
+        self.wait_for_element(self.case_type_dropdown, 200)
+        self.select_by_text(self.case_type_dropdown, UserData.case_type)
         self.wait_to_click(self.add_export_conf)
         self.wait_to_click(self.export_settings_create)
         print("Export created!!")

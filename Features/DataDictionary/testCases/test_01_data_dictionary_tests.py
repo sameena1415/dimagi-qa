@@ -113,6 +113,7 @@ def test_case_12_validate_deprecate_restore_case_exports(driver,settings):
     home = HomePage(driver, settings)
     data = DataDictionaryPage(driver)
     home.data_menu()
+    data.verify_data_page("N")
     data.create_case_export()
     home.data_menu()
     data.verify_data_page("N")
