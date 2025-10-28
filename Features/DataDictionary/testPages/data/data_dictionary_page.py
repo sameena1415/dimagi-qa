@@ -337,7 +337,7 @@ class DataDictionaryPage(BasePage):
             print("deprecated case types are not displayed in the daily saved exports.")
         self.wait_to_click(self.export_excel_dash_int)
         self.wait_to_click(self.add_export_button,10)
-        self.wait_to_click(self.model_type,50)
+        self.wait_to_click(self.model_type,60)
         self.select_by_value(self.model_type, UserData.model_value)
         dropdown = self.get_all_dropdown_options(self.case_type_dropdown)
         if 'case_dd' in dropdown:
