@@ -1,4 +1,4 @@
-import os.path
+import os
 import time
 from time import sleep
 
@@ -33,7 +33,7 @@ class DataDictionaryPage(BasePage):
         self.datatype = (By.XPATH, "(//select[@class='form-control'])[5]")
         self.dd_language =(By.XPATH,"(//select[@class='form-control'])[1]")
         self.upload = (By.XPATH, "//*[@id='gtm-upload-dict']")
-        self.choose_file_text_field = (By.XPATH, "//input[@id='file']")
+        self.choose_file_text_field = (By.ID, "file")
         self.upload_button = (By.XPATH, "//*[@class='btn btn-primary disable-on-submit']")
         self.menu_settings = (By.XPATH, "//a[@class='appnav-title appnav-title-secondary appnav-responsive']")
         self.type_value = (By.XPATH, "//*[@id='case_type']")
@@ -371,7 +371,8 @@ class DataDictionaryPage(BasePage):
         self.is_present_and_displayed(self.warning_label)
         print("deprecated case type label displayed on the already created export")
 
-    def validate_exports_edit_data_section(self, filepath):
+    def validate_exports_edit_data_section(self, filename):
+        self.wait_for_element(self.data_bold, 10)
         self.js_click(self.data_bold,10)
         self.wait_to_click(self.copy_cases_menu, 200)
         self.wait_for_element(self.case_type_dropdown1, 200)
@@ -396,9 +397,11 @@ class DataDictionaryPage(BasePage):
             print("deprecated case types are not displayed in the deduplicate page.")
         self.wait_to_click(self.import_cases_menu, 50)
         time.sleep(5)
-        filepath = str(UserData.user_input_base_dir + "\\" + filepath)
+        filepath = os.path.abspath(os.path.join(UserData.user_input_base_dir, str(filename)))
+        # filepath = str(UserData.user_input_base_dir + "\\" + filepath)
         print("File Path: ", filepath)
         self.wait_for_element(self.choose_file_text_field)
+        print("File Path: ", filepath)
         self.send_keys(self.choose_file_text_field, filepath)
         self.wait_for_element(self.next_step)
         self.js_click(self.next_step)
