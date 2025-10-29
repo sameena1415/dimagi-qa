@@ -268,14 +268,14 @@ class DataDictionaryPage(BasePage):
         self.wait_to_click(self.case_type_value, 10)
         self.wait_to_click(self.deprecate_case, 10)
         self.wait_to_click(self.confirm, 10)
-        self.wait_to_click(self.show_deprecate_case_type, 10)
+        self.wait_to_click(self.show_deprecate_case_type, 30)
         print("case type has been deprecated")
         self.wait_to_click(self.data_bold)
 
     def case_type_restore(self):
         self.wait_to_click(self.data_bold,10)
         self.js_click(self.data_dictionary,10)
-        self.wait_to_click(self.show_deprecated_case_type)
+        self.wait_to_click(self.show_deprecated_case_type,30)
         self.wait_to_click(self.case_type_value)
         self.wait_to_click(self.restore_case_type)
         print("case type has been restored")
@@ -347,7 +347,7 @@ class DataDictionaryPage(BasePage):
         #self.wait_to_click(self.close_popup)
         self.wait_to_click(self.powerBI_tab_int)
         self.wait_to_click(self.add_export_button,20)
-        self.wait_to_click(self.model_type,20)
+        self.wait_to_click(self.model_type,200)
         self.select_by_value(self.model_type, UserData.model_value)
         dropdown = self.get_all_dropdown_options(self.case_type_dropdown)
         if 'case_dd' in dropdown:

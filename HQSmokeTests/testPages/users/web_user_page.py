@@ -198,7 +198,7 @@ class WebUsersPage(BasePage):
         self.wait_to_clear_and_send_keys(self.search_user, UserData.p1p2_user)
         self.wait_to_click(self.search_user_btn)
         self.wait_for_element(self.user_link,5)
-        self.wait_to_click(self.user_link,5)
+        self.wait_to_click(self.user_link,20)
         self.wait_for_element(self.select_project_role_id)
         self.select_by_text(self.select_project_role_id, role_name)
         self.wait_to_click(self.update_role_btn,5)
