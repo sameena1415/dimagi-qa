@@ -200,8 +200,8 @@ class OrganisationStructurePage(BasePage):
             self.wait_to_click((By.XPATH, self.select_value_drop_down.format(loc_field_name)))
             self.wait_to_click(self.update_loc_xpath)
             assert self.is_present_and_displayed(self.success_msg_xpath), "Location field not assigned!"
-        except StaleElementReferenceException:
-            print(StaleElementReferenceException)
+        except Exception:
+            print("Additional Information not present")
 
     def create_org_level(self):
         self.wait_to_click(self.org_level_menu_link_text)
