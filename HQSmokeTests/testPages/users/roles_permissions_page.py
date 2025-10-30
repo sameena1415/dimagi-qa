@@ -48,6 +48,9 @@ class RolesPermissionPage(BasePage):
         self.confirm_role_delete = (By.XPATH, "//div[@class='btn btn-danger']")
         self.full_org_access_checkbox = (By.XPATH, "//label[contains(.,'Full Organization Access')]//following-sibling::div//input")
         self.access_all_reports_checkbox = (By.XPATH, "//input[@id='access-all-reports-checkbox']")
+        self.edit_data = (By.XPATH, "//div[@id='user-roles-table']/div[@class='panel-body']/div[@class='modal fade in']/div[@class='modal-dialog']/form/div[@class='modal-content']/div[@class='modal-body']/div[@class='form form-horizontal']/fieldset/div[3]/div[@class='form-group'][7]/div[@class='col-sm-2 controls'][1]/div[@class='form-check']/label")
+        self.view_data_dictionary = (By.XPATH, "//input[@id='view-data-dict-checkbox']")
+        self.edit_data_dictionary = (By.XPATH, "//input[@id='edit-data-dict-checkbox']")
         self.edit_data = (By.XPATH, "//input[@id='edit-data-checkbox']")
         self.view_data_dictionary = (By.XPATH, "//input[@id='view-data-dict-checkbox']")
         self.edit_data_dictionary = (By.XPATH, "//input[@id='edit-data-dict-checkbox']")
@@ -67,7 +70,7 @@ class RolesPermissionPage(BasePage):
         self.scroll_to_element(self.save_button)
         time.sleep(0.5)
         self.wait_to_click(self.save_button)
-
+        
         assert self.is_present_and_displayed(self.role_created), "Role not added successfully!"
 
     def edit_role(self):
@@ -77,9 +80,9 @@ class RolesPermissionPage(BasePage):
         self.scroll_to_element(self.save_button)
         time.sleep(0.5)
         self.wait_to_click(self.save_button)
-
+        
         assert self.is_present_and_displayed(self.role_renamed), "Role not edited successfully!"
-
+        
 
     def cleanup_role(self):
         self.wait_to_click(self.delete_role)
@@ -97,7 +100,7 @@ class RolesPermissionPage(BasePage):
                                              "(//th[.//span[contains(text(),'role_')]]//following-sibling::td//button[@class='btn btn-danger'])[" + str(
                                                  i + 1) + "]").click()
                     self.wait_to_click(self.confirm_role_delete)
-
+                    
                     list_profile = self.driver.find_elements(By.XPATH, "//th[.//span[contains(text(),'role_')]]")
             else:
                 print("There are no test roles")
@@ -118,7 +121,7 @@ class RolesPermissionPage(BasePage):
                                                  "(//th[.//span[contains(text(),'role_')]]//following-sibling::td//button[@class='btn btn-danger'])[" + str(
                                                      i + 1) + "]").click()
                    self.wait_to_click(self.confirm_role_delete)
-
+                   
                    list_profile = self.driver.find_elements(By.XPATH, "//th[.//span[contains(text(),'role_')]]")
                else:
                    print("There are no test roles")
@@ -152,7 +155,7 @@ class RolesPermissionPage(BasePage):
         self.scroll_to_element(self.save_button)
         time.sleep(0.5)
         self.wait_to_click(self.save_button)
-
+        
         assert self.is_present_and_displayed(self.role_non_admin), "Role not added successfully!"
         return self.role_non_admin_created
 
@@ -171,11 +174,43 @@ class RolesPermissionPage(BasePage):
             self.click(self.view_data_dictionary)
             self.click(self.edit_data_dictionary)
             self.click(self.edit_data_dictionary)
+        print("Role added successfully")
+        return self.role_non_admin_created
+
+
+    def add_shared_export_role(self, name, flag='NO'):
+        self.wait_to_click(self.add_new_role)
+        self.wait_to_clear_and_send_keys(self.role_name, name)
+        time.sleep(1)
+        self.click(self.edit_mobile_worker_checkbox)
+        time.sleep(0.5)
+        self.click(self.edit_web_user_checkbox)
+        time.sleep(0.5)
+        self.click(self.data_checkbox)
+        time.sleep(0.5)
+        self.scroll_to_element(self.manage_shared_exports)
+        if flag == 'YES':
+            time.sleep(2)
+            self.click(self.manage_shared_exports)
+            time.sleep(2)
+        time.sleep(0.5)
+        self.scroll_to_element(self.access_all_reports_checkbox)
+        time.sleep(1)
+        self.click(self.access_all_reports_checkbox)
+        time.sleep(0.5)
         self.scroll_to_element(self.save_button)
         time.sleep(0.5)
         self.click(self.save_button)
         time.sleep(2)
+        assert self.is_present_and_displayed((By.XPATH, self.role_no_shared_export.format(name))), "Role not added successfully!"
+        assert self.is_present_and_displayed((By.XPATH, self.web_user_permission.format(name))), "Web User Permission not present"
+        assert self.is_present_and_displayed((By.XPATH, self.mobile_worker_permission.format(name))), "Mobile Worker Permission not present"
+        if flag == "NO":
+            assert not self.is_present_and_displayed((By.XPATH, self.managed_shared_export_permission.format(name)), 5), "Shared Export Permission is present"
+        else:
+            assert self.is_present_and_displayed((By.XPATH, self.managed_shared_export_permission.format(name))), "Shared Export Permission not present"
         return self.role_non_admin_created
+
 
 
     def add_shared_export_role(self, name, flag='NO'):

@@ -5,8 +5,13 @@ name: Power BI Tests
 
 on:
   schedule:
-    - cron: '0 2 * * 6'
-
+    - cron: '0 3 * * 6'
+  push:
+    branches-ignore:
+      - master   # run on all branches except master
+  pull_request:
+    branches-ignore:
+      - master   # ignore PRs targeting master
   workflow_dispatch:
     inputs:
       environment:
@@ -41,7 +46,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix: ${{ fromJSON(needs.set_matrix.outputs.matrix) }}
-    name: Lookup tests on '${{ matrix.environment }}'
+    name: Power Bi on '${{ matrix.environment }}'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -68,7 +73,7 @@ jobs:
           echo "matrix environment: ${{ matrix.environment }}"
           echo "NOW=$(date +'%m-%d %H:%M')" >> $GITHUB_ENV
           echo ${{env.NOW}}
-          pytest -v --rootdir= Features/Powerbi_integration_exports/testCases -n 0 --dist=loadfile --reruns 1 --html=power_bi_reports_${{ matrix.environment }}.html
+          pytest -v --rootdir= Features/Powerbi_integration_exports/testCases -n 1 --dist=loadfile --reruns 1 --html=power_bi_reports_${{ matrix.environment }}.html
 
 
       - name: Parse test counts

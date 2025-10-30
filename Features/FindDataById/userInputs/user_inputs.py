@@ -19,3 +19,8 @@ class UserData:
                     "staging": ['7ed7f6e897b973005cb9d142c12ecdfd', '72f473f6cb324667967f8113ed6b6d79',
                                 '6a28737916f8bd3098ae71b23060cc54']
                     }
+    reassign_cases_app_data = {
+        "app_name": "Reassign Cases",
+        "case_list_name": "Case List",
+        "form_name": "Registration Form"
+    }
