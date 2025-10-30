@@ -48,6 +48,9 @@ class RolesPermissionPage(BasePage):
         self.confirm_role_delete = (By.XPATH, "//div[@class='btn btn-danger']")
         self.full_org_access_checkbox = (By.XPATH, "//label[contains(.,'Full Organization Access')]//following-sibling::div//input")
         self.access_all_reports_checkbox = (By.XPATH, "//input[@id='access-all-reports-checkbox']")
+        self.edit_data = (By.XPATH, "//div[@id='user-roles-table']/div[@class='panel-body']/div[@class='modal fade in']/div[@class='modal-dialog']/form/div[@class='modal-content']/div[@class='modal-body']/div[@class='form form-horizontal']/fieldset/div[3]/div[@class='form-group'][7]/div[@class='col-sm-2 controls'][1]/div[@class='form-check']/label")
+        self.view_data_dictionary = (By.XPATH, "//input[@id='view-data-dict-checkbox']")
+        self.edit_data_dictionary = (By.XPATH, "//input[@id='edit-data-dict-checkbox']")
         self.edit_data = (By.XPATH, "//input[@id='edit-data-checkbox']")
         self.view_data_dictionary = (By.XPATH, "//input[@id='view-data-dict-checkbox']")
         self.edit_data_dictionary = (By.XPATH, "//input[@id='edit-data-dict-checkbox']")
@@ -128,6 +131,7 @@ class RolesPermissionPage(BasePage):
     def add_non_admin_role(self):
         self.wait_to_click(self.add_new_role)
         self.wait_to_clear_and_send_keys(self.role_name, self.role_non_admin_created)
+        self.wait_to_clear_and_send_keys(self.role_name, self.role_non_admin_created)
         self.wait_for_element(self.role_name)
         self.send_keys(self.role_name, self.role_non_admin_created)
         self.wait_to_click(self.edit_mobile_worker_checkbox)
@@ -207,3 +211,4 @@ class RolesPermissionPage(BasePage):
             assert not self.is_present_and_displayed((By.XPATH, self.managed_shared_export_permission.format(name)), 5), "Shared Export Permission is present"
         else:
             assert self.is_present_and_displayed((By.XPATH, self.managed_shared_export_permission.format(name))), "Shared Export Permission not present"
+        return self.role_non_admin_created
