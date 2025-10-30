@@ -528,7 +528,7 @@ class ReportPage(BasePage):
             print("No rows are present in the web table")
             return False
 
-    def verify_form_data_submit_history(self, case_name, username,type_value=None):
+    def verify_form_data_submit_history(self, case_name, username,type_value=None,app_config=None):
         print("Sleeping for sometime for the case to get registered.")
         time.sleep(90)
         self.wait_to_click(self.submit_history_rep)
@@ -538,9 +538,9 @@ class ReportPage(BasePage):
         self.wait_to_click(self.users_box)
         self.send_keys(self.search_user, username)
         self.wait_to_click((By.XPATH, self.app_user_select.format(username)))
-        self.select_by_text(self.application_select, UserData.reassign_cases_application)
-        self.select_by_text(self.module_select, UserData.case_list_name)
-        self.select_by_text(self.form_select, UserData.form_name)
+        self.select_by_text(self.application_select, app_config['app_name'])
+        self.select_by_text(self.module_select, app_config['case_list_name'])
+        self.select_by_text(self.form_select, app_config['form_name'])
         date_range = self.get_todays_date_range()
         self.clear(self.date_input)
         self.send_keys(self.date_input, date_range + Keys.TAB)

@@ -15,7 +15,7 @@ class FindIdPage(BasePage):
         #FindDataById
         self.find_data_by_id= (By.LINK_TEXT, "Find Data by ID")
         self.find_id= "//*[@placeholder='{} ID']"
-        self.find_button = "//fieldset[@id='find-{}']/div[@class='form-group']/div[@class='col-sm-8 col-md-9']/button[@class='btn btn-primary']"
+        self.find_button = "//fieldset[@id='find-{}']//button[@type='button'][normalize-space()='Find']"
         self.error_message ="//div[contains(text(),'Could not find {}')]"
         self.export_link = "//a[normalize-space()='{} data export']"
         self.export_page ="//h1[normalize-space()='Export {} Data']"
