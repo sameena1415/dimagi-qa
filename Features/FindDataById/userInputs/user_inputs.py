@@ -11,7 +11,7 @@ class UserData:
 
 
     """User Test Data"""
-    location_name = "Test Location [DO NOT DELETE!!!]"
+    location_name = 'value="Test Location [DO NOT DELETE!!!]"'
     invalid_id = 'barff57e-c455-4887-bca6-c43b29e82dde'
     # [userid ,location_id, group_id]
     user_details = {"prod": ['06023ed31ef7c7af67ce1526f47021c6', 'deee331b540d4211be7f95bb66e79578',

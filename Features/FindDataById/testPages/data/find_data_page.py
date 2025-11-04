@@ -7,7 +7,7 @@ from common_utilities.selenium.base_page import BasePage
 
 """"Contains test page elements and functions related to the Lookup Table module"""
 
-class FindIdPage(BasePage):
+class FindDataPage(BasePage):
 
     def __init__(self, driver):
         super().__init__(driver)
@@ -21,7 +21,6 @@ class FindIdPage(BasePage):
         self.export_page ="//h1[normalize-space()='Export {} Data']"
         self.case_id_found = (By.XPATH,"//a[normalize-space()='View']")
         self.view = "//fieldset[@id='{}']//a[contains(text(),'View')]"
-        self.location_name = (By.XPATH,"//p[@class='lead' and contains(text(),' Test Location [DO NOT DELETE!!!]')]")
 
         # Find_Data_By_Id_Form_Level
         self.case_change = (By.XPATH, "//a[normalize-space()='Case Changes']")
@@ -34,140 +33,62 @@ class FindIdPage(BasePage):
 
     def find_data_by_id_page_ui(self):
         self.wait_to_click(self.find_data_by_id)
-        self.is_present_and_displayed((By.XPATH,self.find_id.format('Case')))
-        self.is_present_and_displayed((By.XPATH,self.find_id.format('Form Submission')))
-        assert True, "Find case and Find Forms fields are displayed"
+        assert self.is_present_and_displayed((By.XPATH,self.find_id.format('Case'))) , "find case field is displayed"
+        assert self.is_present_and_displayed((By.XPATH,self.find_id.format('Form Submission'))) ,"find form submission field is displayed"
 
-    def search_invalid_ids(self,type1):
-        if type1 =='case':
+    def search_invalid_ids(self,submission_type):
+        if submission_type =='case':
             self.is_present_and_displayed((By.XPATH, self.find_id.format('Case')))
             self.wait_to_clear_and_send_keys((By.XPATH,self.find_id.format('Case')),UserData.invalid_id)
             self.js_click((By.XPATH,self.find_button.format('case')))
-            self.is_present_and_displayed((By.XPATH,self.error_message.format('case')))
-            assert True, "Could not find case submission"
-        elif type1 == 'form':
+            assert self.is_present_and_displayed((By.XPATH,self.error_message.format('case')))
+            "Could not find case submission"
+        elif submission_type == 'form':
             self.is_present_and_displayed((By.XPATH, self.find_id.format('Form Submission')))
             self.wait_to_clear_and_send_keys((By.XPATH,self.find_id.format('Form Submission')),UserData.invalid_id)
             self.js_click((By.XPATH, self.find_button.format('form')))
-            self.is_present_and_displayed((By.XPATH,self.error_message.format('form submission')))
-            assert True, "Could not find form submission"
+            assert self.is_present_and_displayed((By.XPATH,self.error_message.format('form submission')))
+            "Could not find form submission"
 
     def verify_data_exports_link(self,value):
         if value == 'case':
             self.js_click((By.XPATH, self.export_link.format(value)))
-            self.is_present_and_displayed((By.XPATH,self.export_page.format(str(value).capitalize())))
-            assert True, "Case export page opened"
+            assert self.is_present_and_displayed((By.XPATH,self.export_page.format(str(value).capitalize())))
+            "Case export page opened"
         elif value =='form':
             self.js_click((By.XPATH, self.export_link.format(value)))
-            self.is_present_and_displayed((By.XPATH,self.export_page.format(str(value).capitalize())))
-            assert True, "Form export page opened"
+            assert self.is_present_and_displayed((By.XPATH,self.export_page.format(str(value).capitalize())))
+            "Form export page opened"
 
 
-
-    def validate_location_ids(self, value_type):
-        if value_type == "case":
-            self.click((By.XPATH,self.find_id.format('Case')))
-            url = self.get_current_url()
-            if "staging" in url:
-                self.send_keys((By.XPATH, self.find_id.format('Case')), str(UserData.user_details['staging'][1]))
-            else:
-                self.send_keys((By.XPATH, self.find_id.format('Case')), str(UserData.user_details['prod'][1]))
-            self.js_click((By.XPATH, self.find_button.format(value_type)))
-        elif value_type == "form":
-            self.click((By.XPATH, self.find_id.format('Form Submission')))
-            url = self.get_current_url()
-            if "staging" in url:
-                self.send_keys((By.XPATH, self.find_id.format('Form Submission')),str(UserData.user_details['staging'][1]))
-            else:
-                self.send_keys((By.XPATH, self.find_id.format('Form Submission')),str(UserData.user_details['prod'][1]))
-            self.js_click((By.XPATH, self.find_button.format(value_type)))
-        self.js_click(self.view_button)
-        time.sleep(10)
+    def validate_web_user_location_group_data_pages(self,value_type,id_type,case_data=None):
+        id_map = {
+            "web_user": 0,
+            "location": 1,
+            "group": 2
+        }
+        if id_type not in id_map:
+            raise ValueError(f"Invalid id_type '{id_type}'. Must be one of {list(id_map.keys())}.")
+        value = "Case" if value_type == "case" else "Form Submission"
         url = self.get_current_url()
-        if "staging" in url:
-            self.page_source_contains(UserData.user_details['staging'][1])
-            assert True,("Correct location page is opened in staging environment for" ,value_type ,"field search ")
-        else:
-            self.page_source_contains(UserData.user_details['prod'][1])
-            assert True,("Correct location page is opened in production environment for" ,value_type ,"field search ")
-        self.driver.back()
-
-
-    def validate_web_user_ids(self, value_type):
-        if value_type == "case":
-            self.click((By.XPATH, self.find_id.format('Case')))
-            url = self.get_current_url()
-            if "staging" in url:
-                self.send_keys((By.XPATH, self.find_id.format('Case')), str(UserData.user_details['staging'][0]))
-            else:
-                self.send_keys((By.XPATH, self.find_id.format('Case')), str(UserData.user_details['prod'][0]))
-            self.js_click((By.XPATH, self.find_button.format(value_type)))
-        elif value_type == "form":
-            self.click((By.XPATH, self.find_id.format('Form Submission')))
-            url = self.get_current_url()
-            if "staging" in url:
-                self.send_keys((By.XPATH, self.find_id.format('Form Submission')), str(UserData.user_details['staging'][0]))
-            else:
-                self.send_keys((By.XPATH, self.find_id.format('Form Submission')), str(UserData.user_details['prod'][0]))
-            self.js_click((By.XPATH, self.find_button.format(value_type)))
+        env = "staging" if "staging" in url else "prod"
+        user_id = str(UserData.user_details[env][id_map[id_type]]) if case_data is None else case_data
+        self.click((By.XPATH, self.find_id.format(value)))
+        self.send_keys((By.XPATH, self.find_id.format(value)), user_id)
+        self.js_click((By.XPATH, self.find_button.format(value_type)))
+        text = self.get_attribute(self.view_button, "href")
+        print(text)
+        assert user_id in text, f"{user_id} not found in URL: {text}"
+        print(f"[PASS] {id_type} ID '{user_id}' is present in {text}")
         self.js_click(self.view_button)
-        url = self.get_current_url()
-        if "staging" in url:
-            self.page_source_contains(UserData.user_details['staging'][0])
-            assert True,("Correct web user page is opened in staging environment for" ,value_type ,"field search ")
-        else:
-            self.page_source_contains(UserData.user_details['prod'][0])
-            assert True,("Correct web user page is opened in production environment for" ,value_type ,"field search ")
-        self.driver.back()
-
-    def validate_group_ids(self, value_type):
-        if value_type == "case":
-            self.click((By.XPATH,self.find_id.format('Case')))
-            url = self.get_current_url()
-            if "staging" in url:
-                self.send_keys((By.XPATH, self.find_id.format('Case')), str(UserData.user_details['staging'][2]))
-            else:
-                self.send_keys((By.XPATH, self.find_id.format('Case')), str(UserData.user_details['prod'][2]))
-            self.js_click((By.XPATH, self.find_button.format(value_type)))
-        elif value_type == "form":
-            self.click((By.XPATH,self.find_id.format('Form Submission')))
-            url = self.get_current_url()
-            if "staging" in url:
-                self.send_keys((By.XPATH, self.find_id.format('Form Submission')), str(UserData.user_details['staging'][2]))
-            else:
-                self.send_keys((By.XPATH, self.find_id.format('Form Submission')), str(UserData.user_details['prod'][2]))
-            self.js_click((By.XPATH, self.find_button.format(value_type)))
-        self.js_click(self.view_button)
-        url = self.get_current_url()
-        if "staging" in url:
-            self.page_source_contains(UserData.user_details['staging'][2])
-            assert True,("Correct group page is opened in staging environment for" ,value_type ,"field search ")
-        else:
-            self.page_source_contains(UserData.user_details['prod'][2])
-            assert True,("Correct group page is opened in production environment for" ,value_type ,"field search ")
-
-
-    def validate_case_form_input_id(self, value_type,value):
-        if value_type == "case":
-            print("case id value", value)
-            self.click((By.XPATH, self.find_id.format('Case')))
-            self.wait_to_clear_and_send_keys((By.XPATH, self.find_id.format('Case')),value )
-            self.wait_to_click((By.XPATH, self.find_button.format('case')), 2)
-        elif value_type == "form":
-            print("form  id value",value)
-            self.click((By.XPATH, self.find_id.format('Form Submission')))
-            self.wait_to_clear_and_send_keys((By.XPATH, self.find_id.format('Form Submission')),
-                                             value)
-            self.wait_to_click((By.XPATH, self.find_button.format('form')), 2)
-        self.is_present_and_displayed(self.case_id_found)
-        time.sleep(10)
-        self.wait_to_click(self.view_button)
-        self.page_source_contains(value)
-        assert True,("Correct ",value_type,"id page is opened")
-        self.driver.back()
-
-
-
-
+        time.sleep(5)
+        self.switch_to_next_tab()
+        time.sleep(5)
+        current_url = self.get_current_url()
+        assert user_id in current_url, f"{user_id} not found in new tab URL: {current_url}"
+        print(f"[PASS] {id_type} ID '{user_id}' is present in new tab URL {current_url}")
+        self.driver.close()
+        time.sleep(2)
+        self.switch_back_to_prev_tab()
 
 

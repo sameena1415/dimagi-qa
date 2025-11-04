@@ -249,17 +249,11 @@ class ReportPage(BasePage):
         self.export_to_excel = (By.XPATH, "//a[@id='export-report-excel']")
         self.export_success = (By.XPATH,
                                "//span[.='Your requested Excel report will be sent to the email address defined in your account settings.']")
+        self.download_report_link = (By.XPATH, "//div[contains(@class,'success')]//a[.='Download Report']")
 
         # App Status
         self.app_status_results = (By.XPATH, "//table[@class='table table-striped datatable dataTable no-footer']/tbody/tr")
         self.app_status_results_cells = (By.XPATH, "//table[@class='table table-striped datatable dataTable no-footer']/tbody/tr/td")
-
-        #Find_Data_By_Id
-        self.properties ="//a[normalize-space()='{}']"
-        self.form_properties = "//a[normalize-space()='Form Properties']"
-        self.id_values= "//dt[@title='{}']//following-sibling::dd[1]"
-
-
         self.panel_body_text = (By.XPATH, "//div[@id='report-content']//div[contains(@class,'card-body')]")
         self.last_submit_column_list = (By.XPATH, "//table[@id='report_table_app_status']//tbody//td[3]")
         self.last_submit_column_first = (By.XPATH, "(//table[@id='report_table_app_status']//tbody//td[3])[1]")
@@ -271,6 +265,11 @@ class ReportPage(BasePage):
         self.APPLICATION_STATUS_TITLE = "Application Status - CommCare HQ"
         self.result_table = (By.XPATH, "(//div[@id='report-content']//table//tbody//td[1])[1]")
         self.users_list_item = "//ul[@role='listbox']/li[contains(.,'{}')]"
+
+        # Find_Data_By_Id
+        self.properties = "//a[normalize-space()='{}']"
+        self.form_properties = "//a[normalize-space()='Form Properties']"
+        self.id_values = "//dt[@title='{}']//following-sibling::dd[1]"
 
     def check_if_report_loaded(self):
         try:
@@ -706,6 +705,7 @@ class ReportPage(BasePage):
             owner = UserData.appiumtest_owner_id_prod
         else:
             owner = UserData.appiumtest_owner_id
+        self.wait_for_element(self.case_list_explorer, 300)
         self.wait_to_click(self.case_list_explorer)
         time.sleep(20)
         self.wait_for_element(self.edit_column, 220)
