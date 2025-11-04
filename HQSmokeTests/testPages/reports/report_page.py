@@ -69,7 +69,7 @@ class ReportPage(BasePage):
 
         # Mobile Worker Reports
         self.reports_menu_id = (By.ID, "ProjectReportsTab")
-        self.worker_activity_rep = (By.LINK_TEXT, "Worker Activity")
+        self.worker_activity_rep = (By.LINK_TEXT, "User Activity")
         self.daily_form_activity_rep = (By.LINK_TEXT, "Daily Form Activity")
         self.submissions_by_form_rep = (By.LINK_TEXT, "Submissions By Form")
         self.form_completion_rep = (By.LINK_TEXT, "Form Completion Time")
@@ -129,12 +129,16 @@ class ReportPage(BasePage):
         self.saved_report_description = (By.NAME, "description")
         self.save_confirm = (By.XPATH, '//div[@class = "btn btn-primary"]')
         self.saved_reports_menu_link = (By.LINK_TEXT, 'My Saved Reports')
-        self.saved_report_created = (By.XPATH, "//a[text()='" + self.report_name_saved + "']")
+        self.saved_report_created = "//a[text()='{}']"
         self.delete_saved = (By.XPATH,
                              "(//a[text()='" + self.report_name_saved + "']//following::button[@class='btn btn-danger add-spinner-on-click'])[1]")
         self.delete_saved_report_link = "(//a[text()='{}']//following::button[@class='btn btn-danger add-spinner-on-click'])[1]"
         self.all_saved_reports = (
         By.XPATH, "//td[a[contains(.,'Saved')]]//following-sibling::td/button[contains(@data-bind,'delete')]")
+
+        self.favorite_button = (By.XPATH, "//button[contains(.,'Favorites')]")
+        self.empty_fav_list = (By.XPATH, '//a[.="You don\'t have any favorites"]')
+        self.saved_fav = "//a[contains(.,'{}')][contains(@data-bind,'text: name')]"
 
         # Scheduled Reports
         self.scheduled_reports_menu_xpath = (By.XPATH, "//a[@href='#scheduled-reports']")
@@ -250,12 +254,22 @@ class ReportPage(BasePage):
         # App Status
         self.app_status_results = (By.XPATH, "//table[@class='table table-striped datatable dataTable no-footer']/tbody/tr")
         self.app_status_results_cells = (By.XPATH, "//table[@class='table table-striped datatable dataTable no-footer']/tbody/tr/td")
+        self.panel_body_text = (By.XPATH, "//div[@id='report-content']//div[contains(@class,'card-body')]")
+        self.last_submit_column_list = (By.XPATH, "//table[@id='report_table_app_status']//tbody//td[3]")
+        self.last_submit_column_first = (By.XPATH, "(//table[@id='report_table_app_status']//tbody//td[3])[1]")
+        self.page_list_dropdown = (By.XPATH, "//select[@name='report_table_app_status_length']")
+        self.pagination_list = (By.XPATH, "//ul[@class='pagination']/li/a")
+        self.application_dropdown = (By.XPATH, "//select[@id='report_filter_app']")
+        self.application_field = (By.XPATH, "//span[contains(@id, 'report_filter_app-container')]")
+        self.application_input = (By.XPATH, "//input[contains(@aria-controls,'report_filter_app-result')]")
+        self.APPLICATION_STATUS_TITLE = "Application Status - CommCare HQ"
+        self.result_table = (By.XPATH, "(//div[@id='report-content']//table//tbody//td[1])[1]")
+        self.users_list_item = "//ul[@role='listbox']/li[contains(.,'{}')]"
 
-        #Find_Data_By_Id
-        self.properties ="//a[normalize-space()='{}']"
+        # Find_Data_By_Id
+        self.properties = "//a[normalize-space()='{}']"
         self.form_properties = "//a[normalize-space()='Form Properties']"
-        self.id_values= "//dt[@title='{}']//following-sibling::dd[1]"
-        
+        self.id_values = "//dt[@title='{}']//following-sibling::dd[1]"
 
     def check_if_report_loaded(self):
         try:
@@ -381,11 +395,10 @@ class ReportPage(BasePage):
         self.wait_for_element(self.save_confirm)
         self.js_click(self.save_confirm)
         time.sleep(2)
-        self.wait_for_element(self.saved_reports_menu_link, 100)
-        self.click(self.saved_reports_menu_link)
-        time.sleep(10)
-        self.wait_for_element(self.scheduled_reports_menu_xpath, 200)
-        assert self.is_present_and_displayed(self.saved_report_created, 220)
+
+        self.reload_page()
+        self.wait_to_click(self.saved_reports_menu_link)
+        self.wait_for_element((By.XPATH, self.saved_report_created.format(self.report_name_saved)), 120)
         print("Report Saved successfully!")
 
     def create_scheduled_report_button(self):
