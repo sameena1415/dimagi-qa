@@ -241,10 +241,14 @@ jobs:
               SLACK_WEBHOOK_URL = '${{ secrets.SLACK_WEBHOOK_URL_EU }}';
               SLACK_CHANNEL_ID = '${{ secrets.SLACK_CHANNEL_ID_EU }}';
               console.log("EU Failure"); 
-            } else if (CC_EVENT != 'repository_dispatch' && CC_ENV == 'india' && CC_ENV == 'eu' && JOB_STATUS == 'failure') {
+            } else if (CC_EVENT != 'repository_dispatch' && CC_ENV == 'india') {
               SLACK_WEBHOOK_URL = '${{ secrets.SLACK_WEBHOOK_URL_SMOKE }}';
               SLACK_CHANNEL_ID = '${{ secrets.SLACK_CHANNEL_ID_SMOKE }}';
               console.log("India Success");
+            } else if (CC_EVENT != 'repository_dispatch' && CC_ENV == 'eu') {
+              SLACK_WEBHOOK_URL = '${{ secrets.SLACK_WEBHOOK_URL_EU }}';
+              SLACK_CHANNEL_ID = '${{ secrets.SLACK_CHANNEL_ID_EU }}';
+              console.log("EU Success");
             } else {
               SLACK_WEBHOOK_URL = '';
               SLACK_CHANNEL_ID = '';
