@@ -223,11 +223,53 @@ jobs:
 
             return { SLACK_WEBHOOK_URL, SLACK_CHANNEL_ID };
 
+#      - name: Upload Combined Chart to Slack
+#        if: ${{ (success() || failure()) && steps.configure_slack.outputs.SLACK_CHANNEL_ID != '' }}
+#        run: |
+#          set -e
+#          # Pick emoji based on job status
+#          if [ "${{ job.status }}" = "success" ]; then
+#            STATUS_ICON="✅"
+#            STYLE_BUTTON="primary"
+#          else
+#            STATUS_ICON="❌"
+#            STYLE_BUTTON="danger"
+#          fi
+#          ARTIFACT_URL="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts/${{ steps.artifact-upload-step.outputs.artifact-id }}"
+#          ENVIRONMENT=$(echo "${{ matrix.environment }}" | tr '[:lower:]' '[:upper:]')
+#          ENVIRONMENT="[$ENVIRONMENT]"
+#
+#          COMMENT="$STATUS_ICON 📊 *$ENVIRONMENT ${{ github.workflow }} Test Summary Charts*"$'\n\n'"📎 *Artifact:* <${ARTIFACT_URL}|Download here>"
+#
+#          # Step 1: Request upload URL
+#          UPLOAD_URL_JSON=$(curl -s -X POST https://slack.com/api/files.getUploadURLExternal \
+#            -H "Authorization: Bearer ${{ secrets.SLACK_QA_BOT_TOKEN }}" \
+#            -H "Content-Type: application/json" \
+#            -d "{\"filename\": \"summary_combined.png\", \"length\": $(stat -c%s slack_charts/summary_combined.png)}")
+#
+#          UPLOAD_URL=$(echo "$UPLOAD_URL_JSON" | jq -r '.upload_url')
+#          FILE_ID=$(echo "$UPLOAD_URL_JSON" | jq -r '.file_id')
+#
+#          # Step 2: Upload the file
+#          curl -s -X POST -F "file=@slack_charts/summary_combined.png" "$UPLOAD_URL"
+#
+#          # Step 3: Complete the upload and post to channel
+#          COMPLETE_JSON=$(curl -s -X POST https://slack.com/api/files.completeUploadExternal \
+#            -H "Authorization: Bearer ${{ secrets.SLACK_QA_BOT_TOKEN }}" \
+#            -H "Content-Type: application/json" \
+#            -d "{\"files\": [{\"id\": \"$FILE_ID\", \"title\": \"Summary Combined Chart\"}], \"channel_id\": \"${{ steps.configure_slack.outputs.SLACK_CHANNEL_ID }}\"}")
+#
+#          COMBINED_URL=$(echo "$COMPLETE_JSON" | jq -r '.files[0].permalink')
+#
+#          echo "COMBINED_URL=$COMBINED_URL" >> $GITHUB_ENV
+#          echo "STYLE_BUTTON=$STYLE_BUTTON" >> $GITHUB_ENV
+#          echo "STATUS_ICON=$STATUS_ICON" >> $GITHUB_ENV
+
       - name: Upload Combined Chart to Slack
         if: ${{ (success() || failure()) && steps.configure_slack.outputs.SLACK_CHANNEL_ID != '' }}
         run: |
-          set -e
-          # Pick emoji based on job status
+          set -euo pipefail
+
           if [ "${{ job.status }}" = "success" ]; then
             STATUS_ICON="✅"
             STYLE_BUTTON="primary"
@@ -235,32 +277,72 @@ jobs:
             STATUS_ICON="❌"
             STYLE_BUTTON="danger"
           fi
+
           ARTIFACT_URL="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts/${{ steps.artifact-upload-step.outputs.artifact-id }}"
           ENVIRONMENT=$(echo "${{ matrix.environment }}" | tr '[:lower:]' '[:upper:]')
           ENVIRONMENT="[$ENVIRONMENT]"
-        
           COMMENT="$STATUS_ICON 📊 *$ENVIRONMENT ${{ github.workflow }} Test Summary Charts*"$'\n\n'"📎 *Artifact:* <${ARTIFACT_URL}|Download here>"
-        
-          # Step 1: Request upload URL
-          UPLOAD_URL_JSON=$(curl -s -X POST https://slack.com/api/files.getUploadURLExternal \
+
+          PNG_PATH="slack_charts/summary_combined.png"
+          if [ ! -f "$PNG_PATH" ]; then
+            echo "❌ ERROR: File not found: $PNG_PATH"
+            exit 1
+          fi
+
+          FILE_SIZE=$(stat -c%s "$PNG_PATH")
+          echo "Uploading $PNG_PATH (${FILE_SIZE} bytes)"
+
+          # Step 1️⃣: Request upload URL
+          UPLOAD_URL_JSON=$(curl -s -X POST "https://slack.com/api/files.getUploadURLExternal" \
             -H "Authorization: Bearer ${{ secrets.SLACK_QA_BOT_TOKEN }}" \
             -H "Content-Type: application/json" \
-            -d "{\"filename\": \"summary_combined.png\", \"length\": $(stat -c%s slack_charts/summary_combined.png)}")
+            -d "{\"filename\": \"summary_combined.png\", \"length\": ${FILE_SIZE}}")
+
+          echo "Slack upload URL response: $UPLOAD_URL_JSON"
+
+          OK=$(echo "$UPLOAD_URL_JSON" | jq -r '.ok // false')
+          if [ "$OK" != "true" ]; then
+            ERR=$(echo "$UPLOAD_URL_JSON" | jq -r '.error // "unknown_error"')
+            echo "❌ files.getUploadURLExternal failed: $ERR"
+            exit 1
+          fi
 
           UPLOAD_URL=$(echo "$UPLOAD_URL_JSON" | jq -r '.upload_url')
           FILE_ID=$(echo "$UPLOAD_URL_JSON" | jq -r '.file_id')
 
-          # Step 2: Upload the file
-          curl -s -X POST -F "file=@slack_charts/summary_combined.png" "$UPLOAD_URL"
+          # Step 2️⃣: Upload to presigned URL
+          HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" -X POST -F "file=@${PNG_PATH}" "$UPLOAD_URL")
+          echo "File upload HTTP status: $HTTP_CODE"
+          if [ "$HTTP_CODE" -lt 200 ] || [ "$HTTP_CODE" -ge 300 ]; then
+            echo "❌ Upload failed with HTTP $HTTP_CODE"
+            exit 1
+          fi
 
-          # Step 3: Complete the upload and post to channel
-          COMPLETE_JSON=$(curl -s -X POST https://slack.com/api/files.completeUploadExternal \
+          # Step 3️⃣: Complete the upload
+          COMPLETE_JSON=$(curl -s -X POST "https://slack.com/api/files.completeUploadExternal" \
             -H "Authorization: Bearer ${{ secrets.SLACK_QA_BOT_TOKEN }}" \
             -H "Content-Type: application/json" \
             -d "{\"files\": [{\"id\": \"$FILE_ID\", \"title\": \"Summary Combined Chart\"}], \"channel_id\": \"${{ steps.configure_slack.outputs.SLACK_CHANNEL_ID }}\"}")
 
+          echo "Slack completeUploadExternal response: $COMPLETE_JSON"
+
+          OK2=$(echo "$COMPLETE_JSON" | jq -r '.ok // false')
+          if [ "$OK2" != "true" ]; then
+            ERR2=$(echo "$COMPLETE_JSON" | jq -r '.error // "unknown_error"')
+            echo "❌ files.completeUploadExternal failed: $ERR2"
+            exit 1
+          fi
+
           COMBINED_URL=$(echo "$COMPLETE_JSON" | jq -r '.files[0].permalink')
+          echo "✅ File uploaded successfully: $COMBINED_URL"
 
           echo "COMBINED_URL=$COMBINED_URL" >> $GITHUB_ENV
           echo "STYLE_BUTTON=$STYLE_BUTTON" >> $GITHUB_ENV
           echo "STATUS_ICON=$STATUS_ICON" >> $GITHUB_ENV
+
+          # Step 4️⃣: Post comment in Slack (optional)
+          curl -s -X POST "https://slack.com/api/chat.postMessage" \
+            -H "Authorization: Bearer ${{ secrets.SLACK_QA_BOT_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            -d "{\"channel\": \"${{ steps.configure_slack.outputs.SLACK_CHANNEL_ID }}\", \"text\": $(jq -Rn --arg t \"$COMMENT\" '$t') }" \
+            > /dev/null
