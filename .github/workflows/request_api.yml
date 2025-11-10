@@ -238,13 +238,17 @@ jobs:
         FILE_SIZE=$(stat -c%s "$PNG_PATH")
         echo "Uploading $PNG_PATH (${FILE_SIZE} bytes)"
 
-        # Step 1️⃣: Request upload URL
+        # Step 1️⃣: Request upload URL (fixed JSON quoting)
         UPLOAD_URL_JSON=$(curl -s -X POST "https://slack.com/api/files.getUploadURLExternal" \
           -H "Authorization: Bearer ${{ secrets.SLACK_QA_BOT_TOKEN }}" \
-          -H "Content-Type: application/json" \
-          -d "{\"filename\": \"summary_combined.png\", \"length\": ${FILE_SIZE}}")
+          -H "Content-Type: application/json; charset=utf-8" \
+          -d "$(jq -n \
+                --arg filename "summary_combined.png" \
+                --argjson length "$FILE_SIZE" \
+                '{filename: $filename, length: $length, alt_text: "QA chart"}')")
+          
+        echo "Slack getUploadURLExternal response: $UPLOAD_URL_JSON"
 
-        echo "Slack upload URL response: $UPLOAD_URL_JSON"
 
         OK=$(echo "$UPLOAD_URL_JSON" | jq -r '.ok // false')
         if [ "$OK" != "true" ]; then
