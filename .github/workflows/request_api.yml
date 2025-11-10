@@ -242,7 +242,8 @@ jobs:
         FILE_SIZE=$(stat -c%s "$PNG_PATH")
         
         # Build proper JSON payload into a temp file (note: NO indentation)
-        echo "{\"filename\": \"summary_combined.png\", \"length\": ${FILE_SIZE}, \"alt_text\": \"QA chart\"}" > payload.json
+        jq -n --arg fn "summary_combined.png" --argjson len "$FILE_SIZE" --arg alt "QA chart" \
+          '{filename: $fn, length: $len, alt_text: $alt}' > payload.json
         
         # Call Slack API with correct headers and payload
         UPLOAD_URL_JSON=$(curl -s -X POST "https://slack.com/api/files.getUploadURLExternal" \
