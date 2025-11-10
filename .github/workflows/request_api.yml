@@ -244,7 +244,7 @@ jobs:
           -H "Content-Type: application/json; charset=utf-8" \
           -d "$(jq -n \
                 --arg filename "summary_combined.png" \
-                --argjson length "$FILE_SIZE" \
+                --argjson length "$(stat -c%s slack_charts/summary_combined.png)" \
                 '{filename: $filename, length: $length, alt_text: "QA chart"}')")
           
         echo "Slack getUploadURLExternal response: $UPLOAD_URL_JSON"
