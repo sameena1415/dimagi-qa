@@ -330,7 +330,7 @@ jobs:
           # Step 1️⃣: Request upload URL (robust JSON build)
           FILE_SIZE=$(stat -c%s "$PNG_PATH")
           
-          # Build proper JSON payload into a temp file
+          # Build proper JSON payload into a temp file (note: NO indentation)
           cat > payload.json <<EOF
           {
             "filename": "summary_combined.png",
@@ -346,6 +346,7 @@ jobs:
             --data-binary @payload.json)
           
           echo "Slack getUploadURLExternal response: $UPLOAD_URL_JSON"
+
 
           OK=$(echo "$UPLOAD_URL_JSON" | jq -r '.ok // false')
           if [ "$OK" != "true" ]; then
