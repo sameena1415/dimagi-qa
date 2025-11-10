@@ -211,7 +211,7 @@ jobs:
 #        echo "STYLE_BUTTON=$STYLE_BUTTON" >> $GITHUB_ENV
 #        echo "STATUS_ICON=$STATUS_ICON" >> $GITHUB_ENV
 
-      - name: Upload Combined Chart to Slack
+    - name: Upload Combined Chart to Slack
       if: ${{ (success() || failure()) && steps.configure_slack.outputs.SLACK_CHANNEL_ID != '' }}
       run: |
         set -euo pipefail
