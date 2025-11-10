@@ -327,14 +327,23 @@ jobs:
           FILE_SIZE=$(stat -c%s "$PNG_PATH")
           echo "Uploading $PNG_PATH (${FILE_SIZE} bytes)"
 
-          # Step 1️⃣: Request upload URL (fixed JSON quoting)
+          # Step 1️⃣: Request upload URL (robust JSON build)
+          FILE_SIZE=$(stat -c%s "$PNG_PATH")
+          
+          # Build proper JSON payload into a temp file
+          cat > payload.json <<EOF
+          {
+            "filename": "summary_combined.png",
+            "length": $FILE_SIZE,
+            "alt_text": "QA chart"
+          }
+          EOF
+          
+          # Call Slack API with correct headers and payload
           UPLOAD_URL_JSON=$(curl -s -X POST "https://slack.com/api/files.getUploadURLExternal" \
             -H "Authorization: Bearer ${{ secrets.SLACK_QA_BOT_TOKEN }}" \
             -H "Content-Type: application/json; charset=utf-8" \
-            -d "$(jq -n \
-                  --arg filename "summary_combined.png" \
-                  --argjson length "$(stat -c%s slack_charts/summary_combined.png)" \
-                  '{filename: $filename, length: $length, alt_text: "QA chart"}')")
+            --data-binary @payload.json)
           
           echo "Slack getUploadURLExternal response: $UPLOAD_URL_JSON"
 
