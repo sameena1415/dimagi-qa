@@ -237,15 +237,15 @@ jobs:
               SLACK_WEBHOOK_URL = '${{ secrets.SLACK_WEBHOOK_URL_INDIA }}';
               SLACK_CHANNEL_ID = '${{ secrets.SLACK_CHANNEL_ID_INDIA }}';
               console.log("India Failure");
+            } else if (CC_EVENT == 'repository_dispatch' && CC_ENV == 'eu') {
+              SLACK_WEBHOOK_URL = '${{ secrets.SLACK_WEBHOOK_URL_EU }}';
+              SLACK_CHANNEL_ID = '${{ secrets.SLACK_CHANNEL_ID_EU }}';
+              console.log("EU Failure"); 
             } else if (CC_EVENT != 'repository_dispatch' && CC_ENV == 'india' && CC_ENV == 'eu' && JOB_STATUS == 'failure') {
               SLACK_WEBHOOK_URL = '${{ secrets.SLACK_WEBHOOK_URL_SMOKE }}';
               SLACK_CHANNEL_ID = '${{ secrets.SLACK_CHANNEL_ID_SMOKE }}';
               console.log("India Success");
-            }else if (CC_EVENT == 'repository_dispatch' && CC_ENV == 'eu') {
-              SLACK_WEBHOOK_URL = '${{ secrets.SLACK_WEBHOOK_URL_EU }}';
-              SLACK_CHANNEL_ID = '${{ secrets.SLACK_CHANNEL_ID_EU }}';
-              console.log("EU Failure"); 
-            }else {
+            } else {
               SLACK_WEBHOOK_URL = '';
               SLACK_CHANNEL_ID = '';
               console.log("No notification sent");
@@ -260,7 +260,6 @@ jobs:
         if: ${{ (success() || failure()) && steps.configure_slack.outputs.SLACK_CHANNEL_ID != '' }}
         run: |
           set -e
-          # Pick emoji based on job status
           if [ "${{ job.status }}" = "success" ]; then
             STATUS_ICON="✅"
             STYLE_BUTTON="primary"
@@ -273,14 +272,26 @@ jobs:
           ENVIRONMENT="[$ENVIRONMENT]"
         
           COMMENT="$STATUS_ICON 📊 *$ENVIRONMENT ${{ github.workflow }} Test Summary Charts*"$'\n\n'"📎 *Artifact:* <${ARTIFACT_URL}|Download here>"
-        
-          COMBINED_JSON=$(curl -s -F file=@slack_charts/summary_combined.png \
-            -F channels=${{ steps.configure_slack.outputs.SLACK_CHANNEL_ID }} \
-            -F "initial_comment=$COMMENT" \
+
+          # Step 1: Request upload URL
+          UPLOAD_URL_JSON=$(curl -s -X POST https://slack.com/api/files.getUploadURLExternal \
             -H "Authorization: Bearer ${{ secrets.SLACK_QA_BOT_TOKEN }}" \
-            https://slack.com/api/files.upload)
-      
-          COMBINED_URL=$(echo $COMBINED_JSON | jq -r '.file.permalink')
+            -H "Content-Type: application/json" \
+            -d "{\"filename\": \"summary_combined.png\", \"length\": $(stat -c%s slack_charts/summary_combined.png)}")
+
+          UPLOAD_URL=$(echo "$UPLOAD_URL_JSON" | jq -r '.upload_url')
+          FILE_ID=$(echo "$UPLOAD_URL_JSON" | jq -r '.file_id')
+
+          # Step 2: Upload the file
+          curl -s -X POST -F "file=@slack_charts/summary_combined.png" "$UPLOAD_URL"
+
+          # Step 3: Complete the upload and post to channel
+          COMPLETE_JSON=$(curl -s -X POST https://slack.com/api/files.completeUploadExternal \
+            -H "Authorization: Bearer ${{ secrets.SLACK_QA_BOT_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            -d "{\"files\": [{\"id\": \"$FILE_ID\", \"title\": \"Summary Combined Chart\"}], \"channel_id\": \"${{ steps.configure_slack.outputs.SLACK_CHANNEL_ID }}\"}")
+
+          COMBINED_URL=$(echo "$COMPLETE_JSON" | jq -r '.files[0].permalink')
           echo "COMBINED_URL=$COMBINED_URL" >> $GITHUB_ENV
           echo "STYLE_BUTTON=$STYLE_BUTTON" >> $GITHUB_ENV
           echo "STATUS_ICON=$STATUS_ICON" >> $GITHUB_ENV
