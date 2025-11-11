@@ -228,78 +228,79 @@ jobs:
 #          echo "STATUS_ICON=$STATUS_ICON" >> $GITHUB_ENV
 
       - name: Upload Combined Chart to Slack
-        if: ${{ (success() || failure()) && steps.configure_slack.outputs.SLACK_CHANNEL_ID != '' }}
+        if: (success() || failure()) && (steps.configure_slack.outputs.SLACK_CHANNEL_ID != '')
         env:
           SLACK_QA_BOT_TOKEN: ${{ secrets.SLACK_QA_BOT_TOKEN }}
           SLACK_CHANNEL_ID: ${{ steps.configure_slack.outputs.SLACK_CHANNEL_ID }}
         run: |
-          set -euo pipefail
-
+          set -e
           PNG_PATH="slack_charts/summary_combined.png"
+          echo "Using PNG_PATH=$PNG_PATH"
+
           if [ ! -f "$PNG_PATH" ]; then
-            echo "❌ File not found: $PNG_PATH"
+            echo "❌ ERROR: File not found: $PNG_PATH"
             exit 1
           fi
 
           FILE_SIZE=$(stat -c%s "$PNG_PATH")
           echo "Uploading $PNG_PATH ($FILE_SIZE bytes)"
 
-          # Build payload JSON safely
-          echo "Creating payload.json..."
-          cat > payload.json <<EOF
-          {
-            "filename": "summary_combined.png",
-            "length": $FILE_SIZE,
-            "alt_text": "QA chart"
-          }
-          EOF
-          echo "Payload JSON contents:"
-          cat payload.json
-          
+          # ------------------------------------------
+          # Step 1️⃣: Request upload URL from Slack
+          # ------------------------------------------
           echo "Requesting upload URL from Slack..."
-          UPLOAD_URL_JSON=$( (set +u; curl -s --retry 3 --retry-delay 2 -X POST "https://slack.com/api/files.getUploadURLExternal" \
+
+          PAYLOAD=$(jq -n \
+            --arg filename "summary_combined.png" \
+            --argjson length "$FILE_SIZE" \
+            --arg alt_text "QA chart" \
+            '{filename: $filename, length: $length, alt_text: $alt_text}')
+
+          echo "Payload we will send to Slack:"
+          echo "$PAYLOAD"
+
+          UPLOAD_URL_JSON=$(curl -s --retry 3 --retry-delay 2 -X POST "https://slack.com/api/files.getUploadURLExternal" \
             -H "Authorization: Bearer $SLACK_QA_BOT_TOKEN" \
             -H "Content-Type: application/json; charset=utf-8" \
-            --data-binary @"./payload.json") )
+            --data "$PAYLOAD")
 
-          
           echo "Slack getUploadURLExternal response: $UPLOAD_URL_JSON"
-          
+
           OK=$(echo "$UPLOAD_URL_JSON" | jq -r '.ok // false')
           if [ "$OK" != "true" ]; then
-          echo "❌ files.getUploadURLExternal failed:"
-          echo "$UPLOAD_URL_JSON" | jq .
-          exit 1
+            echo "❌ files.getUploadURLExternal failed:"
+            echo "$UPLOAD_URL_JSON" | jq .
+            exit 1
           fi
-          
+
           UPLOAD_URL=$(echo "$UPLOAD_URL_JSON" | jq -r '.upload_url')
           FILE_ID=$(echo "$UPLOAD_URL_JSON" | jq -r '.file_id')
-          
-          echo "Uploading file bytes..."
+
+          # ------------------------------------------
+          # Step 2️⃣: Upload the file to presigned URL
+          # ------------------------------------------
+          echo "Uploading image to Slack upload URL..."
           HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" -X POST -F "file=@${PNG_PATH}" "$UPLOAD_URL")
           echo "File upload HTTP status: $HTTP_CODE"
           if [ "$HTTP_CODE" -lt 200 ] || [ "$HTTP_CODE" -ge 300 ]; then
-          echo "❌ Upload failed with HTTP $HTTP_CODE"
-          exit 1
+            echo "❌ Upload failed with HTTP $HTTP_CODE"
+            exit 1
           fi
-          
+
+          # ------------------------------------------
+          # Step 3️⃣: Complete the upload
+          # ------------------------------------------
           echo "Completing upload..."
           COMPLETE_JSON=$(curl -s --retry 3 --retry-delay 2 -X POST "https://slack.com/api/files.completeUploadExternal" \
-          -H "Authorization: Bearer $SLACK_QA_BOT_TOKEN" \
-          -H "Content-Type: application/json" \
-          -d "{\"files\": [ { \"id\": \"$FILE_ID\", \"title\": \"Summary Combined Chart\" } ], \"channel_id\": \"$SLACK_CHANNEL_ID\"}")
-          
+            -H "Authorization: Bearer $SLACK_QA_BOT_TOKEN" \
+            -H "Content-Type: application/json" \
+            -d "{\"files\": [ { \"id\": \"$FILE_ID\", \"title\": \"Summary Combined Chart\" } ], \"channel_id\": \"$SLACK_CHANNEL_ID\"}")
+
           echo "Slack completeUploadExternal response: $COMPLETE_JSON"
-          
+
           OK2=$(echo "$COMPLETE_JSON" | jq -r '.ok // false')
           if [ "$OK2" != "true" ]; then
-          echo "❌ files.completeUploadExternal failed:"
-          echo "$COMPLETE_JSON" | jq .
-          exit 1
+            echo "❌ files.completeUploadExternal failed:"
+            echo "$COMPLETE_JSON" | jq .
+            exit 1
           fi
-          
-          COMBINED_URL=$(echo "$COMPLETE_JSON" | jq -r '.files[0].permalink')
-          echo "✅ File uploaded successfully: $COMBINED_URL"
-          
-          # Export environment vars for later steps
-          echo "COMBINED_URL=$COMBINED_URL" >> $GITHUB_ENV
