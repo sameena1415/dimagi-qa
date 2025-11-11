@@ -260,7 +260,7 @@ jobs:
           echo "$PAYLOAD"
 
           UPLOAD_URL_JSON=$(curl -s --retry 3 --retry-delay 2 -X POST "https://slack.com/api/files.getUploadURLExternal" \
-            -H "Authorization: Bearer $SLACK_QA_BOT_TOKEN" \
+            -H "Authorization: Bearer ${{ secrets.SLACK_QA_BOT_TOKEN }}" \
             -H "Content-Type: application/json; charset=utf-8" \
             --data "$PAYLOAD")
 
@@ -292,9 +292,9 @@ jobs:
           # ------------------------------------------
           echo "Completing upload..."
           COMPLETE_JSON=$(curl -s --retry 3 --retry-delay 2 -X POST "https://slack.com/api/files.completeUploadExternal" \
-            -H "Authorization: Bearer $SLACK_QA_BOT_TOKEN" \
+            -H "Authorization: Bearer ${{ secrets.SLACK_QA_BOT_TOKEN }}" \
             -H "Content-Type: application/json" \
-            -d "{\"files\": [ { \"id\": \"$FILE_ID\", \"title\": \"Summary Combined Chart\" } ], \"channel_id\": \"$SLACK_CHANNEL_ID\"}")
+            -d "{\"files\": [ { \"id\": \"$FILE_ID\", \"title\": \"Summary Combined Chart\" } ], \"channel_id\": \"${{ SLACK_CHANNEL_ID }}\"}")
 
           echo "Slack completeUploadExternal response: $COMPLETE_JSON"
 
