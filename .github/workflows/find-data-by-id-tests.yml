@@ -250,19 +250,21 @@ jobs:
           # ------------------------------------------
           echo "Requesting upload URL from Slack..."
 
+          echo "Requesting upload URL from Slack..."
           PAYLOAD=$(jq -n \
             --arg filename "summary_combined.png" \
             --argjson length "$FILE_SIZE" \
             --arg alt_text "QA chart" \
             '{filename: $filename, length: $length, alt_text: $alt_text}')
-
+          
           echo "Payload we will send to Slack:"
           echo "$PAYLOAD"
-
+          
           UPLOAD_URL_JSON=$(curl -s --retry 3 --retry-delay 2 -X POST "https://slack.com/api/files.getUploadURLExternal" \
             -H "Authorization: Bearer ${{ secrets.SLACK_QA_BOT_TOKEN }}" \
-            -H "Content-Type: application/json; charset=utf-8" \
-            --data "$PAYLOAD")
+            -H "Content-Type: application/json;charset=utf-8" \
+            --data-raw "$PAYLOAD")
+
 
           echo "Slack getUploadURLExternal response: $UPLOAD_URL_JSON"
 
