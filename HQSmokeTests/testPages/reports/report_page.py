@@ -541,7 +541,7 @@ class ReportPage(BasePage):
             print("No rows are present in the web table")
             return False
 
-    def verify_form_data_submit_history(self, case_name, username,type_value=None,app_config=None):
+    def verify_form_data_submit_history(self, case_name, username,type_value=None, app_config=None):
         print("Sleeping for sometime for the case to get registered.")
         time.sleep(90)
         self.wait_to_click(self.submit_history_rep)
@@ -566,25 +566,29 @@ class ReportPage(BasePage):
         print("View Form Link: ", form_link)
         # self.switch_to_new_tab()
         self.driver.get(form_link)
+        new_value = None
         if type_value == 'case':
             self.wait_to_click((By.XPATH, self.properties.format('Case Changes')))
             value_id = self.get_text((By.XPATH, self.id_values.format('@case_id')))
             new_value = str(value_id).strip()
-            return new_value
+            # return new_value
         elif type_value == 'user':
             user_id = self.get_text((By.XPATH, self.id_values.format('@user_id')))
-            user_id_value = str(user_id).strip()
-            return user_id_value
+            new_value = str(user_id).strip()
+            # return user_id_value
         elif type_value == 'form':
             self.wait_to_click((By.XPATH, self.properties.format('Form Metadata')))
             form_id = self.get_text((By.XPATH, self.id_values.format('instanceID')))
-            form_id_value = str(form_id).strip()
-            return form_id_value
+            new_value = str(form_id).strip()
+            # return form_id_value
         time.sleep(3)
         self.wait_to_click((By.XPATH, self.properties.format('Form Properties')))
         self.page_source_contains(case_name)
         assert True, "Case name is present in Submit history"
         self.driver.back()
+        if type_value:
+            return new_value
+        return None
 
     def verify_form_data_case_list(self, case_name, username):
         self.wait_to_click(self.case_list_rep)
