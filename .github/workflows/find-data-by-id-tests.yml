@@ -294,7 +294,7 @@ jobs:
           COMPLETE_JSON=$(curl -s --retry 3 --retry-delay 2 -X POST "https://slack.com/api/files.completeUploadExternal" \
             -H "Authorization: Bearer ${{ secrets.SLACK_QA_BOT_TOKEN }}" \
             -H "Content-Type: application/json" \
-            -d "{\"files\": [ { \"id\": \"$FILE_ID\", \"title\": \"Summary Combined Chart\" } ], \"channel_id\": \"${{ SLACK_CHANNEL_ID }}\"}")
+            -d "{\"files\": [ { \"id\": \"$FILE_ID\", \"title\": \"Summary Combined Chart\" } ], \"channel_id\": \"${{ steps.configure_slack.outputs.SLACK_CHANNEL_ID }}\"}")
 
           echo "Slack completeUploadExternal response: $COMPLETE_JSON"
 
