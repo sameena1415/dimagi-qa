@@ -235,42 +235,70 @@ jobs:
 
       - name: Upload Combined Chart to Slack
         if: ${{ (success() || failure()) && steps.configure_slack.outputs.SLACK_CHANNEL_ID != '' }}
+        env:
+          SLACK_QA_BOT_TOKEN: ${{ secrets.SLACK_QA_BOT_TOKEN }}
+          SLACK_CHANNEL_ID: ${{ steps.configure_slack.outputs.SLACK_CHANNEL_ID }}
+          GITHUB_SERVER_URL: ${{ github.server_url }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_RUN_ID: ${{ github.run_id }}
+          ARTIFACT_ID: ${{ steps.artifact-upload-step.outputs.artifact-id }}
+          JOB_STATUS: ${{ job.status }}
+          ENVIRONMENT: ${{ matrix.environment }}
+          WORKFLOW_NAME: ${{ github.workflow }}
         run: |
           set -e
-          # Pick emoji based on job status
-          if [ "${{ job.status }}" = "success" ]; then
+          pip install --quiet slack_sdk
+
+          # Determine emoji based on job status
+          if [ "$JOB_STATUS" = "success" ]; then
             STATUS_ICON="✅"
-            STYLE_BUTTON="primary"
           else
             STATUS_ICON="❌"
-            STYLE_BUTTON="danger"
           fi
-          ARTIFACT_URL="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts/${{ steps.artifact-upload-step.outputs.artifact-id }}"
-          ENVIRONMENT=$(echo "${{ matrix.environment }}" | tr '[:lower:]' '[:upper:]')
-          ENVIRONMENT="[$ENVIRONMENT]"
-        
-          COMMENT="$STATUS_ICON 📊 *$ENVIRONMENT ${{ github.workflow }} Test Summary Charts*"$'\n\n'"📎 *Artifact:* <${ARTIFACT_URL}|Download here>"
-        
-          # Step 1: Request upload URL
-          UPLOAD_URL_JSON=$(curl -s -X POST https://slack.com/api/files.getUploadURLExternal \
-            -H "Authorization: Bearer ${{ secrets.SLACK_QA_BOT_TOKEN }}" \
-            -H "Content-Type: application/json" \
-            -d "{\"filename\": \"summary_combined.png\", \"length\": $(stat -c%s slack_charts/summary_combined.png)}")
 
-          UPLOAD_URL=$(echo "$UPLOAD_URL_JSON" | jq -r '.upload_url')
-          FILE_ID=$(echo "$UPLOAD_URL_JSON" | jq -r '.file_id')
+          # Prepare variables
+          ARTIFACT_URL="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}/artifacts/${ARTIFACT_ID}"
+          ENVIRONMENT_UPPER=$(echo "$ENVIRONMENT" | tr '[:lower:]' '[:upper:]')
+          PNG_PATH="slack_charts/summary_combined.png"
 
-          # Step 2: Upload the file
-          curl -s -X POST -F "file=@slack_charts/summary_combined.png" "$UPLOAD_URL"
+          if [ ! -f "$PNG_PATH" ]; then
+            echo "❌ ERROR: File not found: $PNG_PATH"
+            exit 1
+          fi
 
-          # Step 3: Complete the upload and post to channel
-          COMPLETE_JSON=$(curl -s -X POST https://slack.com/api/files.completeUploadExternal \
-            -H "Authorization: Bearer ${{ secrets.SLACK_QA_BOT_TOKEN }}" \
-            -H "Content-Type: application/json" \
-            -d "{\"files\": [{\"id\": \"$FILE_ID\", \"title\": \"Summary Combined Chart\"}], \"channel_id\": \"${{ steps.configure_slack.outputs.SLACK_CHANNEL_ID }}\"}")
+          python - <<'EOF'
+          import os
+          from slack_sdk import WebClient
+          from slack_sdk.errors import SlackApiError
 
-          COMBINED_URL=$(echo "$COMPLETE_JSON" | jq -r '.files[0].permalink')
+          token = os.environ["SLACK_QA_BOT_TOKEN"]
+          channel = os.environ["SLACK_CHANNEL_ID"]
+          artifact_url = os.environ["GITHUB_SERVER_URL"] + "/" + os.environ["GITHUB_REPOSITORY"] + "/actions/runs/" + os.environ["GITHUB_RUN_ID"] + "/artifacts/" + os.environ["ARTIFACT_ID"]
+          env = os.environ["ENVIRONMENT"].upper()
+          workflow = os.environ["WORKFLOW_NAME"]
+          status_icon = "✅" if os.environ.get("JOB_STATUS") == "success" else "❌"
+          file_path = "slack_charts/summary_combined.png"
 
-          echo "COMBINED_URL=$COMBINED_URL" >> $GITHUB_ENV
-          echo "STYLE_BUTTON=$STYLE_BUTTON" >> $GITHUB_ENV
-          echo "STATUS_ICON=$STATUS_ICON" >> $GITHUB_ENV
+          client = WebClient(token=token)
+
+          message = (
+              f"{status_icon} 📊 *[{env}] {workflow} Test Summary Charts*\n\n"
+              f"📎 *Artifact:* <{artifact_url}|Download here>"
+          )
+
+          try:
+              response = client.files_upload_v2(
+                  file=file_path,
+                  filename="summary_combined.png",
+                  title="summary combined",
+                  initial_comment=message,
+                  channel=channel
+              )
+              if not response.get("ok", False):
+                  raise SlackApiError("Upload failed", response)
+              permalink = response["file"]["permalink"]
+              print(f"✅ Uploaded successfully: {permalink}")
+          except SlackApiError as e:
+              print(f"❌ Slack API error: {e.response['error']}")
+              raise
+          EOF
