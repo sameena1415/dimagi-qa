@@ -257,10 +257,11 @@ jobs:
           cat payload.json
           
           echo "Requesting upload URL from Slack..."
-          UPLOAD_URL_JSON=$(curl -s --retry 3 --retry-delay 2 -X POST "https://slack.com/api/files.getUploadURLExternal" \
-          -H "Authorization: Bearer $SLACK_QA_BOT_TOKEN" \
-          -H "Content-Type: application/json; charset=utf-8" \
-          --data-binary @payload.json)
+          UPLOAD_URL_JSON=$( (set +u; curl -s --retry 3 --retry-delay 2 -X POST "https://slack.com/api/files.getUploadURLExternal" \
+            -H "Authorization: Bearer $SLACK_QA_BOT_TOKEN" \
+            -H "Content-Type: application/json; charset=utf-8" \
+            --data-binary @"./payload.json") )
+
           
           echo "Slack getUploadURLExternal response: $UPLOAD_URL_JSON"
           
